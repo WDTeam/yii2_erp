@@ -11,7 +11,7 @@ namespace dbbase\models\operation;
  * @property string $customer_trans_record_transaction_id
  * @property string $order_id
  * @property string $order_code
- * @property string $service_card_with_customer _id
+ * @property string $service_card_with_customer_id
  * @property string $service_card_with_customer_code
  * @property string $service_card_consume_record_front_money
  * @property string $service_card_consume_record_behind_money
@@ -24,11 +24,22 @@ namespace dbbase\models\operation;
  */
 class OperationServiceCardConsumeRecord extends \yii\db\ActiveRecord
 {
+    
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return '{{%operation_service_card_consume_record}}';
+    }
+    /**
+     * 保存服务卡消费记录
+     * @return bool
+     */
+    public function doSave(){
+        if ($this->save()) {
+            return true;
+         }
+        return false;
     }
 }

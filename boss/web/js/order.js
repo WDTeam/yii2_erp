@@ -47,27 +47,11 @@ $(document).on("change","#order-address_id input[type='radio']",function(){
     getGoods();//地址信息变更后去获取商品信息
 });
 
-
-$("#order-order_booked_count input").change(function(){
+$(document).on("change","#order-order_booked_count input",function(){
     setOrderMoney();
-    $.ajax({
-        type: "GET",
-        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val(),
-        dataType: "json",
-        success: function (data) {
-            $("#order-orderbookedtimerange").html('');
-            for(var key in data) {
-                var val = data[key];
-                for (var k in val.timeline) {
-                    var v = val.timeline[k];
-                    var disabled_class = v.enable?'':'disabled';
-                    var disabled = v.enable?'':'disabled="disabled"';
-                    $("#order-orderbookedtimerange").append('<label class="radio-inline '+disabled_class+'"><input '+disabled+' type="radio"  value="' + v.time + '" name="Order[orderBookedTimeRange]"> ' + v.time + '</label>');
-                }
-            }
-        }
-    });
+    getTimeRange();
 });
+$(document).on('click','.day',function(){getTimeRange();});
 
 
 $('#order-order_pay_type input').change(function(){
@@ -179,6 +163,28 @@ $(document).on('change','#order-coupon_id',function(){
         $(".order_pay_money").text(order_pay_money.toFixed(2));
     }
 });
+
+function getTimeRange()
+{
+    $("#order-orderbookedtimerange").html('');
+    $.ajax({
+        type: "GET",
+        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val(),
+        dataType: "json",
+        success: function (data) {
+            for(var key in data) {
+                var val = data[key];
+                for (var k in val.timeline) {
+                    var v = val.timeline[k];
+                    var disabled_class = v.enable?'':'disabled';
+                    var disabled = v.enable?'':'disabled="disabled"';
+                    $("#order-orderbookedtimerange").append('<label class="radio-inline '+disabled_class+'"><input '+disabled+' type="radio"  value="' + v.time + '" name="Order[orderBookedTimeRange]"> ' + v.time + '</label>');
+                }
+            }
+        }
+    });
+}
+
 
 function getCity(province_id,address_id,city_id,county_id)
 {

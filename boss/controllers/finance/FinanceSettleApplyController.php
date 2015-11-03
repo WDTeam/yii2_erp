@@ -66,8 +66,13 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = $this->initQueryParams($requestParams);
         $searchModel->load($requestParams);
-        $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
-        
+        if(!empty($searchModel->worker_tel)){
+            $searchModel->worker_id = $searchModel->getWorkerIdByWorkerTel($searchModel->worker_tel);
+        }
+        $requestPhone = $searchModel->worker_tel;
+        $searchModel->worker_tel = null;
+        $dataProvider = $searchModel->search(null);
+        $searchModel->worker_tel = $requestPhone;
         return $this->render('selfFulltimeWorkerSettleIndex', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -85,32 +90,15 @@ class FinanceSettleApplyController extends BaseAuthController
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
             $searchModel->worker_identity_id = 1;
-//            $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth();
-//            $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth();
-            if(isset($requestParams['FinanceSettleApplySearch'])){
-                $requestModel = $requestParams['FinanceSettleApplySearch'];
-                if(isset($requestModel['worker_tel'])){
-                    $searchModel->worker_tel = $requestModel['worker_tel'];
-                }
-//                if(isset($requestModel['settleMonth'])){
-//                    $searchModel->settleMonth = $requestModel['settleMonth'];
-//                    $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
-//                    $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
-//                }
-            }
         }
         if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
             $searchModel->worker_identity_id = 2;
-//            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
-//            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 2;
-//            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
-//            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
@@ -211,7 +199,17 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionQuery()
     {
         $financeSearchModel = new FinanceSettleApplySearch;
-        $dataProvider = $financeSearchModel->search(Yii::$app->request->getQueryParams());
+        $requestParams = Yii::$app->request->getQueryParams();
+        $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
+        $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
+        $financeSearchModel->load($requestParams);
+        if(!empty($financeSearchModel->worker_tel)){
+            $financeSearchModel->worker_id = $financeSearchModel->getWorkerIdByWorkerTel($financeSearchModel->worker_tel);
+        }
+        $requestPhone = $financeSearchModel->worker_tel;
+        $financeSearchModel->worker_tel = null;
+        $dataProvider = $financeSearchModel->search(null);
+        $financeSearchModel->worker_tel = $requestPhone;
         return $this->render('query', [
             'dataProvider' => $dataProvider,
             'searchModel' => $financeSearchModel,

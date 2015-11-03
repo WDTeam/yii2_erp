@@ -84,10 +84,10 @@ if(isset($model->review_section)){
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
-                完成总工时
+                完成订单总数
             </div>
             <div class='settleDetail'>
-                工时费小计
+                订单费用小计
             </div>
             <div class='settleDetail'>
                 底薪补贴
@@ -201,12 +201,12 @@ if(isset($model->review_section)){
                        'header' => Yii::t('app', '渠道'),],
                     [
                        'header' => Yii::t('app', '支付方式'),
-                        'attribute' => 'order_pay_type_id',
+                        'attribute' => 'order_pay_type_des',
                     ],
                     ['attribute'=>'order_booked_begin_time',
                        'header' => Yii::t('app', '服务开始时间'),
                         'content'=>function($model,$key,$index){
-                                   return date('Y-m-d h:m:s',$model['order_booked_begin_time']);
+                                   return date('Y-m-d h:i:s',$model['order_booked_begin_time']);
                        },
                     ], 
                     ['attribute'=>'order_booked_count',

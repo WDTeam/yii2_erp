@@ -223,9 +223,12 @@ class Payment extends PaymentCommon
     }
 
     /**
-     * 后台支付(20)
+     * 后台支付/余额支付(20)
      */
-    private function pay_ht(){}
+    private function pay_balance($data)
+    {
+
+    }
 
     /**
      * 新浪微博支付(21)

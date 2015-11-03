@@ -31,18 +31,6 @@ $this->params['review_section'] = $searchModel->review_section;
 $isFinacePayedConfirm = ($searchModel->finance_settle_apply_status == FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED);
 $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
 ?>
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
-<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/tooltip.js"></script>
-<style type="text/css">
-    .popover {
-        height:50px;
-        max-width:2000px;
-    }
-    .btn {width: 120px;margin-bottom: 3px; float: right;}
-</style>
-<form id ="financeSettleApplyForm">
-   
 <div class="finance-settle-apply-index">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -61,7 +49,7 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
                 'worker_name',
                 [ 'header' => Yii::t('app', '阿姨类型'),'content'=>function($model,$key,$index){return $model->getWorkerTypeDes($model->worker_type_id,$model->worker_identity_id);}],
                 'finance_settle_apply_cycle_des',
-                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
+                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y-m-d H:i:s',$model->created_at),'#');}],
                 [ 'header' => Yii::t('app', '结算周期'),'content'=>function($model,$key,$index){return date('Y-m-d',$model->finance_settle_apply_starttime).'至<br>'.date('Y-m-d',$model->finance_settle_apply_endtime);}],
                 'finance_settle_apply_man_hour', 
                 'finance_settle_apply_order_money', 
@@ -151,12 +139,6 @@ JS;
          ?>
      </div>
 </div>
-<script>
-$(function () {
-    $('[data-toggle="popover"]').popover();
-});
-</script>
-</form>
 <?php echo Modal::widget([
             'header' => '<h4 class="modal-title">请输入审核不通过原因</h4>',
             'id'=>'reasonModal',

@@ -6,11 +6,14 @@ use Yii;
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
+
 use core\models\order\Order;
 use core\models\worker\Worker;
-use dbbase\models\finance\FinanceWorkerOrderIncome;
 use core\models\finance\FinanceSettleApplySearch;
+
+use dbbase\models\finance\FinanceWorkerOrderIncome;
 use dbbase\models\order\OrderStatusDict;
+use dbbase\models\order\OrderExtPay;
 
 /**
  * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `dbbase\models\finance\FinanceWorkerOrderIncome`.
@@ -155,7 +158,8 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         $financeWorkerOrderIncomeSearch->channel_id = $order->channel_id;
         $financeWorkerOrderIncomeSearch->order_channel_name = $order->order_channel_name;
         $financeWorkerOrderIncomeSearch->order_pay_type_id = $order->orderExtPay->order_pay_type;
-        $financeWorkerOrderIncomeSearch->order_pay_type_des = $order->orderExtPay->order_pay_type;
+        $orderExtPay = new OrderExtPay;
+        $financeWorkerOrderIncomeSearch->order_pay_type_des = $orderExtPay->orderPayTypeLabels()[$order->orderExtPay->order_pay_type];
         $financeWorkerOrderIncomeSearch->order_booked_begin_time = $order->order_booked_begin_time;
         $financeWorkerOrderIncomeSearch->order_booked_count = $order->order_booked_count;
         $financeWorkerOrderIncomeSearch->order_unit_money = $order->order_unit_money;
@@ -175,7 +179,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $financeWorkerOrderIncomeSearch;
     }
     
-     public function attributeLabels()
+    public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();
         $addAttributeLabels = [

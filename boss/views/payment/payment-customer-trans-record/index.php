@@ -23,39 +23,90 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'customer_id',
-            'order_id',
-            //'order_channel_id',
-            [
-                'attribute' => 'payment_customer_trans_record_order_channel',
-                'label'=>'订单渠道',
-            ],
-            //'pay_channel_id',
-            [
-                'attribute' => 'payment_customer_trans_record_pay_channel',
-                'label'=>'收款渠道',
-            ],
-            //'payment_customer_trans_record_mode',
             [
                 'attribute' => 'payment_customer_trans_record_mode_name',
                 'label'=>'交易方式',
             ],
-            'payment_customer_trans_record_coupon_money',
-            'payment_customer_trans_record_cash',
-            'payment_customer_trans_record_pre_pay',
-            'payment_customer_trans_record_online_pay',
-            'payment_customer_trans_record_online_balance_pay',
-            'payment_customer_trans_record_service_card_on',
-            'payment_customer_trans_record_service_card_pay',
-            'payment_customer_trans_record_service_card_current_balance',
-            'payment_customer_trans_record_service_card_befor_balance',
-            'payment_customer_trans_record_compensate_money',
-            'payment_customer_trans_record_refund_money',
-            'payment_customer_trans_record_order_total_money',
-            'payment_customer_trans_record_total_money',
-            'payment_customer_trans_record_current_balance',
-            'payment_customer_trans_record_befor_balance',
             'payment_customer_trans_record_transaction_id',
+            'customer_id',
+            'order_id',
+            [
+                'attribute' => 'payment_customer_trans_record_order_channel',
+                'label'=>'订单渠道',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_pay_channel',
+                'label'=>'支付渠道',
+            ],
+
+            [
+                'attribute' => 'payment_customer_trans_record_order_total_money',
+                'label'=>'A:订单总金额',
+            ],
+
+
+            [
+                'attribute' => 'payment_customer_trans_record_coupon_money',
+                'label'=>'B:优惠券金额',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_cash',
+                'label'=>'C:现金支付',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_pre_pay',
+                'label'=>'D:预付费金额(第三方)',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_online_pay',
+                'label'=>'E:在线支付',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_online_balance_pay',
+                'label'=>'F:用户余额支付',
+            ],
+
+            [
+                'attribute' => 'payment_customer_trans_record_current_balance',
+                'label'=>'F1:支付前用户余额',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_befor_balance',
+                'label'=>'F2:支付后用户余额',
+            ],
+
+            [
+                'attribute' => 'payment_customer_trans_record_service_card_pay',
+                'label'=>'G:服务卡支付',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_service_card_on',
+                'label'=>'G1:服务卡卡号',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_service_card_current_balance',
+                'label'=>'G2:支付前服务卡余额',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_service_card_befor_balance',
+                'label'=>'G3:支付后服务卡余额',
+            ],
+
+
+            [
+                'attribute' => 'payment_customer_trans_record_compensate_money',
+                'label'=>'H:补偿金额',
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_refund_money',
+                'label'=>'I:退款金额',
+            ],
+
+            [
+                'attribute' => 'payment_customer_trans_record_total_money',
+                'label'=>'J:用户累计交易额',
+            ],
+
             //'payment_customer_trans_record_remark',
             //'payment_customer_trans_record_verify',
             //'created_at',

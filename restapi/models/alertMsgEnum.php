@@ -142,8 +142,6 @@ class alertMsgEnum
     //优惠码
     //优惠码或手机号不能为空
     const exchangeCouponDataDefect = '优惠码或手机号不能为空';
-    //优惠券不能为空
-    const exchangeCouponNotExist = '优惠券不存在';
     //兑换优惠券成功
     const exchangeCouponSuccess = '兑换成功';
     //兑换优惠券失败

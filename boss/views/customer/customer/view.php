@@ -37,8 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
+
 //城市
-$city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
+//$city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
+$operation_city_name = '-';
 
 $customer_ext_srcs = Customer::getSrcs($model->customer_phone);
 $platform_name_str = '';
@@ -57,13 +59,12 @@ if(empty($customer_ext_srcs)){
 		$device_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_name']) ? '-' : $customer_ext_src['device_name']; 
 		$device_no = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_no']) ? '-' : $customer_ext_src['device_no']; 
 
-		$platform_name_str .= $platform_name.'&nbsp;&nbsp;';
-		$channal_name_str .= $channal_name.'&nbsp;&nbsp;';
-		$device_name_str .= $device_name.'&nbsp;&nbsp;';
-		$device_no_str .= $device_no.'&nbsp;&nbsp;';
+		$platform_name_str .= $platform_name.'/';
+		$channal_name_str .= $channal_name.'/';
+		$device_name_str .= $device_name.'/';
+		$device_no_str .= $device_no.'/';
 	}
 }
-
 
 //全部服务地址
 $customerAddress = CustomerAddress::listAddress($model->id);
@@ -81,22 +82,41 @@ if(!empty($customerAddress)){
 		}
 	}
 }
-//var_dump($addressStr);
-//exit();
+
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
+
 //评价数量
 $comment_count = CustomerComment::getCustomerCommentCount($model->id);
 //$comment_count = 0;
 //积分
-$score = CustomerExtScore::getCustomerScore($model->id);
+$score_arr_info = Customer::getScoreById($model->id);
+if($score_arr_info['errcode'] == 0){
+	$score = $score_arr_info['score'];
+}
+
 //余额
-$balance = Customer::getBalanceById($model->id);
+$balance_arr_info = Customer::getBalanceById($model->id);
+if($balance_arr_info['errcode'] == 0){
+	$balance = $balance_arr_info['balance'];
+}
 //历史状态集
 $customerBlockLog = CustomerBlockLog::listBlockLog($model->id);
 //当前状态
 $currentBlockStatus = CustomerBlockLog::getCurrentBlockStatus($model->id);
+
+//workers
+$worker_names = '';
+$customer_workers_res = Customer::getWorkersById($model->id);
+if(empty($customer_workers_res['customer_workers'])){
+	$worker_names = '-';
+}
+foreach ($customer_workers_res['customer_workers'] as $key => $worker)
+{
+	$worker_names .= $worker['worker_name'].'/';
+}
+
 echo DetailView::widget([
     'model' => $model,
     'condensed'=>false,
@@ -115,30 +135,43 @@ echo DetailView::widget([
         //     'type'=>DetailView::INPUT_TEXT,
         //     'valueColOptions'=>['style'=>'width:90%']
         // ],
-        
-         'customer_name',
+		[
+            'attribute'=>'', 
+            'label'=>'手机号',
+            'format'=>'raw',
+            'value'=>$model->customer_phone,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         [
             'attribute'=>'', 
             'label'=>'城市',
             'format'=>'raw',
-            'value'=>$city_name,
+            'value'=>$operation_city_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
-        'customer_phone',
+		[
+            'attribute'=>'', 
+            'label'=>'创建时间',
+            'format'=>'raw',
+            'value'=>date('Y-m-d H:i', $model->customer_phone),
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+		[
+            'attribute'=>'', 
+            'label'=>'来源',
+            'format'=>'raw',
+            'value'=>$channal_name_str,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         [
             'attribute'=>'', 
             'label'=>'平台',
             'format'=>'raw',
             'value'=>$platform_name_str,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-       [
-            'attribute'=>'', 
-            'label'=>'聚道',
-            'format'=>'raw',
-            'value'=>$channal_name_str,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -151,26 +184,22 @@ echo DetailView::widget([
             'valueColOptions'=>['style'=>'width:90%']
         ],
         [
-            'attribute'=>'', 
-            'label'=>'设备号',
+            'attribute' => '',
+			'label'=>'身份',
             'format'=>'raw',
-            'value'=>$device_no_str,
-            'type'=>DetailView::INPUT_SWITCH,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-        [
-            'attribute' => 'customer_is_vip',
+			'value'=>$model->customer_is_vip ? '会员' : '非会员',
             'type' => DetailView::INPUT_WIDGET,
-            'widgetOptions' => [
-                'name'=>'customer_is_vip',
-                'class'=>\kartik\widgets\Select2::className(),
-                'data' => array('1'=>'会员', '0'=>'非会员'),
-                'hideSearch' => true,
-                'options'=>[
-                    'placeholder' => '选择客户身份',
-                ]
-            ],
-            'value'=>$model->customer_is_vip ? '会员' : '非会员',
+			'valueColOptions'=>['style'=>'width:90%']
+            //'widgetOptions' => [
+            //    'name'=>'customer_is_vip',
+            //    'class'=>\kartik\widgets\Select2::className(),
+            //    'data' => array('1'=>'会员', '0'=>'非会员'),
+            //    'hideSearch' => true,
+            //    'options'=>[
+            //        'placeholder' => '选择客户身份',
+            //    ]
+            //],
+            
         ],
         [
             'attribute'=>'', 
@@ -232,6 +261,22 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
+		[
+            'attribute'=>'', 
+            'label'=>'总积分数',
+            'format'=>'raw',
+            'value'=>$score,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+		[
+            'attribute'=>'', 
+            'label'=>'常用阿姨',
+            'format'=>'raw',
+            'value'=> $worker_names,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         [
             'attribute'=>'', 
             'label'=>'评价总数',
@@ -256,14 +301,7 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
-        [
-            'attribute'=>'', 
-            'label'=>'总积分数',
-            'format'=>'raw',
-            'value'=>$score,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
+        
     ],
     'enableEditMode'=>false,
 ]); 

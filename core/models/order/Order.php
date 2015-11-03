@@ -18,11 +18,12 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
+use core\models\order\OrderStatusDict;
+
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
-use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
@@ -103,8 +104,6 @@ use yii\helpers\ArrayHelper;
  */
 class Order extends OrderModel
 {
-
-    const ORDER_ASSIGN_WORKER_LOCK = 'ORDER_ASSIGN_WORKER_LOCK';
 
     /**
      * 创建新订单
@@ -204,12 +203,15 @@ class Order extends OrderModel
 
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
-        $attributes['order_parent_id'] = 0;
-        $attributes['order_is_parent'] = 1;
+
         if (isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id'] > 0) {
             $attributes['order_batch_code'] = OrderTool::createOrderCode('Z');
+            $attributes['order_parent_id'] = 0;
+            $attributes['order_is_parent'] = 1; //周期订单为父子订单
         } else {
             $attributes['order_batch_code'] = OrderTool::createOrderCode('P');
+            $attributes['order_parent_id'] = 0;
+            $attributes['order_is_parent'] = 0; //批量订单为普通订单
         }
         foreach ($booked_list as $booked) {
             $order = new Order();
@@ -231,7 +233,7 @@ class Order extends OrderModel
             OrderStatus::_batchPayment($attributes['order_batch_code'],$attributes['admin_id']);
         }
         return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
-    }
+    } 
 
     /**
      * 在线支付完后调用
@@ -367,44 +369,74 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $assign_type
      * @return array
-     * TODO 避免同一时间 给阿姨指派多个订单问题 需要处理
-     * TODO 修改阿姨接单数量
+     * TODO 避免同一时间 给阿姨指派多个服务时间冲突的订单问题 需要处理
      */
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
+        $order_count = 1;
         $order = OrderSearch::getOne($order_id);
+        $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
+        if($order->order_is_parent==1){
+            $child_list = OrderSearch::getChildOrder($order_id);
+            foreach($child_list as $child){
+                $conflict += OrderSearch::WorkerOrderExistsConflict($worker['id'], $child->order_booked_begin_time, $child->order_booked_end_time);
+            }
+        }
         if ($order->orderExtFlag->order_flag_lock > 0 && $order->orderExtFlag->order_flag_lock != $admin_id && time() - $order->orderExtFlag->order_flag_lock_time < Order::MANUAL_ASSIGN_lONG_TIME) {
             $order->addError('id', '订单正在进行人工指派！');
-        } elseif (OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time) > 0) {
+        } elseif ($conflict > 0) {
             $order->addError('id', '阿姨服务时间冲突！');
         } elseif ($order->orderExtWorker->worker_id > 0) {
             $order->addError('id', '订单已经指派阿姨！');
         } else {
-            $order->order_flag_lock = 0;
-            $order->worker_id = $worker['id'];
-            $order->worker_type_id = $worker['worker_type'];
-            $order->order_worker_phone = $worker['worker_phone'];
-            $order->order_worker_name = $worker['worker_name'];
-            $order->order_worker_type_name = $worker['worker_type_description'];
-            $order->shop_id = $worker["shop_id"];
-            $order->order_worker_shop_name = $worker["shop_name"];
-            $order->order_worker_assign_type = $assign_type; //接单方式
-            $order->admin_id = $admin_id;
-            if ($admin_id > 1) { //大于1属于人工操作
-                $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-            } elseif ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
-                $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-            } else {
-                $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker']);
+            $transact = static::getDb()->beginTransaction();
+            $result = self::_assignDone($order, $worker, $admin_id, $assign_type,$transact);
+            if($result && $order->order_is_parent==1) {
+                foreach ($child_list as $child) {
+                    $order_count++;
+                    $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
+                }
             }
-            if ($result) {
+            if($result) {
+                $transact->commit();
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 //更新阿姨接单数量
-                WorkerStat::updateWorkerStatOrderNum($worker['id'], 1);
+                WorkerStat::updateWorkerStatOrderNum($worker['id'], $order_count);
             }
         }
         return ['status' => $result, 'errors' => $order->errors];
+    }
+
+    /**
+     * 内部方法供指派成功调用
+     * @param $order
+     * @param $worker
+     * @param $admin_id
+     * @param $assign_type
+     * @param $transact
+     * @return bool
+     */
+    private static function _assignDone(&$order, $worker, $admin_id, $assign_type,$transact)
+    {
+        $order->order_flag_lock = 0;
+        $order->worker_id = $worker['id'];
+        $order->worker_type_id = $worker['worker_type'];
+        $order->order_worker_phone = $worker['worker_phone'];
+        $order->order_worker_name = $worker['worker_name'];
+        $order->order_worker_type_name = $worker['worker_type_description'];
+        $order->shop_id = $worker["shop_id"];
+        $order->order_worker_shop_name = $worker["shop_name"];
+        $order->order_worker_assign_type = $assign_type; //接单方式
+        $order->admin_id = $admin_id;
+        if ($admin_id > 1) { //大于1属于人工操作
+            $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
+        } elseif ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
+            $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
+        } else {
+            $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
+        }
+        return $result;
     }
 
     /**
@@ -641,6 +673,66 @@ class Order extends OrderModel
 
         return $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
     }
+
+    /**
+     * 更新订单
+     * @param $attributes
+     * @param $transact
+     * @return bool
+     */
+    public function modify($attributes, $transact = null)
+    {
+        $status = [
+            OrderStatusDict::ORDER_INIT, // = 1已创建
+            OrderStatusDict::ORDER_WAIT_ASSIGN, // = 2待指派
+            OrderStatusDict::ORDER_SYS_ASSIGN_START, // = 3智能指派开始
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE, // = 4智能指派完成
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE, // = 5未完成智能指派 待人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_START, // = 6开始人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE, // = 7完成人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE, // = 8未完成人工指派，如果客服和小家政都未完成人工指派则去响应，否则重回待指派状态。
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER, // = 9阿姨自助抢单
+        ];
+
+        //1:获取订单状态
+        if( !in_array($this->orderExtStatus->order_status_dict_id,$status))
+        {
+            $this->addError('order_status', '当前订单状态不可更新,当前订单状态');
+            return false;
+        }
+
+        //2:载入传入参数
+        $this->setAttributes($attributes);
+
+        //创建地址信息
+        if( !empty($attributes['address_id']) )
+        {
+            try {
+                $address = CustomerAddress::getAddress($attributes['address_id']);
+                $this->setAttributes([
+                    'address_id' => $address->id
+                ]);
+            } catch (Exception $e) {
+                $this->addError('order_address', '创建时获取地址异常！');
+                return false;
+            }
+        }
+
+        //获取服务日期时间段是否可用
+        if( !empty($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id'] > 0 )
+        {
+            //如果有阿姨信息
+            worker::checkWorkerTimeIsDisabled();
+            worker::getWorkerTimeLine();
+        }
+        $this->setAttributes([
+            'admin_id'=>Yii::$app->user->id
+        ]);
+
+        //3:修改订单信息
+        return $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+    }
+
 
     /**
      * 获取订单来源名称

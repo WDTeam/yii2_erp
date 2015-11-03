@@ -10,7 +10,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
-use \dbbase\models\order\OrderStatusDict;
+use \core\models\order\OrderStatusDict;
 use yii\web\Response;
 
 class OrderController extends \restapi\components\Controller
@@ -457,8 +457,8 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
-        if($limit<=0){
-            $limit =1;
+        if ($limit <= 0) {
+            $limit = 1;
         }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
@@ -790,7 +790,6 @@ class OrderController extends \restapi\components\Controller
         $limit = 10;
         if (isset($args['limit'])) {
             $limit = $args['limit'];
-
         }
         $page = 1;
         if (isset($args['page'])) {
@@ -804,7 +803,7 @@ class OrderController extends \restapi\components\Controller
         $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
         $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
         $args["owr.worker_id"] = $worker->id;
-        if($limit<=0){
+        if ($limit <= 0) {
             $limit = 1;
         }
         try {
@@ -1617,30 +1616,29 @@ class OrderController extends \restapi\components\Controller
      *
      *   * 指定阿姨订单列表/待抢单订单列表 leveltype=2
      * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "workerData":
-     *           [
-     *           {
-     *            "order_id":"订单号"
-     *            "order_code":"订单编号"
-     *            "batch_code":"周期订单号"
-     *            "booked_begin_time":"服务开始时间"
-     *            "booked_end_time":"服务结束时间"
-     *            "channel_name":"服务类型名称"
-     *            "booked_count":"时常"
-     *            "address":"服务地址"
-     *            "need":"备注说明"
-     *            "money":"订单价格"
-     *           } 
-     *         ],
-     *         "time":172800   倒计时秒 #要求2天
-     *         "pageNumber":""  指定阿姨订单数
-     *         "pageNumbNot":"" 待抢单订单数
-     *      }
-     * }
+     * "code": "ok",
+     * "msg":"操作成功",
+     * "ret":
+     *     {
+     *   "orderData": [  //指定阿姨订单列表 待抢单订单列表
+     * 	    {
+     *       "order_id": "订单号",
+     *       "order_code": "订单编号",
+     *       "batch_code": "周期订单号",
+     *       "booked_begin_time": "服务开始时间",
+     *       "booked_end_time": "服务结束时间",
+     *       "channel_name": "服务类型名称",
+     *       "booked_count": "时常",
+     *       "address": "服务地址",
+     *       "need": "备注说明",
+     *       "money": "订单价格",
+     *         },
+     * 	      ]
+     *      },
+     *    "time":172800,   倒计时秒 #要求2天
+     *    "pageNum":"总页码数"
+     *    }
+     * 
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1672,28 +1670,41 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
                 try {
-                    #指定阿姨订单列表
-                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
-                    #未指定阿姨订单列表
-                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
-
-                    #指定阿姨订单数
-                    $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
-
-                    if ($param['page'] == 1) {
-                        $ret['pageNumber'] = ($workerOrderCount / $param['page_size']) + 1;
+                    #指定阿姨订单列表 待抢单订单列表
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page']);
+                    
+                    foreach($workerCount as $key=>$val){
+                        if(@$val['is_booker_worker']){
+                            $workerCount[$key]['times'] = '2:00:00';
+                        }else{
+                             $workerCount[$key]['times'] = '';
+                        }
                     }
-
-                    #待抢单订单数
-                    $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
-
-                    if ($param['page'] == 1) {
-                        $ret['pageNumbNot'] = ($orderData / $param['page_size']) + 1;
-                    }
-
-                    $ret['workerData'] = array_merge($workerCount, $workerCountTwo);
+                    
+//                    #待抢单订单列表
+//                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
+//
+//                    #指定阿姨订单数
+                    $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+////                    if ($param['page'] == 1) {
+////                        $ret['workerOrderNum'] = ceil($workerOrderCount / $param['page_size']) + 1;
+////                    }
+////                    #待抢单订单数
+                    $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+////                    if ($param['page'] == 1) {
+////                        $ret['orderNum'] = ceil($orderData / $param['page_size']) + 1;
+////                    }
+//
+//                    if ($workerOrderCount > $orderData) {
+//                        $orderNumber = $workerOrderCount;
+//                    } else {
+//                        $orderNumber = $orderData;
+//                    }
+                    $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
+                    $ret['pageNum'] = $pageNumber;
+                    $ret["orderData"] = $workerCount;
                     #倒计时
-                    $ret['time'] = 172800;
+                   # $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
@@ -1716,7 +1727,9 @@ class OrderController extends \restapi\components\Controller
                     $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr);
                     #待服务订单数
                     $ret['workerServiceCount'] = $count;
+                    #指定阿姨订单数
                     $ret['workerData'] = $workerCount;
+                    #待服务订单数
                     $ret['orderData'] = $workerCountTwo;
                     #阿姨状态
                     $ret['worker_is_block'] = [
@@ -1741,35 +1754,36 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 周期订单提交
      *
-     * @apiParam  {String}  access_token      会话id. 必填
+     * @apiParam  {String}  access_token      会话id. 必填 
      * @apiParam  {String}  [platform_version]  平台版本号
      * @apiParam  {integer} order_service_type_id 服务类型 商品id 必填
      * @apiParam  {integer} order_src_id 订单来源id 必填
      * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
-     * @apiParam  {int}     admin_id 操作人id 0客户 1系统 必填
      * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
-     * @apiParam  {int}  [accept_other_aunt] 0不接受 1接受
+     * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
      * @apiParam  {string}  [order_customer_memo] 客户备注
-     * @apiParam   {int} [coupon_id] 优惠券id
+     * @apiParam   {int}    [coupon_id] 优惠券id
      * 
-     * @apiParam  {Object[]}order_booked_time
-     * [
-     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"},
-     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"},
-     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"},
-     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"}
-     * ]
-     *
+     * @apiParam  {Object[]} 
+     *  { 
+     *   "order_booked_time": [
+     *   // 开始时间 结束时间 优惠券
+     *   {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
+     *   {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
+     *   {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
+     *   {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
+     *    ]
+     *   }
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"添加成功成功",
+     *      "msg":"添加成功",
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -1826,10 +1840,6 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0);
         }
-        if(empty($param['$order_booked_time'])){
-            return $this->send(null, "服务时间不能为空", 0);
-        }
-
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1851,18 +1861,19 @@ class OrderController extends \restapi\components\Controller
 
             $booked_list = array();
 
-            foreach ($param['$order_booked_time'] as $key => $val) {
-                $booked_list[]=[
+            foreach ($param['order_booked_time'] as $key => $val) {
+                $booked_list[] = [
                     'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
-                    'order_booked_end_time' => strtotime($val['order_booked_end_time'])
+                    'order_booked_end_time' => strtotime($val['order_booked_end_time']),
+                    'coupon_id' => $val['coupon_id']
                 ];
             }
 
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
+
                 if ($createOrder['status'] == 1) {
-                    #if ($createOrder["errors"]["order_service_type_name"][0])
                     if (!empty($createOrder)) {
                         return $this->send([1], "添加成功", 1);
                     } else {
@@ -1878,6 +1889,40 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
+    
+    
+     /**
+     * @api {get} v1/order/get-cycle-order 获得周期订单 (haojianshe 100%)
+     *
+     * @apiName actionGetCycleOrder
+     * @apiGroup Order
+     * @apiDescription 阿姨抢单提交
+     *
+     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} [platform_version]  平台版本号
+     * @apiParam {String} order_batch_code          周期订单号
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"0",
+     *      "msg": "操作失败"
+     *  }
+     *
+     */
+    
+    public function actionGetCycleOrder(){
+        
+    }
 
     /**
      * @api {PUT} v1/order/set-worker-order 阿姨抢单提交 (haojianshe 100%)
@@ -1887,7 +1932,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单提交
      *
      * @apiParam {String} access_token      会话id.
-     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} [platform_version]  平台版本号
      * @apiParam {String} order_id          订单号
      *
      * @apiSuccessExample {json} Success-Response:

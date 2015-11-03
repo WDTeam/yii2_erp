@@ -132,7 +132,7 @@ class CustomerWorker extends \dbbase\models\customer\CustomerWorker
      * @return array 阿姨列表
      */
     public static function getCustomerDistrictNearbyWorker($customer_id,$district_id,$page=1,$pageNum=20){
-        if(empty($customer_id) && empty($district_id)){
+        if(empty($customer_id) || empty($district_id)){
             return false;
         }
         $start = ($page-1)*$pageNum;

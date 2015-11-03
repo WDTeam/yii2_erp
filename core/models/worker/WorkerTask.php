@@ -16,7 +16,7 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
         3=>'服务老用户',
         4=>'主动接单',
         5=>'完成工时',
-//         6=>'完成小保养个数 ',
+        6=>'好评 ',
     ];
     /**
      * 条件判断符
@@ -40,9 +40,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     ];
     
     const TASK_CYCLES = [
-        1=>'月',
-        2=>'周',
-        3=>'天'
+        1=>'每月',
+        2=>'每周',
+        3=>'每天'
     ];
     
     public function behaviors()
@@ -79,9 +79,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     {
         $names = self::CONDITION_NAME;
         $data = (array)json_decode($this->worker_task_conditions, true);
-        foreach ($data as $item){
+        foreach ($data as $index=>$item){
             if(isset($names[$item['id']]) && isset($item['value']) && $item['value']!=''){
-                $data[$item['id']]['name'] = $names[$item['id']];
+                $data[$index]['name'] = $names[$item['id']];
             }else{
                 unset($data[$item['id']]);
             }

@@ -47,7 +47,7 @@ use dbbase\models\ActiveRecord;
 class Order extends ActiveRecord
 {
 
-    const MANUAL_ASSIGN_lONG_TIME = 90000;
+    const MANUAL_ASSIGN_lONG_TIME = 900000;
 
     public $order_before_status_dict_id;
     public $order_before_status_name;
@@ -63,6 +63,7 @@ class Order extends ActiveRecord
     public $order_flag_worker_jpush;
     public $order_flag_worker_ivr;
     public $order_flag_cancel_cause;
+    public $order_flag_change_booked_worker;
     public $order_pop_order_code;
     public $order_pop_group_buy_code;
     public $order_pop_operation_money;
@@ -116,6 +117,7 @@ class Order extends ActiveRecord
         'order_flag_worker_jpush',
         'order_flag_worker_ivr',
         'order_flag_cancel_cause',
+        'order_flag_change_booked_worker',
         'order_pop_order_code',
         'order_pop_group_buy_code',
         'order_pop_operation_money',
@@ -239,6 +241,7 @@ class Order extends ActiveRecord
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过ivr',
             'order_flag_cancel_cause' => '取消原因 1公司原因 2个人原因',
+            'order_flag_change_booked_worker' => '是否可更换指定阿姨',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',

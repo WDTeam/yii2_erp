@@ -14,9 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡销售记�
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-sell-record-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
 
 
     <?= DetailView::widget([
@@ -66,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>false,
     ]) ?>
 
 </div>

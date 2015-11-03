@@ -21,6 +21,27 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return $this->_statusLabel;
     }
     
+    
+    /**
+    * 获取用户列表
+    * @date: 2015-10-31
+    * @author: peak pan
+    * @return:
+    **/
+    public static function getuserlist()
+    {
+    	
+    	$usernamelist=self::find()->select('id,username')->asArray()->all();
+    	if($usernamelist){
+    		return ArrayHelper::map($usernamelist, 'id', 'username');
+    	}else{
+    		return array();
+    	}
+    	
+    	
+    }
+    
+    
     /**
      * @inheritdoc
      */
@@ -98,6 +119,30 @@ class SystemUser extends \dbbase\models\system\SystemUser
         //             'admin-update' => ['username', 'email', 'password', 'repassword', 'status', 'role']
         ]);
     }
+    
+    /**
+    * 通过用户id返回用名称
+    * @date: 2015-11-2
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public static function get_id_name($id)
+    {
+    	$usernamelist=self::find()->select('username')->where(['id'=>$id])->asArray()->one();
+    	if($usernamelist){
+    		return $usernamelist['username'];
+    	}else{
+    		return '未知';
+    	}
+    	
+    	
+    }
+    
+    
+    
+    
+    
     
     /**
      * @inheritdoc

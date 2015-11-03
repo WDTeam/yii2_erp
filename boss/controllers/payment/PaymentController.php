@@ -166,6 +166,16 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+        $attr = [
+            'id'=>60,
+			'order_customer_memo'=>'特殊需求特殊需求特殊需求特殊需求',
+			'order_cs_memo'=>'客服备注客服备注客服备注客服备注客服备注',
+			'order_customer_need'=>'重点打扫厨房,家有爱宠,家有爱宠,家有爱宠,家有爱宠,家有爱宠'
+        ];
+        $order = \core\models\order\OrderSearch::getOne($attr['id']);
+        $data = $order->modify($attr);
+        var_dump($data);
+        exit;
         /**
          * 调用(调起)在线支付,发送给支付接口的数据
          * @param integer $payment_type 支付类型,1普通订单,2周期订单,3充值订单

@@ -33,7 +33,8 @@ class CustomerExtBalance extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_balance'], 'number'],
-            [['customer_phone'], 'string', 'max' => 11]
+            [['customer_phone'], 'string', 'max' => 11],
+            [['customer_phone'], 'unique']
         ];
     }
 
