@@ -2,12 +2,8 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
-use kartik\widgets\Select2;
-use yii\web\JsExpression;
-use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-use kartik\grid\GridView;
-
+use core\models\finance\FinanceSettleApplySearch;
 ?>
 
 <div class="worker-search">
@@ -52,6 +48,16 @@ use kartik\grid\GridView;
   </div> 
     <div class='col-md-2'>
         <?= $form->field($model, 'worker_tel') ?>
+    </div>
+    <div class='col-md-2'>
+        <?php 
+            echo  $form->field($model, 'worker_type_id')->dropDownList([FinanceSettleApplySearch::SELF_OPERATION=>'自营',FinanceSettleApplySearch::NON_SELF_OPERATION=>'小家政']);
+        ?>
+    </div>
+    <div class='col-md-2'>
+        <?php 
+            echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceSettleApplySearch::FULLTIME=>'全职',FinanceSettleApplySearch::PARTTIME=>'兼职',FinanceSettleApplySearch::PARKTIME=>'高峰',FinanceSettleApplySearch::INTERVALTIME=>'时段']);
+        ?>
     </div>
     <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

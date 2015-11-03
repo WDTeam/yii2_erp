@@ -1845,18 +1845,18 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
      * @apiParam  {string}  [order_customer_memo] 客户备注
-     * @apiParam   {int}    [coupon_id] 优惠券id
-     * 
-     * @apiParam  {Object[]} 
-     *  { 
-     *   "order_booked_time": [
+     * @apiParam  {int}    [coupon_id] 优惠券id
+     * @apiParam  {Object} [order_booked_time] 
+     * @apiParamExample {json} Request-Example:
+     * {
+     *  "order_booked_time": [
      *   // 开始时间 结束时间 优惠券
      *   {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
      *   {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
      *   {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
      *   {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
-     *    ]
-     *   }
+     *   ]
+     *  }
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -2030,6 +2030,244 @@ class OrderController extends \restapi\components\Controller
         return OrderPush::push($id);
     }
 
-}
+    /**
+     * @api {GET} /order/get-order-worker 获取周期订单（haojianshe 100%）
+     *
+     * @apiName actionGetOrderWorker
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_batch_code 访问源(android_4.2.2)
+     * 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+      {
+      "code": 1,
+      "msg": "操作成功",
+      "ret": [
+      {
+      "id": "8",
+      "order_code": "1231231231231",
+      "order_batch_code": "aaaaa",
+      "order_parent_id": "0",
+      "order_is_parent": "0",
+      "created_at": "3",
+      "updated_at": "0",
+      "isdel": "0",
+      "ver": "1",
+      "version": "1",
+      "order_ip": "",
+      "order_service_type_id": "0",
+      "order_service_type_name": "",
+      "order_src_id": "0",
+      "order_src_name": "",
+      "channel_id": "0",
+      "order_channel_name": "",
+      "order_unit_money": "0.00",
+      "order_money": "0.00",
+      "order_booked_count": "0",
+      "order_booked_begin_time": "3",
+      "order_booked_end_time": "0",
+      "city_id": "0",
+      "district_id": "0",
+      "address_id": "0",
+      "order_address": "",
+      "order_booked_worker_id": "0",
+      "checking_id": "0",
+      "order_cs_memo": "",
+      "order_sys_memo": "",
+      "sub_order": {
+      "1": {
+      "id": "9",
+      "order_code": "1231231231232",
+      "order_batch_code": "aaaaa",
+      "order_parent_id": "1",
+      "order_is_parent": "0",
+      "created_at": "2",
+      "updated_at": "0",
+      "isdel": "0",
+      "ver": "1",
+      "version": "1",
+      "order_ip": "",
+      "order_service_type_id": "0",
+      "order_service_type_name": "",
+      "order_src_id": "0",
+      "order_src_name": "",
+      "channel_id": "0",
+      "order_channel_name": "",
+      "order_unit_money": "0.00",
+      "order_money": "0.00",
+      "order_booked_count": "0",
+      "order_booked_begin_time": "2",
+      "order_booked_end_time": "0",
+      "city_id": "0",
+      "district_id": "0",
+      "address_id": "0",
+      "order_address": "",
+      "order_booked_worker_id": "0",
+      "checking_id": "0",
+      "order_cs_memo": "",
+      "order_sys_memo": ""
+      },
+      "2": {
+      "id": "10",
+      "order_code": "123123",
+      "order_batch_code": "aaaaa",
+      "order_parent_id": "1",
+      "order_is_parent": "0",
+      "created_at": "1",
+      "updated_at": "0",
+      "isdel": "0",
+      "ver": "1",
+      "version": "1",
+      "order_ip": "",
+      "order_service_type_id": "0",
+      "order_service_type_name": "",
+      "order_src_id": "0",
+      "order_src_name": "",
+      "channel_id": "0",
+      "order_channel_name": "",
+      "order_unit_money": "0.00",
+      "order_money": "0.00",
+      "order_booked_count": "0",
+      "order_booked_begin_time": "1",
+      "order_booked_end_time": "0",
+      "city_id": "0",
+      "district_id": "0",
+      "address_id": "0",
+      "order_address": "",
+      "order_booked_worker_id": "0",
+      "checking_id": "0",
+      "order_cs_memo": "",
+      "order_sys_memo": ""
+      }
+      }
+      }
+      ],
+      "alertMsg": ""
+      }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetOrderWorker()
+    {
+        $param = Yii::$app->request->get();
 
-?>
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['order_batch_code']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        try {
+            $order = OrderSearch::getBatchOrder($param['order_batch_code'])->asArray()->all();
+            if (count($order) > 0) {
+                $arr = array();
+                $array = array();
+                foreach ($order as $key => $val) {
+                    if ($val['order_parent_id']) {
+                        $arr[$key] = $val;
+                    } else {
+                        $array[$key] = $val;
+                    }
+                }
+            }
+            foreach ($array as $k => $v) {
+                $array[$k]['sub_order'] = $arr;
+            }
+            return $this->send($array, "操作成功", 1);
+        } catch (\Exception $e) {
+            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
+        }
+    }
+
+    /**
+     * @api {GET} /order/get-order-one 获取一个订单的对象（haojianshe 100%）
+     *
+     * @apiName actionGetOrderOne
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} id 访问源(android_4.2.2)
+     * 
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *    "ret": {
+     *   "id": "2",
+     *    "order_code": "4802003105010",
+     *   "order_batch_code": "",
+     *   "order_parent_id": "0",
+     *   "order_is_parent": 0,
+     *   "created_at": "1446041297",
+     *   "updated_at": "1446041297",
+     *   "isdel": 0,
+     *   "ver": "1",
+     *   "version": "1",
+     *   "order_ip": "114.242.250.248",
+     *    "order_service_type_id": 1,
+     *   "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *   "order_src_id": 1,
+     *   "order_src_name": "BOSS",
+     *   "channel_id": "2",
+     *   "order_channel_name": "H5手机微信",
+     *   "order_unit_money": "20.00",
+     *   "order_money": "40.00",
+     *   "order_booked_count": "120",
+     *   "order_booked_begin_time": "1445581800",
+     *   "order_booked_end_time": "1445589000",
+     *   "city_id": "110100",
+     *   "district_id": "5",
+     *     "address_id": "1",
+     *     "order_address": ",北京市,西城区,西城区西什库大街16号123,空,17091005305",
+     * },
+     * "alertMsg": ""
+     * }
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetOrderOne()
+    {
+        $param = Yii::$app->request->get();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        try {
+            $order = OrderSearch::getOne($param['id'])->getAttributes();
+            $ret["orderData"] = $order;
+            return $this->send($ret, "操作成功", 1);
+        } catch (Exception $e) {
+            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
+        }
+    }
+
+}
