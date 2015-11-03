@@ -24,8 +24,8 @@ $("#order_create_form").submit(function(){
 });
 
 
-$(document).on("change","#order-order_service_type_id input",function(){
-    var goods_id = $("#order-order_service_type_id input:checked").val();
+$(document).on("change","#order-order_service_item_id input",function(){
+    var goods_id = $("#order-order_service_item_id input:checked").val();
     var goods = new Array();
     for(var k in goods_list){
         if(goods_list[k].operation_goods_id == goods_id){
@@ -250,14 +250,14 @@ function getGoods(){
         dataType: "json",
         success: function (data) {
             if(data.code==200){
-                $("#order-order_service_type_id").html('');
+                $("#order-order_service_item_id").html('');
                 goods_list = data.data;
                 district_id = data.district_id;
                 for(var k in goods_list){
                     var v = goods_list[k];
-                    $("#order-order_service_type_id").append(
+                    $("#order-order_service_item_id").append(
                         '<label class="radio-inline"><input type="radio" value="'+ v.operation_goods_id
-                        +'" name="Order[order_service_type_id]"> '+ v.operation_shop_district_goods_name+'</label>'
+                        +'" name="Order[order_service_item_id]"> '+ v.operation_shop_district_goods_name+'</label>'
                     );
                 }
             }else{
@@ -273,14 +273,14 @@ function getCoupons(){
     if(window.customer != undefined) {
         $.ajax({
             type: "GET",
-            url: "/order/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
+            url: "/order/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_item_id input:checked').val(),
             dataType: "json",
             success: function (coupons) {
                 if (coupons.length > 0) {
                     $("#order-coupon_id").html('<option value="">请选择优惠券</option>');
                     for (var k in coupons) {
                         var v = coupons[k];
-                        window.coupons[v.id] = v.coupon_money;
+                        window.coupons[v.id] = v.coupon_price;
                         $("#order-coupon_id").append(
                             '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
                         );

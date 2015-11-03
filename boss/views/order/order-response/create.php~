@@ -6,7 +6,7 @@ use dosamigos\datepicker\DatePicker;
 
 /**
  * @var yii\web\View $this
- * @var dbbase\models\Order $model
+ * @var common\models\Order $model
  */
 
 $this->title = '创建订单';
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if($model->hasErrors()):?>
         <div class="alert alert-danger" role="alert"><?=Html::errorSummary($model); ?></div>
         <?php endif;?>
-        <?php $form = ActiveForm::begin(['layout'=>'horizontal','id'=>'order_create_form']); ?>
+        <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
 
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                 </div>
-                <?= $form->field($model, 'order_service_item_id')->inline()->radioList([])->label('选择服务项') ?>
+                <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">服务信息</h3>
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'language'=>'zh-CN'
                 ]);?>
                 <?= $form->field($model, 'order_booked_count')->inline()->radioList($model->orderBookedCountList)->label('服务时长'); ?>
-                <?= $form->field($model, 'orderBookedTimeRange')->inline()->radioList([])->label('服务时间');?>
+                <?= $form->field($model, 'orderBookedTimeRange')->inline()->radioList($model->orderBookedTimeRangeList)->label('服务时间');?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">支付信息</h3>
@@ -87,23 +87,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class=" col-sm-3"></label>
                     <h4 class="col-sm-2">
-                        单价：<span id="order_unit_money" style="font-size: 25px;color: #00ff00;" >0.00</span>
+                        单价：<span id="order_unit_money" style="font-size: 25px;color: #00ff00;" >25.00</span>
                     </h4>
                     <h4 class="col-sm-2">
-                        总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">0.00</span>
+                        总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">50.00</span>
                     </h4>
                     <h4 class="col-sm-2">
                         账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
                     </h4>
                 </div>
-                <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
-                <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
+                <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>25]) ?></div>
+                <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>50]) ?></div>
                 <?= $form->field($model, 'order_pay_type')->inline()->radioList(['1'=>'现金支付','2'=>'余额支付','3'=>'第三方预付'])->label('支付方式'); ?>
                 <div id="order_pay_type_1" >
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
                         <div class="col-sm-2">
-                            <span class="order_money" style="font-size: 20px;color: #ff0000;">00.00</span>
+                            <span class="order_money" style="font-size: 20px;color: #ff0000;">50.00</span>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class="control-label col-sm-3">需支付</label>
                     <div class="col-sm-2">
-                        <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">00.00</span>
+                        <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">50.00</span>
                     </div>
                 </div>
                 </div>

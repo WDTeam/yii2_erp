@@ -55,6 +55,8 @@ class FinanceHeaderController extends BaseAuthController
     	//获取支付渠道
     	$ordesite= FinancePayChannel::get_pay_channel_list();
     
+    	
+    	
         $searchModel = new FinanceHeaderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         $dataProvider->query->orderBy(['id'=>SORT_DESC]);
