@@ -27,7 +27,7 @@ use boss\models\order\Order;
     'action' => ['order/order/index'],
     'method' => 'get',
 ]); ?>						
-	<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
+	<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu input_customer_phone'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
     <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
             'initValueText' => '门店:', // set the initial display text
             'options' => ['placeholder' => '选择门店', 'class' => 'm_ipu'],
@@ -70,7 +70,7 @@ use boss\models\order\Order;
     <?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>	
 	</div>        	   
 	<?php echo $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>
-    <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
+    <?= Html::submitButton('搜索', ['class' => 'btn btn-primary button-search']) ?>
 	</div>
 <?php ActiveForm::end(); ?>
   <div class="clear"></div>
