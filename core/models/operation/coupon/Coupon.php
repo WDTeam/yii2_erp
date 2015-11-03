@@ -313,6 +313,16 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 	}
 
 	/**
+     * get coupon basic info by id
+	 */
+	public static function getCouponBasicInfoById($coupon_id){
+		$coupon = self::find()->select(['id as coupon_id', 'coupon_name', 'coupon_price'])->where(['id'=>$coupon_id])->asArray()->one();
+		return $coupon;
+	}
+
+	
+
+	/**
      * set custoemr's coupon used after pay by coupon
 	 */
 	public static function useCoupon($coupon_customer_id){
@@ -369,37 +379,37 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 	/**
      * check whether the coupon code is expirated
 	 */
-	public static function isExpirated($coupon_code){
-		$coupon_code = (new \yii\db\Query())
-			->select(['cc.coupon_id as coupon_id', 'cc.id as coupon_code_id', 'c.coupon_name', 'c.coupon_price', 'cc.coupon_code', 'c.coupon_time_type', 'c.coupon_begin_at', 'c.coupon_end_at', 'c.coupon_get_end_at', 'c.coupon_use_end_days'])
-			->from(['cc'=>'{{%coupon_code}}'])
-			->leftJoin(['c'=>'{{%coupon}}'], 'c.id = cc.coupon_id')
-			->where(['cc.coupon_code'=>$coupon_code])
-			->one();
-		$is_expirated = true;
-		switch ($coupon_code['coupon_time_type'])
-		{
-			case 0:
-				if(coupon_code['coupon_end_at'] < time()){
-					$is_expirated = true;
-				}else{
-					$is_expirated = false;
-				}
-			break;
-			case 1:
-				if(coupon_code['coupon_end_at'] < time()){
-					$is_expirated = true;
-				}else{
-					$is_expirated = false;
-				}
-			break;
-			
-		
-			default:
-				# code...
-			break;
-		}
-	}
+	//public static function isExpirated($coupon_code){
+	//	$coupon_code = (new \yii\db\Query())
+	//		->select(['cc.coupon_id as coupon_id', 'cc.id as coupon_code_id', 'c.coupon_name', 'c.coupon_price', 'cc.coupon_code', 'c.coupon_time_type', 'c.coupon_begin_at', 'c.coupon_end_at', 'c.coupon_get_end_at', 'c.coupon_use_end_days'])
+	//		->from(['cc'=>'{{%coupon_code}}'])
+	//		->leftJoin(['c'=>'{{%coupon}}'], 'c.id = cc.coupon_id')
+	//		->where(['cc.coupon_code'=>$coupon_code])
+	//		->one();
+	//	$is_expirated = true;
+	//	switch ($coupon_code['coupon_time_type'])
+	//	{
+	//		case 0:
+	//			if($coupon_code['coupon_end_at'] < time()){
+	//				$is_expirated = true;
+	//			}else{
+	//				$is_expirated = false;
+	//			}
+	//		break;
+	//		case 1:
+	//			if($coupon_code['coupon_end_at'] < time()){
+	//				$is_expirated = true;
+	//			}else{
+	//				$is_expirated = false;
+	//			}
+	//		break;
+	//		
+	//	
+	//		default:
+	//			# code...
+	//		break;
+	//	}
+	//}
 
 	/**
      * coupon generated only one bundle for customer by phone
