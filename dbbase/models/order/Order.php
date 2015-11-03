@@ -40,6 +40,9 @@ use dbbase\models\ActiveRecord;
  * @property string $checking_id
  * @property string $order_cs_memo
  * @property string $order_sys_memo
+ * @property string $order_cancel_cause_id
+ * @property string $order_cancel_cause_detail
+ * @property string $order_cancel_cause_memo
  *
  * @property OrderExtCustomer $orderExtCustomer
  * @property OrderExtFlag $orderExtFlag
@@ -66,7 +69,6 @@ class Order extends ActiveRecord
     public $order_flag_worker_sms;
     public $order_flag_worker_jpush;
     public $order_flag_worker_ivr;
-    public $order_flag_cancel_cause;
     public $order_flag_change_booked_worker;
     public $order_pop_order_code;
     public $order_pop_group_buy_code;
@@ -121,7 +123,6 @@ class Order extends ActiveRecord
         'order_flag_worker_sms',
         'order_flag_worker_jpush',
         'order_flag_worker_ivr',
-        'order_flag_cancel_cause',
         'order_flag_change_booked_worker',
         'order_pop_order_code',
         'order_pop_group_buy_code',
@@ -187,11 +188,13 @@ class Order extends ActiveRecord
     {
         return [
             [['admin_id','order_service_type_id','order_service_item_id','order_src_id','order_booked_begin_time','address_id'],'required'],
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id',
+                'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'order_cancel_cause_id',
+                'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
             [['order_unit_money',  'order_booked_count','order_money','order_lat','order_lng'], 'number'],
             [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
             [['order_service_type_name','order_service_item_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
-            [['order_address', 'order_cs_memo','order_sys_memo'], 'string', 'max' => 255],
+            [['order_address', 'order_cs_memo','order_sys_memo','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
             [$this->attributesExt,'safe']
         ];
@@ -235,6 +238,9 @@ class Order extends ActiveRecord
             'checking_id' => '对账id',
             'order_cs_memo' => '客服备注',
             'order_sys_memo' => '系统备注',
+            'order_cancel_cause_id' => '取消原因id',
+            'order_cancel_cause_detail' => '取消原因',
+            'order_cancel_cause_memo' => '取消备注',
 
             'order_before_status_dict_id' => '状态变更前订单状态字典ID',
             'order_before_status_name' => '状态变更前订单状态',
@@ -249,7 +255,6 @@ class Order extends ActiveRecord
             'order_flag_worker_sms' => '是否给阿姨发过短信',
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过ivr',
-            'order_flag_cancel_cause' => '取消原因 1公司原因 2个人原因',
             'order_flag_change_booked_worker' => '是否可更换指定阿姨',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
@@ -436,6 +441,9 @@ class Order extends ActiveRecord
                 'checking_id' => $this->checking_id,
                 'order_cs_memo' => $this->order_cs_memo,
                 'order_sys_memo' => $this->order_sys_memo,
+                'order_cancel_cause_id' => $this->order_cancel_cause_id,
+                'order_cancel_cause_detail' => $this->order_cancel_cause_detail,
+                'order_cancel_cause_memo' => $this->order_cancel_cause_memo,
                 'admin_id' => $this->admin_id,
             ]);
 

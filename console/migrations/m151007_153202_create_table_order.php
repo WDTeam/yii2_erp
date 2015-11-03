@@ -55,6 +55,9 @@ class m151007_153202_create_table_order extends Migration
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
             'order_sys_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'系统备注\'',
+            'order_cancel_cause_id' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'取消具体原因id\'',
+            'order_cancel_cause_detail' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消具体原因\'',
+            'order_cancel_cause_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消原因备注\'',
 
         ], $tableOptions);
 

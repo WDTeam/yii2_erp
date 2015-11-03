@@ -561,14 +561,16 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $memo
-     * @param $cause 1公司原因 2个人原因
+     * @param $cause
      * @return bool
      */
     public static function cancel($order_id, $admin_id, $cause, $memo = '')
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->order_flag_cancel_cause = $cause;
+        $order->order_cancel_cause_id = $cause;
+        $order->order_cancel_cause_detail = OrderOtherDict::getName($cause);
+        $order->order_cancel_cause_memo = $memo;
         $current_status = $order->orderExtStatus->order_status_dict_id;
         if (in_array($current_status, [  //只有在以下状态下才可以取消订单
                     OrderStatusDict::ORDER_INIT,
@@ -579,21 +581,10 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            if ($admin_id == 0) {
-                $order->order_customer_memo = $memo;
-                $result = OrderStatus::_cancel($order, ['OrderExtCustomer']);
-            } elseif ($admin_id == 1) {
-                $order->order_sys_memo = $memo;
-                $result = OrderStatus::_cancel($order);
-            } elseif ($admin_id == 2) {
-                $order->order_worker_memo = $memo;
-                $result = OrderStatus::_cancel($order, ['OrderExtWorker']);
-            } elseif ($admin_id > 2) {
-                $order->order_cs_memo = $memo;
-                $result = OrderStatus::_cancel($order);
-            }
+            $result = OrderStatus::_cancel($order);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //TODO 调高峰的退款接口
+
             }
         } else {
             return false;
