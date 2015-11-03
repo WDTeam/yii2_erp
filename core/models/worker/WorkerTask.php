@@ -242,6 +242,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
             'worker_types' => \Yii::t('app', '阿姨角色'),
             'worker_rules' => \Yii::t('app', '阿姨身份'),
             'worker_cites' => \Yii::t('app', '开通城市'),
+            'worker_type' => \Yii::t('app', '阿姨角色'),
+            'worker_rule_id' => \Yii::t('app', '阿姨身份'),
+            'worker_task_city_id' => \Yii::t('app', '适用城市'),
         ]);
     }
     
