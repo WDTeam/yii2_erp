@@ -78,6 +78,7 @@ class WorkerController extends \restapi\components\Controller
                     "worker_photo" => $workerInfo['worker_photo'],
                     "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
                     "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
+                    "worker_type" => $workerInfo["worker_type"],
                     "worker_type_description" => $workerInfo["worker_type_description"],
                     'worker_star' => $workerInfo["worker_star"],
                     "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
@@ -907,7 +908,7 @@ class WorkerController extends \restapi\components\Controller
      *          "worker_photo": "头像地址",
      *          "worker_identity_description": "阿姨身份说明",
      *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
-     *          "worker_type_description": "角色",
+     *          "worker_type": "阿姨类型【 1自有 2非自有】",
      *          "worker_star": "星级",
      *          "personal_skill": [
      *              "阿姨技能1",
