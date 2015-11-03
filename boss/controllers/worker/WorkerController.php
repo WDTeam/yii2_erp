@@ -727,7 +727,6 @@ class WorkerController extends BaseAuthController
             $connectionNew->createCommand()->batchInsert('{{%worker_auth}}',$workerAuthColumns, $batchWorkerAuth)->execute();
         }
 
-        //die;
     }
 
     public static function exportDataFromMysqlToRedis(){
@@ -741,6 +740,7 @@ class WorkerController extends BaseAuthController
         echo '<br>';
         //echo date('Y-m-d H:i',1446264000);
         $a = Worker::getDistrictCycleFreeWorker(1,1,[['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'10:00']]);
+        //$a = Worker::getWorkerBankInfo(19077);
         var_dump($a);die;
 //        $a = Worker::getDistrictFreeWorker(1,1,1446253200,1446264000);
 //        print_r($a);
