@@ -2,9 +2,6 @@
 
 namespace dbbase\models\payment;
 
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\finance\FinancePayChannel;
-
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -76,29 +73,16 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
     {
         //写入文本日志
         $writeLog = array(
-            'path' => '/tmp/log/transaction_record/'.date('Y-m-d',time()),
+            'path' => '/tmp/log/transaction_record/'.date('Ym',time()),
             'data' => $param->data,
             'filename' => date('Y-m-d',time()).'.log'
         );
 
         $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
         $this->trigger('writeTextLog');
-        //$orderChannelInfo = FinanceOrderChannel::get_order_channel_info($param->data['order_channel_id']);
-
-        //支付渠道
-        //$param->data['pay_channel_id'] = $orderChannelInfo->pay_channel_id;
-
-        //支付渠道名称
-        //$param->data['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($orderChannelInfo->pay_channel_id);
-
-        //订单渠道名称
-        //$param->data['payment_customer_trans_record_order_channel'] = $orderChannelInfo->finance_order_channel_name;
 
         //makeSign
         $param->data['payment_customer_trans_record_verify'] = self::sign($param->data);
-
-        //交易方式:1消费,2=充值,3=退款,4=补偿
-        //$param->data['payment_customer_trans_record_mode_name'] = PaymentCustomerTransRecord::getCustomerTransRecordModeByName($param->data['payment_customer_trans_record_mode']);
 
         //写入数据库日志
         $this->attributes = $param->data;
@@ -114,7 +98,7 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
     public function writeTextLog($param)
     {
         //创建目录
-        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/log/pay/'.date('Y-m-d',time());
+        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/log/pay/'.date('Ym',time());
         is_dir($path) || mkdir($path,0777,true);
 
         //文件名称
