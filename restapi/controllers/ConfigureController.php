@@ -248,7 +248,8 @@ class ConfigureController extends \restapi\components\Controller
      *                  "sort"=>"2"
      *              },
      *              ],
-     *              "isBlock":"0" 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。
+     *              "isBlock":"0", 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。
+     *              "isEffect": "0" 用户token是否有效，0表示正常，1表示失效，如果access_token为空，该值为0。
      *      }
      * }
      *
@@ -267,6 +268,12 @@ class ConfigureController extends \restapi\components\Controller
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
+        }
+        @$access_token=$param['access_token'];
+        $isEffect="0";
+        if(!empty($access_token)&&!CustomerAccessToken::checkAccessToken($access_token))
+        {
+            $isEffect="1";
         }
         //获取城市列表
         $city_list = OperationCity::getOnlineCitys();
@@ -458,6 +465,7 @@ class ConfigureController extends \restapi\components\Controller
         ];
         $isBlock="0";
 
+
         $ret = [
             'city_list' => $city_list,
             'header_link' => $header_link,
@@ -466,6 +474,7 @@ class ConfigureController extends \restapi\components\Controller
             'server_list' => $server_list,
             'footer_link' => $footer_link,
             'isBlock' => $isBlock,
+            'isEffect' => $isEffect,
         ];
 
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
