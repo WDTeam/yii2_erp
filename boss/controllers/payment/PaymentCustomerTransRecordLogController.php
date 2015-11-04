@@ -2,9 +2,6 @@
 
 namespace boss\controllers\payment;
 
-
-use dbbase\models\customer\PaymentCustomerTransRecordLog;
-
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;

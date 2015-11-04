@@ -110,6 +110,7 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         //     return false;
         // }
         $customer = Customer::find()->where(['customer_phone'=>$customerAccessToken->customer_phone])->one();
+        unset($customer["is_del"]);
         return $customer == NULL ? false : $customer;
     }
 

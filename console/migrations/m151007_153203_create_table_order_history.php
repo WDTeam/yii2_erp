@@ -41,7 +41,6 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_worker_sms' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了短信\'',
             'order_flag_worker_jpush' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了极光推送\'',
             'order_flag_worker_ivr' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了IVR\'',
-            'order_flag_cancel_cause' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'取消原因 1公司原因 2个人原因\'',
             'order_flag_change_booked_worker' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否可换指定阿姨\'',
 
 //===============================下单信息
@@ -64,6 +63,8 @@ class m151007_153203_create_table_order_history extends Migration
             'district_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'商圈ID\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
+            'order_lat' => Schema::TYPE_DOUBLE.' DEFAULT NULL COMMENT \'纬度\'',
+            'order_lng' => Schema::TYPE_DOUBLE.' DEFAULT NULL COMMENT \'经度\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 //================================第三方信息
             'order_pop_order_code' => Schema::TYPE_STRING . '(255)  DEFAULT \'\' COMMENT \'第三方订单编号\'',
@@ -111,6 +112,9 @@ class m151007_153203_create_table_order_history extends Migration
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
             'order_sys_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'系统备注\'',
+            'order_cancel_cause_id' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'取消具体原因id\'',
+            'order_cancel_cause_detail' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消具体原因\'',
+            'order_cancel_cause_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消原因备注\'',
             'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id  0客户操作 1系统操作\'',
 
 

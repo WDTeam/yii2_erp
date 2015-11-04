@@ -175,7 +175,7 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionSelfFulltimeWorkerSettleView(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
-         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
+        $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch->load($requestParams);
         $financeSettleApplySearch = $financeSettleApplySearch->findOne(['id'=>$financeSettleApplySearch->id]);
@@ -202,6 +202,7 @@ class FinanceSettleApplyController extends BaseAuthController
     {
         $financeSearchModel = new FinanceSettleApplySearch;
         $requestParams = Yii::$app->request->getQueryParams();
+        $financeSearchModel->scenario = 'query';
         $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
         $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
         $financeSearchModel->load($requestParams);
@@ -226,81 +227,61 @@ class FinanceSettleApplyController extends BaseAuthController
      * @return type
      */
     public function actionExport(){
-        
-        $shopName = "通州门店";
-        $settleMonth = "8月";
-        $workerType = "全时段";
-        $statDes = $shopName.$settleMonth.$workerType.'家政人员订单费用表';
-        
+        $exportArray = [];
         $financeSearchModel = new FinanceSettleApplySearch;
-        $workerIncomeAndDetailArr = $financeSearchModel->getWorkerIncomeAndDetail();
-        $workerIncomeAndDetail = $workerIncomeAndDetailArr[0];
-        $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch;
-        $nonOrderIncomeArr = $financeWorkerNonOrderIncomeSearch->getNonOrderIncomeBySettleApplyId($workerIncomeAndDetail['settleApplyId']);
-        $nonOrderIncomeTypeAndMoneyArr = [];
-        foreach($nonOrderIncomeArr as $nonOrderIncome){
-            $nonOrderIncomeTypeAndMoneyArr["'".$nonOrderIncome['finance_worker_non_order_income_type']."'"] = $nonOrderIncome['finance_worker_non_order_income'];
-        }
-        $workerIncomeAndDetailReal = array_merge($nonOrderIncomeTypeAndMoneyArr,$workerIncomeAndDetail);
-        
-        $baseData = array('shop_name'=>'待定','worker_name'=>'待定','worker_idcard'=>'待定','worker_bank_card'=>'待定');
-        //获取当前阿姨所有的补贴id和描述，按id排序
-        $allWorkerSubsidyIdAndDes = [['rule_id'=>'1','rule_des'=>'路补'],['rule_id'=>'2','rule_des'=>'晚补'],['rule_id'=>'3','rule_des'=>'全勤奖']];
-        $sheetColumnLeter = ['E','F','G','H','I','J'];
-        $dynamicSheetHeaders = [];
-        $dynamicSheetValues = [];
+        $financeSettleApplySearchArray = $financeSearchModel->getCanPayedSettlementList();
         $i = 0;
-        foreach ($allWorkerSubsidyIdAndDes as $workerSubsidyIdAndDes){
-            $dynamicSheetHeaders[$sheetColumnLeter[$i]]=$workerSubsidyIdAndDes['rule_des'];
-            $dynamicSheetValues[$sheetColumnLeter[$i]] = "'".$workerSubsidyIdAndDes['rule_id']."'";
-            $baseData["'".$workerSubsidyIdAndDes['rule_id']."'"]=0.00;
+        foreach($financeSettleApplySearchArray as $financeSettleApplySearch){
+            $exportRow = [];
+            $worker_id = $financeSettleApplySearch->worker_id;
+            $workerBankInfo = Worker::getWorkerBankInfo($worker_id);
+            if(count($workerBankInfo) > 0){
+                $exportRow['receiver'] = $financeSettleApplySearch->worker_name;//收款人
+                $exportRow['receiver_bank_account'] = $workerBankInfo[0]['worker_bank_card'];//收款人账号
+                $exportRow['receiver_bank_name'] = $workerBankInfo[0]['worker_bank_name'];//开户行
+                $exportRow['receiver_bank_branch'] = $workerBankInfo[0]['worker_bank_from'];//开户网点
+                $exportRow['receiver_bank_address'] = $workerBankInfo[0]['worker_bank_area'];//开户地址
+                $exportRow['receiver_income'] = $financeSettleApplySearch->finance_settle_apply_money;//打款金额
+            }
+            $exportArray[$i] = $exportRow;
             $i++;
         }
-        //查询结算申请表与worker表关联查询，之后单独查询非订单收入表，放入一个数组中，与baseData数组做merge操作
-        
-        $workerIncomeAndDetailToExcel = array_merge($baseData,$workerIncomeAndDetailReal);
-        $data=array(
-            0=>$workerIncomeAndDetailToExcel
-           );
-           $objPHPExcel=new PHPExcel();
-           $objPHPExcel->getProperties()->setCreator('ejiajie')
-                   ->setLastModifiedBy('ejiajie')
-                   ->setTitle('Office 2007 XLSX Document')
-                   ->setSubject('Office 2007 XLSX Document')
-                   ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
-                   ->setKeywords('office 2007 openxml php')
-                   ->setCategory('Result file');
-           $objPHPExcel->setActiveSheetIndex(0)
-                       ->setCellValue('A1','店面')
-                       ->setCellValue('B1','姓名')
-                       ->setCellValue('C1','身份证号')
-                       ->setCellValue('D1','银行卡号');
-            foreach ($dynamicSheetHeaders as $dynamicSheetHeaderKey => $dynamicSheetHeaderValue){
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($dynamicSheetHeaderKey.'1',$dynamicSheetHeaderValue);
-            }
-           $i=2;   
-           foreach($data as $k=>$v){
-            $objPHPExcel->setActiveSheetIndex(0)
-                       ->setCellValue('A'.$i,$v['shop_name'])
-                       ->setCellValue('B'.$i,$v['worker_name'])
-                       ->setCellValue('C'.$i,$v['worker_idcard'])
-                       ->setCellValue('D'.$i,$v['worker_bank_card']);
-            foreach ($dynamicSheetHeaders as $dynamicSheetHeaderKey => $dynamicSheetHeaderValue){
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($dynamicSheetHeaderKey.$i,$v[$dynamicSheetValues[$dynamicSheetHeaderKey]]);
-            }
-            
+        $objPHPExcel=new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator('ejiajie')
+                ->setLastModifiedBy('ejiajie')
+                ->setTitle('Office 2007 XLSX Document')
+                ->setSubject('Office 2007 XLSX Document')
+                ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+                ->setKeywords('office 2007 openxml php')
+                ->setCategory('Result file');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1','收款人')
+                    ->setCellValue('B1','收款人账号')
+                    ->setCellValue('C1','金额')
+                    ->setCellValue('D1','开户行')
+                    ->setCellValue('E1','开户网点')
+                    ->setCellValue('F1','开户地址');
+        $i=2;   
+        foreach($exportArray as $k=>$v){
+         $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i,$v['receiver'])
+                    ->setCellValue('B'.$i,$v['receiver_bank_account'])
+                    ->setCellValue('C'.$i,$v['receiver_income'])
+                    ->setCellValue('D'.$i,$v['receiver_bank_name'])
+                    ->setCellValue('E'.$i,$v['receiver_bank_branch'])
+                    ->setCellValue('F'.$i,$v['receiver_bank_address']);
             $i++;
-           }
-           $objPHPExcel->getActiveSheet()->setTitle('结算');
-           $objPHPExcel->setActiveSheetIndex(0);
-           $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
-           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-           ob_end_clean();
-           header("Content-Type: application/vnd.ms-excel");
-            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
-            header('Cache-Control: max-age=0');
-            $objWriter->save('php://output');
-            exit;
+        }
+        $objPHPExcel->getActiveSheet()->setTitle('结算');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        ob_end_clean();
+        header("Content-Type: application/vnd.ms-excel");
+         header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+         header('Cache-Control: max-age=0');
+         $objWriter->save('php://output');
+         exit;
     }
     
     /**
@@ -402,6 +383,7 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $financeSettleApplySearch->scenario = 'count';
         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
@@ -501,6 +483,7 @@ class FinanceSettleApplyController extends BaseAuthController
     
     private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
         $financeSettleApplySearch = new FinanceSettleApplySearch();
+        $financeSettleApplySearch->scenario = 'save';
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch();
         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         foreach($workerArr as $worker){

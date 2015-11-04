@@ -99,9 +99,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                 </div>
-
+                <!--div>
                 <?= Html::button('修改', ['class' =>  'btn btn-warning pull-right address-edit-btn','id'=>'add_address_btn']); ?>
                 <?= Html::button('保存', ['class' =>  'btn btn-warning pull-right address-save-btn','style'=>'display:none']); ?>
+                </div-->
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务类型</label>
                     <div class="col-sm-6 right-text"><?= Html::encode($model->order_service_type_name) ?></div>
@@ -109,9 +110,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
            <div class="panel-heading service-info-view">
                 <h3 class="panel-title">服务信息</h3>
-                <div class="pull-right" style="margin-top: -26px;">
+                <!--div class="pull-right" style="margin-top: -26px;">
                      <button class="btn btn-warning btn-edit-service-info" type="button">修改</button>
-                </div>                
+                </div-->
             </div>
             <div class="panel-body service-info-view">
                 <div class="form-group">

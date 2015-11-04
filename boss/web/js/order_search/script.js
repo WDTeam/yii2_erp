@@ -82,8 +82,9 @@ $(document).ready(function($){
                 if(msg){
                 	//alert('22');
                 	alert('取消订单成功！');
-                	$("#HBox").hide();
-                	$("#HOverlay").hide()
+                	//$("#HBox").hide();
+                	//$("#HOverlay").hide();
+                	window.location.reload();
                 }else{
                     alert('取消订单失败！');
                 }
@@ -324,6 +325,12 @@ $(document).ready(function($){
 		$(".radioLi").hide();
 		$(".m_disd").hide();
 		$(".submitBtntt").show();
+
+		$(":radio[name='radio_department']").removeAttr("checked");
+		$(":radio[name='radio_complaint_type']").removeAttr("checked");
+		$(":radio[name='radio_complaint_level']").removeAttr("checked");
+		
+		$(":radio[name='radio_department']:eq(0)").parent().click();
 	});
 	
 	$(".m_add").click(function(){
@@ -361,8 +368,9 @@ $(document).ready(function($){
             success: function (msg) {
                 if(msg){
                 	alert('提交投诉成功！');
-                	$("#HBox2").hide();
-                	$("#HOverlay").hide()
+                	//$("#HBox2").hide();
+                	//$("#HOverlay").hide();
+                	window.location.reload();
                 }else{
                     alert('提交投诉失败！');
                 }

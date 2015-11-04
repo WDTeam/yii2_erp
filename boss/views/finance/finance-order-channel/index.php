@@ -32,14 +32,6 @@ use boss\models\finance\FinanceOrderChannelSearch;
     		'finance_order_channel_rate',
     		[
     		'format' => 'raw',
-    		'label' => '支付渠道',
-    		'value' => function ($dataProvider) {
-    			return FinanceOrderChannel::get_pay_name($dataProvider->pay_channel_id);
-    		},
-    		'width' => "100px",
-    		],
-    		[
-    		'format' => 'raw',
     		'label' => '支付显示',
     		'value' => function ($dataProvider) {
     			return $dataProvider->finance_order_channel_sort==1 ? '<font cloro:red>确定</font>':'取消';
