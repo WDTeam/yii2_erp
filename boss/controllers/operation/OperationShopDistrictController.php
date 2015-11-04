@@ -83,6 +83,11 @@ class OperationShopDistrictController extends BaseAuthController
                 $district_str = file_get_contents($filePath);
                 $district_arr = json_decode($district_str, true);
 
+                if (!isset($district_arr) && !is_array($district_arr)) {
+                    \Yii::$app->getSession()->setFlash('default','上传文件数据格式不正确！');
+                    return $this->redirect(['index']);
+                }
+
                 foreach ($district_arr as $keys => $values) {
 
                     foreach ($values['district'] as $k => $v) {
@@ -128,6 +133,7 @@ class OperationShopDistrictController extends BaseAuthController
         return $this->render('index', [
             'model' => $model,
             'city_name' => $city_name,
+            'city_id' => $city_id,
             'dataProvider' => $dataProvider,
         ]);
     }
