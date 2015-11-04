@@ -362,7 +362,7 @@ $(document).ready(function($){
         
 		$.ajax({
             type: "POST",
-            url:  "order-complaint/back",
+            url:  "/order/order-complaint/back",
             data: complaints,
             dataType:"json",
             success: function (msg) {
