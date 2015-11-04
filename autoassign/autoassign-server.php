@@ -11,7 +11,6 @@ define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
 define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
 define("REDIS_IS_SERVER_SUSPEND","REDIS_IS_SERVER_SUSPEND");
-define("REDIS_AUTOASSIGN_CONFIG","REDIS_AUTOASSIGN_CONFIG");
 
 $assign_config = require(CONFIG_PATH);
 
@@ -37,7 +36,6 @@ class server
         $this->config = $config;
         $this->connectRedis();
         $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
-        $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
         $this->saveStatus(null);
         $this->serv = new swoole_websocket_server($config['SERVER_LISTEN_IP'], $config['SERVER_LISTEN_PORT']);
         //初始化swoole服务
