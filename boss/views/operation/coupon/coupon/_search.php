@@ -36,7 +36,7 @@ use \core\models\customer\Customer;
         echo $form->field($model, 'coupon_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-            'data' =>Customer::getOnlineCityList(),
+            'data' =>Customer::cityList(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

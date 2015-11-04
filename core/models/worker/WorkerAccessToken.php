@@ -92,6 +92,7 @@ class WorkerAccessToken extends \dbbase\models\worker\WorkerAccessToken
         unset($worker['worker_password']);
         unset($worker['worker_idcard']);
         unset($worker['worker_idcard']);
+        unset($worker['isdel']);
         return $worker == NULL ? false : $worker;
     }
 
