@@ -1951,7 +1951,7 @@ class OrderController extends \restapi\components\Controller
 
                 if ($createOrder['status'] == 1) {
                     if (!empty($createOrder)) {
-                        return $this->send([1], "添加成功", 1);
+                        return $this->send($createOrder['order_batch_code'], "添加成功", 1);
                     } else {
                         return $this->send(null, "添加失败", 0, 403);
                     }
