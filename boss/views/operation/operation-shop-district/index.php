@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', '增加商圈'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', '增加商圈'), ['create', 'city_id' => $city_id, 'city_name' => $city_name], ['class' => 'btn btn-success']),
             //'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false
         ],

@@ -152,7 +152,7 @@ class OperationShopDistrictController extends BaseAuthController
         } else {
             return $this->render('view', [
                 'model' => $model,
-                'city_id' => $this->city_id,
+                //'city_id' => $this->city_id,
                 'city_name' => $this->city_name
             ]);
         }
@@ -205,7 +205,7 @@ class OperationShopDistrictController extends BaseAuthController
             $model->operation_area_id = $model->operation_area_id.'_'.$model->operation_area_name;
             return $this->render('create', [
                 'model' => $model,
-                'city_id' => $this->city_id,
+                //'city_id' => $this->city_id,
                 'city_name' => $this->city_name,
                 'citymodel' => $citymodel,
                 'areaList' => $areaList,
@@ -272,7 +272,7 @@ class OperationShopDistrictController extends BaseAuthController
             $model->operation_area_id = $model->operation_area_id.'_'.$model->operation_area_name;
             return $this->render('update', [
                 'model' => $model,
-                'city_id' => $this->city_id,
+                //'city_id' => $this->city_id,
                 'city_name' => $this->city_name,
                 'citymodel' => $citymodel,
                 'areaList' => $areaList,
