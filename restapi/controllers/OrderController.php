@@ -1926,6 +1926,9 @@ class OrderController extends \restapi\components\Controller
             $booked_list = array();
 
             foreach ($param['order_booked_time'] as $key => $val) {
+                if(!isset($param['order_booked_time']['coupon_id'])){
+                    $val['coupon_id'] = null;
+                }
                 $booked_list[] = [
                     'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
                     'order_booked_end_time' => strtotime($val['order_booked_end_time']),
