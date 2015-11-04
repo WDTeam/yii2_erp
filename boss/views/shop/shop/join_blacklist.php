@@ -17,7 +17,7 @@ use core\models\shop\Shop;
 
 <?php $form = ActiveForm::begin([
     'type'=>ActiveForm::TYPE_HORIZONTAL,
-    'action'=>['join-blacklist', 'id'=>$model->id]
+    'action'=>['join-blacklist', 'id'=>$model->id],
 ]); ?>
 
     <?php echo Html::textarea('cause', '', [
