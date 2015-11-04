@@ -554,7 +554,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [from] 开始时间   时间戳   如 *'1443695400'
      * @apiParam {String} [to] 结束时间     时间戳   如 *'1443695400'
      * @apiParam {String} [oc.customer_id]客户id
-     *
+     * @apiParam {String} [not_with_work] 0,1
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
@@ -645,11 +645,17 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["owr.worker_id"] = $worker->id;
+        $not_with_work = null;
+        if(isset($args['not_with_work'])){
+            $not_with_work = $args['not_with_work'];
+        }else{
+            $args["owr.worker_id"] = $worker->id;
+        }
+
         try {
             $orderSearch = new \core\models\order\OrderSearch();
-            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
-            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
+            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to,$not_with_work);
+            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to,$not_with_work);
         } catch (\Exception $e) {
             return $this->send($e, "服务异常",1024,200,null,alertMsgEnum::orderGetWorkerOrderFaile);
         }

@@ -468,11 +468,11 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at')
+    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at',$not_with_work=null)
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to,$not_with_work=null)->query;
         $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
@@ -496,10 +496,10 @@ class OrderSearch extends Order
     * @param $customer_id
     * @return int|string
     */
-    public function searchWorkerOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,$to=null)
+    public function searchWorkerOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,$to=null,$not_with_work=null)
     {
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to,$not_with_work)->query;
         return $query->count();
     }
 
@@ -593,15 +593,17 @@ class OrderSearch extends Order
      * 依据订单状态 查询带状态的阿姨订单query对象
      * @return
      */
-    public function searchWorkerOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchWorkerOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null,$not_with_work=null)
     {
         $query = new \yii\db\Query();
 
         $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
         innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
-        innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')->
-        innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
+        innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id');
 
+        if(!is_null($not_with_work )){
+            $query->innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -610,6 +612,14 @@ class OrderSearch extends Order
         if (!is_null($from) && is_numeric($from)) {
             $query->andFilterWhere(['>', 'order_booked_begin_time', $from]);
         }
+
+        if(!is_null($not_with_work )){
+            $query = $query->andFilterWhere([
+                'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
+            ]);
+
+        }
+
         if (!is_null($to) && is_numeric($to)) {
             $query->andFilterWhere(['<', 'order_booked_begin_time', $to]);
         }
@@ -657,7 +667,7 @@ class OrderSearch extends Order
                 'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
-                'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
+
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
