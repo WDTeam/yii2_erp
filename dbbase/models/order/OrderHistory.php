@@ -226,7 +226,7 @@ class OrderHistory extends ActiveRecord
             'order_cancel_cause_id' => '取消原因id',
             'order_cancel_cause_detail' => '取消原因',
             'order_cancel_cause_memo' => '取消备注',
-            'admin_id' => '操作人id  0客户操作 1系统操作',
+            'admin_id' => '操作人id 1系统 2客户 3阿姨 >3后台管理员',
         ];
     }
 }

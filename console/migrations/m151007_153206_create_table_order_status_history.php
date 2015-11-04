@@ -28,7 +28,7 @@ class m151007_153206_create_table_order_status_history extends Migration
             'order_status_customer' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'客户端状态名称\'',
             'order_status_worker' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'阿姨端状态名称\'',
 
-            'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id  0客户操作 1系统操作\'',
+            'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id 1系统 2客户 3阿姨 >3后台管理员\'',
         ], $tableOptions);
         $this->createIndex('idx-order_status_history-order_id', '{{%order_status_history}}', 'order_id');
     }

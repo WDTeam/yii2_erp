@@ -298,7 +298,7 @@ class Order extends ActiveRecord
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
-            'admin_id' => '操作人id  0客户操作 1系统操作',
+            'admin_id' => '操作人id 1系统 2客户 3阿姨 >3后台管理员',
             'order_is_use_balance'=>'是否使用余额 1是 0否',
             'created_at_end'=>'结束时间',
             'stypechannel'=>'渠道分类'   

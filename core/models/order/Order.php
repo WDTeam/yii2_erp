@@ -121,7 +121,7 @@ class Order extends OrderModel
      *  int $order_booked_end_time 预约结束时间 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
-     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
@@ -217,7 +217,7 @@ class Order extends OrderModel
      *  string $channel_id 下单渠道 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
-     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $admin_id 操作人id  1系统 2客户 3阿姨 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
@@ -551,7 +551,7 @@ class Order extends OrderModel
         $order->order_worker_shop_name = $worker["shop_name"];
         $order->order_worker_assign_type = $assign_type; //接单方式
         $order->admin_id = $admin_id;
-        if ($admin_id > 1) { //大于1属于人工操作
+        if ($admin_id > 3) { //大于3属于人工操作
             $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
         } elseif ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
             $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
@@ -592,7 +592,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return bool
      */
-    public static function customerAcceptDone($order_id,$admin_id=0)
+    public static function customerAcceptDone($order_id,$admin_id=2)
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
@@ -683,7 +683,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return bool
      */
-    public static function customerDel($order_id, $admin_id = 0)
+    public static function customerDel($order_id, $admin_id = 2)
     {
         $order = OrderSearch::getOne($order_id);
         $order->order_customer_hidden = 1;
