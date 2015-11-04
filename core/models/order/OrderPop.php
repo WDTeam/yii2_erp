@@ -68,14 +68,14 @@ class OrderPop extends Model
     /**
      * 第三方取消订单同步到boss
      * @param $order_code
-     * @param $cause
-     * @param $memo
+     * @param $cause_id 原因 取OrderOtherDict中的数据
+     * @param $memo 备注
      * @return bool
      */
-    public static function cancel($order_code,$cause,$memo)
+    public static function cancel($order_code,$cause_id,$memo)
     {
         $order = OrderSearch::getOneByCode($order_code);
-        return Order::cancel($order->id,1,$cause,$memo,true);
+        return Order::cancel($order->id,1,$cause_id,$memo,true);
     }
 
     /** *********************以下为订单部分调用****************************** */

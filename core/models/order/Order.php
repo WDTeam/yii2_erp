@@ -614,16 +614,18 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $memo
-     * @param $cause
+     * @param $cause_id
      * @param bool $is_pop 是否是第三方调用
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $cause, $memo = '',$is_pop=false)
+    public static function cancel($order_id, $admin_id, $cause_id, $memo = '',$is_pop=false)
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->order_cancel_cause_id = $cause;
-        $order->order_cancel_cause_detail = OrderOtherDict::getName($cause);
+        if($cause_id>0) {
+            $order->order_cancel_cause_id = $cause_id;
+            $order->order_cancel_cause_detail = OrderOtherDict::getName($cause_id);
+        }
         $order->order_cancel_cause_memo = $memo;
         $current_status = $order->orderExtStatus->order_status_dict_id;
         if (in_array($current_status, [  //只有在以下状态下才可以取消订单
