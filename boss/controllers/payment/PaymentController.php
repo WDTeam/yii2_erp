@@ -131,6 +131,9 @@ class PaymentController extends BaseAuthController
     public function actionTest()
     {
 
+        $customerBalance = Customer::getBalanceById(1);
+        dump($customerBalance['balance']);
+        exit;
         $data = \core\models\payment\Payment::getPayParams(1, 1, 24, 45, ['return_url' => 'http://www.baidu.com']);
         dump($data);
         exit;
