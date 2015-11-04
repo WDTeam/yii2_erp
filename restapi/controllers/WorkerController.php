@@ -1060,8 +1060,16 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_done_time": "任务完成时间",
      *               "worker_task_reward_type": "任务奖励类型",
      *               "worker_task_reward_value": "任务奖励值",
+     *               "worker_task_is_settlemented": "是否已结算",
      *               "created_at": "创建时间",
-     *               "updated_at": "更新时间"
+     *               "updated_at": "更新时间",
+     *               "values": [
+     *                   {
+     *                       "worker_tasklog_condition": "条件索引",
+     *                       "worker_tasklog_value": "条件值"
+     *                   }
+     *               ],
+     *               "worker_task_description": "任务描述"
      *           }
      *       ]，
      *      "alertMsg": "操作成功"
@@ -1096,8 +1104,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            unset($task['is_del']);
-            $tasks[]=$task;
+            $task_log=$task->getDetail();
+            unset($task_log['is_del']);
+            $tasks[]=$task_log;
         }
         return $this->send($tasks, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
     }
@@ -1112,13 +1121,13 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} per_page  第几页
-     * @apiParam {String} page_num  每页显示多少条
+     * @apiParam {String} page  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
+      *   {
      *       "code": 1,
      *       "msg": "操作成功",
      *       "ret": [
@@ -1134,8 +1143,16 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_done_time": "任务完成时间",
      *               "worker_task_reward_type": "任务奖励类型",
      *               "worker_task_reward_value": "任务奖励值",
+     *               "worker_task_is_settlemented": "是否已结算",
      *               "created_at": "创建时间",
-     *               "updated_at": "更新时间"
+     *               "updated_at": "更新时间",
+     *               "values": [
+     *                   {
+     *                       "worker_tasklog_condition": "条件索引",
+     *                       "worker_tasklog_value": "条件值"
+     *                   }
+     *               ],
+     *               "worker_task_description": "任务描述"
      *           }
      *       ]，
      *      "alertMsg": "操作成功"
@@ -1175,8 +1192,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            unset($task['is_del']);
-            $tasks[]=$task;
+            $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
+            unset($task_log['is_del']);
+            $tasks[]=$task_log;
         }
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
     }
@@ -1189,13 +1207,13 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} per_page  第几页
-     * @apiParam {String} page_num  每页显示多少条
+     * @apiParam {String} page   每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
+      *   {
      *       "code": 1,
      *       "msg": "操作成功",
      *       "ret": [
@@ -1211,8 +1229,16 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_done_time": "任务完成时间",
      *               "worker_task_reward_type": "任务奖励类型",
      *               "worker_task_reward_value": "任务奖励值",
+     *               "worker_task_is_settlemented": "是否已结算",
      *               "created_at": "创建时间",
-     *               "updated_at": "更新时间"
+     *               "updated_at": "更新时间",
+     *               "values": [
+     *                   {
+     *                       "worker_tasklog_condition": "条件索引",
+     *                       "worker_tasklog_value": "条件值"
+     *                   }
+     *               ],
+     *               "worker_task_description": "任务描述"
      *           }
      *       ]，
      *      "alertMsg": "操作成功"
@@ -1253,8 +1279,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            unset($task['is_del']);
-            $tasks[]=$task;
+            $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
+            unset($task_log['is_del']);
+            $tasks[]=$task_log;
         }
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
     }
