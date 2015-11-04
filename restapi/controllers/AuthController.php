@@ -13,7 +13,7 @@ use core\models\worker\WorkerIdentityConfig;
 class AuthController extends \restapi\components\Controller
 {
     /**
-     * @api {POST} /auth/login Login（100%）
+     * @api {POST} /auth/login Login [POST] /auth/login Login（100%）
      * 
      * @apiDescription  客户登录（李勇）
      * @apiName actionLogin
@@ -111,7 +111,7 @@ class AuthController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} /auth/login-from-pop LoginFromPop(100%)
+     * @api {POST} /auth/login-from-pop [POST] /auth/login-from-pop(100%)
      * @apiDescription 客户登录(第三方渠道) 
      * @apiName actionLoginFromPop
      * @apiGroup Auth
@@ -173,7 +173,7 @@ class AuthController extends \restapi\components\Controller
     }
 
     /**
-     * @api {post} /auth/worker-login Worker-Login（李勇100%) 
+     * @api {POST} /auth/worker-login [POST] /auth/worker-login（李勇100%) 
      * @apiDescription 阿姨登录（李勇）
      * @apiName actionWorkerLogin
      * @apiGroup Auth 
