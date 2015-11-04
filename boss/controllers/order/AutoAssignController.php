@@ -7,19 +7,13 @@
 */
 namespace boss\controllers\order;
 
-use autoassign\ClientCommand;
-
-use core\models\Order\Order;
-
 use boss\components\BaseAuthController;
-use boss\models\AutoAssignSerach;
 
 use Yii;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 define("WEBPATH", str_replace("\\","/", __DIR__));
-define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
+define("CONFIG_PATH", Yii::$app->basePath."/../autoassign/autoassign.config.php");
 
 /**
  * AutoOrderController implements the CRUD actions for Order model.
