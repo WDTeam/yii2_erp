@@ -65,7 +65,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
      */
     protected function doSave()
     {
-        return $this->save();
+        return $this->save(false);
     }
 
 
