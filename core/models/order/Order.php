@@ -293,7 +293,7 @@ class Order extends OrderModel
                 }
             }
         }
-        
+
         $transact->commit();
 
         if( $orderExtPay == 0)

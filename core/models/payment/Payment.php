@@ -4,6 +4,7 @@ namespace core\models\payment;
 
 use core\models\finance\FinanceOrderChannel;
 use core\models\operation\OperationServiceCardSellRecord;
+use core\models\order\Order;
 use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
