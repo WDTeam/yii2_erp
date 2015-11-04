@@ -78,11 +78,11 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
      * @param $city_id int 城市id
      * @return $couponCustomer 用户优惠券列表
      */
-    public static function GetCustomerCouponList($customer_id,$city_id){
+    public static function GetCustomerCouponList($customer_id,$city_id,$service_type_id){
         $now_time=time();
         $couponCustomer=(new \yii\db\Query())->select('*')->from('{{%coupon}}')
                 ->leftJoin('{{%coupon_customer}}', '{{%coupon_customer}}.coupon_id = {{%coupon}}.id')
-                ->where(['and',"{{%coupon}}.coupon_end_at>$now_time",'{{%coupon_customer}}.is_del=0','{{%coupon_customer}}.is_used=0',"{{%coupon_customer}}.customer_id=$customer_id", ['or', ['and','{{%coupon}}.coupon_city_limit=1',"{{%coupon}}.coupon_city_id=$city_id"], '{{%coupon}}.coupon_city_limit=0']] )
+                ->where(['and',"{{%coupon}}.coupon_end_at>$now_time",'{{%coupon_customer}}.is_del=0','{{%coupon_customer}}.is_used=0',"{{%coupon_customer}}.customer_id=$customer_id", ['or', ['and','{{%coupon}}.coupon_city_limit=1',"{{%coupon}}.coupon_city_id=$city_id"], '{{%coupon}}.coupon_city_limit=0'],['or', ['and','{{%coupon}}.coupon_type!=0',"{{%coupon}}.coupon_service_type_id=$service_type_id"], '{{%coupon}}.coupon_type=0']] )
                 ->orderBy(['{{%coupon}}.coupon_end_at'=>SORT_ASC,'{{%coupon_customer}}.coupon_price'=>SORT_DESC])->all();
         return $couponCustomer;
    }

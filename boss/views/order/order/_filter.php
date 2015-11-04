@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 use boss\models\order\Order;
 use core\models\order\OrderSearch;
+use boss\models\operation\OperationCategory;
 ?>
 
 <div class="heading heading_top">
@@ -14,7 +15,7 @@ use core\models\order\OrderSearch;
 		<div><p>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</p></div>
 		<div>
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'city_id', 'items' => Order::getOnlineCityList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'cities', 'items' => Order::getOnlineCityList()]);
         ?>
 		</div>
 		
@@ -25,7 +26,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'order_service_type_id', 'items' => Order::getServiceItems()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'types', 'items' => Order::getServiceTypes()]);
 		?>	
 		</div>
 		
@@ -36,7 +37,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php 
-		  echo $this->render('_filteritem', ['filter_name' => 'order_status_dict_id', 'items' => Order::getStatusList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'statuss', 'items' => Order::getStatusList()]);
 		?>	
 		</div>
 							    		
@@ -48,7 +49,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php 
-		  echo $this->render('_filteritem', ['filter_name' => 'channel_id', 'items' => $searchModel->getOrderChannelList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'channels', 'items' => $searchModel->getOrderChannelList()]);
 		?>
 		</div>
 		
@@ -58,5 +59,5 @@ use core\models\order\OrderSearch;
 
 <!---------------------订单状态开始-------------------->
 <div class="heading heading_top">
-	<h3 class="panel-title">订单状态</h3>
+	<h3 class="panel-title">订单信息</h3>
 </div>
