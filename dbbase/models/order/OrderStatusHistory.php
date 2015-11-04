@@ -15,6 +15,9 @@ use dbbase\models\ActiveRecord;
  * @property string $order_before_status_name
  * @property integer $order_status_dict_id
  * @property string $order_status_name
+ * @property string $order_status_boss
+ * @property string $order_status_customer
+ * @property string $order_status_worker
  * @property string $admin_id
  */
 class OrderStatusHistory extends ActiveRecord
@@ -35,7 +38,7 @@ class OrderStatusHistory extends ActiveRecord
         return [
             [['created_at', 'updated_at', 'order_id', 'order_before_status_dict_id', 'order_status_dict_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
-            [['order_before_status_name', 'order_status_name'], 'string', 'max' => 128]
+            [['order_before_status_name', 'order_status_name','order_status_boss','order_status_customer','order_status_worker'], 'string', 'max' => 128]
         ];
     }
 
@@ -53,6 +56,9 @@ class OrderStatusHistory extends ActiveRecord
             'order_before_status_name' => '状态变更前订单状态',
             'order_status_dict_id' => '订单状态字典ID',
             'order_status_name' => '订单状态',
+            'order_status_boss' => 'BOSS状态名称',
+            'order_status_customer' => '客户端状态名称',
+            'order_status_worker' => '阿姨端状态名称',
             'admin_id' => '操作人id  0客户操作 1系统操作',
         ];
     }
