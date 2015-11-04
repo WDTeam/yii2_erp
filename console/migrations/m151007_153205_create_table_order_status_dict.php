@@ -25,7 +25,7 @@ class m151007_153205_create_table_order_status_dict extends Migration
         ], $tableOptions);
 
         $this->batchInsert('{{%order_status_dict}}',
-            ['id', 'order_status_name', 'order_status_customer', 'order_status_worker',  'created_at', 'updated_at', 'isdel'],
+            ['id', 'order_status_name', 'order_status_boss','order_status_customer', 'order_status_worker',  'created_at', 'updated_at', 'isdel'],
             [
                 [1, '已创建','初始化','待支付','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [2, '待指派','待指派','待指派','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
