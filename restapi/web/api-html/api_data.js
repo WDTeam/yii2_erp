@@ -253,11 +253,11 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "v1/order/append-order",
-    "title": "追加订单(xieyi 90% 目前产品已删除该需求 )",
+    "url": "/order/append-order",
+    "title": "[POST] /order/append-order( 90% )",
     "name": "ActionAppendOrder",
     "group": "Order",
-    "description": "<p>追加订单</p> ",
+    "description": "<p>追加订单 (谢奕 -- 目前产品已删除该需求)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2358,81 +2358,10 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
-    "type": "POST",
-    "url": "v1/pay/balance-pay",
-    "title": "会员余额支付 (赵顺利100%)",
-    "name": "actionBalancePay",
-    "group": "Pay",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单ID.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"支付成功\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "OrderIdNotFound",
-            "description": "<p>未找到订单ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"支付失败\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/PayController.php",
-    "groupTitle": "Pay"
-  },
-  {
     "type": "get",
     "url": "v2/member_card.json",
     "title": "成为会员接口",
-    "name": "actionMemberCard",
+    "description": "<p>@apiName actionMemberCard</p> ",
     "group": "Pay",
     "parameter": {
       "fields": {
@@ -2484,12 +2413,86 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "../controllers/PayController.php",
+    "groupTitle": "Pay",
+    "name": "GetV2Member_cardJson"
+  },
+  {
+    "type": "POST",
+    "url": "/pay/balance-pay",
+    "title": "[POST] /pay/balance-pay  (100%)",
+    "description": "<p>会员余额支付 (赵顺利)</p> ",
+    "name": "actionBalancePay",
+    "group": "Pay",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单ID.</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"支付成功\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SessionIdNotFound",
+            "description": "<p>未找到会话ID.</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OrderIdNotFound",
+            "description": "<p>未找到订单ID.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"支付失败\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
     "type": "POST",
-    "url": "v1/pay/online-pay",
-    "title": "在线支付接口 (赵顺利100%)",
+    "url": "/pay/online-pay",
+    "title": "[POST] /pay/online-pay (100%)",
+    "description": "<p>在线支付接口(赵顺利100)</p> ",
     "name": "actionOnlinePay",
     "group": "Pay",
     "parameter": {
@@ -2658,10 +2661,10 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/send-sms/send-message-code",
-    "title": "短信验证码 (赵顺利100%)",
+    "title": "[GET] /send-sms/send-message-code (100%)",
     "name": "actionSendMessageCode",
     "group": "SendSms",
-    "description": "<p>请求向用户手机发送验证码用于登录</p> ",
+    "description": "<p>请求向用户手机发送验证码用于登录(赵顺利)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2686,7 +2689,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\":\"ok\"\n   \"msg\": \"短信发送成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\":\"1\"\n   \"msg\": \"短信发送成功\"\n}",
           "type": "json"
         }
       ]
@@ -2705,7 +2708,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"电话号码不符合规则\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"电话号码不符合规则\"\n}",
           "type": "json"
         }
       ]
@@ -2717,7 +2720,8 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/send-sms/send-v",
-    "title": "发短消息",
+    "title": "[GET ] /send-sms/send-v",
+    "description": "<p>发短消息</p> ",
     "name": "actionSendV",
     "group": "SendSms",
     "parameter": {
@@ -2844,8 +2848,9 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "v1/user/add-address",
-    "title": "添加常用地址 (已完成100%)",
+    "url": "/user/add-address",
+    "title": "[POST]/user/add-address(100%)",
+    "description": "<p>添加常用地址</p> ",
     "name": "actionAddAddress",
     "group": "User",
     "parameter": {
@@ -2966,9 +2971,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/black-list-workers",
-    "title": "黑名单阿姨列表 （该功能已经砍掉 已完成100%）",
-    "description": "<p>获得该用户添加进黑名单的阿姨</p> ",
+    "url": "/user/black-list-workers",
+    "title": "[GET] /user/black-list-workers（100%）",
+    "description": "<p>获得该用户添加进黑名单的阿姨 【该功能已经砍掉】</p> ",
     "name": "actionBlackListWorkers",
     "group": "User",
     "parameter": {
@@ -3025,8 +3030,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/default-address",
-    "title": "获取默认地址 (赵顺利100%)",
+    "url": "/user/default-address",
+    "title": "[GET] /user/default-address(100%)",
+    "description": "<p>获取默认地址(赵顺利)</p> ",
     "name": "actionDefaultAddress",
     "group": "User",
     "parameter": {
@@ -3094,8 +3100,9 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "v1/user/delete-address",
-    "title": "删除用户常用地址 (已完成100%)",
+    "url": "/user/delete-address",
+    "title": "[DELETE] /user/delete-address (100%)",
+    "description": "<p>删除用户常用地址</p> ",
     "name": "actionDeleteAddress",
     "group": "User",
     "parameter": {
@@ -3159,8 +3166,9 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "v1/user/delete-used-worker",
-    "title": "删除常用阿姨 （该功能已经砍掉,   100%）",
+    "url": "/user/delete-used-worker",
+    "title": "[DELETE] /user/delete-used-worker （100%）",
+    "description": "<p>删除常用阿姨 [该功能已经砍掉]</p> ",
     "name": "actionDeleteUsedWorker",
     "group": "User",
     "parameter": {
@@ -3235,8 +3243,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-addresses",
-    "title": "常用地址列表 (已完成100%)",
+    "url": "/user/get-addresses",
+    "title": "[GET] /user/get-addresses (100%)",
+    "description": "<p>常用地址列表</p> ",
     "name": "actionGetAddresses",
     "group": "User",
     "parameter": {
@@ -3304,8 +3313,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-comment-count",
-    "title": "获取用户评价数量 （郝建设 100%）",
+    "url": "/user/get-comment-count",
+    "title": "[GET] /user/get-comment-count （100%）",
+    "description": "<p>获取用户评价数量 郝建设()</p> ",
     "name": "actionGetCommentCount",
     "group": "User",
     "parameter": {
@@ -3362,8 +3372,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-comment-level",
-    "title": "获取用户评价等级 （郝建设 100%）",
+    "url": "/user/get-comment-level",
+    "title": "[GET] /user/get-comment-level （100%）",
+    "description": "<p>获取用户评价等级(郝建设)</p> ",
     "name": "actionGetCommentLevel",
     "group": "User",
     "parameter": {
@@ -3420,8 +3431,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-comment-level-tag",
-    "title": "获取用户评价等级下面的标签 （郝建设 100%）",
+    "url": "/user/get-comment-level-tag",
+    "title": "[GET] /user/get-comment-level-tag（100%）",
+    "description": "<p>获取用户评价等级下面的标签(郝建设)</p> ",
     "name": "actionGetCommentLevelTag",
     "group": "User",
     "parameter": {
@@ -3485,8 +3497,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-goods",
-    "title": "获取给定经纬度范围内是否有该服务 （郝建设 100%）",
+    "url": "/user/get-goods",
+    "title": "[GET] v1/user/get-goods （100%）",
+    "description": "<p>获取给定经纬度范围内是否有该服务（郝建设）</p> ",
     "name": "actionGetGoods",
     "group": "User",
     "parameter": {
@@ -3564,8 +3577,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-level-tag",
-    "title": "获取评论的level和tag （郝建设 100%）",
+    "url": "/user/get-level-tag",
+    "title": "[GET] /user/get-level-tag （100%）",
+    "description": "<p>获取评论的level和tag(郝建设)</p> ",
     "name": "actionGetLeveltag",
     "group": "User",
     "parameter": {
@@ -3622,8 +3636,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-user-info",
-    "title": "通过token获取用户信息 （赵顺利 100%）",
+    "url": "/user/get-user-info",
+    "title": "[GET] /user/get-user-info （100%）",
+    "description": "<p>通过token获取用户信息 (赵顺利)</p> ",
     "name": "actionGetUserInfo",
     "group": "User",
     "parameter": {
@@ -3680,8 +3695,9 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-user-money",
-    "title": "用户余额和消费记录 （郝建设 已完成100%）",
+    "url": "/user/get-user-money",
+    "title": "[GET] /user/get-user-money（100%）",
+    "description": "<p>用户余额和消费记录 (郝建设)</p> ",
     "name": "actionGetUserMoney",
     "group": "User",
     "parameter": {
@@ -3749,8 +3765,8 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/user/get-user-score",
-    "title": "用户积分明细 （已经完成 100%）",
+    "url": "/user/get-user-score",
+    "title": "[GET] /user/get-user-score（100%）",
     "description": "<p>获取用户当前积分，积分兑换奖品信息，怎样获取积分信息</p> ",
     "name": "actionGetUserScore",
     "group": "User",
@@ -3808,8 +3824,9 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "v1/user/remove-worker",
-    "title": "移除黑名单中的阿姨 （该功能已经砍掉 已完成100%）",
+    "url": "/user/remove-worker",
+    "title": "[DELETE] /user/remove-worker （100%）",
+    "description": "<p>移除黑名单中的阿姨【该功能已经砍掉】</p> ",
     "name": "actionRemoveWorker",
     "group": "User",
     "parameter": {
@@ -3873,9 +3890,9 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "v1/user/set-default-address",
-    "title": "设置默认地址 (已完成100%)",
-    "description": "<p>用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址</p> ",
+    "url": "/user/set-default-address",
+    "title": "[PUT] /user/set-default-address(100%)",
+    "description": "<p>设置默认地址【用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址】</p> ",
     "name": "actionSetDefaultAddress",
     "group": "User",
     "parameter": {
@@ -3981,8 +3998,9 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "v1/user/update-address",
-    "title": "修改常用地址 (已完成100%)",
+    "url": "/user/update-address",
+    "title": "[PUT] /user/update-address(100%)",
+    "description": "<p>修改常用地址</p> ",
     "name": "actionUpdateAddress",
     "group": "User",
     "parameter": {
@@ -4096,8 +4114,9 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "v1/user/user-suggest",
-    "title": "用户评价 （郝建设 100%）",
+    "url": "/user/user-suggest",
+    "title": "[POST] /user/user-suggest （100%）",
+    "description": "<p>用户评价 (郝建设)</p> ",
     "name": "actionUserSuggest",
     "group": "User",
     "parameter": {
@@ -5043,7 +5062,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5082,7 +5101,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "page_num",
+            "field": "page",
             "description": "<p>每页显示多少条</p> "
           },
           {
@@ -5106,7 +5125,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5145,7 +5164,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "page_num",
+            "field": "page",
             "description": "<p>每页显示多少条</p> "
           },
           {
@@ -5169,7 +5188,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5256,7 +5275,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/worker-info",
-    "title": "[GET] /worker/worker-info",
+    "title": "[GET] /worker/worker-info(100%)",
     "description": "<p>获取阿姨信息 (田玉星)</p> ",
     "name": "actionWorkerInfo",
     "group": "Worker",

@@ -196,12 +196,12 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/order/append-order 追加订单(xieyi 90% 目前产品已删除该需求 )
+     * @api {POST} /order/append-order [POST] /order/append-order( 90% )
      *
      * @apiName ActionAppendOrder
      * @apiGroup Order
      *
-     * @apiDescription 追加订单
+     * @apiDescription 追加订单 (谢奕 -- 目前产品已删除该需求)
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_type_id 服务类型商品id
      * @apiParam {String} order_src_id 订单来源id 
