@@ -27,7 +27,7 @@ class alipay_class{
             "subject"		      => $param['subject'],
             "seller_id"           => $alipay_config['seller_email'],
             "body"                => $param['body'],
-            "total_fee"			  => $param['general_pay_money'],
+            "total_fee"			  => $param['payment_money'],
             "notify_url"		  => $param['notify_url'],
             "service"             => "mobile.securitypay.pay",
             "payment_type"        => "1",

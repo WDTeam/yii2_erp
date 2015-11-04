@@ -1856,7 +1856,7 @@ class OrderController extends \restapi\components\Controller
         if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = Order::sysAssignDone($param['order_id'], '');
+                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderSetWorkerOrderSuccess);
             } catch (Exception $e) {
