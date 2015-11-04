@@ -884,8 +884,6 @@ class Worker extends \dbbase\models\worker\Worker
             Yii::$app->redis->close();
             return true;
         }
-
-
     }
 
     /**
@@ -977,6 +975,29 @@ class Worker extends \dbbase\models\worker\Worker
 
     }
 
+    /**
+     * 更新阿姨信息到redis
+     * @param $worker_id
+     * @param $worker_phone
+     * @param $worker_type
+     * @return bool
+     */
+    public static function updateWorkerInfoToRedis($worker_id,$worker_phone,$worker_type){
+        if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
+            return false;
+        }
+        $workerInfo = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
+        if($workerInfo){
+            $workerInfo = json_decode($workerInfo,1);
+            $workerInfo['info'] = [
+                'worker_id'=>$worker_id,
+                'worker_phone'=>$worker_phone,
+                'worker_type'=>$worker_type
+            ];
+            $workerInfo = json_encode($workerInfo);
+            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        }
+    }
     /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
@@ -1429,8 +1450,10 @@ class Worker extends \dbbase\models\worker\Worker
             case 2:
                 return '通过基础培训';
             case 3:
-                return '已上岗';
+                return '已试工';
             case 4:
+                return '已上岗';
+            case 5:
                 return '通过晋升培训';
         }
        /* if($worker_auth_status==1){

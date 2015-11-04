@@ -2,7 +2,7 @@
   {
     "type": "POST",
     "url": "/auth/login",
-    "title": "Login（100%）",
+    "title": "Login [POST] /auth/login Login（100%）",
     "description": "<p>客户登录（李勇）</p> ",
     "name": "actionLogin",
     "group": "Auth",
@@ -86,7 +86,7 @@
   {
     "type": "POST",
     "url": "/auth/login-from-pop",
-    "title": "LoginFromPop(100%)",
+    "title": "[POST] /auth/login-from-pop(100%)",
     "description": "<p>客户登录(第三方渠道)</p> ",
     "name": "actionLoginFromPop",
     "group": "Auth",
@@ -259,9 +259,9 @@
     "groupTitle": "Auth"
   },
   {
-    "type": "post",
+    "type": "POST",
     "url": "/auth/worker-login",
-    "title": "Worker-Login（李勇100%)",
+    "title": "[POST] /auth/worker-login（李勇100%)",
     "description": "<p>阿姨登录（李勇）</p> ",
     "name": "actionWorkerLogin",
     "group": "Auth",
@@ -1680,7 +1680,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n    \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n      {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n        \"created_at\": \"1445347126\",\n        \"updated_at\": \"1445347126\",\n        \"isdel\": \"0\",\n        \"ver\": \"3\",\n        \"version\": \"3\",\n        \"order_ip\": \"58.135.77.96\",\n        \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n        \"order_src_id\": \"1\",\n        \"order_src_name\": \"BOSS\",\n        \"channel_id\": \"20\",\n        \"order_channel_name\": \"后台下单\",\n        \"order_unit_money\": \"20.00\",\n        \"order_money\": \"40.00\",\n        \"order_pay_type\": \"支付方式\",\n        \"order_booked_count\": \"120\",\n        \"order_booked_begin_time\": \"1446249600\",\n        \"order_booked_end_time\": \"1446256800\",\n        \"address_id\": \"397\",\n        \"district_id\": \"3\",\n        \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n        \"order_booked_worker_id\": \"0\",\n        \"checking_id\": \"0\",\n        \"order_cs_memo\": \"\",\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": \"2\",\n        \"order_before_status_name\": \"已支付\",\n        \"order_status_dict_id\": \"3\",\n        \"order_status_name\": \"已开始智能指派\"\n         }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n    \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n      {\n        \"id\": \"2\",\n        \"order_code\": \"339710\",\n        \"order_parent_id\": \"0\",\n        \"order_is_parent\": \"0\",\n        \"created_at\": \"1445347126\",\n        \"updated_at\": \"1445347126\",\n        \"isdel\": \"0\",\n        \"ver\": \"3\",\n        \"version\": \"3\",\n        \"order_ip\": \"58.135.77.96\",\n        \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n        \"order_src_id\": \"1\",\n        \"order_src_name\": \"BOSS\",\n        \"channel_id\": \"20\",\n        \"order_channel_name\": \"后台下单\",\n        \"order_unit_money\": \"20.00\",\n        \"order_money\": \"40.00\",\n        \"order_pay_type\": \"支付方式\",\n        \"order_booked_count\": \"120\",\n        \"order_booked_begin_time\": \"1446249600\",\n        \"order_booked_end_time\": \"1446256800\",\n        \"address_id\": \"397\",\n        \"district_id\": \"3\",\n        \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n        \"order_booked_worker_id\": \"0\",\n        \"checking_id\": \"0\",\n        \"order_cs_memo\": \"\",\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": \"2\",\n        \"order_before_status_name\": \"已支付\",\n        \"order_status_dict_id\": \"3\",\n        \"order_status_name\": \"已开始智能指派\"\n         }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -1774,20 +1774,10 @@
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1911,26 +1901,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": \"1\",\n     \"msg\": \"操作成功\",\n     \"ret\": {\n         \"limit\": \"1\",\n         \"page_total\": 4,\n         \"offset\": 0,\n         \"orders\": [\n         {\n             \"id\": \"2\",\n              \"order_code\": \"339710\",\n             \"order_parent_id\": \"0\",\n             \"order_is_parent\": \"0\",\n             \"created_at\": \"1445347126\",\n             \"updated_at\": \"1445347126\",\n             \"isdel\": \"0\",\n             \"ver\": \"3\",\n             \"version\": \"3\",\n             \"order_ip\": \"58.135.77.96\",\n             \"order_service_type_id\": \"1\",\n             \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n             \"order_src_id\": \"1\",\n             \"order_src_name\": \"BOSS\",\n             \"channel_id\": \"20\",\n             \"order_channel_name\": \"后台下单\",\n             \"order_unit_money\": \"20.00\",\n             \"order_money\": \"40.00\",\n             \"order_booked_count\": \"120\",\n             \"order_booked_begin_time\": \"1446249600\",\n             \"order_booked_end_time\": \"1446256800\",\n             \"address_id\": \"397\",\n             \"district_id\": \"3\",\n             \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n             \"order_booked_worker_id\": \"0\",\n             \"checking_id\": \"0\",\n             \"order_cs_memo\": \"\",\n             \"order_id\": \"2\",\n             \"order_before_status_dict_id\": \"2\",\n             \"order_before_status_name\": \"已支付\",\n             \"order_status_dict_id\": \"3\",\n             \"order_status_name\": \"已开始智能指派\"\n         }\n     ]\n }",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2096,26 +2076,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": "HTTP/1.1 200 OK\n {\n    \"code\": \"1\",\n    \"msg\": \"操作成功\",\n    \"ret\": {\n    \"limit\": \"1\",\n    \"page_total\": 4,\n    \"offset\": 0,\n    \"orders\": [\n    {\n        \"id\": \"2\",\n        \"order_code\": \"339710\",\n        \"order_parent_id\": \"0\",\n        \"order_is_parent\": \"0\",\n        \"created_at\": \"1445347126\",\n        \"updated_at\": \"1445347126\",\n        \"isdel\": \"0\",\n        \"ver\": \"3\",\n        \"version\": \"3\",\n        \"order_ip\": \"58.135.77.96\",\n        \"order_service_type_id\": \"1\",\n        \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n        \"order_src_id\": \"1\",\n        \"order_src_name\": \"BOSS\",\n        \"channel_id\": \"20\",\n        \"order_channel_name\": \"后台下单\",\n        \"order_unit_money\": \"20.00\",\n        \"order_money\": \"40.00\",\n        \"order_booked_count\": \"120\",\n        \"order_booked_begin_time\": \"1446249600\",\n        \"order_booked_end_time\": \"1446256800\",\n        \"address_id\": \"397\",\n        \"district_id\": \"3\",\n        \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n        \"order_booked_worker_id\": \"0\",\n        \"checking_id\": \"0\",\n        \"order_cs_memo\": \"\",\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": \"2\",\n        \"order_before_status_name\": \"已支付\",\n        \"order_status_dict_id\": \"3\",\n        \"order_status_name\": \"已开始智能指派\"\n    }\n     ]\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2207,20 +2177,10 @@
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2320,26 +2280,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": "HTTP/1.1 200 OK\n {\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n     \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n     {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n      }\n   ]\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2396,20 +2346,10 @@
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2851,7 +2791,7 @@
   {
     "type": "GET",
     "url": "/send-sms/send-worker-message-code",
-    "title": "Send-Worker-Message-Code（100%）",
+    "title": "[GET]Send-Worker-Message-Code（100%）",
     "description": "<p>请求向阿姨手机发送验证码用于登录（李勇）</p> ",
     "name": "actionSendWorkerMessageCode",
     "group": "SendSms",
@@ -5734,9 +5674,9 @@
     "groupTitle": "configure"
   },
   {
-    "type": "Get",
+    "type": "GET",
     "url": "/coupon/all-coupons",
-    "title": "[Get] /coupon/all-coupons（ 100%）",
+    "title": "[GET] /coupon/all-coupons（ 100%）",
     "description": "<p>获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）</p> ",
     "name": "actionAllCoupons",
     "group": "coupon",
@@ -5793,10 +5733,10 @@
     "groupTitle": "coupon"
   },
   {
-    "type": "Get",
+    "type": "GET",
     "url": "/coupon/coupons",
-    "title": "Coupons（100%）",
-    "description": "<p>获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）</p> ",
+    "title": "[GET] /coupon/coupons（100%）",
+    "description": "<p>下单时获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）</p> ",
     "name": "actionCoupons",
     "group": "coupon",
     "parameter": {
@@ -5808,6 +5748,13 @@
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Strimg</p> ",
+            "optional": false,
+            "field": "service_type_id",
+            "description": "<p>服务类别id</p> "
           },
           {
             "group": "Parameter",
@@ -5859,9 +5806,9 @@
     "groupTitle": "coupon"
   },
   {
-    "type": "Get",
+    "type": "GET",
     "url": "/coupon/coupons-over-due",
-    "title": "Coupons-Over-Due（100%）",
+    "title": "[GET] /coupon/coupons-over-due（100%）",
     "description": "<p>获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券）（李勇）</p> ",
     "name": "actionCouponsOverDue",
     "group": "coupon",
@@ -5993,7 +5940,7 @@
   {
     "type": "GET",
     "url": "/coupon/get-coupon-count",
-    "title": "Get-Coupon-Count（100%）",
+    "title": "{GET} /coupon/get-coupon-count（100%）",
     "description": "<p>获取用户优惠券数量（李勇）</p> ",
     "name": "actionGetCouponCount",
     "group": "coupon",

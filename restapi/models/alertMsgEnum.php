@@ -280,5 +280,23 @@ class alertMsgEnum
     //订单查询
     const orderGetOrdersSuccess ="获取订单成功";
     const orderGetOrdersFaile ="获取订单失败";
+    //获取订单数量
+    const orderGetOrderCountSuccess = "订单数量获取成功";
+    const orderGetOrderCountFaile = "订单数量获取失败";
+    //查询阿姨订单
+    const orderGetWorkerOrderSuccess = "查询阿姨订单成功";
+    const orderGetWorkerOrderFaile = "查询阿姨订单失败";
+    //查询阿姨服务订单
+    const orderGetWorkerServiceOrderSuccess = "查询阿姨服务订单成功";
+    const orderGetWorkerServiceOrderFaile = "查询阿姨服务订单失败";
+    //查询阿姨待服务订单数
+     
+    //查询阿姨订单数量
     
+    //阿姨完成的历史订单
+    const orderWorkerDoneOrderHistorySuccess = "阿姨历史完成订单查询成功";
+    const orderWorkerDoneOrderHistoryFaile = "阿姨历史完成订单查询失败";
+    //阿姨取消的历史订单
+    const orderWorkerCancelOrderHistorySuccess = "阿姨历史取消订单查询成功";
+    const orderWorkerCancelOrderHistoryFaile = "阿姨历史取消订单查询失败";
 }

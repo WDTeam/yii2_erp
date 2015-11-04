@@ -499,18 +499,14 @@ class OrderController extends \restapi\components\Controller
      *      }
      *     }
      *
-     *
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionOrdersCount()
@@ -520,7 +516,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -538,7 +534,7 @@ class OrderController extends \restapi\components\Controller
         $orderSearch = new \core\models\order\OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
         $ret['count'] = $count;
-        return $this->send($ret, "操作成功", 1, 200);
+        return $this->send($ret, "操作成功", 1, 200,null,  alertMsgEnum::orderGetOrderCountSuccess);
     }
 
     /**
@@ -559,89 +555,81 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [to] 结束时间     时间戳   如 *'1443695400'
      * @apiParam {String} [oc.customer_id]客户id
      *
-     *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
-     *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     *  HTTP/1.1 200 OK
+     *   {
+     *      "code": "1",
+     *      "msg": "操作成功",
+     *      "ret": {
+     *      "limit": "1",
+     *      "page_total": 4,
+     *      "offset": 0,
+     *      "orders": [
+     *      {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *      }
+     *       ]
+     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerOrders()
     {
         $args = Yii::$app->request->get();
-
         @$token = $args["access_token"];
-
         $worker = WorkerAccessToken::getWorker($token);
-
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
             $orderStatus = explode(".", $args['order_status']);
         }
-
         $channels = null;
         if (isset($args['channels'])) {
             $channels = explode(".", $args['channels']);
         }
-
         @$isAsc = $args['is_asc'];
         if (is_null($isAsc)) {
             $isAsc = true;
@@ -657,21 +645,20 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-
         $args["owr.worker_id"] = $worker->id;
         try {
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
         } catch (\Exception $e) {
-            return $this->send($e, "服务异常", 2);
+            return $this->send($e, "服务异常",0,1024,200,null,alertMsgEnum::orderGetWorkerOrderFaile);
         }
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1);
+        $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderGetWorkerOrderSuccess);
     }
 
     /**
@@ -694,80 +681,74 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
+     * HTTP/1.1 200 OK
+     *  {
+     *   "code": "1",
+     *   "msg": "操作成功",
+     *   "ret": {
+     *      "limit": "1",
+     *      "page_total": 4,
+     *      "offset": 0,
+     *      "orders": [
+     *      {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *       }
      *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     * }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerServiceOrders()
     {
         $args = Yii::$app->request->get();
-
         @$token = $args["access_token"];
-
         $worker = WorkerAccessToken::getWorker($token);
-
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
             $orderStatus = explode(".", $args['order_status']);
         }
-
 
         @$isAsc = $args['is_asc'];
         if (is_null($isAsc)) {
@@ -797,15 +778,14 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $arr);
         } catch (Exception $e) {
-            return $this->send($e, "服务异常", 2);
+            return $this->send($e, "服务异常", 0,200,null,  alertMsgEnum::orderGetWorkerServiceOrderSuccess);
         }
-
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1);
+        $this->send($ret, "操作成功", 1,200,null, alertMsgEnum::orderGetWorkerServiceOrderFaile);
     }
 
     /**
@@ -836,16 +816,14 @@ class OrderController extends \restapi\components\Controller
      *
      *    }
      *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerOrdersCount()
@@ -855,7 +833,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -905,16 +883,14 @@ class OrderController extends \restapi\components\Controller
      *
      *    }
      *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerServiceOrdersCount()
@@ -924,7 +900,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
 
         $args["owr.worker_id"] = $worker->id;
@@ -956,62 +932,60 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
-     *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     * HTTP/1.1 200 OK
+     *   {
+     *      "code": "1",
+     *      "msg": "操作成功",
+     *      "ret": {
+     *          "limit": "1",
+     *          "page_total": 4,
+     *          "offset": 0,
+     *          "orders": [
+     *          {
+     *              "id": "2",
+     *               "order_code": "339710",
+     *              "order_parent_id": "0",
+     *              "order_is_parent": "0",
+     *              "created_at": "1445347126",
+     *              "updated_at": "1445347126",
+     *              "isdel": "0",
+     *              "ver": "3",
+     *              "version": "3",
+     *              "order_ip": "58.135.77.96",
+     *              "order_service_type_id": "1",
+     *              "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *              "order_src_id": "1",
+     *              "order_src_name": "BOSS",
+     *              "channel_id": "20",
+     *              "order_channel_name": "后台下单",
+     *              "order_unit_money": "20.00",
+     *              "order_money": "40.00",
+     *              "order_booked_count": "120",
+     *              "order_booked_begin_time": "1446249600",
+     *              "order_booked_end_time": "1446256800",
+     *              "address_id": "397",
+     *              "district_id": "3",
+     *              "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *              "order_booked_worker_id": "0",
+     *              "checking_id": "0",
+     *              "order_cs_memo": "",
+     *              "order_id": "2",
+     *              "order_before_status_dict_id": "2",
+     *              "order_before_status_name": "已支付",
+     *              "order_status_dict_id": "3",
+     *              "order_status_name": "已开始智能指派"
+     *          }
+     *      ]
+     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerDoneOrdersHistory()
@@ -1021,7 +995,7 @@ class OrderController extends \restapi\components\Controller
 
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+           return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1036,7 +1010,7 @@ class OrderController extends \restapi\components\Controller
         }
         $offset = ($page - 1) * $limit;
         $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
     }
 
     /**
@@ -1050,12 +1024,11 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [page] 第几页 从第一页开始
      * @apiParam {String} [limit] 每页包含订单数
      *
-     *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
+     * HTTP/1.1 200 OK
+     *  {
      *    "code": "1",
      *    "msg": "操作成功",
      *    "ret": {
@@ -1063,63 +1036,60 @@ class OrderController extends \restapi\components\Controller
      *    "page_total": 4,
      *    "offset": 0,
      *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
+     *      {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *      }
      *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     * }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerCancelOrdersHistory()
     {
         $args = Yii::$app->request->get();
         @$token = $args["access_token"];
-
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1134,7 +1104,7 @@ class OrderController extends \restapi\components\Controller
         }
         $offset = ($page - 1) * $limit;
         $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
     }
 
     /**
