@@ -105,7 +105,7 @@ class OrderSearchIndex extends Order
             $query->andFilterWhere(['<=', 'order_booked_begin_time', strtotime($this->booked_to)]);
 
         // 根据电话同时查询指定阿姨及接单阿姨
-        $query->andFilterWhere(['or', ['bookedWorked.worker_phone' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
+        $query->andFilterWhere(['or', ['bookedWorker.worker_phone' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
          
         // 筛选功能
         if (isset($this->cities))

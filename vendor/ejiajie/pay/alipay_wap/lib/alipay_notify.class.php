@@ -47,7 +47,7 @@ class AlipayNotify {
 			//获取支付宝远程服务器ATN结果（验证是否是支付宝发来的消息）
 			$responseTxt = 'true';
 			if (! empty($_POST["notify_id"])) {$responseTxt = $this->getResponse($_POST["notify_id"]);}
-			
+
 			//写日志记录
 			//if ($isSign) {
 			//	$isSignStr = 'true';
@@ -156,7 +156,7 @@ class AlipayNotify {
 		}
 		$veryfy_url = $veryfy_url."partner=" . $partner . "&notify_id=" . $notify_id;
 		$responseTxt = getHttpResponseGET($veryfy_url, $this->alipay_config['cacert']);
-		
+
 		return $responseTxt;
 	}
 }

@@ -48,11 +48,10 @@ use boss\models\order\Order;
         	        if (!empty($model->order_booked_worker_id))
         	        {
         	           $worker = Worker::findOne($model->order_booked_worker_id);
-        	           
-        	           echo '指定阿姨：<span>'.$worker->worker_name.'</span><br />';
-        	           echo '阿姨手机：<span>'.$worker->worker_phone.'</span><br />';
-        	           echo '阿姨身份：<span>'.Worker::getWorkerTypeShow($worker->worker_type).'</span><br />';
-        	           echo '所属门店：<span>'.Worker::getShopName($worker->shop_id).'</span>';            	           
+        	           echo '指定阿姨：<span>'.$worker['worker_name'].'</span><br />';
+        	           echo '阿姨手机：<span>'.$worker['worker_phone'].'</span><br />';
+        	           echo '阿姨身份：<span>'.Worker::getWorkerTypeShow($worker['worker_type']).'</span><br />';
+        	           echo '所属门店：<span>'.Worker::getShopName($worker['shop_id']).'</span>';            	           
         	        }
         	    }
         	    ?>
