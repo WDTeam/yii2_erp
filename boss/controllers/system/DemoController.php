@@ -20,7 +20,8 @@ class DemoController extends BaseAuthController
     public function actionJpush()
     {
         $res = \Yii::$app->jpush;
-        var_dump($res->push(), $res->getReport());
+        $_res = $res->push(['worker_15110249233'],'test content');
+        var_dump($_res);
     }
     /**
      * 发短信 DEMO
@@ -45,5 +46,16 @@ class DemoController extends BaseAuthController
     {
         $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
         var_dump($res);
+    }
+    
+    public function actionEmail()
+    {
+        $text = 'test';
+        $sendres = \Yii::$app->mailer->compose()
+        ->setFrom('service@corp.1jiajie.com')
+        ->setTo(['lidenggao@1jiajie.com', 'linhongyou@1jiajie.com'])
+        ->setSubject('ivr callback ')
+        ->setTextBody($text)
+        ->send();
     }
 }
