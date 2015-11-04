@@ -21,6 +21,9 @@ use dbbase\models\ActiveRecord;
  * @property string $order_before_status_name
  * @property integer $order_status_dict_id
  * @property string $order_status_name
+ * @property string $order_status_boss
+ * @property string $order_status_customer
+ * @property string $order_status_worker
  * @property integer $order_flag_send
  * @property integer $order_flag_urgent
  * @property integer $order_flag_exception
@@ -120,7 +123,7 @@ class OrderHistory extends ActiveRecord
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money', 'order_booked_count','order_lat','order_lng'], 'number'],
             [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
-            [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_service_item_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
+            [['order_before_status_name', 'order_status_name','order_status_boss','order_status_customer','order_status_worker', 'order_service_type_name', 'order_service_item_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo',
                 'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
@@ -147,6 +150,9 @@ class OrderHistory extends ActiveRecord
             'order_before_status_name' => '状态变更前订单状态',
             'order_status_dict_id' => '订单状态字典ID',
             'order_status_name' => '订单状态',
+            'order_status_boss' => 'BOSS状态名称',
+            'order_status_customer' => '客户端状态名称',
+            'order_status_worker' => '阿姨端状态名称',
             'order_flag_send' => '指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
             'order_flag_urgent' => '加急',
             'order_flag_exception' => '异常 1无经纬度',

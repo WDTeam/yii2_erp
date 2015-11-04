@@ -21,8 +21,12 @@ class m151007_153206_create_table_order_status_history extends Migration
             'order_id' => Schema::TYPE_BIGINT .'(20) unsigned NOT NULL COMMENT \'订单ID\'',
             'order_before_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'状态变更前订单状态字典ID\'',
             'order_before_status_name' => Schema::TYPE_STRING . '(128) NOT NULL  DEFAULT \'\' COMMENT \'状态变更前订单状态\'',
+
             'order_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单状态字典ID\'',
             'order_status_name' => Schema::TYPE_STRING . '(128) NOT NULL  DEFAULT \'\' COMMENT \'订单状态\'',
+            'order_status_boss' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'BOOS状态名称\'',
+            'order_status_customer' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'客户端状态名称\'',
+            'order_status_worker' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'阿姨端状态名称\'',
 
             'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id  0客户操作 1系统操作\'',
         ], $tableOptions);

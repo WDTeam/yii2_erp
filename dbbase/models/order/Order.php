@@ -60,6 +60,9 @@ class Order extends ActiveRecord
     public $order_before_status_name;
     public $order_status_dict_id;
     public $order_status_name;
+    public $order_status_boss;
+    public $order_status_customer;
+    public $order_status_worker;
     public $order_flag_send;
     public $order_flag_urgent;
     public $order_flag_exception;
@@ -105,8 +108,6 @@ class Order extends ActiveRecord
     public $shop_id;
     public $order_worker_shop_name;
     public $admin_id;
-    public $created_at_end;
-    public $stypechannel;
     public $order_is_use_balance;
 
     public $attributesExt = [
@@ -114,6 +115,9 @@ class Order extends ActiveRecord
         'order_before_status_name',
         'order_status_dict_id',
         'order_status_name',
+        'order_status_boss',
+        'order_status_customer',
+        'order_status_worker',
         'order_flag_send',
         'order_flag_urgent',
         'order_flag_exception',
@@ -246,6 +250,9 @@ class Order extends ActiveRecord
             'order_before_status_name' => '状态变更前订单状态',
             'order_status_dict_id' => '订单状态字典ID',
             'order_status_name' => '订单状态',
+            'order_status_boss' => 'BOSS状态名称',
+            'order_status_customer' => '客户端状态名称',
+            'order_status_worker' => '阿姨端状态名称',
             'order_flag_send' => '指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
             'order_flag_urgent' => '加急',
             'order_flag_exception' => '异常 1无经纬度',
