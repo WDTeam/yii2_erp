@@ -17,15 +17,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
     <?php $form = ActiveForm::begin([
-		'options' => ['enctype' => 'multipart/form-data'],
-        'action' => ['index'],
+		'options' => ['enctype' => 'multipart/form-data', 'accept-charset' => 'UTF-8'],
+        'action' => ['index', 'city_id' => $city_id, 'city_name' => $city_name],
         'method' => 'post',
     ]);
     ?>
   
-     <div class='col-md-2'>
+    <div class='col-md-2'>
         <?= $form->field($model, 'district_upload_url')->fileInput(['maxlength' => true]) ?>
-     </div>
+    </div>
      
     <div class='col-md-4 form-inline'>
       <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
