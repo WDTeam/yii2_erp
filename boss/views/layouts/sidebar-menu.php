@@ -287,12 +287,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '优惠券列表',
+                                'label' => '优惠券规则管理',
                                 'url' => ['operation/coupon/coupon/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '添加新优惠券',
+                                'label' => '优惠券用户管理',
                                 'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
