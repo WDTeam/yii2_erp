@@ -28,7 +28,8 @@ class m150921_090403_create_table_system_user extends Migration
             INSERT INTO {{%system_user}} VALUES
             (1,'system','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1','','admin@demo.com',1,1438409505,1438409505),
             (2,'customer','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1','','admin@demo.com',1,1438409505,1438409505),
-            (3,'admin','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS','','admin@demo.com',1,1438409505,1438409505);
+            (3,'worker','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1','','admin@demo.com',1,1438409505,1438409505),
+            (4,'admin','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS','','admin@demo.com',1,1438409505,1438409505);
         ")->execute();
     }
 
