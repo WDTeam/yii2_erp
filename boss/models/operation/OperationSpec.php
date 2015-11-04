@@ -24,6 +24,7 @@ class OperationSpec extends \core\models\operation\OperationSpec
     {
         return [
             [['operation_spec_name'], 'required'],
+            ['operation_spec_name', 'unique', 'message' => '该规格名称已存在'],
             [['operation_spec_strategy_unit'], 'required', 'message' => '请输入计量单位'],
             [['operation_spec_description', 'operation_spec_values'], 'string'],
             [['created_at', 'updated_at'], 'integer'],

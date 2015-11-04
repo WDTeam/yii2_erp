@@ -9,6 +9,7 @@ use dbbase\models\ActiveRecord;
  *
  * @property integer $id
  * @property string $order_status_name
+ * @property string $order_status_boss
  * @property string $order_status_customer
  * @property string $order_status_worker
  * @property string $created_at
@@ -29,11 +30,9 @@ class OrderStatusDict extends ActiveRecord
     const ORDER_SERVICE_START = 10; //开始服务
     const ORDER_SERVICE_DONE = 11; //完成服务
     const ORDER_CUSTOMER_ACCEPT_DONE = 12; //完成评价 可申请结算
-    const ORDER_CHECKED = 13; //已核实 已对账
-    const ORDER_PAYOFF_DONE = 14; //已完成结算
-    const ORDER_PAYOFF_SHOP_DONE = 15; //已完成门店结算
-    const ORDER_CANCEL = 16; //已取消
-    const ORDER_DIED = 17; //已归档
+    const ORDER_PAYOFF_DONE = 13; //已完成结算
+    const ORDER_CANCEL = 14; //已取消
+    const ORDER_DIED = 15; //已归档
 
 
     /**
@@ -52,7 +51,7 @@ class OrderStatusDict extends ActiveRecord
         return [
             [['order_status_name'], 'required'],
             [['created_at', 'updated_at', 'isdel'], 'integer'],
-            [['order_status_name', 'order_status_customer', 'order_status_worker'], 'string', 'max' => 255]
+            [['order_status_name','order_status_boss', 'order_status_customer', 'order_status_worker'], 'string', 'max' => 255]
         ];
     }
 
@@ -64,6 +63,7 @@ class OrderStatusDict extends ActiveRecord
         return [
             'id' => 'ID',
             'order_status_name' => '状态名称',
+            'order_status_boss' => 'BOSS状态名称',
             'order_status_customer' => '客户端状态名称',
             'order_status_worker' => '阿姨端状态名称',
             'created_at' => 'Created At',

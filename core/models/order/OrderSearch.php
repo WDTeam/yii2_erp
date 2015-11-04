@@ -19,6 +19,9 @@ use yii\data\ActiveDataProvider;
 class OrderSearch extends Order
 {
 
+    public $stypechannel;
+    public $created_at_end;
+
     public function rules()
     {
         return [
