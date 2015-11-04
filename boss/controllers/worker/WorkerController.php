@@ -224,7 +224,8 @@ class WorkerController extends BaseAuthController
                 }
                 return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
             }else{
-                var_dump($workerModel->getErrors());die;
+                var_dump($workerModel->errors);die;
+                //\Yii::$app->session->setFlash('default', '保存失败');
                 throw new ServerErrorHttpException('录入新阿姨失败');
             }
 
@@ -751,7 +752,7 @@ class WorkerController extends BaseAuthController
         echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         echo '<br>';
-        var_dump(Worker::getWorkerTimeLine(1,2));
+        //var_dump(Worker::getWorkerTimeLine(1,2));
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
