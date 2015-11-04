@@ -107,6 +107,7 @@ class WorkerController extends BaseAuthController
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
+            Worker::deleteDistrictWorkerRelationToRedis($workerModel->id);
             Worker::updateWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){

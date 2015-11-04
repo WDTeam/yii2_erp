@@ -898,12 +898,6 @@ class Worker extends \dbbase\models\worker\Worker
             return false;
         }
 
-        //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
-        $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
-        foreach ((array)$oldDistrictIdsArr as $val) {
-            echo self::DISTRICT.'_'.$val['operation_shop_district_id'];
-            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
-        }
         //添加新的商圈绑定阿姨关系 [1,3,4]
         foreach ((array)$districtIdsArr as $val) {
             //如果商圈不存在，默认添加商圈set，并存储阿姨id
@@ -911,6 +905,17 @@ class Worker extends \dbbase\models\worker\Worker
         }
         Yii::$app->redis->close();
         return true;
+    }
+
+    public static function deleteDistrictWorkerRelationToRedis($worker_id){
+        if(empty($worker_id) || empty($districtIdsArr)){
+            return false;
+        }
+        //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
+        $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
+        foreach ((array)$oldDistrictIdsArr as $val) {
+            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
+        }
     }
 
     /**
