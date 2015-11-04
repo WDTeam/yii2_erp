@@ -72,7 +72,7 @@ use dosamigos\datetimepicker\DateTimePicker;
         <div class="panel-footer">
             <div class="form-group">
                 <div class="col-sm-offset-0 col-sm-12">
-                    <?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']); ?>
+                    <?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block createlal' : 'btn btn-primary btn-lg btn-block createlal']); ?>
                 </div>
             </div>
         </div>

@@ -24,7 +24,7 @@ class OperationShopDistrictCoordinate extends \core\models\operation\OperationSh
     public function validateLongitude($attribute, $params)
     {
         $value = $this->$attribute;
-        if ($value > $params['max'] || $val < $params['min']) {
+        if ($value > $params['max'] || $value < $params['min']) {
             $this->addError($attribute, '经度超出范围');
         }
     }
@@ -35,7 +35,7 @@ class OperationShopDistrictCoordinate extends \core\models\operation\OperationSh
     public function validateLatitude($attribute, $params)
     {
         $value = $this->$attribute;
-        if ($value > $params['max'] || $val < $params['min']) {
+        if ($value > $params['max'] || $value < $params['min']) {
             $this->addError($attribute, '纬度超出范围');
         }
     }
