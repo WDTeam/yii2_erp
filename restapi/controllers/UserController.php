@@ -20,8 +20,8 @@ class UserController extends \restapi\components\Controller
 {
 
     /**
-     * @api {POST} v1/user/add-address 添加常用地址 (已完成100%)
-     *
+     * @api {POST} /user/add-address  [POST]/user/add-address(100%)
+     * @apiDescription 添加常用地址
      * @apiName actionAddAddress
      * @apiGroup User
      *
@@ -122,8 +122,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-addresses 常用地址列表 (已完成100%)
-     *
+     * @api {GET} /user/get-addresses [GET] /user/get-addresses (100%)
+     * @apiDescription 常用地址列表
      * @apiName actionGetAddresses
      * @apiGroup User
      *
@@ -203,8 +203,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%)
-     *
+     * @api {DELETE} /user/delete-address [DELETE] /user/delete-address (100%)
+     * @apiDescription 删除用户常用地址
      * @apiName actionDeleteAddress
      * @apiGroup User
      *
@@ -252,8 +252,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%)
-     * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
+     * @api {PUT} /user/set-default-address [PUT] /user/set-default-address(100%)
+     * @apiDescription 设置默认地址【用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址】
      * @apiName actionSetDefaultAddress
      * @apiGroup User
      *
@@ -321,8 +321,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%)
-     *
+     * @api {PUT} /user/update-address [PUT] /user/update-address(100%)
+     * @apiDescription 修改常用地址
      * @apiName actionUpdateAddress
      * @apiGroup User
      *
@@ -398,7 +398,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/default-address 获取默认地址 (赵顺利100%)
+     * @api {GET} /user/default-address  [GET] /user/default-address(100%)
+     * @apiDescription 获取默认地址(赵顺利)
      * @apiName actionDefaultAddress
      * @apiGroup User
      *
@@ -484,8 +485,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/delete-used-worker 删除常用阿姨 （该功能已经砍掉,   100%）
-     *
+     * @api {DELETE} /user/delete-used-worker [DELETE] /user/delete-used-worker （100%）
+     * @apiDescription 删除常用阿姨 [该功能已经砍掉]
      *
      * @apiName actionDeleteUsedWorker
      * @apiGroup User
@@ -556,8 +557,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/black-list-workers 黑名单阿姨列表 （该功能已经砍掉 已完成100%）
-     * @apiDescription 获得该用户添加进黑名单的阿姨
+     * @api {GET} /user/black-list-workers [GET] /user/black-list-workers（100%）
+     * @apiDescription 获得该用户添加进黑名单的阿姨 【该功能已经砍掉】
      *
      * @apiName actionBlackListWorkers
      * @apiGroup User
@@ -630,10 +631,10 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/remove-worker 移除黑名单中的阿姨 （该功能已经砍掉 已完成100%）
+     * @api {DELETE} /user/remove-worker [DELETE] /user/remove-worker （100%）
      *
-     *
-     * @apiName actionRemoveWorker
+     * @apiDescription 移除黑名单中的阿姨【该功能已经砍掉】
+     * @apiName actionRemoveWorker 
      * @apiGroup User
      *
      * @apiParam {String} access_token  用户认证
@@ -692,9 +693,9 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （郝建设 已完成100%）
+     * @api {GET} /user/get-user-money  [GET] /user/get-user-money（100%）
      *
-     *
+     * @apiDescription 用户余额和消费记录 (郝建设)
      * @apiName actionGetUserMoney
      *
      * @apiGroup User
@@ -806,7 +807,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-score 用户积分明细 （已经完成 100%）
+     * @api {GET} /user/get-user-score [GET] /user/get-user-score（100%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName actionGetUserScore
@@ -878,8 +879,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/user/user-suggest 用户评价 （郝建设 100%）
-     *
+     * @api {POST} /user/user-suggest [POST] /user/user-suggest （100%）
+     * @apiDescription 用户评价 (郝建设)
      * @apiName actionUserSuggest
      * @apiGroup User
      * @apiParam {int} order_id       '订单ID'
@@ -974,8 +975,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-comment-level 获取用户评价等级 （郝建设 100%）
-     *
+     * @api {GET} /user/get-comment-level [GET] /user/get-comment-level （100%）
+     * @apiDescription 获取用户评价等级(郝建设)
      * @apiName actionGetCommentLevel
      * @apiGroup User
      *
@@ -1032,8 +1033,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
-     *
+     * @api {GET} /user/get-comment-level-tag  [GET] /user/get-comment-level-tag（100%）
+     * @apiDescription 获取用户评价等级下面的标签(郝建设)
      * @apiName actionGetCommentLevelTag
      * @apiGroup User
      *
@@ -1092,8 +1093,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-level-tag 获取评论的level和tag （郝建设 100%）
-     *
+     * @api {GET} /user/get-level-tag [GET] /user/get-level-tag （100%）
+     * @apiDescription 获取评论的level和tag(郝建设)
      * @apiName actionGetLeveltag
      * @apiGroup User
      *
@@ -1232,8 +1233,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-comment-count 获取用户评价数量 （郝建设 100%）
-     *
+     * @api {GET} /user/get-comment-count [GET] /user/get-comment-count （100%）
+     * @apiDescription 获取用户评价数量 郝建设()
      * @apiName actionGetCommentCount
      * @apiGroup User
      *
@@ -1286,8 +1287,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-goods 获取给定经纬度范围内是否有该服务 （郝建设 100%）
-     *
+     * @api {GET} /user/get-goods [GET] v1/user/get-goods （100%）
+     * @apiDescription 获取给定经纬度范围内是否有该服务（郝建设）
      * @apiName actionGetGoods
      * @apiGroup User
      *
@@ -1342,8 +1343,8 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-info 通过token获取用户信息 （赵顺利 100%）
-     *
+     * @api {GET} /user/get-user-info [GET] /user/get-user-info （100%）
+     * @apiDescription 通过token获取用户信息 (赵顺利)
      * @apiName actionGetUserInfo
      * @apiGroup User
      *

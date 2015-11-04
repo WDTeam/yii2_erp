@@ -196,12 +196,12 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/order/append-order 追加订单(xieyi 90% 目前产品已删除该需求 )
+     * @api {POST} /order/append-order [POST] /order/append-order( 90% )
      *
      * @apiName ActionAppendOrder
      * @apiGroup Order
      *
-     * @apiDescription 追加订单
+     * @apiDescription 追加订单 (谢奕 -- 目前产品已删除该需求)
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_type_id 服务类型商品id
      * @apiParam {String} order_src_id 订单来源id 
@@ -1912,6 +1912,9 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0);
         }
+        if(is_null($param['accept_other_aunt'])){
+            $param['accept_other_aunt'] = 0;
+        }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1928,7 +1931,8 @@ class OrderController extends \restapi\components\Controller
                 "order_is_use_balance" => $param['order_is_use_balance'],
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
                 "order_customer_need" => $param['order_customer_need'],
-                "order_customer_memo" => $param['order_customer_memo']
+                "order_customer_memo" => $param['order_customer_memo'],
+                "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
             $booked_list = array();
@@ -1947,7 +1951,7 @@ class OrderController extends \restapi\components\Controller
 
                 if ($createOrder['status'] == 1) {
                     if (!empty($createOrder)) {
-                        return $this->send([1], "添加成功", 1);
+                        return $this->send($createOrder['batch_code'], "添加成功", 1);
                     } else {
                         return $this->send(null, "添加失败", 0, 403);
                     }

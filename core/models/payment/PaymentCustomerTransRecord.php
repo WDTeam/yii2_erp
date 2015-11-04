@@ -183,13 +183,10 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         elseif( $transRecord['payment_customer_trans_record_online_balance_pay'] > 0 )
         {
             //如果order_pay_money == 0 直接返回false,去线上支付
-            if( $data['order_pay_money'] != 0 && $data['order_pay_money'] > 0){
-                $status = false;
-            }else{
-                //余额支付 + 优惠券
-                $transRecord['scenario'] = 8;
-                $status = $obj->onlineBalancePay($transRecord);
-            }
+
+            //余额支付 + 优惠券
+            $transRecord['scenario'] = 8;
+            $status = $obj->onlineBalancePay($transRecord);
         }
         elseif( $transRecord['payment_customer_trans_record_pre_pay'] > 0 )
         {
@@ -295,9 +292,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = bcsub($customerBalance['customer_balance'],$data["payment_customer_trans_record_online_balance_pay"]);
+        $data["payment_customer_trans_record_current_balance"] = bcsub($customerBalance['balance'],$data["payment_customer_trans_record_online_balance_pay"]);
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
         //TODO::取服务卡余额计算
@@ -336,9 +333,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
 
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
@@ -369,9 +366,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
         //服务卡卡号
@@ -401,9 +398,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
         //服务卡之前余额
         $data["payment_customer_trans_record_service_card_befor_balance"] = 0;
         //服务卡当前余额
@@ -442,9 +439,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
         //服务卡卡号
@@ -480,9 +477,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = bcsub($customerBalance['customer_balance'],$data["payment_customer_trans_record_online_balance_pay"]);
+        $data["payment_customer_trans_record_current_balance"] = bcsub($customerBalance['balance'],$data["payment_customer_trans_record_online_balance_pay"]);
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
         //服务卡卡号
@@ -529,9 +526,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             //获取用户余额
             $customerBalance = Customer::getBalanceById($data['customer_id']);
             //之前余额
-            $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+            $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
             //当前余额
-            $data["payment_customer_trans_record_current_balance"] = bcadd($customerBalance['customer_balance'],$data["payment_customer_trans_record_online_balance_pay"]);
+            $data["payment_customer_trans_record_current_balance"] = bcadd($customerBalance['balance'],$data["payment_customer_trans_record_online_balance_pay"]);
         }
 
         //获取当前用户最后一次交易记录
@@ -560,9 +557,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = $customerBalance['customer_balance'];
+        $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
         //服务卡卡号

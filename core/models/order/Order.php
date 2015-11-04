@@ -168,11 +168,13 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if ($this->_create($attributes)) {
-            //交易记录
-            if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
-                $order_model = OrderSearch::getOne($this->id);
-                $order_model->admin_id = $attributes['admin_id'];
-                OrderStatus::_payment($order_model, ['OrderExtPay']);
+            //交易记录1,现金支付,3第三支付,无需线上支付
+            if( $this->order_pay_money == 0 ){
+                if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
+                    $order_model = OrderSearch::getOne($this->id);
+                    $order_model->admin_id = $attributes['admin_id'];
+                    OrderStatus::_payment($order_model, ['OrderExtPay']);
+                }
             }
             return true;
         }
@@ -221,6 +223,7 @@ class Order extends OrderModel
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
      *  string $order_flag_sys_assign 是否系统指派
+     *  int $order_flag_change_booked_worker 是否可更换指定阿姨
      *  string $order_cs_memo 客服备注
      * ]
      * @param $booked_list [
@@ -239,7 +242,8 @@ class Order extends OrderModel
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id',
             'customer_id','admin_id','order_pay_type',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
-            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_flag_sys_assign','order_cs_memo'
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo',
+            'order_flag_sys_assign','order_cs_memo','order_flag_change_booked_worker'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'
@@ -509,6 +513,7 @@ class Order extends OrderModel
 
     /**
      * 服务完成
+     * TODO 添加常用阿姨
      * @param $order_id
      * @return bool
      */

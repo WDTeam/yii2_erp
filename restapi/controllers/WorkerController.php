@@ -17,7 +17,7 @@ use Yii;
 class WorkerController extends \restapi\components\Controller
 {
     /**
-     * @api{GET} /worker/worker-info [GET] /worker/worker-info
+     * @api{GET} /worker/worker-info [GET] /worker/worker-info(100%)
      *
      * @apiDescription 获取阿姨信息 (田玉星)
      * 
