@@ -57,7 +57,7 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     }
     public function rules()
     {
-        return array_merge([
+        return array_merge(parent::rules(),[
             [['worker_task_reward_value'], 'match', 'pattern'=>'/^[0-9]+(.[0-9]{1,2})?$/'],
             [['worker_task_name', 
                 'worker_task_end', 'worker_task_reward_type', 'worker_task_reward_value',
@@ -66,7 +66,7 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
             ], 'required'],
             [['worker_task_time'], 'required'],
             [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
-        ],parent::rules());
+        ]);
     }
     
     public function getConditions()
