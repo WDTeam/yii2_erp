@@ -331,7 +331,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //保留两位小数
         bcscale(2);
         //获取用户余额
-        $customerBalance = Customer::getBalanceById($data['customer_id']);var_dump($customerBalance);exit;
+        $customerBalance = Customer::getBalanceById($data['customer_id']);
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
