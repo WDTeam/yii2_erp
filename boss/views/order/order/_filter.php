@@ -14,7 +14,7 @@ use core\models\order\OrderSearch;
 		<div><p>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</p></div>
 		<div>
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'city_id', 'items' => Order::getOnlineCityList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'cities', 'items' => Order::getOnlineCityList()]);
         ?>
 		</div>
 		
@@ -25,7 +25,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'order_service_type_id', 'items' => Order::getServiceItems()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'types', 'items' => Order::getServiceItems()]);
 		?>	
 		</div>
 		
@@ -36,7 +36,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php 
-		  echo $this->render('_filteritem', ['filter_name' => 'order_status_dict_id', 'items' => Order::getStatusList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'statuss', 'items' => Order::getStatusList()]);
 		?>	
 		</div>
 							    		
@@ -48,7 +48,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php 
-		  echo $this->render('_filteritem', ['filter_name' => 'channel_id', 'items' => $searchModel->getOrderChannelList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'channels', 'items' => $searchModel->getOrderChannelList()]);
 		?>
 		</div>
 		

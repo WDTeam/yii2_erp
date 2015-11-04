@@ -271,6 +271,7 @@ class OrderController extends BaseAuthController
     public function actionIndex()
     {
         $searchParas = Yii::$app->request->getQueryParams();
+        //print_r($searchParas);exit;
 
         $searchModel = new \boss\models\order\OrderSearchIndex();
         $dataProvider = $searchModel->search($searchParas);

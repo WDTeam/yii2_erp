@@ -28,9 +28,9 @@ else
 
 foreach ($items as $key => $value)
 {
-    if ($para_current_value == $key)
-        echo '<li class="cur"><a href="'.$toUrl.'&'.$search_class_name.'['.$search_filed_name.']'.'='.$key.'">'.$value.'</a></li>';
+    if (!empty($para_current_value) && strpos($para_current_value, '-'.$key.'-') !== false)
+        echo '<li class="cur"><a href="'.$toUrl.'&'.$search_class_name.'['.$search_filed_name.']'.'='.$para_current_value.'">'.$value.'</a></li>';
     else
-        echo '<li><a href="'.$toUrl.'&'.$search_class_name.'['.$search_filed_name.']'.'='.$key.'">'.$value.'</a></li>';
+        echo '<li><a href="'.$toUrl.'&'.$search_class_name.'['.$search_filed_name.']'.'='.$para_current_value.'-'.$key.'-">'.$value.'</a></li>';
 }
 ?>
