@@ -570,7 +570,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $financeSettleApplySearch->save();
     }
     
-    
+    /**
+     * 获取可付款的结算列表
+     * @return type
+     */
+    public function getCanPayedSettlementList(){
+        $financeSettleApplySearchArray = self::find()->where(['finance_settle_apply_status'=>self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])->all();
+        return $financeSettleApplySearchArray;
+    }
     
     public function attributeLabels()
     {
