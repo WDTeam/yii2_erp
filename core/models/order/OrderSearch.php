@@ -472,7 +472,7 @@ class OrderSearch extends Order
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to,$not_with_work=null)->query;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to,$not_with_work)->query;
         $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
@@ -601,7 +601,7 @@ class OrderSearch extends Order
         innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
         innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id');
 
-        if(!is_null($not_with_work )){
+        if(is_null($not_with_work )){
             $query->innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
         }
         $dataProvider = new ActiveDataProvider([
@@ -613,7 +613,7 @@ class OrderSearch extends Order
             $query->andFilterWhere(['>', 'order_booked_begin_time', $from]);
         }
 
-        if(!is_null($not_with_work )){
+        if(is_null($not_with_work )){
             $query = $query->andFilterWhere([
                 'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
             ]);

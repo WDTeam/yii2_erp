@@ -197,13 +197,5 @@ return [
             'uploadUrl' => '@web/path/to/uploadfolder',
             'imageAllowExtensions'=>['jpg','png','gif']
         ],
-        'params'=>[
-            'order'=>[
-                'MANUAL_ASSIGN_lONG_TIME'=>900,
-                'ORDER_BOOKED_WORKER_ASSIGN_TIME'=>900,
-                'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME'=>300,
-                'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME'=>900,
-            ]
-        ]
     ],
 ];
