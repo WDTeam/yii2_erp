@@ -135,10 +135,21 @@ class FinancePopOrderController extends Controller
     		$FinanceRecordLog->insert();
     		$lastidRecordLog=$FinanceRecordLog->id;
     		}
-    		if($lastidRecordLog==0){ \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
+    		if($lastidRecordLog==0){
+    		  \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
     		  return $this->redirect(['index']);
     		 }
+    		 
+    		 $FinanceRecordLog = new FinanceRecordLogSearch;
+    		 
+    		 $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
+    		 if($customer_info>0){
+    		 	\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
+    		 	return $this->redirect(['index']);
+    		 }
+    		 
     		
+    		 
     		foreach ($sheetData as $key=>$value){
     			//去除表头
     			if($n>1 && !empty($value['A'])){

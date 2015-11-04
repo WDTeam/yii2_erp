@@ -154,6 +154,7 @@ class OrderPush extends Order
     public static function workerSMSPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = 1;
         $order->order_flag_worker_sms = $order->orderExtFlag->order_flag_worker_sms + 1;
         return $order->doSave(['OrderExtFlag']);
     }

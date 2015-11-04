@@ -68,8 +68,9 @@ class FinanceHeader extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_order_channel_id','finance_pay_channel_id', 'create_time', 'is_del','finance_header_key'], 'integer'],
-            [['finance_header_name','finance_header_title','finance_header_where','finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100]
+            [['finance_order_channel_id','finance_pay_channel_id', 'create_time', 'is_del','finance_header_key'], 'integer'], 
+            [['finance_header_title'],'match','pattern'=>'/^[\w|\x{4e00}-\x{9fa5}]+$/u','message'=>'名字里面不能包含特殊符号'],  
+            [['finance_header_name','finance_header_where','finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100]
         ];
     }
 

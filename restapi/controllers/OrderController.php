@@ -19,12 +19,11 @@ class OrderController extends \restapi\components\Controller
     public $workerText = array(1 => '指定阿姨订单数,待抢单订单数', '指定阿姨订单列表', '待抢单订单列表');
 
     /**
-     * @api {POST} /order/create-order 创建订单 (100%xieyi)
-     *
+     * @api {POST} /order/create-order [POST] /order/create-order(100%)
+     * @apiDescription  创建订单 (谢奕)
      *
      * @apiName ActionCreateOrder
      * @apiGroup Order
-     * @apiDescription 创建订单v1
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
@@ -341,10 +340,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders 查询用户订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/orders [GET] /order/orders (90%)
+     * @apiDescription 查询用户订单 (谢奕 --已经将后台接口完成,缺少周期订单)
      *
-     *
-     * @apiName Orders
+     * @apiName actionOrders
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户令牌
@@ -487,11 +486,11 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders-count 查询用户订单数量(xieyi 70%缺少周期订单)
+     * @api {GET} /order/orders-count [GET] /order/orders-count(70%)
      *
-     * @apiName OrdersCount
+     * @apiName actionOrdersCount
      * @apiGroup Order
-     * @apiDescription 获得用户各种状态的订单数量
+     * @apiDescription 获得用户各种状态的订单数量 （谢奕 --缺少周期订单）
      *
      * @apiParam {String} access_token 用户令牌
      * @apiParam {int} [id] 订单id
@@ -555,9 +554,9 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-orders 查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
-     *
-     * @apiName WorkerOrders
+     * @api {GET} /order/worker-orders [GET] /order/worker-orders(90%)
+     * @apiDescription 查询阿姨订单（谢奕 --已经将后台接口完成,缺少周期订单）
+     * @apiName actionWorkerOrders
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -688,10 +687,9 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-service-orders 查询待服务阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
-     *
-     *
-     * @apiName WorkerServiceOrders
+     * @api {GET} /order/worker-service-orders [GET] /order/worker-service-orders(90%)
+     * @apiDescription 查询待服务阿姨订单(谢奕 --已经将后台接口完成,缺少周期订单)
+     * @apiName actionWorkerServiceOrders
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -823,10 +821,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-orders-count 查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/worker-orders-count [GET] /order/worker-orders-count(90%)
+     * @apiDescription 查询阿姨订单订单数量 (谢奕 --已经将后台接口完成,缺少周期订单)
      *
-     *
-     * @apiName WorkerOrdersCount
+     * @apiName actionWorkerOrdersCount
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -897,10 +895,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-service-orders-count 查询阿姨待服务订单订单数量
+     * @api {GET} /order/worker-service-orders-count [GET]/order/worker-service-orders-count (100%)
      *
-     *
-     * @apiName WorkerServiceOrdersCount
+     * @apiDescription 查询阿姨待服务订单订单数量 （谢奕）
+     * @apiName actionWorkerServiceOrdersCount
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -956,10 +954,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/order/worker-done-orders-history 查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/worker-done-orders-history [GET]/order/worker-done-orders-history (90%)
      *
-     *
-     * @apiName WorkerDoneOrdersHistory
+     * @apiDescription 查询阿姨三个月的完成历史订单 (谢奕 --已经将后台接口完成,缺少周期订单)
+     * @apiName actionWorkerDoneOrdersHistory
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -1054,9 +1052,9 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/order/worker-cancel-orders-history 查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/worker-cancel-orders-history [GET]/order/worker-cancel-orders-history(90%)
      *
-     *
+     * @apiDescription 查询阿姨三个月的取消历史订单（谢奕 --已经将后台接口完成,缺少周期订单）
      * @apiName WorkerCancelOrdersHistory
      * @apiGroup Order
      *
@@ -1152,9 +1150,9 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/status-orders-count 查询用户不同状态订单数量(xieyi 70%缺少周期订单)
+     * @api {GET} /order/status-orders-count [GET]/order/status-orders-count(70%)
      *
-     *
+     * @apiDescription 查询用户不同状态订单数量(谢奕--缺少周期订单)
      * @apiName StatusOrdersCount
      * @apiGroup Order
      * @apiDescription 获得各种状态的订单数量
@@ -1239,10 +1237,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/order-status-history 查询用户某个订单状态历史状态记录(xieyi 70%缺少周期订单)
+     * @api {GET} /order/order-status-history [GET] /order/order-status-history(70%)
+     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕 --缺少周期订单)
      *
-     *
-     * @apiName OrderStatusHistory
+     * @apiName actionOrderStatusHistory
      * @apiGroup Order
      *
      * @apiParam {String} order_id 订单id
@@ -1253,7 +1251,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *         "code": "ok",
+     *         "code": "1",
      *         "msg": "操作成功",
      *         "ret": [
      *         {
@@ -1298,9 +1296,9 @@ class OrderController extends \restapi\components\Controller
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
+     *     HTTP/1.1 200 OK
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -1332,11 +1330,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% )
-     *
-     * @apiName CancelOrder
+     * @api {PUT} /order/cancel-order [PUT] /order/cancel-order(100% )
+     * @apiDescription 取消订单(郝建设)
+     * @apiName actionCancelOrder
      * @apiGroup Order
-     *
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -1436,11 +1433,11 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/add-comment 评价订单（该功能写在UserController里面 v1/user/user-suggest）
-     *
+     * @api {POST} /order/add-comment [POST]/order/add-comment（100%）
+     * @apiDescription 评价订单(郝建设 该功能写在UserController里面 /user/user-sugges)
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiName AddComment
+     * @apiName actionAddComment
      * @apiGroup Order
      *
      * @apiParam {String} order_id 订单id
@@ -1454,7 +1451,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "订单评价成功成功",
      *     }
      *
@@ -1463,7 +1460,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -1475,10 +1472,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} /order/hiden-order 删除订单（郝建设 100%）
+     * @api {DELETE} /order/hiden-order [DELETE]/order/hiden-order（ 100%）
      *
-     *
-     * @apiName HidenOrder
+     * @apiDescription 删除订单(郝建设)
+     * @apiName actionHidenOrder
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户认证
@@ -1497,8 +1494,6 @@ class OrderController extends \restapi\components\Controller
      *         1
      *       }
      *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
@@ -1541,10 +1536,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} v1/order/worker-history-orders.php 阿姨全部订单月份列表(zhaoshunli 0%)
-     * @apiName actionAllOrderCommon
+     * @api {GET} /order/worker-history-orders [GET]/order/worker-history-orders (0%)
+     * @apiName actionWorkerHistoryOrders
      * @apiGroup Order
-     * @apiDescription 对账日常订单查看全部，月份列表
+     * @apiDescription 阿姨全部订单月份列表 (赵顺利)
      * @apiParam {String} access_token    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
@@ -1587,15 +1582,15 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} v1/order/get-worker-orders 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
+     * @api {GET} /order/get-worker-orders [GET]/order/get-worker-orders(100%)
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
-     * @apiDescription 阿姨抢单数
+     * @apiDescription 阿姨抢单数 (郝建设)
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
-     * @apiParam {int} [page_size]         条数  #leveltype =2 时要传递
-     * @apiParam {int} [page]              页面  #leveltype =2 时要传递
-     * @apiParam {int} leveltype         判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
+     * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
+     * @apiParam {String} [page]              页面  #leveltype =2 时要传递
+     * @apiParam {String} leveltype          判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1697,93 +1692,93 @@ class OrderController extends \restapi\components\Controller
                     #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     #假数据
-                    $array = Array(
-                        array(
-                            "order_id" => 1,
-                            "order_code" => 701510308380284,
-                            "batch_code" => 'zhouqidingdan',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,朝阳区',
-                            "need" => '重点打扫厨房,重点打扫卫生间',
-                            "money" => '50.00',
-                            "is_booker_worker" => 1,
-                            "times" => '2:00:00',
-                            "order_time" => array(
-                                '1446528600-1446546600',
-                                '1447133400-1447151400',
-                                '1447738200-1447756200'
-                            )
-                        ),
-                        array(
-                            "order_id" => 2,
-                            "order_code" => 701510308380285,
-                            "batch_code" => '',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,朝阳区',
-                            "need" => '重点打扫厨房,重点打扫卫生间',
-                            "money" => '60.00',
-                            "is_booker_worker" => 0,
-                            "order_time" => array(
-                                '1446249600-1446256801'
-                            )
-                        ),
-                        array(
-                            "order_id" => 3,
-                            "order_code" => 701510308380286,
-                            "batch_code" => 'zhouqidingdantwo',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,海淀区区',
-                            "need" => '重点打扫厨房',
-                            "money" => '70.00',
-                            "is_booker_worker" => 1,
-                            "times" => '2:00:00',
-                            "order_time" => array(
-                                '1443666600-1443695400',
-                                '1443753000-1443781800',
-                                '1443839400-1443868200',
-                                '1443925800-1443954600'
-                            )
-                        ),
-                        array(
-                            "order_id" => 4,
-                            "order_code" => 701510308380287,
-                            "batch_code" => 'zhouqidingdantwo',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,丰台区',
-                            "need" => '重点打扫卫生间',
-                            "money" => '80.00',
-                            "is_booker_worker" => 1,
-                            "times" => '2:00:00',
-                            "order_time" => array(
-                                '1448937000-1448965800',
-                                '1449541800-1449570600',
-                                '1450146600-1450175400',
-                                '1450751400-1450780200'
-                            )
-                        ),
-                        array(
-                            "order_id" => 2,
-                            "order_code" => 701510308380285,
-                            "batch_code" => '',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京',
-                            "need" => '重点打扫卫生间11',
-                            "money" => '25.00',
-                            "is_booker_worker" => 0,
-                            "order_time" => array(
-                                '1449801000-1449808200'
-                            )
-                        )
-                    );
+//                    $array = Array(
+//                        array(
+//                            "order_id" => 1,
+//                            "order_code" => 701510308380284,
+//                            "batch_code" => 'zhouqidingdan',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,朝阳区',
+//                            "need" => '重点打扫厨房,重点打扫卫生间',
+//                            "money" => '50.00',
+//                            "is_booker_worker" => 1,
+//                            "times" => '2:00:00',
+//                            "order_time" => array(
+//                                '1446528600-1446546600',
+//                                '1447133400-1447151400',
+//                                '1447738200-1447756200'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 2,
+//                            "order_code" => 701510308380285,
+//                            "batch_code" => '',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,朝阳区',
+//                            "need" => '重点打扫厨房,重点打扫卫生间',
+//                            "money" => '60.00',
+//                            "is_booker_worker" => 0,
+//                            "order_time" => array(
+//                                '1446249600-1446256801'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 3,
+//                            "order_code" => 701510308380286,
+//                            "batch_code" => 'zhouqidingdantwo',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,海淀区区',
+//                            "need" => '重点打扫厨房',
+//                            "money" => '70.00',
+//                            "is_booker_worker" => 1,
+//                            "times" => '2:00:00',
+//                            "order_time" => array(
+//                                '1443666600-1443695400',
+//                                '1443753000-1443781800',
+//                                '1443839400-1443868200',
+//                                '1443925800-1443954600'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 4,
+//                            "order_code" => 701510308380287,
+//                            "batch_code" => 'zhouqidingdantwo',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,丰台区',
+//                            "need" => '重点打扫卫生间',
+//                            "money" => '80.00',
+//                            "is_booker_worker" => 1,
+//                            "times" => '2:00:00',
+//                            "order_time" => array(
+//                                '1448937000-1448965800',
+//                                '1449541800-1449570600',
+//                                '1450146600-1450175400',
+//                                '1450751400-1450780200'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 2,
+//                            "order_code" => 701510308380285,
+//                            "batch_code" => '',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京',
+//                            "need" => '重点打扫卫生间11',
+//                            "money" => '25.00',
+//                            "is_booker_worker" => 0,
+//                            "order_time" => array(
+//                                '1449801000-1449808200'
+//                            )
+//                        )
+//                    );
 
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
-                    $ret["orderData"] = $array; // $workerCount; 实际返回数组名称
+                    $ret["orderData"] = $workerCount; // $workerCount; 实际返回数组名称
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
@@ -1827,11 +1822,11 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/order/create-recursive-orderes 创建周期订单 （haojianshe 100%）
+     * @api {POST} /order/create-recursive-orderes [POST] /order/create-recursive-orderes（100%）
      *
-     * @apiName CreateRecursiveOrderes
+     * @apiName actionCreateRecursiveOrderes
      * @apiGroup Order
-     * @apiDescription 周期订单提交
+     * @apiDescription 创建周期订单(郝建设)
      *
      * @apiParam  {String}  access_token      会话id. 必填 
      * @apiParam  {String}  [platform_version]  平台版本号
@@ -1968,11 +1963,11 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} v1/order/set-worker-order 阿姨抢单提交 (haojianshe 100%)
+     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order ( 100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
-     * @apiDescription 阿姨抢单提交
+     * @apiDescription 阿姨抢单提交 （郝建设）
      *
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} [platform_version]  平台版本号
@@ -2035,8 +2030,9 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/get-order-worker 获取周期订单（haojianshe 100%）
+     * @api {GET} /order/get-order-worker [GET]/order/get-order-worker(100%）
      *
+     * @apiDescription 获取周期订单 （郝建设）
      * @apiName actionGetOrderWorker
      * @apiGroup Order
      *
@@ -2123,8 +2119,8 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/get-order-one 获取一个订单的对象（haojianshe 100%）
-     *
+     * @api {GET} /order/get-order-one [GET] /order/get-order-one（100%）
+     * @apiDescription 获取一个订单的对象 （郝建设） 
      * @apiName actionGetOrderOne
      * @apiGroup Order
      *

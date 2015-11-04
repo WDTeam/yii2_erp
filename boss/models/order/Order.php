@@ -31,7 +31,9 @@ class Order extends OrderModel
     public function rules()
     {
         return array_merge([
-            [['order_customer_phone','orderBookedDate','orderBookedTimeRange'],'required']
+            [['order_customer_phone','orderBookedDate','orderBookedTimeRange'],'required'],
+            [['order_customer_phone'],'match','pattern'=>'%^1[3-9]\d{9}$%','message'=>'请填写正确格式的手机号码'],   //手机号码验证
+
         ],parent::rules());
     }
 

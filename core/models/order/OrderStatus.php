@@ -241,18 +241,6 @@ class OrderStatus extends Order
 
 
     /**
-     * 已核实 已对账
-     * @param $order
-     * @param $must_models
-     * @return bool
-     */
-    protected static function _checked(&$order,$must_models=[])
-    {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CHECKED);
-        return self::_statusChange($order,$status,$must_models);
-    }
-
-    /**
      * 已完成结算
      * @param $order
      * @param $must_models
@@ -309,7 +297,10 @@ class OrderStatus extends Order
             'order_before_status_dict_id' => $from->id,
             'order_before_status_name' => $from->order_status_name,
             'order_status_dict_id' => $status->id,
-            'order_status_name' => $status->order_status_name
+            'order_status_name' => $status->order_status_name,
+            'order_status_boss' => $status->order_status_boss,
+            'order_status_customer' => $status->order_status_customer,
+            'order_status_worker' => $status->order_status_worker
         ]);
         $save_models = ['OrderExtStatus', 'OrderStatusHistory'];
         $save_models = array_merge($must_models, $save_models);

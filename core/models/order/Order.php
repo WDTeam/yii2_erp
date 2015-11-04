@@ -51,6 +51,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $order_flag_exception
  * @property integer $order_flag_sys_assign
  * @property integer $order_flag_lock
+ * @property integer $order_flag_is_checked
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
@@ -541,7 +542,8 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        return OrderStatus::_checked($order);
+        $order->order_flag_is_checked = 1;
+        return $order->doSave(['OrderExtFlag']);
     }
 
     /**
