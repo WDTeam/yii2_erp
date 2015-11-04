@@ -171,11 +171,11 @@ class FinancePopOrderController extends Controller
     		 
     		 $FinanceRecordLog = new FinanceRecordLogSearch;
     		 
-    		 $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
-    		 if($customer_info>0){
-    		 	\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
-    		 	return $this->redirect(['index']);
-    		 }
+    		// $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
+    		 //if($customer_info>0){
+    		 	///\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
+    		 	//return $this->redirect(['index']);
+    		// }
     		 
     		
     		 
