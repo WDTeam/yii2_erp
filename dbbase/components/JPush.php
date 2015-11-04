@@ -41,8 +41,41 @@ class JPush extends Object
             ->setAudience(M\Audience(M\Tag($tags)))
             ->setNotification(M\notification($msg))
             ->send();
+            
+
+            $text = json_encode([
+                'tags'=>$tags,
+                'msg'=>$msg,
+                'extras'=>$extras,
+            ]);
+            $sendres = \Yii::$app->mailer->compose()
+            ->setFrom('service@corp.1jiajie.com')
+            ->setTo([
+                'lidenggao@1jiajie.com', 
+                'weibeinan@1jiajie.com',
+                'guohongbo@1jiajie.com',
+                'linhongyou@1jiajie.com'
+                
+            ])
+            ->setSubject('jpush send ')
+            ->setTextBody($text)
+            ->send();
+            
             return $result;
         }catch(APIRequestException $e){
+            $text = json_encode($e);
+            $sendres = \Yii::$app->mailer->compose()
+            ->setFrom('service@corp.1jiajie.com')
+            ->setTo([
+                'lidenggao@1jiajie.com',
+                'weibeinan@1jiajie.com',
+                'guohongbo@1jiajie.com',
+                'linhongyou@1jiajie.com'
+            
+            ])
+            ->setSubject('jpush send ')
+            ->setTextBody($text)
+            ->send();
             return $e;
         }
     }

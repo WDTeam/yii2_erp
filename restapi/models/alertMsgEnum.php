@@ -118,7 +118,7 @@ class alertMsgEnum
      * 李勇begin
      */
     //通用系统错误提示
-    const bossError = 'boss系统错误';
+    const bossError = '系统出错，请联系管理员！';
     //通用用户登录已过期
     const customerLoginFailed = '用户认证已经过期,请重新登录';
     
@@ -295,6 +295,7 @@ class alertMsgEnum
     //查询阿姨待服务订单数
      
     //查询阿姨订单数量
+     //阿姨抢单
     
     //阿姨完成的历史订单
     const orderWorkerDoneOrderHistorySuccess = "阿姨历史完成订单查询成功";
@@ -313,4 +314,125 @@ class alertMsgEnum
     const orderCancelSuccess = "订单取消成功";
     const orderCancelVerifyFaile ="验证码或订单号不能为空";
     const orderCancelFaile = "订单取消失败";
+    //订单删除
+    const orderDeleteSuccess = "订单删除成功";
+    const orderDeleteFaile = "订单删除失败";
+    //创建周期订单
+    const orderChannelFaile = "下单渠道不能为空";
+    const orderAddressFaile = '用户地址不能为空';
+    const orderCustomerPhoneFaile = "客户手机不能为空";
+    const orderIsUseBalanceFaile = '使用余额不能为空';
+    const orderCreateRecursiveOrderSuccess = "创建周期订单成功";
+    const orderCreateRecursiveOrderFaile= "创建周期订单失败";
+   //阿姨抢单提交
+    const orderSetWorkerOrderSuccess = "阿姨抢单提交成功";
+    const orderSetWorkerOrderFaile = "阿姨抢单提交失败";
+    //获取周期订单
+    const orderGetOrderWorkerSuccess = "获取阿姨周期订单成功";
+    const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
+
+    
+    //添加常用地址
+    //被服务者手机或被服务者昵称不能为空
+    const sendWorkerCodeFaile = '被服务者手机或被服务者昵称不能为空';   
+    //常用地址添加成功
+    const addAddressSuccess = '常用地址添加成功';   
+    //常用地址添加失败
+    const addAddressFail = '常用地址添加失败';   
+    
+    //常用地址列表
+    //获取地址列表成功
+    const getAddressesSuccess = '常用地址添加失败'; 
+    
+    //删除用户常用地址
+    //地址信息获取失败,请添加地址id
+    const deleteAddressNoAddressId = '地址信息获取失败,请添加地址id'; 
+    //删除成功
+    const deleteAddressSuccess = '删除成功'; 
+    //删除失败
+    const deleteAddressFail = '删除失败'; 
+    
+    //设置默认地址
+    //地址信息获取失败
+    const setDefaultAddressNoAddressId = '地址信息获取失败'; 
+    //设置默认地址成功
+    const setDefaultAddressSuccess = '设置默认地址成功'; 
+    //设置默认地址失败
+    const setDefaultAddressFail = '设置默认地址失败'; 
+
+    //修改常用地址
+    //地址信息获取失败
+    const updateAddressNoAddressId = '地址信息获取失败'; 
+    //修改常用地址成功
+    const updateAddressSuccess = '修改常用地址成功'; 
+    //修改常用地址失败
+    const updateAddressFail = '修改常用地址失败'; 
+   
+    //获取默认地址
+    //该用户没有默认地址
+    const defaultAddressNoAddress = '该用户没有默认地址'; 
+    //该用户没有默认地址
+    const defaultAddressSuccess = '获取默认地址成功'; 
+    //获取用户信息失败
+    const defaultAddressFail = '获取用户信息失败'; 
+   
+    //删除常用阿姨
+    //删除成功
+    const deleteUserWorkerSuccess = '删除成功'; 
+    
+    //获得该用户添加进黑名单的阿姨
+    //阿姨列表查询
+    const blackListWorkersSuccess = '阿姨列表查询'; 
+    
+    //移除黑名单中的阿姨
+    //移除成功
+    const removeWorkerSuccess = '移除成功'; 
+    
+    //用户余额和消费记录
+    //查询成功
+    const getUserMoneySuccess = '查询成功'; 
+    
+    //获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
+    //用户积分明细列表
+    const getUserScoreSuccess = '用户积分明细列表'; 
+    
+    //用户评价
+    //提交参数中缺少必要的参数
+    const userSuggestNoOrder = '提交参数中缺少必要的参数'; 
+    //添加评论成功
+    const userSuggestSuccess = '添加评论成功'; 
+    //添加评论失败
+    const userSuggestFail = '添加评论失败'; 
+    
+    //获取用户评价等级
+    //获取评论级别成功
+    const getCommentLevelSuccess = '获取评论级别成功';
+    //获取评论级别失败
+    const getCommentLevelFail = '获取评论级别失败';
+    
+    //获取用户评价等级下面的标签
+    //获取评论标签成功
+    const getCommentLevelTagSuccess = '获取评论标签成功';
+    //获取评论标签失败
+    const getCommentLevelTagFail = '获取评论标签失败';
+    
+    //获取评论的level和tag
+    //获取标签和子标签成功
+    const getLevelTagSuccess = '获取标签和子标签成功';
+    //获取标签和子标签失败
+    const getLevelTagFail = '获取标签和子标签失败';
+    
+    //获取用户评价数量
+    //获取用户评价数量
+    const getCommentCountSuccess = '获取用户评价数量';
+    
+    //获取给定经纬度范围内是否有该服务
+    //该服务获取成功
+    const getGoodsSuccess = '该服务获取成功';
+    
+    //通过token获取用户信息 
+    //该服务获取成功
+    const getGoodsSuccess = '该服务获取成功';
+
+    
 }
