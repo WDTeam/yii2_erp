@@ -117,12 +117,13 @@ class Ivr extends Component implements BootstrapInterface
      */
     public function send($telephone, $orderId, $orderMessage)
     {
-        $sign = md5($this->app_id.$this->token.time());
+        $time = time();
+        $sign = md5($this->app_id.$this->token.$time);
         $ivrarr = [
             'tel' => $telephone,				//手机号  测试手机号13311009484
             'appId'  => $this->app_id,		    //APPID
             'sign' => $sign,			        //签名
-            'timestamp' => time(),
+            'timestamp' => $time,
             'orderMessage' => $orderMessage,
             'orderId' => $orderId
         ];

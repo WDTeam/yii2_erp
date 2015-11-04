@@ -20,7 +20,7 @@ class DemoController extends BaseAuthController
     public function actionJpush()
     {
         $res = \Yii::$app->jpush;
-        $_res = $res->push(['worker_15110249233'],'test content');
+        $_res = $res->push(['15110249233'],'test content');
         var_dump($_res);
     }
     /**
