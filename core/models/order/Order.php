@@ -168,11 +168,13 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if ($this->_create($attributes)) {
-            //交易记录
-            if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
-                $order_model = OrderSearch::getOne($this->id);
-                $order_model->admin_id = $attributes['admin_id'];
-                OrderStatus::_payment($order_model, ['OrderExtPay']);
+            //交易记录1,现金支付,3第三支付,无需线上支付
+            if( $this->order_pay_money == 0 ){
+                if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
+                    $order_model = OrderSearch::getOne($this->id);
+                    $order_model->admin_id = $attributes['admin_id'];
+                    OrderStatus::_payment($order_model, ['OrderExtPay']);
+                }
             }
             return true;
         }
