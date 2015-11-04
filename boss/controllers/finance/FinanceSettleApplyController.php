@@ -230,7 +230,6 @@ class FinanceSettleApplyController extends BaseAuthController
         $exportArray = [];
         $financeSearchModel = new FinanceSettleApplySearch;
         $financeSettleApplySearchArray = $financeSearchModel->getCanPayedSettlementList();
-        //查询结算申请表与worker表关联查询，之后单独查询非订单收入表，放入一个数组中，与baseData数组做merge操作
         $i = 0;
         foreach($financeSettleApplySearchArray as $financeSettleApplySearch){
             $exportRow = [];

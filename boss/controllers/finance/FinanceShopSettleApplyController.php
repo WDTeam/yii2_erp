@@ -165,8 +165,25 @@ class FinanceShopSettleApplyController extends Controller
     }
     
     public function actionExport(){
+        $exportArray = [];
         $searchModel = new FinanceShopSettleApplySearch;
-        $data = $searchModel->find()->all();
+        $shopSettleApplyArray = $searchModel->getCanPayedShopSettlementList();
+        $i = 0;
+        foreach($shopSettleApplyArray as $shopSettleApply){
+            $exportRow = [];
+            $shop_id = $shopSettleApply->shop_id;
+            $shopInfo = Shop::findById($shop_id);
+            if(count($shopInfo) > 0){
+                $exportRow['receiver'] = $shopInfo['principal'];//收款人
+                $exportRow['receiver_bank_account'] = $shopInfo['bankcard_number'];//收款人账号
+                $exportRow['receiver_bank_name'] = $shopInfo['opening_bank'];//开户行
+                $exportRow['receiver_bank_branch'] = $shopInfo['sub_branch'];//开户网点
+                $exportRow['receiver_bank_address'] = $shopInfo['opening_address'];//开户地址
+                $exportRow['receiver_income'] = $shopSettleApply->finance_shop_settle_apply_fee;//打款金额
+            }
+            $exportArray[$i] = $exportRow;
+            $i++;
+        }
         $objPHPExcel=new PHPExcel();
         ob_start();
         $objPHPExcel->getProperties()->setCreator('ejiajie')
@@ -177,20 +194,22 @@ class FinanceShopSettleApplyController extends Controller
                 ->setKeywords('office 2007 openxml php')
                 ->setCategory('Result file');
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1','门店名称')
-                    ->setCellValue('B1','归属家政名称')
-                    ->setCellValue('C1','完成总单量')
-                    ->setCellValue('D1','每单管理费')
-                    ->setCellValue('E1','管理费');
+                    ->setCellValue('A1','收款人')
+                    ->setCellValue('B1','收款人账号')
+                    ->setCellValue('C1','金额')
+                    ->setCellValue('D1','开户行')
+                    ->setCellValue('E1','开户网点')
+                    ->setCellValue('F1','开户地址');
            $i=2;   
-           foreach($data as $k=>$v){
+           foreach($exportArray as $k=>$v){
             $objPHPExcel->setActiveSheetIndex(0)
-                       ->setCellValue('A'.$i,$v['shop_name'])
-                       ->setCellValue('B'.$i,$v['shop_manager_name'])
-                       ->setCellValue('C'.$i,$v['finance_shop_settle_apply_order_count'])
-                       ->setCellValue('D'.$i,$v['finance_shop_settle_apply_fee_per_order'])
-                       ->setCellValue('E'.$i,$v['finance_shop_settle_apply_fee']);
-            $i++;
+                        ->setCellValue('A'.$i,$v['receiver'])
+                        ->setCellValue('B'.$i,$v['receiver_bank_account'])
+                        ->setCellValue('C'.$i,$v['receiver_income'])
+                        ->setCellValue('D'.$i,$v['receiver_bank_name'])
+                        ->setCellValue('E'.$i,$v['receiver_bank_branch'])
+                        ->setCellValue('F'.$i,$v['receiver_bank_address']);
+                $i++;
            }
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
