@@ -1,7 +1,10 @@
 <?php
 use yii\helpers\Url;
+use yii\base\Object;
+use boss\models\order\OrderSearchIndex;
 
-$search_class_name = 'OrderSearch';
+$a1 = explode('\\', get_class(new OrderSearchIndex()));
+$search_class_name = array_pop($a1);
 $search_filed_name = $filter_name;
 $toUrl = Url::to(['']).'?&i=1';
 

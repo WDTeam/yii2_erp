@@ -32,6 +32,12 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
             ],
         ];
     }
+    public function rules()
+    {
+        return array_merge(parent::rules(),[
+            [['worker_task_reward_value'], 'match', 'pattern'=>'/^[0-9]+(.[0-9]{1,2})?$/']
+        ]);
+    }
     /**
      * 获取每个条件对应的所有数值
      */

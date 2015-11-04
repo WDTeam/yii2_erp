@@ -24,7 +24,7 @@ class m151016_094208_create_table_worker_task extends Migration
             'worker_task_description_url'=>Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'任务描述URL\'',
             'worker_task_conditions'=>Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'任务条件(JSON)\'',
             'worker_task_reward_type'=>Schema::TYPE_SMALLINT . '(3) DEFAULT 0 COMMENT \'任务奖励类型\'',
-            'worker_task_reward_value'=>Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'任务奖励值\'',
+            'worker_task_reward_value'=>Schema::TYPE_DECIMAL. '(10,2)  COMMENT \'任务奖励值\'',
             'worker_task_online'=>Schema::TYPE_SMALLINT . '(1) DEFAULT 1 COMMENT \'任务在线\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'创建时间\'' ,
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'更新时间\'' ,

@@ -6,6 +6,7 @@ use core\models\order\Order;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use boss\models\worker\Worker;
 
 /*
  * 仅用于订单查询主页面!!!!!!!!!!!!!!!!!!!!!!!
@@ -27,9 +28,14 @@ class OrderSearchIndex extends Order
         ];
     }
     
+    public function getBookedWorker()
+    {
+        return $this->hasOne(Worker::className(), ['id' => 'order_booked_worker_id'])->from(Worker::tableName().' AS bookedWorker');
+    }
+    
     public function search($params)
     {
-        $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay']);
+        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //             'pagination' => [
@@ -45,8 +51,8 @@ class OrderSearchIndex extends Order
             'id' => $this->id,
             'order_parent_id' => $this->order_parent_id,
             'order_is_parent' => $this->order_is_parent,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            //'created_at' => $this->created_at,
+            //'updated_at' => $this->updated_at,
             'isdel' => $this->isdel,
             'order_ip' => $this->order_ip,
             'order_service_type_id' => $this->order_service_type_id,
@@ -55,8 +61,8 @@ class OrderSearchIndex extends Order
             'order_unit_money' => $this->order_unit_money,
             'order_money' => $this->order_money,
             'order_booked_count' => $this->order_booked_count,
-            'order_booked_begin_time' => $this->order_booked_begin_time,
-            'order_booked_end_time' => $this->order_booked_end_time,
+            //'order_booked_begin_time' => $this->order_booked_begin_time,
+            //'order_booked_end_time' => $this->order_booked_end_time,
             'address_id' => $this->address_id,
             //'order_booked_worker_id' => $this->order_booked_worker_id,
             'checking_id' => $this->checking_id,
@@ -66,12 +72,11 @@ class OrderSearchIndex extends Order
             'shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
-            'order_status_dict_id' => $this->order_status_dict_id,
+            //'order_status_dict_id' => $this->order_status_dict_id,
         ]);
         
-        $query->orFilterWhere(['or', ['order_booked_worker_id' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
+        $query->orFilterWhere(['or', ['bookedWorked.worker_phone' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
 
-        //两种特殊状态的订单查询条件是订单服务时间
         if (isset($this->order_status_dict_id) && is_array($this->order_status_dict_id) 
         && (in_array(-1, $this->order_status_dict_id) || in_array(-2, $this->order_status_dict_id))) {
             if (in_array(-1, $this->order_status_dict_id)) {

@@ -77,8 +77,19 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
             $detail_encode = urlencode($operation_province_name.$operation_city_name.$operation_area_name.$customer_address_detail);
             $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
             $address_decode = json_decode($address_encode, true);
-			
-			if($address_decode['status'] == 0){
+
+            /**
+             * http://developer.baidu.com/map/index.php?title=webapi/guide/webservice-geocoding
+             * 名称           类型          说明
+             * status        Int           返回结果状态值， 成功返回0，其他值请查看下方返回码状态表。
+             * location      object        经纬度坐标
+             *  lat          float         纬度值
+             *  lng          float         经度值
+             * precise       Int           位置的附加信息，是否精确查找。1为精确查找，0为不精确。
+             * confidence    Int           可信度
+             * level         string        地址类型
+             */
+			if($address_decode['status'] == 0 && $address_decode['result']['precise'] == 1){
 				$operation_longitude = $address_decode['result']['location']['lng'];
             	$operation_latitude = $address_decode['result']['location']['lat'];
 			}else{

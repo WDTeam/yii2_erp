@@ -91,10 +91,7 @@ class OrderSearch extends Order
         $params = [
             OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
             OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
-            OrderStatusDict::ORDER_CHECKED, //已核实 已对账
             OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
-            OrderStatusDict::ORDER_PAYOFF_SHOP_DONE, //已完成门店结算
-            OrderStatusDict::ORDER_DIED, //已归档
         ];
         //查询
         $query = new \yii\db\Query();
@@ -630,13 +627,16 @@ class OrderSearch extends Order
                 ]);
             }
         }
+        if(!isset($attributes["OrderSearch"]["id"])){
+            $attributes["OrderSearch"]["id"]=null;
+        }
         if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
             $attributes["OrderSearch"]["oc.customer_id"]=null;
         }
 
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $this->id,
+                'id' => $attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
