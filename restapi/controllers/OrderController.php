@@ -1912,6 +1912,9 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0);
         }
+        if(is_null($param['accept_other_aunt'])){
+            $param['accept_other_aunt'] = 0;
+        }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1928,7 +1931,8 @@ class OrderController extends \restapi\components\Controller
                 "order_is_use_balance" => $param['order_is_use_balance'],
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
                 "order_customer_need" => $param['order_customer_need'],
-                "order_customer_memo" => $param['order_customer_memo']
+                "order_customer_memo" => $param['order_customer_memo'],
+                "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
             $booked_list = array();
