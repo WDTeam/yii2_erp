@@ -12,6 +12,8 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+
 /**
  * OperationShopDistrictController implements the CRUD actions for OperationShopDistrict model.
  */
@@ -55,12 +57,77 @@ class OperationShopDistrictController extends BaseAuthController
      */
     public function actionIndex()
     {
+        $city_id = $this->city_id;
+        $city_name = $this->city_name;
+
+        $model = new OperationShopDistrict();
+
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationShopDistrict::find()->where(['operation_city_id' => $this->city_id]),
+            'query' => OperationShopDistrict::find()->where([
+                'operation_city_id' => $city_id
+            ]),
         ]);
 
+    	if(Yii::$app->request->isPost) {
+    		if(Yii::$app->params['uploadpath']){
+    			$data = \Yii::$app->request->post();
+    			$model->load($data);
+    			$file = UploadedFile::getInstance($model, 'district_upload_url');
+    			
+                if (!isset($file->baseName)) {
+                    \Yii::$app->getSession()->setFlash('default','请上传商圈数据！');
+                    return $this->redirect(['index']);
+                }
+
+    			$filePath = $file->tempName;
+                $district_str = file_get_contents($filePath);
+                $district_arr = json_decode($district_str, true);
+
+                foreach ($district_arr as $keys => $values) {
+
+                    foreach ($values['district'] as $k => $v) {
+
+                        //插入商圈名称信息
+                        $model = new OperationShopDistrict();
+
+                        $model->operation_shop_district_name = $v['operation_shop_district_name'];
+                        $model->operation_city_id = $city_id;
+                        $model->operation_city_name = $city_name;
+                        $model->operation_area_id = $values['operation_area_id'];
+                        $model->operation_area_name = $values['operation_area_name'];
+
+                        $model->insert();
+                        $insert_id = $model->id;
+
+                        //插入商圈经纬度信息
+                        if (isset($v['l_n_t'])) {
+                            $len = count($v['l_n_t']);
+                            for ($i = 0; $i < $len; $i ++) {
+
+                                $coordinateModel = new OperationShopDistrictCoordinate();
+
+                                $coordinateModel->operation_shop_district_id = $insert_id;
+                                $coordinateModel->operation_shop_district_name = $v['operation_shop_district_name'];
+                                $coordinateModel->operation_city_id = $city_id;
+                                $coordinateModel->operation_city_name = $city_name;
+                                $coordinateModel->operation_area_id = $values['operation_area_id'];
+                                $coordinateModel->operation_area_name = $values['operation_area_name'];
+                                $coordinateModel->operation_shop_district_coordinate_start_longitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_start_longitude'];
+                                $coordinateModel->operation_shop_district_coordinate_start_latitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_start_latitude'];
+                                $coordinateModel->operation_shop_district_coordinate_end_longitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_end_longitude'];
+                                $coordinateModel->operation_shop_district_coordinate_end_latitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_end_latitude'];
+
+                                $coordinateModel->insert();
+                            }
+                        }
+                    }
+                }
+    		}
+    	}
+
         return $this->render('index', [
-            'city_name' => $this->city_name,
+            'model' => $model,
+            'city_name' => $city_name,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -276,6 +343,7 @@ class OperationShopDistrictController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     /**
      * 下拉选择组件AJAX获取sh专用
      */
@@ -286,4 +354,5 @@ class OperationShopDistrictController extends BaseAuthController
             'results'=>$data
         ]);
     }
+
 }
