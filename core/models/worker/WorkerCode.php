@@ -38,7 +38,7 @@ class WorkerCode extends \dbbase\models\worker\WorkerCode
             }
             
             $workerCode->worker_code = $worker_code;
-            $workerCode->worker_code_expiration = 90;
+            $workerCode->worker_code_expiration = 60;
             $workerCode->worker_phone = $phone;
             $workerCode->created_at = time();
             $workerCode->updated_at = 0;

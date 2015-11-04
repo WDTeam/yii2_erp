@@ -16,10 +16,10 @@ use \restapi\models\alertMsgEnum;
 class ServiceController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} v1/service/service-goods 依据城市和服务品类 获取服务类型列表 （赵顺利 80%url不能获取）
+     * @api {GET} /service/service-goods [GET] /service/service-goods（80%）
      * @apiName actionServiceGoods
      * @apiGroup service
-     * @apiDescription 获得某城市下某服务的所有子服务列表，返回子服务数组[服务名,服务描述,服务图标，服务id，url]
+     * @apiDescription 获得某城市下某服务的所有子服务列表，返回子服务数组[服务名,服务描述,服务图标，服务id，url](赵顺利--url不能获取 )
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} category_id 服务品类id
@@ -93,10 +93,10 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/home-services 依据城市 获取首页服务列表 （赵顺利 20% 假数据，未与boss关联）
+     * @api {GET} /service/home-services [GET] /service/home-services（20% ）
      * @apiName actionHomeServices
      * @apiGroup service
-     * @apiDescription 获取城市首页服务项目信息简介
+     * @apiDescription 获取城市首页服务项目信息简介(赵顺利--假数据，未与boss关联)
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -214,10 +214,10 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/all-services 依据城市 获取所有服务列表 (赵顺利100%)
-     * @apiName actionAllServices
+     * @api {GET} /service/all-services   [GET] /service/all-services (100%)
+     * @apiName actionAllServices 
      * @apiGroup service
-     * @apiDescription 获取城市所以服务类型列表
+     * @apiDescription 获取城市所以服务类型列表 （赵顺利）
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -309,10 +309,10 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/goods-price 获取某城市某商品的价格及备注信息（赵顺利 100%）
+     * @api {GET} /service/goods-price [GET] /service/goods-price（100%）
      * @apiName actionGoodsPrice
-     * @apiGroup service
-     * @apiDescription 获取某城市某商品的价格及备注信息
+     * @apiGroup service 
+     * @apiDescription 获取某城市某商品的价格及备注信息 （赵顺利）
      *
      * @apiParam {String} city_id 城市id
      * @apiParam {String} longitude 经度
@@ -369,10 +369,10 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/cleaning-task 获得所有保洁任务项目（赵顺利 100%）
+     * @api {GET} /service/cleaning-task [GET] /service/cleaning-task（100%）
      * @apiGroup service
      * @apiName actionCleaningTask
-     * @apiDescription 获取城市所有保洁任务
+     * @apiDescription 获取城市所有保洁任务(赵顺利)
      *
      * @apiParam {String} city_id 城市
      * @apiParam {String} address_id 地址id
@@ -436,7 +436,7 @@ class ServiceController extends \restapi\components\Controller
 
     
     /**
-     * @api {get} /service/single-service-time Single-Service-Time(100%)
+     * @api {GET} /service/single-service-time [GET] /service/single-service-time(100%)
      * 
      * @apiDescription 单次服务获取服务时间（李勇）
      * @apiName actionSingleServiceTime
@@ -600,7 +600,7 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} /service/recursive-service-time  Recursive-Service-Time(100%)
+     * @api {GET} /service/recursive-service-time  [GET] /service/recursive-service-time(100%)
      * 
      * @apiDescription 周期服务时间表（李勇）
      * @apiName actionRecursiveServiceTime
@@ -766,7 +766,7 @@ class ServiceController extends \restapi\components\Controller
     }
     
      /**
-     * @api {GET} /service/server-worker-list Server-Worker-List（100%）
+     * @api {GET} /service/server-worker-list [GET] /service/server-worker-list（100%）
      * 
      * @apiDescription 获取周期服务可用阿姨列表（李勇）
      * @apiGroup service
@@ -856,10 +856,10 @@ class ServiceController extends \restapi\components\Controller
    
     
     /**
-     * @api {GET} v1/service/baidu-map 根据地址获取百度地图数据（赵顺利 100%）
+     * @api {GET} /service/baidu-map [GET]/service/baidu-map（100%）
      * @apiGroup service
      * @apiName actionBaiduMap
-     * @apiDescription 根据地址获取百度地图数据
+     * @apiDescription 根据地址获取百度地图数据(赵顺利 )
      *
      * @apiParam {String} query 查询关键字
      * @apiParam {String} location 经纬度

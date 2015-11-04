@@ -73,6 +73,11 @@ class FinancePopOrderController extends Controller
     				return $this->redirect(['index']);
     			}
     			
+    			if($data['FinancePopOrderSearch']['finance_order_channel_id']=='' && $data['FinancePopOrderSearch']['finance_pay_channel_id']==''){
+    				\Yii::$app->getSession()->setFlash('default','渠道至少选择一个！');
+    				return $this->redirect(['index']);
+    			}
+    			
     			$filenamesitename=$file->baseName;
     			if($file){
     				$qiniu = new Qiniu();

@@ -7,6 +7,9 @@ use kartik\datecontrol\DateControl;
 use core\models\order\OrderComplaint;
 $rty=OrderComplaint::ComplaintTypes();
 
+$model->customer_tag_type=1;
+$model->customer_comment_level=1;
+$model->is_online=1;
 /**
  * @var yii\web\View $this
  * @var dbbase\models\CustomerCommentTag $model
@@ -34,7 +37,7 @@ $rty=OrderComplaint::ComplaintTypes();
     		'options'=>['placeholder'=>'Enter 阿姨身份...','class'=>'test'],
     		'items'=>$rty['1'],
     		],		
-'customer_tag_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'评价标签名称...批量用tag1|tag2|tag3|tag4', 'maxlength'=>255]], 
+'customer_tag_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'标签名称...批量tag1|tag2|tag3|tag4', 'maxlength'=>100]], 
     		
     		'is_online'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '开启', '2' => '关闭'],
     		'options'=>[
