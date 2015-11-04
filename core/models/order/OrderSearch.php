@@ -91,10 +91,7 @@ class OrderSearch extends Order
         $params = [
             OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
             OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
-            OrderStatusDict::ORDER_CHECKED, //已核实 已对账
             OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
-            OrderStatusDict::ORDER_PAYOFF_SHOP_DONE, //已完成门店结算
-            OrderStatusDict::ORDER_DIED, //已归档
         ];
         //查询
         $query = new \yii\db\Query();
