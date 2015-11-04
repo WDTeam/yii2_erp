@@ -1048,7 +1048,7 @@ class WorkerController extends \restapi\components\Controller
      *       "code": 1,
      *       "msg": "操作成功",
      *       "ret": [
-     *           {
+     *          "task_doing":{ 
      *               "id": "编号",
      *               "worker_id": "阿姨ID",
      *               "worker_task_id": "任务ID",
@@ -1070,7 +1070,8 @@ class WorkerController extends \restapi\components\Controller
      *                   }
      *               ],
      *               "worker_task_description": "任务描述"
-     *           }
+     *           },
+     *           "url": "右上角任务说明链接（后台没有返回空）"
      *       ]，
      *      "alertMsg": "操作成功"
      *   }
@@ -1106,8 +1107,9 @@ class WorkerController extends \restapi\components\Controller
         foreach($ret as $task){
             $task_log=$task->getDetail();
             unset($task_log['is_del']);
-            $tasks[]=$task_log;
+            $tasks['task_doing']=$task_log;
         }
+        $tasks['url']="";
         return $this->send($tasks, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
     }
     
@@ -1131,7 +1133,7 @@ class WorkerController extends \restapi\components\Controller
      *       "code": 1,
      *       "msg": "操作成功",
      *       "ret": [
-     *           {
+     *          "task_done":{ 
      *               "id": "编号",
      *               "worker_id": "阿姨ID",
      *               "worker_task_id": "任务ID",
@@ -1153,7 +1155,8 @@ class WorkerController extends \restapi\components\Controller
      *                   }
      *               ],
      *               "worker_task_description": "任务描述"
-     *           }
+     *           },
+     *          "url": "右上角任务说明链接（后台没有返回空）"
      *       ]，
      *      "alertMsg": "操作成功"
      *   }
@@ -1194,8 +1197,9 @@ class WorkerController extends \restapi\components\Controller
         foreach($ret as $task){
             $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
             unset($task_log['is_del']);
-            $tasks[]=$task_log;
+            $tasks["task_done"]=$task_log;
         }
+        $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
     }
     
@@ -1217,7 +1221,7 @@ class WorkerController extends \restapi\components\Controller
      *       "code": 1,
      *       "msg": "操作成功",
      *       "ret": [
-     *           {
+     *           "task_fail":{ 
      *               "id": "编号",
      *               "worker_id": "阿姨ID",
      *               "worker_task_id": "任务ID",
@@ -1241,6 +1245,7 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_description": "任务描述"
      *           }
      *       ]，
+     *      "url": "右上角任务说明链接（后台没有返回空）"
      *      "alertMsg": "操作成功"
      *   }
      *
@@ -1281,8 +1286,9 @@ class WorkerController extends \restapi\components\Controller
         foreach($ret as $task){
             $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
             unset($task_log['is_del']);
-            $tasks[]=$task_log;
+            $tasks["task_fail"]=$task_log;
         }
+            $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
     }
 
@@ -1360,11 +1366,11 @@ class WorkerController extends \restapi\components\Controller
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
         //获取任务的订单列表
-        try{
+//        try{
             $order_list=OrderSearch::getWorkerAndOrderAndDoneTime($worker_id ,$worker_task_log_start,$worker_task_log_end);
-        }catch (\Exception $e) {
-            return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
-        }
+//        }catch (\Exception $e) {
+//            return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+//        }
         $task_log['order_list']=$order_list;
         if(empty($task_log)){
               return $this->send(null, "查看任务失败", 0,200,null,alertMsgEnum::checkTaskFail);
