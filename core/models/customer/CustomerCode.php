@@ -64,10 +64,11 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
      */
     public static function checkCode($phone, $code){
         $customerCode = self::find()->where(['customer_phone'=>$phone, 'customer_code'=>$code, 'is_del'=>0])->one();
+        
         if ($customerCode == NULL) {
             return false;
         }
-        if ($customerCode->created_at < time() && $customerCode->created_at + $customerCode->customer_code_expiration > time()) {
+        if ($customerCode->created_at <= time() && $customerCode->created_at + $customerCode->customer_code_expiration >= time()) {
             return true;
         }
         return false;

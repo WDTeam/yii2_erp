@@ -14,7 +14,7 @@ class CouponController extends \restapi\components\Controller
 {
     
     /**
-     * @api {POST} /coupon/exchange-coupon Exchange-Coupon（100%）
+     * @api {POST} /coupon/exchange-coupon [POST] /coupon/exchange-coupon（100%）
      * 
      * @apiDescription 兑换优惠劵（李勇）
      * @apiName actionExchangeCoupon
@@ -100,11 +100,12 @@ class CouponController extends \restapi\components\Controller
     /**
      * @api {Get} /coupon/coupons Coupons（100%）
      *
-     * @apiDescription  获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）
+     * @apiDescription  下单时获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）
      * @apiName actionCoupons
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
+     * @apiParam {Strimg} service_type_id 服务类别id
      * @apiParam {String} city_id  城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -181,13 +182,17 @@ class CouponController extends \restapi\components\Controller
         if ( !isset($param['city_id']) || !$param['city_id']) {
             return $this->send(null, "请选择城市", 0, 200,null,alertMsgEnum::couponsCityNoChoice);
         }
-        $city_id = $param['city_id'];
-        //获取该用户该城市的优惠券列表
-        try{
-            $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id);
-        }catch (\Exception $e) {
-            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+        if ( !isset($param['service_type_id']) || !$param['service_type_id']) {
+            return $this->send(null, "请选择服务类别id", 0, 200,null,alertMsgEnum::couponsCityNoService);
         }
+        $city_id = $param['city_id'];
+        $service_type_id = $param['service_type_id'];
+        //获取该用户该城市的优惠券列表
+//        try{
+            $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id,$service_type_id);
+//        }catch (\Exception $e) {
+//            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+//        }
         if (!empty($coupons)) {
             $arr_coupons=array();
             foreach($coupons as $coupon){
@@ -201,7 +206,7 @@ class CouponController extends \restapi\components\Controller
         
     }
     /**
-     * @api {Get} /coupon/all-coupons All-Coupons（李勇 100%）
+     * @api {Get} /coupon/all-coupons [Get] /coupon/all-coupons（ 100%）
      *
      * @apiDescription   获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）
      * @apiName actionAllCoupons
