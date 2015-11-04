@@ -73,6 +73,7 @@ class Order extends ActiveRecord
     public $order_flag_worker_jpush;
     public $order_flag_worker_ivr;
     public $order_flag_change_booked_worker;
+    public $order_flag_is_checked;
     public $order_pop_order_code;
     public $order_pop_group_buy_code;
     public $order_pop_operation_money;
@@ -128,6 +129,7 @@ class Order extends ActiveRecord
         'order_flag_worker_jpush',
         'order_flag_worker_ivr',
         'order_flag_change_booked_worker',
+        'order_flag_is_checked',
         'order_pop_order_code',
         'order_pop_group_buy_code',
         'order_pop_operation_money',
@@ -263,6 +265,7 @@ class Order extends ActiveRecord
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过ivr',
             'order_flag_change_booked_worker' => '是否可更换指定阿姨',
+            'order_flag_is_checked' => '是否已对账',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',

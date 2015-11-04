@@ -34,6 +34,7 @@ use dbbase\models\ActiveRecord;
  * @property integer $order_flag_worker_jpush
  * @property integer $order_flag_worker_ivr
  * @property integer $order_flag_change_booked_worker
+ * @property integer $order_flag_is_checked
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
@@ -115,7 +116,7 @@ class OrderHistory extends ActiveRecord
         return [
             [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id',
                 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time',
-                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_change_booked_worker','order_cancel_cause_id',
+                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_change_booked_worker','order_flag_is_checked','order_cancel_cause_id',
                 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time',
                 'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
                 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
@@ -163,6 +164,7 @@ class OrderHistory extends ActiveRecord
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过IVR',
             'order_flag_change_booked_worker' => '是否可更换指定阿姨',
+            'order_flag_is_checked' => '是否已对账',
             'order_ip' => '下单IP',
             'order_service_type_id' => '订单服务类别ID',
             'order_service_type_name' => '订单服务类别',

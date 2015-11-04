@@ -45,6 +45,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_worker_jpush' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了极光推送\'',
             'order_flag_worker_ivr' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了IVR\'',
             'order_flag_change_booked_worker' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否可换指定阿姨\'',
+            'order_flag_is_checked' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否已对账\'',
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',
