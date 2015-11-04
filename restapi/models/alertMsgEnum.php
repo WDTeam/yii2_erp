@@ -53,7 +53,7 @@ class alertMsgEnum
     const allServicesSuccess='获取城市上线服务成功';
     const allServicesFailed='获取城市上线服务失败';
     //用户端首页初始化
-    const getUserInitSuccess='获取用户端初始化信息成功';
+    const getUserInitSuccess='';
     const getUserInitFailed='获取用户端初始化信息失败';
     //阿姨端首页初始化
     const getWorkerInitSuccess='获取阿姨端初始化信息成功';
