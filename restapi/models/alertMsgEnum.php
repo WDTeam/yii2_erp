@@ -292,6 +292,7 @@ class alertMsgEnum
     //查询阿姨待服务订单数
      
     //查询阿姨订单数量
+     //阿姨抢单
     
     //阿姨完成的历史订单
     const orderWorkerDoneOrderHistorySuccess = "阿姨历史完成订单查询成功";
@@ -310,4 +311,20 @@ class alertMsgEnum
     const orderCancelSuccess = "订单取消成功";
     const orderCancelVerifyFaile ="验证码或订单号不能为空";
     const orderCancelFaile = "订单取消失败";
+    //订单删除
+    const orderDeleteSuccess = "订单删除成功";
+    const orderDeleteFaile = "订单删除失败";
+    //创建周期订单
+    const orderChannelFaile = "下单渠道不能为空";
+    const orderAddressFaile = '用户地址不能为空';
+    const orderCustomerPhoneFaile = "客户手机不能为空";
+    const orderIsUseBalanceFaile = '使用余额不能为空';
+    const orderCreateRecursiveOrderSuccess = "创建周期订单成功";
+    const orderCreateRecursiveOrderFaile= "创建周期订单失败";
+   //阿姨抢单提交
+    const orderSetWorkerOrderSuccess = "阿姨抢单提交成功";
+    const orderSetWorkerOrderFaile = "阿姨抢单提交失败";
+    //获取周期订单
+    const orderGetOrderWorkerSuccess = "获取阿姨周期订单成功";
+    const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
 }
