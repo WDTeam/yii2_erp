@@ -175,7 +175,7 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionSelfFulltimeWorkerSettleView(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
-         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
+        $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch->load($requestParams);
         $financeSettleApplySearch = $financeSettleApplySearch->findOne(['id'=>$financeSettleApplySearch->id]);
@@ -202,6 +202,7 @@ class FinanceSettleApplyController extends BaseAuthController
     {
         $financeSearchModel = new FinanceSettleApplySearch;
         $requestParams = Yii::$app->request->getQueryParams();
+        $financeSearchModel->scenario = 'query';
         $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
         $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
         $financeSearchModel->load($requestParams);
@@ -402,6 +403,7 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $financeSettleApplySearch->scenario = 'count';
         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
@@ -501,6 +503,7 @@ class FinanceSettleApplyController extends BaseAuthController
     
     private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
         $financeSettleApplySearch = new FinanceSettleApplySearch();
+        $financeSettleApplySearch->scenario = 'save';
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch();
         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         foreach($workerArr as $worker){
