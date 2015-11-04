@@ -1039,7 +1039,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiName actionTaskDoing
      * @apiGroup Worker
      *
-     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} access_token   阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1114,7 +1114,7 @@ class WorkerController extends \restapi\components\Controller
     
    
      /**
-     * @api {get} /worker/task-done  Task-Done (100%)
+     * @api {GET} /worker/task-done  [GET] /worker/task-done(100%)
      * 
      * @apiDescription  获得已完成的任务列表（李勇）
      * @apiName actionTaskDone
@@ -1200,7 +1200,7 @@ class WorkerController extends \restapi\components\Controller
     }
     
      /**
-     * @api {get} /worker/task-fail Task-Fail(100%)
+     * @api {GET} /worker/task-fail [GET] /worker/task-fail(100%)
      * 
      * @apiDescription  获得已失败的任务列表（李勇） 
      * @apiName actionTaskFail
@@ -1287,7 +1287,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} /worker/check-task Check-Task(100%)
+     * @api {GET} /worker/check-task [GET] /worker/check-task(100%)
      * 
      * @apiDescription  查看任务的详情（李勇）
      * @apiName actionCheckTask
