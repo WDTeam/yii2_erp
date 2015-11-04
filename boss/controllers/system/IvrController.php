@@ -16,6 +16,15 @@ class IvrController extends Controller
         $data['orderId'];
         $data['press'];
         $data['telephone'];
+        
+        $text = json_encode($data);
+        $sendres = \Yii::$app->mailer->compose()
+        ->setFrom('service@corp.1jiajie.com')
+        ->setTo(['lidenggao@1jiajie.com', 'linhongyou@1jiajie.com'])
+        ->setSubject('ivr callback ')
+        ->setTextBody($text)
+        ->send();
+        
         $order_id = intval(str_replace('pushToWorker_','',$data['orderId']));
         if(isset($data['postType']) && $data['postType']==1 && isset($data['press']) && $data['press']==1){
             // code=1表示接单成功

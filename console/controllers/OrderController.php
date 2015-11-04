@@ -36,7 +36,7 @@ class OrderController extends Controller{
     /**
      * 处理服务结束
      * @author CoLee
-     * @param unknown $order_id
+     * @param unknown $order
      */
     private function serviceDone($order)
     {

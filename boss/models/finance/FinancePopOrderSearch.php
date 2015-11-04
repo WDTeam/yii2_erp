@@ -651,7 +651,9 @@ class FinancePopOrderSearch extends FinancePopOrder
     
     }  
 
-    //百度钱包 
+    
+    
+    //百度钱包 支付宝
     public function get_baidupay($hder_info,$dateinfo,$channelid,$channelidpay,$channel_rate){
     	//对应退款金额
     	 if(isset($hder_info['refund'])){
@@ -696,8 +698,8 @@ class FinancePopOrderSearch extends FinancePopOrder
     }
     //打开订单库开始比对
     //订单对账
-    $OrderExtPop = new Order;
-    $orderInfo = $OrderExtPop::find()->joinWith(['orderExtPop'])->where(['orderExtPop.order_pop_order_code'=>$getorder])->one();
+    $OrderExtPop = new Order;                    
+    $orderInfo = $OrderExtPop::find()->joinWith(['orderExtPay'])->where(['orderExtPay.order_pay_flow_num'=>$getorder])->one();
     //第三方运营费
      
     if (isset($orderInfo->order_code)) {
@@ -770,7 +772,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	if($getorder_money >=1000){
     		//查询胜强的充值表
     		//查询存在
-    		$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    		$alinfo_es=\core\models\payment\Payment::getPaymentByInfo(['payment_transaction_id'=>$getorder]);
     
     
     		/* 	 if($alinfo_es){
