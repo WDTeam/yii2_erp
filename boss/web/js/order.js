@@ -56,6 +56,8 @@ $(document).on("click","#add_address_btn",function(){
     if($('#address_0').length==0 && $('#order-customer_id').val()!='') {
         $form = '<div class="radio" id="address_0">' + $('#address_form').html() + '</div>';
         $("#order-address_id").append($form);
+        $('#address_0').find(".phone_form").val($("#order-order_customer_phone").val());
+        $('#address_0').find(".nickname_form").val('客户');
     }
 });
 
@@ -324,25 +326,29 @@ function getCustomerInfo(){
                         url: "/order/order/customer-address/?id=" + customer.id,
                         dataType: "json",
                         success: function (address) {
-                            address_list = address;
-                            $("#order-address_id").html('');
-                            for(var k in address){
-                                var v = address[k];
-                                $("#order-address_id").append(
-                                    '<div class="radio" id="address_'+ v.id +'"><label class="col-sm-7"><input type="radio" value="'+ v.id +'" '
-                                    +' name="Order[address_id]"> '
-                                    + v.operation_province_name+' '
-                                    + v.operation_city_name+' '
-                                    + v.operation_area_name+' '
-                                    + v.customer_address_detail+' '
-                                    + v.customer_address_nickname+' '
-                                    + v.customer_address_phone+'</label>' +
-                                    '<label class="col-sm-4" style="color: #FF0000;">' +
-                                    (v.customer_address_longitude* v.customer_address_latitude==0?'该地址没有匹配到经纬度':'该地址可以下单')+
-                                    '</label>' +
-                                    '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
-                                    '</div>'
-                                );
+                            if (address.length==0) {
+                                $("#add_address_btn").click();
+                            } else {
+                                address_list = address;
+                                $("#order-address_id").html('');
+                                for (var k in address) {
+                                    var v = address[k];
+                                    $("#order-address_id").append(
+                                        '<div class="radio" id="address_' + v.id + '"><label class="col-sm-7"><input type="radio" value="' + v.id + '" '
+                                        + ' name="Order[address_id]"> '
+                                        + v.operation_province_name + ' '
+                                        + v.operation_city_name + ' '
+                                        + v.operation_area_name + ' '
+                                        + v.customer_address_detail + ' '
+                                        + v.customer_address_nickname + ' '
+                                        + v.customer_address_phone + '</label>' +
+                                        '<label class="col-sm-4" style="color: #FF0000;">' +
+                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
+                                        '</label>' +
+                                        '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
+                                        '</div>'
+                                    );
+                                }
                             }
                         }
                     });
