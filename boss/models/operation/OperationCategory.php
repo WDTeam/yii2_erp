@@ -29,6 +29,7 @@ class OperationCategory extends \core\models\operation\OperationCategory
         return [
             [['created_at', 'updated_at'], 'integer'],
             [['operation_category_name'], 'string', 'max' => 60],
+            ['operation_category_name', 'unique', 'message' => '该服务类型已存在'],
             [['operation_category_name'], 'required'],
         ];
     }

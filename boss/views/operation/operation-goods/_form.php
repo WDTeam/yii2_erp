@@ -6,6 +6,7 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use dosamigos\datetimepicker\DateTimePicker;
 use boss\components\GoodsTypeCascade;
+use kartik\widgets\FileInput;
 
 /**
  * @var yii\web\View $this
@@ -108,14 +109,24 @@ use boss\components\GoodsTypeCascade;
                 <?= $form->field($model, 'operation_goods_price_description')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'operation_tags')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'operation_goods_img')->widget(FileInput::classname(), [
+                    'options' => ['multiple' => true],
+                    'pluginOptions' => [
+                        'previewFileType' => 'any',
+                        'showPreview' => true,
+                        'showCaption' => false,
+                        'showRemove' => true,
+                        'showUpload' => false,
+                    ]
+                ])?>
                     <?php
-                        echo '<div class="form-group ">
-                           <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_img'].'</label>
-                           <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_img]">
-                           <input type="file" maxlength="" name="OperationGoods[operation_goods_img]" ></div>
-                           <div class="col-md-offset-2 col-md-10"></div>
-                           <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-                           </div>';
+                        //echo '<div class="form-group ">
+                           //<label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_img'].'</label>
+                           //<div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_img]">
+                           //<input type="file" maxlength="" name="OperationGoods[operation_goods_img]" ></div>
+                           //<div class="col-md-offset-2 col-md-10"></div>
+                           //<div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+                           //</div>';
         //        ?>
                 <?php
         //         echo '<div class="form-group ">
