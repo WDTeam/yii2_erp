@@ -50,6 +50,28 @@ class FinancePopOrderController extends Controller
 
     
     
+   /**
+   * redis 测试方法   仅适用于潘高峰个人使用   
+   * @date: 2015-11-4
+   * @author: peak pan
+   * @return:
+   **/ 
+    
+    public function actionIndexredis()
+    {
+    	$name='gaofengceshi';
+    	
+    	for ($i=1;$i>5000;$i++){
+    		$datainfo='1000000'.$i;
+    		\Yii::$app->cache->mset($name,$datainfo);
+    		echo  $i; 
+    	}
+    	
+    	
+    	echo  'ok'; exit;
+    	
+    }
+   
     /**
     * 对账方法
     * @date: 2015-9-23
