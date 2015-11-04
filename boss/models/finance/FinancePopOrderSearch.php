@@ -647,6 +647,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['finance_pop_order_pay_status_type']=2;
     		
     }
+    
     return $orderdateinfo;
     
     }  
@@ -698,10 +699,16 @@ class FinancePopOrderSearch extends FinancePopOrder
     }
     //打开订单库开始比对
     //订单对账
-    $OrderExtPop = new Order;                    
-    $orderInfo = $OrderExtPop::find()->joinWith(['orderExtPay'])->where(['orderExtPay.order_pay_flow_num'=>$getorder])->one();
+    $OrderExtPop = new Order;
+
+  //  var_dump(trim($getorder));exit;
+    $orderInfo = $OrderExtPop::find()->joinWith(['orderExtPay'])->where(['orderExtPay.order_pay_flow_num'=>trim($getorder)])->one();
+
+    
+    //var_dump($orderInfo);
+//exit;
+    
     //第三方运营费
-     
     if (isset($orderInfo->order_code)) {
     	$orderdateinfo=$orderInfo->getAttributes();
     
@@ -727,6 +734,9 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['order_use_promotion_money']=$orderInfo->orderExtPay->order_use_promotion_money;//使用促销金额
     	$orderdateinfo['order_pay_money']=$orderInfo->orderExtPay->order_pay_money;//支付金额
     	$orderdateinfo['coupon_id']=$orderInfo->orderExtPay->coupon_id;
+    	$orderdateinfo['order_booked_end_time']=$orderInfo->order_booked_count;
+    	
+    	
     	}
     	//第三方运营费用
     	$orderdateinfo['order_pop_operation_money']=$promote;
@@ -762,10 +772,11 @@ class FinancePopOrderSearch extends FinancePopOrder
     			//无状态
     			$orderdateinfo['finance_pop_order_pay_status_type']=1;
     		}
-    
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	}else {
     		$orderdateinfo['order_money']=$getorder_money;
     		$orderdateinfo['finance_pop_order_pay_status_type']=4;
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	}
     }else {
     	//在订单表查询无数据 1 确实没有 2视为充值订单
@@ -847,6 +858,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['finance_pop_order_pay_status_type']=2;
     		
     }
+    
+    //var_dump($orderdateinfo);exit;
+    
+    
     return $orderdateinfo;
     
     }
