@@ -354,7 +354,7 @@ if((int)($couponCustomerProvider->query->count()) > 0){
 	]);
 }
 
-$customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find()->where(['customer_id'=>$model->id])]);
+$customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find()->where(['customer_id'=>$model->id])->orderBy('created_at desc')]);
 if((int)($customerBlockLogProvider->query->count()) > 0){
 	echo GridView::widget([
     'dataProvider' => $customerBlockLogProvider,
