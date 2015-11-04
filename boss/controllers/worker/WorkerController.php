@@ -743,7 +743,7 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest1(){
-        Worker::operateWorkerOrderInfoToRedis(19076,1,123,2,1446681600,1446685200);
+        Worker::operateWorkerOrderInfoToRedis(19077,1,123,2,1446681600,1446685200);
     }
 
     public function actionTest(){
