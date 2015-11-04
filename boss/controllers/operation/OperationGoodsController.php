@@ -199,20 +199,14 @@ class OperationGoodsController extends Controller
             $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
             $specinfo = OperationSpec::getSpecInfo($model->operation_spec_info);
             $model->operation_spec_strategy_unit = $specinfo['operation_spec_strategy_unit'];
-            /** 冗余计量单位 **/
             
             /** 添加商品图片 **/
-            $appFiles = array(
-                'operation_goods_img',
-            );
-            $operation_goods_img = $this->handleGoodsImgs($model, $appFiles);
-            if(empty($operation_goods_img)){ $operation_goods_img = '';}else{$operation_goods_img = $operation_goods_img['operation_goods_img']; }
-            $model->operation_goods_img = $operation_goods_img;
+            $model->uploadImgToQiniu('operation_goods_img');
+
             /** 添加个性标签 **/
             $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
             $model->operation_tags = serialize($tags);
-            /** 添加个性标签 **/
             
             $model->created_at = time();
             $model->updated_at = time();
@@ -268,25 +262,18 @@ class OperationGoodsController extends Controller
             $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
             $specinfo = OperationSpec::getSpecInfo($model->operation_spec_info);
             $model->operation_spec_strategy_unit = $specinfo['operation_spec_strategy_unit'];
-            /** 冗余计量单位 **/
             
              /** 添加商品图片 **/
-            $appFiles = array(
-                'operation_goods_img',
-            );
-            $operation_goods_img = $this->handleGoodsImgs($model, $appFiles);
-            if(empty($operation_goods_img)){ $operation_goods_img = '';}else{$operation_goods_img = $operation_goods_img['operation_goods_img']; }
-            $model->operation_goods_img = $operation_goods_img;
+            $model->uploadImgToQiniu('operation_goods_img');
+
             /** 添加个性标签 **/
             $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
             $model->operation_tags = serialize($tags);
-            /** 添加个性标签 **/
             
             $model->updated_at = time();
             
             if($model->save()){
-//                return $this->redirect(['view', 'id' => $model->id]);
                 return $this->redirect(['/operation/operation-category']);
             }
         } else {
