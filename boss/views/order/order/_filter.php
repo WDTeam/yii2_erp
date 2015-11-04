@@ -58,5 +58,5 @@ use core\models\order\OrderSearch;
 
 <!---------------------订单状态开始-------------------->
 <div class="heading heading_top">
-	<h3 class="panel-title">订单状态</h3>
+	<h3 class="panel-title">订单信息</h3>
 </div>
