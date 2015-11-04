@@ -7,6 +7,9 @@ use kartik\datecontrol\DateControl;
 use core\models\order\OrderComplaint;
 $rty=OrderComplaint::ComplaintTypes();
 
+$model->customer_tag_type=1;
+$model->customer_comment_level=1;
+$model->is_online=1;
 /**
  * @var yii\web\View $this
  * @var dbbase\models\CustomerCommentTag $model
