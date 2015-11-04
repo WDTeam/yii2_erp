@@ -17,7 +17,7 @@ use Yii;
 class WorkerController extends \restapi\components\Controller
 {
     /**
-     * @api{GET} /worker/worker-info [GET] /worker/worker-info
+     * @api{GET} /worker/worker-info [GET] /worker/worker-info(100%)
      *
      * @apiDescription 获取阿姨信息 (田玉星)
      * 
@@ -1366,11 +1366,11 @@ class WorkerController extends \restapi\components\Controller
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
         //获取任务的订单列表
-//        try{
+        try{
             $order_list=OrderSearch::getWorkerAndOrderAndDoneTime($worker_id ,$worker_task_log_start,$worker_task_log_end);
-//        }catch (\Exception $e) {
-//            return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
-//        }
+        }catch (\Exception $e) {
+            return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+        }
         $task_log['order_list']=$order_list;
         if(empty($task_log)){
               return $this->send(null, "查看任务失败", 0,200,null,alertMsgEnum::checkTaskFail);
