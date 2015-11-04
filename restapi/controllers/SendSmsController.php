@@ -131,6 +131,12 @@ class SendSmsController extends \restapi\components\Controller
         @$app_version = Yii::$app->request->get('app_version');
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             $login_info = Worker::checkWorkerLogin($phone);
+            $whether_send_code = WorkerCode::whetherSendCode($phone);
+            if($whether_send_code==1){
+                return $this->send(null, "短信发送频率过高（60s）", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
+            }elseif($whether_send_code==2){
+                return $this->send(null, "今日短信发送超过5次", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
+            }
             if($login_info['can_login']==1){
                 //验证通过
                 if (!WorkerCode::generateAndSend($phone)) {
