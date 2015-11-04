@@ -2107,19 +2107,19 @@ class OrderController extends \restapi\components\Controller
 
             if (count($order) > 0) {
                 $arr = array();
-                $array = array();
+
                 foreach ($order as $key => $val) {
                     if ($val['order_parent_id']) {
                         $arr[$key] = $val;
                     } else {
-                        $array[$key] = $val;
+                        $r_order = $val;
                     }
                 }
             }
-            foreach ($array as $k => $v) {
-                $array[$k]['sub_order'] = $arr;
-            }
-            return $this->send($array, "操作成功", 1);
+
+            $r_order['sub_order'] = $arr;
+
+            return $this->send($r_order, "操作成功", 1);
         } catch (\Exception $e) {
             return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
         }
