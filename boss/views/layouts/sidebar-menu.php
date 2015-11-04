@@ -131,22 +131,22 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '人工派单',
+                        'label' => '人工指派订单',
                         'url' => ['/order/order/assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单',
+                        'label' => '智能指派订单',
                         'url' => ['/order/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 	[
-                		'label' => '订单投诉',
+                		'label' => '处理投诉订单',
                 		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
                 	[
-                		'label' => '订单响应',
+                		'label' => '响应异常订单',
                 		'url' => ['/order/order-response'],
                 		'icon' => 'fa fa-angle-right',
                 	],
@@ -296,7 +296,7 @@ echo Menu::widget(
                                 'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                        
+
                         ]
                     ],
 

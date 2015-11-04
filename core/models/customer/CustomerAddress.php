@@ -88,8 +88,9 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
              * precise       Int           位置的附加信息，是否精确查找。1为精确查找，0为不精确。
              * confidence    Int           可信度
              * level         string        地址类型
+             * && $address_decode['result']['precise'] == 1
              */
-			if($address_decode['status'] == 0 && $address_decode['result']['precise'] == 1){
+			if($address_decode['status'] == 0){
 				$operation_longitude = $address_decode['result']['location']['lng'];
             	$operation_latitude = $address_decode['result']['location']['lat'];
 			}else{

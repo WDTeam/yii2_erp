@@ -14,6 +14,7 @@ use core\models\shop\Shop;
 use boss\models\worker\Worker;
 use boss\models\worker\WorkerVacation;
 use boss\models\worker\WorkerVacationApplication;
+use boss\models\worker\WorkerIdentityConfig;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -33,8 +34,13 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'format' => 'raw',
             'label' => '阿姨姓名',
             'value' => function ($dataProvider) {
-                if($dataProvider->id){
-                    return $dataProvider->worker->worker_name;
+                if($dataProvider->id) {
+                    return Html::a($dataProvider->worker->worker_name, Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->worker->id]), [
+                        'title' => '查看',
+                        'style' => 'margin-right:5%',
+                        'data-pjax'=>0,
+                        'target'=>'_blank'
+                    ]);
                 }
             },
         ],
@@ -75,6 +81,16 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'value' => function ($dataProvider) {
                 if($dataProvider->id){
                     return Worker::getWorkerTypeShow($dataProvider->worker->worker_type);
+                }
+            },
+            'width' => "70px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '阿姨身份',
+            'value' => function ($dataProvider) {
+                if($dataProvider->id){
+                    return WorkerIdentityConfig::getWorkerIdentityShow($dataProvider->worker->worker_identity_id);
                 }
             },
             'width' => "70px",
@@ -137,8 +153,8 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                     ]);
                 },
                 'auth' => function ($url, $model) {
-                    return Html::a('<span class="btn btn-primary">审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->worker->id]), [
-                        'title' =>'审核管理',
+                    return Html::a('<span class="btn btn-primary">管理</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->worker->id]), [
+                        'title' =>'管理',
                         'style' => 'margin-right:5%'
                     ]);
                 },
@@ -166,7 +182,20 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'class'=>'kartik\grid\CheckboxColumn',
             'headerOptions'=>['class'=>'kartik-sheet-style'],
         ],
-        'worker_name',
+        [
+            'format' => 'raw',
+            'label' => '阿姨姓名',
+            'value' => function ($dataProvider) {
+                if($dataProvider->id){
+                    return Html::a($dataProvider->worker_name, Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->id]), [
+                        'title' => '查看',
+                        'style' => 'margin-right:5%',
+                        'data-pjax'=>0,
+                        'target'=>'_blank'
+                    ]);
+                }
+            }
+        ],
         [
             'format' => 'raw',
             'label' => '门店名称',
@@ -185,6 +214,16 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                 return Worker::getWorkerTypeShow($dataProvider->worker_type);
             },
             'width' => "100px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '阿姨身份',
+            'value' => function ($dataProvider) {
+                if($dataProvider->id){
+                    return WorkerIdentityConfig::getWorkerIdentityShow($dataProvider->worker_identity_id);
+                }
+            },
+            'width' => "70px",
         ],
         [
             'format' => 'raw',
@@ -276,12 +315,20 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
             'width' => "20%",
-            'template' =>'{view} {auth} {vacation} {block} {delete}',
+            'template' =>'{order}{view} {auth} {vacation} {block} {delete}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
 
             'buttons' => [
+                'order' => function ($url, $model) {
+                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearchIndex[order_worker_phone]='.$model->worker_phone]), [
+                        'title' =>'订单',
+                        'style' => 'margin-right:5%',
+                        'data-pjax'=>'0',
+                        'target' => '_blank',
+                    ]);
+                },
                 'view' => function ($url, $model) {
                     return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
                         'title' =>'查看',
@@ -295,8 +342,8 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                     ]);
                 },
                 'auth' => function ($url, $model) {
-                    return Html::a('<span class="btn btn-primary">审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
-                        'title' =>'审核管理',
+                    return Html::a('<span class="btn btn-primary">管理</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
+                        'title' =>'管理',
                         'style' => 'margin-right:5%'
                     ]);
                 },
@@ -380,6 +427,10 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
         'toolbar' =>
             [
                 'content'=>
+                    Html::a('录入新阿姨', ['create'], [
+                        'class' => 'btn btn-default',
+                        'title' => Yii::t('kvgrid', 'Reset Grid')
+                    ]),
                     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
                         'class' => 'btn btn-default',
                         'title' => Yii::t('kvgrid', 'Reset Grid')
@@ -437,6 +488,15 @@ $this->registerJs(<<<JSCONTENT
             }
             $('#vacationModal .modal-body').eq(0).load(url);
         });
+        function outlinks() {
+           if (!document.getElementsByTagName) return;
+           var anchors = document.getElementsByTagName("a");
+           for (var i=0; i<anchors.length; i++) {
+             var anchor = anchors[i];
+             if (anchor.getAttribute("href") && anchor.getAttribute("rel") == "external")
+             anchor.target = "_blank";
+           }
+        }
 JSCONTENT
         );
 

@@ -36,7 +36,7 @@ class WorkerVacation extends \yii\db\ActiveRecord
         return [
             [['worker_id','worker_vacation_type','admin_id'], 'integer'],
             [['daterange','worker_vacation_type','worker_vacation_status'],'required'],
-            [['worker_vacation_extend'], 'string', 'max' => 50]
+            [['worker_vacation_extend'], 'string', 'max' => 200]
         ];
     }
 

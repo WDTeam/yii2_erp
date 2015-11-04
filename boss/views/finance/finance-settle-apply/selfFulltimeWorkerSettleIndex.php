@@ -1,3 +1,8 @@
+<style>
+    .modal-content {
+        height: 300px !important;
+    }
+</style>
 <?php
 
 use kartik\grid\GridView;

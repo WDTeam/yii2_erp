@@ -1,6 +1,6 @@
 <?php
 /*
- * BOSS 自动派单运行服务实例
+ * BOSS 智能派单运行服务实例
  * @author 张旭刚<zhangxugang@corp.1jiajie.com>
  * @link http://boss.1jiajie.com/auto-assign/
  * @copyright Copyright (c) 2015 E家洁 LLC
@@ -14,57 +14,41 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <!-- 新增样式表begin -->
 <style type="text/css">
-    hr { margin-top: 0;}
     .col-md-4 {width: 27%;}
     .col-md-6 {width: 54%;}
-    .margin-l-30 {margin-left: 30px;}
-    .margin-l-36 {margin-left: 33px;}
+    .marginstyle{
+        margin:0 auto;
+    }
 </style>
 <!-- end -->
 <input id="srvIsSuspend" name="srvIsSuspend" value="<?php echo $srvIsSuspend ? 'true':'false' ?>" hidden />
 <div class="container">
-    <div class="row">
-        <div class="col-md-4 form-inline">
-            <label>派单服务器地址：&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <input readonly="true" class="form-control" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'].':'.$srvInfo['port'] : ''?>"  />
-            <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>"  />
+    <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>"  />
              <input id="serverport" class="form-control" style="width:30%;" name="serverport" type = "hidden" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" />
-        </div>
-        <div class="col-md-3 form-inline">
-            <button class="btn btn-default" id="connect" name="connect">连接派单服务器</button>
-            <button class="btn btn-default" id="start" name="start">停止自动派单</button>
-        </div>
-        <div class="col-md-5 form-inline" style="margin-top:8px;">
-            <label>当前状态：</label><div style="display: inline;" id="connectStatus"></div>
-        </div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-md-4 form-inline">
-            <label>Redis服务器地址：&nbsp;</label>
-            <input readonly="true" class="form-control" value="<?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT '] : ''?>"  />
-        </div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-md-6  form-inline">
-            <label>全职阿姨派单时间：</label>
-	 
-            <input id="qstart" class="form-control" maxlength="18" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" readonly="true"  name="qend" value="<?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>" />分钟
-	 
-        </div>
--    </div>
-    <div class="row">
-        <div class="col-md-6  form-inline">
-            <label>兼职阿姨派单时间：</label>
-            <input id="jstart" class="form-control" name="jstart" value="5" readonly="true" /> 至 <input id="jend" readonly="true" class="form-control" name="jend" value="<?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>" />分钟
-	 
-        </div>
-     </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-       
-    </div>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>派单服务器地址</th>
+                <th>Redis服务器地址</th>
+                <th>全职阿姨时间段</th>
+                <th>兼职阿姨时间段</th>
+                <th>当前状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody >
+            <tr>
+                <td  style="vertical-align:middle;"><?php echo !empty($srvInfo['ip'])? $srvInfo['ip'].':'.$srvInfo['port'] : ''?></td>
+                <td style="vertical-align:middle;"><?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT '] : ''?></td>
+                <td style="vertical-align:middle;">0 - <?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>分钟</td>
+                <td style="vertical-align:middle;"><?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?> - <?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>分钟</td>
+                <td style="vertical-align:middle;"><div style="display: inline;" id="connectStatus"></div></td>
+                <td style="vertical-align:middle;"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button>
+                    <button class="btn btn-default" id="start" name="start">停止智能派单</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <div class="row">&nbsp;</div>
     <table class="table table-hover table-bordered">
         <thead>

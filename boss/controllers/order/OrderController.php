@@ -271,6 +271,7 @@ class OrderController extends BaseAuthController
     public function actionIndex()
     {
         $searchParas = Yii::$app->request->getQueryParams();
+        //print_r($searchParas);exit;
 
         $searchModel = new \boss\models\order\OrderSearchIndex();
         $dataProvider = $searchModel->search($searchParas);
@@ -363,16 +364,12 @@ class OrderController extends BaseAuthController
             'admin_id' => Yii::$app->user->id,
             'order_pay_type' => 1,
             'order_is_use_balance' => 1,
-            'order_booked_worker_id' => 1,
+            'order_booked_worker_id' => 19074,
             'order_customer_need' => 'xxxxx',
             'order_customer_memo' => 'fffff',
             'order_flag_sys_assign' => 0,
         ];
         $booked_list = [
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00')),
-            ],
             [
                 'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400,
                 'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400,
@@ -380,6 +377,10 @@ class OrderController extends BaseAuthController
             [
                 'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400+86400,
                 'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400+86400,
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400+86400+86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400+86400+86400,
             ],
         ];
         return Order::createNewBatch($attributes, $booked_list);

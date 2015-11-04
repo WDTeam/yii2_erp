@@ -20,6 +20,9 @@ class alertMsgEnum
     //用户登录
     const userLoginSuccess = '用户登录成功';
     const userLoginFailed = '用户认证已经过期,请重新登录';
+     //微信用户登录
+    const uesrWeiXinLoginSuccess = '用户登录成功';
+    const uesrWeiXinLoginFailed = '用户登录失败';
     //依据城市和服务品类 获取服务商品列表
     const getGoodsesSuccess='获取服务商品成功';
     const getGoodsesFailed='获取服务商品失败';
@@ -156,6 +159,8 @@ class alertMsgEnum
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';
+    //请选择城市
+    const couponsCityNoService = '请选择服务类别';
     //获取优惠券列表成功
     const couponsSuccess = '获取优惠券列表成功';
     //优惠券列表为空
@@ -261,4 +266,51 @@ class alertMsgEnum
     /*
      * 李勇end
      */
+    
+    /**订单**/
+    //创建订单
+    const orderServiceItemIdFaile = "请输入服务项目ID";
+    const orderSrcIdFaile = "订单来源不明确";
+    const orderBookedBeginTimeFaile = "数据不完整,请输入初始时间";
+    const orderBookedEndTimeFaile = "数据不完整,请输入完成时间";
+    const orderPayTypeFaile = "数据不完整,请输入支付方式";
+    const orderAddressIdFaile="地址数据不完整,请输入常用地址id或者城市,地址名（包括区）";
+    const orderCreateSuccess = "订单创建成功";
+    const orderCreateFaile = "订单创建失败";
+    //追加订单
+    const orderAppendOrderSuccess = '追加订单成功';
+    const orderAppendOrderFaile = '追加订单失败';
+    //订单查询
+    const orderGetOrdersSuccess ="获取订单成功";
+    const orderGetOrdersFaile ="获取订单失败";
+    //获取订单数量
+    const orderGetOrderCountSuccess = "订单数量获取成功";
+    const orderGetOrderCountFaile = "订单数量获取失败";
+    //查询阿姨订单
+    const orderGetWorkerOrderSuccess = "查询阿姨订单成功";
+    const orderGetWorkerOrderFaile = "查询阿姨订单失败";
+    //查询阿姨服务订单
+    const orderGetWorkerServiceOrderSuccess = "查询阿姨服务订单成功";
+    const orderGetWorkerServiceOrderFaile = "查询阿姨服务订单失败";
+    //查询阿姨待服务订单数
+     
+    //查询阿姨订单数量
+    
+    //阿姨完成的历史订单
+    const orderWorkerDoneOrderHistorySuccess = "阿姨历史完成订单查询成功";
+    const orderWorkerDoneOrderHistoryFaile = "阿姨历史完成订单查询失败";
+    //阿姨取消的历史订单
+    const orderWorkerCancelOrderHistorySuccess = "阿姨历史取消订单查询成功";
+    const orderWorkerCancelOrderHistoryFaile = "阿姨历史取消订单查询失败";
+    //查询用户不同状态订单数量
+    const orderGetStatusOrdersCountSuccess = "获取状态订单数量成功";
+    const orderGetStatusOrdersCountFaile = "获取状态订单数量失败";
+    //查询某个订单状态的历史记录
+    const orderExistFaile = "订单不存在";
+    const orderGetOrderStatusHistorySuccess = "查询订单状态记录成功";
+    const orderGetOrderStatusHistoryFaile = "查询订单状态记录失败";
+    //取消订单
+    const orderCancelSuccess = "订单取消成功";
+    const orderCancelVerifyFaile ="验证码或订单号不能为空";
+    const orderCancelFaile = "订单取消失败";
 }

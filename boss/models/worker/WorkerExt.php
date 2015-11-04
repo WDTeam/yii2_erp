@@ -30,5 +30,9 @@ use Yii;
  */
 class WorkerExt extends \core\models\worker\WorkerExt
 {
-
+    public static function getWorkerHeightShow($worker_height){
+        if($worker_height){
+            return $worker_height.' cm';
+        }
+    }
 }

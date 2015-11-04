@@ -10,7 +10,8 @@ use restapi\models\alertMsgEnum;
 class SendSmsController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} /send-sms/send-v 发短消息
+     * @api {GET} /send-sms/send-v [GET ] /send-sms/send-v
+     * @apiDescription 发短消息
      * @apiName actionSendV
      * @apiGroup SendSms
      *
@@ -55,17 +56,17 @@ class SendSmsController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /send-sms/send-message-code 短信验证码 (赵顺利100%)
+     * @api {GET} /send-sms/send-message-code [GET] /send-sms/send-message-code (100%)
      * @apiName actionSendMessageCode
      * @apiGroup SendSms
-     * @apiDescription 请求向用户手机发送验证码用于登录
+     * @apiDescription 请求向用户手机发送验证码用于登录(赵顺利)
      * @apiParam {String} phone 用户手机号
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *        "code":"ok"
+     *        "code":"1"
      *        "msg": "短信发送成功"
      *     }
      *
@@ -74,7 +75,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "电话号码不符合规则"
      *     }
      */
@@ -95,7 +96,7 @@ class SendSmsController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /send-sms/send-worker-message-code Send-Worker-Message-Code（100%）
+     * @api {GET} /send-sms/send-worker-message-code  [GET]Send-Worker-Message-Code（100%）
      * 
      * @apiDescription 请求向阿姨手机发送验证码用于登录（李勇）
      * @apiName actionSendWorkerMessageCode

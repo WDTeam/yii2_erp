@@ -27,7 +27,7 @@ use kartik\date\DatePicker;
     ]); ?>
     <div class='col-md-2'>
         <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
-            'name' => 'worker_rule_id',
+            'name' => 'worker_work_city',
             'hideSearch' => true,
             'data' => $model::getOnlineCityList(),
             'options' => ['placeholder' => '选择城市...', 'inline' => true],
@@ -51,6 +51,17 @@ use kartik\date\DatePicker;
                 'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                 'templateResult' => new JsExpression('function(city) { return city.text; }'),
                 'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+            ],
+        ]); ?>
+    </div>
+    <div class='col-md-3'>
+        <?= $form->field($model, 'worker_identity_id')->widget(Select2::classname(), [
+            'name' => 'worker_identity_id',
+            'hideSearch' => true,
+            'data' => \boss\models\worker\WorkerIdentityConfig::getWorkerIdentityList(),
+            'options' => ['placeholder' => '选择身份...', 'inline' => true],
+            'pluginOptions' => [
+                'allowClear' => true
             ],
         ]); ?>
     </div>

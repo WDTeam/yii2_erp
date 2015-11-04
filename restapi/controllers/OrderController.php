@@ -3,15 +3,16 @@
 namespace restapi\controllers;
 
 use \core\models\order\OrderPush;
-use Faker\Provider\DateTime;
-use Yii;
 use \core\models\order\Order;
+use \core\models\order\OrderSearch;
+use \core\models\order\OrderStatusDict;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
-use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
-use \core\models\order\OrderStatusDict;
+
+use  restapi\models\alertMsgEnum;
 use yii\web\Response;
+use Yii;
 
 class OrderController extends \restapi\components\Controller
 {
@@ -54,7 +55,7 @@ class OrderController extends \restapi\components\Controller
      *  "code": "1",
      *  "msg": "创建订单成功",
      *  "ret": {
-     *          "order_service_type_id": "1", 服务类型商品id
+     *          "order_service_type_id": "服务类型商品id", 
      *          "order_src_id": "2",
      *          "order_booked_begin_time": "1445251619",
      *          "order_booked_end_time": "1445255219",
@@ -79,13 +80,13 @@ class OrderController extends \restapi\components\Controller
      *      }
      *  }
      *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
+     *     HTTP/1.1 200 OK
      *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "code": 0,
+     *        "msg": "用户无效,请先登录",
+     *        "ret": {},
+     *        "alertMsg": "用户认证已经过期,请重新登录"
      *
      *     }
      *
@@ -98,32 +99,32 @@ class OrderController extends \restapi\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
 
         if (is_null($args['order_service_item_id'])) {
-            return $this->send(null, "请输入服务项目id", 0);
+            return $this->send(null, "请输入服务项目id",0,200,null,alertMsgEnum::orderServiceItemIdFaile);
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
         if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源", 0);
+            return $this->send(null, "数据不完整,缺少订单来源", 0,200,null,alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间", 0);
+            return $this->send(null, "数据不完整,请输入初始时间", 0,200,null,alertMsgEnum::orderBookedBeginTimeFaile);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间", 0);
+            return $this->send(null, "数据不完整,请输入完成时间", 0,200,null,  alertMsgEnum::orderBookedEndTimeFaile);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
         if (is_null($args['order_pay_type'])) {
-            return $this->send(null, "数据不完整,请输入支付方式", 0);
+            return $this->send(null, "数据不完整,请输入支付方式", 0,200,null,  alertMsgEnum::orderPayTypeFaile);
         }
         $attributes['order_pay_type'] = $args['order_pay_type'];
 
@@ -137,10 +138,10 @@ class OrderController extends \restapi\components\Controller
             if (!empty($model)) {
                 $attributes['address_id'] = $model->id;
             } else {
-                return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0);
+                return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0,200,null,alertMsgEnum::orderAddressIdFaile);
             }
         } else {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0);
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0,200,null,alertMsgEnum::orderAddressIdFaile);
         }
 
         if (isset($args['order_pop_order_code'])) {
@@ -180,28 +181,24 @@ class OrderController extends \restapi\components\Controller
         }
 
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
-
-
         $attributes['admin_id'] = 0;
         $order = new \core\models\order\Order();
         $is_success = $order->createNew($attributes);
         $order->errors;
         if ($is_success) {
-            $msg = '创建订单成功';
-            return $this->send($order, $msg);
+            return $this->send($order, '创建订单成功',1,200,null,  alertMsgEnum::orderCreateSuccess);
         } else {
-            $msg = '创建订单失败';
-            return $this->send($order->errors, $msg, 0);
+            return $this->send($order->errors, '创建订单失败', 0,200,null,  alertMsgEnum::orderCreateFaile);
         }
     }
 
     /**
-     * @api {POST} v1/order/append-order 追加订单(xieyi 90% 目前产品已删除该需求 )
+     * @api {POST} /order/append-order [POST] /order/append-order( 90% )
      *
      * @apiName ActionAppendOrder
      * @apiGroup Order
      *
-     * @apiDescription 追加订单
+     * @apiDescription 追加订单 (谢奕 -- 目前产品已删除该需求)
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_type_id 服务类型商品id
      * @apiParam {String} order_src_id 订单来源id 
@@ -225,9 +222,9 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
      *
-     * @apiSuccess {Object} order 成功订单对象.
+     * @apiSuccess {Object} order 成功订单对象
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
+     *   HTTP/1.1 200 OK
      *     {
      *       "code": "1",
      *       "msg": "以下单成功，正在等待阿姨抢单",
@@ -237,16 +234,14 @@ class OrderController extends \restapi\components\Controller
      *       }
      *
      *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionAppendOrder()
@@ -256,37 +251,37 @@ class OrderController extends \restapi\components\Controller
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
         if (is_null($args['order_service_item_id'])) {
-            return $this->send(null, "请输入商品类型", 0);
+            return $this->send(null, "请输入商品类型", 0,200,null,alertMsgEnum::orderServiceItemIdFaile);
         }
         $attributes['order_service_type_id'] = $args['order_service_type_id'];
         if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源", 0);
+            return $this->send(null, "数据不完整,缺少订单来源", 0,200,null,  alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间", 0);
+            return $this->send(null, "数据不完整,请输入初始时间", 0,200,null,  alertMsgEnum::orderBookedBeginTimeFaile);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间", 0);
+            return $this->send(null, "数据不完整,请输入完成时间", 0,200,null,  alertMsgEnum::orderBookedEndTimeFaile);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
         if (is_null($args['order_pay_type'])) {
-            return $this->send(null, "数据不完整,请输入支付方式", 0);
+            return $this->send(null, "数据不完整,请输入支付方式", 0,200,null,alertMsgEnum::orderPayTypeFaile);
         }
         $attributes['order_pay_type'] = $args['order_pay_type'];
 
 
         if (is_null($args['address_id'])) {
             if (is_null($args['address_id']) or is_null($args['city'])) {
-                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0);
+                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0,200,null,  alertMsgEnum::orderAddressIdFaile);
             }
             $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
@@ -331,11 +326,9 @@ class OrderController extends \restapi\components\Controller
         $order = new \core\models\order\Order();
         $is_success = $order->createNew($attributes);
         if ($is_success) {
-            $msg = '追加订单成功';
-            $this->send($order, $msg);
+            $this->send($order,'追加订单成功',1,200,null,  alertMsgEnum::orderAppendOrderSuccess);
         } else {
-            $msg = '追加订单失败';
-            $this->send($order, $msg, 0);
+            $this->send($order,'追加订单失败',0,200,null,  alertMsgEnum::orderAppendOrderFaile);
         }
     }
 
@@ -360,74 +353,69 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
+     *  HTTP/1.1 200 OK
+     *  {
      *    "code": "1",
      *    "msg": "操作成功",
      *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_pay_type": "支付方式",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
+     *      "limit": "1",
+     *       "page_total": 4,
+     *       "offset": 0,
+     *       "orders": [
+     *        {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *           "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_pay_type": "支付方式",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *           }
      *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      */
     public function actionOrders()
     {
         $args = Yii::$app->request->get();
-
         @$token = $args["access_token"];
-
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -479,9 +467,9 @@ class OrderController extends \restapi\components\Controller
             $ret['page'] = $page;
             $ret['orders'] = $orders;
 
-            $this->send($ret, "操作成功", 1);
+            $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderGetOrdersSuccess);
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误" . $e, 0, 1024);
+            return $this->send(null, "boss系统错误" . $e, 0, 1024,null,  alertMsgEnum::orderGetOrdersFaile);
         }
     }
 
@@ -511,18 +499,14 @@ class OrderController extends \restapi\components\Controller
      *      }
      *     }
      *
-     *
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionOrdersCount()
@@ -532,7 +516,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -550,7 +534,7 @@ class OrderController extends \restapi\components\Controller
         $orderSearch = new \core\models\order\OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
         $ret['count'] = $count;
-        return $this->send($ret, "操作成功", 1, 200);
+        return $this->send($ret, "操作成功", 1, 200,null,  alertMsgEnum::orderGetOrderCountSuccess);
     }
 
     /**
@@ -571,89 +555,81 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [to] 结束时间     时间戳   如 *'1443695400'
      * @apiParam {String} [oc.customer_id]客户id
      *
-     *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
-     *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     *  HTTP/1.1 200 OK
+     *   {
+     *      "code": "1",
+     *      "msg": "操作成功",
+     *      "ret": {
+     *      "limit": "1",
+     *      "page_total": 4,
+     *      "offset": 0,
+     *      "orders": [
+     *      {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *      }
+     *       ]
+     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerOrders()
     {
         $args = Yii::$app->request->get();
-
         @$token = $args["access_token"];
-
         $worker = WorkerAccessToken::getWorker($token);
-
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
             $orderStatus = explode(".", $args['order_status']);
         }
-
         $channels = null;
         if (isset($args['channels'])) {
             $channels = explode(".", $args['channels']);
         }
-
         @$isAsc = $args['is_asc'];
         if (is_null($isAsc)) {
             $isAsc = true;
@@ -669,21 +645,20 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-
         $args["owr.worker_id"] = $worker->id;
         try {
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
         } catch (\Exception $e) {
-            return $this->send($e, "服务异常", 2);
+            return $this->send($e, "服务异常",0,1024,200,null,alertMsgEnum::orderGetWorkerOrderFaile);
         }
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1);
+        $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderGetWorkerOrderSuccess);
     }
 
     /**
@@ -706,80 +681,74 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
+     * HTTP/1.1 200 OK
+     *  {
+     *   "code": "1",
+     *   "msg": "操作成功",
+     *   "ret": {
+     *      "limit": "1",
+     *      "page_total": 4,
+     *      "offset": 0,
+     *      "orders": [
+     *      {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *       }
      *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     * }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerServiceOrders()
     {
         $args = Yii::$app->request->get();
-
         @$token = $args["access_token"];
-
         $worker = WorkerAccessToken::getWorker($token);
-
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
             $orderStatus = explode(".", $args['order_status']);
         }
-
 
         @$isAsc = $args['is_asc'];
         if (is_null($isAsc)) {
@@ -809,15 +778,14 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $arr);
         } catch (Exception $e) {
-            return $this->send($e, "服务异常", 2);
+            return $this->send($e, "服务异常", 0,200,null,  alertMsgEnum::orderGetWorkerServiceOrderSuccess);
         }
-
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1);
+        $this->send($ret, "操作成功", 1,200,null, alertMsgEnum::orderGetWorkerServiceOrderFaile);
     }
 
     /**
@@ -848,16 +816,14 @@ class OrderController extends \restapi\components\Controller
      *
      *    }
      *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerOrdersCount()
@@ -867,7 +833,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -917,16 +883,14 @@ class OrderController extends \restapi\components\Controller
      *
      *    }
      *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerServiceOrdersCount()
@@ -936,7 +900,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
 
         $args["owr.worker_id"] = $worker->id;
@@ -968,62 +932,60 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    "limit": "1",
-     *    "page_total": 4,
-     *    "offset": 0,
-     *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
-     *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     * HTTP/1.1 200 OK
+     *   {
+     *      "code": "1",
+     *      "msg": "操作成功",
+     *      "ret": {
+     *          "limit": "1",
+     *          "page_total": 4,
+     *          "offset": 0,
+     *          "orders": [
+     *          {
+     *              "id": "2",
+     *               "order_code": "339710",
+     *              "order_parent_id": "0",
+     *              "order_is_parent": "0",
+     *              "created_at": "1445347126",
+     *              "updated_at": "1445347126",
+     *              "isdel": "0",
+     *              "ver": "3",
+     *              "version": "3",
+     *              "order_ip": "58.135.77.96",
+     *              "order_service_type_id": "1",
+     *              "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *              "order_src_id": "1",
+     *              "order_src_name": "BOSS",
+     *              "channel_id": "20",
+     *              "order_channel_name": "后台下单",
+     *              "order_unit_money": "20.00",
+     *              "order_money": "40.00",
+     *              "order_booked_count": "120",
+     *              "order_booked_begin_time": "1446249600",
+     *              "order_booked_end_time": "1446256800",
+     *              "address_id": "397",
+     *              "district_id": "3",
+     *              "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *              "order_booked_worker_id": "0",
+     *              "checking_id": "0",
+     *              "order_cs_memo": "",
+     *              "order_id": "2",
+     *              "order_before_status_dict_id": "2",
+     *              "order_before_status_name": "已支付",
+     *              "order_status_dict_id": "3",
+     *              "order_status_name": "已开始智能指派"
+     *          }
+     *      ]
+     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerDoneOrdersHistory()
@@ -1033,7 +995,7 @@ class OrderController extends \restapi\components\Controller
 
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+           return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1048,7 +1010,7 @@ class OrderController extends \restapi\components\Controller
         }
         $offset = ($page - 1) * $limit;
         $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
     }
 
     /**
@@ -1062,12 +1024,11 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [page] 第几页 从第一页开始
      * @apiParam {String} [limit] 每页包含订单数
      *
-     *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
+     * HTTP/1.1 200 OK
+     *  {
      *    "code": "1",
      *    "msg": "操作成功",
      *    "ret": {
@@ -1075,63 +1036,60 @@ class OrderController extends \restapi\components\Controller
      *    "page_total": 4,
      *    "offset": 0,
      *    "orders": [
-     *    {
-     *    "id": "2",
-     *    "order_code": "339710",
-     *    "order_parent_id": "0",
-     *    "order_is_parent": "0",
-     *    "created_at": "1445347126",
-     *    "updated_at": "1445347126",
-     *    "isdel": "0",
-     *    "ver": "3",
-     *    "version": "3",
-     *    "order_ip": "58.135.77.96",
-     *    "order_service_type_id": "1",
-     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *    "order_src_id": "1",
-     *    "order_src_name": "BOSS",
-     *    "channel_id": "20",
-     *    "order_channel_name": "后台下单",
-     *    "order_unit_money": "20.00",
-     *    "order_money": "40.00",
-     *    "order_booked_count": "120",
-     *    "order_booked_begin_time": "1446249600",
-     *    "order_booked_end_time": "1446256800",
-     *    "address_id": "397",
-     *    "district_id": "3",
-     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
-     *    "order_booked_worker_id": "0",
-     *    "checking_id": "0",
-     *    "order_cs_memo": "",
-     *    "order_id": "2",
-     *    "order_before_status_dict_id": "2",
-     *    "order_before_status_name": "已支付",
-     *    "order_status_dict_id": "3",
-     *    "order_status_name": "已开始智能指派"
-     *    }
+     *      {
+     *          "id": "2",
+     *          "order_code": "339710",
+     *          "order_parent_id": "0",
+     *          "order_is_parent": "0",
+     *          "created_at": "1445347126",
+     *          "updated_at": "1445347126",
+     *          "isdel": "0",
+     *          "ver": "3",
+     *          "version": "3",
+     *          "order_ip": "58.135.77.96",
+     *          "order_service_type_id": "1",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_src_id": "1",
+     *          "order_src_name": "BOSS",
+     *          "channel_id": "20",
+     *          "order_channel_name": "后台下单",
+     *          "order_unit_money": "20.00",
+     *          "order_money": "40.00",
+     *          "order_booked_count": "120",
+     *          "order_booked_begin_time": "1446249600",
+     *          "order_booked_end_time": "1446256800",
+     *          "address_id": "397",
+     *          "district_id": "3",
+     *          "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *          "order_booked_worker_id": "0",
+     *          "checking_id": "0",
+     *          "order_cs_memo": "",
+     *          "order_id": "2",
+     *          "order_before_status_dict_id": "2",
+     *          "order_before_status_name": "已支付",
+     *          "order_status_dict_id": "3",
+     *          "order_status_name": "已开始智能指派"
+     *      }
      *    ]
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     * }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionWorkerCancelOrdersHistory()
     {
         $args = Yii::$app->request->get();
         @$token = $args["access_token"];
-
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1146,7 +1104,7 @@ class OrderController extends \restapi\components\Controller
         }
         $offset = ($page - 1) * $limit;
         $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
     }
 
     /**
@@ -1167,10 +1125,11 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
+     * HTTP/1.1 200 OK
+     *  {
      *      "code": "1",
      *      "msg": "操作成功",
+     *      "alertMsg": "获取状态订单数量成功"
      *      "ret": {
      *          "1": "9",
      *          "2": "0",
@@ -1187,18 +1146,14 @@ class OrderController extends \restapi\components\Controller
      *          }
      *     }
      *
-     *
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionStatusOrdersCount()
@@ -1208,7 +1163,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -1233,7 +1188,7 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
             $ret['count'] = $count;
         }
-        $this->send($ret, "操作成功");
+        $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderGetStatusOrdersCountSuccess);
     }
 
     /**
@@ -1249,12 +1204,13 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} status_list 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *         "code": "1",
-     *         "msg": "操作成功",
-     *         "ret": [
-     *         {
+     * HTTP/1.1 200 OK
+     *  {
+     *    "code": "1",
+     *     "msg": "操作成功",
+     *     "alertMsg": "查询订单状态记录成功"
+     *     "ret": [
+     *        {
      *         "id": 2,
      *         "created_at": 1445347126,
      *         "updated_at": 1445347126,
@@ -1290,18 +1246,17 @@ class OrderController extends \restapi\components\Controller
      *         "admin_id": 1,
      *         "order_flag_lock_time": null
      *         }
-     *         ]
-     *         }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     *     ]
+     * }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionOrderStatusHistory()
@@ -1312,11 +1267,11 @@ class OrderController extends \restapi\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderId = $args['order_id'];
         if (!is_numeric($orderId)) {
-            return $this->send(null, "该订单不存在", 0);
+            return $this->send(null, "该订单不存在", 0,200,null,  alertMsgEnum::orderExistFaile);
         }
         //TODO check whether the orders belong the user
         $orderSearch = new \core\models\order\OrderSearch();
@@ -1326,7 +1281,7 @@ class OrderController extends \restapi\components\Controller
         $orders = $orderSearch->searchOrdersWithStatus($orderArr);
         $ret['status_history'] = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功");
+        $this->send($ret, "操作成功",1,200,NULL,  alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
     /**
@@ -1347,34 +1302,32 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "693345订单取消成功",
+     *       "alertMsg": "订单取消成功"
      *       "ret":{
      *         1
      *       }
      *     }
      *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionCancelOrder()
     {
         $param = Yii::$app->request->post();
-
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
         if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
-            return $this->send(null, "验证码或订单号不能为空", 0, 403);
+            return $this->send(null, "验证码或订单号不能为空", 0,200,null,  alertMsgEnum::orderCancelVerifyFaile);
         }
 
         $token = $param['access_token'];
@@ -1386,7 +1339,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (!CustomerAccessToken::checkAccessToken($token)) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+             return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($token);
@@ -1417,18 +1370,18 @@ class OrderController extends \restapi\components\Controller
                 try {
                     $result = Order::cancel($orderId, 0, $reason);
                     if ($result) {
-                        return $this->send([1], $orderId . "订单取消成功", 1);
+                        return $this->send([1], $orderId . "订单取消成功", 1,200,null,  alertMsgEnum::orderCancelSuccess);
                     } else {
-                        return $this->send([0], $orderId . "订单取消失败", 0);
+                        return $this->send([0], $orderId . "订单取消失败", 0,200,null,  alertMsgEnum::orderCancelFaile);
                     }
                 } catch (Exception $e) {
-                    return $this->send(null, $orderId . "订单取消异常:" . $e);
+                    return $this->send(null, $orderId . "订单取消异常:" . $e,0,1024,null,  alertMsgEnum::orderCancelFaile);
                 }
             } else {
-                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200,NULL,alertMsgEnum::orderCancelFaile);
             }
         } else {
-            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200,null,alertMsgEnum::orderCancelFaile);
         }
     }
 
@@ -1447,29 +1400,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} rate 星级
      * @apiParam {String} tag 评价标签
      *
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "订单评价成功成功",
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
      */
-    public function actionAddComment()
-    {
-        
-    }
+
 
     /**
      * @api {DELETE} /order/hiden-order [DELETE]/order/hiden-order（ 100%）
@@ -1938,6 +1870,9 @@ class OrderController extends \restapi\components\Controller
             $booked_list = array();
 
             foreach ($param['order_booked_time'] as $key => $val) {
+                if(!isset($param['order_booked_time']['coupon_id'])){
+                    $val['coupon_id'] = null;
+                }
                 $booked_list[] = [
                     'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
                     'order_booked_end_time' => strtotime($val['order_booked_end_time']),
@@ -2104,19 +2039,19 @@ class OrderController extends \restapi\components\Controller
 
             if (count($order) > 0) {
                 $arr = array();
-                $array = array();
+
                 foreach ($order as $key => $val) {
                     if ($val['order_parent_id']) {
                         $arr[$key] = $val;
                     } else {
-                        $array[$key] = $val;
+                        $r_order = $val;
                     }
                 }
             }
-            foreach ($array as $k => $v) {
-                $array[$k]['sub_order'] = $arr;
-            }
-            return $this->send($array, "操作成功", 1);
+
+            $r_order['sub_order'] = $arr;
+
+            return $this->send($r_order, "操作成功", 1);
         } catch (\Exception $e) {
             return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
         }

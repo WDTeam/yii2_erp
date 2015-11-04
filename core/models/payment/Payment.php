@@ -4,6 +4,7 @@ namespace core\models\payment;
 
 use core\models\finance\FinanceOrderChannel;
 use core\models\operation\OperationServiceCardSellRecord;
+use core\models\order\Order;
 use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
@@ -708,7 +709,61 @@ class Payment extends \dbbase\models\payment\Payment
     {
         //POST数据
         if(!empty($data['debug'])){
+            //{"payment_type":"1","subject":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed8","trade_no":"2015110457346343","buyer_email":"weibeinan2008@163.com","gmt_create":"2015-11-04 18:15:36","notify_type":"trade_status_sync","quantity":"1","out_trade_no":"1511040155118","seller_id":"2088801136967007","notify_time":"2015-11-04 18:39:23","body":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed80.02\u5143","trade_status":"TRADE_SUCCESS","is_total_fee_adjust":"N","total_fee":"0.02","gmt_payment":"2015-11-04 18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
             //15:57:08","price":"0.02","buyer_id":"2088802381237501","notify_id":"2983afc3b92e376e84923e4c75e0f3574s","use_coupon":"N","sign_type":"RSA","sign":"ZlCICZ\/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE\/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc="}
+            //18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
+            /*
+             {
+                "payment_type": "1",
+                "subject": "e家洁在线支付",
+                "trade_no": "2015110457346343",
+                "buyer_email": "weibeinan2008@163.com",
+                "gmt_create": "2015-11-04 18:15:36",
+                "notify_type": "trade_status_sync",
+                "quantity": "1",
+                "out_trade_no": "1511040155118",
+                "seller_id": "2088801136967007",
+                "notify_time": "2015-11-04 18:39:23",
+                "body": "e家洁在线支付0.02元",
+                "trade_status": "TRADE_SUCCESS",
+                "is_total_fee_adjust": "N",
+                "total_fee": "0.02",
+                "gmt_payment": "2015-11-04 18:15:36",
+                "seller_email": "47632990@qq.com",
+                "price": "0.02",
+                "buyer_id": "2088412778636439",
+                "notify_id": "e57d71ea1dc40bbf294a7df8d47171834e",
+                "use_coupon": "N",
+                "sign_type": "RSA",
+                "sign": "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
+            }
+             */
+
+            $_POST = [
+                "payment_type"=> "1",
+                "subject"=> "e家洁在线支付",
+                "trade_no"=> "2015110457346343",
+                "buyer_email"=> "weibeinan2008@163.com",
+                "gmt_create"=> "2015-11-04 18:15:36",
+                "notify_type"=> "trade_status_sync",
+                "quantity"=> "1",
+                "out_trade_no"=> "1511040155118",
+                "seller_id"=> "2088801136967007",
+                "notify_time"=> "2015-11-04 18:39:23",
+                "body"=> "e家洁在线支付0.02元",
+                "trade_status"=> "TRADE_SUCCESS",
+                "is_total_fee_adjust"=> "N",
+                "total_fee"=> "0.02",
+                "gmt_payment"=> "2015-11-04 18:15:36",
+                "seller_email"=> "47632990@qq.com",
+                "price"=> "0.02",
+                "buyer_id"=> "2088412778636439",
+                "notify_id"=> "e57d71ea1dc40bbf294a7df8d47171834e",
+                "use_coupon"=> "N",
+                "sign_type"=> "RSA",
+                "sign"=> "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
+            ];
+            /*
             $_POST = array (
                 "payment_type" => "1",
                 "subject" => "e家洁在线支付",
@@ -734,6 +789,7 @@ class Payment extends \dbbase\models\payment\Payment
                 "sign_type" => "RSA",
                 "sign" => "ZlCICZ/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc=",
             );
+            */
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -766,12 +822,12 @@ class Payment extends \dbbase\models\payment\Payment
             //验证签名
             $class = new \alipay_wap_class();
             $verify_result = $class->callback();
-
+            /*
             if(!empty($_GET['debug']))
             {
                 $verify_result = true;
             }
-
+            */
             //签名验证成功
             if($verify_result)
             {
