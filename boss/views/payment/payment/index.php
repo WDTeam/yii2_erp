@@ -55,7 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'updated_at',
-                'format' => ['date', 'Y-m-d H:i:s'],
+                'value'=>function($model){
+                    return date("Y-m-d H:i:s",$model->updated_at);
+                }
+                //'format' => ['date', 'Y-m-d H:i:s'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
