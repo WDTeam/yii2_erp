@@ -230,7 +230,7 @@ class OrderSearch extends Order
             ])->andWhere([
                 'or',
                 ['orderExtFlag.order_flag_lock' => 0],
-                ['<','orderExtFlag.order_flag_lock_time',time()-Order::MANUAL_ASSIGN_lONG_TIME] //查询超时未解锁的订单
+                ['<','orderExtFlag.order_flag_lock_time',time()-Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME']] //查询超时未解锁的订单
             ])->andWhere([ //系统指派失败的 或者 已支付待指派并且标记不需要系统指派的订单
                 'or',
                 [
