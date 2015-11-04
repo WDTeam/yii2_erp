@@ -135,6 +135,8 @@ class FinancePopOrderController extends Controller
     		$FinanceRecordLog->insert();
     		$lastidRecordLog=$FinanceRecordLog->id;
     		}
+    		
+    		
     		if($lastidRecordLog==0){
     		  \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
     		  return $this->redirect(['index']);
@@ -209,7 +211,7 @@ class FinancePopOrderController extends Controller
     		}
     		$n++;
     		}
-    	 	$FinanceRecordLog = new FinanceRecordLogSearch;
+    	 	//$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
     	 	$customer_info = FinanceRecordLog::findOne($lastidRecordLog);
     		$customer_info->finance_order_channel_id =1;
