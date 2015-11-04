@@ -50,6 +50,7 @@ class OperationGoods extends \core\models\operation\OperationGoods
             [['operation_goods_name', 'operation_category_name', 'operation_goods_english_name'], 'string', 'max' => 60],
             [['operation_category_ids'], 'string', 'max' => 100],
             [['operation_goods_start_time', 'operation_goods_end_time'], 'string', 'max' => 20],
+            ['operation_goods_img', 'file', 'extensions' => ['jpg', 'gif'], 'maxSize' => 1024*1024*1024],
         ];
     }
 
