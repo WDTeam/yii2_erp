@@ -5,7 +5,7 @@ return [
     'language' => 'zh-CN',
     'timeZone' => 'Asia/Shanghai',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'bootstrap' => ['log', 'devicedetect', 'ivr'],
+    'bootstrap' => ['log', 'devicedetect', 'ivr', 'core\components\EventBind'],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

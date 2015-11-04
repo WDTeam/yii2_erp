@@ -3,7 +3,7 @@
 return [
     'id' => 'app-core',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['core\components\EventBind','log'],
     'aliases'=>[
         '@core'=>'@app',
     ],
