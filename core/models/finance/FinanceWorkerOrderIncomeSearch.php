@@ -130,9 +130,9 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public static function getOrderCountByWorkerId($worker_id,$start_time,$end_time){
         return Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')
                 ->where(['orderExtWorker.worker_id'=>$worker_id,
-//                    'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE
+                    'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE
                         ])
-//                ->andFilterWhere(['between','order_booked_begin_time',$start_time,$end_time])
+                ->andFilterWhere(['between','order_booked_begin_time',$start_time,$end_time])
                 ->count();
     }
     
