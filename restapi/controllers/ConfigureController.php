@@ -116,6 +116,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiDescription 用户端首页初始化,获得开通城市列表，广告轮播图 等初始化数据(赵顺利--假数据 )
      *
      * @apiParam {String} city_name 城市
+     * @apiParam {String} [access_token] 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
@@ -246,7 +247,8 @@ class ConfigureController extends \restapi\components\Controller
      *                  "colour"=>"",
      *                  "sort"=>"2"
      *              },
-     *          ]
+     *              ],
+     *              "isBlock":"0" 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。
      *      }
      * }
      *
@@ -454,6 +456,7 @@ class ConfigureController extends \restapi\components\Controller
                 'sort' => '4',
             ],
         ];
+        $isBlock="0";
 
         $ret = [
             'city_list' => $city_list,
@@ -462,6 +465,7 @@ class ConfigureController extends \restapi\components\Controller
             'home_order_server' => $home_order_server,
             'server_list' => $server_list,
             'footer_link' => $footer_link,
+            'isBlock' => $isBlock,
         ];
 
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);

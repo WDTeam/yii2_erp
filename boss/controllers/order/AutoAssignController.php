@@ -7,13 +7,18 @@
 */
 namespace boss\controllers\order;
 
-use Yii;
+use autoassign\ClientCommand;
+
 use core\models\Order\Order;
+
+use boss\components\BaseAuthController;
 use boss\models\AutoAssignSerach;
+
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use boss\components\BaseAuthController;
-use autoassign\ClientCommand;
+
+
 
 /**
  * AutoOrderController implements the CRUD actions for Order model.
