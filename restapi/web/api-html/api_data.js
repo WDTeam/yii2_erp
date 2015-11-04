@@ -168,6 +168,97 @@ define({ "api": [
     "groupTitle": "Auth"
   },
   {
+    "type": "POST",
+    "url": "/auth/weixin-login",
+    "title": "WeixinLogin（0%）",
+    "name": "actionWeixinLogin",
+    "group": "Auth",
+    "description": "<p>微信用户登录（赵顺利）</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>用户电话号码</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "verify_code",
+            "description": "<p>短信验证码</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "weixin_id",
+            "description": "<p>微信id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "user",
+            "description": "<p>用户信息.</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>访问令牌字符串.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"登陆成功\",\n\"ret\": {\n    \"user\": {\n        \"id\": \"ID\",\n        \"customer_name\": \"用户名\",\n        \"customer_sex\": \"性别\",\n        \"customer_birth\": \"生日\",\n        \"customer_photo\": \"头像\",\n        \"customer_phone\": \"电话\",\n        \"customer_email\": \"邮箱\",\n        \"operation_area_id\": \"商圈id\",\n        \"operation_area_name\": \"商圈\",\n        \"operation_city_id\": \"城市id\",\n        \"operation_city_name\": \"城市\",\n        \"customer_level\": \"评级\",\n        \"customer_complaint_times\": \"投诉\",\n        \"customer_platform_version\": \"操作系统版本号\",\n        \"customer_app_version\": \"app版本号\",\n        \"customer_mac\": \"mac地址\",\n        \"customer_login_ip\": \"登陆ip\",\n        \"customer_login_time\": \"登陆时间\",\n        \"customer_is_vip\": \"身份\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\"\n        },\n    \"access_token\": \"token值\"\n     },\n\"alertMsg\": \"登陆成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The id of the User was not found.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "  HTTP/1.1 200 Not Found\n{\n   \"code\": 0,\n   \"msg\": \"用户名或验证码错误\",\n   \"ret\": {},\n   \"alertMsg\": \"登陆失败\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/AuthController.php",
+    "groupTitle": "Auth"
+  },
+  {
     "type": "post",
     "url": "/auth/worker-login",
     "title": "Worker-Login（李勇100%)",
@@ -5062,7 +5153,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_doing\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          },\n          \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5125,7 +5216,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_done\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          },\n         \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5188,7 +5279,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          \"task_fail\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"url\": \"右上角任务说明链接（后台没有返回空）\"\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5509,6 +5600,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
             "field": "app_version",
             "description": "<p>访问源(android_4.2.2)</p> "
           }
@@ -5519,7 +5617,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"city_list\": [\n             {\n                 \"id\": 1,\n                 \"province_id\": 120000,\n                 \"province_name\": \"天津\",\n                 \"city_id\": 120100,\n                 \"city_name\": \"天津市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444283773,\n                 \"updated_at\": 1444283773\n             },\n             {\n                 \"id\": 2,\n                 \"province_id\": 110000,\n                 \"province_name\": \"北京\",\n                 \"city_id\": 110100,\n                 \"city_name\": \"北京市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444368462,\n                 \"updated_at\": 1444368462\n             },\n             {\n                 \"id\": 3,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140300,\n                 \"city_name\": \"阳泉市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444413962,\n                 \"updated_at\": 1444413962\n             },\n             {\n                 \"id\": 4,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140100,\n                 \"city_name\": \"太原市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444635891,\n                 \"updated_at\": 1444635891\n             }\n             ],\n             \"pic_list\": [\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                 \"url_title\": \"标准服务\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/pledge.html\",\n                 \"url_title\": \"服务承诺\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png\",\n                 \"link\": \"\",\n                 \"url_title\": \"\"\n             }\n             ],\n             \"home_order_server\": [\n             {\n                 \"title\"=>\"单次保洁\",\n                 \"introduction\"=>\"新用户第1小时免费\",\n                 \"icon\"=>\"\",\n                 \"url\"=>\"\",\n                 \"sort\"=>\"1\",  排序\n                 \"bg_colour\"=>\"\",  背景颜色\n                 \"font_colour\"=>\"\",  字体颜色\n                 \"category_id\" => \"1\",\n                 \"category_name\" => \"专业保洁\",\n                 \"category_icon\" => \"\",\n                 \"category_introduction\" => \"44项定制清洁服务\",\n                 \"category_price\" => \"25.00\",\n                 \"category_price_unit\" => \"小时\",\n                 \"category_price_description\" => \"￥25/小时\",\n             },\n             ],\n             \"server_list\": [\n             {\n                 \"category_id\": \"6\",   服务品类id\n                 \"category_name\": \"精品保洁\",  服务品类名\n                 \"category_icon\": \"\",   小图片\n                 \"category_url\": \"\",    调转地址url\n                 \"category_introduction\": \"\",  简介\n                 \"category_price\": \"\",  价格\n                 \"category_price_unit\": \"\",  价格单位\n                 \"category_price_description\": \"\",  价格备注\n                 \"colour\"=>\"\",\n                 \"sort\": \"1\"   排序\n             },\n             {\n                 \"category_id\": \"1\",\n                 \"category_name\": \"专业保洁\",\n                 \"category_icon\": \"\",\n                 \"category_url\": \"\",\n                 \"category_introduction\": \"44项定制清洁服务\",\n                 \"category_price\": \"25.00\",\n                 \"category_price_unit\": \"小时\",\n                 \"category_price_description\": \"￥25/小时\",\n                 \"colour\"=>\"\",\n                 \"sort\": \"2\"\n             },\n             ],\n             \"footer_link\":[\n             {\n                 \"link_id\"=>\"1\",\n                 \"title\"=>\"首页\",\n                 \"url\"=>\"\",   跳转链接\n                 \"link_icon_check\" => \"http://dev.m2.1jiajie.com/statics/images/nav_01.png\", 选中图片\n                 \"link_icon_uncheck\" => \"http://dev.m2.1jiajie.com/statics/images/nav_d_01.png\", 未选中图片\n                 \"colour_check\" => \"#f7b136\", 选中颜色\n                 \"colour_uncheck\" => \"#555\",  未选中颜色\n                 \"sort\"=>\"1\"  排序\n             },\n             {\n                 \"link_id\"=>\"2\",\n                 \"title\"=>\"订单\",\n                 \"url\"=>\"\",\n                 \"link_icon\"=>\"\",\n                 \"colour\"=>\"\",\n                 \"sort\"=>\"2\"\n             },\n         ]\n     }\n}",
+          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"city_list\": [\n             {\n                 \"id\": 1,\n                 \"province_id\": 120000,\n                 \"province_name\": \"天津\",\n                 \"city_id\": 120100,\n                 \"city_name\": \"天津市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444283773,\n                 \"updated_at\": 1444283773\n             },\n             {\n                 \"id\": 2,\n                 \"province_id\": 110000,\n                 \"province_name\": \"北京\",\n                 \"city_id\": 110100,\n                 \"city_name\": \"北京市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444368462,\n                 \"updated_at\": 1444368462\n             },\n             {\n                 \"id\": 3,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140300,\n                 \"city_name\": \"阳泉市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444413962,\n                 \"updated_at\": 1444413962\n             },\n             {\n                 \"id\": 4,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140100,\n                 \"city_name\": \"太原市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444635891,\n                 \"updated_at\": 1444635891\n             }\n             ],\n             \"pic_list\": [\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                 \"url_title\": \"标准服务\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/pledge.html\",\n                 \"url_title\": \"服务承诺\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png\",\n                 \"link\": \"\",\n                 \"url_title\": \"\"\n             }\n             ],\n             \"home_order_server\": [\n             {\n                 \"title\"=>\"单次保洁\",\n                 \"introduction\"=>\"新用户第1小时免费\",\n                 \"icon\"=>\"\",\n                 \"url\"=>\"\",\n                 \"sort\"=>\"1\",  排序\n                 \"bg_colour\"=>\"\",  背景颜色\n                 \"font_colour\"=>\"\",  字体颜色\n                 \"category_id\" => \"1\",\n                 \"category_name\" => \"专业保洁\",\n                 \"category_icon\" => \"\",\n                 \"category_introduction\" => \"44项定制清洁服务\",\n                 \"category_price\" => \"25.00\",\n                 \"category_price_unit\" => \"小时\",\n                 \"category_price_description\" => \"￥25/小时\",\n             },\n             ],\n             \"server_list\": [\n             {\n                 \"category_id\": \"6\",   服务品类id\n                 \"category_name\": \"精品保洁\",  服务品类名\n                 \"category_icon\": \"\",   小图片\n                 \"category_url\": \"\",    调转地址url\n                 \"category_introduction\": \"\",  简介\n                 \"category_price\": \"\",  价格\n                 \"category_price_unit\": \"\",  价格单位\n                 \"category_price_description\": \"\",  价格备注\n                 \"colour\"=>\"\",\n                 \"sort\": \"1\"   排序\n             },\n             {\n                 \"category_id\": \"1\",\n                 \"category_name\": \"专业保洁\",\n                 \"category_icon\": \"\",\n                 \"category_url\": \"\",\n                 \"category_introduction\": \"44项定制清洁服务\",\n                 \"category_price\": \"25.00\",\n                 \"category_price_unit\": \"小时\",\n                 \"category_price_description\": \"￥25/小时\",\n                 \"colour\"=>\"\",\n                 \"sort\": \"2\"\n             },\n             ],\n             \"footer_link\":[\n             {\n                 \"link_id\"=>\"1\",\n                 \"title\"=>\"首页\",\n                 \"url\"=>\"\",   跳转链接\n                 \"link_icon_check\" => \"http://dev.m2.1jiajie.com/statics/images/nav_01.png\", 选中图片\n                 \"link_icon_uncheck\" => \"http://dev.m2.1jiajie.com/statics/images/nav_d_01.png\", 未选中图片\n                 \"colour_check\" => \"#f7b136\", 选中颜色\n                 \"colour_uncheck\" => \"#555\",  未选中颜色\n                 \"sort\"=>\"1\"  排序\n             },\n             {\n                 \"link_id\"=>\"2\",\n                 \"title\"=>\"订单\",\n                 \"url\"=>\"\",\n                 \"link_icon\"=>\"\",\n                 \"colour\"=>\"\",\n                 \"sort\"=>\"2\"\n             },\n             ],\n             \"isBlock\":\"0\" 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。\n     }\n}",
           "type": "json"
         }
       ]
@@ -5668,7 +5766,7 @@ define({ "api": [
   {
     "type": "Get",
     "url": "/coupon/all-coupons",
-    "title": "All-Coupons（李勇 100%）",
+    "title": "[Get] /coupon/all-coupons（ 100%）",
     "description": "<p>获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）</p> ",
     "name": "actionAllCoupons",
     "group": "coupon",
@@ -5859,7 +5957,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/coupon/exchange-coupon",
-    "title": "Exchange-Coupon（100%）",
+    "title": "[POST] /coupon/exchange-coupon（100%）",
     "description": "<p>兑换优惠劵（李勇）</p> ",
     "name": "actionExchangeCoupon",
     "group": "coupon",
