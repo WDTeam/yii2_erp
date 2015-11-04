@@ -10,7 +10,8 @@ use \core\models\customer\CustomerAccessToken;
 class PayController extends \restapi\components\Controller
 {
     /**
-     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利100%)
+     * @api {POST} /pay/balance-pay [POST] /pay/balance-pay  (100%)
+     * @apiDescription 会员余额支付 (赵顺利)
      * @apiName actionBalancePay
      * @apiGroup Pay
      *
@@ -21,7 +22,7 @@ class PayController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"支付成功",
      * }
      *
@@ -31,7 +32,7 @@ class PayController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "支付失败"
      *  }
      *
@@ -58,7 +59,8 @@ class PayController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/pay/online-pay 在线支付接口 (赵顺利100%)
+     * @api {POST} /pay/online-pay [POST] /pay/online-pay (100%)
+     * @apiDescription 在线支付接口(赵顺利100)
      * @apiName actionOnlinePay
      * @apiGroup Pay
      *
@@ -206,6 +208,7 @@ class PayController extends \restapi\components\Controller
 
     /**
      * @api {get} v2/member_card.json  成为会员接口
+     * @apiDescription 
      * @apiName actionMemberCard
      * @apiGroup Pay
      *
