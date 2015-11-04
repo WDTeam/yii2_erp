@@ -884,8 +884,6 @@ class Worker extends \dbbase\models\worker\Worker
             Yii::$app->redis->close();
             return true;
         }
-
-
     }
 
     /**
@@ -1429,8 +1427,10 @@ class Worker extends \dbbase\models\worker\Worker
             case 2:
                 return '通过基础培训';
             case 3:
-                return '已上岗';
+                return '已试工';
             case 4:
+                return '已上岗';
+            case 5:
                 return '通过晋升培训';
         }
        /* if($worker_auth_status==1){

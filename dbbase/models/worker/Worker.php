@@ -1,10 +1,7 @@
 <?php
 
 namespace dbbase\models\worker;
-use kartik\builder\TabularForm;
-use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
-use dbbase\models\WorkerExt;
 use Yii;
 
 /**
@@ -51,16 +48,21 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_name','worker_idcard'],'unique','message'=>'{attribute}\'{value}\'已经被占用'],
+            [['worker_phone','worker_idcard'],'unique'],
             ['worker_phone','match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
             ['worker_idcard','match','pattern'=>'/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/','message'=>'请填写正确格式的身份证号'],
             [['shop_id','worker_name','worker_work_city','worker_phone','worker_idcard','worker_type', 'worker_type','worker_identity_id'],'required'],
             [['shop_id', 'worker_level', 'worker_auth_status',  'worker_work_city', 'worker_work_area', 'worker_type', 'worker_rule_id', 'worker_is_block', 'worker_is_blacklist', 'worker_is_dimission','created_ad', 'updated_ad', 'isdel'], 'integer'],
             [['worker_work_lng', 'worker_work_lat'], 'number'],
+            [['worker_name'], 'string', 'max' => 20],
             [['worker_idcard'], 'string', 'max' => 18],
             [['worker_phone'], 'string', 'max' => 11],
             [['worker_dimission_reason','worker_blacklist_reason'], 'string', 'max' => 150],
             [['worker_password', 'worker_work_street'], 'string', 'max' => 50],
+            [['worker_blacklist_reason'], 'string', 'max' => 200],
+            [['worker_dimission_reason'], 'string', 'max' => 200],
+            [['worker_work_street'], 'string', 'max' => 50],
+            [['worker_photo'], 'image', 'maxSize' => 1024 * 1024],
         ];
     }
 

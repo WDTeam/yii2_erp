@@ -42,7 +42,8 @@ $workerVacationModel->worker_vacation_type = 1;
         'pluginOptions'=>[
             'locale'=>['format'=>'date'],
             'separator'=>' 至 ',
-            'opens'=>'right'
+            'opens'=>'right',
+            'minDate'=>'date'
         ]
     ]);?>
 
