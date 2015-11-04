@@ -261,4 +261,22 @@ class alertMsgEnum
     /*
      * 李勇end
      */
+    
+    /**订单**/
+    //创建订单
+    const orderServiceItemIdFaile = "请输入服务项目ID";
+    const orderSrcIdFaile = "订单来源不明确";
+    const orderBookedBeginTimeFaile = "数据不完整,请输入初始时间";
+    const orderBookedEndTimeFaile = "数据不完整,请输入完成时间";
+    const orderPayTypeFaile = "数据不完整,请输入支付方式";
+    const orderAddressIdFaile="地址数据不完整,请输入常用地址id或者城市,地址名（包括区）";
+    const orderCreateSuccess = "订单创建成功";
+    const orderCreateFaile = "订单创建失败";
+    //追加订单
+    const orderAppendOrderSuccess = '追加订单成功';
+    const orderAppendOrderFaile = '追加订单失败';
+    //订单查询
+    const orderGetOrdersSuccess ="获取订单成功";
+    const orderGetOrdersFaile ="获取订单失败";
+    
 }

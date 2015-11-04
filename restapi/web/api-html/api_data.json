@@ -417,33 +417,23 @@
             "type": "<p>Object</p> ",
             "optional": false,
             "field": "order",
-            "description": "<p>成功订单对象.</p> "
+            "description": "<p>成功订单对象</p> "
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"以下单成功，正在等待阿姨抢单\",\n  \"ret\":{\n      \"order\": {}\n\n  }\n\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": \"1\",\n    \"msg\": \"以下单成功，正在等待阿姨抢单\",\n    \"ret\":{\n        \"order\": {}\n\n    }\n\n  }",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -613,7 +603,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"1\", 服务类型商品id\n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"地址,姓名,电话\",\n         \"order_code\": \"订单号\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,  订单创建时间\n         \"updated_at\": 1445320069,  订单修改时间\n         \"id\": 8\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"服务类型商品id\", \n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"地址,姓名,电话\",\n         \"order_code\": \"订单号\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,  订单创建时间\n         \"updated_at\": 1445320069,  订单修改时间\n         \"id\": 8\n     }\n }",
           "type": "json"
         }
       ]
@@ -624,20 +614,10 @@
       }
     ],
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n\n}",
           "type": "json"
         }
       ]
@@ -1609,26 +1589,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_pay_type\": \"支付方式\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n    \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n      {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n        \"created_at\": \"1445347126\",\n        \"updated_at\": \"1445347126\",\n        \"isdel\": \"0\",\n        \"ver\": \"3\",\n        \"version\": \"3\",\n        \"order_ip\": \"58.135.77.96\",\n        \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n        \"order_src_id\": \"1\",\n        \"order_src_name\": \"BOSS\",\n        \"channel_id\": \"20\",\n        \"order_channel_name\": \"后台下单\",\n        \"order_unit_money\": \"20.00\",\n        \"order_money\": \"40.00\",\n        \"order_pay_type\": \"支付方式\",\n        \"order_booked_count\": \"120\",\n        \"order_booked_begin_time\": \"1446249600\",\n        \"order_booked_end_time\": \"1446256800\",\n        \"address_id\": \"397\",\n        \"district_id\": \"3\",\n        \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n        \"order_booked_worker_id\": \"0\",\n        \"checking_id\": \"0\",\n        \"order_cs_memo\": \"\",\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": \"2\",\n        \"order_before_status_name\": \"已支付\",\n        \"order_status_dict_id\": \"3\",\n        \"order_status_name\": \"已开始智能指派\"\n         }\n  ]\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -5062,7 +5032,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_doing\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          },\n          \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5125,7 +5095,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_done\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          },\n         \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5188,7 +5158,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          \"task_fail\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"url\": \"右上角任务说明链接（后台没有返回空）\"\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5668,7 +5638,7 @@
   {
     "type": "Get",
     "url": "/coupon/all-coupons",
-    "title": "All-Coupons（李勇 100%）",
+    "title": "[Get] /coupon/all-coupons（ 100%）",
     "description": "<p>获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）</p> ",
     "name": "actionAllCoupons",
     "group": "coupon",
@@ -5859,7 +5829,7 @@
   {
     "type": "POST",
     "url": "/coupon/exchange-coupon",
-    "title": "Exchange-Coupon（100%）",
+    "title": "[POST] /coupon/exchange-coupon（100%）",
     "description": "<p>兑换优惠劵（李勇）</p> ",
     "name": "actionExchangeCoupon",
     "group": "coupon",
