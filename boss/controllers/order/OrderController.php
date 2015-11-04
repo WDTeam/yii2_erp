@@ -370,16 +370,16 @@ class OrderController extends BaseAuthController
         ];
         $booked_list = [
             [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00')),
             ],
             [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +1days'),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +1days'),
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400,
             ],
             [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +2days'),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +2days'),
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400+86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400+86400,
             ],
         ];
         return Order::createNewBatch($attributes, $booked_list);

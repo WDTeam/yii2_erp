@@ -221,6 +221,7 @@ class Order extends OrderModel
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
      *  string $order_flag_sys_assign 是否系统指派
+     *  int $order_flag_change_booked_worker 是否可更换指定阿姨
      *  string $order_cs_memo 客服备注
      * ]
      * @param $booked_list [
@@ -239,7 +240,8 @@ class Order extends OrderModel
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id',
             'customer_id','admin_id','order_pay_type',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
-            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_flag_sys_assign','order_cs_memo'
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo',
+            'order_flag_sys_assign','order_cs_memo','order_flag_change_booked_worker'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'
@@ -509,6 +511,7 @@ class Order extends OrderModel
 
     /**
      * 服务完成
+     * TODO 添加常用阿姨
      * @param $order_id
      * @return bool
      */

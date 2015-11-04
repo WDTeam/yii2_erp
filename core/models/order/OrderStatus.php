@@ -152,6 +152,32 @@ class OrderStatus extends Order
     }
 
     /**
+     * 批量开始人工指派
+     * @param $batch_code
+     * @param $admin_id
+     * @param $is_cs
+     * @return bool
+     */
+    public static function batchManualAssignStart($batch_code,$admin_id,$is_cs)
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_START);
+        $transact = static::getDb()->beginTransaction();
+        $orders = OrderSearch::getBatchOrder($batch_code);
+        foreach($orders as $order){
+            $order->order_flag_lock = $admin_id;
+            $order->order_flag_lock_time = time(); //加锁时间
+            $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_cs ? 1 : 2); //指派时先标记是谁指派不了
+            $order->admin_id = $admin_id;
+            if(!self::_statusChange($order,$status,['OrderExtFlag'],$transact)){
+                $transact->rollBack();
+                return false;
+            }
+        }
+        $transact->commit();
+        return true;
+    }
+
+    /**
      * 完成人工指派
      * @param $order
      * @param $must_models
