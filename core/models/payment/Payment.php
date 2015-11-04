@@ -868,25 +868,46 @@ class Payment extends \dbbase\models\payment\Payment
      * @param $data
      */
     public function wxAppNotify($data){
+        //{"r":"\/pay\/wx-app-notify","bank_type":"0","discount":"0","fee_type":"1","input_charset":"UTF-8","notify_id":"envUQL970OKMjmAE66VO3Jsn9_10yHjOEzrSRxvgoyTkhAiEPFWa9f-uJnVIq08EhcVXyTfMeLr9vym58gZhO_vUqbjYrDll","out_trade_no":"15110501657379","partner":"1217983401","product_fee":"2","sign":"E9441ED08D39D9FCE40C1372A5F4EDE0","sign_type":"MD5","time_end":"20151105001614","total_fee":"2","trade_mode":"1","trade_state":"0","transaction_id":"1217983401391511058440210952","transport_fee":"0"}
+
         $class = new \wxpay_class();
         if(!empty($data['debug'])){
+            $GLOBALS['HTTP_RAW_POST_DATA'] = "<xml>
+                <appid><![CDATA[wx7558e67c2d61eb8f]]></appid>
+                <attach><![CDATA[e家洁在线支付]]></attach>
+                <bank_type><![CDATA[CFT]]></bank_type>
+                <cash_fee><![CDATA[1]]></cash_fee>
+                <fee_type><![CDATA[CNY]]></fee_type>
+                <is_subscribe><![CDATA[Y]]></is_subscribe>
+                <mch_id><![CDATA[10037310]]></mch_id>
+                <nonce_str><![CDATA[aoydf0e8u58c2scu2o441n1i5yxtxghr]]></nonce_str>
+                <openid><![CDATA[o7Kvajh91Fmh_KYzhwX0LWZtpMPM]]></openid>
+                <out_trade_no><![CDATA[15101922921]]></out_trade_no>
+                <result_code><![CDATA[SUCCESS]]></result_code>
+                <return_code><![CDATA[SUCCESS]]></return_code>
+                <sign><![CDATA[3E437AF36D969693DD705034A8FFD5F9]]></sign>
+                <time_end><![CDATA[20151019102921]]></time_end>
+                <total_fee>1</total_fee>
+                <trade_type><![CDATA[JSAPI]]></trade_type>
+                <transaction_id><![CDATA[1004390062201510191251335932]]></transaction_id>
+                </xml>";
             $post = $_POST = [
-                "r" => "/general-pay/wx-app-notify",
+                "r" => "/pay/wx-app-notify",
                 "bank_type" => "0",
                 "discount" => "0",
                 "fee_type" => "1",
                 "input_charset" => "UTF-8",
-                "notify_id" => "envUQL970OImimNqSbr02zP5_Zq5nrw-luZ8ADWHtVsc_30p2GXJ51YmMHoAqccbbeZBlGI2Ken5nHuMzIRqYgLX_4kw4QXg",
-                "out_trade_no" => "15101258091",
+                "notify_id" => "envUQL970OKMjmAE66VO3Jsn9_10yHjOEzrSRxvgoyTkhAiEPFWa9f-uJnVIq08EhcVXyTfMeLr9vym58gZhO_vUqbjYrDll",
+                "out_trade_no" => "15110501657379",
                 "partner" => "1217983401",
-                "product_fee" => "1",
-                "sign" => "A9A2D759AC57CA47ACC80436C4C6A876",
+                "product_fee" => "2",
+                "sign" => "E9441ED08D39D9FCE40C1372A5F4EDE0",
                 "sign_type" => "MD5",
-                "time_end" => "20151012165432",
-                "total_fee" => "1",
+                "time_end" => "20151105001614",
+                "total_fee" => "2",
                 "trade_mode" => "1",
                 "trade_state" => "0",
-                "transaction_id" => "1217983401381510128537567810",
+                "transaction_id" => "1217983401391511058440210952",
                 "transport_fee" => "0"
             ];
             $status = 'error';
@@ -917,11 +938,11 @@ class Payment extends \dbbase\models\payment\Payment
         //查询支付记录
         $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
 
-        if(!empty($data['debug'])){
-            $status = true;
-        }else{
+        //if(!empty($data['debug'])){
+        //    $status = true;
+        //}else{
             $status = $class->callback();
-        }
+        //}
 
         //验证支付结果
         if(!empty($model) && !empty($status)){
