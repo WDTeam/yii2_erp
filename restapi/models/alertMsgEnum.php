@@ -20,6 +20,9 @@ class alertMsgEnum
     //用户登录
     const userLoginSuccess = '用户登录成功';
     const userLoginFailed = '用户认证已经过期,请重新登录';
+     //微信用户登录
+    const uesrWeiXinLoginSuccess = '用户登录成功';
+    const uesrWeiXinLoginFailed = '用户登录失败';
     //依据城市和服务品类 获取服务商品列表
     const getGoodsesSuccess='获取服务商品成功';
     const getGoodsesFailed='获取服务商品失败';
@@ -299,4 +302,15 @@ class alertMsgEnum
     //阿姨取消的历史订单
     const orderWorkerCancelOrderHistorySuccess = "阿姨历史取消订单查询成功";
     const orderWorkerCancelOrderHistoryFaile = "阿姨历史取消订单查询失败";
+    //查询用户不同状态订单数量
+    const orderGetStatusOrdersCountSuccess = "获取状态订单数量成功";
+    const orderGetStatusOrdersCountFaile = "获取状态订单数量失败";
+    //查询某个订单状态的历史记录
+    const orderExistFaile = "订单不存在";
+    const orderGetOrderStatusHistorySuccess = "查询订单状态记录成功";
+    const orderGetOrderStatusHistoryFaile = "查询订单状态记录失败";
+    //取消订单
+    const orderCancelSuccess = "订单取消成功";
+    const orderCancelVerifyFaile ="验证码或订单号不能为空";
+    const orderCancelFaile = "订单取消失败";
 }

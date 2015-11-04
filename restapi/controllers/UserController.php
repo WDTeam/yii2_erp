@@ -1415,4 +1415,83 @@ class UserController extends \restapi\components\Controller
         return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
     }
 
+    /**
+     * @api {GET} /user/get-weixin-user-info  getWeixinUserInfo （90%）
+     * @apiDescription 通过微信id获取用户信息 (赵顺利 未测试)
+     * @apiName actionGetWeixinUserInfo
+     * @apiGroup User
+     *
+     * @apiParam {String} weixin_id 微信id
+     * @apiParam {String} sign 微信签名
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *      "code": 1,
+     *      "msg": "获取用户信息成功",
+     *      "ret": {
+     *          "user": {
+     *              "id": 1,
+     *              "customer_name": null,
+     *              "customer_sex": null,
+     *              "customer_birth": null,
+     *              "customer_photo": null,
+     *              "customer_phone": "18311474301",
+     *              "customer_email": null,
+     *              "operation_area_id": null,
+     *              "operation_area_name": null,
+     *              "operation_city_id": null,
+     *              "operation_city_name": null,
+     *              "customer_level": null,
+     *              "customer_complaint_times": 0,
+     *              "customer_platform_version": null,
+     *              "customer_app_version": null,
+     *              "customer_mac": null,
+     *              "customer_login_ip": null,
+     *              "customer_login_time": null,
+     *              "customer_is_vip": null,
+     *              "created_at": 1446195943,
+     *              "updated_at": 0,
+     *              "is_del": 0
+     *          },
+     *          "access_token": "bdf403df7b4afe39f6fe5110b98299bd"
+     *      },
+     *      "alertMsg": "获取用户信息成功"
+     *  }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "微信id或签名不允许为空",
+     *       "ret":{},
+     *       "alertMsg": "获取用户信息失败"
+     *     }
+     *
+     */
+    public function actionGetWeixinUserInfo()
+    {
+        $param = Yii::$app->request->get();
+        $weixin_id=$param['weixin_id'];
+        $sign=$param['sign'];
+        if (empty($weixin_id)|| empty($sign) ) {
+            return $this->send(null, "微信id或签名不允许为空", 0, 403, null, alertMsgEnum::getUserInfoFailed);
+        }
+
+        $date=CustomerAccessToken::generateAccessTokenForWeixin($weixin_id, $sign);
+        if($date['errcode']!='0')
+        {
+            return $this->send(null, $date['errmsg'], 0, 403, null, alertMsgEnum::getUserInfoFailed);
+        }
+
+        $ret = [
+            "user" => $date['access_token'],
+            "access_token" => $date['customer']
+        ];
+        return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
+    }
+
 }

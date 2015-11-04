@@ -1125,10 +1125,11 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
+     * HTTP/1.1 200 OK
+     *  {
      *      "code": "1",
      *      "msg": "操作成功",
+     *      "alertMsg": "获取状态订单数量成功"
      *      "ret": {
      *          "1": "9",
      *          "2": "0",
@@ -1145,18 +1146,14 @@ class OrderController extends \restapi\components\Controller
      *          }
      *     }
      *
-     *
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionStatusOrdersCount()
@@ -1166,7 +1163,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -1191,7 +1188,7 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
             $ret['count'] = $count;
         }
-        $this->send($ret, "操作成功");
+        $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderGetStatusOrdersCountSuccess);
     }
 
     /**
@@ -1207,12 +1204,13 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} status_list 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *         "code": "1",
-     *         "msg": "操作成功",
-     *         "ret": [
-     *         {
+     * HTTP/1.1 200 OK
+     *  {
+     *    "code": "1",
+     *     "msg": "操作成功",
+     *     "alertMsg": "查询订单状态记录成功"
+     *     "ret": [
+     *        {
      *         "id": 2,
      *         "created_at": 1445347126,
      *         "updated_at": 1445347126,
@@ -1248,18 +1246,17 @@ class OrderController extends \restapi\components\Controller
      *         "admin_id": 1,
      *         "order_flag_lock_time": null
      *         }
-     *         ]
-     *         }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
+     *     ]
+     * }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionOrderStatusHistory()
@@ -1270,11 +1267,11 @@ class OrderController extends \restapi\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
         $orderId = $args['order_id'];
         if (!is_numeric($orderId)) {
-            return $this->send(null, "该订单不存在", 0);
+            return $this->send(null, "该订单不存在", 0,200,null,  alertMsgEnum::orderExistFaile);
         }
         //TODO check whether the orders belong the user
         $orderSearch = new \core\models\order\OrderSearch();
@@ -1284,7 +1281,7 @@ class OrderController extends \restapi\components\Controller
         $orders = $orderSearch->searchOrdersWithStatus($orderArr);
         $ret['status_history'] = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功");
+        $this->send($ret, "操作成功",1,200,NULL,  alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
     /**
@@ -1305,34 +1302,32 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "693345订单取消成功",
+     *       "alertMsg": "订单取消成功"
      *       "ret":{
      *         1
      *       }
      *     }
      *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "code": 0,
+     *     "msg": "用户无效,请先登录",
+     *     "ret": {},
+     *     "alertMsg": "用户认证已经过期,请重新登录"
+     *  }
      *
      */
     public function actionCancelOrder()
     {
         $param = Yii::$app->request->post();
-
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
         if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
-            return $this->send(null, "验证码或订单号不能为空", 0, 403);
+            return $this->send(null, "验证码或订单号不能为空", 0,200,null,  alertMsgEnum::orderCancelVerifyFaile);
         }
 
         $token = $param['access_token'];
@@ -1344,7 +1339,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (!CustomerAccessToken::checkAccessToken($token)) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+             return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($token);
@@ -1375,18 +1370,18 @@ class OrderController extends \restapi\components\Controller
                 try {
                     $result = Order::cancel($orderId, 0, $reason);
                     if ($result) {
-                        return $this->send([1], $orderId . "订单取消成功", 1);
+                        return $this->send([1], $orderId . "订单取消成功", 1,200,null,  alertMsgEnum::orderCancelSuccess);
                     } else {
-                        return $this->send([0], $orderId . "订单取消失败", 0);
+                        return $this->send([0], $orderId . "订单取消失败", 0,200,null,  alertMsgEnum::orderCancelFaile);
                     }
                 } catch (Exception $e) {
-                    return $this->send(null, $orderId . "订单取消异常:" . $e);
+                    return $this->send(null, $orderId . "订单取消异常:" . $e,0,1024,null,  alertMsgEnum::orderCancelFaile);
                 }
             } else {
-                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200,NULL,alertMsgEnum::orderCancelFaile);
             }
         } else {
-            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200,null,alertMsgEnum::orderCancelFaile);
         }
     }
 
@@ -1405,29 +1400,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} rate 星级
      * @apiParam {String} tag 评价标签
      *
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "订单评价成功成功",
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
      */
-    public function actionAddComment()
-    {
-        
-    }
+
 
     /**
      * @api {DELETE} /order/hiden-order [DELETE]/order/hiden-order（ 100%）
