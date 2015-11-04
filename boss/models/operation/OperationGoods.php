@@ -43,6 +43,9 @@ class OperationGoods extends \core\models\operation\OperationGoods
             [['operation_category_id'], 'required', 'message' => '请选择服务类型'],
             [['operation_goods_name'], 'required'],
             [['operation_goods_price_description'], 'required'],
+            [['operation_spec_info'], 'required', 'message' => '商品规格不能为空'],
+            [['operation_goods_introduction'], 'required'],
+            [['operation_goods_img'], 'required'],
             ['operation_goods_english_name', 'match', 'pattern' => '/^[a-z]\w*$/i', 'message' => '只能输入英文'],
             [['operation_category_id', 'operation_goods_service_interval_time', 'operation_goods_service_estimate_time', 'created_at', 'updated_at'], 'integer'],
             [['operation_goods_introduction', 'operation_goods_service_time_slot', 'operation_goods_price_description', 'operation_tags', 'operation_goods_app_ico', 'operation_goods_pc_ico'], 'string'],
@@ -50,6 +53,7 @@ class OperationGoods extends \core\models\operation\OperationGoods
             [['operation_goods_name', 'operation_category_name', 'operation_goods_english_name'], 'string', 'max' => 60],
             [['operation_category_ids'], 'string', 'max' => 100],
             [['operation_goods_start_time', 'operation_goods_end_time'], 'string', 'max' => 20],
+            ['operation_goods_img', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
         ];
     }
 

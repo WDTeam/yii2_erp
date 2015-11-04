@@ -27,13 +27,13 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 创建订单v1
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_service_item_id 服务类型商品id
+     * @apiParam {String} order_service_item_id 服务项目id
      * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
-     * @apiParam {String} address_id 订单地址id
+     * @apiParam {String} [address_id] 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -103,8 +103,8 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['customer_id'] = $user->id;
 
-        if (is_null($args['order_service_type_id'])) {
-            return $this->send(null, "请输入服务类型商品id", 0);
+        if (is_null($args['order_service_item_id'])) {
+            return $this->send(null, "请输入服务项目id", 0);
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
@@ -1697,93 +1697,93 @@ class OrderController extends \restapi\components\Controller
                     #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     #假数据
-                    $array = Array(
-                        array(
-                            "order_id" => 1,
-                            "order_code" => 701510308380284,
-                            "batch_code" => 'zhouqidingdan',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,朝阳区',
-                            "need" => '重点打扫厨房,重点打扫卫生间',
-                            "money" => '50.00',
-                            "is_booker_worker" => 1,
-                            "times" => '2:00:00',
-                            "order_time" => array(
-                                '1446528600-1446546600',
-                                '1447133400-1447151400',
-                                '1447738200-1447756200'
-                            )
-                        ),
-                        array(
-                            "order_id" => 2,
-                            "order_code" => 701510308380285,
-                            "batch_code" => '',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,朝阳区',
-                            "need" => '重点打扫厨房,重点打扫卫生间',
-                            "money" => '60.00',
-                            "is_booker_worker" => 0,
-                            "order_time" => array(
-                                '1446249600-1446256801'
-                            )
-                        ),
-                        array(
-                            "order_id" => 3,
-                            "order_code" => 701510308380286,
-                            "batch_code" => 'zhouqidingdantwo',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,海淀区区',
-                            "need" => '重点打扫厨房',
-                            "money" => '70.00',
-                            "is_booker_worker" => 1,
-                            "times" => '2:00:00',
-                            "order_time" => array(
-                                '1443666600-1443695400',
-                                '1443753000-1443781800',
-                                '1443839400-1443868200',
-                                '1443925800-1443954600'
-                            )
-                        ),
-                        array(
-                            "order_id" => 4,
-                            "order_code" => 701510308380287,
-                            "batch_code" => 'zhouqidingdantwo',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京,北京市,丰台区',
-                            "need" => '重点打扫卫生间',
-                            "money" => '80.00',
-                            "is_booker_worker" => 1,
-                            "times" => '2:00:00',
-                            "order_time" => array(
-                                '1448937000-1448965800',
-                                '1449541800-1449570600',
-                                '1450146600-1450175400',
-                                '1450751400-1450780200'
-                            )
-                        ),
-                        array(
-                            "order_id" => 2,
-                            "order_code" => 701510308380285,
-                            "batch_code" => '',
-                            "channel_name" => '后台下单',
-                            "booked_count" => 2,
-                            "address" => '北京',
-                            "need" => '重点打扫卫生间11',
-                            "money" => '25.00',
-                            "is_booker_worker" => 0,
-                            "order_time" => array(
-                                '1449801000-1449808200'
-                            )
-                        )
-                    );
+//                    $array = Array(
+//                        array(
+//                            "order_id" => 1,
+//                            "order_code" => 701510308380284,
+//                            "batch_code" => 'zhouqidingdan',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,朝阳区',
+//                            "need" => '重点打扫厨房,重点打扫卫生间',
+//                            "money" => '50.00',
+//                            "is_booker_worker" => 1,
+//                            "times" => '2:00:00',
+//                            "order_time" => array(
+//                                '1446528600-1446546600',
+//                                '1447133400-1447151400',
+//                                '1447738200-1447756200'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 2,
+//                            "order_code" => 701510308380285,
+//                            "batch_code" => '',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,朝阳区',
+//                            "need" => '重点打扫厨房,重点打扫卫生间',
+//                            "money" => '60.00',
+//                            "is_booker_worker" => 0,
+//                            "order_time" => array(
+//                                '1446249600-1446256801'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 3,
+//                            "order_code" => 701510308380286,
+//                            "batch_code" => 'zhouqidingdantwo',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,海淀区区',
+//                            "need" => '重点打扫厨房',
+//                            "money" => '70.00',
+//                            "is_booker_worker" => 1,
+//                            "times" => '2:00:00',
+//                            "order_time" => array(
+//                                '1443666600-1443695400',
+//                                '1443753000-1443781800',
+//                                '1443839400-1443868200',
+//                                '1443925800-1443954600'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 4,
+//                            "order_code" => 701510308380287,
+//                            "batch_code" => 'zhouqidingdantwo',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,丰台区',
+//                            "need" => '重点打扫卫生间',
+//                            "money" => '80.00',
+//                            "is_booker_worker" => 1,
+//                            "times" => '2:00:00',
+//                            "order_time" => array(
+//                                '1448937000-1448965800',
+//                                '1449541800-1449570600',
+//                                '1450146600-1450175400',
+//                                '1450751400-1450780200'
+//                            )
+//                        ),
+//                        array(
+//                            "order_id" => 2,
+//                            "order_code" => 701510308380285,
+//                            "batch_code" => '',
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京',
+//                            "need" => '重点打扫卫生间11',
+//                            "money" => '25.00',
+//                            "is_booker_worker" => 0,
+//                            "order_time" => array(
+//                                '1449801000-1449808200'
+//                            )
+//                        )
+//                    );
 
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
-                    $ret["orderData"] = $array; // $workerCount; 实际返回数组名称
+                    $ret["orderData"] = $workerCount; // $workerCount; 实际返回数组名称
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);

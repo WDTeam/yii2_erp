@@ -135,7 +135,7 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     
     	 $ordewhere['is_del']=0;
     	 if($styp=='one'){
-    	 	$ordewhere['finance_pay_channel_is_lock']=2;
+    	 	$ordewhere['finance_pay_channel_is_lock']=1;
     	 }
     	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();	
     	 

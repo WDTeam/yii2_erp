@@ -19,6 +19,9 @@ use yii\data\ActiveDataProvider;
 class OrderSearch extends Order
 {
 
+    public $stypechannel;
+    public $created_at_end;
+
     public function rules()
     {
         return [
@@ -621,13 +624,16 @@ class OrderSearch extends Order
                 ]);
             }
         }
+        if(!isset($attributes["OrderSearch"]["id"])){
+            $attributes["OrderSearch"]["id"]=null;
+        }
         if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
             $attributes["OrderSearch"]["oc.customer_id"]=null;
         }
 
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $this->id,
+                'id' => $attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
