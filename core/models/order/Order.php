@@ -151,6 +151,7 @@ class Order extends OrderModel
             'order_booked_begin_time','order_booked_end_time','address_id',
             'customer_id','admin_id','order_pay_type'
         ];
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         foreach($attributes as $k=>$v){
             if(!in_array($k,$attributes_keys)){
                 unset($attributes[$k]);
@@ -259,6 +260,7 @@ class Order extends OrderModel
                 ['status' => false, 'errors' => $v.'为必填项！'];
             }
         }
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
 
@@ -482,6 +484,8 @@ class Order extends OrderModel
     {
         $result = false;
         $order = OrderSearch::getOne($order_id);
+        $orderids = [];
+        //阿姨服务时间是否冲突
         $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
         if($order->order_is_parent==1){
             $child_list = OrderSearch::getChildOrder($order_id);
@@ -498,9 +502,18 @@ class Order extends OrderModel
         } else {
             $transact = static::getDb()->beginTransaction();
             $result = self::_assignDone($order, $worker, $admin_id, $assign_type,$transact);
-            if($result && $order->order_is_parent==1) {
+            $orderids[] = $order->id;
+            //处理阿姨排班表
+            Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$order->id,$order->order_booked_count,$order->order_booked_begin_time,$order->order_booked_end_time);
+            if($result && $order->order_is_parent==1) { //如果是周期订单
                 foreach ($child_list as $child) {
                     $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
+                    $orderids[] = $child->id;
+                    if(!$result){
+                        break;
+                    }
+                    //处理阿姨排班表
+                    Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$child->id,$child->order_booked_count,$child->order_booked_begin_time,$child->order_booked_end_time);
                 }
             }
             if($result) {
@@ -508,6 +521,11 @@ class Order extends OrderModel
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 //更新阿姨接单数量
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //第二个参数是阿姨的接单次数
+            }else{
+                foreach($orderids as $orderid) {
+                    //失败后删除阿姨的订单信息
+                    Worker::deleteWorkerOrderInfoToRedis($worker['id'], $orderid);
+                }
             }
         }
         return ['status' => $result, 'errors' => $order->errors];
@@ -647,6 +665,12 @@ class Order extends OrderModel
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //调高峰的退款接口
                 FinanceRefundadd::add($order);
+                if(in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
+                    OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+                    OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE
+                ])){
+                    Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order_id);
+                }
             }
             return $result;
         } else {

@@ -42,70 +42,84 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'payment_customer_trans_record_order_total_money',
                 'label'=>'A:订单总金额',
+                'options'=>[ 'style'=>'background:#FFFFCC'],
             ],
 
 
             [
                 'attribute' => 'payment_customer_trans_record_coupon_money',
                 'label'=>'B:优惠券金额',
+                'options'=>[ 'style'=>'background:#CCFFFF'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_cash',
                 'label'=>'C:现金支付',
+                'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_pre_pay',
                 'label'=>'D:预付费金额(第三方)',
+                'options'=>[ 'style'=>'background:#99CCCC'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_online_pay',
                 'label'=>'E:在线支付',
+                'options'=>[ 'style'=>'background:#FFCC99'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_online_balance_pay',
                 'label'=>'F:用户余额支付',
+                'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
 
             [
                 'attribute' => 'payment_customer_trans_record_current_balance',
                 'label'=>'F1:支付前用户余额',
+                'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_befor_balance',
                 'label'=>'F2:支付后用户余额',
+                'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
 
             [
                 'attribute' => 'payment_customer_trans_record_service_card_pay',
                 'label'=>'G:服务卡支付',
+                'options'=>[ 'style'=>'background:#FF9999'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_service_card_on',
                 'label'=>'G1:服务卡卡号',
+                'options'=>[ 'style'=>'background:#FF9999'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_service_card_current_balance',
                 'label'=>'G2:支付前服务卡余额',
+                'options'=>[ 'style'=>'background:#FF9999'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_service_card_befor_balance',
                 'label'=>'G3:支付后服务卡余额',
+                'options'=>[ 'style'=>'background:#FF9999'],
             ],
 
 
             [
                 'attribute' => 'payment_customer_trans_record_compensate_money',
                 'label'=>'H:补偿金额',
+                'options'=>[ 'style'=>'background:#996699'],
             ],
             [
                 'attribute' => 'payment_customer_trans_record_refund_money',
                 'label'=>'I:退款金额',
+                'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
 
             [
                 'attribute' => 'payment_customer_trans_record_total_money',
                 'label'=>'J:用户累计交易额',
-                //'options'=>[ 'style'=>'background:orange'],
+                'options'=>[ 'style'=>'background:#FF6666'],
             ],
 
             //'payment_customer_trans_record_remark',

@@ -44,13 +44,13 @@ class Worker extends \core\models\worker\Worker
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        $rules = [
-            [['worker_district'], 'required'],
-        ];
-        return array_merge(parent::rules(),$rules);
-    }
+//    public function rules()
+//    {
+//        $rules = [
+//            [['worker_district'], 'required'],
+//        ];
+//        return array_merge(parent::rules(),$rules);
+//    }
 
     /**
     * 获取阿姨首页按钮css样式class

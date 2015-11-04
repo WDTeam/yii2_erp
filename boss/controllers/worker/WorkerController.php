@@ -107,6 +107,8 @@ class WorkerController extends BaseAuthController
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
+            Worker::deleteDistrictWorkerRelationToRedis($workerModel->id);
+            Worker::updateWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
                     $workerDistrictModel = new WorkerDistrict;
@@ -206,7 +208,7 @@ class WorkerController extends BaseAuthController
                 $workerAuthModel->worker_id = $workerModel->id;
                 $workerAuthModel->save();
                 $workerParam = Yii::$app->request->post('Worker');
-                Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
+                Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
                 if($workerParam['worker_district']){
                     foreach($workerParam['worker_district'] as $val){
                         $workerDistrictModel = new WorkerDistrict;
@@ -222,7 +224,8 @@ class WorkerController extends BaseAuthController
                 }
                 return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
             }else{
-                var_dump($workerModel->getErrors());die;
+                var_dump($workerModel->errors);die;
+                //\Yii::$app->session->setFlash('default', '保存失败');
                 throw new ServerErrorHttpException('录入新阿姨失败');
             }
 
@@ -719,7 +722,7 @@ class WorkerController extends BaseAuthController
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
                 $batchWorkerAuth[] = $workerAuthArr;
-                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type']);
+                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type'],$workerArr['worker_identity_id']);
             }
 
             $workerColumns = array_keys($workerArr);
@@ -740,12 +743,16 @@ class WorkerController extends BaseAuthController
 
     }
 
+    public function actionTest1(){
+        Worker::operateWorkerOrderInfoToRedis(19077,1,123,2,1446681600,1446685200);
+    }
+
     public function actionTest(){
         echo '<pre>';
         echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         echo '<br>';
-        var_dump(Worker::getWorkerTimeLine(1,2));
+        //var_dump(Worker::getWorkerTimeLine(1,2));
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);

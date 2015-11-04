@@ -5,12 +5,15 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\finance\FinanceSettleApply;
+
 use core\models\worker\Worker;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
+
+use dbbase\models\order\OrderStatusDict;
+use dbbase\models\finance\FinanceSettleApply;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceSettleApply`.
@@ -360,7 +363,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     }
     
     public function getWorkerOrderInfo($workerId){
-        return  Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$workerId])->all();
+        return  Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$workerId,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])->all();
     }
     
     public function getWorkerTypeName($workerType){
