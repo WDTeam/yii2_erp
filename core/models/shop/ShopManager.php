@@ -62,6 +62,7 @@ class ShopManager extends \dbbase\models\shop\ShopManager
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel', 'bl_photo_url',
             ], 'required'],
+            [['principal'], 'match', 'pattern' => '/^[\w|\x{4e00}-\x{9fa5}]+$/u'],
             [['password'], 'string'],
             [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
         ]);
