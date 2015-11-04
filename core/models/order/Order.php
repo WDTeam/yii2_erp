@@ -9,6 +9,7 @@
 
 namespace core\models\order;
 
+use core\models\finance\FinanceRefundadd;
 use core\models\operation\coupon\Coupon;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
@@ -583,9 +584,10 @@ class Order extends OrderModel
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
             $result = OrderStatus::_cancel($order);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
-                //TODO 调高峰的退款接口
-
+                //调高峰的退款接口
+                FinanceRefundadd::add($order);
             }
+            return $result;
         } else {
             return false;
         }
