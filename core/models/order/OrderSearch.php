@@ -599,6 +599,7 @@ class OrderSearch extends Order
 
         $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
         innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
+        innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')->
         innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
 
         $dataProvider = new ActiveDataProvider([
