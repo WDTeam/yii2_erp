@@ -271,6 +271,9 @@ class Order extends OrderModel
             $attributes['order_parent_id'] = 0;
             $attributes['order_is_parent'] = 0; //批量订单为普通订单
         }
+
+        //在线支付初始化
+        $orderExtPay = 0;
         foreach ($booked_list as $v) {
             $order = new Order();
             $booked = [
@@ -287,13 +290,19 @@ class Order extends OrderModel
                     //第一个订单为父订单其余为子订单
                     $attributes['order_parent_id'] = $order->id;
                     $attributes['order_is_parent'] = 0;
+                    $orderExtPay += $order->orderExtPay;
                 }
             }
         }
+
         $transact->commit();
-        //交易记录
-        if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay',2)) {
-            OrderStatus::_batchPayment($attributes['order_batch_code'],$attributes['admin_id']);
+
+        if( $orderExtPay == 0)
+        {
+            //交易记录
+            if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay',2)) {
+                OrderStatus::_batchPayment($attributes['order_batch_code'],$attributes['admin_id']);
+            }
         }
         return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
     } 
