@@ -44,7 +44,7 @@ class Shop extends \dbbase\models\shop\Shop
                 'operation_shop_district_id',
             'shop_manager_id'], 'required'],
             [['street'], 'string', 'max'=>30],
-            [['principal'], 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/i'],
+            [['principal'], 'match', 'pattern' => '/^[\w|\x{4e00}-\x{9fa5}]+$/u'],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],

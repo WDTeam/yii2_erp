@@ -21,6 +21,9 @@ use dbbase\models\ActiveRecord;
  * @property string $order_before_status_name
  * @property integer $order_status_dict_id
  * @property string $order_status_name
+ * @property string $order_status_boss
+ * @property string $order_status_customer
+ * @property string $order_status_worker
  * @property integer $order_flag_send
  * @property integer $order_flag_urgent
  * @property integer $order_flag_exception
@@ -31,6 +34,7 @@ use dbbase\models\ActiveRecord;
  * @property integer $order_flag_worker_jpush
  * @property integer $order_flag_worker_ivr
  * @property integer $order_flag_change_booked_worker
+ * @property integer $order_flag_is_checked
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
@@ -112,7 +116,7 @@ class OrderHistory extends ActiveRecord
         return [
             [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id',
                 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time',
-                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_change_booked_worker','order_cancel_cause_id',
+                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_change_booked_worker','order_flag_is_checked','order_cancel_cause_id',
                 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time',
                 'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
                 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
@@ -120,7 +124,7 @@ class OrderHistory extends ActiveRecord
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money', 'order_booked_count','order_lat','order_lng'], 'number'],
             [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
-            [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_service_item_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
+            [['order_before_status_name', 'order_status_name','order_status_boss','order_status_customer','order_status_worker', 'order_service_type_name', 'order_service_item_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo',
                 'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
@@ -147,6 +151,9 @@ class OrderHistory extends ActiveRecord
             'order_before_status_name' => '状态变更前订单状态',
             'order_status_dict_id' => '订单状态字典ID',
             'order_status_name' => '订单状态',
+            'order_status_boss' => 'BOSS状态名称',
+            'order_status_customer' => '客户端状态名称',
+            'order_status_worker' => '阿姨端状态名称',
             'order_flag_send' => '指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
             'order_flag_urgent' => '加急',
             'order_flag_exception' => '异常 1无经纬度',
@@ -157,6 +164,7 @@ class OrderHistory extends ActiveRecord
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过IVR',
             'order_flag_change_booked_worker' => '是否可更换指定阿姨',
+            'order_flag_is_checked' => '是否已对账',
             'order_ip' => '下单IP',
             'order_service_type_id' => '订单服务类别ID',
             'order_service_type_name' => '订单服务类别',

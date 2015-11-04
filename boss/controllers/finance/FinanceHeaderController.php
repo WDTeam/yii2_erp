@@ -156,7 +156,7 @@ class FinanceHeaderController extends BaseAuthController
        	 	$payname=$post['FinanceHeader']['finance_pay_channel_name'];
        		$paynameinfo=$modelPay->searchfind(array('id'=>$payname),'finance_pay_channel_name');
        	
-       	$post['FinanceHeader']['finance_header_title'] = $post['FinanceHeader']['finance_header_title']?$post['FinanceHeader']['finance_header_title']:'美团的'; 	
+       	$post['FinanceHeader']['finance_header_title'] = $post['FinanceHeader']['finance_header_title']?trim($post['FinanceHeader']['finance_header_title']):'美团的'; 	
        	
         $post['FinanceHeader']['finance_order_channel_id'] =$post['FinanceHeader']['finance_order_channel_name']?$post['FinanceHeader']['finance_order_channel_name']:'0';
         

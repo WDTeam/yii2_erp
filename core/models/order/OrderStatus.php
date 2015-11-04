@@ -152,6 +152,32 @@ class OrderStatus extends Order
     }
 
     /**
+     * 批量开始人工指派
+     * @param $batch_code
+     * @param $admin_id
+     * @param $is_cs
+     * @return bool
+     */
+    public static function batchManualAssignStart($batch_code,$admin_id,$is_cs)
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_START);
+        $transact = static::getDb()->beginTransaction();
+        $orders = OrderSearch::getBatchOrder($batch_code);
+        foreach($orders as $order){
+            $order->order_flag_lock = $admin_id;
+            $order->order_flag_lock_time = time(); //加锁时间
+            $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_cs ? 1 : 2); //指派时先标记是谁指派不了
+            $order->admin_id = $admin_id;
+            if(!self::_statusChange($order,$status,['OrderExtFlag'],$transact)){
+                $transact->rollBack();
+                return false;
+            }
+        }
+        $transact->commit();
+        return true;
+    }
+
+    /**
      * 完成人工指派
      * @param $order
      * @param $must_models
@@ -241,18 +267,6 @@ class OrderStatus extends Order
 
 
     /**
-     * 已核实 已对账
-     * @param $order
-     * @param $must_models
-     * @return bool
-     */
-    protected static function _checked(&$order,$must_models=[])
-    {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CHECKED);
-        return self::_statusChange($order,$status,$must_models);
-    }
-
-    /**
      * 已完成结算
      * @param $order
      * @param $must_models
@@ -309,7 +323,10 @@ class OrderStatus extends Order
             'order_before_status_dict_id' => $from->id,
             'order_before_status_name' => $from->order_status_name,
             'order_status_dict_id' => $status->id,
-            'order_status_name' => $status->order_status_name
+            'order_status_name' => $status->order_status_name,
+            'order_status_boss' => $status->order_status_boss,
+            'order_status_customer' => $status->order_status_customer,
+            'order_status_worker' => $status->order_status_worker
         ]);
         $save_models = ['OrderExtStatus', 'OrderStatusHistory'];
         $save_models = array_merge($must_models, $save_models);

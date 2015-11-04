@@ -455,10 +455,10 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/order/create-order",
-    "title": "创建订单 (100%xieyi)",
+    "title": "[POST] /order/create-order(100%)",
+    "description": "<p>创建订单 (谢奕)</p> ",
     "name": "ActionCreateOrder",
     "group": "Order",
-    "description": "<p>创建订单v1</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -648,8 +648,184 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/order/status-orders-count",
+    "title": "[GET]/order/status-orders-count(70%)",
+    "description": "<p>获得各种状态的订单数量</p> ",
+    "name": "StatusOrdersCount",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>订单状态</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "id",
+            "description": "<p>订单id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "channels",
+            "description": "<p>渠道号按'.'分隔</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "order_status",
+            "description": "<p>订单状态按'.'分隔</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "from",
+            "description": "<p>开始时间</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "to",
+            "description": "<p>结束时间</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object[]</p> ",
+            "optional": false,
+            "field": "orderList",
+            "description": "<p>该状态订单.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"操作成功\",\n \"ret\": {\n     \"1\": \"9\",\n     \"2\": \"0\",\n     \"3\": \"4\",\n     \"4\": \"0\",\n     \"5\": \"0\",\n     \"6\": \"1\",\n     \"7\": \"0\",\n     \"8\": \"0\",\n     \"9\": \"0\",\n     \"10\": \"0\",\n     \"11\": \"0\",\n     \"12\": \"0\"\n     }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
+    "url": "/order/worker-cancel-orders-history",
+    "title": "[GET]/order/worker-cancel-orders-history(90%)",
+    "description": "<p>查询阿姨三个月的取消历史订单（谢奕 --已经将后台接口完成,缺少周期订单）</p> ",
+    "name": "WorkerCancelOrdersHistory",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "page",
+            "description": "<p>第几页 从第一页开始</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>每页包含订单数</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object[]</p> ",
+            "optional": false,
+            "field": "orderList",
+            "description": "<p>该状态订单.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "POST",
     "url": "/order/add-comment",
-    "title": "评价订单（该功能写在UserController里面 v1/user/user-suggest）",
+    "title": "[POST]/order/add-comment（100%）",
+    "description": "<p>评价订单(郝建设 该功能写在UserController里面 /user/user-sugges)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -712,13 +888,13 @@ define({ "api": [
         ]
       }
     },
-    "name": "AddComment",
+    "name": "actionAddComment",
     "group": "Order",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"订单评价成功成功\",\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单评价成功成功\",\n}",
           "type": "json"
         }
       ]
@@ -737,7 +913,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -749,8 +925,9 @@ define({ "api": [
   {
     "type": "PUT",
     "url": "/order/cancel-order",
-    "title": "取消订单(haojianse 100% )",
-    "name": "CancelOrder",
+    "title": "[PUT] /order/cancel-order(100% )",
+    "description": "<p>取消订单(郝建设)</p> ",
+    "name": "actionCancelOrder",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -827,11 +1004,11 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "v1/order/create-recursive-orderes",
-    "title": "创建周期订单 （haojianshe 100%）",
-    "name": "CreateRecursiveOrderes",
+    "url": "/order/create-recursive-orderes",
+    "title": "[POST] /order/create-recursive-orderes（100%）",
+    "name": "actionCreateRecursiveOrderes",
     "group": "Order",
-    "description": "<p>周期订单提交</p> ",
+    "description": "<p>创建周期订单(郝建设)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1004,10 +1181,11 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
-    "type": "DELETE",
-    "url": "/order/hiden-order",
-    "title": "删除订单（郝建设 100%）",
-    "name": "HidenOrder",
+    "type": "GET",
+    "url": "/order/get-order-one",
+    "title": "[GET] /order/get-order-one（100%）",
+    "description": "<p>获取一个订单的对象 （郝建设）</p> ",
+    "name": "actionGetOrderOne",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1030,18 +1208,17 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_id",
+            "field": "id",
             "description": "<p>订单号</p> "
           }
         ]
       }
     },
-    "description": "<p>客户端删除订单，后台软删除 隐藏订单</p> ",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"订单删除成功\",\n \"ret\":{\n    1\n  }\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"0\",\n  \"order_is_parent\": 0,\n  \"created_at\": \"1446041297\",\n  \"updated_at\": \"1446041297\",\n  \"isdel\": 0,\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n    \"address_id\": \"1\",\n    \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n},\n\"alertMsg\": \"\"\n}",
           "type": "json"
         }
       ]
@@ -1071,9 +1248,212 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/order/get-order-worker",
+    "title": "[GET]/order/get-order-worker(100%）",
+    "description": "<p>获取周期订单 （郝建设）</p> ",
+    "name": "actionGetOrderWorker",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_batch_code",
+            "description": "<p>周期订单号</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"操作成功\",\n \"ret\": [\n {\n \"id\": \"8\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"0\",\n \"order_is_parent\": \"0\",\n \"sub_order\": {\n \"1\": {\n \"id\": \"9\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"1\",\n \"order_sys_memo\": \"\"\n },\n \"2\": {\n \"id\": \"10\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_cs_memo\": \"\",\n \"order_sys_memo\": \"\"\n}\n}\n}\n ],\n \"alertMsg\": \"\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
+    "url": "/order/get-worker-orders",
+    "title": "[GET]/order/get-worker-orders(100%)",
+    "name": "actionGetWorkerOrders",
+    "group": "Order",
+    "description": "<p>阿姨抢单数 (郝建设)</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>会话id.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>平台版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "page_size",
+            "description": "<p>条数  #leveltype =2 时要传递</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "page",
+            "description": "<p>页面  #leveltype =2 时要传递</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "leveltype",
+            "description": "<p>判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"ok\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\",\n      \"times\" => '2:00:00',\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SessionIdNotFound",
+            "description": "<p>未找到会话ID.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "DELETE",
+    "url": "/order/hiden-order",
+    "title": "[DELETE]/order/hiden-order（ 100%）",
+    "description": "<p>客户端删除订单，后台软删除 隐藏订单</p> ",
+    "name": "actionHidenOrder",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单号</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"订单删除成功\",\n \"ret\":{\n    1\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
     "url": "/order/order-status-history",
-    "title": "查询用户某个订单状态历史状态记录(xieyi 70%缺少周期订单)",
-    "name": "OrderStatusHistory",
+    "title": "[GET] /order/order-status-history(70%)",
+    "description": "<p>查询用户某个订单状态历史状态记录(谢奕 --缺少周期订单)</p> ",
+    "name": "actionOrderStatusHistory",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1110,7 +1490,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"操作成功\",\n    \"ret\": [\n    {\n    \"id\": 2,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 1,\n    \"order_before_status_name\": \"已创建\",\n    \"order_status_dict_id\": 1,\n    \"order_status_name\": \"已创建\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    },\n    {\n    \"id\": 3,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 1,\n    \"order_before_status_name\": \"已创建\",\n    \"order_status_dict_id\": 2,\n    \"order_status_name\": \"已支付\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    },\n    {\n    \"id\": 4,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 2,\n    \"order_before_status_name\": \"已支付\",\n    \"order_status_dict_id\": 3,\n    \"order_status_name\": \"已开始智能指派\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    }\n    ]\n    }",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"操作成功\",\n    \"ret\": [\n    {\n    \"id\": 2,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 1,\n    \"order_before_status_name\": \"已创建\",\n    \"order_status_dict_id\": 1,\n    \"order_status_name\": \"已创建\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    },\n    {\n    \"id\": 3,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 1,\n    \"order_before_status_name\": \"已创建\",\n    \"order_status_dict_id\": 2,\n    \"order_status_name\": \"已支付\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    },\n    {\n    \"id\": 4,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 2,\n    \"order_before_status_name\": \"已支付\",\n    \"order_status_dict_id\": 3,\n    \"order_status_name\": \"已开始智能指派\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    }\n    ]\n    }",
           "type": "json"
         }
       ]
@@ -1129,7 +1509,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -1141,8 +1521,9 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/orders",
-    "title": "查询用户订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "Orders",
+    "title": "[GET] /order/orders (90%)",
+    "description": "<p>查询用户订单 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "name": "actionOrders",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1259,10 +1640,10 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/orders-count",
-    "title": "查询用户订单数量(xieyi 70%缺少周期订单)",
-    "name": "OrdersCount",
+    "title": "[GET] /order/orders-count(70%)",
+    "name": "actionOrdersCount",
     "group": "Order",
-    "description": "<p>获得用户各种状态的订单数量</p> ",
+    "description": "<p>获得用户各种状态的订单数量 （谢奕 --缺少周期订单）</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1355,12 +1736,12 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
-    "type": "GET",
-    "url": "/order/status-orders-count",
-    "title": "查询用户不同状态订单数量(xieyi 70%缺少周期订单)",
-    "name": "StatusOrdersCount",
+    "type": "PUT",
+    "url": "/order/set-worker-order",
+    "title": "[PUT]/order/set-worker-order ( 100%)",
+    "name": "actionSetWorkerOrder",
     "group": "Order",
-    "description": "<p>获得各种状态的订单数量</p> ",
+    "description": "<p>阿姨抢单提交 （郝建设）</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1369,62 +1750,30 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>订单状态</p> "
+            "description": "<p>会话id.</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
-            "field": "id",
-            "description": "<p>订单id</p> "
+            "field": "platform_version",
+            "description": "<p>平台版本号</p> "
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "channels",
-            "description": "<p>渠道号按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_status",
-            "description": "<p>订单状态按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "from",
-            "description": "<p>开始时间</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "to",
-            "description": "<p>结束时间</p> "
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单号</p> "
           }
         ]
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "orderList",
-            "description": "<p>该状态订单.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"操作成功\",\n \"ret\": {\n     \"1\": \"9\",\n     \"2\": \"0\",\n     \"3\": \"4\",\n     \"4\": \"0\",\n     \"5\": \"0\",\n     \"6\": \"1\",\n     \"7\": \"0\",\n     \"8\": \"0\",\n     \"9\": \"0\",\n     \"10\": \"0\",\n     \"11\": \"0\",\n     \"12\": \"0\"\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n}",
           "type": "json"
         }
       ]
@@ -1435,15 +1784,15 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
+            "field": "SessionIdNotFound",
+            "description": "<p>未找到会话ID.</p> "
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"操作失败\"\n}",
           "type": "json"
         }
       ]
@@ -1454,9 +1803,10 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/order/worker-cancel-orders-history",
-    "title": "查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "WorkerCancelOrdersHistory",
+    "url": "/order/worker-done-orders-history",
+    "title": "[GET]/order/worker-done-orders-history (90%)",
+    "description": "<p>查询阿姨三个月的完成历史订单 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "name": "actionWorkerDoneOrdersHistory",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1530,10 +1880,11 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "v1/order/worker-done-orders-history",
-    "title": "查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "WorkerDoneOrdersHistory",
+    "url": "/order/worker-history-orders",
+    "title": "[GET]/order/worker-history-orders (0%)",
+    "name": "actionWorkerHistoryOrders",
     "group": "Order",
+    "description": "<p>阿姨全部订单月份列表 (赵顺利)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1542,41 +1893,23 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>阿姨登陆令牌</p> "
+            "description": "<p>会话id.</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "page",
-            "description": "<p>第几页 从第一页开始</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "limit",
-            "description": "<p>每页包含订单数</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
           }
         ]
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "orderList",
-            "description": "<p>该状态订单.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"year\": \"2015\",\n         \"firstYear\": \"2015\",\n         \"lastYear\": \"2015\",\n         \"info\":\n         [\n         {\n             \"month\": \"09\",\n             \"order_num\": \"8\",\n             \"work_hour\": \"23.5\"\n         }\n         ],\n         \"msgStyle\": \"\",\n         \"alertMsg\": \"\"\n     }\n}",
           "type": "json"
         }
       ]
@@ -1587,15 +1920,15 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
+            "field": "SessionIdNotFound",
+            "description": "<p>未找到会话ID.</p> "
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
           "type": "json"
         }
       ]
@@ -1607,8 +1940,9 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/worker-orders",
-    "title": "查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "WorkerOrders",
+    "title": "[GET] /order/worker-orders(90%)",
+    "description": "<p>查询阿姨订单（谢奕 --已经将后台接口完成,缺少周期订单）</p> ",
+    "name": "actionWorkerOrders",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1732,8 +2066,9 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/worker-orders-count",
-    "title": "查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "WorkerOrdersCount",
+    "title": "[GET] /order/worker-orders-count(90%)",
+    "description": "<p>查询阿姨订单订单数量 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "name": "actionWorkerOrdersCount",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1836,8 +2171,9 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/worker-service-orders",
-    "title": "查询待服务阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "WorkerServiceOrders",
+    "title": "[GET] /order/worker-service-orders(90%)",
+    "description": "<p>查询待服务阿姨订单(谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "name": "actionWorkerServiceOrders",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -1954,8 +2290,9 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/worker-service-orders-count",
-    "title": "查询阿姨待服务订单订单数量",
-    "name": "WorkerServiceOrdersCount",
+    "title": "[GET]/order/worker-service-orders-count (100%)",
+    "description": "<p>查询阿姨待服务订单订单数量 （谢奕）</p> ",
+    "name": "actionWorkerServiceOrdersCount",
     "group": "Order",
     "parameter": {
       "fields": {
@@ -2012,341 +2349,6 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "get",
-    "url": "v1/order/worker-history-orders.php",
-    "title": "阿姨全部订单月份列表(zhaoshunli 0%)",
-    "name": "actionAllOrderCommon",
-    "group": "Order",
-    "description": "<p>对账日常订单查看全部，月份列表</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"year\": \"2015\",\n         \"firstYear\": \"2015\",\n         \"lastYear\": \"2015\",\n         \"info\":\n         [\n         {\n             \"month\": \"09\",\n             \"order_num\": \"8\",\n             \"work_hour\": \"23.5\"\n         }\n         ],\n         \"msgStyle\": \"\",\n         \"alertMsg\": \"\"\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "GET",
-    "url": "/order/get-order-one",
-    "title": "获取一个订单的对象（haojianshe 100%）",
-    "name": "actionGetOrderOne",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "id",
-            "description": "<p>订单号</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"0\",\n  \"order_is_parent\": 0,\n  \"created_at\": \"1446041297\",\n  \"updated_at\": \"1446041297\",\n  \"isdel\": 0,\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n    \"address_id\": \"1\",\n    \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n},\n\"alertMsg\": \"\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "GET",
-    "url": "/order/get-order-worker",
-    "title": "获取周期订单（haojianshe 100%）",
-    "name": "actionGetOrderWorker",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_batch_code",
-            "description": "<p>周期订单号</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"操作成功\",\n \"ret\": [\n {\n \"id\": \"8\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"0\",\n \"order_is_parent\": \"0\",\n \"sub_order\": {\n \"1\": {\n \"id\": \"9\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"1\",\n \"order_sys_memo\": \"\"\n },\n \"2\": {\n \"id\": \"10\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_cs_memo\": \"\",\n \"order_sys_memo\": \"\"\n}\n}\n}\n ],\n \"alertMsg\": \"\"\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "get",
-    "url": "v1/order/get-worker-orders",
-    "title": "指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)",
-    "name": "actionGetWorkerOrders",
-    "group": "Order",
-    "description": "<p>阿姨抢单数</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": true,
-            "field": "page_size",
-            "description": "<p>条数  #leveltype =2 时要传递</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": true,
-            "field": "page",
-            "description": "<p>页面  #leveltype =2 时要传递</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": false,
-            "field": "leveltype",
-            "description": "<p>判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"ok\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\",\n      \"times\" => '2:00:00',\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "PUT",
-    "url": "v1/order/set-worker-order",
-    "title": "阿姨抢单提交 (haojianshe 100%)",
-    "name": "actionSetWorkerOrder",
-    "group": "Order",
-    "description": "<p>阿姨抢单提交</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单号</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"操作失败\"\n}",
           "type": "json"
         }
       ]
@@ -4242,9 +4244,9 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/worker/check-task",
-    "title": "Check-Task(100%)",
+    "title": "[GET] /worker/check-task(100%)",
     "description": "<p>查看任务的详情（李勇）</p> ",
     "name": "actionCheckTask",
     "group": "Worker",
@@ -4310,7 +4312,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-bill-list",
-    "title": "Get-Worker-Bill-List (100%)",
+    "title": "[GET]/worker/get-worker-bill-list(100%)",
     "description": "<p>获取阿姨对账单列表 （田玉星）</p> ",
     "name": "actionGetWorkerBillList",
     "group": "Worker",
@@ -4373,7 +4375,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-center",
-    "title": "Get-Worker-Center(100%)",
+    "title": "[GET] /worker/get-worker-center(100%)",
     "description": "<p>个人中心首页 （田玉星）</p> ",
     "name": "actionGetWorkerCenter",
     "group": "Worker",
@@ -4415,7 +4417,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-comment",
-    "title": "Get-Worker-Comment(100%)",
+    "title": "[GET]/worker/get-worker-comment(100%)",
     "description": "<p>获取阿姨对应的评论 （田玉星）</p> ",
     "name": "actionGetWorkerComment",
     "group": "Worker",
@@ -4485,7 +4487,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-complain",
-    "title": "Get-Worker-Complain (100%)",
+    "title": "[GET]/worker/get-worker-complain(100%)",
     "description": "<p>获取阿姨对应的投诉 （田玉星）</p> ",
     "name": "actionGetWorkerComplain",
     "group": "Worker",
@@ -4548,7 +4550,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-leave-history",
-    "title": "Get-Worker-Leave-History(100%)",
+    "title": "[GET]/worker/get-worker-leave-history(100%)",
     "description": "<p>查看阿姨请假历史 （田玉星）</p> ",
     "name": "actionGetWorkerLeaveHistory",
     "group": "Worker",
@@ -4611,7 +4613,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-place-by-id",
-    "title": "Get-Worker-Place-ById（100%）",
+    "title": "[GET]/worker/get-worker-place-by-id（100%）",
     "description": "<p>获取阿姨住址 （田玉星）</p> ",
     "name": "actionGetWorkerPlaceById",
     "group": "Worker",
@@ -4660,7 +4662,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-punish-list",
-    "title": "Get-Worker-Punish-List(100%)",
+    "title": "[GET]/worker/get-worker-punish-list(100%)",
     "description": "<p>获取阿姨受处罚列表 （田玉星）</p> ",
     "name": "actionGetWorkerPunishList",
     "group": "Worker",
@@ -4730,7 +4732,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-service-info",
-    "title": "Get-Worker-ServiceInfo(100%)",
+    "title": "[GET]/worker/get-worker-service-info(100%)",
     "description": "<p>获取账单阿姨服务信息 （田玉星）</p> ",
     "name": "actionGetWorkerServiceInfo",
     "group": "Worker",
@@ -4779,7 +4781,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-taskreward-list",
-    "title": "Get-Worker-Taskreward-List(100%)",
+    "title": "[GET]/worker/get-worker-taskreward-list(100%)",
     "description": "<p>获取阿姨奖励列表 （田玉星）</p> ",
     "name": "actionGetWorkerTaskrewardList",
     "group": "Worker",
@@ -4849,7 +4851,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-tasktime-list",
-    "title": "Get-Worker-Tasktime-List (100%)",
+    "title": "[GET]/worker/get-worker-tasktime-list(100%)",
     "description": "<p>获取阿姨工时列表 （田玉星）</p> ",
     "name": "actionGetWorkerTasktimeList",
     "group": "Worker",
@@ -4919,7 +4921,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/worker/handle-worker-leave",
-    "title": "Handle-Worker-Leave（100%）",
+    "title": "[POST] /worker/handle-worker-leave（100%）",
     "description": "<p>阿姨请假 （田玉星）</p> ",
     "name": "actionHandleWorkerLeave",
     "group": "Worker",
@@ -4982,8 +4984,8 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/system-news",
-    "title": "消息通知中心(田玉星0%)",
-    "description": "<p>未定</p> ",
+    "title": "[GET] /worker/system-news(0%)",
+    "description": "<p>消息通知中心 （田玉星）</p> ",
     "name": "actionSystemNews",
     "group": "Worker",
     "parameter": {
@@ -5006,32 +5008,14 @@ define({ "api": [
         ]
       }
     },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"result\": \"1\",\n         \"initInfo\": []\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/worker/task-doing",
-    "title": "Task-Doing (100%)",
+    "title": "[GET] /worker/task-doing(100%)",
     "description": "<p>获得进行中的任务列表（李勇）</p> ",
     "name": "actionTaskDoing",
     "group": "Worker",
@@ -5078,9 +5062,9 @@ define({ "api": [
     "groupTitle": "Worker"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/worker/task-done",
-    "title": "Task-Done (100%)",
+    "title": "[GET] /worker/task-done(100%)",
     "description": "<p>获得已完成的任务列表（李勇）</p> ",
     "name": "actionTaskDone",
     "group": "Worker",
@@ -5141,9 +5125,9 @@ define({ "api": [
     "groupTitle": "Worker"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/worker/task-fail",
-    "title": "Task-Fail(100%)",
+    "title": "[GET] /worker/task-fail(100%)",
     "description": "<p>获得已失败的任务列表（李勇）</p> ",
     "name": "actionTaskFail",
     "group": "Worker",
@@ -5216,7 +5200,7 @@ define({ "api": [
   {
     "type": "PUT",
     "url": "/worker/worker-bill-confirm",
-    "title": "Worker-Bill-Confirm(100%)",
+    "title": "[PUT] /worker/worker-bill-confirm(100%)",
     "description": "<p>账单确认 （田玉星）</p> ",
     "name": "actionWorkerBillConfirm",
     "group": "Worker",
@@ -5272,7 +5256,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/worker-info",
-    "title": "WorkerInfo（100%）",
+    "title": "[GET] /worker/worker-info",
     "description": "<p>获取阿姨信息 (田玉星)</p> ",
     "name": "actionWorkerInfo",
     "group": "Worker",
@@ -5300,7 +5284,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨信息成功\"，\n \"ret\": {\n    \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨信息成功\"，\n \"ret\": {\n    \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\"\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -5319,9 +5303,9 @@ define({ "api": [
     "groupTitle": "Worker"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/worker/worker-leave",
-    "title": "Worker-Leave(100%)",
+    "title": "[GET] /worker/worker-leave(100%)",
     "description": "<p>查看请假情况（李勇）</p> ",
     "name": "actionWorkerLeave",
     "group": "Worker",

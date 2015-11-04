@@ -32,7 +32,9 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
         return [
             [['finance_order_channel_sort', 'finance_order_channel_is_lock', 'create_time', 'is_del'], 'integer'],
            [['finance_order_channel_rate'], 'required'],
-           [['finance_order_channel_rate','finance_order_channel_source','finance_order_channel_name'], 'string', 'max' => 50]
+           [['finance_order_channel_name'],'match','pattern'=>'/^[\w|\x{4e00}-\x{9fa5}]+$/u','message'=>'名字里面不能包含特殊符号'],
+           [['finance_order_channel_name'],'required'],
+[['finance_order_channel_rate','finance_order_channel_source','finance_order_channel_name'], 'string', 'max' => 50]
         ];
     }
 
