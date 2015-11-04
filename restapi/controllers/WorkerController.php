@@ -17,7 +17,7 @@ use Yii;
 class WorkerController extends \restapi\components\Controller
 {
     /**
-     * @api{GET} /worker/worker-info WorkerInfo（100%）
+     * @api{GET} /worker/worker-info [GET] /worker/worker-info
      *
      * @apiDescription 获取阿姨信息 (田玉星)
      * 
@@ -40,7 +40,7 @@ class WorkerController extends \restapi\components\Controller
      *          "worker_identity_description": "阿姨身份说明",
      *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
      *          "worker_type_description": "角色",
-     *          "worker_star": "星级",
+     *          "worker_star": "星级"
      *          "personal_skill": [
      *              "阿姨技能1",
      *              "阿姨技能2",
@@ -92,7 +92,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} /worker/handle-worker-leave  Handle-Worker-Leave（100%）
+     * @api {POST} /worker/handle-worker-leave  [POST] /worker/handle-worker-leave（100%）
      * @apiDescription 阿姨请假 （田玉星）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
@@ -177,7 +177,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-leave-history  Get-Worker-Leave-History(100%)
+     * @api {GET} /worker/get-worker-leave-history  [GET]/worker/get-worker-leave-history(100%)
      *
      * @apiDescription 查看阿姨请假历史 （田玉星）
      * @apiName actionGetWorkerLeaveHistory
@@ -264,7 +264,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-place-by-id  Get-Worker-Place-ById（100%）
+     * @api {GET} /worker/get-worker-place-by-id  [GET]/worker/get-worker-place-by-id（100%）
      *
      * @apiDescription 获取阿姨住址 （田玉星）
      * @apiName actionGetWorkerPlaceById
@@ -316,7 +316,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-comment  Get-Worker-Comment(100%)
+     * @api {GET} /worker/get-worker-comment  [GET]/worker/get-worker-comment(100%)
      *
      * @apiDescription 获取阿姨对应的评论 （田玉星）
      * @apiName actionGetWorkerComment
@@ -395,7 +395,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-complain Get-Worker-Complain (100%)
+     * @api {GET} /worker/get-worker-complain [GET]/worker/get-worker-complain(100%)
      *
      * @apiDescription 获取阿姨对应的投诉 （田玉星）
      * @apiName actionGetWorkerComplain
@@ -468,7 +468,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-service-info  Get-Worker-ServiceInfo(100%)
+     * @api {GET} /worker/get-worker-service-info  [GET]/worker/get-worker-service-info(100%)
      * 
      * @apiDescription 获取账单阿姨服务信息 （田玉星）
      * @apiName actionGetWorkerServiceInfo
@@ -528,7 +528,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-bill-list Get-Worker-Bill-List (100%)
+     * @api {GET} /worker/get-worker-bill-list [GET]/worker/get-worker-bill-list(100%)
      * @apiDescription 获取阿姨对账单列表 （田玉星）
      * @apiName actionGetWorkerBillList 
      * @apiGroup Worker
@@ -614,7 +614,7 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-tasktime-list Get-Worker-Tasktime-List (100%)
+     * @api {GET} /worker/get-worker-tasktime-list [GET]/worker/get-worker-tasktime-list(100%)
      * @apiDescription 获取阿姨工时列表 （田玉星）
      * @apiName actionGetWorkerTasktimeList
      * @apiGroup Worker
@@ -694,7 +694,7 @@ class WorkerController extends \restapi\components\Controller
     
   
     /**
-     * @api {GET} /worker/get-worker-taskreward-list Get-Worker-Taskreward-List(100%)
+     * @api {GET} /worker/get-worker-taskreward-list [GET]/worker/get-worker-taskreward-list(100%)
      * @apiDescription 获取阿姨奖励列表 （田玉星）
      * @apiName actionGetWorkerTaskrewardList
      * @apiGroup Worker
@@ -761,7 +761,7 @@ class WorkerController extends \restapi\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-punish-list Get-Worker-Punish-List(100%)
+     * @api {GET} /worker/get-worker-punish-list [GET]/worker/get-worker-punish-list(100%)
      * @apiDescription 获取阿姨受处罚列表 （田玉星）
      * @apiName actionGetWorkerPunishList
      * @apiGroup Worker
@@ -846,7 +846,7 @@ class WorkerController extends \restapi\components\Controller
     }
     
     /**
-     * @api {PUT} /worker/worker-bill-confirm Worker-Bill-Confirm(100%)
+     * @api {PUT} /worker/worker-bill-confirm [PUT] /worker/worker-bill-confirm(100%)
      * @apiDescription 账单确认 （田玉星）
      * @apiName actionWorkerBillConfirm
      * @apiGroup Worker
@@ -895,7 +895,7 @@ class WorkerController extends \restapi\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-center  Get-Worker-Center(100%)
+     * @api {GET} /worker/get-worker-center  [GET] /worker/get-worker-center(100%)
      * @apiDescription 个人中心首页 （田玉星）
      * @apiName actionGetWorkerCenter
      * @apiGroup Worker
@@ -959,39 +959,17 @@ class WorkerController extends \restapi\components\Controller
     
     
     /** 
-     * @api {GET} /worker/system-news  消息通知中心(田玉星0%)
-     * 
-     * @apiDescription 未定
-     * 
+     * @api {GET} /worker/system-news  [GET] /worker/system-news(0%)
+     * @apiDescription 消息通知中心 （田玉星）
      * @apiName actionSystemNews
      * @apiGroup Worker
-     *
      * @apiParam {String} access_token    阿姨登录token.
      * @apiParam {String} [platform_version] 平台版本号.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result": "1",
-     *          "initInfo": []
-     *      }
-     * }
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
      */
-
+    
+    
     /**
-     * @api {get} /worker/worker-leave Worker-Leave(100%)
+     * @api {GET} /worker/worker-leave [GET] /worker/worker-leave(100%)
      * 
      * @apiDescription  查看请假情况（李勇）
      * @apiName actionWorkerLeave
@@ -1055,7 +1033,7 @@ class WorkerController extends \restapi\components\Controller
     }    
     
      /**
-     * @api {get} /worker/task-doing Task-Doing (100%)
+     * @api {GET} /worker/task-doing [GET] /worker/task-doing(100%)
      * 
      * @apiDescription  获得进行中的任务列表（李勇）
      * @apiName actionTaskDoing
