@@ -70,9 +70,6 @@ class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
         try{
             $customer->is_del = 0;
             $customer->validate();
-            if ($customer->hasErrors()) {
-                return false;
-            }
             $customer->save();
             $customerBlockLog = new CustomerBlockLog;
             $customerBlockLog->customer_id = $customer_id;
@@ -81,7 +78,6 @@ class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
             $customerBlockLog->created_at = time();
             $customerBlockLog->updated_at = 0;
             $customerBlockLog->is_del = 0;
-            $customerBlockLog->validate();
             $customerBlockLog->save();
             $transaction->commit();
             return true;
@@ -120,7 +116,7 @@ class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
                 $block_status_name = '正常';
                 break;
             case 1:
-                $block_status_name = '黑名单';
+                $block_status_name = '封号';
                 break;
             default:
                 # code...
