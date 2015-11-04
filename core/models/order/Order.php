@@ -20,7 +20,6 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
-use core\models\order\OrderStatusDict;
 
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
@@ -37,7 +36,7 @@ use boss\models\operation\OperationCategory;
 /**
  * This is the model class for table "{{%order}}".
  *
- * @property string $id
+ * @property integer $id
  * @property string $created_at
  * @property string $updated_at
  * @property string $order_code
@@ -58,7 +57,7 @@ use boss\models\operation\OperationCategory;
  * @property string $order_service_type_name
  * @property integer $order_src_id
  * @property string $order_src_name
- * @property string $channel_id
+ * @property integer $channel_id
  * @property string $order_channel_name
  * @property string $order_unit_money
  * @property string $order_money

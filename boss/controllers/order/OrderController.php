@@ -202,7 +202,7 @@ class OrderController extends BaseAuthController
                     'ext_pop' => $order->orderExtPop,
                     'ext_customer' => $order->orderExtCustomer,
                     'ext_flag' => $order->orderExtFlag,
-                    'operation_long_time' => Order::MANUAL_ASSIGN_lONG_TIME,
+                    'operation_long_time' => Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME'],
                     'booked_time_range' => $booked_time_range,
                     'booked_workers' => $workers
                 ];

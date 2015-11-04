@@ -54,8 +54,6 @@ use dbbase\models\ActiveRecord;
 class Order extends ActiveRecord
 {
 
-    const MANUAL_ASSIGN_lONG_TIME = 900000;
-
     public $order_before_status_dict_id;
     public $order_before_status_name;
     public $order_status_dict_id;
