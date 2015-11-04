@@ -35,7 +35,8 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::serviceStart(2);
+        return Yii::$app->params;
+//        return Order::serviceStart(2);
     }
 
     public function actionCancelOrder()

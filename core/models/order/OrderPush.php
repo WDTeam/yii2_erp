@@ -36,9 +36,9 @@ class OrderPush extends Order
         $part_time = 2; //兼职
         $push_status = 0; //推送状态
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            if($order->order_booked_worker_id>0 && time() - $order->orderExtStatus->updated_at < 900){ //先判断有没有指定阿姨
+            if($order->order_booked_worker_id>0 && time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_BOOKED_WORKER_ASSIGN_TIME']){ //先判断有没有指定阿姨
                 $workers[] = Worker::getWorkerInfo($order->order_booked_worker_id);
-            }elseif (time() - $order->orderExtStatus->updated_at < 300) {
+            }elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME']) {
                 //获取全职阿姨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $full_time;
@@ -47,7 +47,7 @@ class OrderPush extends Order
                     $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                     $push_status = $part_time;
                 }
-            } elseif (time() - $order->orderExtStatus->updated_at < 900) {
+            } elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME']) {
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $part_time;
             }
