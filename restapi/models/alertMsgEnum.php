@@ -333,8 +333,6 @@ class alertMsgEnum
 
     
     //添加常用地址
-    //被服务者手机或被服务者昵称不能为空
-    const sendWorkerCodeFaile = '被服务者手机或被服务者昵称不能为空';   
     //常用地址添加成功
     const addAddressSuccess = '常用地址添加成功';   
     //常用地址添加失败
@@ -430,9 +428,6 @@ class alertMsgEnum
     //该服务获取成功
     const getGoodsSuccess = '该服务获取成功';
     
-    //通过token获取用户信息 
-    //该服务获取成功
-    const getGoodsSuccess = '该服务获取成功';
 
     
 }
