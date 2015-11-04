@@ -407,13 +407,27 @@ class FinanceSettleApplyController extends BaseAuthController
                 $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worker_tel);//获取阿姨的信息
                 $financeSettleApplySearch->settle_type = $settle_type;
                 $financeSettleApplySearch->review_section = $review_section;
-                $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id);
+                $workerInfo = Worker::getWorkerInfo($financeSettleApplySearch->worker_id);
+                $finance_settle_apply_starttime = null;
+                $finance_settle_apply_endtime = null;
+                if(count($workerInfo)>0){
+                    $worker_type_id = $workerInfo['worker_type'];
+                    $worker_identity_id = $workerInfo['worker_identity_id'];
+                    if(($worker_type_id ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker_identity_id == FinanceSettleApplySearch::FULLTIME)){
+                        $finance_settle_apply_starttime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//结算开始日期
+                        $finance_settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//结算截止日期
+                    }else{
+                        $finance_settle_apply_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
+                        $finance_settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
+                    }
+                }
+                $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
                 $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
                 $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
                 $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
                 $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-                $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
-                $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
+                $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime,$finance_settle_apply_endtime);
+                $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
             }
         }
         
@@ -430,7 +444,21 @@ class FinanceSettleApplyController extends BaseAuthController
         $settle_type = $requestParams['settle_type'];
         $worker_id = $requestParams['worker_id'];
         $partimeWorkerArr = [['worker_id'=>$worker_id],];
-        $this->saveAndGenerateSettleData($partimeWorkerArr,time(),time());
+        $workerInfo = Worker::getWorkerInfo($worker_id);
+        $finance_settle_apply_starttime = null;
+        $finance_settle_apply_endtime = null;
+        if(count($workerInfo)>0){
+            $worker_type_id = $workerInfo['worker_type'];
+            $worker_identity_id = $workerInfo['worker_identity_id'];
+            if(($worker_type_id ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker_identity_id == FinanceSettleApplySearch::FULLTIME)){
+                $finance_settle_apply_starttime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//结算开始日期
+                $finance_settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//结算截止日期
+            }else{
+                $finance_settle_apply_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
+                $finance_settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
+            }
+        }
+        $this->saveAndGenerateSettleData($partimeWorkerArr,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
         return $this->redirect('self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
@@ -493,9 +521,9 @@ class FinanceSettleApplyController extends BaseAuthController
             //已对账的订单，且没有投诉和赔偿的订单
             $financeWorkerOrderIncomeArr = $financeWorkerOrderIncomeSearch->getWorkerOrderIncomeArrayByWorkerId($workerId);
             //获取订单总收入
-            $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId);
+            $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId,$settleStartTime,$settleEndTime);
             //获取阿姨的奖励信息
-            $financeWorkerNonOrderIncomeArr = $financeWorkerNonOrderIncomeSearch->getTaskArrByWorkerId($workerId, null, null);
+            $financeWorkerNonOrderIncomeArr = $financeWorkerNonOrderIncomeSearch->getTaskArrByWorkerId($workerId, $settleStartTime, $settleEndTime);
             $transaction =  Yii::$app->db->beginTransaction();
             try{
                 $existCount = FinanceSettleApplySearch::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
