@@ -614,15 +614,18 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $memo
-     * @param $cause
+     * @param $cause_id
+     * @param bool $is_pop 是否是第三方调用
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $cause, $memo = '')
+    public static function cancel($order_id, $admin_id, $cause_id, $memo = '',$is_pop=false)
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->order_cancel_cause_id = $cause;
-        $order->order_cancel_cause_detail = OrderOtherDict::getName($cause);
+        if($cause_id>0) {
+            $order->order_cancel_cause_id = $cause_id;
+            $order->order_cancel_cause_detail = OrderOtherDict::getName($cause_id);
+        }
         $order->order_cancel_cause_memo = $memo;
         $current_status = $order->orderExtStatus->order_status_dict_id;
         if (in_array($current_status, [  //只有在以下状态下才可以取消订单
@@ -634,6 +637,12 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
+            //如果是第三方订单并且不是第三方触发的取消则同步状态到第三方
+            if(!$is_pop && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
+                if(!OrderPop::cancelToPop($order)) { //第三方同步失败则直接取消失败
+                    return false;
+                }
+            }
             $result = OrderStatus::_cancel($order);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //调高峰的退款接口

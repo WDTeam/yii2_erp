@@ -16,7 +16,7 @@ class ShopSearch extends Shop
     {
         return [
             [['id', 'shop_manager_id', 'province_id', 'city_id', 'county_id', 'operation_shop_district_id', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'level'], 'safe'],
+            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'level', 'isdel'], 'safe'],
         ];
     }
 
@@ -29,7 +29,8 @@ class ShopSearch extends Shop
     public function search($params)
     {
         $query = Shop::find();
-
+        $query->where('isdel is NULL OR isdel=0');
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
