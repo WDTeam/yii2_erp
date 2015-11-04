@@ -962,16 +962,18 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @param $worker_phone
      * @param $worker_type
+     * @param $worker_identity_id 阿姨身份id 1全时2兼职
      * @return bool
      */
-    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type){
+    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type,$worker_identity_id){
         if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
             return false;
         }
         $workerInfo['info'] = [
             'worker_id'=>$worker_id,
             'worker_phone'=>$worker_phone,
-            'worker_type'=>$worker_type
+            'worker_identity_id'=>$worker_type,
+            'worker_type'=>$worker_identity_id
         ];
         $workerInfo['schedule'] = [];
         $workerInfo['order'] = [];
@@ -985,9 +987,10 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @param $worker_phone
      * @param $worker_type
+     * @param $worker_identity_id 阿姨身份id 1全时2兼职
      * @return bool
      */
-    public static function updateWorkerInfoToRedis($worker_id,$worker_phone,$worker_type){
+    public static function updateWorkerInfoToRedis($worker_id,$worker_phone,$worker_type,$worker_identity_id){
         if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
             return false;
         }
@@ -997,7 +1000,8 @@ class Worker extends \dbbase\models\worker\Worker
             $workerInfo['info'] = [
                 'worker_id'=>$worker_id,
                 'worker_phone'=>$worker_phone,
-                'worker_type'=>$worker_type
+                'worker_type'=>$worker_type,
+                'worker_identity_id'=>$worker_identity_id
             ];
             $workerInfo = json_encode($workerInfo);
             Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
@@ -1006,12 +1010,12 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $worker_identity_id 阿姨身份 1全时2兼职
      * @param int $orderBookBeginTime 待指派订单预约开始时间
      * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
+    public static function getDistrictFreeWorker($district_id,$worker_identity_id=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
@@ -1026,7 +1030,7 @@ class Worker extends \dbbase\models\worker\Worker
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
 
-            if($val['info']['worker_type']==$worker_type){
+            if($val['info']['worker_identity_id']==$worker_identity_id){
                 $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
                 if(array_diff($orderBookTime,$workerEnabledTime)){
                     continue;
@@ -1060,13 +1064,13 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $worker_identity_id 阿姨身份 1全时2兼职
      * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
      * @throws ErrorException
      */
 
-    public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
+    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_id=1,$orderBookTimeArr){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
@@ -1075,7 +1079,7 @@ class Worker extends \dbbase\models\worker\Worker
         foreach ($districtWorkerResult as $val) {
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
-            if($val['info']['worker_type']==$worker_type){
+            if($val['info']['worker_identity_id']==$worker_identity_id){
                 $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
                     if($t_val['orderBookBeginTime']>=$t_val['orderBookEndTime']){
