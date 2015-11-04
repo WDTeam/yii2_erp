@@ -129,8 +129,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             [
-            'attribute'=>'worker_count',
-            'type' => DetailView::INPUT_HIDDEN,
+                'attribute'=>'worker_count',
+                'type' => DetailView::INPUT_HIDDEN,
+                'format'=>'raw',
+                'value'=>Html::a($model->worker_count,[
+                    'worker/worker/index',
+                    'WorkerSearch'=>[
+                        'shop_id'=>$model->id
+                    ],
+                ]),
             ],
             [
                 'attribute'=>'complain_coutn',
