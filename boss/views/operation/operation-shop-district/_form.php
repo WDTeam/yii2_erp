@@ -12,20 +12,6 @@ use dosamigos\datetimepicker\DateTimePicker;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-<?php $form = ActiveForm::begin([
-        'options' => ['enctype' => 'multipart/form-data', 'accept-charset' => 'UTF-8'],
-        'action' => ['index', 'city_id' => $city_id, 'city_name' => $city_name],
-        'method' => 'post',
-    ]);
-    ?>
-    <div class='col-md-2'>
-        <?= $form->field($model, 'district_upload_url')->fileInput(['maxlength' => true]) ?>
-    </div>
-     
-    <div class='col-md-4 form-inline'>
-      <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
-    </div> 
-    <?php ActiveForm::end(); ?>
 <div class="operation-shop-district-form">
     
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
