@@ -741,6 +741,10 @@ class WorkerController extends BaseAuthController
 
     }
 
+    public function actionTest1(){
+        Worker::operateWorkerOrderInfoToRedis(19076,1,123,2,1446681600,1446685200);
+    }
+
     public function actionTest(){
         echo '<pre>';
         echo '星期1 8:00 10:00';
