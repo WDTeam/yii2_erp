@@ -96,7 +96,7 @@ class SendSmsController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /send-sms/send-worker-message-code Send-Worker-Message-Code（100%）
+     * @api {GET} /send-sms/send-worker-message-code  [GET]Send-Worker-Message-Code（100%）
      * 
      * @apiDescription 请求向阿姨手机发送验证码用于登录（李勇）
      * @apiName actionSendWorkerMessageCode

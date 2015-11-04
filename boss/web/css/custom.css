@@ -3,9 +3,6 @@ body{
 	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 
-.modal-content {
-	height: 300px !important;
-}
 
 .form-group label.col-md-2 {
 	float: none;

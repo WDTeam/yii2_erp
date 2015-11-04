@@ -1,8 +1,12 @@
+<style>
+    .col-md-2 {margin-top: 15px;}
+</style>
 <?php
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
@@ -14,27 +18,46 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 
 $this->params['breadcrumbs'][] = ['label' => $city_name];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+    <?php $form = ActiveForm::begin([
+		'options' => ['enctype' => 'multipart/form-data', 'accept-charset' => 'UTF-8'],
+        'action' => ['index', 'city_id' => $city_id, 'city_name' => $city_name],
+        'method' => 'post',
+    ]);
+    ?>
+    <div class='col-md-2'>
+        <h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> <?=Html::encode($this->title)?><?=Html::encode($city_name)?> </h3>
+    </div>
+    <div class='col-md-3'>
+        <?= $form->field($model, 'district_upload_url')->fileInput(['maxlength' => true]) ?>
+    </div>
+     
+    <div class='col-md-2 form-inline'>
+      <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
+    </div> 
+    <?php ActiveForm::end(); ?>
 <div class="operation-shop-district-index">
 
-    <p>
-        <?php /* echo Html::a(Yii::t('operation', 'Create {modelClass}', [
-    'modelClass' => 'Operation Shop District',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
             'operation_area_name',
             'operation_shop_district_name',
-//            'operation_city_id',
-//            'operation_city_name',
-//            'operation_shop_district_latitude_longitude:ntext',
-//            'created_at', 
-//            'updated_at', 
+            [
+                'header'=>"上线状态",
+                'attribute'=> 'operation_shop_district_status',
+                'format'=>'html',
+                'value' => function ($model) {
+                    if ($model->operation_shop_district_status == 1) {
+                        return '未上线';
+                    } elseif ($model->operation_shop_district_status == 2) {
+                        return '已上线';
+                    } else {
+                        return '状态异常，请手动编辑状态';
+                    }
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),
@@ -75,15 +98,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed'=>true,
         'floatHeader'=>true,
 
-
-
-
         'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' - '.Html::encode($city_name).' </h3>',
+            'heading'=>'',
             'type'=>'info',
-            'before'=>''   //<span class="panel-title">'.Html::encode($city_name).' </span>
-                .Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']),
-//            'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', '增加商圈'), ['create'], ['class' => 'btn btn-success']),
+            //'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>

@@ -10,7 +10,6 @@ use boss\models\order\Order;
     span {color: #000;}
 </style>
 <div class="m_tab">
-    <div class="m_cek"><input type="checkbox" /></div>
     <table cellspacing="0" cellpadding="0" border="1">
         <tr class="first">
 	        <th style="width: 28%;">订单编号：<?= Html::encode($model->order_code) ?><span><?= Html::encode($model->order_service_type_name) ?></span></th>

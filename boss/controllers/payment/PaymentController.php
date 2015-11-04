@@ -130,7 +130,17 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+        $data = file_get_contents('shanghai.txt');
+        $data = str_replace("\n","",$data);
+        dump($data);
+        dump(json_decode($data));
 
+
+        $data = file_get_contents('beijing.txt');
+        $data = str_replace("\n","",$data);
+        dump($data);
+        dump(json_decode($data));
+        exit;
         $customerBalance = Customer::getBalanceById(1);
         dump($customerBalance['balance']);
         exit;

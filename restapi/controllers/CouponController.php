@@ -98,7 +98,7 @@ class CouponController extends \restapi\components\Controller
     }
 
     /**
-     * @api {Get} /coupon/coupons Coupons（100%）
+     * @api {GET} /coupon/coupons [GET] /coupon/coupons（100%）
      *
      * @apiDescription  下单时获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）
      * @apiName actionCoupons
@@ -188,11 +188,11 @@ class CouponController extends \restapi\components\Controller
         $city_id = $param['city_id'];
         $service_type_id = $param['service_type_id'];
         //获取该用户该城市的优惠券列表
-//        try{
+        try{
             $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id,$service_type_id);
-//        }catch (\Exception $e) {
-//            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
-//        }
+        }catch (\Exception $e) {
+            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+        }
         if (!empty($coupons)) {
             $arr_coupons=array();
             foreach($coupons as $coupon){
@@ -206,7 +206,7 @@ class CouponController extends \restapi\components\Controller
         
     }
     /**
-     * @api {Get} /coupon/all-coupons [Get] /coupon/all-coupons（ 100%）
+     * @api {GET} /coupon/all-coupons [GET] /coupon/all-coupons（ 100%）
      *
      * @apiDescription   获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）
      * @apiName actionAllCoupons
@@ -305,7 +305,7 @@ class CouponController extends \restapi\components\Controller
     }
     
      /**
-     * @api {Get} /coupon/coupons-over-due  Coupons-Over-Due（100%）
+     * @api {GET} /coupon/coupons-over-due  [GET] /coupon/coupons-over-due（100%）
      *
      * @apiDescription 获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券）（李勇）
      * @apiName actionCouponsOverDue
@@ -408,7 +408,7 @@ class CouponController extends \restapi\components\Controller
     }
     
      /**
-     * @api {GET} /coupon/get-coupon-count Get-Coupon-Count（100%）
+     * @api {GET} /coupon/get-coupon-count {GET} /coupon/get-coupon-count（100%）
      *
      * @apiDescription 获取用户优惠券数量（李勇）
      * @apiName actionGetCouponCount
