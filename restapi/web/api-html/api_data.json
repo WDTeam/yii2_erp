@@ -2,8 +2,9 @@
   {
     "type": "POST",
     "url": "/auth/login",
-    "title": "客户登录（李勇100%）",
-    "name": "Login",
+    "title": "Login（100%）",
+    "description": "<p>客户登录（李勇）</p> ",
+    "name": "actionLogin",
     "group": "Auth",
     "parameter": {
       "fields": {
@@ -54,7 +55,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"\"\n  }\n}",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"登陆成功\",\n\"ret\": {\n    \"user\": {\n        \"id\": \"ID\",\n        \"customer_name\": \"用户名\",\n        \"customer_sex\": \"性别\",\n        \"customer_birth\": \"生日\",\n        \"customer_photo\": \"头像\",\n        \"customer_phone\": \"电话\",\n        \"customer_email\": \"邮箱\",\n        \"operation_area_id\": \"商圈id\",\n        \"operation_area_name\": \"商圈\",\n        \"operation_city_id\": \"城市id\",\n        \"operation_city_name\": \"城市\",\n        \"customer_level\": \"评级\",\n        \"customer_complaint_times\": \"投诉\",\n        \"customer_platform_version\": \"操作系统版本号\",\n        \"customer_app_version\": \"app版本号\",\n        \"customer_mac\": \"mac地址\",\n        \"customer_login_ip\": \"登陆ip\",\n        \"customer_login_time\": \"登陆时间\",\n        \"customer_is_vip\": \"身份\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\"\n        },\n    \"access_token\": \"token值\"\n     },\n\"alertMsg\": \"登陆成功\"\n }",
           "type": "json"
         }
       ]
@@ -73,7 +74,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名或验证码错误\"\n}",
+          "content": "  HTTP/1.1 200 Not Found\n{\n   \"code\": 0,\n   \"msg\": \"用户名或验证码错误\",\n   \"ret\": {},\n   \"alertMsg\": \"登陆失败\"\n }",
           "type": "json"
         }
       ]
@@ -85,8 +86,9 @@
   {
     "type": "POST",
     "url": "/auth/login-from-pop",
-    "title": "客户登录(第三方渠道) (已实现)",
-    "name": "LoginFromPop",
+    "title": "LoginFromPop(100%)",
+    "description": "<p>客户登录(第三方渠道)</p> ",
+    "name": "actionLoginFromPop",
     "group": "Auth",
     "parameter": {
       "fields": {
@@ -156,7 +158,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名,签名或渠道id错误\",\n  \"ret\": null\n}",
+          "content": "HTTP/1.1 200 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名,签名或渠道id错误\",\n  \"ret\": null\n}",
           "type": "json"
         }
       ]
@@ -168,7 +170,8 @@
   {
     "type": "post",
     "url": "/auth/worker-login",
-    "title": "阿姨登录（李勇100%)",
+    "title": "Worker-Login（李勇100%)",
+    "description": "<p>阿姨登录（李勇）</p> ",
     "name": "actionWorkerLogin",
     "group": "Auth",
     "parameter": {
@@ -220,7 +223,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"登陆成功\",\n      \"ret\": {\n          \"user\": {\n              \"id\": \"阿姨表自增id\",\n              \"shop_id\": \"门店id\",\n              \"worker_name\": \"阿姨姓名\",\n              \"worker_phone\": \"阿姨手机\",\n              \"worker_photo\": \"阿姨头像地址\",\n              \"worker_level\": \"阿姨等级\",\n              \"worker_auth_status\": \"阿姨审核状态 0新录入1已审核2已基础培训3已试工4已上岗5已晋升培训\",\n              \"worker_work_city\": \"阿姨工作城市\",\n              \"worker_work_area\": \"阿姨工作区县\",\n              \"worker_work_street\": \"阿姨常用工作地址\",\n              \"worker_work_lng\": \"阿姨常用工作经度\",\n              \"worker_work_lat\": \"阿姨常用工作纬度\",\n              \"worker_star\": \"阿姨星级\",\n              \"worker_type\": \"阿姨类型 1自有 2非自有\",\n              \"worker_rule_id\": \"阿姨角色id \",\n              \"worker_identity_id\": \"阿姨身份id \",\n              \"worker_is_block\": \"阿姨是否封号 0正常1封号\",\n              \"worker_is_vacation\": \"阿姨是否请假 0正常1请假中\",\n              \"worker_is_blacklist\": \"阿姨是否黑名单 0正常1黑名单\",\n              \"worker_blacklist_reason\": \"阿姨被加入黑名单的原因\",\n              \"worker_blacklist_time\": \"阿姨加入黑名单的原因\",\n              \"worker_is_dimission\": \"阿姨离职原因\",\n              \"worker_dimission_reason\": \"阿姨离职原因\",\n              \"worker_dimission_time\": \"阿姨离职时间\",\n              \"created_ad\": \"阿姨录入时间\",\n              \"updated_ad\": \"最后更新时间\",\n              \"isdel\": \"是否删号 0正常1删号\"\n          },\n          \"access_token\": \"eaa872ee3e20880be5e368f289d5aa67\"\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"登陆成功\",\n      \"ret\": {\n          \"user\": {\n              \"id\": \"阿姨表自增id\",\n              \"shop_id\": \"门店id\",\n              \"worker_name\": \"阿姨姓名\",\n              \"worker_phone\": \"阿姨手机\",\n              \"worker_photo\": \"阿姨头像地址\",\n              \"worker_level\": \"阿姨等级\",\n              \"worker_auth_status\": \"阿姨审核状态 0新录入1已审核2已基础培训3已试工4已上岗5已晋升培训\",\n              \"worker_work_city\": \"阿姨工作城市\",\n              \"worker_work_area\": \"阿姨工作区县\",\n              \"worker_work_street\": \"阿姨常用工作地址\",\n              \"worker_work_lng\": \"阿姨常用工作经度\",\n              \"worker_work_lat\": \"阿姨常用工作纬度\",\n              \"worker_star\": \"阿姨星级\",\n              \"worker_type\": \"阿姨类型 1自有 2非自有\",\n              \"worker_rule_id\": \"阿姨角色id \",\n              \"worker_identity_id\": \"阿姨身份id \",\n              \"worker_is_block\": \"阿姨是否封号 0正常1封号\",\n              \"worker_is_vacation\": \"阿姨是否请假 0正常1请假中\",\n              \"worker_is_blacklist\": \"阿姨是否黑名单 0正常1黑名单\",\n              \"worker_blacklist_reason\": \"阿姨被加入黑名单的原因\",\n              \"worker_blacklist_time\": \"阿姨加入黑名单的原因\",\n              \"worker_is_dimission\": \"阿姨离职原因\",\n              \"worker_dimission_reason\": \"阿姨离职原因\",\n              \"worker_dimission_time\": \"阿姨离职时间\",\n              \"created_ad\": \"阿姨录入时间\",\n              \"updated_ad\": \"最后更新时间\"\n          },\n          \"access_token\": \"token值\"\n      }\n  }",
           "type": "json"
         }
       ]
@@ -239,7 +242,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名或验证码错误\"\n}",
+          "content": " HTTP/1.1 200 Not Found\n{\n\"code\": 0,\n\"msg\": \"用户名或验证码错误\",\n\"ret\": {},\n\"alertMsg\": \"登陆失败\"\n}",
           "type": "json"
         }
       ]
@@ -471,7 +474,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_service_item_id",
-            "description": "<p>服务类型商品id</p> "
+            "description": "<p>服务项目id</p> "
           },
           {
             "group": "Parameter",
@@ -511,7 +514,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "address_id",
             "description": "<p>订单地址id</p> "
           },
@@ -2781,10 +2784,10 @@
   {
     "type": "GET",
     "url": "/send-sms/send-worker-message-code",
-    "title": "阿姨登录短信验证码 （李勇100%）",
+    "title": "Send-Worker-Message-Code（100%）",
+    "description": "<p>请求向阿姨手机发送验证码用于登录（李勇）</p> ",
     "name": "actionSendWorkerMessageCode",
     "group": "SendSms",
-    "description": "<p>请求向阿姨手机发送验证码用于登录</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2809,7 +2812,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\":1\n   \"msg\": \"短信发送成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"短信发送成功\",\n      \"ret\": {},\n      \"alertMsg\": \"验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636\"\n   }",
           "type": "json"
         }
       ]
@@ -2828,7 +2831,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":0,\n  \"msg\": \"电话号码不符合规则\"\n}",
+          "content": "HTTP/1.1 200 Not Found\n {\n     \"code\": 0,\n     \"msg\": \"阿姨不存在或在黑名单或离职或删号\",\n     \"ret\": {},\n     \"alertMsg\": \"验证码已发失败\"\n }",
           "type": "json"
         }
       ]
@@ -4241,7 +4244,8 @@
   {
     "type": "get",
     "url": "/worker/check-task",
-    "title": "查看任务的详情 (李勇100%)",
+    "title": "Check-Task(100%)",
+    "description": "<p>查看任务的详情（李勇）</p> ",
     "name": "actionCheckTask",
     "group": "Worker",
     "parameter": {
@@ -4275,7 +4279,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_description\": \"任务描述\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"settled\":[\n              {\n                 \"order_id\": \"订单id\",\n                 \"order_time\": \"订单时间\",\n                 \"work_hours\": \"工时\"\n               },\n               {\n                 \"order_id\": \"订单id\",\n                 \"order_time\": \"订单时间\",\n                 \"work_hours\": \"工时\"\n               }  \n          ]\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": {\n          \"id\": \"编号\",\n          \"worker_id\": \"阿姨ID\",\n          \"worker_task_id\": \"任务ID\",\n          \"worker_task_cycle_number\": \"任务周期序号\",\n          \"worker_task_name\": \"任务名称\",\n          \"worker_task_log_start\": 任务本周期开始时间,\n          \"worker_task_log_end\": \"任务本周期结束时间\",\n          \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n          \"worker_task_done_time\": \"任务完成时间\",\n          \"worker_task_reward_type\": \"任务奖励类型\",\n          \"worker_task_reward_value\": \"任务奖励值\",\n          \"created_at\": \"创建时间\",\n          \"updated_at\": \"更新时间\",\n          \"values\": [\n              {\n                  \"worker_tasklog_condition\": \"条件索引\",\n                  \"worker_tasklog_value\": \"条件值\"\n              }\n          ],\n          \"worker_task_description\": \"任务描述\",\n          \"order_list\": [订单信息]\n      },\n      \"alertMsg\": \"操作成功\"\n   }",
           "type": "json"
         }
       ]
@@ -4294,7 +4298,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found \n{ \n  \"code\":\"0\",\n  \"msg\": \"查看任务失败\"\n}",
+          "content": "HTTP/1.1 200 Not Found \n  {\n     \"code\": 0,\n     \"msg\": \"查看任务失败\",\n     \"ret\": {},\n     \"alertMsg\": \"查看任务失败\"\n  }",
           "type": "json"
         }
       ]
@@ -4344,11 +4348,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4363,6 +4362,48 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
+    "url": "/worker/get-worker-center",
+    "title": "Get-Worker-Center(100%)",
+    "description": "<p>个人中心首页 （田玉星）</p> ",
+    "name": "actionGetWorkerCenter",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨数据成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type\": \"阿姨类型【 1自有 2非自有】\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
           "type": "json"
         }
       ]
@@ -4419,11 +4460,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-comment"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4487,11 +4523,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-complain"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4674,11 +4705,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-punish-list"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4728,11 +4754,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-service-info"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4803,11 +4824,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-taskreward-list"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4873,16 +4889,11 @@
             "type": "<p>String</p> ",
             "optional": true,
             "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "description": "<p>平台版本号</p> "
           }
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -5005,16 +5016,6 @@
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
@@ -5030,7 +5031,8 @@
   {
     "type": "get",
     "url": "/worker/task-doing",
-    "title": "获得进行中的任务列表 (李勇100%)",
+    "title": "Task-Doing (100%)",
+    "description": "<p>获得进行中的任务列表（李勇）</p> ",
     "name": "actionTaskDoing",
     "group": "Worker",
     "parameter": {
@@ -5057,26 +5059,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 2,\n              \"worker_id\": 1,\n              \"worker_task_id\": 2,\n              \"worker_task_cycle_number\": \"1\",\n              \"worker_task_name\": \"任务名称2\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446297240,\n              \"worker_task_is_done\": 0,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0,\n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0\n          }\n      ]\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"您没有任务哦\"\n}",
+          "content": "  HTTP/1.1 200 Not Found\n{\n    \"code\": 0,\n    \"msg\": \"您没有任务哦\",\n    \"ret\": {},\n    \"alertMsg\": \"您没有任务哦\"\n}",
           "type": "json"
         }
       ]
@@ -5088,7 +5080,8 @@
   {
     "type": "get",
     "url": "/worker/task-done",
-    "title": "获得已完成的任务列表 (李勇100%)",
+    "title": "Task-Done (100%)",
+    "description": "<p>获得已完成的任务列表（李勇）</p> ",
     "name": "actionTaskDone",
     "group": "Worker",
     "parameter": {
@@ -5129,26 +5122,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 2,\n              \"worker_id\": 1,\n              \"worker_task_id\": 2,\n              \"worker_task_cycle_number\": \"1\",\n              \"worker_task_name\": \"任务名称2\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446297240,\n              \"worker_task_is_done\": 0,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0,\n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0\n          }\n      ]\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"您没有已完成任务哦\"\n}",
+          "content": "  HTTP/1.1 200 Not Found\n{\n    \"code\": 0,\n    \"msg\": \"您没有已完成任务哦\",\n    \"ret\": {},\n    \"alertMsg\": \"您没有已完成任务哦\"\n}",
           "type": "json"
         }
       ]
@@ -5160,7 +5143,8 @@
   {
     "type": "get",
     "url": "/worker/task-fail",
-    "title": "获得已失败的任务列表 (李勇100%)",
+    "title": "Task-Fail(100%)",
+    "description": "<p>获得已失败的任务列表（李勇）</p> ",
     "name": "actionTaskFail",
     "group": "Worker",
     "parameter": {
@@ -5201,7 +5185,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 3,\n              \"worker_id\": 1,\n              \"worker_task_id\": 1,\n              \"worker_task_cycle_number\": \"0\",\n              \"worker_task_name\": \"任务名称3\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446097240,\n              \"worker_task_is_done\": -1,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0, \n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0,\n              \"values\": [],\n              \"worker_task_description\": \"\"\n          }\n      ]\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\"\n          }\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5220,7 +5204,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"您没有失败的任务哦\"\n}",
+          "content": " HTTP/1.1 200 Not Found\n{\n   \"code\": 0,\n   \"msg\": \"您没有失败的任务哦\",\n   \"ret\": {},\n   \"alertMsg\": \"您没有失败的任务哦\"\n}",
           "type": "json"
         }
       ]
@@ -5337,7 +5321,8 @@
   {
     "type": "get",
     "url": "/worker/worker-leave",
-    "title": "查看请假情况 (李勇100%)",
+    "title": "Worker-Leave(100%)",
+    "description": "<p>查看请假情况（李勇）</p> ",
     "name": "actionWorkerLeave",
     "group": "Worker",
     "parameter": {
@@ -5371,63 +5356,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"2015-10-28\": true,\n      \"2015-10-29\": true,\n      \"2015-10-30\": false,\n      \"2015-10-31\": false,\n      \"2015-11-01\": false,\n      \"2015-11-02\": true,\n      \"2015-11-03\": true,\n      \"2015-11-04\": true,\n      \"2015-11-05\": true,\n      \"2015-11-06\": false,\n      \"2015-11-07\": false,\n      \"2015-11-08\": false,\n      \"2015-11-09\": true,\n  }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"阿姨不存在\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "GET",
-    "url": "/worker/get-worker-center",
-    "title": "个人中心首页 (田玉星 100%)",
-    "name": "getWorkerCenter",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨登录token</p> "
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-center"
-      }
-    ],
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨数据成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type\": \"阿姨类型【 1自有 2非自有】\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"2015-10-28\": true,\n      \"2015-10-29\": true,\n      \"2015-10-30\": false,\n      \"2015-10-31\": false,\n      \"2015-11-01\": false,\n      \"2015-11-02\": true,\n      \"2015-11-03\": true,\n      \"2015-11-04\": true,\n      \"2015-11-05\": true,\n      \"2015-11-06\": false,\n      \"2015-11-07\": false,\n      \"2015-11-08\": false,\n      \"2015-11-09\": true,\n  },\n \"alertMsg\": \"获取阿姨请假排班表成功\"\n}",
           "type": "json"
         }
       ]
@@ -5436,7 +5365,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
+          "content": " HTTP/1.1 200 Not Found\n{\n    \"code\": 0,\n    \"msg\": \"用户认证已经过期,请重新登录\",\n    \"ret\": {},\n    \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -5733,8 +5662,9 @@
   {
     "type": "Get",
     "url": "/coupon/all-coupons",
-    "title": "获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）",
-    "name": "AllCoupons",
+    "title": "All-Coupons（李勇 100%）",
+    "description": "<p>获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）</p> ",
+    "name": "actionAllCoupons",
     "group": "coupon",
     "parameter": {
       "fields": {
@@ -5760,7 +5690,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\":\n  \"ret\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -5779,7 +5709,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠券列表为空\"\n\n   }",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]
@@ -5791,8 +5721,9 @@
   {
     "type": "Get",
     "url": "/coupon/coupons",
-    "title": "获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券） （李勇 100%）",
-    "name": "Coupons",
+    "title": "Coupons（100%）",
+    "description": "<p>获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）</p> ",
+    "name": "actionCoupons",
     "group": "coupon",
     "parameter": {
       "fields": {
@@ -5825,7 +5756,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\":\n  \"ret\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠券名称\",\n           \"coupon_price\": \"优惠券价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -5844,7 +5775,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠券列表为空\"\n\n   }",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]
@@ -5856,8 +5787,9 @@
   {
     "type": "Get",
     "url": "/coupon/coupons-over-due",
-    "title": "获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券） （李勇 100%）",
-    "name": "CouponsOverDue",
+    "title": "Coupons-Over-Due（100%）",
+    "description": "<p>获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券）（李勇）</p> ",
+    "name": "actionCouponsOverDue",
     "group": "coupon",
     "parameter": {
       "fields": {
@@ -5890,7 +5822,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\":\n  \"ret\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -5909,7 +5841,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠券列表为空\"\n\n   }",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n }",
           "type": "json"
         }
       ]
@@ -5921,8 +5853,9 @@
   {
     "type": "POST",
     "url": "/coupon/exchange-coupon",
-    "title": "兑换优惠劵 （李勇 100%）",
-    "name": "ExchangeCoupon",
+    "title": "Exchange-Coupon（100%）",
+    "description": "<p>兑换优惠劵（李勇）</p> ",
+    "name": "actionExchangeCoupon",
     "group": "coupon",
     "parameter": {
       "fields": {
@@ -5955,7 +5888,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\",\n  \"ret\":{\n      \"id\":1,\n      \"coupon_id\":1,\n      \"coupon_name\":\"优惠券名称\",\n      \"coupon_price\":123\n }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"兑换成功\",\n  \"ret\": {\n      \"customer_id\": 1,\n      \"coupon_id\": 5,\n      \"coupon_code_id\": 10,\n      \"coupon_code\": \"fkdaibz0\",\n      \"coupon_name\": \"万能优惠券\",\n      \"coupon_price\": \"10.00\",\n      \"expirate_at\": 1455206400,\n      \"is_used\": 0,\n      \"created_at\": 1446605320,\n      \"updated_at\": 1446605320,\n      \"id\": 10\n  },\n  \"alertMsg\": \"兑换成功\"\n}",
           "type": "json"
         }
       ]
@@ -5963,12 +5896,6 @@
     "error": {
       "fields": {
         "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          },
           {
             "group": "Error 4xx",
             "optional": false,
@@ -5980,12 +5907,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠券不存在，\"\n\n}",
+          "content": " HTTP/1.1 200 Not Found\n{\n   \"code\": 0,\n   \"msg\": \"优惠码不存在\",\n   \"ret\": {},\n   \"alertMsg\": \"兑换失败\"\n }",
           "type": "json"
         }
       ]
@@ -5996,9 +5918,10 @@
   },
   {
     "type": "GET",
-    "url": "v1/coupon/get-coupon-count",
-    "title": "获取用户优惠券数量 （功能已经实现 100%）",
-    "name": "GetCouponCount",
+    "url": "/coupon/get-coupon-count",
+    "title": "Get-Coupon-Count（100%）",
+    "description": "<p>获取用户优惠券数量（李勇）</p> ",
+    "name": "actionGetCouponCount",
     "group": "coupon",
     "parameter": {
       "fields": {
@@ -6024,7 +5947,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取成功\"\n  \"ret\":{\n       \"couponCount\":{\n       \"count\":'10'\n        }\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取用户优惠券数量成功\",\n     \"ret\": {\n         \"couponCount\": \"优惠券数量\"\n     },\n     \"alertMsg\": \"获取用户优惠券数量成功\"\n  }",
           "type": "json"
         }
       ]
@@ -6043,12 +5966,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n }",
           "type": "json"
         }
       ]
@@ -6056,86 +5974,6 @@
     "version": "0.0.0",
     "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
-  },
-  {
-    "type": "get",
-    "url": "v1/service/single-service-time",
-    "title": "单次服务排班表(李勇100%)",
-    "name": "SingleServiceTime",
-    "group": "service",
-    "description": "<p>单次服务获取服务时间</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "service_type",
-            "description": "<p>服务类型</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "longitude",
-            "description": "<p>当前经度.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "latitude",
-            "description": "<p>当前纬度.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "plan_time",
-            "description": "<p>计划服务时长</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取单次服务排班表成功\",\n\"ret\": [\n      {\n          \"date\": \"2015-10-29\",\n          \"timeline\": [\n              {\n                  \"time\": \"8:00-10:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"8:30-10:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:00-11:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:30-11:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:00-12:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:30-12:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:00-13:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:30-13:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:00-14:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:30-14:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:00-15:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:30-16:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:00-17:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:30-17:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"15:00-18:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"16:30-18:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:00-19:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:30-19:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:30-20:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:00-21:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:30-21:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"20:00-22:00\",\n                  \"enable\": false\n              }\n          ]\n      }\n   ]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/ServiceController.php",
-    "groupTitle": "service"
   },
   {
     "type": "GET",
@@ -6496,10 +6334,10 @@
   {
     "type": "get",
     "url": "/service/recursive-service-time",
-    "title": "周期服务时间表(李勇100%)",
+    "title": "Recursive-Service-Time(100%)",
+    "description": "<p>周期服务时间表（李勇）</p> ",
     "name": "actionRecursiveServiceTime",
     "group": "service",
-    "description": "<p>周期服务时间表</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6552,7 +6390,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"获取周期服务时间表成功\",\n  \"ret\": [\n      {\n          \"date\": \"2015-10-29\",\n          \"timeline\": [\n              {\n                  \"time\": \"8:00-10:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"8:30-10:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:00-11:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:30-11:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:00-12:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:30-12:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:00-13:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:30-13:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:00-14:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:30-14:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:00-15:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:30-16:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:00-17:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:30-17:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"15:00-18:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"16:30-18:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:00-19:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:30-19:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:30-20:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:00-21:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:30-21:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"20:00-22:00\",\n                  \"enable\": false\n              }\n          ]\n      }\n   ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"获取周期服务时间表成功\",\n  \"ret\": [\n      {\n          \"date\": \"2015-10-29\",\n          \"timeline\": [\n              {\n                  \"time\": \"8:00-10:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"8:30-10:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:00-11:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:30-11:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:00-12:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:30-12:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:00-13:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:30-13:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:00-14:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:30-14:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:00-15:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:30-16:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:00-17:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:30-17:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"15:00-18:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"16:30-18:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:00-19:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:30-19:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:30-20:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:00-21:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:30-21:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"20:00-22:00\",\n                  \"enable\": false\n              }\n          ]\n      }\n   ],\n \"alertMsg\": \"获取周期服务时间表成功\"\n}",
           "type": "json"
         }
       ]
@@ -6571,7 +6409,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]
@@ -6582,11 +6420,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/server-worker-list",
-    "title": "周期服务可用阿姨列表（李勇 100%）",
+    "url": "/service/server-worker-list",
+    "title": "Server-Worker-List（100%）",
+    "description": "<p>获取周期服务可用阿姨列表（李勇）</p> ",
     "group": "service",
     "name": "actionServerWorkerList",
-    "description": "<p>获取周期服务可用阿姨列表</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6632,7 +6470,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取周期服务可用阿姨列表成功\",\n     \"ret\": {\n         \"worker_id\": 1,\n         \"worker_name\": \"阿姨姓名\",\n         \"worker_phote\": \"阿姨头像\",\n         \"service_times\": \"服务次数\",\n         \"service_star\": \"服务星级\",\n         \"last_time\": \"最后服务时间\"\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取周期服务可用阿姨列表成功\",\n     \"ret\": {\n         \"page\": \"第几页\",\n         \"pageNum\": \"每页显示多少条\",\n         \"data\": [\n             {\n                 \"id\": \"阿姨表自增id\",\n                 \"worker_name\": \"阿姨姓名\",\n                 \"worker_photo\": \"阿姨手机\",\n                 \"worker_star\": \"阿姨星级\",\n                 \"updated_at\": \"最后更新时间\",\n                 \"worker_server_num\": \"阿姨服务次数\",\n                 \"worker_comment_score\": \"阿姨评论评分\"\n             }\n         ]\n     },\n     \"alertMsg\": \"获取周期服务可用阿姨列表成功\"\n }",
           "type": "json"
         }
       ]
@@ -6651,7 +6489,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"没有可用阿姨\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"code\": 0,\n      \"msg\": \"没有可用阿姨\",\n      \"ret\": {},\n      \"alertMsg\": \"没有可用阿姨\"\n  }",
           "type": "json"
         }
       ]
@@ -6718,6 +6556,86 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "get",
+    "url": "/service/single-service-time",
+    "title": "Single-Service-Time(100%)",
+    "description": "<p>单次服务获取服务时间（李勇）</p> ",
+    "name": "actionSingleServiceTime",
+    "group": "service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "service_type",
+            "description": "<p>服务类型</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "plan_time",
+            "description": "<p>计划服务时长</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取单次服务排班表成功\",\n\"ret\": [\n      {\n          \"date\": \"2015-10-29\",\n          \"timeline\": [\n              {\n                  \"time\": \"8:00-10:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"8:30-10:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:00-11:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:30-11:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:00-12:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:30-12:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:00-13:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:30-13:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:00-14:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:30-14:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:00-15:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:30-16:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:00-17:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:30-17:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"15:00-18:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"16:30-18:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:00-19:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:30-19:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:30-20:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:00-21:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:30-21:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"20:00-22:00\",\n                  \"enable\": false\n              }\n          ]\n      }\n   ],\n\"alertMsg\": \"获取周期服务时间表成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]

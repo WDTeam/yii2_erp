@@ -328,8 +328,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
-     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -408,8 +406,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} page_num   每页显示的数据数量
      * @apiParam {String} [platform_version] 平台版本号.
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-complain
-     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -481,8 +477,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} [platform_version] 平台版本号.
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-service-info
-     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -543,8 +537,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} [platform_version] 平台版本号.
-     *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -631,9 +623,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条.
-     * @apiParam {String} [platform_version] 平台版本号.
-     * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
+     * @apiParam {String} [platform_version] 平台版本号
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -715,8 +705,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} [platform_version] 平台版本号.
      * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-taskreward-list
-     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -783,8 +771,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} [platform_version] 平台版本号.
-     * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-punish-list
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -909,14 +895,12 @@ class WorkerController extends \restapi\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
-     *
-     * @apiName getWorkerCenter
+     * @api {GET} /worker/get-worker-center  Get-Worker-Center(100%)
+     * @apiDescription 个人中心首页 （田玉星）
+     * @apiName actionGetWorkerCenter
      * @apiGroup Worker
      *
      * @apiParam {String} access_token 阿姨登录token
-     *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-center
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -997,8 +981,6 @@ class WorkerController extends \restapi\components\Controller
      *      }
      * }
      *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
@@ -1042,8 +1024,6 @@ class WorkerController extends \restapi\components\Controller
      *  "alertMsg": "获取阿姨请假排班表成功"
      *}
      *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *    {
@@ -1072,25 +1052,7 @@ class WorkerController extends \restapi\components\Controller
             return $this->send($e, "获取阿姨请假表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         return $this->send($ret, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
-    }
-
-    /**
-     * 获取该阿姨的消息列表
-     */
-
-    /**
-     * 删除阿姨消息
-     */
-
-    /**
-     * 查看该阿姨所有未交罚款记录
-     */
-
-    /**
-     * 获得该阿姨所有未领取任务奖励记录
-     */
-    
-    
+    }    
     
      /**
      * @api {get} /worker/task-doing Task-Doing (100%)
@@ -1126,8 +1088,6 @@ class WorkerController extends \restapi\components\Controller
      *       ]，
      *      "alertMsg": "操作成功"
      *   }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
@@ -1202,8 +1162,6 @@ class WorkerController extends \restapi\components\Controller
      *       ]，
      *      "alertMsg": "操作成功"
      *   }
-     *
-     * @apiError  您没有已完成任务哦.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
