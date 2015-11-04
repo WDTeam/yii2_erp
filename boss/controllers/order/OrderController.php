@@ -128,29 +128,16 @@ class OrderController extends BaseAuthController
         return Order::getOrderBookedTimeRangeList($district_id, $order_booked_count, $date);
     }
 
+    /**
+     * 根据服务品类获取优惠券
+     * @return array
+     */
     public function actionCoupons()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->get('id');
-        $service_id = Yii::$app->request->get('service_id');
-        return Coupon::getAbleCouponByCateId($id, $service_id);
-        return '[
-                {
-                    "id": 1,
-                    "coupon_name": "优惠券30",
-                    "coupon_money": 30
-                },
-                {
-                    "id": 2,
-                    "coupon_name": "40优惠券",
-                    "coupon_money": 40
-                },
-                {
-                    "id": 3,
-                    "coupon_name": "50优惠券",
-                    "coupon_money": 50
-                }
-            ]';
+        $cate_id = Yii::$app->request->get('cate_id');
+        return Coupon::getAbleCouponByCateId($id, $cate_id);
     }
 
     public function actionCards($id)
@@ -203,7 +190,7 @@ class OrderController extends BaseAuthController
             }
             $workers = [];
             if($order->order_booked_worker_id>0){
-                $worker_list = Worker::getWorkerInfo($order->order_booked_worker_id);
+                $worker_list = Worker::getWorkerStatInfo($order->order_booked_worker_id);
                 if(!empty($worker_list)) {
                     $workers = Order::assignWorkerFormat($order, [$worker_list]);
                 }
@@ -236,7 +223,16 @@ class OrderController extends BaseAuthController
         $district_id = $order->district_id;
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
-            $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+            if($order->order_is_parent==1){
+                $childs = OrderSearch::getChildOrder($order_id);
+                $times = [['orderBookBeginTime'=>$order->order_booked_begin_time, 'orderBookEndTime'=>$order->order_booked_end_time]];
+                foreach($childs as $child){
+                    $times[] = ['orderBookBeginTime'=>$child->order_booked_begin_time, 'orderBookEndTime'=>$child->order_booked_end_time];
+                }
+                $worker_list = array_merge(Worker::getDistrictCycleFreeWorker($district_id, 1,$times), Worker::getDistrictCycleFreeWorker($district_id, 2,$times));
+            }else {
+                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+            }
         } catch (Exception $e) {
             return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
@@ -276,7 +272,7 @@ class OrderController extends BaseAuthController
     {
         $searchParas = Yii::$app->request->getQueryParams();
 
-        $searchModel = new OrderSearch;
+        $searchModel = new \boss\models\order\OrderSearchIndex();
         $dataProvider = $searchModel->search($searchParas);
 
         return $this->render('index', [
@@ -358,18 +354,19 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $attributes = [
             'order_ip' => Yii::$app->request->userIP,
-            'order_service_type_id' => 1,
+            'order_service_item_id' => 1,
             'order_src_id' => 1,
             'channel_id' => 20,
             'address_id' => 1,
-            'customer_id' => 3,
+            'customer_id' => 2,
             'order_customer_phone' => '13141484602',
             'admin_id' => Yii::$app->user->id,
             'order_pay_type' => 1,
             'order_is_use_balance' => 1,
             'order_booked_worker_id' => 1,
             'order_customer_need' => 'xxxxx',
-            'order_customer_memo' => 'fffff'
+            'order_customer_memo' => 'fffff',
+            'order_flag_sys_assign' => 0,
         ];
         $booked_list = [
             [

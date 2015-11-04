@@ -13,6 +13,8 @@ use boss\models\finance\FinanceOrderChannelSearch;
 $this->title = $model->finance_order_channel_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '渠道管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="finance-order-channel-view">
     

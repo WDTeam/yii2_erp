@@ -59,21 +59,13 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     {
         return array_merge(parent::rules(),[
             [['worker_task_name', 
-                'worker_task_end', 'worker_task_reward_type',
+                'worker_task_end', 'worker_task_reward_type', 'worker_task_reward_value',
                 'worker_rules', 'worker_types', 'worker_cites',
-                'worker_task_cycle',
+                'worker_task_cycle', 'conditions',
             ], 'required'],
             [['worker_task_time'], 'required'],
             [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
-            [['conditions'], 'validateConditions'],
         ]);
-    }
-    
-    public function validateConditions($attribute, $params)
-    {
-//         if (!$this->hasErrors()) {
-//             $this->addError($attribute, \Yii::t('app', '条件错误.'));
-//         }
     }
     
     public function getConditions()
@@ -96,9 +88,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function getWorker_task_time()
     {
         if($this->getIsNewRecord()){
-            return null;
+            $this->worker_task_start = time();
+            $this->worker_task_end = time()+3600*24*30;
         }
-
         $str = date('m/d/Y', $this->worker_task_start);
         $str .= ' - ';
         $str .= date('m/d/Y', $this->worker_task_end);
@@ -226,12 +218,14 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function getStatusLabel()
     {
         $cur_time = time();
-        if($this->worker_task_start>$cur_time){
+        if($this->worker_task_online!=1){
+            return '已下线';
+        }elseif($this->worker_task_start>$cur_time){
             return '未开始';
         }elseif ($this->worker_task_start<$cur_time && $this->worker_task_end>$cur_time){
             return '进行中';
         }elseif ($this->worker_task_end<$cur_time){
-            return '已结束';
+            return '已过期';
         }
     }
     
@@ -242,6 +236,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
             'worker_types' => \Yii::t('app', '阿姨角色'),
             'worker_rules' => \Yii::t('app', '阿姨身份'),
             'worker_cites' => \Yii::t('app', '开通城市'),
+            'worker_type' => \Yii::t('app', '阿姨角色'),
+            'worker_rule_id' => \Yii::t('app', '阿姨身份'),
+            'worker_task_city_id' => \Yii::t('app', '适用城市'),
         ]);
     }
     

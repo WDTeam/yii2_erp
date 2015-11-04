@@ -55,6 +55,8 @@ use kartik\date\DatePicker;
     ?>
      </div>
        
+       
+  
      
     <div class='col-md-2'>
     <?= $form->field($model, 'finance_order_channel_statuspayment')->widget(DatePicker::classname(), [
@@ -80,9 +82,14 @@ use kartik\date\DatePicker;
      </div>
      
      
+      <div class='col-md-2'>
+      
+    <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
+     </div>
+     
+     
      
     <div class='col-md-4 form-inline'>
-      <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
       <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
       <?= Html::resetButton(Yii::t('app', '重置'), ['class' => 'btn btn-default']) ?>
     </div> 

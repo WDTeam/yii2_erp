@@ -28,8 +28,10 @@ class m151007_153202_create_table_order extends Migration
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',
-            'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
+            'order_service_type_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
+            'order_service_item_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务项ID\'',
+            'order_service_item_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务项\'',
             'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',
             'order_src_name' => Schema::TYPE_STRING . '(128)  DEFAULT \'\' COMMENT \'订单来源，订单入口名称\'',
             'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'订单渠道ID\'',
@@ -44,6 +46,8 @@ class m151007_153202_create_table_order extends Migration
             'district_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'商圈ID\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
+            'order_lat' => Schema::TYPE_DOUBLE.' DEFAULT NULL COMMENT \'纬度\'',
+            'order_lng' => Schema::TYPE_DOUBLE.' DEFAULT NULL COMMENT \'经度\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 
 //===========================对账信息
@@ -51,6 +55,9 @@ class m151007_153202_create_table_order extends Migration
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
             'order_sys_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'系统备注\'',
+            'order_cancel_cause_id' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'取消具体原因id\'',
+            'order_cancel_cause_detail' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消具体原因\'',
+            'order_cancel_cause_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消原因备注\'',
 
         ], $tableOptions);
 

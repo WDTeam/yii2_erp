@@ -86,17 +86,22 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function rules()
     {
         return [
-            [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required'],
-             [['worker_id','id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ], 'integer'],
-            [['worker_tel',], 'string', 'max' => 11],
-            [['worker_tel',],'match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
+            [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required','on'=>['query']],
+             [['worker_id','id', 'shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ], 'integer','on'=>['query','count','save','default']],
+            [['worker_tel',], 'string', 'max' => 11,'on'=>['query','count','save','default']],
+            [['worker_tel',],'match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码','on'=>['query','count','save','default']],
         ];
     }
 
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
+        return [
+            'query'=>[ 'settle_apply_create_start_time', 'settle_apply_create_end_time','worker_tel', 'finance_settle_apply_status','worker_type_id','worker_identity_id'],
+            'count'=>[ 'worker_tel'],
+            'save'=>[ 'worker_tel'],
+            'default'=>['worker_id','id', 'shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ],
+        ];
     }
 
     public function search($params)
@@ -226,6 +231,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->shop_id = $workerInfo['shop_id'];
             $this->shop_name = $workerInfo['shop_name'];
             $this->shop_manager_name = $workerInfo['shop_manager_name'];
+            $this->shop_manager_id = $workerInfo['shop_manager_id'];
         }
         if(($this->worker_type_id ==self::SELF_OPERATION ) && ($this->worker_identity_id == self::FULLTIME)){
             $this->finance_settle_apply_starttime = self::getFirstDayOfSpecifiedMonth();//结算开始日期

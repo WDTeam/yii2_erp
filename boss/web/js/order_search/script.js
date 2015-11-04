@@ -30,9 +30,32 @@ $(document).ready(function($){
 	   }
      );	
 	
+	// 辅助函数，验证传入函数的字符串是否全为数字
+	function CheckDigit(str)
+	{
+		var letters="0123456789";
+		for(var i=0;i<str.length;i++)
+		{
+			if(letters.indexOf (str[i])==-1)
+				return false;
+		}
+		return true ;
+	}
+	
 	// 默认初始化对话框
 	var $el = $(".dialog");
 	$el.hDialog(); 
+	
+	// 输入条件校验
+//	$('.button-search').click(function(){
+//		var customerPhone = $('.input_customer_phone').val();
+//		
+//		if (CheckDigit(customerPhone) == false){
+//			$(this).hDialog({box:'#HBox_error'});
+//			return false;
+//		}
+//		return true;
+//	});
 	
 	// 取消订单
 	$(".m_quxiao").hDialog({width:600,height: 400});
@@ -59,14 +82,185 @@ $(document).ready(function($){
                 if(msg){
                 	//alert('22');
                 	alert('取消订单成功！');
-                	$("#HBox").hide();
-                	$("#HOverlay").hide()
+                	//$("#HBox").hide();
+                	//$("#HOverlay").hide();
+                	window.location.reload();
                 }else{
                     alert('取消订单失败！');
                 }
             }
         });		
 	});	
+
+    //订单响应开始 -----------------------------------------------------------
+	$(".m_response").hDialog({ box:"#HBox4", width:800,height: 600});
+
+	$(".m_response").click(function(){
+		$(".xuanzhong").attr("checked","checked");
+		operating_order_id = $(this).parents('tr').find('input.order_id').val();
+
+        //把上次添加的记录清除，重新添加
+        $(".response_record").children("div").empty();
+        $(".response_times").children("div").empty();
+        //$(".response_times").children("div").prepend('<span>正在加载...</span>'); 
+
+        //获取响应记录
+		$.ajax({
+            type: "POST",
+            url:  "/order/order-response/get-order-response-times",
+            data: {
+                order_id: operating_order_id,
+            },
+            dataType:"json",
+            success: function (msg) {
+                if (msg.code == 201) {
+                    for (i = 3; i >= 1; i --) {
+                        $(".response_times").children("div").prepend(
+                                '<label class="mr10"> <input type="radio" name="radio_responsetimes" value="' + i + '" id=times_' + i + ' />' + i + '次' + '</label>'
+                        ); 
+                    }
+
+                    if (msg.data == 1) {
+                        $('#times_1').attr("disabled",true);
+                        $('#times_3').attr("disabled",true);
+                    }
+                    if (msg.data == 2) {
+                        $('#times_2').attr("disabled",true);
+                        $('#times_1').attr("disabled",true);
+                    }
+                    if (msg.data == 3) {
+                        $('#times_3').attr("disabled",true);
+                        $('#times_2').attr("disabled",true);
+                        $('#times_1').attr("disabled",true);
+                    }
+
+                } else {
+                    for (i = 3; i >= 1; i --) {
+                        $(".response_times").children("div").prepend(
+                                '<label class="mr10"> <input type="radio" name="radio_responsetimes" value="' + i + '" id=times_' + i + ' />' + i + '次' + '</label>'
+                        ); 
+                    }
+
+                    $('#times_3').attr("disabled",true);
+                    $('#times_2').attr("disabled",true);
+                }
+
+            }
+        });		
+
+
+        //获取响应记录
+		$.ajax({
+            type: "POST",
+            url:  "/order/order-response/get-order-response",
+            data: {
+                order_id: operating_order_id,
+            },
+            dataType:"json",
+            success: function (msg) {
+                if (msg.code == 201) {
+                    var len = msg.data.length;
+                    for (i = 0; i < len; i ++) {
+                        $(".response_record").children("div").prepend(
+                            '<span>时间:' + msg.data[i].created_at + '</span>' + ';' +
+                            '<span>操作人:' + msg.data[i].order_operation_user + '</span>' +  ';' +
+
+                            '<span>响应次数:' + msg.data[i].order_response_times + '</span>' +  ';' +
+
+                            '<span>接听结果:' + msg.data[i].order_reply_result + '</span>' +  ';' +
+
+                            '<span>是否响应:' + msg.data[i].order_response_or_not + '</span>' +  ';' +
+
+                            '<span>响应结果:' + msg.data[i].order_response_result + '</span>' +  ';' + '<br />'
+                        ); 
+                    }
+
+                } else {
+                    $(".response_record").children("div").prepend('<span>暂无记录</span>'); 
+                }
+            }
+        });		
+	});	
+
+    //每次点击响应，响应结果都先隐藏
+	$(".m_response").click(function(){
+        $("#responseresult_show").hide();
+    });
+
+    //是否响应
+	$(".radio_responseornot").click(function(){
+		var responseornot_id = $(":radio[name='radio_responseornot']:checked").val();
+
+        if (responseornot_id == 0) {
+            $("#responseresult_show").show();
+        } else if (responseornot_id == 1) {
+            $("#responseresult_show").hide();
+        }
+    });
+
+    //信息是否选中
+	$(".responseSubmitBtn").click(function(){
+		var responsetimes_id = $(":radio[name='radio_responsetimes']:checked").val();
+		//var responsetimes_name = $(":radio[name='radio_responsetimes']:checked").parent().text();
+
+		var replyresult_id = $(":radio[name='radio_replyresult']:checked").val();
+		//var replyresult_name = $(":radio[name='radio_replyresult']:checked").parent().text();
+
+		var responseornot_id = $(":radio[name='radio_responseornot']:checked").val();
+		//var responseornot_name = $(":radio[name='radio_responseornot']:checked").parent().text();
+
+		var responseresult_id = $(":radio[name='radio_responseresult']:checked").val();
+		//var responseresult_name = $(":radio[name='radio_responseresult']:checked").parent().text();
+
+		if (responsetimes_id == undefined) {
+			alert("响应次数必须选择！");
+			return;
+		}
+
+		if (replyresult_id == undefined) {
+			alert("接听结果必须选择！");
+			return;
+		}
+
+		if (responseornot_id == undefined) {
+			alert("是否响应必须选择！");
+			return;
+		}
+
+        if ((responseornot_id == 0) && (responseresult_id == undefined)) {
+			alert("响应结果必须选择！");
+			return;
+        }
+
+        if (responseornot_id == 1) {
+            responseresult_id = 0;
+        }
+
+        //保存数据库
+		$.ajax({
+            type: "POST",
+            url:  "/order/order-response/save-order-response",
+            data: {
+                order_response_times: responsetimes_id,
+                order_reply_result: replyresult_id,
+                order_response_or_not: responseornot_id,
+                order_response_result: responseresult_id,
+                order_id: operating_order_id,
+            },
+            dataType:"json",
+            success: function (msg) {
+                if(msg.code == 201){
+                    alert(msg.msg);
+                    $("#HBox4").hide();
+                    $("#HOverlay").hide()
+                }else{
+                    alert(msg.msg);
+                }
+            }
+        });		
+
+	});
+    //订单响应结束 -----------------------------------------------------------
 	
 	// 订单投诉
 	$(".m_tousu").hDialog({ box:"#HBox2", width:800,height: 600});
@@ -131,6 +325,12 @@ $(document).ready(function($){
 		$(".radioLi").hide();
 		$(".m_disd").hide();
 		$(".submitBtntt").show();
+
+		$(":radio[name='radio_department']").removeAttr("checked");
+		$(":radio[name='radio_complaint_type']").removeAttr("checked");
+		$(":radio[name='radio_complaint_level']").removeAttr("checked");
+		
+		$(":radio[name='radio_department']:eq(0)").parent().click();
 	});
 	
 	$(".m_add").click(function(){
@@ -168,8 +368,9 @@ $(document).ready(function($){
             success: function (msg) {
                 if(msg){
                 	alert('提交投诉成功！');
-                	$("#HBox2").hide();
-                	$("#HOverlay").hide()
+                	//$("#HBox2").hide();
+                	//$("#HOverlay").hide();
+                	window.location.reload();
                 }else{
                     alert('提交投诉失败！');
                 }

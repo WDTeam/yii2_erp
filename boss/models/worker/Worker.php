@@ -144,6 +144,10 @@ class Worker extends \core\models\worker\Worker
      * 统计各个审核状态的阿姨数量
      */
     public static function CountWorkerStatus($workerStatus){
-        return self::find()->where(['worker_auth_status'=>$workerStatus])->count();
+        return self::find()->where(['worker_auth_status'=>$workerStatus,'isdel'=>0])->count();
+    }
+
+    public static function CountWorker(){
+        return self::find()->where(['isdel'=>0])->count();
     }
 }

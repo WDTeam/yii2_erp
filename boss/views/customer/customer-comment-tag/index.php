@@ -14,8 +14,16 @@ $this->title = Yii::t('boss', '评价标签管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-comment-tag-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+     <div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i>标签查询</h3>
+    </div>
+    <div class="panel-body">
+       <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
+    </div>
+</div>
+    
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -40,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		},
     		'width' => "100px",
     		],
-
+			'customer_tag_count',
     		[
     		'format' => 'raw',
     		'label' => '评价等级',
@@ -67,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:datetime',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{update}',
+                'template' =>'{update} {delete}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/customer-comment-tag/view','id' => $model->id,'edit'=>'t']), [

@@ -6,6 +6,8 @@
  */
 namespace core\models\worker;
 
+use  core\models\customer\CustomerComment;
+
 use yii\base\Model;
 class WorkerTaskCondition extends Model
 {
@@ -80,7 +82,7 @@ class WorkerTaskCondition extends Model
         AND b.created_at<{$end_time}";
         $data[5] = (int)\Yii::$app->db->createCommand($sql)->queryScalar();
         //好评
-        $data[6] = 0;
+        $data[6] = (int)CustomerComment::getCommentworkercount($worker_id,$start_time,$end_time);
     
         return $data;
     }
