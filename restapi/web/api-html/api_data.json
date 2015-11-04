@@ -470,7 +470,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_service_type_id",
+            "field": "order_service_item_id",
             "description": "<p>服务类型商品id</p> "
           },
           {
@@ -850,7 +850,7 @@
             "group": "Parameter",
             "type": "<p>integer</p> ",
             "optional": false,
-            "field": "order_service_type_id",
+            "field": "order_service_item_id",
             "description": "<p>服务类型 商品id 必填</p> "
           },
           {
@@ -4239,69 +4239,6 @@
     "groupTitle": "User"
   },
   {
-    "type": "GET",
-    "url": "/worker/worker-info",
-    "title": "查看阿姨信息 (田玉星 100%)",
-    "name": "WorkerInfo",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户登录token</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "worker_id",
-            "description": "<p>阿姨id</p> "
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/worker-info"
-      }
-    ],
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨信息成功\"，\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": null\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
     "type": "get",
     "url": "/worker/check-task",
     "title": "查看任务的详情 (李勇100%)",
@@ -4369,7 +4306,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-bill-list",
-    "title": "获取阿姨对账单列表 (田玉星 100%)",
+    "title": "Get-Worker-Bill-List (100%)",
+    "description": "<p>获取阿姨对账单列表 （田玉星）</p> ",
     "name": "actionGetWorkerBillList",
     "group": "Worker",
     "parameter": {
@@ -4424,7 +4362,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4436,7 +4374,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-comment",
-    "title": "获取阿姨对应的评论 (田玉星 100%)",
+    "title": "Get-Worker-Comment(100%)",
+    "description": "<p>获取阿姨对应的评论 （田玉星）</p> ",
     "name": "actionGetWorkerComment",
     "group": "Worker",
     "parameter": {
@@ -4498,7 +4437,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4510,7 +4449,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-complain",
-    "title": "获取阿姨对应的投诉 (田玉星 100%)",
+    "title": "Get-Worker-Complain (100%)",
+    "description": "<p>获取阿姨对应的投诉 （田玉星）</p> ",
     "name": "actionGetWorkerComplain",
     "group": "Worker",
     "parameter": {
@@ -4565,7 +4505,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4577,7 +4517,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-leave-history",
-    "title": "查看阿姨请假历史（田玉星 100%）",
+    "title": "Get-Worker-Leave-History(100%)",
+    "description": "<p>查看阿姨请假历史 （田玉星）</p> ",
     "name": "actionGetWorkerLeaveHistory",
     "group": "Worker",
     "parameter": {
@@ -4614,11 +4555,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-leave-history"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4632,7 +4568,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"阿姨不存在\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4644,7 +4580,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-place-by-id",
-    "title": "获取阿姨住址(田玉星 100% )",
+    "title": "Get-Worker-Place-ById（100%）",
+    "description": "<p>获取阿姨住址 （田玉星）</p> ",
     "name": "actionGetWorkerPlaceById",
     "group": "Worker",
     "parameter": {
@@ -4667,11 +4604,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-place-by-id"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -4685,7 +4617,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"阿姨不存在\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4697,7 +4629,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-punish-list",
-    "title": "获取阿姨受处罚列表 (田玉星 100%)",
+    "title": "Get-Worker-Punish-List(100%)",
+    "description": "<p>获取阿姨受处罚列表 （田玉星）</p> ",
     "name": "actionGetWorkerPunishList",
     "group": "Worker",
     "parameter": {
@@ -4759,7 +4692,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4771,7 +4704,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-service-info",
-    "title": "获取账单阿姨服务信息 (田玉星 100%)",
+    "title": "Get-Worker-ServiceInfo(100%)",
+    "description": "<p>获取账单阿姨服务信息 （田玉星）</p> ",
     "name": "actionGetWorkerServiceInfo",
     "group": "Worker",
     "parameter": {
@@ -4812,7 +4746,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4824,7 +4758,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-taskreward-list",
-    "title": "获取阿姨奖励列表 (田玉星 100%)",
+    "title": "Get-Worker-Taskreward-List(100%)",
+    "description": "<p>获取阿姨奖励列表 （田玉星）</p> ",
     "name": "actionGetWorkerTaskrewardList",
     "group": "Worker",
     "parameter": {
@@ -4886,7 +4821,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4898,7 +4833,8 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-tasktime-list",
-    "title": "获取阿姨工时列表 (田玉星 100%)",
+    "title": "Get-Worker-Tasktime-List (100%)",
+    "description": "<p>获取阿姨工时列表 （田玉星）</p> ",
     "name": "actionGetWorkerTasktimeList",
     "group": "Worker",
     "parameter": {
@@ -4960,7 +4896,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4972,7 +4908,8 @@
   {
     "type": "POST",
     "url": "/worker/handle-worker-leave",
-    "title": "阿姨请假（田玉星 100%）",
+    "title": "Handle-Worker-Leave（100%）",
+    "description": "<p>阿姨请假 （田玉星）</p> ",
     "name": "actionHandleWorkerLeave",
     "group": "Worker",
     "parameter": {
@@ -4997,23 +4934,18 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "leave_time",
-            "description": "<p>请假时间，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】</p> "
+            "description": "<p>请假时间戳，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "leave_type",
-            "description": "<p>请假类型  1.休假 2事假 .</p> "
+            "description": "<p>请假类型  1.休假 2事假</p> "
           }
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/handle-worker-leave"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -5027,7 +4959,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"阿姨不存在\",\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -5300,7 +5232,8 @@
   {
     "type": "PUT",
     "url": "/worker/worker-bill-confirm",
-    "title": "账单确认 (田玉星 100%)",
+    "title": "Worker-Bill-Confirm(100%)",
+    "description": "<p>账单确认 （田玉星）</p> ",
     "name": "actionWorkerBillConfirm",
     "group": "Worker",
     "parameter": {
@@ -5330,11 +5263,6 @@
         ]
       }
     },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/worker-bill-confirm"
-      }
-    ],
     "success": {
       "examples": [
         {
@@ -5348,7 +5276,56 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200\n{\n \"code\": 0,\n \"msg\": \"用户认证已经过期,请重新登录\",\n \"ret\": {},\n \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
+    "url": "/worker/worker-info",
+    "title": "WorkerInfo（100%）",
+    "description": "<p>获取阿姨信息 (田玉星)</p> ",
+    "name": "actionWorkerInfo",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "worker_id",
+            "description": "<p>阿姨id</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨信息成功\"，\n \"ret\": {\n    \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200\n{\n  \"code\": 0,\n  \"msg\": \"用户认证已经过期,请重新登录\",\n  \"ret\": {},\n  \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]

@@ -17,15 +17,16 @@ use Yii;
 class WorkerController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 100%)
+     * @api{GET} /worker/worker-info WorkerInfo（100%）
      *
-     * @apiName WorkerInfo
+     * @apiDescription 获取阿姨信息 (田玉星)
+     * 
+     * @apiName actionWorkerInfo
      * @apiGroup Worker
      *
      * @apiParam {String} access_token 用户登录token
      * @apiParam {String} [worker_id]  阿姨id
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-info
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -33,7 +34,7 @@ class WorkerController extends \restapi\components\Controller
      *      "msg": "阿姨信息查询成功",
      *      "alertMsg": "获取阿姨信息成功"，
      *      "ret": {
-      *          "worker_name": "阿姨姓名",
+      *         "worker_name": "阿姨姓名",
      *          "worker_phone": "阿姨手机号",
      *          "worker_photo": "头像地址",
      *          "worker_identity_description": "阿姨身份说明",
@@ -48,13 +49,13 @@ class WorkerController extends \restapi\components\Controller
      *        }
      *     } 
      *
-     * @apiError UserNotFound 用户认证已经过期.
      * @apiErrorExample Error-Response:
-     * HTTP/1.1 403 Not Found
+     * HTTP/1.1 200
      * {
-     *   "code": "0",
-     *   "msg": "用户认证已经过期,请重新登录，",
-     *   "ret": null
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      * }
      */
     public function actionWorkerInfo()
@@ -91,17 +92,15 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} /worker/handle-worker-leave  阿姨请假（田玉星 100%）
-     *
+     * @api {POST} /worker/handle-worker-leave  Handle-Worker-Leave（100%）
+     * @apiDescription 阿姨请假 （田玉星）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} leave_time 请假时间，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】
+     * @apiParam {String} leave_time 请假时间戳，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】
      * @apiParam {String} leave_type 请假类型  1.休假 2事假
-     * .
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
      *
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
@@ -113,10 +112,12 @@ class WorkerController extends \restapi\components\Controller
      *  }
      * 
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "阿姨不存在",
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionHandleWorkerLeave()
@@ -176,8 +177,9 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-leave-history  查看阿姨请假历史（田玉星 100%）
+     * @api {GET} /worker/get-worker-leave-history  Get-Worker-Leave-History(100%)
      *
+     * @apiDescription 查看阿姨请假历史 （田玉星）
      * @apiName actionGetWorkerLeaveHistory
      * @apiGroup Worker
      *
@@ -185,8 +187,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
-     *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-leave-history
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -208,10 +208,12 @@ class WorkerController extends \restapi\components\Controller
      *   }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"error",
-     *      "msg": "阿姨不存在"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      *
      */
@@ -262,15 +264,15 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 100% )
+     * @api {GET} /worker/get-worker-place-by-id  Get-Worker-Place-ById（100%）
      *
+     * @apiDescription 获取阿姨住址 （田玉星）
      * @apiName actionGetWorkerPlaceById
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-place-by-id
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -284,10 +286,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "阿姨不存在"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      *
      */
@@ -312,8 +316,9 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-comment 获取阿姨对应的评论 (田玉星 100%)
+     * @api {GET} /worker/get-worker-comment  Get-Worker-Comment(100%)
      *
+     * @apiDescription 获取阿姨对应的评论 （田玉星）
      * @apiName actionGetWorkerComment
      * @apiGroup Worker
      *
@@ -345,10 +350,12 @@ class WorkerController extends \restapi\components\Controller
      *   }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function  actionGetWorkerComment()
@@ -390,8 +397,9 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 100%)
+     * @api {GET} /worker/get-worker-complain Get-Worker-Complain (100%)
      *
+     * @apiDescription 获取阿姨对应的投诉 （田玉星）
      * @apiName actionGetWorkerComplain
      * @apiGroup Worker
      *
@@ -422,10 +430,12 @@ class WorkerController extends \restapi\components\Controller
      *   }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerComplain()
@@ -462,8 +472,9 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-service-info 获取账单阿姨服务信息 (田玉星 100%)
+     * @api {GET} /worker/get-worker-service-info  Get-Worker-ServiceInfo(100%)
      * 
+     * @apiDescription 获取账单阿姨服务信息 （田玉星）
      * @apiName actionGetWorkerServiceInfo
      * @apiGroup Worker
      *
@@ -487,10 +498,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerServiceInfo()
@@ -521,8 +534,8 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨对账单列表 (田玉星 100%)
-     * 
+     * @api {GET} /worker/get-worker-bill-list Get-Worker-Bill-List (100%)
+     * @apiDescription 获取阿姨对账单列表 （田玉星）
      * @apiName actionGetWorkerBillList 
      * @apiGroup Worker
      *
@@ -566,10 +579,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerBillList()
@@ -607,8 +622,8 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 100%)
-     * 
+     * @api {GET} /worker/get-worker-tasktime-list Get-Worker-Tasktime-List (100%)
+     * @apiDescription 获取阿姨工时列表 （田玉星）
      * @apiName actionGetWorkerTasktimeList
      * @apiGroup Worker
      * 
@@ -642,10 +657,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */ 
     public function actionGetWorkerTasktimeList(){
@@ -687,8 +704,8 @@ class WorkerController extends \restapi\components\Controller
     
   
     /**
-     * @api {GET} /worker/get-worker-taskreward-list 获取阿姨奖励列表 (田玉星 100%)
-     * 
+     * @api {GET} /worker/get-worker-taskreward-list Get-Worker-Taskreward-List(100%)
+     * @apiDescription 获取阿姨奖励列表 （田玉星）
      * @apiName actionGetWorkerTaskrewardList
      * @apiGroup Worker
      * 
@@ -719,10 +736,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerTaskrewardList(){
@@ -754,8 +773,8 @@ class WorkerController extends \restapi\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 100%)
-     * 
+     * @api {GET} /worker/get-worker-punish-list Get-Worker-Punish-List(100%)
+     * @apiDescription 获取阿姨受处罚列表 （田玉星）
      * @apiName actionGetWorkerPunishList
      * @apiGroup Worker
      * 
@@ -789,10 +808,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerPunishList(){
@@ -839,16 +860,14 @@ class WorkerController extends \restapi\components\Controller
     }
     
     /**
-     * @api {PUT} /worker/worker-bill-confirm 账单确认 (田玉星 100%)
-     * 
+     * @api {PUT} /worker/worker-bill-confirm Worker-Bill-Confirm(100%)
+     * @apiDescription 账单确认 （田玉星）
      * @apiName actionWorkerBillConfirm
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
-     * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-bill-confirm
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -860,10 +879,12 @@ class WorkerController extends \restapi\components\Controller
      * }
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
+     *  HTTP/1.1 200
      *  {
-     *      "code":"0",
-     *      "msg": "用户认证已经过期,请重新登录"
+     *   "code": 0,
+     *   "msg": "用户认证已经过期,请重新登录",
+     *   "ret": {},
+     *   "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionWorkerBillConfirm(){
