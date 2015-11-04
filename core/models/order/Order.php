@@ -151,6 +151,7 @@ class Order extends OrderModel
             'order_booked_begin_time','order_booked_end_time','address_id',
             'customer_id','admin_id','order_pay_type'
         ];
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         foreach($attributes as $k=>$v){
             if(!in_array($k,$attributes_keys)){
                 unset($attributes[$k]);
@@ -259,6 +260,7 @@ class Order extends OrderModel
                 ['status' => false, 'errors' => $v.'为必填项！'];
             }
         }
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
 
