@@ -27,13 +27,13 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 创建订单v1
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_service_item_id 服务类型商品id
+     * @apiParam {String} order_service_item_id 服务项目id
      * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
-     * @apiParam {String} address_id 订单地址id
+     * @apiParam {String} [address_id] 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -103,8 +103,8 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['customer_id'] = $user->id;
 
-        if (is_null($args['order_service_type_id'])) {
-            return $this->send(null, "请输入服务类型商品id", 0);
+        if (is_null($args['order_service_item_id'])) {
+            return $this->send(null, "请输入服务项目id", 0);
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
