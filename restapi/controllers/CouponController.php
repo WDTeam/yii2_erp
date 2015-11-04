@@ -14,7 +14,7 @@ class CouponController extends \restapi\components\Controller
 {
     
     /**
-     * @api {POST} /coupon/exchange-coupon Exchange-Coupon（100%）
+     * @api {POST} /coupon/exchange-coupon [POST] /coupon/exchange-coupon（100%）
      * 
      * @apiDescription 兑换优惠劵（李勇）
      * @apiName actionExchangeCoupon
@@ -201,7 +201,7 @@ class CouponController extends \restapi\components\Controller
         
     }
     /**
-     * @api {Get} /coupon/all-coupons All-Coupons（李勇 100%）
+     * @api {Get} /coupon/all-coupons [Get] /coupon/all-coupons（ 100%）
      *
      * @apiDescription   获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）
      * @apiName actionAllCoupons

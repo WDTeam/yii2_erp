@@ -5380,7 +5380,8 @@
   {
     "type": "GET",
     "url": "/configure/all-services",
-    "title": "获取城市全部上线服务 （赵顺利100%）",
+    "title": "[GET] /configure/all-services（100%）",
+    "description": "<p>获取城市服务配置项价格介绍页面以及分类的全部服务项目</p> ",
     "name": "actionAllServices",
     "group": "configure",
     "parameter": {
@@ -5431,15 +5432,15 @@
         }
       ]
     },
-    "description": "<p>获取城市服务配置项价格介绍页面以及分类的全部服务项目</p> ",
     "version": "0.0.0",
     "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
     "type": "GET",
-    "url": "v1/configure/start-page",
-    "title": "阿姨端启动页 （赵顺利 20%）",
+    "url": "/configure/start-page",
+    "title": "[GET] /configure/start-page  （20%）",
+    "description": "<p>阿姨端启动页（赵顺利）</p> ",
     "name": "actionStartPage",
     "group": "configure",
     "parameter": {
@@ -5489,11 +5490,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/configure/user-init",
-    "title": "用户端首页初始化 （赵顺利20% 假数据）",
+    "url": "/configure/user-init",
+    "title": "[GET] /configure/user-init（20% ）",
     "name": "actionUserInit",
     "group": "configure",
-    "description": "<p>获得开通城市列表，广告轮播图 等初始化数据</p> ",
+    "description": "<p>用户端首页初始化,获得开通城市列表，广告轮播图 等初始化数据(赵顺利--假数据 )</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -5547,9 +5548,10 @@
     "groupTitle": "configure"
   },
   {
-    "type": "POST",
+    "type": "GET",
     "url": "/configure/worker-check-update",
-    "title": "检查阿姨端版本更新 （赵顺利0%）",
+    "title": "[GET] /configure/worker-check-update （0%）",
+    "description": "<p>检查阿姨端版本更新 (赵顺利)</p> ",
     "name": "actionWorkerCheckUpdate",
     "group": "configure",
     "parameter": {
@@ -5606,8 +5608,9 @@
   },
   {
     "type": "GET",
-    "url": "v1/configure/worker-init",
-    "title": "阿姨app初始化 （赵顺利 100%）",
+    "url": "/configure/worker-init",
+    "title": "[GET] /configure/worker-init（100%）",
+    "description": "<p>阿姨app初始化 （赵顺利）</p> ",
     "name": "actionWorkerInit",
     "group": "configure",
     "parameter": {
@@ -5980,11 +5983,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/all-services",
-    "title": "依据城市 获取所有服务列表 (赵顺利100%)",
+    "url": "/service/all-services",
+    "title": "[GET] /service/all-services (100%)",
     "name": "actionAllServices",
     "group": "service",
-    "description": "<p>获取城市所以服务类型列表</p> ",
+    "description": "<p>获取城市所以服务类型列表 （赵顺利）</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6039,11 +6042,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/baidu-map",
-    "title": "根据地址获取百度地图数据（赵顺利 100%）",
+    "url": "/service/baidu-map",
+    "title": "[GET]/service/baidu-map（100%）",
     "group": "service",
     "name": "actionBaiduMap",
-    "description": "<p>根据地址获取百度地图数据</p> ",
+    "description": "<p>根据地址获取百度地图数据(赵顺利 )</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6124,11 +6127,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/cleaning-task",
-    "title": "获得所有保洁任务项目（赵顺利 100%）",
+    "url": "/service/cleaning-task",
+    "title": "[GET] /service/cleaning-task（100%）",
     "group": "service",
     "name": "actionCleaningTask",
-    "description": "<p>获取城市所有保洁任务</p> ",
+    "description": "<p>获取城市所有保洁任务(赵顺利)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6197,11 +6200,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/goods-price",
-    "title": "获取某城市某商品的价格及备注信息（赵顺利 100%）",
+    "url": "/service/goods-price",
+    "title": "[GET] /service/goods-price（100%）",
     "name": "actionGoodsPrice",
     "group": "service",
-    "description": "<p>获取某城市某商品的价格及备注信息</p> ",
+    "description": "<p>获取某城市某商品的价格及备注信息 （赵顺利）</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6277,11 +6280,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/home-services",
-    "title": "依据城市 获取首页服务列表 （赵顺利 20% 假数据，未与boss关联）",
+    "url": "/service/home-services",
+    "title": "[GET] /service/home-services（20% ）",
     "name": "actionHomeServices",
     "group": "service",
-    "description": "<p>获取城市首页服务项目信息简介</p> ",
+    "description": "<p>获取城市首页服务项目信息简介(赵顺利--假数据，未与boss关联)</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6335,9 +6338,9 @@
     "groupTitle": "service"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/service/recursive-service-time",
-    "title": "Recursive-Service-Time(100%)",
+    "title": "[GET] /service/recursive-service-time(100%)",
     "description": "<p>周期服务时间表（李勇）</p> ",
     "name": "actionRecursiveServiceTime",
     "group": "service",
@@ -6424,7 +6427,7 @@
   {
     "type": "GET",
     "url": "/service/server-worker-list",
-    "title": "Server-Worker-List（100%）",
+    "title": "[GET] /service/server-worker-list（100%）",
     "description": "<p>获取周期服务可用阿姨列表（李勇）</p> ",
     "group": "service",
     "name": "actionServerWorkerList",
@@ -6503,11 +6506,11 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/service-goods",
-    "title": "依据城市和服务品类 获取服务类型列表 （赵顺利 80%url不能获取）",
+    "url": "/service/service-goods",
+    "title": "[GET] /service/service-goods（80%）",
     "name": "actionServiceGoods",
     "group": "service",
-    "description": "<p>获得某城市下某服务的所有子服务列表，返回子服务数组[服务名,服务描述,服务图标，服务id，url]</p> ",
+    "description": "<p>获得某城市下某服务的所有子服务列表，返回子服务数组<a href=\"%E8%B5%B5%E9%A1%BA%E5%88%A9--url%E4%B8%8D%E8%83%BD%E8%8E%B7%E5%8F%96\">服务名,服务描述,服务图标，服务id，url</a></p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -6568,9 +6571,9 @@
     "groupTitle": "service"
   },
   {
-    "type": "get",
+    "type": "GET",
     "url": "/service/single-service-time",
-    "title": "Single-Service-Time(100%)",
+    "title": "[GET] /service/single-service-time(100%)",
     "description": "<p>单次服务获取服务时间（李勇）</p> ",
     "name": "actionSingleServiceTime",
     "group": "service",
