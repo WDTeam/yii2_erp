@@ -988,7 +988,9 @@ class WorkerController extends \restapi\components\Controller
      */
 
     /**
-     * @api {get} /worker/worker-leave  查看请假情况 (李勇100%)
+     * @api {get} /worker/worker-leave Worker-Leave(100%)
+     * 
+     * @apiDescription  查看请假情况（李勇）
      * @apiName actionWorkerLeave
      * @apiGroup Worker
      *
@@ -1015,17 +1017,20 @@ class WorkerController extends \restapi\components\Controller
      *       "2015-11-07": false,
      *       "2015-11-08": false,
      *       "2015-11-09": true,
-     *   }
+     *   },
+     *  "alertMsg": "获取阿姨请假排班表成功"
      *}
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     { 
-     *       "code":"0",
-     *       "msg": "阿姨不存在"
-     *     }
+     *     HTTP/1.1 200 Not Found
+     *    {
+     *        "code": 0,
+     *        "msg": "用户认证已经过期,请重新登录",
+     *        "ret": {},
+     *        "alertMsg": "用户认证已经过期,请重新登录"
+     *    }
      */
     public function actionWorkerLeave()
     {
@@ -1033,17 +1038,17 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if($checkResult['code']!=1){
-            return $this->send(null, $checkResult['msg'], 0, 403,null,alertMsgEnum::workerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         } 
         if (!isset($param['type']) || !$param['type'] || !in_array($param['type'], array(1, 2))) {
-            return $this->send(null, "请选择请假类型", 0, 403,null,alertMsgEnum::workerLeaveNoType);
+            return $this->send(null, "请选择请假类型", 0, 200,null,alertMsgEnum::workerLeaveNoType);
         }
         $worker_id = $checkResult['workerInfo']['worker_id'];
         $type = $param['type'];
         try{
             $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
         }catch (\Exception $e) {
-            return $this->send($e, "获取阿姨请假表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "获取阿姨请假表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         return $this->send($ret, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
     }
@@ -1067,7 +1072,9 @@ class WorkerController extends \restapi\components\Controller
     
     
      /**
-     * @api {get} /worker/task-doing  获得进行中的任务列表 (李勇100%)
+     * @api {get} /worker/task-doing Task-Doing (100%)
+     * 
+     * @apiDescription  获得进行中的任务列表（李勇）
      * @apiName actionTaskDoing
      * @apiGroup Worker
      *
@@ -1081,32 +1088,35 @@ class WorkerController extends \restapi\components\Controller
      *       "msg": "操作成功",
      *       "ret": [
      *           {
-     *               "id": 2,
-     *               "worker_id": 1,
-     *               "worker_task_id": 2,
-     *               "worker_task_cycle_number": "1",
-     *               "worker_task_name": "任务名称2",
-     *               "worker_task_log_start": 1446096240,
-     *               "worker_task_log_end": 1446297240,
-     *               "worker_task_is_done": 0,
-     *               "worker_task_done_time": 0,
-     *               "worker_task_reward_type": 0,
-     *               "worker_task_reward_value": 0,
-     *               "created_at": 1446097240,
-     *               "updated_at": 0,
-     *               "is_del": 0
+     *               "id": "编号",
+     *               "worker_id": "阿姨ID",
+     *               "worker_task_id": "任务ID",
+     *               "worker_task_cycle_number": "任务周期序号",
+     *               "worker_task_name": "任务名称",
+     *               "worker_task_log_start": 任务本周期开始时间,
+     *               "worker_task_log_end": "任务本周期结束时间",
+     *               "worker_task_is_done": "任务是否完成,0未处理，1完成，-1结束且未完成",
+     *               "worker_task_done_time": "任务完成时间",
+     *               "worker_task_reward_type": "任务奖励类型",
+     *               "worker_task_reward_value": "任务奖励值",
+     *               "created_at": "创建时间",
+     *               "updated_at": "更新时间"
      *           }
-     *       ]
+     *       ]，
+     *      "alertMsg": "操作成功"
      *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     { 
-     *       "code":"0",
-     *       "msg": "您没有任务哦"
-     *     }
+     *     HTTP/1.1 200 Not Found
+     *   {
+     *       "code": 0,
+     *       "msg": "您没有任务哦",
+     *       "ret": {},
+     *       "alertMsg": "您没有任务哦"
+     *   }
+     * 
      */
     public function actionTaskDoing()
     {
@@ -1114,26 +1124,34 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if($checkResult['code']!=1){
-            return $this->send(null, $checkResult['msg'], 0, 403,null,alertMsgEnum::workerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         } 
         $worker_id = $checkResult['workerInfo']['worker_id'];
         try{
             $ret= WorkerTaskLog::getCurListByWorkerId($worker_id);
         }catch (\Exception $e) {
-            return $this->send($e, "获取当前阿姨任务列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "获取当前阿姨任务列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         if(empty($ret)){
-              return $this->send(null, "您没有任务哦", 0, 403,null,alertMsgEnum::taskDoingFail);
+              return $this->send(null, "您没有任务哦", 0, 200,null,alertMsgEnum::taskDoingFail);
         }
-        return $this->send($ret, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
+        $tasks=array();
+        foreach($ret as $task){
+            unset($task['is_del']);
+            $tasks[]=$task;
+        }
+        return $this->send($tasks, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
     }
     
     
    
      /**
-     * @api {get} /worker/task-done  获得已完成的任务列表 (李勇100%)
+     * @api {get} /worker/task-done  Task-Done (100%)
+     * 
+     * @apiDescription  获得已完成的任务列表（李勇）
      * @apiName actionTaskDone
      * @apiGroup Worker
+     * 
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
@@ -1146,32 +1164,35 @@ class WorkerController extends \restapi\components\Controller
      *       "msg": "操作成功",
      *       "ret": [
      *           {
-     *               "id": 2,
-     *               "worker_id": 1,
-     *               "worker_task_id": 2,
-     *               "worker_task_cycle_number": "1",
-     *               "worker_task_name": "任务名称2",
-     *               "worker_task_log_start": 1446096240,
-     *               "worker_task_log_end": 1446297240,
-     *               "worker_task_is_done": 0,
-     *               "worker_task_done_time": 0,
-     *               "worker_task_reward_type": 0,
-     *               "worker_task_reward_value": 0,
-     *               "created_at": 1446097240,
-     *               "updated_at": 0,
-     *               "is_del": 0
+     *               "id": "编号",
+     *               "worker_id": "阿姨ID",
+     *               "worker_task_id": "任务ID",
+     *               "worker_task_cycle_number": "任务周期序号",
+     *               "worker_task_name": "任务名称",
+     *               "worker_task_log_start": 任务本周期开始时间,
+     *               "worker_task_log_end": "任务本周期结束时间",
+     *               "worker_task_is_done": "任务是否完成,0未处理，1完成，-1结束且未完成",
+     *               "worker_task_done_time": "任务完成时间",
+     *               "worker_task_reward_type": "任务奖励类型",
+     *               "worker_task_reward_value": "任务奖励值",
+     *               "created_at": "创建时间",
+     *               "updated_at": "更新时间"
      *           }
-     *       ]
+     *       ]，
+     *      "alertMsg": "操作成功"
      *   }
-     * 
-     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiError  您没有已完成任务哦.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     { 
-     *       "code":"0",
-     *       "msg": "您没有已完成任务哦"
-     *     }
+     *     HTTP/1.1 200 Not Found
+     *   {
+     *       "code": 0,
+     *       "msg": "您没有已完成任务哦",
+     *       "ret": {},
+     *       "alertMsg": "您没有已完成任务哦"
+     *   }
+     * 
      */
     public function actionTaskDone()
     {
@@ -1179,10 +1200,10 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if($checkResult['code']!=1){
-            return $this->send(null, $checkResult['msg'], 0, 403,null,alertMsgEnum::workerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         }
         if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
-            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 403,null,alertMsgEnum::taskDoneNoPage);
+            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 200,null,alertMsgEnum::taskDoneNoPage);
         }
         $worker_id = $checkResult['workerInfo']['worker_id'];
         $page = $param['page'];
@@ -1190,18 +1211,26 @@ class WorkerController extends \restapi\components\Controller
         try{
             $ret= WorkerTaskLog::getDonedTasks($worker_id,1,$page,$per_page);
         }catch (\Exception $e) {
-            return $this->send($e, "获取已完成的任务的系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "获取已完成的任务的系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         if(empty($ret)){
-              return $this->send(null, "您没有已完成任务哦", 0, 403,null,alertMsgEnum::taskDoneFail);
+              return $this->send(null, "您没有已完成任务哦", 0, 200,null,alertMsgEnum::taskDoneFail);
         }
-        return $this->send($ret, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
+        $tasks=array();
+        foreach($ret as $task){
+            unset($task['is_del']);
+            $tasks[]=$task;
+        }
+        return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
     }
     
      /**
-     * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇100%)
+     * @api {get} /worker/task-fail Task-Fail(100%)
+     * 
+     * @apiDescription  获得已失败的任务列表（李勇） 
      * @apiName actionTaskFail
      * @apiGroup Worker
+     * 
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
@@ -1214,34 +1243,34 @@ class WorkerController extends \restapi\components\Controller
      *       "msg": "操作成功",
      *       "ret": [
      *           {
-     *               "id": 3,
-     *               "worker_id": 1,
-     *               "worker_task_id": 1,
-     *               "worker_task_cycle_number": "0",
-     *               "worker_task_name": "任务名称3",
-     *               "worker_task_log_start": 1446096240,
-     *               "worker_task_log_end": 1446097240,
-     *               "worker_task_is_done": -1,
-     *               "worker_task_done_time": 0,
-     *               "worker_task_reward_type": 0,
-     *               "worker_task_reward_value": 0, 
-     *               "created_at": 1446097240,
-     *               "updated_at": 0,
-     *               "is_del": 0,
-     *               "values": [],
-     *               "worker_task_description": ""
+     *               "id": "编号",
+     *               "worker_id": "阿姨ID",
+     *               "worker_task_id": "任务ID",
+     *               "worker_task_cycle_number": "任务周期序号",
+     *               "worker_task_name": "任务名称",
+     *               "worker_task_log_start": 任务本周期开始时间,
+     *               "worker_task_log_end": "任务本周期结束时间",
+     *               "worker_task_is_done": "任务是否完成,0未处理，1完成，-1结束且未完成",
+     *               "worker_task_done_time": "任务完成时间",
+     *               "worker_task_reward_type": "任务奖励类型",
+     *               "worker_task_reward_value": "任务奖励值",
+     *               "created_at": "创建时间",
+     *               "updated_at": "更新时间"
      *           }
-     *       ]
+     *       ]，
+     *      "alertMsg": "操作成功"
      *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     { 
-     *       "code":"0",
-     *       "msg": "您没有失败的任务哦"
-     *     }
+     *     HTTP/1.1 200 Not Found
+     *    {
+     *       "code": 0,
+     *       "msg": "您没有失败的任务哦",
+     *       "ret": {},
+     *       "alertMsg": "您没有失败的任务哦"
+     *    }
      */
     public function actionTaskFail()
     {
@@ -1249,10 +1278,10 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if($checkResult['code']!=1){
-            return $this->send(null, $checkResult['msg'], 0, 403,null,alertMsgEnum::workerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         } 
         if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
-            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 403,null,alertMsgEnum::taskFailNoPage);
+            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 200,null,alertMsgEnum::taskFailNoPage);
         }
         $worker_id = $checkResult['workerInfo']['worker_id'];
         $page = $param['page'];
@@ -1260,16 +1289,23 @@ class WorkerController extends \restapi\components\Controller
         try{
             $ret= WorkerTaskLog::getDonedTasks($worker_id,-1,$page,$per_page);
         }catch (\Exception $e) {
-            return $this->send($e, "boss系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "boss系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         if(empty($ret)){
-              return $this->send(null, "您没有任务哦", 0,403,null,alertMsgEnum::taskFailFail);
+              return $this->send(null, "您没有任务哦", 0,200,null,alertMsgEnum::taskFailFail);
         }
-        return $this->send($ret, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
+        $tasks=array();
+        foreach($ret as $task){
+            unset($task['is_del']);
+            $tasks[]=$task;
+        }
+        return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
     }
 
     /**
-     * @api {get} /worker/check-task  查看任务的详情 (李勇100%)
+     * @api {get} /worker/check-task Check-Task(100%)
+     * 
+     * @apiDescription  查看任务的详情（李勇）
      * @apiName actionCheckTask
      * @apiGroup Worker
      *
@@ -1279,41 +1315,44 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_description": "任务描述",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "settled":[
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功",
+     *       "ret": {
+     *           "id": "编号",
+     *           "worker_id": "阿姨ID",
+     *           "worker_task_id": "任务ID",
+     *           "worker_task_cycle_number": "任务周期序号",
+     *           "worker_task_name": "任务名称",
+     *           "worker_task_log_start": 任务本周期开始时间,
+     *           "worker_task_log_end": "任务本周期结束时间",
+     *           "worker_task_is_done": "任务是否完成,0未处理，1完成，-1结束且未完成",
+     *           "worker_task_done_time": "任务完成时间",
+     *           "worker_task_reward_type": "任务奖励类型",
+     *           "worker_task_reward_value": "任务奖励值",
+     *           "created_at": "创建时间",
+     *           "updated_at": "更新时间",
+     *           "values": [
      *               {
-     *                  "order_id": "订单id",
-     *                  "order_time": "订单时间",
-     *                  "work_hours": "工时"
-     *                },
-     *                {
-     *                  "order_id": "订单id",
-     *                  "order_time": "订单时间",
-     *                  "work_hours": "工时"
-     *                }  
-     *           ]
-     *      }
-     * }
-     *
+     *                   "worker_tasklog_condition": "条件索引",
+     *                   "worker_tasklog_value": "条件值"
+     *               }
+     *           ],
+     *           "worker_task_description": "任务描述",
+     *           "order_list": [订单信息]
+     *       },
+     *       "alertMsg": "操作成功"
+     *    }
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found 
-     *     { 
-     *       "code":"0",
-     *       "msg": "查看任务失败"
-     *     }
+     *     HTTP/1.1 200 Not Found 
+     *       {
+     *          "code": 0,
+     *          "msg": "查看任务失败",
+     *          "ret": {},
+     *          "alertMsg": "查看任务失败"
+     *       }
      */
     public function actionCheckTask()
     {
@@ -1321,10 +1360,10 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if($checkResult['code']!=1){
-            return $this->send(null, $checkResult['msg'], 0, 403,null,alertMsgEnum::workerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         } 
         if (!isset($param['id']) || !$param['id']){
-            return $this->send(null, "请填写任务id", 0, 403,null,alertMsgEnum::checkTaskNoId);
+            return $this->send(null, "请填写任务id", 0, 200,null,alertMsgEnum::checkTaskNoId);
         }
         $worker_id = $checkResult['workerInfo']['worker_id'];
         $id = $param['id'];
@@ -1332,7 +1371,7 @@ class WorkerController extends \restapi\components\Controller
         try{
             $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
         }catch (\Exception $e) {
-            return $this->send($e, "获取任务的详情系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "获取任务的详情系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
@@ -1340,12 +1379,13 @@ class WorkerController extends \restapi\components\Controller
         try{
             $order_list=OrderSearch::getWorkerAndOrderAndDoneTime($worker_id ,$worker_task_log_start,$worker_task_log_end);
         }catch (\Exception $e) {
-            return $this->send($e, "获取任务的订单列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
         $task_log['order_list']=$order_list;
         if(empty($task_log)){
-              return $this->send(null, "查看任务失败", 0,403,null,alertMsgEnum::checkTaskFail);
+              return $this->send(null, "查看任务失败", 0,200,null,alertMsgEnum::checkTaskFail);
         }
+        unset($task_log['is_del']);
         return $this->send($task_log, "操作成功", 1,200,null,alertMsgEnum::checkTaskSuccess);
     }
 }
