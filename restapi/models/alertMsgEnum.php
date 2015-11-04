@@ -314,7 +314,6 @@ class alertMsgEnum
     const orderCancelSuccess = "订单取消成功";
     const orderCancelVerifyFaile ="验证码或订单号不能为空";
     const orderCancelFaile = "订单取消失败";
-<<<<<<< HEAD
     //订单删除
     const orderDeleteSuccess = "订单删除成功";
     const orderDeleteFaile = "订单删除失败";
@@ -331,7 +330,7 @@ class alertMsgEnum
     //获取周期订单
     const orderGetOrderWorkerSuccess = "获取阿姨周期订单成功";
     const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
-=======
+
     
     //添加常用地址
     //被服务者手机或被服务者昵称不能为空
@@ -436,5 +435,4 @@ class alertMsgEnum
     const getGoodsSuccess = '该服务获取成功';
 
     
->>>>>>> f4314cf810922e221457a8f76ebc4950faf1a5bf
 }
