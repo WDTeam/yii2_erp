@@ -108,7 +108,7 @@ class WorkerController extends BaseAuthController
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
             Worker::deleteDistrictWorkerRelationToRedis($workerModel->id);
-            Worker::updateWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
+            Worker::updateWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
                     $workerDistrictModel = new WorkerDistrict;
@@ -208,7 +208,7 @@ class WorkerController extends BaseAuthController
                 $workerAuthModel->worker_id = $workerModel->id;
                 $workerAuthModel->save();
                 $workerParam = Yii::$app->request->post('Worker');
-                Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
+                Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
                 if($workerParam['worker_district']){
                     foreach($workerParam['worker_district'] as $val){
                         $workerDistrictModel = new WorkerDistrict;
@@ -721,7 +721,7 @@ class WorkerController extends BaseAuthController
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
                 $batchWorkerAuth[] = $workerAuthArr;
-                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type']);
+                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type'],$workerArr['worker_identity_id']);
             }
 
             $workerColumns = array_keys($workerArr);
