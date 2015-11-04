@@ -1,6 +1,7 @@
 <?php
 /**
  * @author CoLee
+ * 注：事件绑定容易对别人功能造成阻塞，绑定需谨慎！！
  */
 namespace core\components;
 
