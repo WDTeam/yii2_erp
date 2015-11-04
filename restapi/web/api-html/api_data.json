@@ -787,26 +787,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"操作成功\",\n \"ret\": {\n     \"1\": \"9\",\n     \"2\": \"0\",\n     \"3\": \"4\",\n     \"4\": \"0\",\n     \"5\": \"0\",\n     \"6\": \"1\",\n     \"7\": \"0\",\n     \"8\": \"0\",\n     \"9\": \"0\",\n     \"10\": \"0\",\n     \"11\": \"0\",\n     \"12\": \"0\"\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n {\n     \"code\": \"1\",\n     \"msg\": \"操作成功\",\n     \"alertMsg\": \"获取状态订单数量成功\"\n     \"ret\": {\n         \"1\": \"9\",\n         \"2\": \"0\",\n         \"3\": \"4\",\n         \"4\": \"0\",\n         \"5\": \"0\",\n         \"6\": \"1\",\n         \"7\": \"0\",\n         \"8\": \"0\",\n         \"9\": \"0\",\n         \"10\": \"0\",\n         \"11\": \"0\",\n         \"12\": \"0\"\n         }\n    }",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -864,26 +854,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": "HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n   \"limit\": \"1\",\n   \"page_total\": 4,\n   \"offset\": 0,\n   \"orders\": [\n     {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n     }\n   ]\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -961,34 +941,6 @@
     },
     "name": "actionAddComment",
     "group": "Order",
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单评价成功成功\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
@@ -1045,26 +997,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"693345订单取消成功\",\n  \"ret\":{\n    1\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"693345订单取消成功\",\n  \"alertMsg\": \"订单取消成功\"\n  \"ret\":{\n    1\n  }\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1561,26 +1503,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"操作成功\",\n    \"ret\": [\n    {\n    \"id\": 2,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 1,\n    \"order_before_status_name\": \"已创建\",\n    \"order_status_dict_id\": 1,\n    \"order_status_name\": \"已创建\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    },\n    {\n    \"id\": 3,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 1,\n    \"order_before_status_name\": \"已创建\",\n    \"order_status_dict_id\": 2,\n    \"order_status_name\": \"已支付\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    },\n    {\n    \"id\": 4,\n    \"created_at\": 1445347126,\n    \"updated_at\": 1445347126,\n    \"order_id\": \"2\",\n    \"order_before_status_dict_id\": 2,\n    \"order_before_status_name\": \"已支付\",\n    \"order_status_dict_id\": 3,\n    \"order_status_name\": \"已开始智能指派\",\n    \"admin_id\": 1,\n    \"order_flag_lock_time\": null\n    }\n    ]\n    }",
+          "content": "HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"查询订单状态记录成功\"\n    \"ret\": [\n       {\n        \"id\": 2,\n        \"created_at\": 1445347126,\n        \"updated_at\": 1445347126,\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": 1,\n        \"order_before_status_name\": \"已创建\",\n        \"order_status_dict_id\": 1,\n        \"order_status_name\": \"已创建\",\n        \"admin_id\": 1,\n        \"order_flag_lock_time\": null\n        },\n        {\n        \"id\": 3,\n        \"created_at\": 1445347126,\n        \"updated_at\": 1445347126,\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": 1,\n        \"order_before_status_name\": \"已创建\",\n        \"order_status_dict_id\": 2,\n        \"order_status_name\": \"已支付\",\n        \"admin_id\": 1,\n        \"order_flag_lock_time\": null\n        },\n        {\n        \"id\": 4,\n        \"created_at\": 1445347126,\n        \"updated_at\": 1445347126,\n        \"order_id\": \"2\",\n        \"order_before_status_dict_id\": 2,\n        \"order_before_status_name\": \"已支付\",\n        \"order_status_dict_id\": 3,\n        \"order_status_name\": \"已开始智能指派\",\n        \"admin_id\": 1,\n        \"order_flag_lock_time\": null\n        }\n    ]\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
