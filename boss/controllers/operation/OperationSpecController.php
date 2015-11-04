@@ -83,6 +83,10 @@ class OperationSpecController extends Controller
             $model->updated_at = time();
             if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
         } else {
             return $this->render('create', [

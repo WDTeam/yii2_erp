@@ -2,10 +2,10 @@
 
 namespace boss\controllers\payment;
 
-use Yii;
-use dbbase\models\PaymentLog;
 use boss\models\PaymentLogSearch;
 use boss\components\BaseAuthController;
+
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

@@ -23,13 +23,13 @@ $model->is_del=0;
     'form' => $form,
     'columns' => 1,
     'attributes' => [
-     		'pay_channel_id'=>[
+     		/* 'pay_channel_id'=>[
      		'type' => Form::INPUT_DROPDOWN_LIST,
      		'items' => FinancePayChannel::get_pay_channel_list($stype='all'),
      		'options' => [
      		'prompt' => '请选择支付渠道',
      		],
-     		],
+     		], */
      		//'pay_channel_id'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'options'=>['placeholder'=>'比例...']],
      		
      		'finance_order_channel_rate'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'比例...']], 

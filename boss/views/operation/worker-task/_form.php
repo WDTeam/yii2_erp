@@ -16,9 +16,10 @@ use kartik\daterange\DateRangePicker;
  * @var core\models\worker\WorkerTask $model
  * @var yii\widgets\ActiveForm $form
  */
- 
+
 $conditions = $model->getFullConditions();
-// var_dump($model->getErrors());
+// var_dump($model->getErrors('conditions'), $model->hasErrors('conditions'));
+
 ?>
 
 <div class="worker-task-form">
@@ -38,8 +39,17 @@ $conditions = $model->getFullConditions();
         'worker_task_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 任务名称...', 'maxlength'=>255]],
     ]
     ]);?>
-    <div class="form-group">
+    <div class="form-group <?=$model->hasErrors('conditions')?'has-error':''?>">
         <label class="control-label col-md-2">任务条件</label>
+        <?php 
+        if($model->hasErrors('conditions')){
+            $errs = $model->getErrors('conditions');
+            echo Html::tag('div', implode(',', $errs), [
+                'class'=>'help-block',
+                'style'=>'padding:0 20px;'
+            ]);
+        }
+        ?>
         <?php foreach ($conditions as $con){?>
         <div class="col-md-10" style="padding-left:50px">
             <span class="col-md-2">
