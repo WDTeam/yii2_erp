@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 use boss\models\order\Order;
 use core\models\order\OrderSearch;
+use boss\models\operation\OperationCategory;
 ?>
 
 <div class="heading heading_top">
@@ -25,7 +26,7 @@ use core\models\order\OrderSearch;
 		</div>
 		<div style="margin-left:80px;">
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'types', 'items' => Order::getServiceItems()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'types', 'items' => Order::getServiceTypes()]);
 		?>	
 		</div>
 		

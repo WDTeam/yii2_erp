@@ -32,6 +32,7 @@ use dbbase\models\finance\FinanceOrderChannel;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
+use boss\models\operation\OperationCategory;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -955,6 +956,16 @@ class Order extends OrderModel
         return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
     }
 
+    /*
+     * 获取服务项目表
+     */
+    
+    public static function getServiceTypes()
+    {
+        $list = OperationCategory::find()->asArray()->all();
+        return $list ? ArrayHelper::map($list, 'id', 'operation_category_name') : [];
+    }
+    
     /*
      * 获取服务项目表
      */
