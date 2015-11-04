@@ -291,6 +291,104 @@ class AuthController extends \restapi\components\Controller
         }
     }
 
+    /**
+     * @api {POST} /auth/weixin-login WeixinLogin（0%）
+     * @apiName actionWeixinLogin
+     * @apiGroup Auth
+     * @apiDescription  微信用户登录（赵顺利）
+     *
+     * @apiParam {String} phone 用户电话号码
+     * @apiParam {String} verify_code 短信验证码
+     * @apiParam {String} weixin_id 微信id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccess {Object} user 用户信息.
+     * @apiSuccess {String} access_token 访问令牌字符串.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *   "code": 1,
+     *   "msg": "登陆成功",
+     *   "ret": {
+     *       "user": {
+     *           "id": "ID",
+     *           "customer_name": "用户名",
+     *           "customer_sex": "性别",
+     *           "customer_birth": "生日",
+     *           "customer_photo": "头像",
+     *           "customer_phone": "电话",
+     *           "customer_email": "邮箱",
+     *           "operation_area_id": "商圈id",
+     *           "operation_area_name": "商圈",
+     *           "operation_city_id": "城市id",
+     *           "operation_city_name": "城市",
+     *           "customer_level": "评级",
+     *           "customer_complaint_times": "投诉",
+     *           "customer_platform_version": "操作系统版本号",
+     *           "customer_app_version": "app版本号",
+     *           "customer_mac": "mac地址",
+     *           "customer_login_ip": "登陆ip",
+     *           "customer_login_time": "登陆时间",
+     *           "customer_is_vip": "身份",
+     *           "created_at": "创建时间",
+     *           "updated_at": "更新时间"
+     *           },
+     *       "access_token": "token值"
+     *        },
+     *   "alertMsg": "登陆成功"
+     *    }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 Not Found
+     *   {
+     *      "code": 0,
+     *      "msg": "用户名或验证码错误",
+     *      "ret": {},
+     *      "alertMsg": "登陆失败"
+     *    }
+     */
+    public function actionWeixinLogin()
+    {
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(empty($param['phone'])||empty($param['verify_code'])||empty($param['weixin_id'])){
+            return $this->send(null, "参数不完整，登录失败。", 0, 200,null,alertMsgEnum::customerLoginDataDefect);
+        }
+        $phone = $param['phone'];
+        $verifyCode = $param['verify_code'];
+        try{
+            $checkRet = CustomerCode::checkCode($phone,$verifyCode);
+        }catch (\Exception $e) {
+            return $this->send($e, "验证手机号和验证码系统错误", 1024, 200,null,alertMsgEnum::bossError);
+        }
+        if ($checkRet) {
+            try{
+                $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
+            }catch (\Exception $e) {
+                return $this->send($e, "生成token系统错误", 1024, 200,null,alertMsgEnum::bossError);
+            }
+            if (empty($token)) {
+                return $this->send(null, "生成token错误",0, 200,null,alertMsgEnum::customerLoginFail);
+            }else{
+                try{
+                    $user = CustomerAccessToken::getCustomer($token);
+                }catch (\Exception $e) {
+                    return $this->send($e, "获取登录用户信息系统错误", 1024, 200,null,alertMsgEnum::bossError);
+                }
+                $ret = [
+                    "user" => $user,
+                    "access_token" => $token
+                ];
+                return $this->send($ret, "登陆成功",1,200,null,alertMsgEnum::customerLoginSuccess);
+
+            }
+        } else {
+            return $this->send(null, "用户名或验证码错误", 0,200,null,alertMsgEnum::customerLoginFail);
+        }
+    }
+
 }
 
 ?>

@@ -12,7 +12,6 @@ use dosamigos\datetimepicker\DateTimePicker;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
 <div class="operation-shop-district-form">
     
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
