@@ -140,8 +140,9 @@ class EventBind extends Component implements BootstrapInterface
             Ivr::className(),
             Ivr::EVENT_SEND_AFTER,
             function ($event) {
+//                 var_dump($event);
                 try{
-                    $data = $event->owner->request_data;
+                    $data = $event->sender->request_data;
                     $mongo = \Yii::$app->mongodb;
                     $collection = $mongo->getCollection('ivr_send_log');
                     $res = $collection->insert([
@@ -171,7 +172,7 @@ class EventBind extends Component implements BootstrapInterface
             Ivr::EVENT_CALLBACK,
             function ($event) {
                 try{
-                    $cbdata = (object)$this->owner->cb_data;
+                    $cbdata = (object)$this->sender->cb_data;
                     $mongo = \Yii::$app->mongodb;
                     $collection = $mongo->getCollection('ivr_callback_log');
                     $res = $collection->insert([
