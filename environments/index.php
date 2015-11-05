@@ -94,7 +94,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'boss/config/boss_config.php',
+            'boss/config/boss-config.php',
         ],
     ],
 ];
