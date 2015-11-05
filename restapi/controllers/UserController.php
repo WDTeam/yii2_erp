@@ -1460,7 +1460,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-weixin-user-info  getWeixinUserInfo （90%）
+     * @api {GET} /user/get-weixin-user-info  [GET] /user/get-weixin-user-info （90%）
      * @apiDescription 通过微信id获取用户信息 (赵顺利 未测试)
      * @apiName actionGetWeixinUserInfo
      * @apiGroup User
@@ -1525,7 +1525,7 @@ class UserController extends \restapi\components\Controller
         }
 
         $date = CustomerAccessToken::generateAccessTokenForWeixin($weixin_id, $sign);
-        
+
         if ($date['errcode'] != '0') {
             return $this->send(null, $date['errmsg'], 0, 403, null, alertMsgEnum::getUserInfoFailed);
         }
@@ -1535,6 +1535,60 @@ class UserController extends \restapi\components\Controller
             "access_token" => $date['customer']
         ];
         return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
+    }
+
+    /**
+     * @api {GET} /user/get-user-feedback  [GET] /user/get-user-feedback （100%）
+     * @apiDescription 用户意见反馈 (郝建设)
+     * @apiName actionGetUserFeedback
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token  用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *      "code": 1,
+     *      "msg": "用户反馈信息提交成功",
+     *      "ret": {},
+     *      "alertMsg": "获取用户信息提交成功"
+     *  }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户反馈信息提交失败",
+     *       "ret":{},
+     *       "alertMsg": "用户反馈信息提交失败"
+     *     }
+     *
+     */
+    public function actionGetUserFeedback()
+    {
+        $param = Yii::$app->request->get();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            try {
+                $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
+                if ($feedback) {
+                    return $this->send(1, "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
+                } else {
+                    return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
+                }
+            } catch (\Exception $e) {
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+        }
     }
 
 }
