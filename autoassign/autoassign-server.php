@@ -377,11 +377,14 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
-            echo '指派结果为:'.$result;
-            $d = json_decode($result,true);
-            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-            $d['assign_start_time'] = isset($d['assign_start_time'])?date('Y-m-d H:i:s', $d['assign_start_time']) : '';
-            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+//            echo '指派结果为:'.$result;
+//            $d = json_decode($result,true);
+//            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+//            $d['assign_start_time'] = isset($d['assign_start_time'])?date('Y-m-d H:i:s', $d['assign_start_time']) : '';
+//            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : ''
+//          不再解析返回值
+            $orders = $this->redis->zrange($this->config['_REDIS_WAIT_ASSIGN_ORDER_POOL_'],0,-1);
+            $d = (Array)$orders;
             $d = json_encode($d);
             $this->broadcast($server,$d);
         } catch (Exception $ex) {
