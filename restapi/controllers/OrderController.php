@@ -1316,17 +1316,11 @@ class OrderController extends \restapi\components\Controller
             'order_use_coupon_money' => $orderInfo['order_use_coupon_money'], 
             'order_use_promotion_money' => $orderInfo['order_use_promotion_money']
         ];
-<<<<<<< HEAD
         $status_history = OrderStatus::searchOrderStatusHistory($args['order_id']);
         foreach($status_history as $key=> $val){
             $ret['status_history'][$key]['created_at'] = $val['created_at'];
             $ret['status_history'][$key]['order_status_customer'] = $val['order_status_customer'];
         }
-=======
-        $ret['status_history'] = OrderStatus::searchOrderStatusHistory($args['order_id']);
-        $ret['orders'] = $orderInfo;
-
->>>>>>> 7b6b1a43d7bfbfff4e4077c2d3ba7ec8ad1754fd
         $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
