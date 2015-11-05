@@ -184,6 +184,20 @@ class EventBind extends Component implements BootstrapInterface
                         'created_at'=>date('Y-m-d H:i:s'),
                         'create_time'=>time(),
                     ]);
+                    
+//                     $text = json_encode($data);
+//                     $sendres = \Yii::$app->mailer->compose()
+//                     ->setFrom('service@corp.1jiajie.com')
+//                     ->setTo([
+//                         'lidenggao@1jiajie.com',
+//                         //             'weibeinan@1jiajie.com',
+//                     //             'guohongbo@1jiajie.com',
+//                     //             'linhongyou@1jiajie.com'
+                    
+//                     ])
+//                     ->setSubject('ivr callback ')
+//                     ->setTextBody($text)
+//                     ->send();
                 }catch(\Exception $e){
                     \Yii::error($e, 'event/ivrcallback');
                 }
