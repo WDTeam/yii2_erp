@@ -53,8 +53,8 @@ class DemoController extends BaseAuthController
         $text = 'test';
         $sendres = \Yii::$app->mailer->compose()
         ->setFrom('service@corp.1jiajie.com')
-        ->setTo(['lidenggao@1jiajie.com', 'linhongyou@1jiajie.com'])
-        ->setSubject('ivr callback ')
+        ->setTo(['lidenggao@1jiajie.com'])
+        ->setSubject('send email test')
         ->setTextBody($text)
         ->send();
     }
