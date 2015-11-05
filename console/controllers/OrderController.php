@@ -17,6 +17,7 @@ class OrderController extends Controller{
     /**
      * 处理服务开始
      * @param unknown $order
+     * @author CoLee
      */
     private function serviceStart($order)
     {
@@ -34,7 +35,8 @@ class OrderController extends Controller{
     }
     /**
      * 处理服务结束
-     * @param unknown $order_id
+     * @author CoLee
+     * @param unknown $order
      */
     private function serviceDone($order)
     {
@@ -52,6 +54,7 @@ class OrderController extends Controller{
     }
     /**
      * 评价订单
+     * @author CoLee
      * @param unknown $order
      */
     private function suggest($order)
@@ -75,6 +78,7 @@ class OrderController extends Controller{
     }
     /**
      * 定时处理服务状态
+     * @author CoLee
      * 5分钟一次 
      * use: *\/5 * * * * yii order/change-service-status
      */

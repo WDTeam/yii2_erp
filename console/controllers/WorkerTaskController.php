@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author CoLee
+ */
 namespace console\controllers;
 
 use yii\console\Controller;
@@ -29,17 +32,26 @@ class WorkerTaskController extends Controller
         ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
         ->all();
         foreach ($tasks as $task){
-            $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
-            $task->setValues($conVals);
-            $task->calculateIsDone();
+            try{
+                $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
+                $task->setValues($conVals);
+                $task->calculateIsDone();
+            }catch(\Exception $e){
+                echo 'has error';
+            }
         }
 //         * 3、自动生成阿姨任务记录，有则取，无则建.
         $models = Worker::find()->all();
         $total = count($models);
         echo "worker total: {$total}".PHP_EOL;
         foreach ($models as $model){
-            $res =  (array)WorkerTask::autoCreateTaskLog($model->id);
-            echo count($res).PHP_EOL;
+            try{
+                $res =  (array)WorkerTask::autoCreateTaskLog($model->id);
+                echo count($res).PHP_EOL;
+            }catch(\Exception $e){
+                echo 'has error';
+            }
+            
         }
         //检查结算
         $tasks = (array)WorkerTaskLog::find()
@@ -49,8 +61,12 @@ class WorkerTaskController extends Controller
         $total = count($tasks);
         echo "setSettlemented total: {$total}".PHP_EOL;
         foreach ($tasks as $task){
-            $task->setSettlemented();
-            echo 'task: '.$task->worker_task_name.' done.'.PHP_EOL;
+            try{
+                $task->setSettlemented();
+                echo 'task: '.$task->worker_task_name.' done.'.PHP_EOL;
+            }catch(\Exception $e){
+                echo 'has error';
+            }
         }
     }
 }

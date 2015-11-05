@@ -647,11 +647,14 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['finance_pop_order_pay_status_type']=2;
     		
     }
+    
     return $orderdateinfo;
     
     }  
 
-    //百度钱包 
+    
+    
+    //百度钱包 支付宝
     public function get_baidupay($hder_info,$dateinfo,$channelid,$channelidpay,$channel_rate){
     	//对应退款金额
     	 if(isset($hder_info['refund'])){
@@ -697,9 +700,15 @@ class FinancePopOrderSearch extends FinancePopOrder
     //打开订单库开始比对
     //订单对账
     $OrderExtPop = new Order;
-    $orderInfo = $OrderExtPop::find()->joinWith(['orderExtPop'])->where(['orderExtPop.order_pop_order_code'=>$getorder])->one();
+
+  //  var_dump(trim($getorder));exit;
+    $orderInfo = $OrderExtPop::find()->joinWith(['orderExtPay'])->where(['orderExtPay.order_pay_flow_num'=>trim($getorder)])->one();
+
+    
+    //var_dump($orderInfo);
+//exit;
+    
     //第三方运营费
-     
     if (isset($orderInfo->order_code)) {
     	$orderdateinfo=$orderInfo->getAttributes();
     
@@ -725,6 +734,9 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['order_use_promotion_money']=$orderInfo->orderExtPay->order_use_promotion_money;//使用促销金额
     	$orderdateinfo['order_pay_money']=$orderInfo->orderExtPay->order_pay_money;//支付金额
     	$orderdateinfo['coupon_id']=$orderInfo->orderExtPay->coupon_id;
+    	$orderdateinfo['order_booked_end_time']=$orderInfo->order_booked_count;
+    	
+    	
     	}
     	//第三方运营费用
     	$orderdateinfo['order_pop_operation_money']=$promote;
@@ -760,17 +772,18 @@ class FinancePopOrderSearch extends FinancePopOrder
     			//无状态
     			$orderdateinfo['finance_pop_order_pay_status_type']=1;
     		}
-    
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	}else {
     		$orderdateinfo['order_money']=$getorder_money;
     		$orderdateinfo['finance_pop_order_pay_status_type']=4;
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	}
     }else {
     	//在订单表查询无数据 1 确实没有 2视为充值订单
     	if($getorder_money >=1000){
     		//查询胜强的充值表
     		//查询存在
-    		$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    		$alinfo_es=\core\models\payment\Payment::getPaymentByInfo(['payment_transaction_id'=>$getorder]);
     
     
     		/* 	 if($alinfo_es){
@@ -845,6 +858,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['finance_pop_order_pay_status_type']=2;
     		
     }
+    
+    //var_dump($orderdateinfo);exit;
+    
+    
     return $orderdateinfo;
     
     }

@@ -17,6 +17,29 @@ use Yii;
  */
 class OperationShopDistrictCoordinate extends \core\models\operation\OperationShopDistrictCoordinate
 {
+
+    /**
+     * 自建校验器:经度 0~180
+     */
+    public function validateLongitude($attribute, $params)
+    {
+        $value = $this->$attribute;
+        if ($value > $params['max'] || $value < $params['min']) {
+            $this->addError($attribute, '经度超出范围');
+        }
+    }
+
+    /**
+     * 自建校验器:纬度 0~90
+     */
+    public function validateLatitude($attribute, $params)
+    {
+        $value = $this->$attribute;
+        if ($value > $params['max'] || $value < $params['min']) {
+            $this->addError($attribute, '纬度超出范围');
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -24,11 +47,22 @@ class OperationShopDistrictCoordinate extends \core\models\operation\OperationSh
     {
         return [
             [['operation_city_id', 'created_at', 'updated_at'], 'integer'],
-            [['operation_shop_district_coordinate_start_longitude'], 'number', 'min' => 0, 'max' => 180],
-            [['operation_shop_district_coordinate_end_longitude'], 'number', 'min' => 0, 'max' => 180],
-            [['operation_shop_district_coordinate_start_latitude'], 'number', 'min' => 0, 'max' => 90],
-            [['operation_shop_district_coordinate_end_latitude'], 'number', 'min' => 0, 'max' => 90],
-            [['operation_shop_district_name'], 'string', 'max' => 60],
+            [
+                [
+                    'operation_shop_district_coordinate_start_longitude',
+                    'operation_shop_district_coordinate_end_longitude'
+                ],
+                'validateLongitude',
+                'params' => ['min' => '0', 'max' => '180']
+            ],
+            [
+                [
+                    'operation_shop_district_coordinate_start_latitude',
+                    'operation_shop_district_coordinate_end_latitude'
+                ],
+                'validateLatitude',
+                'params' => ['min' => '0', 'max' => '90']
+            ],
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_city_name'], 'string', 'max' => 50]
         ];

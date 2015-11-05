@@ -217,25 +217,17 @@ class CustomerController extends Controller
 
         $model = $this->findModel($id);
 		$customerBlockLogModel = new CustomerBlockLog;
-        if(\Yii::$app->request->post()){
-            $block_reason =\Yii::$app->request->post('customer_del_reason','');
-            $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
-            if ($is_added) {
-				\Yii::$app->session->setFlash('default', '封号成功');
-                return $this->redirect(['index']);
-            }else{
-                return $this->renderAjax('add-to-block',['model'=>$model]);
-            }
-
-			//if($customerBlockLogModel->save()){
-			//	$model->is_del = 1;
-			//	$model->save();
-			//	return $this->redirect(['index']);
-			//}else{
-			//	return $this->renderAjax('add-to-block',['model'=>$model, 'customerBlockLogModel'=>$customerBlockLogModel]);
-			//}
-        }
         return $this->renderAjax('add-to-block',['model'=>$model]);
+    }
+    
+    /**
+     * add customer to black-block
+     */
+    public function actionDoAddToBlock(){
+        $id = \Yii::$app->request->get('id');
+        $block_reason = \Yii::$app->request->get('block_reason');
+        $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
+        echo $is_added;
     }
 
     /*
@@ -789,8 +781,8 @@ class CustomerController extends Controller
 
         // $res = \dbbase\models\CustomerBlockLog::addToBlock(17782, '测试');
         // var_dump($res);
-        // $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
-        // var_dump($res);
+        //$res = \core\models\customer\CustomerCode::generateAndSend('13436939480');
+        //var_dump($res);
 
         // $res = \core\models\customer\CustomerCode::checkCode('18519654001', '9906');
         // var_dump($res);
@@ -812,7 +804,8 @@ class CustomerController extends Controller
 		//var_dump($res);
 		//$res = \core\models\customer\Customer::getAllRelationally();
 		//$res = \core\models\customer\Customer::addCustomer('15623564857', 20);
-		$res = \core\models\customer\Customer::getWorkersByPhone('13436939482');
+		//$res = \core\models\customer\Customer::getWorkersByPhone('13436939482');
+        $res = \core\models\customer\CustomerAccessToken::generateAccessToken('13436939480', '8149', 3);
 		var_dump($res);
     }
 

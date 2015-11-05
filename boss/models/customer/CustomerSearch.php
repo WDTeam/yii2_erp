@@ -7,6 +7,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use dbbase\models\customer\Customer;
 
+use core\models\customer\CustomerAddress;
+
 /**
  * CustomerSearch represents the model behind the search form about `dbbase\models\Customer`.
  */
@@ -33,7 +35,7 @@ class CustomerSearch extends Customer
 
     public function search($params)
     {
-		$query = Customer::find();
+		$query = Customer::find()->orderBy('created_at desc');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
@@ -60,7 +62,7 @@ class CustomerSearch extends Customer
             //'customer_is_vip' => $this->customer_is_vip,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            //'is_del' => $this->is_del,
+            'is_del' => $this->is_del,
         ]);
 
 		if(isset($this->customer_is_vip)){
@@ -75,12 +77,30 @@ class CustomerSearch extends Customer
             ->andFilterWhere(['like', 'customer_email', $this->customer_email])
             ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip]);
 
-        if ($this->time_begin && $this->time_end) {
-            $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)])
-            ->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
+        if ($this->time_begin) {
+            $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)]);
         }
 
-        $query->andFilterWhere(['like', 'customer_phone', $this->customer_global_search]);
+		if ($this->time_end) {
+            $query->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
+        }
+
+		if($this->customer_global_search){
+			$customer_global_search = $this->customer_global_search;
+			$customerIdsArr = CustomerAddress::find()->select(['customer_id'])
+				->where(['like', 'operation_province_name', $customer_global_search])
+				->orWhere(['like', 'operation_city_name', $customer_global_search])
+				->orWhere(['like', 'operation_area_name', $customer_global_search])
+				->orWhere(['like', 'customer_address_detail', $customer_global_search])
+				->asArray()->all();
+			$customer_ids = [];
+			foreach ($customerIdsArr as $customerIds)
+			{
+				array_push($customer_ids, $customerIds['customer_id']);
+			}
+			$query->orFilterWhere(['in', 'id', $customer_ids])
+				->orFilterWhere(['like', 'customer_phone', $this->customer_global_search]);
+		}
         return $dataProvider;
     }
 	

@@ -58,22 +58,15 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function rules()
     {
         return array_merge(parent::rules(),[
+            [['worker_task_reward_value'], 'match', 'pattern'=>'/^[0-9]+(.[0-9]{1,2})?$/'],
             [['worker_task_name', 
-                'worker_task_end', 'worker_task_reward_type',
+                'worker_task_end', 'worker_task_reward_type', 'worker_task_reward_value',
                 'worker_rules', 'worker_types', 'worker_cites',
-                'worker_task_cycle',
+                'worker_task_cycle', 'conditions',
             ], 'required'],
             [['worker_task_time'], 'required'],
             [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
-            [['conditions'], 'validateConditions'],
         ]);
-    }
-    
-    public function validateConditions($attribute, $params)
-    {
-//         if (!$this->hasErrors()) {
-//             $this->addError($attribute, \Yii::t('app', '条件错误.'));
-//         }
     }
     
     public function getConditions()
@@ -96,9 +89,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function getWorker_task_time()
     {
         if($this->getIsNewRecord()){
-            return null;
+            $this->worker_task_start = time();
+            $this->worker_task_end = time()+3600*24*30;
         }
-
         $str = date('m/d/Y', $this->worker_task_start);
         $str .= ' - ';
         $str .= date('m/d/Y', $this->worker_task_end);

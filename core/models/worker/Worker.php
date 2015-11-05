@@ -4,8 +4,10 @@ namespace core\models\worker;
 
 
 use dbbase\models\Help;
+use JPush\Exception\APIRequestException;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
+use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -136,12 +138,17 @@ class Worker extends \dbbase\models\worker\Worker
         }else{
             $workerStatResult = self::find()
                 ->where(['id'=>$worker_id])
-                ->select('id,shop_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
+                ->select('id,shop_id,worker_type,worker_identity_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
                 ->joinWith('workerStatRelation')
                 ->asArray()
                 ->one();
             if($workerStatResult){
-                if($workerStatResult['worker_stat_order_num']!==0){
+                //门店名称,家政公司名称
+                $shopInfo = Shop::findone($workerStatResult['shop_id']);
+                $workerStatResult['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+                $workerStatResult['worker_type_description'] = self::getWorkerTypeShow($workerStatResult['worker_type']);
+                $workerStatResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerStatResult['worker_identity_id']);
+                if($workerStatResult['worker_stat_order_num']!=0){
                     $workerStatResult['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($workerStatResult['worker_stat_order_refuse']/$workerStatResult['worker_stat_order_num']);
                 }else{
                     $workerStatResult['worker_stat_order_refuse_percent'] = '0%';
@@ -155,11 +162,11 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 批量获取阿姨银行信息
-     * @param int|array $worker_id
+     * 获取阿姨银行信息
+     * @param int|array $worker_id 阿姨id
      * @return array
      */
-    public static function getWorkerBankListByIds($worker_id){
+    public static function getWorkerBankInfo($worker_id){
         if(empty($worker_id)){
             return [];
         }else{
@@ -305,7 +312,7 @@ class Worker extends \dbbase\models\worker\Worker
                     $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
                     $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
 
-                    if($val['worker_stat_order_num']!==0){
+                    if($val['worker_stat_order_num']!=0){
                         $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
                     }else{
                         $val['worker_stat_order_refuse_percent'] = '0%';
@@ -359,7 +366,7 @@ class Worker extends \dbbase\models\worker\Worker
                 $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
                 $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
                 $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
-                if($val['worker_stat_order_num']!==0){
+                if($val['worker_stat_order_num']!=0){
                     $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
                 }else{
                     $val['worker_stat_order_refuse_percent'] = '0%';
@@ -877,8 +884,6 @@ class Worker extends \dbbase\models\worker\Worker
             Yii::$app->redis->close();
             return true;
         }
-
-
     }
 
     /**
@@ -893,12 +898,6 @@ class Worker extends \dbbase\models\worker\Worker
             return false;
         }
 
-        //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
-        $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
-        foreach ((array)$oldDistrictIdsArr as $val) {
-            echo self::DISTRICT.'_'.$val['operation_shop_district_id'];
-            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
-        }
         //添加新的商圈绑定阿姨关系 [1,3,4]
         foreach ((array)$districtIdsArr as $val) {
             //如果商圈不存在，默认添加商圈set，并存储阿姨id
@@ -906,6 +905,17 @@ class Worker extends \dbbase\models\worker\Worker
         }
         Yii::$app->redis->close();
         return true;
+    }
+
+    public static function deleteDistrictWorkerRelationToRedis($worker_id){
+        if(empty($worker_id) || empty($districtIdsArr)){
+            return false;
+        }
+        //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
+        $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
+        foreach ((array)$oldDistrictIdsArr as $val) {
+            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
+        }
     }
 
     /**
@@ -952,16 +962,18 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @param $worker_phone
      * @param $worker_type
+     * @param $worker_identity_id 阿姨身份id 1全时2兼职
      * @return bool
      */
-    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type){
+    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type,$worker_identity_id){
         if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
             return false;
         }
         $workerInfo['info'] = [
             'worker_id'=>$worker_id,
             'worker_phone'=>$worker_phone,
-            'worker_type'=>$worker_type
+            'worker_identity_id'=>$worker_type,
+            'worker_type'=>$worker_identity_id
         ];
         $workerInfo['schedule'] = [];
         $workerInfo['order'] = [];
@@ -971,25 +983,54 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
+     * 更新阿姨信息到redis
+     * @param $worker_id
+     * @param $worker_phone
+     * @param $worker_type
+     * @param $worker_identity_id 阿姨身份id 1全时2兼职
+     * @return bool
+     */
+    public static function updateWorkerInfoToRedis($worker_id,$worker_phone,$worker_type,$worker_identity_id){
+        if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
+            return false;
+        }
+        $workerInfo = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
+        if($workerInfo){
+            $workerInfo = json_decode($workerInfo,1);
+            $workerInfo['info'] = [
+                'worker_id'=>$worker_id,
+                'worker_phone'=>$worker_phone,
+                'worker_type'=>$worker_type,
+                'worker_identity_id'=>$worker_identity_id
+            ];
+            $workerInfo = json_encode($workerInfo);
+            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        }
+    }
+    /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $worker_identity_id 阿姨身份 1全时2兼职
      * @param int $orderBookBeginTime 待指派订单预约开始时间
      * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
+    public static function getDistrictFreeWorker($district_id,$worker_identity_id=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
         $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
-
+        //开始时间大于等于结束时间
+        if($orderBookBeginTime>=$orderBookEndTime){
+            return [];
+        }
+        $districtFreeWorkerIdsArr = [];
         foreach ($districtWorkerResult as $val) {
 
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
 
-            if($val['info']['worker_type']==$worker_type){
+            if($val['info']['worker_identity_id']==$worker_identity_id){
                 $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
                 if(array_diff($orderBookTime,$workerEnabledTime)){
                     continue;
@@ -1013,6 +1054,7 @@ class Worker extends \dbbase\models\worker\Worker
      */
     protected static function generateTimeUnit($beginTime,$endTime){
         $durationTime = ($endTime-$beginTime)/3600;
+        $TimeArr = [];
         for($i=0;$i<$durationTime*2;$i++){
             $TimeArr[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
         }
@@ -1020,61 +1062,45 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 获取商圈中 周期内可用阿姨
+     * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_type 阿姨类型 1自营2非自营
-     * @param array $orderBookTimeArr 待指派订单预约时间['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'9:00]
+     * @param int $worker_identity_id 阿姨身份 1全时2兼职
+     * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
+     * @throws ErrorException
      */
-    public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
-        $timesArr = self::getDayTimes();
+
+    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_id=1,$orderBookTimeArr){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
-        $time = strtotime(date('Y-m-d'));
-        //生成最近7天的星期对应时间戳数组 ['1'=>1490901111,'2'=>1490909811,....]
-        for($i=0;$i<7;$i++){
-            $week  = date('N',$time+$i*24*3600);
-            $weekTimeArr[$week] = $time+$i*24*3600;
-        }
         $districtFreeWorkerIdsArr = [];
 
         foreach ($districtWorkerResult as $val) {
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
-            if($val['info']['worker_type']==$worker_type){
-                $workerIsDisble = 0;
+            if($val['info']['worker_identity_id']==$worker_identity_id){
+                $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
-                    /*
-                     * 根据时间段转换成最小时间单位
-                     * 转换前['8:00-10:00']
-                     * 转换后['8:00','8:30','9:00','9:30']
-                     */
-                    $beginKey = array_search($t_val['orderBookBeginTime'],$timesArr);
-                    $endKey = array_search($t_val['orderBookEndTime'],$timesArr);
-                    $orderBookTime = array_slice($timesArr,$beginKey,$endKey-$beginKey);
-
-                    for($i=1;$i<=4;$i++){
-                        //获取周期表中选中星期的时间戳
-                        $time = $weekTimeArr[$t_val['week']]+$i*7*24*3600;
-                        //根据排班表获取所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30'，...]
-                        $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($time,$schedule);
-                        if(array_diff($orderBookTime,$workerEnabledTime)){
-                            $workerIsDisble = 1;
-                            break;
-                        }
-                        //根据订单获取不可用时间 ['8:00','8:30','9:00','9:30']
-                        $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$orderInfo);
-                        if(array_intersect($orderBookTime,$workerHaveBookedTime)){
-                            $workerIsDisble = 1;
-                            break;
-                        }
+                    if($t_val['orderBookBeginTime']>=$t_val['orderBookEndTime']){
+                        return [];
                     }
-                    if($workerIsDisble==1){
+                    $orderBookTime = self::generateTimeUnit($t_val['orderBookBeginTime'],$t_val['orderBookEndTime']);
+
+                    //根据排班表获取所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30'，...]
+                    $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($t_val['orderBookBeginTime'],$schedule);
+                    if(array_diff($orderBookTime,$workerEnabledTime)){
+                        $workerIsDisabled = 1;
+                        break;
+                    }
+                    //根据订单获取不可用时间 ['8:00','8:30','9:00','9:30']
+                    $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($t_val['orderBookBeginTime'],$orderInfo);
+                    if(array_intersect($orderBookTime,$workerHaveBookedTime)){
+                        $workerIsDisabled = 1;
                         break;
                     }
                 }
-                if($workerIsDisble==0){
+                if($workerIsDisabled==0){
                     $districtFreeWorkerIdsArr[] = $val['info']['worker_id'];
                 }
             }
@@ -1433,8 +1459,10 @@ class Worker extends \dbbase\models\worker\Worker
             case 2:
                 return '通过基础培训';
             case 3:
-                return '已上岗';
+                return '已试工';
             case 4:
+                return '已上岗';
+            case 5:
                 return '通过晋升培训';
         }
        /* if($worker_auth_status==1){

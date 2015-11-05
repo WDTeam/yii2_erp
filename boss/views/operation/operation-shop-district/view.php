@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_shop_district_name',
             'operation_city_id',
             'operation_city_name',
-//            'operation_shop_district_latitude_longitude:ntext',
+            //'operation_shop_district_latitude_longitude:ntext',
             'created_at:datetime',
             'updated_at:datetime',
         ],

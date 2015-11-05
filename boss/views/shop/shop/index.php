@@ -85,7 +85,18 @@ $columns[] = [
     },
     'options'=>['width'=>200,],
     ];
-$columns[] = 'worker_count';
+$columns[] = [
+    'attribute'=>'worker_count',
+    'format'=>'raw',
+    'value'=>function ($model){
+        return Html::a($model->worker_count,[
+            'worker/worker/index',
+            'WorkerSearch'=>[
+                'shop_id'=>$model->id
+            ],
+        ]);  
+    },
+];
 $columns[] = 'complain_coutn';
 $columns[] = 'level';
 $columns[] = [

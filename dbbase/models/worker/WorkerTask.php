@@ -40,7 +40,7 @@ class WorkerTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_task_online','worker_task_start', 'worker_task_end', 'worker_task_cycle', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['worker_task_online','worker_task_start', 'worker_task_end', 'worker_task_cycle', 'worker_task_reward_type', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['worker_task_conditions'], 'string'],
             [['worker_task_name', 'worker_type', 'worker_rule_id', 'worker_task_city_id', 'worker_task_description', 'worker_task_description_url'], 'string', 'max' => 255]
         ];

@@ -5,12 +5,15 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\finance\FinanceSettleApply;
+
 use core\models\worker\Worker;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
+
+use dbbase\models\order\OrderStatusDict;
+use dbbase\models\finance\FinanceSettleApply;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceSettleApply`.
@@ -86,17 +89,22 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function rules()
     {
         return [
-            [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required'],
-             [['worker_id','id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ], 'integer'],
-            [['worker_tel',], 'string', 'max' => 11],
-            [['worker_tel',],'match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
+            [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required','on'=>['query']],
+             [['worker_id','id', 'shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ], 'integer','on'=>['query','count','save','default']],
+            [['worker_tel',], 'string', 'max' => 11,'on'=>['query','count','save','default']],
+            [['worker_tel',],'match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码','on'=>['query','count','save','default']],
         ];
     }
 
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
+        return [
+            'query'=>[ 'settle_apply_create_start_time', 'settle_apply_create_end_time','worker_tel', 'finance_settle_apply_status','worker_type_id','worker_identity_id'],
+            'count'=>[ 'worker_tel'],
+            'save'=>[ 'worker_tel'],
+            'default'=>['worker_id','id', 'shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ],
+        ];
     }
 
     public function search($params)
@@ -197,7 +205,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * 根据阿姨Id获取结算的整体信息
      * @param type $workerId
      */
-    public function getWorkerSettlementSummaryInfo($workerId){
+    public function getWorkerSettlementSummaryInfo($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $orders = $this->getWorkerOrderInfo($workerId);
         $order_count = 0;//总单量
         $apply_man_hour = 0;//总工时
@@ -226,14 +234,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->shop_id = $workerInfo['shop_id'];
             $this->shop_name = $workerInfo['shop_name'];
             $this->shop_manager_name = $workerInfo['shop_manager_name'];
+            $this->shop_manager_id = $workerInfo['shop_manager_id'];
         }
-        if(($this->worker_type_id ==self::SELF_OPERATION ) && ($this->worker_identity_id == self::FULLTIME)){
-            $this->finance_settle_apply_starttime = self::getFirstDayOfSpecifiedMonth();//结算开始日期
-            $this->finance_settle_apply_endtime = self::getLastDayOfSpecifiedMonth();//结算截止日期
-        }else{
-            $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
-            $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
-        }
+        $this->finance_settle_apply_starttime = $finance_settle_apply_starttime;//结算开始日期
+        $this->finance_settle_apply_endtime = $finance_settle_apply_endtime;//结算截止日期
         $apply_base_salary = $this->getBaseSalary($this->worker_type_id,$this->worker_identity_id);
         $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
@@ -253,6 +257,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
               }
            }
         }
+        $apply_base_salary_subsidy  = $this->getBaseSalarySubsidy($workerId,$apply_order_money,$apply_base_salary,$this->worker_type_id,$this->worker_identity_id,$this->finance_settle_apply_starttime,$this->finance_settle_apply_endtime);
+        $this->finance_settle_apply_base_salary_subsidy =  $apply_base_salary_subsidy;
         $apply_money_except_deduct_cash = $apply_order_money + $apply_base_salary_subsidy + $apply_task_money;//订单金额+底薪补贴+任务奖励
         $apply_money_except_cash = $apply_money_except_deduct_cash - $apply_money_deduction;//订单金额+底薪补贴+任务奖励-扣款
         $apply_money = $apply_money_except_cash - $order_cash_money;//订单金额+底薪补贴+任务奖励-扣款-现金订单金额
@@ -270,7 +276,6 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $this->finance_settle_apply_money =$apply_money;//本次应付合计
         $this->finance_settle_apply_order_noncash_count = $order_noncash_count;//非现金订单
         $this->finance_settle_apply_order_money_except_cash = $order_money_except_cash;//工时费应结，扣除了现金
-        $this->finance_settle_apply_base_salary_subsidy = $this->getBaseSalarySubsidy($workerId,$apply_order_money,$apply_base_salary,$this->worker_type_id,$this->worker_identity_id,$this->finance_settle_apply_starttime,$this->finance_settle_apply_endtime);
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期Id
         $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期描述
         $this->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
@@ -354,7 +359,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     }
     
     public function getWorkerOrderInfo($workerId){
-        return  Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$workerId])->all();
+        return  Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')->where(['orderExtWorker.worker_id'=>$workerId,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])->all();
     }
     
     public function getWorkerTypeName($workerType){
@@ -564,7 +569,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $financeSettleApplySearch->save();
     }
     
-    
+    /**
+     * 获取可付款的结算列表
+     * @return type
+     */
+    public function getCanPayedSettlementList(){
+        $financeSettleApplySearchArray = self::find()->where(['finance_settle_apply_status'=>self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])->all();
+        return $financeSettleApplySearchArray;
+    }
     
     public function attributeLabels()
     {

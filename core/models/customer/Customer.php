@@ -603,6 +603,7 @@ class Customer extends \dbbase\models\customer\Customer
         return $count;
     }
 
+
 	/**
      * get all customer relationally
 	 */
@@ -632,8 +633,9 @@ class Customer extends \dbbase\models\customer\Customer
 	/**
 	 * get online city list
  	 */
-	public static function getOnlineCityList(){
+	public static function cityList(){
         $onlineCityList = OperationCity::getCityOnlineInfoList();
-        return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
+        $cityList = $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
+		return $cityList;
     }
 }

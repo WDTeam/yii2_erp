@@ -35,7 +35,8 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::serviceStart(2);
+        return Yii::$app->params;
+//        return Order::serviceStart(2);
     }
 
     public function actionCancelOrder()
@@ -190,7 +191,7 @@ class OrderController extends BaseAuthController
             }
             $workers = [];
             if($order->order_booked_worker_id>0){
-                $worker_list = Worker::getWorkerInfo($order->order_booked_worker_id);
+                $worker_list = Worker::getWorkerStatInfo($order->order_booked_worker_id);
                 if(!empty($worker_list)) {
                     $workers = Order::assignWorkerFormat($order, [$worker_list]);
                 }
@@ -202,7 +203,7 @@ class OrderController extends BaseAuthController
                     'ext_pop' => $order->orderExtPop,
                     'ext_customer' => $order->orderExtCustomer,
                     'ext_flag' => $order->orderExtFlag,
-                    'operation_long_time' => Order::MANUAL_ASSIGN_lONG_TIME,
+                    'operation_long_time' => Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME'],
                     'booked_time_range' => $booked_time_range,
                     'booked_workers' => $workers
                 ];
@@ -223,7 +224,16 @@ class OrderController extends BaseAuthController
         $district_id = $order->district_id;
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
-            $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+            if($order->order_is_parent==1){
+                $childs = OrderSearch::getChildOrder($order_id);
+                $times = [['orderBookBeginTime'=>$order->order_booked_begin_time, 'orderBookEndTime'=>$order->order_booked_end_time]];
+                foreach($childs as $child){
+                    $times[] = ['orderBookBeginTime'=>$child->order_booked_begin_time, 'orderBookEndTime'=>$child->order_booked_end_time];
+                }
+                $worker_list = array_merge(Worker::getDistrictCycleFreeWorker($district_id, 1,$times), Worker::getDistrictCycleFreeWorker($district_id, 2,$times));
+            }else {
+                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+            }
         } catch (Exception $e) {
             return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
@@ -262,8 +272,9 @@ class OrderController extends BaseAuthController
     public function actionIndex()
     {
         $searchParas = Yii::$app->request->getQueryParams();
+        //print_r($searchParas);exit;
 
-        $searchModel = new OrderSearch;
+        $searchModel = new \boss\models\order\OrderSearchIndex();
         $dataProvider = $searchModel->search($searchParas);
 
         return $this->render('index', [
@@ -354,22 +365,23 @@ class OrderController extends BaseAuthController
             'admin_id' => Yii::$app->user->id,
             'order_pay_type' => 1,
             'order_is_use_balance' => 1,
-            'order_booked_worker_id' => 1,
+            'order_booked_worker_id' => 19074,
             'order_customer_need' => 'xxxxx',
-            'order_customer_memo' => 'fffff'
+            'order_customer_memo' => 'fffff',
+            'order_flag_sys_assign' => 0,
         ];
         $booked_list = [
             [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400,
             ],
             [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +1days'),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +1days'),
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400+86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400+86400,
             ],
             [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +2days'),
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +2days'),
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00'))+86400+86400+86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00'))+86400+86400+86400,
             ],
         ];
         return Order::createNewBatch($attributes, $booked_list);

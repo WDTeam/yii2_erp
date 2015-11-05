@@ -3,7 +3,7 @@
 namespace boss\models\worker;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "{{%worker}}".
  *
@@ -41,12 +41,22 @@ use Yii;
 class Worker extends \core\models\worker\Worker
 {
 
+    /**
+     * @inheritdoc
+     */
+//    public function rules()
+//    {
+//        $rules = [
+//            [['worker_district'], 'required'],
+//        ];
+//        return array_merge(parent::rules(),$rules);
+//    }
 
-  /**
-  * 获取阿姨首页按钮css样式class
-  * @param int $btnCate 按钮所属类型 0-10
-  * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
-  */
+    /**
+    * 获取阿姨首页按钮css样式class
+    * @param int $btnCate 按钮所属类型 0-10
+    * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
+    */
     public static function setBtnCss($btnCate){
         $params = Yii::$app->request->getQueryParams();
         $workerParams = isset($params['WorkerSearch'])?$params['WorkerSearch']:[];
@@ -144,6 +154,25 @@ class Worker extends \core\models\worker\Worker
      * 统计各个审核状态的阿姨数量
      */
     public static function CountWorkerStatus($workerStatus){
-        return self::find()->where(['worker_auth_status'=>$workerStatus])->count();
+        return self::find()->where(['worker_auth_status'=>$workerStatus,'isdel'=>0])->count();
     }
+
+    public static function CountWorker(){
+        return self::find()->where(['isdel'=>0])->count();
+    }
+
+    /**
+     * 设置worker_district属性
+     */
+    public function getworker_district(){
+        $workerDistrictArr = self::getWorkerDistrict($this->id);
+        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
+    }
+    /**
+     * 设置worker_district属性
+     */
+    public function setworker_district(){
+
+    }
+
 }

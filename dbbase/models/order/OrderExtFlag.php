@@ -17,7 +17,8 @@ use dbbase\models\ActiveRecord;
  * @property integer $order_flag_worker_sms
  * @property integer $order_flag_worker_jpush
  * @property integer $order_flag_worker_ivr
- * @property integer $order_flag_cancel_cause
+ * @property integer $order_flag_change_booked_worker
+ * @property integer $order_flag_is_checked
  * @property string $created_at
  * @property string $updated_at
  *
@@ -40,7 +41,7 @@ class OrderExtFlag extends ActiveRecord
     {
         return [
             [['order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time',
-                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_cancel_cause', 'created_at', 'updated_at'], 'integer']
+                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr','order_flag_change_booked_worker','order_flag_is_checked', 'created_at', 'updated_at'], 'integer']
         ];
     }
 
@@ -60,7 +61,8 @@ class OrderExtFlag extends ActiveRecord
             'order_flag_worker_sms' => '是否给阿姨发过短信',
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过IVR',
-            'order_flag_cancel_cause' => '取消原因 1公司原因 2个人原因',
+            'order_flag_change_booked_worker' => '是否可更换指定阿姨',
+            'order_flag_is_checked' => '是否已对账',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];

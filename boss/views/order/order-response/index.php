@@ -219,14 +219,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				<h1>响应</h1>
 				<ul class="list">
 					
-					<li class="radioLi">
+					<li class="response_times">
 						<strong>* 响应次数</strong>
 						<div class="fl jsRadio">
     						<?php
-                                foreach (OrderResponse::ResponseTimes() as $key => $value)
-                                {
-                                    echo '<label class="mr10"><input type="radio" name="radio_responsetimes" value="'.$key.'"/>'.$value.'</label>';
-                                }    						  
+                                //foreach (OrderResponse::ResponseTimes() as $key => $value)
+                                //{
+                                    //echo '<label class="mr10"><input type="radio" name="radio_responsetimes" value="'.$key.'"/>'.$value.'</label>';
+                                //}    						  
     						?>
 						</div>
 					</li>

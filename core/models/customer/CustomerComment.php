@@ -17,6 +17,8 @@ namespace core\models\customer;
 use Yii;
 use core\models\order\OrderComplaint;
 use core\models\order\Order;
+use core\models\comment\CustomerCommentTag;
+
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -48,6 +50,25 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         return $comment_list;
     }
 
+
+    
+    /**
+     * 根据阿姨的id,开始时间和结束时间获取评价列表
+     * @date: 2015-10-27
+     * @author: peak pan
+     * @return:
+     * */
+    public static function getCommentworkercount($worker_id,$statime,$endtime)
+    {
+    	
+    	$comment_list = self::find()
+    	->andWhere(['worker_id' => $worker_id])
+    	->andFilterWhere(['between', 'created_at',$statime,$endtime])
+    	->count();
+    	return $comment_list;
+    }
+    
+    
     
     /**
      *  增加评价
@@ -139,6 +160,17 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->save();
                 // var_dump($customerComment->errors);
                 $transaction->commit();
+                
+                
+                //增加使用次数
+               $arraydate= explode(',',$array['customer_comment_tag_ids']);
+                foreach ($arraydate as $ted){
+                	$dateinfo=CustomerCommentTag::findOne($ted);
+                	$dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
+                	$dateinfo->save();
+                	unset($dateinfo);
+                }
+                
 				//通知订单 ，改变订单状态
 				if(!isset($array['adminid'])){$array['adminid']=0;}
                 Order::customerAcceptDone($array['order_id'],$array['adminid']); 
@@ -172,6 +204,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         }
     }
 
+    
     
     
     /**

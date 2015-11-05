@@ -14,10 +14,11 @@ use \restapi\models\alertMsgEnum;
 class ConfigureController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} /configure/all-services 获取城市全部上线服务 （赵顺利100%）
-     * @apiName actionAllServices
+     * @api {GET} /configure/all-services  [GET] /configure/all-services（100%）
+     * @apiDescription 获取城市全部上线服务 (赵顺利)
+     * @apiName actionAllServices 
      * @apiGroup configure
-     *
+     * 
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -109,12 +110,13 @@ class ConfigureController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/configure/user-init 用户端首页初始化 （赵顺利20% 假数据）
+     * @api {GET} /configure/user-init  [GET] /configure/user-init（20% ）
      * @apiName actionUserInit
      * @apiGroup configure
-     * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
+     * @apiDescription 用户端首页初始化,获得开通城市列表，广告轮播图 等初始化数据(赵顺利--假数据 )
      *
      * @apiParam {String} city_name 城市
+     * @apiParam {String} [access_token] 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
@@ -245,7 +247,9 @@ class ConfigureController extends \restapi\components\Controller
      *                  "colour"=>"",
      *                  "sort"=>"2"
      *              },
-     *          ]
+     *              ],
+     *              "isBlock":"0", 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。
+     *              "isEffect": "0" 用户token是否有效，0表示正常，1表示失效，如果access_token为空，该值为0。
      *      }
      * }
      *
@@ -264,6 +268,12 @@ class ConfigureController extends \restapi\components\Controller
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
+        }
+        @$access_token=$param['access_token'];
+        $isEffect="0";
+        if(!empty($access_token)&&!CustomerAccessToken::checkAccessToken($access_token))
+        {
+            $isEffect="1";
         }
         //获取城市列表
         $city_list = OperationCity::getOnlineCitys();
@@ -453,6 +463,8 @@ class ConfigureController extends \restapi\components\Controller
                 'sort' => '4',
             ],
         ];
+        $isBlock="0";
+
 
         $ret = [
             'city_list' => $city_list,
@@ -461,13 +473,16 @@ class ConfigureController extends \restapi\components\Controller
             'home_order_server' => $home_order_server,
             'server_list' => $server_list,
             'footer_link' => $footer_link,
+            'isBlock' => $isBlock,
+            'isEffect' => $isEffect,
         ];
 
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
     }
 
     /**
-     * @api {POST} /configure/worker-check-update 检查阿姨端版本更新 （赵顺利0%）
+     * @api {GET} /configure/worker-check-update [GET] /configure/worker-check-update （0%）
+     * @apiDescription 检查阿姨端版本更新 (赵顺利)
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      *
@@ -502,7 +517,8 @@ class ConfigureController extends \restapi\components\Controller
      */
 
     /**
-     * @api {GET} v1/configure/worker-init 阿姨app初始化 （赵顺利 100%）
+     * @api {GET} /configure/worker-init  [GET] /configure/worker-init（100%）
+     * @apiDescription 阿姨app初始化 （赵顺利）
      * @apiName actionWorkerInit
      * @apiGroup configure
      *
@@ -662,7 +678,8 @@ class ConfigureController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/configure/start-page 阿姨端启动页 （赵顺利 20%）
+     * @api {GET} /configure/start-page  [GET] /configure/start-page  （20%）
+     * @apiDescription 阿姨端启动页（赵顺利）
      * @apiName actionStartPage
      * @apiGroup configure
      *

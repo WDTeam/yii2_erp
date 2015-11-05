@@ -98,7 +98,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     
     public function getOrderDataProviderFromOrder($worker_id){
         $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
+        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])->all();
         $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
@@ -107,7 +107,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     
     public function getCashOrderDataProviderFromOrder($worker_id){
         $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>1])->all();
+        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>1])->all();
         $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
@@ -129,8 +129,10 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     
     public static function getOrderCountByWorkerId($worker_id,$start_time,$end_time){
         return Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')
-                ->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])
-                ->andFilterWhere(['between','order_booked_begin_time',$start_time,$end_time])
+                ->where(['orderExtWorker.worker_id'=>$worker_id,
+                    'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE
+                        ])
+//                ->andFilterWhere(['between','order_booked_begin_time',$start_time,$end_time])
                 ->count();
     }
     

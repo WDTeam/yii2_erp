@@ -50,6 +50,28 @@ class FinancePopOrderController extends Controller
 
     
     
+   /**
+   * redis 测试方法   仅适用于潘高峰个人使用   
+   * @date: 2015-11-4
+   * @author: peak pan
+   * @return:
+   **/ 
+    
+    public function actionIndexredis()
+    {
+    	$name='gaofengceshi';
+    	
+    	for ($i=1;$i>5000;$i++){
+    		$datainfo='1000000'.$i;
+    		\Yii::$app->cache->mset($name,$datainfo);
+    		echo  $i; 
+    	}
+    	
+    	
+    	echo  'ok'; exit;
+    	
+    }
+   
     /**
     * 对账方法
     * @date: 2015-9-23
@@ -70,6 +92,11 @@ class FinancePopOrderController extends Controller
     			
     			if(!isset($file->baseName)){
     				\Yii::$app->getSession()->setFlash('default','请上传对账单！');
+    				return $this->redirect(['index']);
+    			}
+    			
+    			if($data['FinancePopOrderSearch']['finance_order_channel_id']=='' && $data['FinancePopOrderSearch']['finance_pay_channel_id']==''){
+    				\Yii::$app->getSession()->setFlash('default','渠道至少选择一个！');
     				return $this->redirect(['index']);
     			}
     			
@@ -135,10 +162,23 @@ class FinancePopOrderController extends Controller
     		$FinanceRecordLog->insert();
     		$lastidRecordLog=$FinanceRecordLog->id;
     		}
-    		if($lastidRecordLog==0){ \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
+    		
+    		
+    		if($lastidRecordLog==0){
+    		  \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
     		  return $this->redirect(['index']);
     		 }
+    		 
+    		 $FinanceRecordLog = new FinanceRecordLogSearch;
+    		 
+    		// $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
+    		 //if($customer_info>0){
+    		 	///\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
+    		 	//return $this->redirect(['index']);
+    		// }
+    		 
     		
+    		 
     		foreach ($sheetData as $key=>$value){
     			//去除表头
     			if($n>1 && !empty($value['A'])){
@@ -198,7 +238,7 @@ class FinancePopOrderController extends Controller
     		}
     		$n++;
     		}
-    	 	$FinanceRecordLog = new FinanceRecordLogSearch;
+    	 	//$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
     	 	$customer_info = FinanceRecordLog::findOne($lastidRecordLog);
     		$customer_info->finance_order_channel_id =1;

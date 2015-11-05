@@ -1,9 +1,13 @@
 <?php
 
-use yii\helpers\Html;
+
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
+
 use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
+
+use yii\widgets\Pjax;
+use yii\helpers\Html;
 use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
@@ -58,7 +62,9 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
                         ]);
                     },
                     'disagree' => function ($url, $model,$review_section) {
-                        return Html::a('<span class="btn btn-primary" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'').'">审核不通过</span>',
+                        return 
+                        $this->params['review_section'] == FinanceShopSettleApplySearch::BUSINESS_REVIEW? '':
+                        Html::a('<span class="btn btn-primary" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'').'">审核不通过</span>',
                             [
                                 '/finance/finance-shop-settle-apply/review-failed-reason',
                                 'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0,

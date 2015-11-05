@@ -82,7 +82,6 @@ echo $this->render('operate/_operate_dimission',['workerModel'=>$workerModel]);
 Modal::end();
 
 ?>
-
 <div style="height:20px"></div>
 <?php
 

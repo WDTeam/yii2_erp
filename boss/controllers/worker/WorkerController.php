@@ -3,11 +3,7 @@
 namespace boss\controllers\worker;
 
 
-use core\models\customer\CustomerWorker;
-use core\models\operation\OperationArea;
-use core\models\worker\WorkerSkill;
-use core\models\worker\WorkerStat;
-use core\models\worker\WorkerVacationApplication;
+
 use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -27,6 +23,11 @@ use boss\models\worker\WorkerSchedule;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
 use core\models\shop\Shop;
+use core\models\customer\CustomerWorker;
+use core\models\operation\OperationArea;
+use core\models\worker\WorkerSkill;
+use core\models\worker\WorkerStat;
+use core\models\worker\WorkerVacationApplication;
 use yii\web\ServerErrorHttpException;
 
 
@@ -106,6 +107,8 @@ class WorkerController extends BaseAuthController
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
+            Worker::deleteDistrictWorkerRelationToRedis($workerModel->id);
+            Worker::updateWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
                     $workerDistrictModel = new WorkerDistrict;
@@ -197,29 +200,36 @@ class WorkerController extends BaseAuthController
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
             $workerModel->created_ad = time();
             $workerModel->uploadImgToQiniu('worker_photo');
-            $workerModel->save();
-            $workerModel->link('workerExtRelation',$workerExtModel);
-            $workerStatModel->worker_id = $workerModel->id;
-            $workerStatModel->save();
-            $workerAuthModel->worker_id = $workerModel->id;
-            $workerAuthModel->save();
-            $workerParam = Yii::$app->request->post('Worker');
-
-            Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
-            if($workerParam['worker_district']){
-                foreach($workerParam['worker_district'] as $val){
-                    $workerDistrictModel = new WorkerDistrict;
-                    $workerDistrictModel->created_ad = time();
-                    $workerDistrictModel->worker_id = $workerModel->id;
-                    $workerDistrictModel->operation_shop_district_id = $val;
-                    $workerDistrictModel->save();
+            if($workerModel->save()){
+                $workerExtModel->worker_id = $workerModel->id;
+                $workerExtModel->save();
+                $workerStatModel->worker_id = $workerModel->id;
+                $workerStatModel->save();
+                $workerAuthModel->worker_id = $workerModel->id;
+                $workerAuthModel->save();
+                $workerParam = Yii::$app->request->post('Worker');
+                Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
+                if($workerParam['worker_district']){
+                    foreach($workerParam['worker_district'] as $val){
+                        $workerDistrictModel = new WorkerDistrict;
+                        $workerDistrictModel->created_ad = time();
+                        $workerDistrictModel->worker_id = $workerModel->id;
+                        $workerDistrictModel->operation_shop_district_id = $val;
+                        $workerDistrictModel->save();
+                    }
+                    $operateStatus = Worker::operateDistrictWorkerRelationToRedis($workerModel->id,$workerParam['worker_district']);
+                    if($operateStatus==false){
+                        throw new ServerErrorHttpException('更新商圈绑定阿姨到缓存失败');
+                    }
                 }
-                $operateStatus = Worker::operateDistrictWorkerRelationToRedis($workerModel->id,$workerParam['worker_district']);
-                if($operateStatus==false){
-                    throw new ServerErrorHttpException('更新商圈绑定阿姨到缓存失败');
-                }
+                return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
+            }else{
+                var_dump($workerModel->errors);die;
+                //\Yii::$app->session->setFlash('default', '保存失败');
+                throw new ServerErrorHttpException('录入新阿姨失败');
             }
-            return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
+
+
         } else {
             return $this->render('create', [
                 'worker' => $workerModel,
@@ -712,7 +722,7 @@ class WorkerController extends BaseAuthController
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
                 $batchWorkerAuth[] = $workerAuthArr;
-                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type']);
+                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type'],$workerArr['worker_identity_id']);
             }
 
             $workerColumns = array_keys($workerArr);
@@ -727,11 +737,14 @@ class WorkerController extends BaseAuthController
             $connectionNew->createCommand()->batchInsert('{{%worker_auth}}',$workerAuthColumns, $batchWorkerAuth)->execute();
         }
 
-        //die;
     }
 
     public static function exportDataFromMysqlToRedis(){
 
+    }
+
+    public function actionTest1(){
+        Worker::operateWorkerOrderInfoToRedis(19077,1,123,2,1446681600,1446685200);
     }
 
     public function actionTest(){
@@ -739,11 +752,13 @@ class WorkerController extends BaseAuthController
         echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         echo '<br>';
+        //var_dump(Worker::getWorkerTimeLine(1,2));
         //echo date('Y-m-d H:i',1446264000);
-        $a = Worker::getDistrictCycleFreeWorker(1,1,[['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'10:00']]);
-        var_dump($a);die;
-//        $a = Worker::getDistrictFreeWorker(1,1,1446253200,1446264000);
-//        print_r($a);
+        //$a = Worker::getWorkerStatInfo(19077);
+        //$a = Worker::getWorkerBankInfo(19077);
+        //var_dump($a);die;
+        $a = Worker::getDistrictCycleFreeWorker(1,1,[['orderBookBeginTime'=>'1446253200','orderBookEndTime'=>'1446264000']]);
+        print_r($a);
         //$a = Worker::operateWorkerOrderInfoToRedis(1,1,1,2,1446434010,1446434010);
         die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);
@@ -778,8 +793,8 @@ class WorkerController extends BaseAuthController
 //        ];
 //        Yii::$app->redis->set('WORKER_18475',json_encode($workerInfo));
 //        die;
-        echo '<pre>';
-        var_dump(CustomerWorker::getCustomerDistrictNearbyWorker(1,1));die;
+//        echo '<pre>';
+//        var_dump(CustomerWorker::getCustomerDistrictNearbyWorker(1,1));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //
@@ -789,25 +804,25 @@ class WorkerController extends BaseAuthController
        // Yii::$app->redis->set('worker_1',json_encode($workerInfo));
        // die;
 
-        $workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
+        //$workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
 //          Yii::$app->redis->srem('district_1','16682');
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
 //        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
 //        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
 //        Yii::$app->redis->sadd('worker_16693','10','11');
         //$workers = Yii::$app->redis->smembers('district_1');
-        var_dump($workers);
-        die;
-        $time = date('H');
-        foreach($workers as $val){
-            $workerKey = 'worker_'.$val;
-            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
-            if(empty($workerIsBusy)){
-                $workerFreeArr[] = $val;
-            }
-        }
-        var_dump($workerFreeArr);
-        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
+//        var_dump($workers);
+//        die;
+//        $time = date('H');
+//        foreach($workers as $val){
+//            $workerKey = 'worker_'.$val;
+//            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
+//            if(empty($workerIsBusy)){
+//                $workerFreeArr[] = $val;
+//            }
+//        }
+//        var_dump($workerFreeArr);
+//        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
     }
 
 

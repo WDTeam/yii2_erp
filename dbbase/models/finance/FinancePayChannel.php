@@ -31,6 +31,8 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     {
         return [
             [['finance_pay_channel_rank', 'finance_pay_channel_is_lock', 'create_time', 'is_del'], 'integer'],
+            [['finance_pay_channel_name'],'match','pattern'=>'/^[\w|\x{4e00}-\x{9fa5}]+$/u','message'=>'名字里面不能包含特殊符号'],
+            [['finance_pay_channel_name'],'required'],
             [['finance_pay_channel_name'], 'string', 'max' => 50]
         ];
     }
@@ -135,7 +137,7 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     
     	 $ordewhere['is_del']=0;
     	 if($styp=='one'){
-    	 	$ordewhere['finance_pay_channel_is_lock']=2;
+    	 	$ordewhere['finance_pay_channel_is_lock']=1;
     	 }
     	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();	
     	 

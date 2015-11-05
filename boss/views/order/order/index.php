@@ -162,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		<!------------------弹出层开始------------------>
 		
-		<div class="cd-popup" role="alert">
+		<div id="HBox_error" class="cd-popup" role="alert">
 			<div class="cd-popup-container">
 				<p>提示</p>
 				<ul>
