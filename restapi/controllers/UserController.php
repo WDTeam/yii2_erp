@@ -40,52 +40,43 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "地址添加成功"
+     *       "msg": "地址添加成功",
+     *       "alertMsg":"常用地址添加成功",
      *       "ret":{
      *       "address":
      *          {
      *          "id": 主键,
      *          "customer_id":关联客户,
-     *          "operation_province_id": 110000,
-     *          "operation_city_id": 市,
-     *          "operation_area_id": 区,
-     *          "operation_province_name": "北京",
-     *          "operation_city_name": "北京市",
-     *          "operation_area_name": "朝阳区",
-     *          "operation_province_short_name": "北京",
-     *          "operation_city_short_name": "北京",
-     *          "operation_area_short_name": "朝阳",
+     *          "operation_province_id": 省id,
+     *          "operation_city_id": 市id,
+     *          "operation_area_id": 区id,
+     *          "operation_province_name": "省名字",
+     *          "operation_city_name": "市名字",
+     *          "operation_area_name": "区名字",
+     *          "operation_province_short_name": "省短名",
+     *          "operation_city_short_name": "市短名",
+     *          "operation_area_short_name": "区短名",
      *          "customer_address_detail": "详细地址",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
+     *          "customer_address_status": 客户地址类型,1为默认地址，-1为非默认地址,
      *          "customer_address_longitude": 经度,
      *          "customer_address_latitude": 纬度,
      *          "customer_address_nickname": "用户昵称",
      *          "customer_address_phone": "被服务者手机",
-     *          "created_at": 1445063798,
-     *          "updated_at": 0,
-     *          "is_del": 0
+     *          "created_at": 创建时间,
+     *          "updated_at": 更新时间,
      *          }
      *        }
-     *
      *     }
      *
-     * @apiError UserNotFound 用户认证失败.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录。"
-     *
-     *     }
      * @apiError AddressNotFound 常用地址添加失败.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
      *       "code": "0",
-     *       "msg": "常用地址添加失败"
-     *
+     *       "msg": "常用地址添加失败",
+     *       "ret": {},
+     *       "alertMsg":"常用地址添加失败",
      *     }
      */
     public function actionAddAddress()
@@ -97,12 +88,12 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         //控制添加地址时手机号码必须填写
         if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
-            return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200,null,alertMsgEnum::addAddressNoPhone);
+            return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200, null, alertMsgEnum::addAddressNoPhone);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -110,28 +101,30 @@ class UserController extends \restapi\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             $model = CustomerAddress::addAddress($customer->id, @$param['operation_province_name'], @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'], @$param['customer_address_phone']);
 
+            #销毁删除表示
+            unset($model['is_del']);
+
             if (!empty($model)) {
                 $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功", 1,200,null,alertMsgEnum::addAddressSuccess);
+                return $this->send($ret, "常用地址添加成功", 1, 200, null, alertMsgEnum::addAddressSuccess);
             } else {
-                return $this->send(null, "常用地址添加失败", 0, 200,null,alertMsgEnum::addAddressFail);
+                return $this->send(null, "常用地址添加失败", 0, 200, null, alertMsgEnum::addAddressFail);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
     /**
      * @api {GET} /user/get-addresses [GET] /user/get-addresses (100%)
-     * @apiDescription 常用地址列表
+     * @apiDescription 获取常用地址列表
      * @apiName actionGetAddresses
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
+     * 
      * @apiSuccess {Object[]} addresses 用户常用地址数组.
-     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -139,27 +132,26 @@ class UserController extends \restapi\components\Controller
      *       "msg": "获取地址列表成功"
      *       "ret":{
      *       "addresses": [
-     *          {
-     *          "id": 2,
-     *          "customer_id": 1,
-     *          "operation_province_id": 110000,
-     *          "operation_city_id": 110100,
-     *          "operation_area_id": 110105,
-     *          "operation_province_name": "北京",
-     *          "operation_city_name": "北京市",
-     *          "operation_area_name": "朝阳区",
-     *          "operation_province_short_name": "北京",
-     *          "operation_city_short_name": "北京",
-     *          "operation_area_short_name": "朝阳",
-     *          "customer_address_detail": "某某小区8栋3单元512",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
-     *          "customer_address_longitude": 116.48641,
-     *          "customer_address_latitude": 39.92149,
-     *          "customer_address_nickname": "王小明",
-     *          "customer_address_phone": "18210922324",
-     *          "created_at": 1445063798,
-     *          "updated_at": 0,
-     *          "is_del": 0
+     *         {
+     *          "id": 主键,
+     *          "customer_id":关联客户,
+     *          "operation_province_id": 省id,
+     *          "operation_city_id": 市id,
+     *          "operation_area_id": 区id,
+     *          "operation_province_name": "省名字",
+     *          "operation_city_name": "市名字",
+     *          "operation_area_name": "区名字",
+     *          "operation_province_short_name": "省短名",
+     *          "operation_city_short_name": "市短名",
+     *          "operation_area_short_name": "区短名",
+     *          "customer_address_detail": "详细地址",
+     *          "customer_address_status": 客户地址类型,1为默认地址，-1为非默认地址,
+     *          "customer_address_longitude": 经度,
+     *          "customer_address_latitude": 纬度,
+     *          "customer_address_nickname": "用户昵称",
+     *          "customer_address_phone": "被服务者手机",
+     *          "created_at": 创建时间,
+     *          "updated_at": 更新时间,
      *          },
      *         ]
      *        }
@@ -171,34 +163,41 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
+     *       "msg": "用户认证已经过期,请重新登录",
+     *       "ret": {},
+     *       "alertMsg":"获取常用地址列表失败",
      *     }
      */
     public function actionGetAddresses()
     {
         @$accessToken = Yii::$app->request->get('access_token');
+
         if (empty($accessToken)) {
             $accessToken = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($accessToken);
 
-        if (!empty($customer) && !empty($customer->id)) {
-            $AddressArr = CustomerAddress::listAddress($customer->id);
+        try {
+            if (!empty($customer) && !empty($customer->id)) {
+                $AddressArr = CustomerAddress::listAddress($customer->id);
 
-            $addresses = array();
-            foreach ($AddressArr as $key => $model) {
-                $addresses[] = $model;
+                $addresses = array();
+                foreach ($AddressArr as $key => $model) {
+                    $addresses[] = $model;
+                    unset($model->is_del);
+                }
+                $ret = ['addresses' => $addresses];
+                return $this->send($ret, "获取地址列表成功", 1, 200, null, alertMsgEnum::getAddressesSuccess);
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
             }
-            $ret = ['addresses' => $addresses];
-            return $this->send($ret, "获取地址列表成功", 1,200,null,alertMsgEnum::getAddressesSuccess);
-        } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+        } catch (\Exception $e) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -210,12 +209,14 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {int} address_id 地址id
+     * @apiParam {int}    address_id 地址id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
+     *       "alertMeg": "删除成功",
+     *       "ret": {},
      *       "msg": "删除成功"
      *     }
      *
@@ -225,12 +226,15 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录."
+     *       "msg": "用户认证已经过期,请重新登录."，
+     *        "ret": {},
+     *       "alertMeg": "删除失败"
      *     }
      */
     public function actionDeleteAddress()
     {
         $params = Yii::$app->request->post();
+
         if (empty($params)) {
             $params = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -238,16 +242,16 @@ class UserController extends \restapi\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败,请添加地址id", 0, 200,null,alertMsgEnum::deleteAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败,请添加地址id", 0, 200, null, alertMsgEnum::deleteAddressNoAddressId);
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
-            return $this->send(null, "删除成功", 1,200,null,alertMsgEnum::deleteAddressSuccess);
+            return $this->send(null, "删除成功", 1, 200, null, alertMsgEnum::deleteAddressSuccess);
         } else {
-            return $this->send(null, "删除失败", 0, 200,null,alertMsgEnum::deleteAddressFail);
+            return $this->send(null, "删除失败", 0, 200, null, alertMsgEnum::deleteAddressFail);
         }
     }
 
@@ -272,7 +276,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "设置成功"
+     *       "msg": "设置默认地址成功",
+     *       "ret": {},
+     *      "alertMeg": "设置默认地址成功"
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -281,7 +287,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "地址信息获取失败",
+     *       "ret": {},
+     *       "alertMeg": "地址信息获取失败"
      *     }
      */
     public function actionSetDefaultAddress()
@@ -296,27 +304,27 @@ class UserController extends \restapi\components\Controller
         @$addressId = $params['address_id'];
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", 0, 200,null,alertMsgEnum::setDefaultAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::setDefaultAddressNoAddressId);
         }
 
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", 0, 200,null,alertMsgEnum::setDefaultAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::setDefaultAddressNoAddressId);
         }
         try {
             if (CustomerAddress::updateAddress($model->id, $model->operation_province_name, $model->operation_city_name, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
             ) {
-                return $this->send(null, "设置默认地址成功", 1,200,null,alertMsgEnum::setDefaultAddressSuccess);
+                return $this->send(null, "设置默认地址成功", 1, 200, null, alertMsgEnum::setDefaultAddressSuccess);
             } else {
 
-                return $this->send(null, "设置默认地址失败", 0, 200,null,alertMsgEnum::setDefaultAddressFail);
+                return $this->send(null, "设置默认地址失败", 0, 200, null, alertMsgEnum::setDefaultAddressFail);
             }
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+            return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
         }
     }
 
@@ -340,7 +348,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "修改常用地址成功"
+     *       "msg": "修改常用地址成功",
+     *       "ret": {},
+     *       "alertMsg": "修改常用地址成功"
      *     }
      *
      * @apiError UserNotFound 用户认证失败.
@@ -349,8 +359,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录。"
-     *
+     *       "ret": {},
+     *       "msg": "用户认证已经过期,请重新登录。",
+     *       "alertMeg": "用户认证已经过期,请重新登录。",
      *     }
      * @apiError AddressNotFound 地址信息获取失败.
      *
@@ -358,6 +369,8 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 address Not Found
      *     {
      *       "code": "0",
+     *       "ret": {},
+     *       "alertMeg": "用户认证已经过期,请重新登录。",
      *       "msg": "地址信息获取失败"
      *
      *     }
@@ -373,27 +386,27 @@ class UserController extends \restapi\components\Controller
         @$addressId = $params['address_id'];
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", 0, 200,null,alertMsgEnum::updateAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::updateAddressNoAddressId);
         }
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", 0, 200,null,alertMsgEnum::updateAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::updateAddressNoAddressId);
         }
 
         try {
             if (CustomerAddress::updateAddress($model->id, @$params['operation_province_name'], @$params['operation_city_name'], @$params['operation_area_name'], @$params['customer_address_detail'], @$params['customer_address_nickname'], @$params['customer_address_phone'])
             ) {
-                return $this->send(null, "修改常用地址成功", 1,200,null,alertMsgEnum::updateAddressSuccess);
+                return $this->send(null, "修改常用地址成功", 1, 200, null, alertMsgEnum::updateAddressSuccess);
             } else {
 
-                return $this->send(null, "修改常用地址失败", 0, 200,null,alertMsgEnum::updateAddressFail);
+                return $this->send(null, "修改常用地址失败", 0, 200, null, alertMsgEnum::updateAddressFail);
             }
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+            return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
         }
     }
 
@@ -413,27 +426,26 @@ class UserController extends \restapi\components\Controller
      *       "msg": "修改常用地址成功"
      *       "ret":{
      *       "address":
-     *          {
-     *          "id": 2,
-     *          "customer_id": 1,
-     *          "operation_province_id": 110000,
-     *          "operation_city_id": 110100,
-     *          "operation_area_id": 110105,
-     *          "operation_province_name": "北京",
-     *          "operation_city_name": "北京市",
-     *          "operation_area_name": "朝阳区",
-     *          "operation_province_short_name": "北京",
-     *          "operation_city_short_name": "北京",
-     *          "operation_area_short_name": "朝阳",
-     *          "customer_address_detail": "某某小区8栋3单元512",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
-     *          "customer_address_longitude": 116.48641,
-     *          "customer_address_latitude": 39.92149,
-     *          "customer_address_nickname": "王小明",
-     *          "customer_address_phone": "18210922324",
-     *          "created_at": 1445063798,
-     *          "updated_at": 0,
-     *          "is_del": 0
+     *         {
+     *          "id": 主键,
+     *          "customer_id":关联客户,
+     *          "operation_province_id": 省id,
+     *          "operation_city_id": 市id,
+     *          "operation_area_id": 区id,
+     *          "operation_province_name": "省名字",
+     *          "operation_city_name": "市名字",
+     *          "operation_area_name": "区名字",
+     *          "operation_province_short_name": "省短名",
+     *          "operation_city_short_name": "市短名",
+     *          "operation_area_short_name": "区短名",
+     *          "customer_address_detail": "详细地址",
+     *          "customer_address_status": 客户地址类型,1为默认地址，-1为非默认地址,
+     *          "customer_address_longitude": 经度,
+     *          "customer_address_latitude": 纬度,
+     *          "customer_address_nickname": "用户昵称",
+     *          "customer_address_phone": "被服务者手机",
+     *          "created_at": 创建时间,
+     *          "updated_at": 更新时间,
      *          }
      *        }
      *
@@ -463,7 +475,7 @@ class UserController extends \restapi\components\Controller
         $params = Yii::$app->request->get() or $params = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
 
@@ -472,15 +484,15 @@ class UserController extends \restapi\components\Controller
             try {
                 $Address = CustomerAddress::getCurrentAddress($customer->id);
                 if (empty($Address)) {
-                    return $this->send(null, "该用户没有默认地址", 0, 200,null,alertMsgEnum::defaultAddressNoAddress);
+                    return $this->send(null, "该用户没有默认地址", 0, 200, null, alertMsgEnum::defaultAddressNoAddress);
                 }
                 $ret = ['address' => $Address];
-                return $this->send($ret, "获取默认地址成功", 1,200,null,alertMsgEnum::defaultAddressSuccess);
+                return $this->send($ret, "获取默认地址成功", 1, 200, null, alertMsgEnum::defaultAddressSuccess);
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "获取用户信息失败", "0", 200,null,alertMsgEnum::defaultAddressFail);
+            return $this->send(null, "获取用户信息失败", "0", 200, null, alertMsgEnum::defaultAddressFail);
         }
     }
 
@@ -535,7 +547,7 @@ class UserController extends \restapi\components\Controller
         $app_version = $param['access_token'];
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -549,9 +561,9 @@ class UserController extends \restapi\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "删除成功", 1,200,null,alertMsgEnum::deleteUserWorkerSuccess);
+                return $this->send($deleteData, "删除成功", 1, 200, null, alertMsgEnum::deleteUserWorkerSuccess);
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
             }
         }
     }
@@ -613,7 +625,7 @@ class UserController extends \restapi\components\Controller
         $app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -623,9 +635,9 @@ class UserController extends \restapi\components\Controller
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
             if ($workerData) {
-                return $this->send($workerData, "阿姨列表查询", 1,null,alertMsgEnum::blackListWorkersSuccess);
+                return $this->send($workerData, "阿姨列表查询", 1, null, alertMsgEnum::blackListWorkersSuccess);
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
             }
         }
     }
@@ -633,7 +645,7 @@ class UserController extends \restapi\components\Controller
     /**
      * @api {DELETE} /user/remove-worker [DELETE] /user/remove-worker （100%）
      *
-     * @apiDescription 移除黑名单中的阿姨【该功能已经砍掉】
+     * @apiDescription 移除黑名单中的阿姨 [该功能已经砍掉]
      * @apiName actionRemoveWorker 
      * @apiGroup User
      *
@@ -672,7 +684,7 @@ class UserController extends \restapi\components\Controller
         $worker_id = $param['worker_id']; #阿姨id
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", "0", 200, null, alertMsgEnum::userLoginFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -685,9 +697,9 @@ class UserController extends \restapi\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "移除成功", 1,200,null,alertMsgEnum::removeWorkerSuccess);
+                return $this->send($deleteData, "移除成功", 1, 200, null, alertMsgEnum::removeWorkerSuccess);
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
             }
         }
     }
@@ -710,6 +722,7 @@ class UserController extends \restapi\components\Controller
      * {
      * "code": "1",
      * "msg": "查询成功",
+     * "alertMsg": "查询成功",
      * "ret": {
      * "userBalance": "用户余额",
      * "userRecord": [
@@ -743,7 +756,6 @@ class UserController extends \restapi\components\Controller
      * "customer_trans_record_verify": '验证',
      * "created_at":'创建时间',
      * "updated_at":'更新时间',
-     * "is_del"：'删除',
      * }
      * ]
      * }
@@ -755,8 +767,10 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret": {}
+
      *     }
      *
      */
@@ -769,8 +783,10 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
+
+
         #获取用户id
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
@@ -797,12 +813,12 @@ class UserController extends \restapi\components\Controller
                 $ret["userBalance"] = $userBalanceMoney;
                 $ret["userRecord"] = $userRecord;
 
-                return $this->send($ret, "查询成功", 1,200,null,alertMsgEnum::getUserMoneySuccess);
+                return $this->send($ret, "查询成功", 1, 200, null, alertMsgEnum::getUserMoneySuccess);
             } catch (\Exception $e) {
-                return $this->send($e, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send($e, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
 
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -821,6 +837,7 @@ class UserController extends \restapi\components\Controller
      * {
      * "code": 1,
      * "msg": "用户积分明细列表",
+     * "alertMsg": "用户积分明细列表",
      * "ret": {
      * "scoreCategory": [
      *      {
@@ -829,7 +846,6 @@ class UserController extends \restapi\components\Controller
      *       "customer_score": "客户积分",
      *       "created_at": "创建时间",
      *       "updated_at": "更新时间",
-     *       "is_del": 是否删除
      *       }
      *      ]
      *     }
@@ -841,7 +857,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录",
+     *       "alertMsg": "用户认证已经过期,请重新登录",
+     *       "ret": {},
      *
      *     }
      *
@@ -856,24 +874,32 @@ class UserController extends \restapi\components\Controller
         @$app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", "0", 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
         if (!empty($customer) && !empty($customer->id)) {
             try {
                 /**
                  * @param int $customer_id 用户id
                  */
                 $userscore = CustomerExtScore::getCustomerScoreList($customer->id);
-                if ($userscore) {
-                    $ret["scoreCategory"] = $userscore;
-                    return $this->send($ret, "用户积分明细列表", 1,200,null,alertMsgEnum::getUserScoreSuccess);
+                   
+                $array = array();
+                foreach ($userscore as $key => $val) {
+                    unset($val['is_del']);
+                    $array[$key] = $val;
+                }
+                
+                if ($array) {
+                    $ret["scoreCategory"] = $array;
+                    return $this->send($ret, "用户积分明细列表", 1, 200, null, alertMsgEnum::getUserScoreSuccess);
                 } else {
-                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         }
     }
@@ -928,7 +954,7 @@ class UserController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
-            return $this->send(null, "提交参数中缺少必要的参数.", 0, 200,null,alertMsgEnum::userSuggestNoOrder);
+            return $this->send(null, "提交参数中缺少必要的参数.", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
 
         #是否匿名评价,0匿名,1非匿名'
@@ -962,15 +988,15 @@ class UserController extends \restapi\components\Controller
                 $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
                 if (!empty($model)) {
-                    return $this->send(null, "添加评论成功", 1,200,null,alertMsgEnum::userSuggestSuccess);
+                    return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
-                    return $this->send(null, "添加评论失败", 0, 200,null,alertMsgEnum::userSuggestFail);
+                    return $this->send(null, "添加评论失败", 0, 200, null, alertMsgEnum::userSuggestFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1020,15 +1046,15 @@ class UserController extends \restapi\components\Controller
                 $level = CustomerCommentLevel::getCommentLevel();
                 if (!empty($level)) {
                     $ret = ['comment' => $level];
-                    return $this->send($ret, "获取评论级别成功", 1,200,null,alertMsgEnum::getCommentLevelSuccess);
+                    return $this->send($ret, "获取评论级别成功", 1, 200, null, alertMsgEnum::getCommentLevelSuccess);
                 } else {
-                    return $this->send(null, "获取评论级别失败", 0, 200,null,alertMsgEnum::getCommentLevelFail);
+                    return $this->send(null, "获取评论级别失败", 0, 200, null, alertMsgEnum::getCommentLevelFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1080,15 +1106,15 @@ class UserController extends \restapi\components\Controller
 
                 if (!empty($level)) {
                     $ret = ['commentTag' => $level];
-                    return $this->send($ret, "获取评论标签成功", 1,200,null,alertMsgEnum::getCommentLevelTagSuccess);
+                    return $this->send($ret, "获取评论标签成功", 1, 200, null, alertMsgEnum::getCommentLevelTagSuccess);
                 } else {
-                    return $this->send(null, "获取评论标签失败", 0, 200,null,alertMsgEnum::getCommentLevelTagFail);
+                    return $this->send(null, "获取评论标签失败", 0, 200, null, alertMsgEnum::getCommentLevelTagFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1220,15 +1246,15 @@ class UserController extends \restapi\components\Controller
                 }
 
                 if (!empty($level)) {
-                    return $this->send($level, "获取标签和子标签成功", 1,200,null,alertMsgEnum::getLevelTagSuccess);
+                    return $this->send($level, "获取标签和子标签成功", 1, 200, null, alertMsgEnum::getLevelTagSuccess);
                 } else {
-                    return $this->send(null, "获取标签和子标签失败", 0, 200,null,alertMsgEnum::getLevelTagFail);
+                    return $this->send(null, "获取标签和子标签失败", 0, 200, null, alertMsgEnum::getLevelTagFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1277,12 +1303,12 @@ class UserController extends \restapi\components\Controller
                 $level = CustomerComment::getCustomerCommentCount($customer->id);
                 $ret['CommentCount'] = $level;
 
-                return $this->send($ret, "获取用户评价数量", 1,200,null,alertMsgEnum::getCommentCountSuccess);
+                return $this->send($ret, "获取用户评价数量", 1, 200, null, alertMsgEnum::getCommentCountSuccess);
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1330,15 +1356,15 @@ class UserController extends \restapi\components\Controller
             try {
                 $service = Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
                 if ($service) {
-                    return $this->send(1, "该服务获取成功", 1,200,null,alertMsgEnum::getGoodsSuccess);
+                    return $this->send(1, "该服务获取成功", 1, 200, null, alertMsgEnum::getGoodsSuccess);
                 } else {
-                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1475,15 +1501,14 @@ class UserController extends \restapi\components\Controller
     public function actionGetWeixinUserInfo()
     {
         $param = Yii::$app->request->get();
-        $weixin_id=$param['weixin_id'];
-        $sign=$param['sign'];
-        if (empty($weixin_id)|| empty($sign) ) {
+        $weixin_id = $param['weixin_id'];
+        $sign = $param['sign'];
+        if (empty($weixin_id) || empty($sign)) {
             return $this->send(null, "微信id或签名不允许为空", 0, 403, null, alertMsgEnum::getUserInfoFailed);
         }
 
-        $date=CustomerAccessToken::generateAccessTokenForWeixin($weixin_id, $sign);
-        if($date['errcode']!='0')
-        {
+        $date = CustomerAccessToken::generateAccessTokenForWeixin($weixin_id, $sign);
+        if ($date['errcode'] != '0') {
             return $this->send(null, $date['errmsg'], 0, 403, null, alertMsgEnum::getUserInfoFailed);
         }
 
