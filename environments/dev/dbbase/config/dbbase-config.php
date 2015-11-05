@@ -131,23 +131,16 @@ return [
          */
         'log' => [
             'targets' => [
-                'fileError' => [
-                    'class' => 'yii\log\FileTarget',
+                'email' => [
+                    'class' => 'yii\log\EmailTarget',
+                    'mailer'=>'mailer',
                     'levels' => ['error'],
-                    'categories' => ['yii\*'],
-                    'logFile' => '@app/runtime/logs/error.log',
-                ],
-                'fileWarning' => [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['warning'],
-                    'categories' => ['yii\*'],
-                    'logFile' => '@app/runtime/logs/warning.log',
-                ],
-                'fileInfo' => [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['trace', 'info'],
-                    'categories' => ['yii\*'],
-                    'logFile' => '@app/runtime/logs/info.log',
+                    'categories' => ['event\*'],
+                    'message' => [
+                        'from'=>'service@corp.1jiajie.com',
+                        'to' => ['lidenggao@1jiajie.com'],
+                        'subject' => '事件绑定处理错误日志',
+                    ],
                 ],
             ],
         ],

@@ -12,6 +12,7 @@ use core\models\shop\ShopManager;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
 use yii\base\Event;
+use dbbase\components\JPush;
 class EventBind extends Component implements BootstrapInterface
 {
     public function bootstrap($app)
@@ -27,7 +28,7 @@ class EventBind extends Component implements BootstrapInterface
                     $shop_id = $event->sender->shop_id;
                     Shop::runCalculateWorkerCount($shop_id);
                 }catch(\Exception $e){
-                
+                    \Yii::error($e, 'event/bind');
                 }
             }
         );
@@ -45,7 +46,7 @@ class EventBind extends Component implements BootstrapInterface
                     $old_id = $attributes['shop_id'];
                     Shop::runCalculateWorkerCount($old_id);
                 }catch(\Exception $e){
-        
+                    \Yii::error($e, 'event/bind');
                 }
             }
         );
@@ -60,7 +61,7 @@ class EventBind extends Component implements BootstrapInterface
                     $shop_manager_id = $event->sender->shop_manager_id;
                     ShopManager::runCalculateWorkerCount($shop_manager_id);
                 }catch(\Exception $e){
-        
+                    \Yii::error($e, 'event/bind');
                 }
             }
         );
@@ -78,7 +79,52 @@ class EventBind extends Component implements BootstrapInterface
                     $old_id = $attributes['shop_manager_id'];
                     ShopManager::runCalculateWorkerCount($old_id);
                 }catch(\Exception $e){
-        
+                    \Yii::error($e, 'event/bind');
+                }
+            }
+        );
+        /**
+         * JPUSH 事件记录到MONGODB
+         */
+        Event::on(
+            JPush::className(),
+            JPush::EVENT_PUSH_AFTER,
+            function ($event) {
+                try{
+                    $data = $event->sender->data;
+                    $mongo = \Yii::$app->mongodb;
+                    $collection = $mongo->getCollection('jpush_log');
+                    $res = $collection->insert([
+                        'tags' => $data['tags'], 
+                        'msg' => $data['msg'],
+                        'extras'=>$data['extras'],
+                        'title'=>$data['title'],
+                        'category'=>$data['category'],
+                    ]);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event/jpush');
+                }
+            }
+        );
+        /**
+         * SMS 事件记录到MONGODB
+         */
+        Event::on(
+            JPush::className(),
+            JPush::EVENT_PUSH_AFTER,
+            function ($event) {
+                try{
+                    $data = $event->sender->data;
+                    $mongo = \Yii::$app->mongodb;
+                    $collection = $mongo->getCollection('sms_log');
+                    $res = $collection->insert([
+                        'general_smslog_mobiles'=>$data['pszMobis'],
+                        'general_smslog_msg'=>$data['pszMsg'],
+                        'general_smslog_res'=>$data['result'],
+                        'created_at'=>time(),
+                    ]);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event/sms');
                 }
             }
         );

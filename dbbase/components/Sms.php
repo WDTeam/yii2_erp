@@ -55,14 +55,6 @@ class Sms extends Component
     
     const EVENT_SEND_AFTER = 'smsSendAfter';
     
-    public function behaviors()
-    {
-        return [
-            [
-                'class'=>SmslogBehavior::className(),
-            ]
-        ];
-    }
     public $data;
     /**
      * 发短信

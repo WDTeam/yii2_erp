@@ -51,15 +51,6 @@ $config =  [
                 '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
             ],
         ],
-        'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
         'errorHandler' => [
             'errorAction' => 'system/site/error',
         ],

@@ -62,6 +62,13 @@ class DemoController extends BaseAuthController
     public function actionMongodb()
     {
         $mongo = \Yii::$app->mongodb;
-        var_dump($mongo->getCollection('customer'));
+        $collection = $mongo->getCollection('test');
+        $res = $collection->insert(['name' => 'John Smith', 'status' => 1]);
+        var_dump($res);
+    }
+    
+    public function actionLog()
+    {
+        \Yii::info(['a'=>111], 'customs\test');
     }
 }
