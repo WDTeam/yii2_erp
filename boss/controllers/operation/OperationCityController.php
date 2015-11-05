@@ -50,6 +50,7 @@ class OperationCityController extends BaseAuthController
         }
 
         $dataProvider = $searchModel->search($params);
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -197,7 +198,7 @@ class OperationCityController extends BaseAuthController
         $post = Yii::$app->request->post();
         if(empty($post)){
             $model = new OperationCity;
-//            $citylist = OperationCity::getOnlineCityList(2); //未开通的城市列表
+            //$citylist = OperationCity::getOnlineCityList(2); //未开通的城市列表
             $citylist = OperationCity::getCityList(); //城市列表
             return $this->render('Release', [
                 'model' => $model,

@@ -37,10 +37,12 @@ $(document).ready(function(){
 
 	 //触发单选框的change事件
 	 $('.MyRadioStyle input').on('ifChecked', function(event){
-	 	$(this).trigger("change");
+         //alert(1);
+         $(this).trigger("change");
 	 });
 	 $('.MyRadioStyle input').on('ifUnchecked', function(event){
-	 	$(this).trigger("change");
+         //alert(2);
+		 //$(this).trigger("change");
 	 });
 
 	//给所有的type=file外层添加一个<a>

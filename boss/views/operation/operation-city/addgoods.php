@@ -21,18 +21,21 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
 ?>
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title"> 服务品类</h3>
+            <h3 class="panel-title"> 服务类型</h3>
         </div>
     <div class="panel-body ">
         <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
         <div class="row">
-            <div class="col-md-2">先选择品类</div>
-            <div class="col-md-offset-2 col-md-2">后选择商品</div>
+            <div class="col-md-2">先选择服务类型</div>
+            <div class="col-md-offset-1 col-md-2">后选择服务项目</div>
+            <div class="col-md-offset-2 col-md-1">定价</div>
+            <div class="col-md-offset-1 col-md-2">适用商圈</div>
         </div>
         <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
             <?php echo Html::radioList('categorylist[]', [], $categorylist, ['class'=>'MyRadioStyle col-md-2'])  ?>
-            <div class="col-md-2"></div>
-            <div id="categoryGoodsContent" class="MyRadioStyle col-md-6">
+            <div id="categoryGoodsContent" class="MyRadioStyle col-md-3">
+            </div>
+            <div id="categoryGoodsPrice" class="MyRadioStyle col-md-3">
             </div>
         </div>
     </div>
