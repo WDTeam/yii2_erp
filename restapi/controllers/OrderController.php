@@ -1212,7 +1212,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/order-status-history [GET] /order/order-status-history(70%)
-     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕 --缺少周期订单)
+     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕/田玉星 --缺少周期订单)
      *
      * @apiName actionOrderStatusHistory
      * @apiGroup Order
@@ -1282,15 +1282,12 @@ class OrderController extends \restapi\components\Controller
     public function actionOrderStatusHistory()
     {
 
-        $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
-        @$token = $args['access_token'];
-        $user = CustomerAccessToken::getCustomer($token);
-        if (empty($user)) {
+        $args = Yii::$app->request->get() or  $args = json_decode(Yii::$app->request->getRawBody(), true);
+        if(!isset($args['access_token'])||!$args['access_token']||!CustomerAccessToken::getCustomer($token)){
             return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
-        $orderId = $args['order_id'];
-        if (!is_numeric($orderId)) {
+        //判断订单号
+        if (!isset($args['order_id'])||!is_numeric($args['order_id'])) {
             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
         //TODO check whether the orders belong the user
