@@ -1,23 +1,23 @@
 <?php
 namespace core\models\customer;
 
-use core\models\finance\FinanceOrderChannel;
 use Yii;
-
 use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 
 use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
+use dbbase\models\Worker;
+use dbbase\models\customer\CustomerFeedback;
+use dbbase\models\customer\CustomerExtBalanceLog;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
-use dbbase\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;
-
 use core\models\operation\OperationCity;
+use core\models\finance\FinanceOrderChannel;
 
 
 class Customer extends \dbbase\models\customer\Customer
@@ -122,14 +122,18 @@ class Customer extends \dbbase\models\customer\Customer
     /**
      * 获取客户的手机号
      */
-    public static function getCustomerPhone($customer_id)
+    public static function getCustomerPhoneById($customer_id)
     {
-        $customer = self::findOne($customer_id);
-        if ($customer == NULL) {
-            return false;
-        }else{
-            return $customer->customer_phone;
-        }
+        $customer = self::find()->select(['customer_phone'])->where(['id'=>$customer_id])->one();
+        return $customer->customer_phone;
+    }
+    
+    /**
+     * get customer id by phone
+     */
+    public static function getCustomerIdByPhone($customer_phone){
+        $customer = self::find()->select(['id'])->where(['customer_phone'=>$customer_phone])->one();
+        return $customer->id;
     }
 
     /**
@@ -377,6 +381,58 @@ class Customer extends \dbbase\models\customer\Customer
         $customerExtBalance->save();
         return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
     }
+    /**
+     * change customer's balance, customer 's last balnce and current balance is availible
+     */
+    public static function operateBalance($customer_id, $end_balance){
+        $customer = self::findOne($customer_id);
+        if($customer === NULL){
+            return ['respone'=>'error', 'errcode'=>1, 'errmsg'=>'客户不存在'];
+        }
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer->id])->one();
+        if($customerExtBalance === NULL){
+            return ['respone'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+        }
+        $begin_balance = $customerExtBalance->customer_balance;
+        $diff = $end_balance - $begin_balance;
+        if($diff > 0){
+            $operate_balance = abs($diff);
+            $operate_type = 1;
+            $operate_type_name = '增加';
+        }else if($diff == 0){
+            $operate_balance = abs($diff);
+            $operate_type = 0;
+            $operate_type_name = '没变';
+        }else{
+            $operate_balance = abs($diff);
+            $operate_type = -1;
+            $operate_type_name = '减少';
+        }
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerExtBalance->customer_balance = $end_balance;
+            $customerExtBalance->updated_at = time();
+            $customerExtBalance->save();
+            $customerExtBalanceLog = new CustomerExtBalanceLog;
+            $customerExtBalanceLog->customer_id = $customer->id;
+            $customerExtBalanceLog->customer_phone = $customer->customer_phone;
+            $customerExtBalanceLog->customer_ext_balance_begin_balance = $begin_balance;
+            $customerExtBalanceLog->customer_ext_balance_end_balance = $end_balance;
+            $customerExtBalanceLog->customer_ext_balance_operate_balance = $operate_balance;
+            $customerExtBalanceLog->customer_ext_balance_operate_type = $operate_type;
+            $customerExtBalanceLog->customer_ext_balance_operate_type_name = $operate_type_name;
+            $customerExtBalanceLog->created_at = time();
+            $customerExtBalanceLog->updated_at = 0;
+            $customerExtBalanceLog->is_del = 0;
+            $customerExtBalanceLog->save();
+            $transaction->commit();
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'操作余额失败'];
+        }
+    }
+    
 
 	/******************************************score**********************************************/
 	/**
@@ -577,6 +633,27 @@ class Customer extends \dbbase\models\customer\Customer
 	}
 
 	/**********************************block*************************************************************/
+    
+    
+/***********************************customer feedback************************************************/
+    /**
+     * submit feedback of customer
+     */
+    public static function addFeedback($customer_id, $feedback_content){
+        $customer_phone = self::getCustomerPhoneById($customer_id);
+        $customerFeedback = new CustomerFeedback;
+        $customerFeedback->customer_id = $customer_id;
+        $customerFeedback->customer_phone = $customer_phone;
+        $customerFeedback->feedback_content = $feedback_content;
+        $customerFeedback->created_at = time();
+        $customerFeedback->updated_at = 0;
+        $customerFeedback->is_del = 0;
+        if(!$customerFeedback->validate()){
+            return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'客户提交意见失败'];
+        }
+        $customerFeedback->save();
+        return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+    }
 	
 	/**********************************count*************************************************************/
 	/**

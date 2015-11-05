@@ -735,8 +735,8 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['order_pay_money']=$orderInfo->orderExtPay->order_pay_money;//支付金额
     	$orderdateinfo['coupon_id']=$orderInfo->orderExtPay->coupon_id;
     	$orderdateinfo['order_booked_end_time']=$orderInfo->order_booked_count;
-    	
-    	
+    	$orderdateinfo['order_status_name']=$orderInfo->orderExtStatus->order_status_boss;
+
     	}
     	//第三方运营费用
     	$orderdateinfo['order_pop_operation_money']=$promote;

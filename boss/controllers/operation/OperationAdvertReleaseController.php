@@ -155,7 +155,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            if (!empty($post['advert'])) {
+            if (!empty($post['advert']) && isset($post['advert']['id'])) {
                 $cache = Yii::$app->cache;
                 $citys = $cache->get('__CITY_INFO__');
                 $model = new OperationAdvertRelease();

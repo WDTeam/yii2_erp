@@ -38,7 +38,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_send' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了\'',
             'order_flag_urgent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'加急\'',
             'order_flag_exception' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'异常 1无经纬度\'',
-            'order_flag_sys_assign' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'是否需要系统指派 1是 0否\'',
+            'order_flag_sys_assign' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 1 COMMENT \'是否需要系统指派 1是 0否\'',
             'order_flag_lock' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否锁定 1锁定 0未锁定\'',
             'order_flag_lock_time' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'加锁时间\'',
             'order_flag_worker_sms' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了短信\'',
@@ -119,7 +119,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_cancel_cause_id' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'取消具体原因id\'',
             'order_cancel_cause_detail' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消具体原因\'',
             'order_cancel_cause_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'取消原因备注\'',
-            'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id  0客户操作 1系统操作\'',
+            'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id 1系统 2客户 3阿姨 >3后台管理员\'',
 
 
         ], $tableOptions);

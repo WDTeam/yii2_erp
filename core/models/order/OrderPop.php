@@ -75,7 +75,7 @@ class OrderPop extends Model
     public static function cancel($order_code,$cause_id,$memo)
     {
         $order = OrderSearch::getOneByCode($order_code);
-        return Order::cancel($order->id,1,$cause_id,$memo,true);
+        return Order::doCancel($order,1,$cause_id,$memo,true);
     }
 
     /** *********************以下为订单部分调用****************************** */
@@ -97,7 +97,7 @@ class OrderPop extends Model
 
     private static function _pushStatus($order,$status)
     {
-        $url = \Yii::$app->params['order']['pop']['api_url'].'push-order-status';
+        $url = \Yii::$app->params['order_pop']['api_url'].'push-order-status';
         $data[order_id] = $order->order_code;
         $data[status] = $status;
         $data[platform_version] = self::VERSION;

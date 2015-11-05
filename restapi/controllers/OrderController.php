@@ -9,8 +9,8 @@ use \core\models\order\OrderStatusDict;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
-
-use  restapi\models\alertMsgEnum;
+use \core\models\order\OrderStatus;
+use restapi\models\alertMsgEnum;
 use yii\web\Response;
 use Yii;
 
@@ -77,7 +77,8 @@ class OrderController extends \restapi\components\Controller
      *          "created_at": 1445320069,  订单创建时间
      *          "updated_at": 1445320069,  订单修改时间
      *          "id": 8
-     *      }
+     *      },
+     *  "alertMsg": "创建订单成功,请重新登录"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -99,32 +100,32 @@ class OrderController extends \restapi\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
 
         if (is_null($args['order_service_item_id'])) {
-            return $this->send(null, "请输入服务项目id",0,200,null,alertMsgEnum::orderServiceItemIdFaile);
+            return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
         if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源", 0,200,null,alertMsgEnum::orderSrcIdFaile);
+            return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间", 0,200,null,alertMsgEnum::orderBookedBeginTimeFaile);
+            return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间", 0,200,null,  alertMsgEnum::orderBookedEndTimeFaile);
+            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
         if (is_null($args['order_pay_type'])) {
-            return $this->send(null, "数据不完整,请输入支付方式", 0,200,null,  alertMsgEnum::orderPayTypeFaile);
+            return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
         $attributes['order_pay_type'] = $args['order_pay_type'];
 
@@ -138,10 +139,10 @@ class OrderController extends \restapi\components\Controller
             if (!empty($model)) {
                 $attributes['address_id'] = $model->id;
             } else {
-                return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0,200,null,alertMsgEnum::orderAddressIdFaile);
+                return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
             }
         } else {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0,200,null,alertMsgEnum::orderAddressIdFaile);
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
 
         if (isset($args['order_pop_order_code'])) {
@@ -186,9 +187,9 @@ class OrderController extends \restapi\components\Controller
         $is_success = $order->createNew($attributes);
         $order->errors;
         if ($is_success) {
-            return $this->send($order, '创建订单成功',1,200,null,  alertMsgEnum::orderCreateSuccess);
+            return $this->send($order, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
-            return $this->send($order->errors, '创建订单失败', 0,200,null,  alertMsgEnum::orderCreateFaile);
+            return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }
 
@@ -228,6 +229,7 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "以下单成功，正在等待阿姨抢单",
+     *       "alertMsg": "以下单成功，正在等待阿姨抢单",
      *       "ret":{
      *           "order": {}
      *
@@ -251,37 +253,37 @@ class OrderController extends \restapi\components\Controller
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
         if (is_null($args['order_service_item_id'])) {
-            return $this->send(null, "请输入商品类型", 0,200,null,alertMsgEnum::orderServiceItemIdFaile);
+            return $this->send(null, "请输入商品类型", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         $attributes['order_service_type_id'] = $args['order_service_type_id'];
         if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源", 0,200,null,  alertMsgEnum::orderSrcIdFaile);
+            return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间", 0,200,null,  alertMsgEnum::orderBookedBeginTimeFaile);
+            return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间", 0,200,null,  alertMsgEnum::orderBookedEndTimeFaile);
+            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
         if (is_null($args['order_pay_type'])) {
-            return $this->send(null, "数据不完整,请输入支付方式", 0,200,null,alertMsgEnum::orderPayTypeFaile);
+            return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
         $attributes['order_pay_type'] = $args['order_pay_type'];
 
 
         if (is_null($args['address_id'])) {
             if (is_null($args['address_id']) or is_null($args['city'])) {
-                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0,200,null,  alertMsgEnum::orderAddressIdFaile);
+                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
             }
             $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
@@ -326,9 +328,9 @@ class OrderController extends \restapi\components\Controller
         $order = new \core\models\order\Order();
         $is_success = $order->createNew($attributes);
         if ($is_success) {
-            $this->send($order,'追加订单成功',1,200,null,  alertMsgEnum::orderAppendOrderSuccess);
+            $this->send($order, '追加订单成功', 1, 200, null, alertMsgEnum::orderAppendOrderSuccess);
         } else {
-            $this->send($order,'追加订单失败',0,200,null,  alertMsgEnum::orderAppendOrderFaile);
+            $this->send($order, '追加订单失败', 0, 200, null, alertMsgEnum::orderAppendOrderFaile);
         }
     }
 
@@ -398,6 +400,8 @@ class OrderController extends \restapi\components\Controller
      *          "order_status_name": "已开始智能指派"
      *           }
      *    ]
+     *  },
+     * "alertMsg": "操作成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -415,7 +419,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -448,7 +452,7 @@ class OrderController extends \restapi\components\Controller
             $limit = 1;
         }
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
             $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
 
@@ -467,9 +471,9 @@ class OrderController extends \restapi\components\Controller
             $ret['page'] = $page;
             $ret['orders'] = $orders;
 
-            $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderGetOrdersSuccess);
+            $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetOrdersSuccess);
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误" . $e, 1024,200,null,  alertMsgEnum::orderGetOrdersFaile);
+            return $this->send(null, "boss系统错误" . $e, 1024, 200, null, alertMsgEnum::orderGetOrdersFaile);
         }
     }
 
@@ -496,7 +500,8 @@ class OrderController extends \restapi\components\Controller
      *      "msg": "操作成功",
      *      "ret": {
      *          "count": "4"
-     *      }
+     *      },
+     *       "alertMsg": "操作成功"
      *     }
      *
      * @apiErrorExample Error-Response:
@@ -516,7 +521,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -531,10 +536,10 @@ class OrderController extends \restapi\components\Controller
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
 
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
         $ret['count'] = $count;
-        return $this->send($ret, "操作成功", 1, 200,null,  alertMsgEnum::orderGetOrderCountSuccess);
+        return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetOrderCountSuccess);
     }
 
     /**
@@ -554,7 +559,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [from] 开始时间   时间戳   如 *'1443695400'
      * @apiParam {String} [to] 结束时间     时间戳   如 *'1443695400'
      * @apiParam {String} [oc.customer_id]客户id
-     *
+     * @apiParam {String} [not_with_work] 0,1
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
@@ -602,6 +607,7 @@ class OrderController extends \restapi\components\Controller
      *          "order_status_name": "已开始智能指派"
      *      }
      *       ]
+     *     "alertMsg": "操作成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -620,7 +626,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -645,20 +651,26 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["owr.worker_id"] = $worker->id;
+        $not_with_work = null;
+        if (isset($args['not_with_work'])) {
+            $not_with_work = $args['not_with_work'];
+        } else {
+            $args["owr.worker_id"] = $worker->id;
+        }
+
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
-            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
-            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
+            $orderSearch = new OrderSearch();
+            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to, $not_with_work);
+            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to, $not_with_work);
         } catch (\Exception $e) {
-            return $this->send($e, "服务异常",1024,200,null,alertMsgEnum::orderGetWorkerOrderFaile);
+            return $this->send($e, "服务异常", 1024, 200, null, alertMsgEnum::orderGetWorkerOrderFaile);
         }
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderGetWorkerOrderSuccess);
+        $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetWorkerOrderSuccess);
     }
 
     /**
@@ -723,8 +735,10 @@ class OrderController extends \restapi\components\Controller
      *          "order_before_status_name": "已支付",
      *          "order_status_dict_id": "3",
      *          "order_status_name": "已开始智能指派"
-     *       }
-     *    ]
+     *        }
+     *       ]
+     *      }
+     *  "alertMsg": "操作成功"
      * }
      *
      * @apiErrorExample Error-Response:
@@ -743,7 +757,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -774,18 +788,18 @@ class OrderController extends \restapi\components\Controller
             $limit = 1;
         }
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $arr);
         } catch (Exception $e) {
-            return $this->send($e, "服务异常", 0,200,null,  alertMsgEnum::orderGetWorkerServiceOrderSuccess);
+            return $this->send($e, "服务异常", 0, 200, null, alertMsgEnum::orderGetWorkerServiceOrderSuccess);
         }
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1,200,null, alertMsgEnum::orderGetWorkerServiceOrderFaile);
+        $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetWorkerServiceOrderFaile);
     }
 
     /**
@@ -812,8 +826,8 @@ class OrderController extends \restapi\components\Controller
      *    "code": "1",
      *    "msg": "操作成功",
      *    "ret": {
-     *    }
-     *
+     *    },
+     *    "alertMsg": "操作成功"
      *    }
      *
      * @apiErrorExample Error-Response:
@@ -833,7 +847,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -846,7 +860,7 @@ class OrderController extends \restapi\components\Controller
         @$from = $args['from'];
         @$to = $args['to'];
         $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
         $ret = [];
         if (!empty($orderStatus)) {
             foreach ($orderStatus as $statuStr) {
@@ -880,6 +894,7 @@ class OrderController extends \restapi\components\Controller
      *    "msg": "操作成功",
      *    "ret": {
      *    }
+     *    "alertMsg": "操作成功"
      *
      *    }
      *
@@ -900,11 +915,11 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new \OrderSearch();
         $ret = [];
         $arr = array();
         $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
@@ -976,6 +991,7 @@ class OrderController extends \restapi\components\Controller
      *              "order_status_name": "已开始智能指派"
      *          }
      *      ]
+     *     "alertMsg": "操作成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -995,7 +1011,7 @@ class OrderController extends \restapi\components\Controller
 
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-           return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1010,7 +1026,7 @@ class OrderController extends \restapi\components\Controller
         }
         $offset = ($page - 1) * $limit;
         $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
-        return $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
+        return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
     }
 
     /**
@@ -1070,7 +1086,8 @@ class OrderController extends \restapi\components\Controller
      *          "order_status_dict_id": "3",
      *          "order_status_name": "已开始智能指派"
      *      }
-     *    ]
+     *    ],
+     *   "alertMsg": "操作成功"
      * }
      *
      * @apiErrorExample Error-Response:
@@ -1089,7 +1106,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1104,12 +1121,11 @@ class OrderController extends \restapi\components\Controller
         }
         $offset = ($page - 1) * $limit;
         $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
-        return $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
+        return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
     }
 
     /**
      * @api {GET} /order/status-orders-count [GET]/order/status-orders-count(70%)
-     *
      * @apiDescription 查询用户不同状态订单数量(谢奕--缺少周期订单)
      * @apiName StatusOrdersCount
      * @apiGroup Order
@@ -1158,12 +1174,13 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionStatusOrdersCount()
     {
+
         $args = Yii::$app->request->get();
 
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -1177,7 +1194,8 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
+
         $ret = [];
         if (!empty($orderStatus)) {
             foreach ($orderStatus as $statuStr) {
@@ -1188,12 +1206,13 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
             $ret['count'] = $count;
         }
-        $this->send($ret, "操作成功",1,200,null,  alertMsgEnum::orderGetStatusOrdersCountSuccess);
+
+        $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetStatusOrdersCountSuccess);
     }
 
     /**
      * @api {GET} /order/order-status-history [GET] /order/order-status-history(70%)
-     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕 --缺少周期订单)
+     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕/田玉星 --缺少周期订单)
      *
      * @apiName actionOrderStatusHistory
      * @apiGroup Order
@@ -1204,6 +1223,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} status_list 该状态订单.
      *
      * @apiSuccessExample Success-Response:
+
      * HTTP/1.1 200 OK
      *  {
      *    "code": "1",
@@ -1261,27 +1281,28 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionOrderStatusHistory()
     {
+        $args = Yii::$app->request->get() or  $args = json_decode(Yii::$app->request->getRawBody(), true);
+        if(!isset($args['access_token'])||!$args['access_token']||!CustomerAccessToken::getCustomer($args['access_token'])){
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+        }
+        //判断订单号
+        if (!isset($args['order_id'])||!is_numeric($args['order_id'])) {
+            return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
+        }
+        $orderWhere = array("id"=>$args['order_id'],'order_parent_id'=>0);
+        $orderInfo = (new OrderSearch())->searchOrdersWithStatus($orderWhere);
+        if(!$orderInfo){
+             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
+        }
+        $orderResult = array();
+        //订单数据整理
+        $orderResult = [
+            ''
+        ];
+        $ret['status_history'] =  OrderStatus::searchOrderStatusHistory($args['order_id']);
+        $ret['orders'] = $orderInfo;
 
-        $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
-        @$token = $args['access_token'];
-        $user = CustomerAccessToken::getCustomer($token);
-        if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
-        }
-        $orderId = $args['order_id'];
-        if (!is_numeric($orderId)) {
-            return $this->send(null, "该订单不存在", 0,200,null,  alertMsgEnum::orderExistFaile);
-        }
-        //TODO check whether the orders belong the user
-        $orderSearch = new \core\models\order\OrderSearch();
-        $orderArr = array();
-        $orderArr["id"] = $orderId;
-        $orderArr['order_parent_id'] = 0;
-        $orders = $orderSearch->searchOrdersWithStatus($orderArr);
-        $ret['status_history'] = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
-        $ret['orders'] = $orders;
-        $this->send($ret, "操作成功",1,200,NULL,  alertMsgEnum::orderGetOrderStatusHistorySuccess);
+        $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
     /**
@@ -1327,7 +1348,7 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
-            return $this->send(null, "验证码或订单号不能为空", 0,200,null,  alertMsgEnum::orderCancelVerifyFaile);
+            return $this->send(null, "验证码或订单号不能为空", 0, 200, null, alertMsgEnum::orderCancelVerifyFaile);
         }
 
         $token = $param['access_token'];
@@ -1339,7 +1360,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (!CustomerAccessToken::checkAccessToken($token)) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($token);
@@ -1370,18 +1391,18 @@ class OrderController extends \restapi\components\Controller
                 try {
                     $result = Order::cancel($orderId, 0, $reason);
                     if ($result) {
-                        return $this->send([1], $orderId . "订单取消成功", 1,200,null,  alertMsgEnum::orderCancelSuccess);
+                        return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                     } else {
-                        return $this->send([0], $orderId . "订单取消失败", 0,200,null,  alertMsgEnum::orderCancelFaile);
+                        return $this->send([0], $orderId . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
                     }
                 } catch (Exception $e) {
-                    return $this->send(null, $orderId . "订单取消异常:" . $e,1024,200,null,  alertMsgEnum::orderCancelFaile);
+                    return $this->send(null, $orderId . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
                 }
             } else {
-                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200,NULL,alertMsgEnum::orderCancelFaile);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200, NULL, alertMsgEnum::orderCancelFaile);
             }
         } else {
-            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200,null,alertMsgEnum::orderCancelFaile);
+            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200, null, alertMsgEnum::orderCancelFaile);
         }
     }
 
@@ -1400,8 +1421,24 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} rate 星级
      * @apiParam {String} tag 评价标签
      *
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "订单评价成功成功",
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
      */
-
 
     /**
      * @api {DELETE} /order/hiden-order [DELETE]/order/hiden-order（ 100%）
@@ -1420,7 +1457,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "订单删除成功",
      *       "alertMsg": "订单取消成功"
      *        "ret":{ }
@@ -1442,7 +1479,7 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1453,12 +1490,12 @@ class OrderController extends \restapi\components\Controller
              */
             try {
                 if (Order::customerDel($param['order_id'], 0)) {
-                    return $this->send(null, "删除订单成功", 1,200,null,  alertMsgEnum::orderDeleteSuccess);
+                    return $this->send(null, "删除订单成功", 1, 200, null, alertMsgEnum::orderDeleteSuccess);
                 } else {
-                    return $this->send(null, "订单删除失败", 0, 200,null,  alertMsgEnum::orderDeleteFaile);
+                    return $this->send(null, "订单删除失败", 0, 200, null, alertMsgEnum::orderDeleteFaile);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 1024,200,null,alertMsgEnum::orderDeleteFaile);
+                return $this->send(null, "boss系统错误" . $e, 1024, 200, null, alertMsgEnum::orderDeleteFaile);
             }
         }
     }
@@ -1489,9 +1526,9 @@ class OrderController extends \restapi\components\Controller
      *              "work_hour": "23.5"
      *          }
      *          ],
-     *          "msgStyle": "",
-     *          "alertMsg": ""
-     *      }
+     *          "msgStyle": ""
+     *      },
+     *      "alertMsg": "操作成功"
      * }
      *
      *
@@ -1504,7 +1541,6 @@ class OrderController extends \restapi\components\Controller
      *     "alertMsg": "用户认证已经过期,请重新登录"
      *  }
      */
-  
     public function actionWorkerHistoryOrders()
     {
         
@@ -1537,12 +1573,13 @@ class OrderController extends \restapi\components\Controller
      *            ##暂时还没有统一
      *            //"阿姨状态 0正常1封号",
      *            }
-     *      }
+     *      },
+     *      "alertMsg": "操作成功"
      * }
      *
      *   * 指定阿姨订单列表/待抢单订单列表 leveltype=2
      * {
-     * "code": "ok",
+     * "code": "1",
      * "msg":"操作成功",
      * "ret":
      *     {
@@ -1570,8 +1607,9 @@ class OrderController extends \restapi\components\Controller
      * 	       ]
      *       },
      *    "pageNum":"总页码数"
-     *    }
-     * 
+     *    },
+     * "alertMsg": "操作成功"
+     * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
@@ -1592,19 +1630,19 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null, alertMsgEnum::userLoginFailed);
         }
 
         #判断传递的参数
         if (empty($param['leveltype'])) {
-            return $this->send(null, "缺少规定的参数leveltype", 0, 403);
+            return $this->send(null, "缺少规定的参数leveltype", 0, 200,null, alertMsgEnum::userLoginFailed);
         }
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
             if ($param['leveltype'] == 2) {
                 if (empty($param['page_size']) || empty($param['page'])) {
-                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
+                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 200,null, alertMsgEnum::userLoginFailed);
                 }
                 try {
                     #指定阿姨订单列表 待抢单订单列表
@@ -1625,7 +1663,7 @@ class OrderController extends \restapi\components\Controller
                     $ret["orderData"] = $workerCount; // $workerCount; 实际返回数组名称
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024,null, alertMsgEnum::userLoginFailed);
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
@@ -1636,7 +1674,7 @@ class OrderController extends \restapi\components\Controller
                     $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $args["owr.worker_id"] = $worker->id;
                     $args["oc.customer_id"] = null;
-                    $orderSearch = new \core\models\order\OrderSearch();
+                    $orderSearch = new OrderSearch();
                     $ret = [];
                     $arr = array();
                     $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
@@ -1655,13 +1693,13 @@ class OrderController extends \restapi\components\Controller
                     ];
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024, null, alertMsgEnum::userLoginFailed);
                 }
             } else {
-                return $this->send(null, "leveltype指定参数错误,不能大于2", 0, 403);
+                return $this->send(null, "leveltype指定参数错误,不能大于2", 0, 200, null, alertMsgEnum::levelType);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1699,7 +1737,7 @@ class OrderController extends \restapi\components\Controller
      *      "alertMsg": "创建周期订单成功"
      * }
      *
-    * @apiErrorExample Error-Response:
+     * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
      *    "code": 0,
@@ -1718,7 +1756,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         #获取用户ip
@@ -1726,34 +1764,34 @@ class OrderController extends \restapi\components\Controller
 
         #判断服务类型
         if (empty($param['order_service_item_id'])) {
-            return $this->send(null, "服务类型不能为空", 0,200,null,  alertMsgEnum::orderServiceItemIdFaile);
+            return $this->send(null, "服务类型不能为空", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         #判断订单来源
         if (empty($param['order_src_id'])) {
-            return $this->send(null, "订单来源id不能为空", 0,200,null,  alertMsgEnum::orderSrcIdFaile);
+            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         #判断下单渠道不能为空
         if (empty($param['channel_id'])) {
-            return $this->send(null, "下单渠道不能为空", 0,200,null,  alertMsgEnum::orderChannelFaile);
+            return $this->send(null, "下单渠道不能为空", 0, 200, null, alertMsgEnum::orderChannelFaile);
         }
         #判断地址不能为空
         if (empty($param['address_id'])) {
-            return $this->send(null, "用户地址不能为空", 0,200,null,  alertMsgEnum::orderAddressFaile);
+            return $this->send(null, "用户地址不能为空", 0, 200, null, alertMsgEnum::orderAddressFaile);
         }
         #判断客户手机不能为空
         if (empty($param['order_customer_phone'])) {
-            return $this->send(null, "客户手机不能为空", 0,200,null,  alertMsgEnum::orderCustomerPhoneFaile);
+            return $this->send(null, "客户手机不能为空", 0, 200, null, alertMsgEnum::orderCustomerPhoneFaile);
         }
 
         #判断支付方式
         if (empty($param['order_pay_type'])) {
-            return $this->send(null, "支付方式不能为空", 0,200,NULL,  alertMsgEnum::orderPayTypeFaile);
+            return $this->send(null, "支付方式不能为空", 0, 200, NULL, alertMsgEnum::orderPayTypeFaile);
         }
         #判断是否使用余额
         if (empty($param['order_is_use_balance'])) {
-            return $this->send(null, "使用余额不能为空", 0,200,NULL,  alertMsgEnum::orderIsUseBalanceFaile);
+            return $this->send(null, "使用余额不能为空", 0, 200, NULL, alertMsgEnum::orderIsUseBalanceFaile);
         }
-        if(is_null($param['accept_other_aunt'])){
+        if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
 
@@ -1779,7 +1817,7 @@ class OrderController extends \restapi\components\Controller
             $booked_list = array();
 
             foreach ($param['order_booked_time'] as $key => $val) {
-                if(!isset($param['order_booked_time']['coupon_id'])){
+                if (!isset($param['order_booked_time']['coupon_id'])) {
                     $val['coupon_id'] = null;
                 }
                 $booked_list[] = [
@@ -1790,32 +1828,32 @@ class OrderController extends \restapi\components\Controller
             }
 
             try {
-                $order = new \core\models\order\Order();
+                $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
 
                 if ($createOrder['status'] == 1) {
                     if (!empty($createOrder)) {
-                        return $this->send($createOrder['batch_code'], "添加成功", 1,200,null,  alertMsgEnum::orderCreateRecursiveOrderSuccess);
+                        return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                     } else {
-                        return $this->send(null, "添加失败", 0, 200,null,  alertMsgEnum::orderCreateRecursiveOrderFaile);
+                        return $this->send(null, "添加失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                     }
                 } else {
-                    return $this->send(null, "boss系统错误,添加周期订单失败", 1024,200,NULL,alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    return $this->send(null, "boss系统错误,添加周期订单失败", 1024, 200, NULL, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误,添加周期订单失败" . $e, 1024,200,NULL,alertMsgEnum::orderCreateRecursiveOrderFaile);
+                return $this->send(null, "boss系统错误,添加周期订单失败" . $e, 1024, 200, NULL, alertMsgEnum::orderCreateRecursiveOrderFaile);
             }
         } else {
-           return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
     /**
-     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order ( 100%)
+     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (90%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
-     * @apiDescription 阿姨抢单提交 （郝建设）
+     * @apiDescription 阿姨抢单提交 （郝建设 未测试）
      *
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} [platform_version]  平台版本号
@@ -1825,14 +1863,16 @@ class OrderController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *      "code": "1",
-     *      "msg":"操作成功",
-     *       "alertMsg": "阿姨抢单提交成功"
+     *      "msg":"阿姨抢单提交成功",
+     *      "alertMsg": "阿姨抢单提交成功",
+     *      "ret":{
+     *     }
      * }
      *
-    * @apiErrorExample Error-Response:
+     * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *     "code": 0,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1848,20 +1888,25 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0,200,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
-
             try {
-                $setWorker = Order::sysAssignDone($param['order_id'], '');
-                $ret['workerSend'] = $setWorker;
-                return $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::orderSetWorkerOrderSuccess);
+                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
+
+                if ($setWorker) {
+                    return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
+                } else {
+                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
+                }
             } catch (Exception $e) {
-                return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024,200,NULL,  alertMsgEnum::orderSetWorkerOrderFaile);
+                return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024, 200, NULL, alertMsgEnum::orderSetWorkerOrderFaile);
             }
+        } else {
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1879,10 +1924,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/get-order-worker [GET]/order/get-order-worker(100%）
+     * @api {GET} /order/get-order-customer [GET]/order/get-order-customer(100%）
      *
      * @apiDescription 获取周期订单 （郝建设）
-     * @apiName actionGetOrderWorker
+     * @apiName actionGetOrderCustomer
      * @apiGroup Order
      *
      * @apiParam {String} access_token    用户认证
@@ -1919,7 +1964,7 @@ class OrderController extends \restapi\components\Controller
      *    }
      *    }
      *     ],
-     *     "alertMsg": ""
+     *     "alertMsg": "操作成功"
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -1929,11 +1974,13 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "error",
      *       "msg": "用户认证已经过期,请重新登录，"
+     *       "ret":{},
+     *       "alertMsg": "操作成功"
      *
      *     }
      *
      */
-    public function actionGetOrderWorker()
+    public function actionGetOrderCustomer()
     {
         $param = Yii::$app->request->get();
 
@@ -1941,10 +1988,10 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
 
             if (count($order) > 0) {
@@ -1957,13 +2004,13 @@ class OrderController extends \restapi\components\Controller
                         $r_order = $val;
                     }
                 }
+                $r_order['sub_order'] = $arr;
+                return $this->send($r_order, "操作成功", 1,200,null,  alertMsgEnum::checkTaskSuccess);
+            } else {
+                return $this->send(null, "boss系统错误" . $e, 1024, null, alertMsgEnum::orderGetOrderWorkerFaile);
             }
-
-            $r_order['sub_order'] = $arr;
-
-            return $this->send($r_order, "操作成功", 1);
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
+            return $this->send(null, "boss系统错误" . $e, 1024, null, alertMsgEnum::orderGetOrderWorkerFaile);
         }
     }
 
@@ -2010,7 +2057,7 @@ class OrderController extends \restapi\components\Controller
      *     "address_id": "1",
      *     "order_address": ",北京市,西城区,西城区西什库大街16号123,空,17091005305",
      * },
-     * "alertMsg": ""
+     * "alertMsg": "操作成功"
      * }
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -2019,7 +2066,8 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "error",
      *       "msg": "用户认证已经过期,请重新登录，"
-     *
+     *       "ret":{},
+     *       "alertMsg": "操作成功"
      *     }
      *
      */
@@ -2032,14 +2080,18 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         try {
             $order = OrderSearch::getOne($param['id'])->getAttributes();
+            if($order){
             $ret["orderData"] = $order;
-            return $this->send($ret, "操作成功", 1);
+            return $this->send($ret, "操作成功", 1,200,null,  alertMsgEnum::checkTaskSuccess);
+            }else{
+            return $this->send(null, "boss系统错误" . $e,0, 1024, null, alertMsgEnum::orderGetOrderWorkerFaile);
+            }
         } catch (Exception $e) {
-            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
+            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e,0, 10240, null, alertMsgEnum::userLoginFailed);
         }
     }
 

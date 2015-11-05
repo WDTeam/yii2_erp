@@ -140,7 +140,7 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'order_id', 'order_channel_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode', 'payment_customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay', 'payment_customer_trans_record_service_card_current_balance', 'payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_compensate_money', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance'], 'number'],
-            [['payment_customer_trans_record_service_card_on'], 'string', 'max' => 30],
+            [['payment_customer_trans_record_service_card_on','payment_customer_trans_record_eo_order_id'], 'string', 'max' => 30],
             [['payment_customer_trans_record_transaction_id'], 'string', 'max' => 40],
             [['payment_customer_trans_record_remark'], 'string', 'max' => 255],
             [['payment_customer_trans_record_verify'], 'string', 'max' => 32]

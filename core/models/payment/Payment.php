@@ -166,6 +166,7 @@ class Payment extends \dbbase\models\payment\Payment
 
         //获取支付渠道名称
         $data['payment_source_name'] = FinanceOrderChannel::getOrderChannelByName($data['payment_source']);
+
         //使用场景
         $model->scenario = $scenario;
         $model->attributes = $data;
@@ -278,7 +279,13 @@ class Payment extends \dbbase\models\payment\Payment
         //组装支付订单号
         $rand = mt_rand(1000,9999);
         $date = date("ymd",time());
-        return $date.$transType.$rand.$id;
+        //生成商户订单号
+        $payment_eo_order_id = $date.$transType.$rand.$id;
+        //查询当前ID的数据是否存在
+        $model = Payment::findOne($id);
+        $model->setAttribute('payment_eo_order_id',$payment_eo_order_id);
+        $model->doSave();
+        return $payment_eo_order_id;
     }
 
     /**
@@ -763,33 +770,7 @@ class Payment extends \dbbase\models\payment\Payment
                 "sign_type"=> "RSA",
                 "sign"=> "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
             ];
-            /*
-            $_POST = array (
-                "payment_type" => "1",
-                "subject" => "e家洁在线支付",
-                "trade_no" => "2015102942279250",
-                "buyer_email" => "18311474301",
-                "gmt_create" => "2015-10-29 15:57:07",
-                "notify_type" => "trade_status_sync",
-                "quantity" => "1",
-                "out_trade_no" => "1510290160566",
-                "seller_id" => "2088801136967007",
-                "notify_time" => "2015-10-29 15:57:09",
-                "body" => "e家洁在线支付0.02元",
-                "trade_status" => "TRADE_FINISHED",
-                "is_total_fee_adjust" => "N",
-                "total_fee" => "0.02",
-                "gmt_payment" => "2015-10-29 15:57:08",
-                "seller_email" => "47632990@qq.com",
-                "gmt_close" => "2015-10-29 15:57:08",
-                "price" => "0.02",
-                "buyer_id" => "2088802381237501",
-                "notify_id" => "2983afc3b92e376e84923e4c75e0f3574s",
-                "use_coupon" => "N",
-                "sign_type" => "RSA",
-                "sign" => "ZlCICZ/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc=",
-            );
-            */
+
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -868,25 +849,46 @@ class Payment extends \dbbase\models\payment\Payment
      * @param $data
      */
     public function wxAppNotify($data){
+        //{"r":"\/pay\/wx-app-notify","bank_type":"0","discount":"0","fee_type":"1","input_charset":"UTF-8","notify_id":"envUQL970OKMjmAE66VO3Jsn9_10yHjOEzrSRxvgoyTkhAiEPFWa9f-uJnVIq08EhcVXyTfMeLr9vym58gZhO_vUqbjYrDll","out_trade_no":"15110501657379","partner":"1217983401","product_fee":"2","sign":"E9441ED08D39D9FCE40C1372A5F4EDE0","sign_type":"MD5","time_end":"20151105001614","total_fee":"2","trade_mode":"1","trade_state":"0","transaction_id":"1217983401391511058440210952","transport_fee":"0"}
+
         $class = new \wxpay_class();
         if(!empty($data['debug'])){
+            $GLOBALS['HTTP_RAW_POST_DATA'] = "<xml>
+                <appid><![CDATA[wx7558e67c2d61eb8f]]></appid>
+                <attach><![CDATA[e家洁在线支付]]></attach>
+                <bank_type><![CDATA[CFT]]></bank_type>
+                <cash_fee><![CDATA[1]]></cash_fee>
+                <fee_type><![CDATA[CNY]]></fee_type>
+                <is_subscribe><![CDATA[Y]]></is_subscribe>
+                <mch_id><![CDATA[10037310]]></mch_id>
+                <nonce_str><![CDATA[aoydf0e8u58c2scu2o441n1i5yxtxghr]]></nonce_str>
+                <openid><![CDATA[o7Kvajh91Fmh_KYzhwX0LWZtpMPM]]></openid>
+                <out_trade_no><![CDATA[15101922921]]></out_trade_no>
+                <result_code><![CDATA[SUCCESS]]></result_code>
+                <return_code><![CDATA[SUCCESS]]></return_code>
+                <sign><![CDATA[3E437AF36D969693DD705034A8FFD5F9]]></sign>
+                <time_end><![CDATA[20151019102921]]></time_end>
+                <total_fee>1</total_fee>
+                <trade_type><![CDATA[JSAPI]]></trade_type>
+                <transaction_id><![CDATA[1004390062201510191251335932]]></transaction_id>
+                </xml>";
             $post = $_POST = [
-                "r" => "/general-pay/wx-app-notify",
+                "r" => "/pay/wx-app-notify",
                 "bank_type" => "0",
                 "discount" => "0",
                 "fee_type" => "1",
                 "input_charset" => "UTF-8",
-                "notify_id" => "envUQL970OImimNqSbr02zP5_Zq5nrw-luZ8ADWHtVsc_30p2GXJ51YmMHoAqccbbeZBlGI2Ken5nHuMzIRqYgLX_4kw4QXg",
-                "out_trade_no" => "15101258091",
+                "notify_id" => "envUQL970OKMjmAE66VO3Jsn9_10yHjOEzrSRxvgoyTkhAiEPFWa9f-uJnVIq08EhcVXyTfMeLr9vym58gZhO_vUqbjYrDll",
+                "out_trade_no" => "15110501657379",
                 "partner" => "1217983401",
-                "product_fee" => "1",
-                "sign" => "A9A2D759AC57CA47ACC80436C4C6A876",
+                "product_fee" => "2",
+                "sign" => "E9441ED08D39D9FCE40C1372A5F4EDE0",
                 "sign_type" => "MD5",
-                "time_end" => "20151012165432",
-                "total_fee" => "1",
+                "time_end" => "20151105001614",
+                "total_fee" => "2",
                 "trade_mode" => "1",
                 "trade_state" => "0",
-                "transaction_id" => "1217983401381510128537567810",
+                "transaction_id" => "1217983401391511058440210952",
                 "transport_fee" => "0"
             ];
             $status = 'error';
@@ -917,11 +919,11 @@ class Payment extends \dbbase\models\payment\Payment
         //查询支付记录
         $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
 
-        if(!empty($data['debug'])){
-            $status = true;
-        }else{
+        //if(!empty($data['debug'])){
+        //    $status = true;
+        //}else{
             $status = $class->callback();
-        }
+        //}
 
         //验证支付结果
         if(!empty($model) && !empty($status)){
@@ -1291,7 +1293,7 @@ class Payment extends \dbbase\models\payment\Payment
         {
             case 1:
                 //支付普通订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1,$attribute);
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
                 {
@@ -1300,7 +1302,7 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 2:
                 //支付周期订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2,$attribute);
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
                 {
@@ -1309,7 +1311,7 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 3:
                 //支付充值交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment',2,$attribute);
                 break;
         }
         //支付充值

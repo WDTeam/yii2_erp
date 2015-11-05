@@ -44,7 +44,7 @@ class wxpay_class
             $packageParams['notify_url']	= $param['notify_url'];	    //通知地址
             $packageParams['out_trade_no']	= $param['out_trade_no'];		        //商户订单号
             $packageParams['partner']		= $PARTNER;		        //设置商户号
-            $packageParams['total_fee']		= $param['general_pay_money'];			//商品总金额,以分为单位
+            $packageParams['total_fee']		= $param['payment_money'];			//商品总金额,以分为单位
             $packageParams['spbill_create_ip']= $_SERVER['REMOTE_ADDR'];  //支付机器IP
             //获取package包
             $package= $reqHandler->genPackage($packageParams);

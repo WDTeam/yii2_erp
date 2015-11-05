@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationPlatformVersion */
 
-$this->title = $this->title = Yii::t('app', 'Update').Yii::t('app', 'Platform').Yii::t('app', 'Version');
+$this->title = $this->title = Yii::t('app', 'Look').Yii::t('app', 'Platform').Yii::t('app', 'Version');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['/operation/operation-platform/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform').Yii::t('app' ,'Version'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

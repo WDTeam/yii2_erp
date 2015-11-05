@@ -1063,12 +1063,6 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_is_settlemented": "是否已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
-     *               "values": [
-     *                   {
-     *                       "worker_tasklog_condition": "条件索引",
-     *                       "worker_tasklog_value": "条件值"
-     *                   }
-     *               ],
      *               "worker_task_description": "任务描述"
      *           },
      *           "url": "右上角任务说明链接（后台没有返回空）"
@@ -1105,9 +1099,8 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            $task_log=$task->getDetail();
-            unset($task_log['is_del']);
-            $tasks['task_doing']=$task_log;
+            unset($task['is_del']);
+            $tasks['task_doing'][]=$task;
         }
         $tasks['url']="";
         return $this->send($tasks, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
@@ -1195,9 +1188,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
-            unset($task_log['is_del']);
-            $tasks["task_done"]=$task_log;
+            unset($task['is_del']);
+            unset($task['values']);
+            $tasks['task_done'][]=$task;
         }
         $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
@@ -1284,11 +1277,11 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
-            unset($task_log['is_del']);
-            $tasks["task_fail"]=$task_log;
+            unset($task['is_del']);
+            unset($task['values']);
+            $tasks['task_fail'][]=$task;
         }
-            $tasks["url"]="";
+        $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
     }
 
