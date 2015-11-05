@@ -31,7 +31,7 @@ $(document).ready(function(){
 	// });
 
 	$('.MyRadioStyle input').each(function(){
-		ApplyToRadio($(this));
+        ApplyToRadio($(this));
 	});
 
 
@@ -80,20 +80,66 @@ $(document).ready(function(){
 
 	//日派单管理列表td样式
 	$(".kv-grid-table tr td").css("background-color","#fff");
-	
+
+
+
+    //----------------------------------------------------
+    var $div_li =$("div.tab_menu label");
+    var $_label =$("div.ipo label");
+    var $btn_tab = $("div.ipo label");
+    $div_li.click(function(){
+        //alert(10);
+        $(this).addClass("selected").siblings().removeClass("selected");
+        var index =  $div_li.index(this);
+        $("div.tab_box > div").eq(index).show().siblings().hide();
+        //alert(10);
+    }).hover(function(){
+        $(this).addClass("hover");
+    },function(){
+        $(this).removeClass("hover");
+    });
+
+
+    $_label.click(function(){
+        $(this).addClass("selected")
+            .siblings().removeClass("selected");
+        var tab_index =  $_label.index(this);
+        console.log(tab_index)
+            $("div.tab_text > div")
+            .eq(tab_index).show()
+            .siblings().hide();
+    }).hover(function(){
+        $(this).addClass("hover");
+    },function(){
+        $(this).removeClass("hover");
+    });
+
+    $btn_tab.click(function(){
+        $(this).addClass("selected")
+            .siblings().removeClass("selected");
+        var btn_tab_index =  $_label.index(this);
+        $("div.btn_tab_box > div")
+            .eq(btn_tab_index).show()
+            .siblings().hide();
+    }).hover(function(){
+        $(this).addClass("hover");
+    },function(){
+        $(this).removeClass("hover");
+    })
+    //-------------------------------------------------------------
 });
 
 function ApplyToRadio(self){
-	var label = self;
-	var label_text = label.parent().text();
-
+    var label = self;
+    var label_text = label.parent().text();
+    //console.log(self.parent());
+//alert(label.css('iradio_line-blue'));
 	////截取文字长度
 	//if(label_text.length > 6) {
 	//	label.parent().attr('title', label_text);
 	//	label_text = label_text.substr(0,6) + '...';
 	//}
-
-	label.parent().html('').append(self);
+    //label.parent().html('').append(self);
 
 	self.iCheck({
 		checkboxClass: 'icheckbox_line-blue',

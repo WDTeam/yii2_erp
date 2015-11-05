@@ -1,3 +1,11 @@
+<style>
+*{ margin:0; padding:0;}
+body { font:12px/19px Arial, Helvetica, sans-serif; color:#666;}
+.tab_menu,.tab_box,.tab_text ,.btn_tab_box{float: left;}
+.hidden{display:none}
+.tab_menu ul li {width: 50px; background-color: red; border: 1px solid #000;}
+.tab_menu ul li:hover{background-color: #000088;}
+</style>
 <?php
 
 use yii\helpers\Html;
@@ -19,31 +27,158 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '添加服务')];
 <?php
 $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]);
 ?>
+<!--
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title"> 服务类型</h3>
+            <h3 class="panel-title"> 服务品类</h3>
         </div>
     <div class="panel-body ">
         <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
         <div class="row">
-            <div class="col-md-2">先选择服务类型</div>
-            <div class="col-md-offset-1 col-md-2">后选择服务项目</div>
-            <div class="col-md-offset-2 col-md-1">定价</div>
-            <div class="col-md-offset-1 col-md-2">适用商圈</div>
+            <div class="col-md-2">先选择品类</div>
+            <div class="col-md-offset-2 col-md-2">后选择商品</div>
         </div>
         <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-            <?php echo Html::radioList('categorylist[]', [], $categorylist, ['class'=>'MyRadioStyle col-md-2'])  ?>
-            <div id="categoryGoodsContent" class="MyRadioStyle col-md-3">
-            </div>
-            <div id="categoryGoodsPrice" class="MyRadioStyle col-md-3">
+            <?php //echo Html::radioList('categorylist[]', [], $categorylist, ['class'=>'MyRadioStyle col-md-2'])  ?>
+            <div class="col-md-2"></div>
+            <div id="categoryGoodsContent" class="MyRadioStyle col-md-6">
             </div>
         </div>
     </div>
         <div class="panel-footer">
             <div class="form-group">
                 <div class="col-sm-12">
-                <?php echo Html::submitButton('下一步', ['class' => 'btn btn-success btn-lg btn-block']);?>
+                <?php //echo Html::submitButton('下一步', ['class' => 'btn btn-success btn-lg btn-block']);?>
                 </div>
             </div>
         </div>
+
+-->
+
+
         <?php ActiveForm::end(); ?>
+	<div class="tab_menu">
+		<label for="">1<input type="radio" value="" name="1"></label><br>
+		<label for="">2<input  type="radio" value="" name="2"></label><br>
+		<label for="">3<input  type="radio" value="" name="3"></label>
+	</div>
+	<div class="tab_box">
+		<div class="hidden ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden ipo">
+			<label for="">4<input type="checkbox" value=""></label><br>
+			<label for="">5<input  type="checkbox" value=""></label><br>
+			<label for="">6<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden ipo">
+			<label for="">7<input type="checkbox" value=""></label><br>
+			<label for="">8<input  type="checkbox" value=""></label><br>
+			<label for="">9<input  type="checkbox" value=""></label>
+		</div>
+	</div>
+	<div class="tab_text">
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+		<div class="hidden">
+			<div>服务项目：<span>家庭保洁</span></div>
+			<div>销售价格：<input type="text">小时/元</div>
+			<div>市场价格：<input type="text">小时/元</div>
+			<div>最低消费：<input type="text">小时/元</div>
+		</div>
+	</div>
+	<div class="btn_tab_box">
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+		<div class="hidden btn_ipo">
+			<label for="">1<input type="checkbox" value=""></label><br>
+			<label for="">2<input  type="checkbox" value=""></label><br>
+			<label for="">3<input  type="checkbox" value=""></label>
+		</div>
+	</div>

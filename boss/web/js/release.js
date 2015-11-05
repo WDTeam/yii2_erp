@@ -142,25 +142,35 @@ function selectCategoryChecked(){
 }
 
 function categoryGoods(obj){
-    alert(1);
     var status = obj.is(':checked');
     var value = obj.attr('value');
-    $('.goods_list').remove();
-    if (status) {
-        var url = '/operation/operation-city/getcategorygoods';
-        var city_id = $('.city_id').val();
-        var data = {'categoryid': value, 'city_id' : city_id};
-        $.post(url, data, function(t){
-            console.log(t);
-            $('#categoryGoodsContent').append(t);
+    //$('.goods_list').remove();
+    $('.goods_list').hide();
 
-            //radio应用icheck样式
-            $('#categoryGoodsContent input').each(function(){
-                ApplyToRadio($(this));
-            });
-        }, 'html');
-    } else {
-        $('#goods_'+value).remove();
+    if(status){
+        //判断某个按钮是否被点击过
+        if (obj.attr("done") == undefined) {
+
+            obj.attr("done", "true");
+            var url = '/operation/operation-city/getcategorygoods';
+            var city_id = $('.city_id').val();
+            var data = {'categoryid': value, 'city_id' : city_id};
+            $.post(url, data, function(t){
+                $('#categoryGoodsContent').append(t);
+
+                //radio应用icheck样式
+                $('#categoryGoodsContent input').each(function(){
+                    ApplyToRadio($(this));
+                });
+            }, 'html');
+            //return;
+        } else {
+            $('#goods_'+value).show();
+        }
+
+    }else{
+        //$('#goods_'+value).remove();
+        $('#goods_'+value).hide();
     }
 }
 
