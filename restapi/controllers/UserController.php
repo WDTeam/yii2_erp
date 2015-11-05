@@ -409,7 +409,7 @@ class UserController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "修改常用地址成功"
      *       "ret":{
      *       "address":
@@ -453,7 +453,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "地址信息获取失败"
      *
      *     }
