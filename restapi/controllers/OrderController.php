@@ -1173,6 +1173,7 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionStatusOrdersCount()
     {
+
         $args = Yii::$app->request->get();
 
         @$token = $args["access_token"];
@@ -1193,6 +1194,7 @@ class OrderController extends \restapi\components\Controller
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
         $orderSearch = new \core\models\order\OrderSearch();
+
         $ret = [];
         if (!empty($orderStatus)) {
             foreach ($orderStatus as $statuStr) {
@@ -1203,6 +1205,7 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
             $ret['count'] = $count;
         }
+
         $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetStatusOrdersCountSuccess);
     }
 
@@ -1860,7 +1863,8 @@ class OrderController extends \restapi\components\Controller
      *      "code": "1",
      *      "msg":"阿姨抢单提交成功",
      *      "alertMsg": "阿姨抢单提交成功",
-     *      "ret":{}
+     *      "ret":{
+     *     }
      * }
      *
      * @apiErrorExample Error-Response:
@@ -1886,19 +1890,21 @@ class OrderController extends \restapi\components\Controller
         }
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
-        try {
-            if (!empty($worker) && !empty($worker->id)) {
+
+        if (!empty($worker) && !empty($worker->id)) {
+            try {
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
-                
-                if($setWorker){
-                    $ret['workerSend'] = $setWorker;
-                    return $this->send($ret, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
-                }else{
-                     return $this->send(null, "阿姨抢单提交失败",0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
+
+                if ($setWorker) {
+                    return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
+                } else {
+                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024, 200, NULL, alertMsgEnum::orderSetWorkerOrderFaile);
             }
-        } catch (Exception $e) {
-            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024, 200, NULL, alertMsgEnum::orderSetWorkerOrderFaile);
+        } else {
+            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
