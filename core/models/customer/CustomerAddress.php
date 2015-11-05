@@ -35,7 +35,7 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
         $customer_address = self::getAddressOne($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone);
         
         if(!empty($customer_address)){
-            return ['response'=>'error', 'errcode'=>4, 'errmsg'=>'xx00'];
+            //return ['response'=>'error', 'errcode'=>4, 'errmsg'=>'xx00'];
             return false;
         }
         
