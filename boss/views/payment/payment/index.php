@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'payment_verify',
             [
                 'attribute' => 'created_at',
+                //'format' => ['date', 'Y-m-d H:i:s'],
                 'value'=>function($model){
                     return date("Y-m-d H:i:s",$model->created_at);
                 }
