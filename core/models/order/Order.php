@@ -630,14 +630,27 @@ class Order extends OrderModel
      * 取消订单
      * @param $order_id
      * @param $admin_id
+     * @param $cause_id
+     * @param string $memo
+     * @return bool
+     */
+    public static function cancel($order_id, $admin_id, $cause_id, $memo = '')
+    {
+        $order = OrderSearch::getOne($order_id);
+        return self::doCancel($order, $admin_id, $cause_id, $memo,false);
+    }
+
+    /**
+     * 取消订单
+     * @param $order
+     * @param $admin_id
      * @param $memo
      * @param $cause_id
      * @param bool $is_pop 是否是第三方调用
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $cause_id, $memo = '',$is_pop=false)
+    public static function doCancel($order, $admin_id, $cause_id, $memo = '',$is_pop=false)
     {
-        $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
         if($cause_id>0) {
             $order->order_cancel_cause_id = $cause_id;
