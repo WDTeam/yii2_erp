@@ -13,6 +13,7 @@ use yii\base\BootstrapInterface;
 use yii\base\Component;
 use yii\base\Event;
 use dbbase\components\JPush;
+use dbbase\components\Sms;
 class EventBind extends Component implements BootstrapInterface
 {
     public function bootstrap($app)
@@ -110,8 +111,8 @@ class EventBind extends Component implements BootstrapInterface
          * SMS 事件记录到MONGODB
          */
         Event::on(
-            JPush::className(),
-            JPush::EVENT_PUSH_AFTER,
+            Sms::className(),
+            Sms::EVENT_SEND_AFTER,
             function ($event) {
                 try{
                     $data = $event->sender->data;
