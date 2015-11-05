@@ -27,6 +27,10 @@ class OrderOtherDict extends ActiveRecord
     const NAME_IVR_PUSH_FAILURE = 5;
     const NAME_JPUSH_PUSH_SUCCESS = 6;
     const NAME_JPUSH_PUSH_FAILURE = 7;
+
+    const NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE = 8;
+
+
     /**
      * @inheritdoc
      */
