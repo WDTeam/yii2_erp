@@ -21,34 +21,60 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             [
                 'attribute' => 'payment_customer_trans_record_mode_name',
                 'label'=>'交易方式',
+                'options' => ['width'=>70]
             ],
-            'payment_customer_trans_record_transaction_id',
-            'customer_id',
-            'order_id',
+            [
+                'attribute' => 'payment_customer_trans_record_transaction_id',
+                'label'=>'交易流水号',
+                'options' => ['width'=>200]
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_eo_order_id',
+                'label'=>'商户订单号',
+                'options' => ['width'=>120]
+            ],
+            [
+                'attribute' => 'customer_id',
+                'label'=>'用户ID',
+                'options' => ['width'=>60]
+            ],
+            [
+                'attribute' => 'order_id',
+                'label'=>'E家洁订单号',
+                'options' => ['width'=>80]
+            ],
             [
                 'attribute' => 'payment_customer_trans_record_order_channel',
                 'label'=>'订单渠道',
+                'options' => ['width'=>120]
             ],
             [
                 'attribute' => 'payment_customer_trans_record_pay_channel',
                 'label'=>'支付渠道',
+                'options' => ['width'=>120]
             ],
-
             [
                 'attribute' => 'payment_customer_trans_record_order_total_money',
                 'label'=>'A:订单总金额',
                 'options'=>[ 'style'=>'background:#FFFFCC'],
             ],
-
-
+            [
+                'attribute' => 'payment_customer_trans_record_coupon_id',
+                'label'=>'B:优惠券ID',
+                'options'=>[ 'style'=>'background:#CCFFFF'],
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_coupon_code',
+                'label'=>'B1:优惠券编码',
+                'options'=>[ 'style'=>'background:#CCFFFF'],
+            ],
             [
                 'attribute' => 'payment_customer_trans_record_coupon_money',
-                'label'=>'B:优惠券金额',
+                'label'=>'B2:优惠券金额',
                 'options'=>[ 'style'=>'background:#CCFFFF'],
             ],
             [
@@ -103,8 +129,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'G3:支付后服务卡余额',
                 'options'=>[ 'style'=>'background:#FF9999'],
             ],
-
-
             [
                 'attribute' => 'payment_customer_trans_record_compensate_money',
                 'label'=>'H:补偿金额',
@@ -115,7 +139,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'I:退款金额',
                 'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
-
             [
                 'attribute' => 'payment_customer_trans_record_total_money',
                 'label'=>'J:用户累计交易额',

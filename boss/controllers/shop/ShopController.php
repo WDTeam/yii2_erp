@@ -87,7 +87,7 @@ class ShopController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if($model->load(Yii::$app->request->post())){
             if($model->changeAuditStatus(0,'修改内容')){
                 return $this->redirect(['view', 'id' => $model->id]);

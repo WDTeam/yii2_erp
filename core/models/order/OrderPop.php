@@ -75,7 +75,7 @@ class OrderPop extends Model
     public static function cancel($order_code,$cause_id,$memo)
     {
         $order = OrderSearch::getOneByCode($order_code);
-        return Order::cancel($order->id,1,$cause_id,$memo,true);
+        return Order::doCancel($order,1,$cause_id,$memo,true);
     }
 
     /** *********************以下为订单部分调用****************************** */
