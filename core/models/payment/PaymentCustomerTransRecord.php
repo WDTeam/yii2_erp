@@ -295,6 +295,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
@@ -336,6 +338,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
@@ -369,6 +373,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
@@ -401,6 +407,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
@@ -442,6 +450,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
@@ -480,6 +490,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
@@ -529,6 +541,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         {
             //获取用户余额
             $customerBalance = Customer::getBalanceById($data['customer_id']);
+            //如果余额返回数据错误,余额 = 0 ;
+            $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
             //之前余额
             $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
             //当前余额
@@ -560,6 +574,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
+        //如果余额返回数据错误,余额 = 0 ;
+        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
         //之前余额
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
