@@ -1282,7 +1282,7 @@ class OrderController extends \restapi\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or  $args = json_decode(Yii::$app->request->getRawBody(), true);
-        if(!isset($args['access_token'])||!$args['access_token']||!CustomerAccessToken::getCustomer($token)){
+        if(!isset($args['access_token'])||!$args['access_token']||!CustomerAccessToken::getCustomer($args['access_token'])){
             return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         //判断订单号
@@ -1296,9 +1296,9 @@ class OrderController extends \restapi\components\Controller
         }
         $orderResult = array();
         //订单数据整理
-//        $orderResult = [
-//            ''
-//        ]
+        $orderResult = [
+            ''
+        ]
         $ret['status_history'] =  OrderStatus::searchOrderStatusHistory($args['order_id']);
         $ret['orders'] = $orderInfo;
 
