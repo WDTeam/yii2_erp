@@ -992,7 +992,7 @@ class UserController extends \restapi\components\Controller
 
                 $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
-               
+            
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
@@ -1594,7 +1594,7 @@ class UserController extends \restapi\components\Controller
             try {
                 $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
                 if ($feedback) {
-                    return $this->send(1, "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
+                    return $this->send('{}', "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
                 } else {
                     return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
                 }

@@ -94,7 +94,11 @@ class Payment extends \dbbase\models\payment\Payment
                     'order_pop_order_money'
                 ];
                 $dataArray = OrderSearch::getOrderInfo($order_id,$fields,$payment_type);
-                $pay_money = 0;
+                $pay_money = 0;    //在线支付
+                $order_use_acc_balance = 0;  //使用余额
+                $card_id = 0;
+                $order_use_card_money = 0;   //使用服务卡
+
                 //判断是普通订单还是周期订单
                 if(count($dataArray) > 1)
                 {
@@ -102,12 +106,34 @@ class Payment extends \dbbase\models\payment\Payment
                     foreach( $dataArray as $val )
                     {
                         $pay_money += $val['order_pay_money'];    //在线支付
+                        $order_use_acc_balance += $val['order_use_acc_balance'];    //使用余额
+                        $card_id = $val['card_id'];    //服务卡号
+                        $order_use_card_money += $val['order_use_card_money'];    //使用服务卡
+
                     }
                 }
                 else
                 {
                     $one = current($dataArray);
-                    $pay_money = $one['order_pay_money'];
+                    $pay_money = $one['order_pay_money'];   //在线支付
+                    $order_use_acc_balance = $one['order_use_acc_balance'];    //使用余额
+                    $card_id = $one['card_id'];    //服务卡号
+                    $order_use_card_money = $one['order_use_card_money'];    //使用服务卡
+                }
+
+                //判断余额是否和订单余额不一致
+                if( !empty($order_use_acc_balance) && $order_use_acc_balance > 0 )
+                {
+                    //获取用户余额
+                    $customerBalance = Customer::getBalanceById($customer_id);
+                    if($customerBalance['balance'] < $order_use_acc_balance)
+                    return ['status'=>0 , 'info'=>'用户余额不足,请重新下单', 'data'=>''];
+                }
+
+                //判断服务卡余额是否和订单服务卡支付不一致
+                if( !empty($order_use_card_money) && $order_use_card_money > 0 && !empty($card_id) )
+                {
+                    //TODO::服务卡逻辑
                 }
                 $payment_mode = 1;//在线支付
                 break;
@@ -321,7 +347,7 @@ class Payment extends \dbbase\models\payment\Payment
     /**
      * 微信APP(1)
      */
-    private function wxApp()
+    private function wxApp($data)
     {
         $param = [
             "body"	=> $this->body(),
