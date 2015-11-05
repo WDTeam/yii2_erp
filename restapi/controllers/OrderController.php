@@ -1289,7 +1289,6 @@ class OrderController extends \restapi\components\Controller
         if (!isset($args['order_id'])||!is_numeric($args['order_id'])) {
             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
-<<<<<<< HEAD
         $orderWhere = array("id"=>$args['order_id'],'order_parent_id'=>0);
         $orderInfo = (new OrderSearch())->searchOrdersWithStatus($orderWhere);
         if(!$orderInfo){
@@ -1302,20 +1301,7 @@ class OrderController extends \restapi\components\Controller
 //        ]
         $ret['status_history'] =  OrderStatus::searchOrderStatusHistory($args['order_id']);
         $ret['orders'] = $orderInfo;
-=======
-        //TODO check whether the orders belong the user
-        $orderSearch = new OrderSearch();
-        $orderArr = array();
-        $orderArr["id"] = $orderId;
-        $orderArr['order_parent_id'] = 0;
-        $orders = $orderSearch->searchOrdersWithStatus($orderArr);
-        $ret['status_history'] = OrderStatus::searchOrderStatusHistory($orderId);
-<<<<<<< HEAD
-        $ret['orders'] = $orders;
->>>>>>> eb0dbd6eaef249360e446d4fe1ba65f459cded4c
-=======
-        $ret['orders'] = $orders; 
->>>>>>> a60ff71e9ef631426d073c219f795b23e90c0c9d
+
         $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
