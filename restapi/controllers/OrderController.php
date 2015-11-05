@@ -1253,7 +1253,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *         "code": "ok",
+     *         "code": "1",
      *         "msg": "操作成功",
      *         "ret": [
      *         {
@@ -1350,7 +1350,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "693345订单取消成功",
      *       "ret":{
      *         1
@@ -1454,7 +1454,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "订单评价成功成功",
      *     }
      *
@@ -1491,7 +1491,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "订单删除成功",
      *      "ret":{
      *         1
@@ -1551,7 +1551,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"操作成功",
      *      "ret":
      *      {
@@ -1601,7 +1601,7 @@ class OrderController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      *  指定阿姨订单数/待抢单订单订单数 leveltype=1
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"操作成功",
      *      "ret":
      *      {
@@ -1618,7 +1618,7 @@ class OrderController extends \restapi\components\Controller
      *
      *   * 指定阿姨订单列表/待抢单订单列表 leveltype=2
      * {
-     * "code": "ok",
+     * "code": "1",
      * "msg":"操作成功",
      * "ret":
      *     {
@@ -1859,7 +1859,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"添加成功", 
      * }
      *
@@ -1981,7 +1981,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"操作成功",
      * }
      *

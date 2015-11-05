@@ -112,7 +112,7 @@ class UserController extends \restapi\components\Controller
 
             if (!empty($model)) {
                 $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功", 1);
+                return $this->send($ret, "常用地址添加成功", 1,200);
             } else {
                 return $this->send(null, "常用地址添加失败", 0, 403);
             }
@@ -408,7 +408,7 @@ class UserController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "修改常用地址成功"
      *       "ret":{
      *       "address":
@@ -452,7 +452,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "地址信息获取失败"
      *
      *     }
@@ -462,7 +462,7 @@ class UserController extends \restapi\components\Controller
         $params = Yii::$app->request->get() or $params = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
 
@@ -479,7 +479,7 @@ class UserController extends \restapi\components\Controller
                 return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
-            return $this->send(null, "获取用户信息失败", "error", 403);
+            return $this->send(null, "获取用户信息失败", "0", 403);
         }
     }
 
