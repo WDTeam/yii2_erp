@@ -8,7 +8,8 @@ require(__DIR__ . '/../../dbbase/config/bootstrap.php');
 
 $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../dbbase/config/dbbase-config.php'),
-    require(__DIR__ . '/../config/restapi-config.php'),
+    require(__DIR__ . '/../../restapi/config/restapi-config.php'),
+
 );
 
 $application = new yii\web\Application($config);
