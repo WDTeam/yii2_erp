@@ -11,7 +11,6 @@ namespace core\models\order;
 
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderOtherDict;
-use dbbase\models\order\OrderStatusDict;
 use Yii;
 use core\models\worker\Worker;
 

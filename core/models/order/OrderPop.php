@@ -8,7 +8,6 @@
 
 namespace core\models\order;
 
-use dbbase\models\order\OrderExtPay;
 
 class OrderPop extends Model
 {

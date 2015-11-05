@@ -130,7 +130,7 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
-        $data = Payment::orderRefund(1,1);
+        $data = Payment::orderRefund(1,1010);
         dump($data);
         exit;
         $data = \core\models\payment\Payment::getPayParams(1, 1, 24, 45, ['return_url' => 'http://www.baidu.com']);

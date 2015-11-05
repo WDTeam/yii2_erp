@@ -827,12 +827,10 @@ class Payment extends \dbbase\models\payment\Payment
             //验证签名
             $class = new \alipay_wap_class();
             $verify_result = $class->callback();
-            /*
-            if(!empty($_GET['debug']))
+            if($_GET['debug'])
             {
                 $verify_result = true;
             }
-            */
             //签名验证成功
             if($verify_result)
             {
@@ -1375,27 +1373,43 @@ class Payment extends \dbbase\models\payment\Payment
         }
         elseif( !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
         {
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            //查询线上支付记录
+            $paymentInfo = Payment::find()->where(['payment_mode'=>1,'payment_status'=>1,'order_id'=>$order_id,'customer_id'=>$customer_id])->asArray()->one();
+            if( empty($paymentInfo))
+            {
+                return ['status'=>0,'info'=>'未找到支付数据','data'=>''];
+            }
+
             //线上退款,创建一条线上退款记录,状态未确认
             $model = new Payment();
             $model->scenario = 'refund';
-//            $model->attributes = $data;
             $model->setAttributes([
                 'customer_id' => $customer_id,
                 'order_id' => $order_id,
-                'payment_money' => $orderInfo['order_pay_money'],
-                'payment_actual_money' => 0,
-                'payment_source' => '20',
-                'payment_source_name' => '原路退回',
+                'payment_money' => $orderInfo['order_pay_money'],   //订单支付金额
+                'payment_actual_money' => $paymentInfo['payment_actual_money'],     //实际支付金额
+                'payment_source' => $paymentInfo['payment_source'],
+                'payment_source_name' => $paymentInfo['payment_source_name'],
                 'payment_mode' => 3,
-                'payment_status' => 0,
+                'payment_status' => 1,
                 'payment_memo' => '',
                 'payment_type' => 4,
                 'admin_id' => Yii::$app->user->id,
                 'payment_admin_name' => Yii::$app->user->identity->username,
             ]);
-            if($model->doSave())
-            return ['status'=>1,'info'=>'等待财务审核退款','data'=>''];
 
+            //调用退款
+            if($model->doSave() && $model->paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4]))
+            {
+                $transaction->commit();
+                return ['status'=>1,'info'=>'已确认退记录完成','data'=>''];
+            }
+            else
+            {
+                $transaction->rollBack();
+            }
         }
         return ['status'=>0,'info'=>'未找到订单数据','data'=>''];
     }

@@ -92,8 +92,8 @@ return [
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
 
     // 配置 BOSS API 地址
-    'BOSS_API_URL' => 'http://api.me/order/push/',
+    'BOSS_API_URL' => 'http://dev.api.1jiajie.com/order/push/',
 
     // 配置 BOSS CONFIG 地址
-    'BOSS_CONFIG_URL' => 'http://api.me/config/',
+    'BOSS_CONFIG_URL' => 'http://dev.boss.1jiajie.com/config/',
 ];

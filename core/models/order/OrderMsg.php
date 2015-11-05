@@ -10,6 +10,7 @@ namespace core\models\order;
 
 use Yii;
 use yii\base\Exception;
+use yii\base\Model;
 
 class OrderMsg extends Model
 {
