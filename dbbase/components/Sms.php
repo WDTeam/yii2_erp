@@ -47,7 +47,7 @@ namespace dbbase\components;
  * 使用: Yii::$app->sms->send('手机号，逗号分隔', '短信内容', '一次并发数,可选');
  */
 use yii\base\Component;
-use core\behaviors\SmslogBehavior;
+
 class Sms extends Component
 {
     public $userId='';

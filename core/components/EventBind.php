@@ -14,6 +14,7 @@ use yii\base\Component;
 use yii\base\Event;
 use dbbase\components\JPush;
 use dbbase\components\Sms;
+use dbbase\components\Ivr;
 class EventBind extends Component implements BootstrapInterface
 {
     public function bootstrap($app)
@@ -101,6 +102,8 @@ class EventBind extends Component implements BootstrapInterface
                         'extras'=>$data['extras'],
                         'title'=>$data['title'],
                         'category'=>$data['category'],
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'create_time'=>time(),
                     ]);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event/jpush');
@@ -122,10 +125,67 @@ class EventBind extends Component implements BootstrapInterface
                         'general_smslog_mobiles'=>$data['pszMobis'],
                         'general_smslog_msg'=>$data['pszMsg'],
                         'general_smslog_res'=>$data['result'],
-                        'created_at'=>time(),
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'create_time'=>time(),
                     ]);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event/sms');
+                }
+            }
+        );
+        /**
+         * IVR 发送事件记录到MONGODB
+         */
+        Event::on(
+            Ivr::className(),
+            Ivr::EVENT_SEND_AFTER,
+            function ($event) {
+                try{
+                    $data = $event->owner->request_data;
+                    $mongo = \Yii::$app->mongodb;
+                    $collection = $mongo->getCollection('ivr_send_log');
+                    $res = $collection->insert([
+                        'ivrlog_req_tel' => $data['tel'],
+                        'ivrlog_req_app_id' => $data['appId'],
+                        'ivrlog_req_sign' => $data['sign'],
+                        'ivrlog_req_timestamp' => $data['timestamp'],
+                        'ivrlog_req_order_message' => $data['orderMessage'],
+                        'ivrlog_req_order_id' => $data['orderId'],
+                        'ivrlog_res_result' => $data['result'],
+                        'ivrlog_res_unique_id'=>isset($data['uniqueId'])?$data['uniqueId']:'',
+                        'ivrlog_res_clid'=>(isset($data['uniqueId']) && isset($data['clid']))?$data['clid']:'',
+                        'ivrlog_res_description'=>$data['description'],
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'create_time'=>time(),
+                    ]);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event/ivrsend');
+                }
+            }
+        );
+        /**
+         * IVR 回调事件记录到MONGODB
+         */
+        Event::on(
+            Ivr::className(),
+            Ivr::EVENT_CALLBACK,
+            function ($event) {
+                try{
+                    $cbdata = (object)$this->owner->cb_data;
+                    $mongo = \Yii::$app->mongodb;
+                    $collection = $mongo->getCollection('ivr_callback_log');
+                    $res = $collection->insert([
+                        'ivrlog_cb_telephone' => $cbdata->telephone,
+                        'ivrlog_cb_order_id' => $cbdata->orderId,
+                        'ivrlog_cb_press' => $cbdata->press,
+                        'ivrlog_cb_result' => $cbdata->result,
+                        'ivrlog_cb_post_type' => $cbdata->postType,
+                        'ivrlog_cb_webcall_request_unique_id'=>isset($cbdata->webcall_request_unique_id)?$cbdata->webcall_request_unique_id:'',
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'create_time'=>time(),
+                    ]);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event/ivrcallback');
                 }
             }
         );
