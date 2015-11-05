@@ -33,6 +33,7 @@ class OrderStatus extends Order
                     OrderPool::addOrder($order->id);
                 }
             }
+            OrderMsg::payment($order);
             return true;
         }
         return false;
