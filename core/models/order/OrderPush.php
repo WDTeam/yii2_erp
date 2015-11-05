@@ -130,7 +130,7 @@ class OrderPush extends Order
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
             if (!empty($worker)) {
                 $week = ['日','一','二','三','四','五','六'];
-                $range =  date('H点', $order->order_booked_begin_time).'至'. date('H点', $order->order_booked_end_time).($order->order_booked_count % 60 > 0 ? "半" : "");
+                $range =  date('H点i分', $order->order_booked_begin_time).'至'. date('H点i分', $order->order_booked_end_time);
                 $ivr_msg = "服务时间是:" . date('y年m月d日', $order->order_booked_begin_time) . "，星期".$week[date('w', $order->order_booked_begin_time)]."，".$range
                     ."，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时。服务地址是：{$order->order_address}！";
                 $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, $ivr_msg);
