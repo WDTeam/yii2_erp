@@ -7,7 +7,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Update').Yii::t('app', 'Platform').Yii::t('app', 'Version');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['/operation/operation-platform/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform').Yii::t('app' ,'Version'), 'url' => ['index', 'platform_id' => $platform_id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Update').Yii::t('app', 'Platform').Yii::t('app', 'Version');
 ?>
 <div class="operation-platform-version-update">
 
