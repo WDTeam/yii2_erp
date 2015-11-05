@@ -826,6 +826,10 @@ class Order extends OrderModel
             'order_before_status_name' => $status_from->order_status_name,
             'order_status_dict_id' => $status_to->id,
             'order_status_name' => $status_to->order_status_name,
+            'order_status_boss' => $status_to->order_status_boss,
+            'order_status_customer' => $status_to->order_status_customer,
+            'order_status_worker' => $status_to->order_status_worker,
+
             'order_src_name' => $this->getOrderSrcName($this->order_src_id),
             'order_channel_name' => $this->getOrderChannelList($this->channel_id),
             'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
