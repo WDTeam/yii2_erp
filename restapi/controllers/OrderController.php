@@ -1115,7 +1115,6 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/status-orders-count [GET]/order/status-orders-count(70%)
-     *
      * @apiDescription 查询用户不同状态订单数量(谢奕--缺少周期订单)
      * @apiName StatusOrdersCount
      * @apiGroup Order
@@ -1210,14 +1209,7 @@ class OrderController extends \restapi\components\Controller
      * @apiSuccess {Object[]} status_list 该状态订单.
      *
      * @apiSuccessExample Success-Response:
-<<<<<<< HEAD
-     *     HTTP/1.1 200 OK
-     *     {
-     *         "code": "1",
-     *         "msg": "操作成功",
-     *         "ret": [
-     *         {
-=======
+
      * HTTP/1.1 200 OK
      *  {
      *    "code": "1",
@@ -1225,7 +1217,6 @@ class OrderController extends \restapi\components\Controller
      *     "alertMsg": "查询订单状态记录成功"
      *     "ret": [
      *        {
->>>>>>> ffe3cc1b8800967605b3e11f9553325c3eda5f31
      *         "id": 2,
      *         "created_at": 1445347126,
      *         "updated_at": 1445347126,
@@ -1730,13 +1721,9 @@ class OrderController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *      "code": "1",
-<<<<<<< HEAD
-     *      "msg":"添加成功", 
-=======
      *      "msg":"创建周期订单成功", 
      *      "ret": {},
      *      "alertMsg": "创建周期订单成功"
->>>>>>> ffe3cc1b8800967605b3e11f9553325c3eda5f31
      * }
      *
     * @apiErrorExample Error-Response:
