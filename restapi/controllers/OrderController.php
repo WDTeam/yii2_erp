@@ -1451,10 +1451,8 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} order_id 订单号
+     * @apiParam {int} order_id 订单号
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
-     * @apiParam {int} order_id 订单id
-     *
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1462,7 +1460,7 @@ class OrderController extends \restapi\components\Controller
      *       "code": "1",
      *       "msg": "订单删除成功",
      *       "alertMsg": "订单取消成功"
-     *        "ret":{ }
+     *        "ret":{}
      *     }
      *
      * @apiErrorExample Error-Response:
