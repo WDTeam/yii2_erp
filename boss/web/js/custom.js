@@ -89,8 +89,9 @@ $(document).ready(function(){
     var $btn_tab = $("div.ipo label");
     $div_li.click(function(){
         //alert(10);
-        $(this).addClass("selected").siblings().removeClass("selected");
+        // $(this).addClass("selected").siblings().removeClass("selected");
         var index =  $div_li.index(this);
+        console.log(index);
         $("div.tab_box > div").eq(index).show().siblings().hide();
         //alert(10);
     }).hover(function(){
@@ -101,10 +102,9 @@ $(document).ready(function(){
 
 
     $_label.click(function(){
-        $(this).addClass("selected")
-            .siblings().removeClass("selected");
+        // $(this).addClass("selected")
+        //     .siblings().removeClass("selected");
         var tab_index =  $_label.index(this);
-        console.log(tab_index)
             $("div.tab_text > div")
             .eq(tab_index).show()
             .siblings().hide();

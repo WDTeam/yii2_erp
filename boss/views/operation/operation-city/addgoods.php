@@ -1,10 +1,8 @@
 <style>
-*{ margin:0; padding:0;}
-body { font:12px/19px Arial, Helvetica, sans-serif; color:#666;}
-.tab_menu,.tab_box,.tab_text ,.btn_tab_box{float: left;}
-.hidden{display:none}
-.tab_menu ul li {width: 50px; background-color: red; border: 1px solid #000;}
-.tab_menu ul li:hover{background-color: #000088;}
+    *{ margin:0; padding:0;}
+    body { font:12px/19px Arial, Helvetica, sans-serif; color:#666;}
+    .tab_menu,.tab_box,.tab_text ,.btn_tab_box{float: left;}
+    .hid{display:none}
 </style>
 <?php
 
@@ -54,81 +52,79 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
         </div>
 
 -->
-
-
-        <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 	<div class="tab_menu">
 		<label for="">1<input type="radio" value="" name="1"></label><br>
 		<label for="">2<input  type="radio" value="" name="2"></label><br>
 		<label for="">3<input  type="radio" value="" name="3"></label>
 	</div>
 	<div class="tab_box">
-		<div class="hidden ipo">
+		<div class="hid ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden ipo">
+		<div class="hid ipo">
 			<label for="">4<input type="checkbox" value=""></label><br>
 			<label for="">5<input  type="checkbox" value=""></label><br>
 			<label for="">6<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden ipo">
+		<div class="hid ipo">
 			<label for="">7<input type="checkbox" value=""></label><br>
 			<label for="">8<input  type="checkbox" value=""></label><br>
 			<label for="">9<input  type="checkbox" value=""></label>
 		</div>
 	</div>
 	<div class="tab_text">
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
 			<div>最低消费：<input type="text">小时/元</div>
 		</div>
-		<div class="hidden">
+		<div class="hid">
 			<div>服务项目：<span>家庭保洁</span></div>
 			<div>销售价格：<input type="text">小时/元</div>
 			<div>市场价格：<input type="text">小时/元</div>
@@ -136,47 +132,47 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
 		</div>
 	</div>
 	<div class="btn_tab_box">
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
 		</div>
-		<div class="hidden btn_ipo">
+		<div class="hid btn_ipo">
 			<label for="">1<input type="checkbox" value=""></label><br>
 			<label for="">2<input  type="checkbox" value=""></label><br>
 			<label for="">3<input  type="checkbox" value=""></label>
