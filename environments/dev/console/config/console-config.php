@@ -9,7 +9,8 @@ $params = array_merge(
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'gii'],
+    
     'controllerNamespace' => 'console\controllers',
     'components' => [
         'log' => [
@@ -29,6 +30,9 @@ return [
         'schemadump' => [
             'class' => 'jamband\schemadump\SchemaDumpController',
         ],
+    ],
+    'modules' => [
+        'gii' => 'yii\gii\Module',
     ],
     'params' => $params,
 ];
