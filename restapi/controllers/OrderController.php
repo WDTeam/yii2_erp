@@ -76,7 +76,8 @@ class OrderController extends \restapi\components\Controller
      *          "created_at": 1445320069,  订单创建时间
      *          "updated_at": 1445320069,  订单修改时间
      *          "id": 8
-     *      }
+     *      },
+     *  "alertMsg": "创建订单成功,请重新登录"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -399,7 +400,7 @@ class OrderController extends \restapi\components\Controller
      *           }
      *    ]
      *  },
-     * "alertMsg": "操作成功",
+     * "alertMsg": "操作成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -498,7 +499,8 @@ class OrderController extends \restapi\components\Controller
      *      "msg": "操作成功",
      *      "ret": {
      *          "count": "4"
-     *      }
+     *      },
+     *       "alertMsg": "操作成功"
      *     }
      *
      * @apiErrorExample Error-Response:
@@ -604,6 +606,7 @@ class OrderController extends \restapi\components\Controller
      *          "order_status_name": "已开始智能指派"
      *      }
      *       ]
+     *     "alertMsg": "操作成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -731,8 +734,10 @@ class OrderController extends \restapi\components\Controller
      *          "order_before_status_name": "已支付",
      *          "order_status_dict_id": "3",
      *          "order_status_name": "已开始智能指派"
-     *       }
-     *    ]
+     *        }
+     *       ]
+     *      }
+     *  "alertMsg": "操作成功"
      * }
      *
      * @apiErrorExample Error-Response:
@@ -820,8 +825,8 @@ class OrderController extends \restapi\components\Controller
      *    "code": "1",
      *    "msg": "操作成功",
      *    "ret": {
-     *    }
-     *
+     *    },
+     *    "alertMsg": "操作成功"
      *    }
      *
      * @apiErrorExample Error-Response:
@@ -888,6 +893,7 @@ class OrderController extends \restapi\components\Controller
      *    "msg": "操作成功",
      *    "ret": {
      *    }
+     *    "alertMsg": "操作成功"
      *
      *    }
      *
@@ -984,6 +990,7 @@ class OrderController extends \restapi\components\Controller
      *              "order_status_name": "已开始智能指派"
      *          }
      *      ]
+     *     "alertMsg": "操作成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -1078,7 +1085,8 @@ class OrderController extends \restapi\components\Controller
      *          "order_status_dict_id": "3",
      *          "order_status_name": "已开始智能指派"
      *      }
-     *    ]
+     *    ],
+     *   "alertMsg": "操作成功"
      * }
      *
      * @apiErrorExample Error-Response:
@@ -1408,7 +1416,6 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} rate 星级
      * @apiParam {String} tag 评价标签
      *
-      <<<<<<< HEAD
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1426,9 +1433,6 @@ class OrderController extends \restapi\components\Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
-     *
-      =======
-      >>>>>>> ffe3cc1b8800967605b3e11f9553325c3eda5f31
      */
 
     /**
@@ -1517,9 +1521,9 @@ class OrderController extends \restapi\components\Controller
      *              "work_hour": "23.5"
      *          }
      *          ],
-     *          "msgStyle": "",
-     *          "alertMsg": ""
-     *      }
+     *          "msgStyle": ""
+     *      },
+     *      "alertMsg": "操作成功"
      * }
      *
      *
@@ -1564,7 +1568,8 @@ class OrderController extends \restapi\components\Controller
      *            ##暂时还没有统一
      *            //"阿姨状态 0正常1封号",
      *            }
-     *      }
+     *      },
+     *      "alertMsg": "操作成功"
      * }
      *
      *   * 指定阿姨订单列表/待抢单订单列表 leveltype=2
@@ -1597,8 +1602,9 @@ class OrderController extends \restapi\components\Controller
      * 	       ]
      *       },
      *    "pageNum":"总页码数"
-     *    }
-     * 
+     *    },
+     * "alertMsg": "操作成功"
+     * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
@@ -1860,7 +1866,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *     "code": 0,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1950,7 +1956,7 @@ class OrderController extends \restapi\components\Controller
      *    }
      *    }
      *     ],
-     *     "alertMsg": ""
+     *     "alertMsg": "操作成功"
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -1960,6 +1966,8 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "error",
      *       "msg": "用户认证已经过期,请重新登录，"
+     *       "ret":{},
+     *       "alertMsg": "操作成功"
      *
      *     }
      *
@@ -2041,7 +2049,7 @@ class OrderController extends \restapi\components\Controller
      *     "address_id": "1",
      *     "order_address": ",北京市,西城区,西城区西什库大街16号123,空,17091005305",
      * },
-     * "alertMsg": ""
+     * "alertMsg": "操作成功"
      * }
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -2050,7 +2058,8 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "error",
      *       "msg": "用户认证已经过期,请重新登录，"
-     *
+     *       "ret":{},
+     *       "alertMsg": "操作成功"
      *     }
      *
      */
