@@ -166,6 +166,7 @@ class Payment extends \dbbase\models\payment\Payment
 
         //获取支付渠道名称
         $data['payment_source_name'] = FinanceOrderChannel::getOrderChannelByName($data['payment_source']);
+
         //使用场景
         $model->scenario = $scenario;
         $model->attributes = $data;
@@ -278,7 +279,13 @@ class Payment extends \dbbase\models\payment\Payment
         //组装支付订单号
         $rand = mt_rand(1000,9999);
         $date = date("ymd",time());
-        return $date.$transType.$rand.$id;
+        //生成商户订单号
+        $payment_eo_order_id = $date.$transType.$rand.$id;
+        //查询当前ID的数据是否存在
+        $model = Payment::findOne($id);
+        $model->setAttribute('payment_eo_order_id',$payment_eo_order_id);
+        $model->doSave();
+        return $payment_eo_order_id;
     }
 
     /**
@@ -763,33 +770,7 @@ class Payment extends \dbbase\models\payment\Payment
                 "sign_type"=> "RSA",
                 "sign"=> "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
             ];
-            /*
-            $_POST = array (
-                "payment_type" => "1",
-                "subject" => "e家洁在线支付",
-                "trade_no" => "2015102942279250",
-                "buyer_email" => "18311474301",
-                "gmt_create" => "2015-10-29 15:57:07",
-                "notify_type" => "trade_status_sync",
-                "quantity" => "1",
-                "out_trade_no" => "1510290160566",
-                "seller_id" => "2088801136967007",
-                "notify_time" => "2015-10-29 15:57:09",
-                "body" => "e家洁在线支付0.02元",
-                "trade_status" => "TRADE_FINISHED",
-                "is_total_fee_adjust" => "N",
-                "total_fee" => "0.02",
-                "gmt_payment" => "2015-10-29 15:57:08",
-                "seller_email" => "47632990@qq.com",
-                "gmt_close" => "2015-10-29 15:57:08",
-                "price" => "0.02",
-                "buyer_id" => "2088802381237501",
-                "notify_id" => "2983afc3b92e376e84923e4c75e0f3574s",
-                "use_coupon" => "N",
-                "sign_type" => "RSA",
-                "sign" => "ZlCICZ/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc=",
-            );
-            */
+
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -1312,7 +1293,7 @@ class Payment extends \dbbase\models\payment\Payment
         {
             case 1:
                 //支付普通订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1,$attribute);
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
                 {
@@ -1321,7 +1302,7 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 2:
                 //支付周期订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2,$attribute);
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
                 {
@@ -1330,7 +1311,7 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 3:
                 //支付充值交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment',2,$attribute);
                 break;
         }
         //支付充值

@@ -348,12 +348,13 @@ class server
     public function onTask($server, $task_id, $from_id, $data) {
         //echo 'onTask'."\n";
         $this->serv = $server;
+        echo 'task start time :'.time();
         echo "当前服务器主进程的PID:".$server->master_pid."</br>";
         echo "当前服务器管理进程的PID:".$server->manager_pid."</br>";
         echo "当前Worker进程的编号:".$server->worker_id."</br>";
         echo '$from_id is '.$from_id.'; task_id is '.$task_id." called"."</br>";
         //return $this->taskOrder($data, $server);
-        
+        echo '当前任务订单数据为:'.$data;
         if (empty($data['lock']))
         {
             $this->lockOrder($data);//加入状态锁
@@ -376,10 +377,14 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
-            $d = json_decode($result,true);
-            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-            $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
-            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+//            echo '指派结果为:'.$result;
+//            $d = json_decode($result,true);
+//            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+//            $d['assign_start_time'] = isset($d['assign_start_time'])?date('Y-m-d H:i:s', $d['assign_start_time']) : '';
+//            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : ''
+//          不再解析返回值
+            $orders = $this->redis->zrange($this->config['_REDIS_WAIT_ASSIGN_ORDER_POOL_'],0,-1);
+            $d = (Array)$orders;
             $d = json_encode($d);
             $this->broadcast($server,$d);
         } catch (Exception $ex) {
@@ -394,6 +399,9 @@ class server
      */
     public function onFinish($server,$task_id, $data) {
         echo date('Y-m-d H:i:s').'订单:＝ '.$data['order_id']." 本次任务完成\n";
+        echo "当前Worker进程的编号:".$server->worker_id."</br>";
+        echo '; task_id is '.$task_id." called"."</br>";
+        echo '任务结束时间为:'.time();
 //        $d = $data;
 //        if(isset($d['order_id'])) {
 //            unset($d['order_id']);

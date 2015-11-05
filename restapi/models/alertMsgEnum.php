@@ -21,6 +21,10 @@ class alertMsgEnum
     //用户登录
     const userLoginSuccess = '用户登录成功';
     const userLoginFailed = '用户认证已经过期,请重新登录';
+    
+    //leveltype指定参数错误,不能大于2
+    const levelType = 'leveltype指定参数错误,不能大于2';
+    
     //微信用户登录
     const uesrWeiXinLoginSuccess = '用户登录成功';
     const uesrWeiXinLoginFailed = '用户登录失败';
@@ -391,5 +395,11 @@ class alertMsgEnum
     const getUserFeedback = '获取用户信息提交成功';
     //用户反馈信息提交失败
     const getUserFeedbackFailure = '用户反馈信息提交失败';
+    
+    
+     //提交意见反馈不能为空
+    const UserFeedbackContent = '提交意见反馈不能为空';
+    
+    
 
 }
