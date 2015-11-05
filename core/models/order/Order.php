@@ -634,7 +634,7 @@ class Order extends OrderModel
      */
     public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = ''){
         $order = OrderSearch::getOne($order_id);
-        return self::_cancel($order, $admin_id, $cause_id, $memo);
+        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
     }
 
     /**
@@ -647,7 +647,7 @@ class Order extends OrderModel
      */
     public static function cancelByOrderCode($order_code, $admin_id, $cause_id, $memo = ''){
         $order = OrderSearch::getOneByCode($order_code);
-        return self::_cancel($order, $admin_id, $cause_id, $memo);
+        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
     }
 
     /**
@@ -658,7 +658,7 @@ class Order extends OrderModel
      * @param $memo
      * @return bool
      */
-    private static function _cancel($order, $admin_id, $cause_id, $memo = '')
+    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '')
     {
 
         $order->admin_id = $admin_id;
