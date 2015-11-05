@@ -348,7 +348,10 @@ class server
     public function onTask($server, $task_id, $from_id, $data) {
         //echo 'onTask'."\n";
         $this->serv = $server;
-        echo '$from_id is '.$from_id.'; task_id is '.$task_id." called";
+        echo "当前服务器主进程的PID:".$server->master_pid."</br>";
+        echo "当前服务器管理进程的PID:".$server->manager_pid."</br>";
+        echo "当前Worker进程的编号:".$server->worker_id."</br>";
+        echo '$from_id is '.$from_id.'; task_id is '.$task_id." called"."</br>";
         //return $this->taskOrder($data, $server);
         
         if (empty($data['lock']))
