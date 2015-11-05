@@ -1,23 +1,22 @@
 <?php
 namespace core\models\customer;
 
-use core\models\finance\FinanceOrderChannel;
 use Yii;
-
 use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 
 use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
+use dbbase\models\Worker;
+use dbbase\models\customer\CustomerFeedback;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
-use dbbase\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;
-
 use core\models\operation\OperationCity;
+use core\models\finance\FinanceOrderChannel;
 
 
 class Customer extends \dbbase\models\customer\Customer
@@ -122,14 +121,18 @@ class Customer extends \dbbase\models\customer\Customer
     /**
      * 获取客户的手机号
      */
-    public static function getCustomerPhone($customer_id)
+    public static function getCustomerPhoneById($customer_id)
     {
-        $customer = self::findOne($customer_id);
-        if ($customer == NULL) {
-            return false;
-        }else{
-            return $customer->customer_phone;
-        }
+        $customer = self::find()->select(['customer_phone'])->where(['id'=>$customer_id])->one();
+        return $customer->customer_phone;
+    }
+    
+    /**
+     * get customer id by phone
+     */
+    public static function getCustomerIdByPhone($customer_phone){
+        $customer = self::find()->select(['id'])->where(['customer_phone'=>$customer_phone])->one();
+        return $customer->id;
     }
 
     /**
@@ -577,6 +580,27 @@ class Customer extends \dbbase\models\customer\Customer
 	}
 
 	/**********************************block*************************************************************/
+    
+    
+/***********************************customer feedback************************************************/
+    /**
+     * submit feedback of customer
+     */
+    public static function addFeedback($customer_id, $feedback_content){
+        $customer_phone = self::getCustomerPhoneById($customer_id);
+        $customerFeedback = new CustomerFeedback;
+        $customerFeedback->customer_id = $customer_id;
+        $customerFeedback->customer_phone = $customer_phone;
+        $customerFeedback->feedback_content = $feedback_content;
+        $customerFeedback->created_at = time();
+        $customerFeedback->updated_at = 0;
+        $customerFeedback->is_del = 0;
+        if(!$customerFeedback->validate()){
+            return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'客户提交意见失败'];
+        }
+        $customerFeedback->save();
+        return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+    }
 	
 	/**********************************count*************************************************************/
 	/**
