@@ -1,6 +1,6 @@
 <?php
 defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+defined('YII_ENV') or define('YII_ENV', 'local');
 ini_set("display_errors","on");
 error_reporting(E_ALL);
 require(__DIR__ . '/../../vendor/autoload.php');

@@ -2,6 +2,7 @@
 
 namespace restapi\controllers;
 
+use core\models\order\OrderOtherDict;
 use \core\models\order\OrderPush;
 use \core\models\order\Order;
 use \core\models\order\OrderSearch;
@@ -183,7 +184,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
-        $attributes['admin_id'] = 0;
+        $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
         $order = new \core\models\order\Order();
         $is_success = $order->createNew($attributes);
         $order->errors;
@@ -325,7 +326,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         $attributes['order_ip'] = Yii::app()->request->userHostAddress;
-        $attributes['admin_id'] = 0;
+        $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
         $order = new \core\models\order\Order();
         $is_success = $order->createNew($attributes);
         if ($is_success) {
@@ -1408,7 +1409,7 @@ class OrderController extends \restapi\components\Controller
                     $reason = '其他原因#' . $reason;
                 }
                 try {
-                    $result = Order::cancel($orderId, 0, $reason);
+                    $result = Order::cancelByOrderId($orderId,Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE,$reason);
 
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
@@ -1823,7 +1824,7 @@ class OrderController extends \restapi\components\Controller
                 "address_id" => $param['address_id'],
                 "customer_id" => $customer->id,
                 "order_customer_phone" => $param['order_customer_phone'],
-                "admin_id" => 0,
+                "admin_id" => Order::ADMIN_CUSTOMER,
                 "order_pay_type" => $param['order_pay_type'],
                 "order_is_use_balance" => $param['order_is_use_balance'],
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
