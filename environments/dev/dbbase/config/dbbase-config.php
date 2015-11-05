@@ -19,7 +19,6 @@ return [
         'redis' => [
             'class' => 'yii\redis\Connection',
             'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-            //            'hostname' => '127.0.0.1', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
             'port' => 6379,
             'database' => 0,
         ],
@@ -29,15 +28,6 @@ return [
         ],
         /**
          * 极光推送,默认为开发环境配置
-         * //正式
-         * $app_key='507d4a12d19ebbab7205f6bb';
-         * $master_secret = '30d1653625e797b7f80b56bb';
-         * // 测试
-         * $app_key='6b79c45db3ed3aa1706778f9';
-         * $master_secret = '7bcba44668a3ff6469fb57a5';
-         * //dev
-         * $app_key='3037ca7c859cca4c996f7144';
-         * $master_secret = 'a064811d7e4596c32d0e6884';
          */
         'jpush'=>[
             'class'=>'dbbase\components\JPush',
