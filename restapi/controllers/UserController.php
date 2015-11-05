@@ -1538,7 +1538,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-user-feedback  [GET] /user/get-user-feedback （100%）
+     * @api {POST} /user/get-user-feedback  [GET] /user/get-user-feedback （100%）
      * @apiDescription 用户意见反馈 (郝建设)
      * @apiName actionGetUserFeedback
      * @apiGroup User
@@ -1569,7 +1569,7 @@ class UserController extends \restapi\components\Controller
      */
     public function actionGetUserFeedback()
     {
-        $param = Yii::$app->request->get();
+        $param = Yii::$app->request->post();
 
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
