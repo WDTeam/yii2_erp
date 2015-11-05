@@ -274,5 +274,5 @@ return [
             'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME'=>300,
             'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME'=>900,
         ]
-    ]
+    ], 
 ];
