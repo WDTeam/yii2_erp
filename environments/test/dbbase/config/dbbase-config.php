@@ -23,8 +23,21 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://101.200.179.70:27017/boss_dev',
+        ],
         /**
          * 极光推送,默认为开发环境配置
+         * //正式
+         * $app_key='507d4a12d19ebbab7205f6bb';
+         * $master_secret = '30d1653625e797b7f80b56bb';
+         * // 测试
+         * $app_key='6b79c45db3ed3aa1706778f9';
+         * $master_secret = '7bcba44668a3ff6469fb57a5';
+         * //dev
+         * $app_key='3037ca7c859cca4c996f7144';
+         * $master_secret = 'a064811d7e4596c32d0e6884';
          */
         'jpush'=>[
             'class'=>'dbbase\components\JPush',
@@ -44,7 +57,7 @@ return [
         */
         'ivr'=>[
             'class'=>'dbbase\components\Ivr',
-            'app_id'=>'5000058',
+            'app_id'=>'5000040',
             'token'=>'57b62a3462b52a1413a4e1934a60d983',
             'redirect_uri'=>'system/ivr/callback'
         ],
