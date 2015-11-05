@@ -45,7 +45,7 @@ class Payment extends \yii\db\ActiveRecord
             [['customer_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['payment_memo','show_url','return_url'], 'string', 'max' => 255],
             [['payment_verify'], 'string', 'max' => 32],
-            [['payment_type'],'in','range'=>[1,2,3]],   //支付类型:1普通订单支付,2周期订单支付,3充值
+            [['payment_type'],'in','range'=>[1,2,3,4]],   //支付类型:1普通订单支付,2周期订单支付,3充值
         ];
     }
 
@@ -61,7 +61,7 @@ class Payment extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return[
-            'default'                =>  ['id','payment_actual_money','payment_transaction_id','payment_eo_order_id'],
+            'default'                => ['id','payment_actual_money','payment_transaction_id','payment_eo_order_id'],
             //支付宝WEB
             'alipay_web_online_pay' =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','return_url','show_url'],
             //在线支付
@@ -71,7 +71,7 @@ class Payment extends \yii\db\ActiveRecord
             //直达号在线支付
             'zhidahao_h5_online_pay'=>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //在线退款
-            'refund'                =>  ['payment_type','customer_id','order_id','payment_money','payment_source','payment_source_name','payment_mode','payment_status','payment_eo_order_id','payment_type','admin_id','payment_admin_name','payment_verify'],
+            'refund'                =>  ['customer_id','order_id','payment_money','payment_actual_money','payment_source','payment_source_name','payment_mode','payment_status','payment_memo','payment_type','admin_id','payment_admin_name'],
         ];
     }
 

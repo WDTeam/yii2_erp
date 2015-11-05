@@ -28,6 +28,7 @@ use dbbase\models\order\Order as OrderModel;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\order\OrderStatusDict;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
@@ -682,19 +683,26 @@ class Order extends OrderModel
                     return false;
                 }
             }
-            $result = OrderStatus::_cancel($order);
+            $transact = static::getDb()->beginTransaction();
+            $result = OrderStatus::_cancel($order,$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //调高峰的退款接口
-                FinanceRefundadd::add($order);
+                $result = FinanceRefundadd::add($order);
                 if(in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
                     OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
-                    OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE
-                ])){
-                    Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
+                    OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+                    OrderStatusDict::ORDER_WORKER_BIND_ORDER
+                ]) && $result){
+                    $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
+            }elseif($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
+                $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if($result){
+                $transact->commit();
                 OrderMsg::cancel($order); //取消订单发送通知
+            }else{
+                $transact->rollBack();
             }
             return $result;
         } else {
