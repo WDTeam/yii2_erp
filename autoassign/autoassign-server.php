@@ -79,7 +79,7 @@ class server
     function onWorkerStart(swoole_server $server, $worker_id) {
         //echo 'onWorkStart ID:=' . $worker_id . "\n";
         cli_set_process_title($this->config['SERVER_WORKER_PROCESS_ID'] . $worker_id);
-
+        echo "worker_id ".$worker_id." is start";
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
@@ -348,7 +348,10 @@ class server
     public function onTask($server, $task_id, $from_id, $data) {
         //echo 'onTask'."\n";
         $this->serv = $server;
-       
+        echo "当前服务器主进程的PID:".$server->master_pid."</br>";
+        echo "当前服务器管理进程的PID:".$server->manager_pid."</br>";
+        echo "当前Worker进程的编号:".$server->worker_id."</br>";
+        echo '$from_id is '.$from_id.'; task_id is '.$task_id." called"."</br>";
         //return $this->taskOrder($data, $server);
         
         if (empty($data['lock']))
@@ -373,9 +376,10 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
+            echo '指派结果为:'.$result;
             $d = json_decode($result,true);
             $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-            $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
+            $d['assign_start_time'] = isset($d['assign_start_time'])?date('Y-m-d H:i:s', $d['assign_start_time']) : '';
             $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
             $d = json_encode($d);
             $this->broadcast($server,$d);

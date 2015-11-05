@@ -29,7 +29,8 @@ class OperationCity extends \core\models\operation\OperationCity
         return [
             [['operation_city_is_online', 'created_at', 'updated_at', 'city_id', 'province_id'], 'integer'],
             [['city_name','province_name'], 'string', 'max' => 30],
-            [['city_name','province_name'], 'required']
+            [['city_name','province_name'], 'required'],
+            ['city_name', 'unique', 'message' => '该城市已创建'],
         ];
     }
 

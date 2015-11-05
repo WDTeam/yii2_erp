@@ -143,8 +143,8 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '所有用户',
-            //1 => '新用户',
-            //2 => '老用户',
+            1 => '新用户',
+            2 => '老用户',
             //3 => '会员',
             //4 => '非会员',
         );

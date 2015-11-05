@@ -421,13 +421,19 @@ class FinanceSettleApplyController extends BaseAuthController
                         $finance_settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
                     }
                 }
-                $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
-                $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
-                $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-                $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-                $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-                $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime,$finance_settle_apply_endtime);
-                $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+                $existCount = FinanceSettleApplySearch::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$finance_settle_apply_starttime,'finance_settle_apply_endtime'=>$finance_settle_apply_endtime])->count();
+                if($existCount > 0){
+                    Yii::$app->getSession()->setFlash('default', "该阿姨已经生成本周期的结算单");
+                    $financeSettleApplySearch->worker_tel = "";
+                }else{
+                    $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
+                    $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
+                    $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                    $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                    $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                    $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime,$finance_settle_apply_endtime);
+                    $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+                }
             }
         }
         
@@ -530,9 +536,11 @@ class FinanceSettleApplyController extends BaseAuthController
                 if($existCount == 0){
                     if($financeSettleApplySearch->save()){
                         foreach($financeWorkerOrderIncomeArr as $financeWorkerOrderIncome){
+                            $financeWorkerOrderIncome->finance_settle_apply_id = $financeSettleApplySearch->id;
                             $financeWorkerOrderIncome->save();
                         }
                         foreach($financeWorkerNonOrderIncomeArr as $financeWorkerNonOrder){
+                            $financeWorkerNonOrder->finance_settle_apply_id = $financeSettleApplySearch->id;
                             $financeWorkerNonOrder->save();
                         }
                     }

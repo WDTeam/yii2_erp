@@ -10,7 +10,7 @@ use kartik\datecontrol\DateControl;
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['operation/operation-category']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Selected Service'), 'url' => ['operation/operation-selected-service']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-view">

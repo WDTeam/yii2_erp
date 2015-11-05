@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 $this->title = Yii::t('app', 'Update').Yii::t('app', 'Item') . ' ';
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Item'), 'url' => ['/operation-category']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Selected Service'), 'url' => ['operation/operation-selected-service']];
 //$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
