@@ -1298,7 +1298,7 @@ class OrderController extends \restapi\components\Controller
         //订单数据整理
         $orderResult = [
             ''
-        ]
+        ];
         $ret['status_history'] =  OrderStatus::searchOrderStatusHistory($args['order_id']);
         $ret['orders'] = $orderInfo;
 
