@@ -520,6 +520,7 @@ class Order extends OrderModel
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 //更新阿姨接单数量
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //第二个参数是阿姨的接单次数
+                OrderMsg::assignDone($order); //指派成功发送通知
             }else{
                 foreach($orderids as $orderid) {
                     //失败后删除阿姨的订单信息
@@ -583,7 +584,11 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = 1;
-        return OrderStatus::_serviceDone($order);
+        $result = OrderStatus::_serviceDone($order);
+        if($result) {
+            OrderMsg::serviceDone($order); //发送通知
+        }
+        return $result;
     }
 
     /**
@@ -681,8 +686,11 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE
                 ])){
-                    Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order_id);
+                    Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
+            }
+            if($result){
+                OrderMsg::cancel($order); //取消订单发送通知
             }
             return $result;
         } else {

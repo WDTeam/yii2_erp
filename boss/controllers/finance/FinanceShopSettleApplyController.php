@@ -141,7 +141,9 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->load($requestParams);
         if(!empty($searchModel->shop_id)){
-            $this->saveAndGenerateSettleData([['shop_id'=>$searchModel->shop_id,'shop_manager_id'=>$searchModel->shop_manager_id],], '', '');
+            $settle_apply_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
+            $settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
+            $this->saveAndGenerateSettleData([['shop_id'=>$searchModel->shop_id,'shop_manager_id'=>$searchModel->shop_manager_id],], $settle_apply_starttime, $settle_apply_endtime);
         }
         return $this->redirect('index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
@@ -341,11 +343,13 @@ class FinanceShopSettleApplyController extends Controller
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
             $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
-            $searchModel->finance_shop_settle_apply_starttime = time();
-            $searchModel->finance_shop_settle_apply_endtime = time();
+            $searchModel->finance_shop_settle_apply_starttime = $settleStartTime;
+            $searchModel->finance_shop_settle_apply_endtime = $settleEndTime;
             $searchModel->created_at = time();
-//            var_dump($searchModel);die;
-            $searchModel->save();
+            $existCount = FinanceShopSettleApplySearch::find()->where(['shop_id'=>$searchModel->shop_id,'finance_shop_settle_apply_starttime'=>$settleStartTime,'finance_shop_settle_apply_endtime'=>$settleEndTime])->count();
+            if($existCount == 0){
+                $searchModel->save();
+            }
         }
     }
 }

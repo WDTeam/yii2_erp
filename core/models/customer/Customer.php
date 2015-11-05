@@ -9,6 +9,7 @@ use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
 use dbbase\models\Worker;
 use dbbase\models\customer\CustomerFeedback;
+use dbbase\models\customer\CustomerExtBalanceLog;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
@@ -380,6 +381,58 @@ class Customer extends \dbbase\models\customer\Customer
         $customerExtBalance->save();
         return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
     }
+    /**
+     * change customer's balance, customer 's last balnce and current balance is availible
+     */
+    public static function operateBalance($customer_id, $end_balance){
+        $customer = self::findOne($customer_id);
+        if($customer === NULL){
+            return ['respone'=>'error', 'errcode'=>1, 'errmsg'=>'客户不存在'];
+        }
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer->id])->one();
+        if($customerExtBalance === NULL){
+            return ['respone'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+        }
+        $begin_balance = $customerExtBalance->customer_balance;
+        $diff = $end_balance - $begin_balance;
+        if($diff > 0){
+            $operate_balance = abs($diff);
+            $operate_type = 1;
+            $operate_type_name = '增加';
+        }else if($diff == 0){
+            $operate_balance = abs($diff);
+            $operate_type = 0;
+            $operate_type_name = '没变';
+        }else{
+            $operate_balance = abs($diff);
+            $operate_type = -1;
+            $operate_type_name = '减少';
+        }
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerExtBalance->customer_balance = $end_balance;
+            $customerExtBalance->updated_at = time();
+            $customerExtBalance->save();
+            $customerExtBalanceLog = new CustomerExtBalanceLog;
+            $customerExtBalanceLog->customer_id = $customer->id;
+            $customerExtBalanceLog->customer_phone = $customer->customer_phone;
+            $customerExtBalanceLog->customer_ext_balance_begin_balance = $begin_balance;
+            $customerExtBalanceLog->customer_ext_balance_end_balance = $end_balance;
+            $customerExtBalanceLog->customer_ext_balance_operate_balance = $operate_balance;
+            $customerExtBalanceLog->customer_ext_balance_operate_type = $operate_type;
+            $customerExtBalanceLog->customer_ext_balance_operate_type_name = $operate_type_name;
+            $customerExtBalanceLog->created_at = time();
+            $customerExtBalanceLog->updated_at = 0;
+            $customerExtBalanceLog->is_del = 0;
+            $customerExtBalanceLog->save();
+            $transaction->commit();
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'操作余额失败'];
+        }
+    }
+    
 
 	/******************************************score**********************************************/
 	/**

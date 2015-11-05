@@ -156,6 +156,21 @@ class Ivr extends Component implements BootstrapInterface
     public function callback($data)
     {
         $this->cb_data = $data;
+        
+        $text = json_encode($data);
+        $sendres = \Yii::$app->mailer->compose()
+        ->setFrom('service@corp.1jiajie.com')
+        ->setTo([
+            'lidenggao@1jiajie.com',
+//             'weibeinan@1jiajie.com',
+//             'guohongbo@1jiajie.com',
+//             'linhongyou@1jiajie.com'
+        
+        ])
+        ->setSubject('ivr callback ')
+        ->setTextBody($text)
+        ->send();
+        
         $this->trigger(self::EVENT_CALLBACK);
         return $data;
     }

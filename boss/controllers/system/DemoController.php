@@ -20,7 +20,7 @@ class DemoController extends BaseAuthController
     public function actionJpush()
     {
         $res = \Yii::$app->jpush;
-        $_res = $res->push(['15110249233'],'test content');
+        $_res = $res->push(['15110249233'],'test: 服务时间是:15年11月12日，星期四，09点至12点半，时长0个半小时。服务地址是：北京,北京市,朝阳区,光华路soho,林,13141451414！');
         var_dump($_res);
     }
     /**
@@ -44,7 +44,7 @@ class DemoController extends BaseAuthController
 
     public function actionIvr()
     {
-        $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
+        $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '服务时间是:15年11月12日，星期四，09点至12点半，时长0个半小时。服务地址是：北京,北京市,朝阳区,光华路soho,林,13141451414！');
         var_dump($res);
     }
     
@@ -57,5 +57,11 @@ class DemoController extends BaseAuthController
         ->setSubject('ivr callback ')
         ->setTextBody($text)
         ->send();
+    }
+    
+    public function actionMongodb()
+    {
+        $mongo = \Yii::$app->mongodb;
+        var_dump($mongo->getCollection('customer'));
     }
 }

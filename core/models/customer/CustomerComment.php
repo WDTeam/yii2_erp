@@ -194,7 +194,8 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                     OrderComplaint::appModel($data);
                 }
 
-                return $customerComment;
+                return true;
+                
             } catch (\Exception $e) {
                 $transaction->rollback();
                 return false;

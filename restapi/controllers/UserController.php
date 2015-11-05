@@ -572,7 +572,7 @@ class UserController extends \restapi\components\Controller
 
     /**
      * @api {GET} /user/black-list-workers [GET] /user/black-list-workers（100%）
-     * @apiDescription 获得该用户添加进黑名单的阿姨 【该功能已经砍掉】
+     * @apiDescription 获得该用户添加进黑名单的阿姨 [该功能已经砍掉]
      *
      * @apiName actionBlackListWorkers
      * @apiGroup User
@@ -992,6 +992,7 @@ class UserController extends \restapi\components\Controller
 
                 $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
+               
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
@@ -1041,6 +1042,7 @@ class UserController extends \restapi\components\Controller
      */
     public function actionGetCommentLevel()
     {
+       
         $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
@@ -1252,7 +1254,7 @@ class UserController extends \restapi\components\Controller
                     }
                 }
 
-                $array = [];
+               
                 foreach ($level as $key => $val) {
                     unset($val['is_del']);
                     $array[$key] = $val;

@@ -24,6 +24,10 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://101.200.179.70:27017/boss_dev_log',
+        ],
         /**
          * 极光推送,默认为开发环境配置
         * //正式
