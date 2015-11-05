@@ -661,7 +661,7 @@ class OrderController extends \restapi\components\Controller
         try {
             $orderSearch = new OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to, $not_with_work);
-            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to, $not_with_work);
+            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to,'order.created_at', $not_with_work);
         } catch (\Exception $e) {
             return $this->send($e, "服务异常", 1024, 200, null, alertMsgEnum::orderGetWorkerOrderFaile);
         }
