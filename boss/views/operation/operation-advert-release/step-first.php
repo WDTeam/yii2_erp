@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="form-group">
-        <label class="control-label">平台名称</label>
+        <label class="control-label">城市名称</label>
         <?=Html::checkboxList('city_ids[]', null, $citys, ['class' => 'form-control']);?>
         <div class="help-block"></div>
     </div>
