@@ -85,7 +85,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     }
     
     public function getShopSettleInfo($shopId){
-        $orderCount = FinanceSettleApply::find()->select(['sum(finance_settle_apply_order_count) as orderCount'])->andWhere(['shop_id'=>$shopId])->asArray()->all();
+        $orderCount = FinanceSettleApply::find()->select(['sum(finance_settle_apply_order_count) as orderCount'])->andWhere(['shop_id'=>$shopId,'finance_settle_apply_status'=>FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])->asArray()->all();
         $this->finance_shop_settle_apply_order_count = $orderCount[0]['orderCount'];
         $this->finance_shop_settle_apply_fee_per_order = self::MANAGE_FEE_PER_ORDER;
         $this->finance_shop_settle_apply_fee = self::MANAGE_FEE_PER_ORDER * $this->finance_shop_settle_apply_order_count;

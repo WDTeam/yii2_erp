@@ -21,13 +21,28 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'id',
             'customer_id',
-            'order_id',
-            'payment_money',
-            'payment_actual_money',
-            'payment_source_name',
+            [
+                'attribute' => 'order_id',
+                'label' => 'E家洁订单号',
+                'options' => ['width'=>80],
+            ],
+            [
+                'attribute' => 'payment_money',
+                'label' => '支付金额',
+                'options' => ['width'=>70],
+            ],
+            [
+                'attribute' => 'payment_actual_money',
+                'label' => '实付金额',
+                'options' => ['width'=>70],
+            ],
+            [
+                'attribute' => 'payment_source_name',
+                'label' => '支付渠道',
+            ],
             [
                 'attribute' => 'payment_mode',
-                'options'=>['width'=>80,],
+                'options'=>['width'=>70,],
                 "value" => function($model){
                     return $model::$PAY_MODE[$model->payment_mode];
                 }
@@ -39,8 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model::$PAY_STATUS[$model->payment_status];
                 }
             ],
-            'payment_transaction_id',
-            'payment_eo_order_id',
+            [
+                'attribute' => 'payment_transaction_id',
+                'label' => '交易流水号',
+                'options' => ['width'=>220],
+            ],
+            [
+                'attribute' => 'payment_eo_order_id',
+                'label' => '商户订单号',
+                'options' => ['width'=>160],
+            ],
             //'payment_memo',
             //'payment_type',
             //'admin_id',

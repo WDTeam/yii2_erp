@@ -123,6 +123,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_order_total_money',  //订单总额
                 'payment_customer_trans_record_total_money',    //交易总额
                 'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_eo_order_id',//商户订单号
                 'payment_customer_trans_record_verify',
             ],
             //2=现金 cardPay
@@ -185,6 +186,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
                 'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
                 'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_eo_order_id',//商户订单号
                 'payment_customer_trans_record_verify',
             ],
             //5=退款（服务卡）：把订单金额退到服务卡 refundServiceCardPay
@@ -299,7 +301,6 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_coupon_money',   //优惠券金额
                 'payment_customer_trans_record_online_pay', //在线支付
                 'payment_customer_trans_record_order_total_money',  //订单总额
-                'payment_customer_trans_record_transaction_id', //交易流水号
                 'payment_customer_trans_record_befor_balance',  //之前余额
                 'payment_customer_trans_record_current_balance',    //当前余额
                 'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
@@ -307,6 +308,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_total_money',    //交易总额
                 'payment_customer_trans_record_service_card_on', //服务卡ID
                 'payment_customer_trans_record_service_card_pay', //服务卡金额
+                'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_eo_order_id',//商户订单号
                 'payment_customer_trans_record_verify',
 
             ],

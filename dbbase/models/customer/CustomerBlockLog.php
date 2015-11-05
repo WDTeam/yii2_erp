@@ -32,10 +32,10 @@ class CustomerBlockLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+			
             [['customer_id', 'customer_block_log_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['created_at', 'updated_at'], 'required'],
             [['customer_phone'], 'string', 'max' => 11],
-            [['customer_block_log_reason'], 'string', 'max' => 255]
         ];
     }
 

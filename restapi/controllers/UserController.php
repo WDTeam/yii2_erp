@@ -337,10 +337,12 @@ class UserController extends \restapi\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {int}    address_id 地址id
+     * @apiParam {String} [operation_province_name] 省
+     * @apiParam {String} [operation_city_name] 市名
      * @apiParam {String} [operation_area_name] 地区名（朝阳区）
-     * @apiParam {String} [address_detail] 详细地址信息
-     * @apiParam {String} [address_nickname] 联系人
-     * @apiParam {String} [address_phone] 联系电话
+     * @apiParam {String} [customer_address_detail] 详细地址信息
+     * @apiParam {String} [customer_address_nickname] 被服务者昵称
+     * @apiParam {String} [customer_address_phone] 被服务者手机
      *
      * @apiSuccess {Object[]} address 新增地址.
      *
@@ -570,7 +572,7 @@ class UserController extends \restapi\components\Controller
 
     /**
      * @api {GET} /user/black-list-workers [GET] /user/black-list-workers（100%）
-     * @apiDescription 获得该用户添加进黑名单的阿姨 【该功能已经砍掉】
+     * @apiDescription 获得该用户添加进黑名单的阿姨 [该功能已经砍掉]
      *
      * @apiName actionBlackListWorkers
      * @apiGroup User
@@ -990,6 +992,7 @@ class UserController extends \restapi\components\Controller
 
                 $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
+               
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
@@ -1039,6 +1042,7 @@ class UserController extends \restapi\components\Controller
      */
     public function actionGetCommentLevel()
     {
+       
         $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
@@ -1250,7 +1254,7 @@ class UserController extends \restapi\components\Controller
                     }
                 }
 
-                $array = [];
+               
                 foreach ($level as $key => $val) {
                     unset($val['is_del']);
                     $array[$key] = $val;
