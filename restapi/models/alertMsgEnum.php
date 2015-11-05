@@ -391,5 +391,11 @@ class alertMsgEnum
     const getUserFeedback = '获取用户信息提交成功';
     //用户反馈信息提交失败
     const getUserFeedbackFailure = '用户反馈信息提交失败';
+    
+    
+     //用户反馈信息提交失败
+    const UserFeedbackContent = '提交意见反馈不能为空';
+    
+    
 
 }

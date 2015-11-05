@@ -1543,8 +1543,9 @@ class UserController extends \restapi\components\Controller
      * @apiName actionGetUserFeedback
      * @apiGroup User
      *
-     * @apiParam {String} access_token  用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} access_token     用户认证
+     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} feedback_content 用户提交的数据
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1574,6 +1575,16 @@ class UserController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
+
+        #验证用户反馈提交
+        if (empty($param['feedback_content'])) {
+            return $this->send(null, "提交意见反馈不能为空", 0, 200, null, alertMsgEnum::UserFeedbackContent);
+        }
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::getUserInfoFailed);
+        }
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {

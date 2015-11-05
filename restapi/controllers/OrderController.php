@@ -9,6 +9,7 @@ use \core\models\order\OrderStatusDict;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
+use \core\models\order\OrderStatus;
 use restapi\models\alertMsgEnum;
 use yii\web\Response;
 use Yii;
@@ -451,7 +452,7 @@ class OrderController extends \restapi\components\Controller
             $limit = 1;
         }
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
             $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
 
@@ -535,7 +536,7 @@ class OrderController extends \restapi\components\Controller
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
 
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
         $ret['count'] = $count;
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetOrderCountSuccess);
@@ -658,7 +659,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to, $not_with_work);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to, $not_with_work);
         } catch (\Exception $e) {
@@ -787,7 +788,7 @@ class OrderController extends \restapi\components\Controller
             $limit = 1;
         }
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $arr);
         } catch (Exception $e) {
@@ -859,7 +860,7 @@ class OrderController extends \restapi\components\Controller
         @$from = $args['from'];
         @$to = $args['to'];
         $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
         $ret = [];
         if (!empty($orderStatus)) {
             foreach ($orderStatus as $statuStr) {
@@ -918,7 +919,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new \OrderSearch();
         $ret = [];
         $arr = array();
         $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
@@ -1193,7 +1194,7 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
 
         $ret = [];
         if (!empty($orderStatus)) {
@@ -1293,12 +1294,12 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
         //TODO check whether the orders belong the user
-        $orderSearch = new \core\models\order\OrderSearch();
+        $orderSearch = new OrderSearch();
         $orderArr = array();
         $orderArr["id"] = $orderId;
         $orderArr['order_parent_id'] = 0;
         $orders = $orderSearch->searchOrdersWithStatus($orderArr);
-        $ret['status_history'] = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
+        $ret['status_history'] =  OrderStatus::searchOrderStatusHistory($orderId);
         $ret['orders'] = $orders;
         $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
@@ -1672,7 +1673,7 @@ class OrderController extends \restapi\components\Controller
                     $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $args["owr.worker_id"] = $worker->id;
                     $args["oc.customer_id"] = null;
-                    $orderSearch = new \core\models\order\OrderSearch();
+                    $orderSearch = new  OrderSearch();
                     $ret = [];
                     $arr = array();
                     $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
@@ -1989,7 +1990,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         try {
-            $orderSearch = new \core\models\order\OrderSearch();
+            $orderSearch = new OrderSearch();
             $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
 
             if (count($order) > 0) {
