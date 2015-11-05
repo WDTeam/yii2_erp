@@ -1297,7 +1297,7 @@ class OrderController extends \restapi\components\Controller
         $orderArr['order_parent_id'] = 0;
         $orders = $orderSearch->searchOrdersWithStatus($orderArr);
         $ret['status_history'] = OrderStatus::searchOrderStatusHistory($orderId);
-        $ret['orders'] = $orders;
+        $ret['orders'] = $orders; 
         $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
@@ -1824,7 +1824,7 @@ class OrderController extends \restapi\components\Controller
             }
 
             try {
-                $order = new \core\models\order\Order();
+                $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
 
                 if ($createOrder['status'] == 1) {
