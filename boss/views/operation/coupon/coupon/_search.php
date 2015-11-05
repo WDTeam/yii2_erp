@@ -37,7 +37,7 @@ use \core\models\customer\Customer;
             'name' => 'id',
             'hideSearch' => true,
             'data' =>Customer::cityList(),
-            'options' => ['placeholder' => '选择城市', 'inline' => true],
+            'options' => ['placeholder' => '全部', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
