@@ -41,8 +41,8 @@ return [
          */
         'jpush'=>[
             'class'=>'dbbase\components\JPush',
-            'app_key'=>'3037ca7c859cca4c996f7144',
-            'master_secret'=>'a064811d7e4596c32d0e6884'
+            'app_key'=>'507d4a12d19ebbab7205f6bb',
+            'master_secret'=>'30d1653625e797b7f80b56bb'
         ],
         /**
          * 发短信配置

@@ -6,7 +6,7 @@ $config = [
     'aliases'=>[
         '@api'=>'@app',
     ],
-    'controllerNamespace' => 'api\controllers',
+    'controllerNamespace' => 'restapi\controllers',
     'modules' => [
 //         'user' => [
 //             'class' => 'api\modules\user\Module',
