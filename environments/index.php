@@ -32,27 +32,21 @@ return [
     'Development' => [
         'path' => 'dev',
         'setWritable' => [
-            'core/runtime',
-            'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
-			'boss/web/upload',
             'restapi/runtime',
             'restapi/web/assets',
         ],
         'setExecutable' => [
             'yii',
-            'tests/codeception/bin/yii',
         ],
         'setCookieValidationKey' => [
-            'core/config/main-local.php',
+            'boss/config/boss-config.php',
         ],
     ],
     'Production' => [
         'path' => 'prod',
         'setWritable' => [
-            'core/runtime',
-            'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
             'restapi/runtime',
@@ -62,14 +56,12 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'core/config/main-local.php',
+            'boss/config/boss-config.php',
         ],
     ],
     'Test' => [
         'path' => 'test',
         'setWritable' => [
-            'core/runtime',
-            'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
             'restapi/runtime',
@@ -79,7 +71,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'core/config/main-local.php',
+            'boss/config/boss-config.php',
         ],
     ],
     'Localhost' => [
