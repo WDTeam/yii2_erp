@@ -10,8 +10,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=local-boss-db',
-            'username' => 'root',
-            'password' => '',
+            'username' => 'dev',
+            'password' => 'z1x2c3',
             'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
         ],
