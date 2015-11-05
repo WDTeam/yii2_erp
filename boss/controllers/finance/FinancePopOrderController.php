@@ -61,9 +61,9 @@ class FinancePopOrderController extends Controller
     {
     	$name='gaofengceshi';
     	
-    	for ($i=1;$i>5000;$i++){
+    	for($i=1;$i<50000;$i++){
     		$datainfo='1000000'.$i;
-    		\Yii::$app->cache->mset($name,$datainfo);
+    		\Yii::$app->redis->zadd($name,$datainfo,$i);
     		echo  $i; 
     	}
     	
