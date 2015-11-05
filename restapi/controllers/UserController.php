@@ -885,13 +885,13 @@ class UserController extends \restapi\components\Controller
                  * @param int $customer_id 用户id
                  */
                 $userscore = CustomerExtScore::getCustomerScoreList($customer->id);
-                   
+
                 $array = array();
                 foreach ($userscore as $key => $val) {
                     unset($val['is_del']);
                     $array[$key] = $val;
                 }
-                
+
                 if ($array) {
                     $ret["scoreCategory"] = $array;
                     return $this->send($ret, "用户积分明细列表", 1, 200, null, alertMsgEnum::getUserScoreSuccess);
@@ -929,7 +929,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "用户评价提交成功"
+     *       "msg": "用户评价提交成功", 
+     *       "alertMsg": "用户评价提交成功",
+     *       "ret": {}
      *
      *     }
      *
@@ -939,8 +941,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret": {}
      *     }
      *
      */
@@ -982,9 +985,9 @@ class UserController extends \restapi\components\Controller
         if (empty($param['customer_comment_tag_ids'])) {
             $param['customer_comment_tag_ids'] = 0;
         }
+        try {
+            if (!empty($customer) && !empty($customer->id)) {
 
-        if (!empty($customer) && !empty($customer->id)) {
-            try {
                 $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
                 if (!empty($model)) {
@@ -992,11 +995,11 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "添加评论失败", 0, 200, null, alertMsgEnum::userSuggestFail);
                 }
-            } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
             }
-        } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 200, null, alertMsgEnum::userLoginFailed);
+        } catch (\Exception $e) {
+            return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
         }
     }
 
@@ -1014,12 +1017,11 @@ class UserController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "获取评论级别成功",
+     *       "alertMsg": "获取评论级别成功",
      *       "ret": {
      *          "id": "1",
      *          "customer_comment_level": "级别代号",
-     *          "customer_comment_level_name": "级别名称",
-     *          "is_del": "是否删除",
-     *
+     *          "customer_comment_level_name": "级别名称"
      *           }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -1029,6 +1031,8 @@ class UserController extends \restapi\components\Controller
      *     {
      *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret": {}
      *
      *     }
      *
@@ -1044,8 +1048,15 @@ class UserController extends \restapi\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             try {
                 $level = CustomerCommentLevel::getCommentLevel();
-                if (!empty($level)) {
-                    $ret = ['comment' => $level];
+
+                $array = [];
+                foreach ($level as $key => $val) {
+                    unset($val['is_del']);
+                    $array[$key] = $val;
+                }
+
+                if (!empty($array)) {
+                    $ret = ['comment' => $array];
                     return $this->send($ret, "获取评论级别成功", 1, 200, null, alertMsgEnum::getCommentLevelSuccess);
                 } else {
                     return $this->send(null, "获取评论级别失败", 0, 200, null, alertMsgEnum::getCommentLevelFail);
@@ -1073,13 +1084,11 @@ class UserController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "获取评论标签成功",
+     *       "alertMsg": "获取评论标签成功",
      *       "ret": {
      *          "id": "1",
      *          "customer_tag_name": "评价标签名称",
      *          "customer_comment_level": "评价等级",
-     *          "is_online": "是否上线",
-     *          "is_del": "删除",
-     *
      *           }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -1088,7 +1097,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，"
+     *       "ret": {}
      *
      *     }
      *
@@ -1104,8 +1115,15 @@ class UserController extends \restapi\components\Controller
             try {
                 $level = CustomerCommentTag::getCommentTag($param['customer_comment_level']);
 
-                if (!empty($level)) {
-                    $ret = ['commentTag' => $level];
+                $array = [];
+                foreach ($level as $key => $val) {
+                    unset($val['is_del']);
+                    unset($val['is_online']);
+                    $array[$key] = $val;
+                }
+
+                if (!empty($array)) {
+                    $ret = ['commentTag' => $array];
                     return $this->send($ret, "获取评论标签成功", 1, 200, null, alertMsgEnum::getCommentLevelTagSuccess);
                 } else {
                     return $this->send(null, "获取评论标签失败", 0, 200, null, alertMsgEnum::getCommentLevelTagFail);
@@ -1132,26 +1150,22 @@ class UserController extends \restapi\components\Controller
      * {
      * "code": 1,
      * "msg": "获取标签和子标签成功",
+     * "alertMsg": "获取标签和子标签成功",
      * "ret": [
      *     {
      *         "id": "1",
      *        "customer_comment_level": "0",
      *        "customer_comment_level_name": "满意",
-     *        "is_del": "0",
      *        "tag": [
      *            {
      *                "id": "2",
      *                "customer_tag_name": "满意",
      *                "customer_comment_level": "0",
-     *                "is_online": "0",
-     *                "is_del": "0"
      *            },
      *            {
      *                "id": "6",
      *                "customer_tag_name": "满意",
      *                "customer_comment_level": "0",
-     *                "is_online": "0",
-     *                "is_del": "0"
      *            }
      *        ]
      *    },
@@ -1159,28 +1173,21 @@ class UserController extends \restapi\components\Controller
      *       "id": "2",
      *       "customer_comment_level": "1",
      *       "customer_comment_level_name": "一般",
-     *       "is_del": "0",
      *       "tag": [
      *           {
      *               "id": "1",
      *               "customer_tag_name": "一般",
      *               "customer_comment_level": "1",
-     *               "is_online": "1",
-     *               "is_del": "0"
      *          },
      *          {
      *              "id": "5",
      *              "customer_tag_name": "一般",
      *              "customer_comment_level": "1",
-     *              "is_online": "0",
-     *              "is_del": "0"
      *          },
      *          {
      *              "id": "7",
      *              "customer_tag_name": "一般",
      *              "customer_comment_level": "1",
-     *              "is_online": "0",
-     *              "is_del": "0"
      *          }
      *      ]
      *  },
@@ -1188,21 +1195,17 @@ class UserController extends \restapi\components\Controller
      *      "id": "3",
      *     "customer_comment_level": "2",
      *     "customer_comment_level_name": "不满意",
-     *     "is_del": "0",
      *     "tag": [
      *         {
      *             "id": "3",
      *             "customer_tag_name": "不满意",
      *             "customer_comment_level": "2",
-     *             "is_online": "0",
-     *             "is_del": "0"
+
      *         },
      *         {
      *             "id": "4",
      *             "customer_tag_name": "不满意",
      *             "customer_comment_level": "2",
-     *             "is_online": "0",
-     *             "is_del": "0"
      *         }
      *     ]
      * }
@@ -1215,7 +1218,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret":{}
      *     }
      *
      */
@@ -1245,8 +1250,14 @@ class UserController extends \restapi\components\Controller
                     }
                 }
 
-                if (!empty($level)) {
-                    return $this->send($level, "获取标签和子标签成功", 1, 200, null, alertMsgEnum::getLevelTagSuccess);
+                $array = [];
+                foreach ($level as $key => $val) {
+                    unset($val['is_del']);
+                    $array[$key] = $val;
+                }
+
+                if (!empty($array)) {
+                    return $this->send($array, "获取标签和子标签成功", 1, 200, null, alertMsgEnum::getLevelTagSuccess);
                 } else {
                     return $this->send(null, "获取标签和子标签失败", 0, 200, null, alertMsgEnum::getLevelTagFail);
                 }
@@ -1272,6 +1283,7 @@ class UserController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "获取用户评论数量成功",
+     *       "alertMsg": "获取用户评论数量成功",
      *       "ret": {
      *          "CommentCount":"评论数量"
      *
@@ -1283,7 +1295,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret": {}
      *
      *     }
      *
@@ -1313,7 +1327,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-goods [GET] v1/user/get-goods （100%）
+     * @api {GET} /user/get-goods [GET]  /user/get-goods （100%）
      * @apiDescription 获取给定经纬度范围内是否有该服务（郝建设）
      * @apiName actionGetGoods
      * @apiGroup User
@@ -1329,9 +1343,8 @@ class UserController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "有该服务",
-     *       "ret": {
-     *          "1",
-     *           }
+     *       "alertMsg": "有该服务",
+     *       "ret": {}
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -1339,7 +1352,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret": {}
      *
      *     }
      *
@@ -1385,27 +1400,26 @@ class UserController extends \restapi\components\Controller
      *      "ret": {
      *          "user": {
      *              "id": 1,
-     *              "customer_name": null,
-     *              "customer_sex": null,
-     *              "customer_birth": null,
-     *              "customer_photo": null,
-     *              "customer_phone": "18311474301",
-     *              "customer_email": null,
-     *              "operation_area_id": null,
-     *              "operation_area_name": null,
-     *              "operation_city_id": null,
-     *              "operation_city_name": null,
-     *              "customer_level": null,
-     *              "customer_complaint_times": 0,
-     *              "customer_platform_version": null,
-     *              "customer_app_version": null,
-     *              "customer_mac": null,
-     *              "customer_login_ip": null,
-     *              "customer_login_time": null,
-     *              "customer_is_vip": null,
-     *              "created_at": 1446195943,
-     *              "updated_at": 0,
-     *              "is_del": 0
+     *              "customer_name": 用户名,
+     *              "customer_sex": 性别,
+     *              "customer_birth": 生日,
+     *              "customer_photo": 头像,
+     *              "customer_phone": "电话",
+     *              "customer_email": 邮箱,
+     *              "operation_area_id": 商圈,
+     *              "operation_area_name": 城市,
+     *              "operation_city_id": 住址,
+     *              "operation_city_name": 详细住址,
+     *              "customer_level": 评级,
+     *              "customer_complaint_times": 投诉,
+     *              "customer_platform_version": 操作系统版本号,
+     *              "customer_app_version": app版本号,
+     *              "customer_mac": mac地址,
+     *              "customer_login_ip": 登陆ip,
+     *              "customer_login_time": 登陆时间,
+     *              "customer_is_vip": 身份,
+     *              "created_at": 创建时间,
+     *              "updated_at": 更新时间,
      *          },
      *          "access_token": "bdf200df7b4afe39f6fe5110b98299bd"
      *      },
@@ -1418,7 +1432,9 @@ class UserController extends \restapi\components\Controller
      *     HTTP/1.1 200 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录，",
+     *       "alertMsg": "用户认证已经过期,请重新登录，",
+     *       "ret": {}
      *
      *     }
      *
@@ -1431,6 +1447,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::getUserInfoFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
         if (empty($customer)) {
             return $this->send(null, "boss系统错误", 0, 1024, null, alertMsgEnum::getUserInfoFailed);
         }
@@ -1438,11 +1455,12 @@ class UserController extends \restapi\components\Controller
             "user" => $customer,
             "access_token" => $param['access_token']
         ];
+
         return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
     }
 
     /**
-     * @api {GET} /user/get-weixin-user-info  getWeixinUserInfo （90%）
+     * @api {GET} /user/get-weixin-user-info  [GET] /user/get-weixin-user-info （90%）
      * @apiDescription 通过微信id获取用户信息 (赵顺利 未测试)
      * @apiName actionGetWeixinUserInfo
      * @apiGroup User
@@ -1459,27 +1477,26 @@ class UserController extends \restapi\components\Controller
      *      "ret": {
      *          "user": {
      *              "id": 1,
-     *              "customer_name": null,
-     *              "customer_sex": null,
-     *              "customer_birth": null,
-     *              "customer_photo": null,
-     *              "customer_phone": "18311474301",
-     *              "customer_email": null,
-     *              "operation_area_id": null,
-     *              "operation_area_name": null,
-     *              "operation_city_id": null,
-     *              "operation_city_name": null,
-     *              "customer_level": null,
-     *              "customer_complaint_times": 0,
-     *              "customer_platform_version": null,
-     *              "customer_app_version": null,
-     *              "customer_mac": null,
-     *              "customer_login_ip": null,
-     *              "customer_login_time": null,
-     *              "customer_is_vip": null,
-     *              "created_at": 1446195943,
-     *              "updated_at": 0,
-     *              "is_del": 0
+     *              "customer_name": 用户名,
+     *              "customer_sex": 性别,
+     *              "customer_birth": 生日,
+     *              "customer_photo": 头像,
+     *              "customer_phone": "电话",
+     *              "customer_email": 邮箱,
+     *              "operation_area_id": 商圈,
+     *              "operation_area_name": 城市,
+     *              "operation_city_id": 住址,
+     *              "operation_city_name": 详细住址,
+     *              "customer_level": 评级,
+     *              "customer_complaint_times": 投诉,
+     *              "customer_platform_version": 操作系统版本号,
+     *              "customer_app_version": app版本号,
+     *              "customer_mac": mac地址,
+     *              "customer_login_ip": 登陆ip,
+     *              "customer_login_time": 登陆时间,
+     *              "customer_is_vip": 身份,
+     *              "created_at": 创建时间,
+     *              "updated_at": 更新时间,
      *          },
      *          "access_token": "bdf403df7b4afe39f6fe5110b98299bd"
      *      },
@@ -1508,6 +1525,7 @@ class UserController extends \restapi\components\Controller
         }
 
         $date = CustomerAccessToken::generateAccessTokenForWeixin($weixin_id, $sign);
+
         if ($date['errcode'] != '0') {
             return $this->send(null, $date['errmsg'], 0, 403, null, alertMsgEnum::getUserInfoFailed);
         }
@@ -1517,6 +1535,60 @@ class UserController extends \restapi\components\Controller
             "access_token" => $date['customer']
         ];
         return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
+    }
+
+    /**
+     * @api {POST} /user/get-user-feedback  [GET] /user/get-user-feedback （100%）
+     * @apiDescription 用户意见反馈 (郝建设)
+     * @apiName actionGetUserFeedback
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token  用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *      "code": 1,
+     *      "msg": "用户反馈信息提交成功",
+     *      "ret": {},
+     *      "alertMsg": "获取用户信息提交成功"
+     *  }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户反馈信息提交失败",
+     *       "ret":{},
+     *       "alertMsg": "用户反馈信息提交失败"
+     *     }
+     *
+     */
+    public function actionGetUserFeedback()
+    {
+        $param = Yii::$app->request->post();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            try {
+                $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
+                if ($feedback) {
+                    return $this->send(1, "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
+                } else {
+                    return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
+                }
+            } catch (\Exception $e) {
+                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+        }
     }
 
 }
