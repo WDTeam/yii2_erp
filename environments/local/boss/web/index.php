@@ -9,8 +9,8 @@ require(__DIR__ . '/../../dbbase/config/bootstrap.php');
 require(__DIR__ . '/../config/bootstrap.php');
 
 $config = yii\helpers\ArrayHelper::merge(
-    require(__DIR__ . '/../../dbbase/config/main.php'),
-    require(__DIR__ . '/../config/main.php')
+    require(__DIR__ . '/../../dbbase/config/dbbase_config.php'),
+    require(__DIR__ . '/../config/boss_config.php')
 );
 
 $application = new yii\web\Application($config);
