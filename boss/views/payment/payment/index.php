@@ -104,9 +104,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader'=>true,
         'toolbar' => '',
         'rowOptions' =>function ($model, $key, $index, $grid){
-            if($model->payment_verify != $model->sign())
-            {
+            if( empty($model->payment_verify) ){
                 return ['class'=>'text-red','verify'=>$model->payment_verify,'sign'=>$model->sign()];
+            }else if($model->payment_verify != $model->sign())
+            {
+                return ['class'=>'bg-red','verify'=>$model->payment_verify,'sign'=>$model->sign()];
             }
         },
         'panel' => [

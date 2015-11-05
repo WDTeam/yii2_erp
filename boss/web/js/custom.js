@@ -75,9 +75,7 @@ $(document).ready(function(){
 		$(".check").css("display","none");
 
 	});
-
-	//日派单管理列表td样式
-	$(".kv-grid-table tr td").css("background-color","#fff");
+	
 	
 });
 
