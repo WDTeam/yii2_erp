@@ -1,6 +1,22 @@
 <?php
-
-return [
+$params = [
+'uploadpath' =>true, //true上传到七牛 false 上传的本地
+'worker_base_salary'=>3000,//阿姨的底薪
+'unit_order_money_nonself_fulltime' =>50,//小家政全时段阿姨补贴的每单的金额
+'order_count_per_week'=>12,//小家政全时段阿姨的底薪策略是保单，每周12单
+ 'service'=>[
+        'user'=>[
+            'domain'=>'http://dev.service.1jiajie.com:80/'
+        ]
+    ]
+];
+$ErrorCode = [
+    '100001'=>'数据传入，为空',
+    '100002'=>'数据传入，格式有误（手机号，邮箱）',
+    '100003'=>'数据传入，数据无效（Token）',
+    '100004'=>'未授权，非法访问',
+];
+$config =  [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -14,6 +30,24 @@ return [
 //         ],
     ],
     'components' => [
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' =>true,//这句一定有，false发送邮件，true只是生成邮件在runtime文件夹下，不发邮件
+            'viewPath' => 'dbbase/mail',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.163.com',
+                'username' => 'linuu90@163.com',
+                'password' => 'uu801272',
+                'port' => '25',
+                'encryption' => 'tls',
+        
+            ],
+            'messageConfig'=>[
+                'charset'=>'UTF-8',
+                'from'=>['linuu90@163.com'=>'APIForDevelopLocalhost']
+            ],
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
 //            'enableStrictParsing' => true,
@@ -71,5 +105,26 @@ return [
 
 
     ],
-    'params' => include 'params-local.php',
+    'params' => $params,
 ];
+if (YII_ENV_DEV) {
+    // configuration adjustments for 'dev' environment
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        'on beforeAction' => function($event) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+        },
+        ];
+    $config['bootstrap'][] = 'gii';
+    $config['modules']['gii'] = [
+        'class' => 'yii\gii\Module',
+        'on beforeAction' => function($event) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+        },
+        ];
+}
+
+
+return $config;
+
