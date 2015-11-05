@@ -103,16 +103,16 @@ class OperationCityController extends BaseAuthController
             $province = OperationArea::getOneFromId($p['OperationCity']['province_id']);
             $city = OperationArea::getOneFromId($p['OperationCity']['city_id']);
             if(empty($p['OperationCity']['city_id'])){
+                \Yii::$app->getSession()->setFlash('default','请选择城市！');
                 return $this->redirect(['create']);
-                throw new NotFoundHttpException('请选择城市');
             }
             $p['OperationCity']['province_name'] = $province->area_name;
             $p['OperationCity']['city_name'] = $city->area_name;
         }
         if ($model->load($p)) {
             if(OperationCity::getCityInfo($model->city_id)){
+                \Yii::$app->getSession()->setFlash('default','该城市已开通过！');
                 return $this->redirect(['create']);
-                throw new NotFoundHttpException('该城市已开通过');
             }
 //            $path = UploadFile::widget(['fileInputName' => 'file']);
 //            echo $path;exit;
