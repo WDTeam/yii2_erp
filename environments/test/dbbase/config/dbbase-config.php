@@ -10,9 +10,9 @@ return [
 
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=local-boss-db',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => 'mysql:host=rdsl1g8oe3xdc1ul6l3i.mysql.rds.aliyuncs.com;dbname=test_boss_db',
+            'username' => 'test_boss_db_dbo',
+            'password' => 'test_boss',
             'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
         ],
