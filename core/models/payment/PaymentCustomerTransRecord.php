@@ -319,8 +319,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //扣除用户余额
         if( !empty($data["payment_customer_trans_record_online_balance_pay"]) && $data["payment_customer_trans_record_online_balance_pay"] > 0 )
         {
-            //用户服务卡扣款
-            Customer::decBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay']);
+            //用户余额扣款
+            //Customer::decBalance(,$data['payment_customer_trans_record_online_balance_pay']);
+            Customer::operateBalance($data['customer_id'], $data["payment_customer_trans_record_current_balance"]);
         }
 
         //使用场景
@@ -475,9 +476,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $this->scenario = 8;
         $this->attributes = $data;
 
-        //用户服务卡扣款
-        Customer::decBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay']);
-
+        //用户余额扣款
+        //Customer::decBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay']);
+        Customer::operateBalance($data['customer_id'], $data["payment_customer_trans_record_current_balance"]);
         return $this->doSave();
     }
 
@@ -513,9 +514,9 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $this->scenario = 8;
         $this->attributes = $data;
 
-        //用户服务卡扣款
-        Customer::decBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay']);
-
+        //用户余额扣款
+        //Customer::decBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay']);
+        Customer::operateBalance($data['customer_id'], $data["payment_customer_trans_record_current_balance"]);
         return $this->doSave();
     }
 
