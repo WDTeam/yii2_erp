@@ -79,7 +79,7 @@ class server
     function onWorkerStart(swoole_server $server, $worker_id) {
         //echo 'onWorkStart ID:=' . $worker_id . "\n";
         cli_set_process_title($this->config['SERVER_WORKER_PROCESS_ID'] . $worker_id);
-
+        echo "worker_id ".$worker_id." is start";
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
@@ -348,7 +348,7 @@ class server
     public function onTask($server, $task_id, $from_id, $data) {
         //echo 'onTask'."\n";
         $this->serv = $server;
-       
+        echo '$from_id is '.$from_id.'; task_id is '.$task_id." called";
         //return $this->taskOrder($data, $server);
         
         if (empty($data['lock']))
