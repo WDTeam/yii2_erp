@@ -228,6 +228,7 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "以下单成功，正在等待阿姨抢单",
+     *       "alertMsg": "以下单成功，正在等待阿姨抢单",
      *       "ret":{
      *           "order": {}
      *
@@ -398,6 +399,8 @@ class OrderController extends \restapi\components\Controller
      *          "order_status_name": "已开始智能指派"
      *           }
      *    ]
+     *  },
+     * "alertMsg": "操作成功",
      *  }
      *
      * @apiErrorExample Error-Response:
