@@ -217,7 +217,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
      * 退款交易记录
      * @param $data
      */
-    public static function refundRecord($data)
+    public static function refundRecord($order_id)
     {
         //公用部分
         $data['order_channel_id'] = $data['payment_source']; //订单渠道
