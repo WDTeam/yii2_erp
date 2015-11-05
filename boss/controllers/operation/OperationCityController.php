@@ -97,9 +97,9 @@ class OperationCityController extends BaseAuthController
     public function actionCreate()
     {
         $model = new OperationCity;
-//        
+        
         $p = Yii::$app->request->post();
-        if(!empty($p)){
+        if(!empty($p) && isset($p['OperationCity']['city_id'])){
             $province = OperationArea::getOneFromId($p['OperationCity']['province_id']);
             $city = OperationArea::getOneFromId($p['OperationCity']['city_id']);
             if(empty($p['OperationCity']['city_id'])){
