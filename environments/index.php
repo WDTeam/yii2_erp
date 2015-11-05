@@ -85,8 +85,6 @@ return [
     'Localhost' => [
         'path' => 'local',
         'setWritable' => [
-            'core/runtime',
-            'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
             'restapi/runtime',
@@ -96,7 +94,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'core/config/main-local.php',
+            'boss/config/boss-config.php',
         ],
     ],
 ];

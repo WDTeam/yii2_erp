@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'payment_verify',
             [
                 'attribute' => 'created_at',
+                //'format' => ['date', 'Y-m-d H:i:s'],
                 'value'=>function($model){
                     return date("Y-m-d H:i:s",$model->created_at);
                 }
@@ -103,9 +104,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader'=>true,
         'toolbar' => '',
         'rowOptions' =>function ($model, $key, $index, $grid){
-            if($model->payment_verify != $model->sign())
-            {
+            if( empty($model->payment_verify) ){
                 return ['class'=>'text-red','verify'=>$model->payment_verify,'sign'=>$model->sign()];
+            }else if($model->payment_verify != $model->sign())
+            {
+                return ['class'=>'bg-red','verify'=>$model->payment_verify,'sign'=>$model->sign()];
             }
         },
         'panel' => [

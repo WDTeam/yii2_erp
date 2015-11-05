@@ -159,20 +159,30 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->is_del = 1;
                 $customerComment->save();
                 // var_dump($customerComment->errors);
-                $transaction->commit();
+              
                 
                 
                 //增加使用次数
                $arraydate= explode(',',$array['customer_comment_tag_ids']);
+               
+              
                 foreach ($arraydate as $ted){
+                    
+                   
+                    
                 	$dateinfo=CustomerCommentTag::findOne($ted);
-                	$dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
-                	$dateinfo->save();
+                       
+                       // var_dump($dateinfo);exit;
+                        if(isset($dateinfo->customer_tag_count)){ 
+                       $dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
+                	$dateinfo->save();     
+                        }
+     
                 	unset($dateinfo);
                 }
-                
+
 				//通知订单 ，改变订单状态
-				if(!isset($array['adminid'])){$array['adminid']=0;}
+		if(!isset($array['adminid'])){$array['adminid']=0;}
                 Order::customerAcceptDone($array['order_id'],$array['adminid']); 
                 
                 if ($array['customer_comment_level'] == '3') {
@@ -193,8 +203,8 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                     //提交给投诉接口
                     OrderComplaint::appModel($data);
                 }
-
-                return $customerComment;
+                $transaction->commit();
+                return true; 
             } catch (\Exception $e) {
                 $transaction->rollback();
                 return false;

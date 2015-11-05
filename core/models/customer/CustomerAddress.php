@@ -32,6 +32,13 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
      * 新增服务地址
      */
     public static function addAddress($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
+        $customer_address = self::getAddressOne($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone);
+        
+        if(!empty($customer_address)){
+            return ['response'=>'error', 'errcode'=>4, 'errmsg'=>'xx00'];
+            return false;
+        }
+        
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //先将该客户所有的地址状态设为0
@@ -292,6 +299,20 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 		return $currentAddress == NULL ? false : $currentAddress;
 		
 	}
+    
+    public static function getAddressOne($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
+        $customer_address = self::find()->where([
+            'customer_id'=>$customer_id,
+            'operation_province_name'=>$operation_province_name,
+            'operation_city_name'=>$operation_city_name,
+            'operation_area_name'=>$operation_area_name,
+            'customer_address_detail'=>$customer_address_detail,
+            'customer_address_nickname'=>$customer_address_nickname,
+            'customer_address_phone'=>$customer_address_phone,
+        ])->asArray()->one();
+        //var_dump($customer_address);
+        return $customer_address;
+    }
 }
 
 
