@@ -1029,7 +1029,8 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取阿姨请假表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        return $this->send($ret, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
+        $result["leave_time"]=$ret;
+        return $this->send($result, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
     }    
     
      /**
@@ -1189,7 +1190,7 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            $task_log=$task->getDetail();
+            $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
             unset($task_log['is_del']);
             $tasks['task_done'][]=$task_log;
         }
@@ -1278,7 +1279,7 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            $task_log=$task->getDetail();
+            $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
             unset($task_log['is_del']);
             $tasks['task_fail'][]=$task_log;
         }
