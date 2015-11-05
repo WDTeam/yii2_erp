@@ -1922,7 +1922,6 @@ class OrderController extends \restapi\components\Controller
     public function actionPush($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Yii::$app->params;
         return OrderPush::push($id);
     }
 
