@@ -222,22 +222,44 @@ class OperationCityController extends BaseAuthController
      */
     public function actionAddgoods($city_id, $cityAddGoods = ''){
 
-        //echo '<pre>';
-        //print_r($post);die;
-        
         $post = Yii::$app->request->post();
         if(empty($post)) {
             $categoryinfo = OperationCategory::getCategoryList();
+
             $categorylist = array();
+            $goods = array();
+
+            //echo '<pre>';
+            //print_r($categoryinfo);die;
             foreach ((array)$categoryinfo as $key => $value) {
-                $categorylist[$value['id'] . '-' . $value['operation_category_name']] = $value['operation_category_name'];
+                $categorylist[$value['id']] = $value['operation_category_name'];
+                $goods[$value['id']] = OperationGoods::find()
+                    ->where(['operation_category_id' => $value['id']])
+                    ->asArray()
+                    ->all();
+                //print_r($goods);
             }
+
+            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
+            //echo '<pre>';
+            //print_r($shopdistrict);die;
+            $shopdistrictinfo = [];
+            foreach ((array)$shopdistrict as $key => $value) {
+                $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
+            }
+
+            //echo '<pre>';
+            //print_r($shopdistrictinfo);die;
             $city_name = OperationCity::getCityName($city_id);
+            //echo '<pre>';
+            //print_r($categorylist);die;
             return $this->render('addgoods', [
                 'cityAddGoods' => $cityAddGoods,
                 'city_id' => $city_id,
                 'city_name' => $city_name,
                 'categorylist' => $categorylist,
+                'goods' => $goods,
+                'shopdistrictinfo' => $shopdistrictinfo,
             ]);
         }else{
             if(empty($post['categorygoods'])){
@@ -435,11 +457,16 @@ class OperationCityController extends BaseAuthController
         $city_id = Yii::$app->request->post('city_id');
         $categorygoods = OperationGoods::getCategoryGoodsInfo($categoryid, $city_id);
         $categorygoodsall = [];
-        return $this->renderAjax('categorygoods', [
-            'categoryid' => $categoryid,
-            'categorygoods' => $categorygoods,
-            'categorygoodsall' => $categorygoodsall,
-        ]);
+        $arr = [];
+        $arr[] = $categoryid;
+        $arr[] = $categorygoods;
+        $arr[] = $categorygoodsall;
+        echo json_encode($arr);
+        //return $this->renderAjax('categorygoods', [
+            //'categoryid' => $categoryid,
+            //'categorygoods' => $categorygoods,
+            //'categorygoodsall' => $categorygoodsall,
+        //]);
     }
     
     
