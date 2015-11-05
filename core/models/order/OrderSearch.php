@@ -610,12 +610,7 @@ class OrderSearch extends Order
             $query->andFilterWhere(['>', 'order_booked_begin_time', $from]);
         }
 
-        if(is_null($not_with_work )){
-            $query = $query->andFilterWhere([
-                'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
-            ]);
 
-        }
 
         if (!is_null($to) && is_numeric($to)) {
             $query->andFilterWhere(['<', 'order_booked_begin_time', $to]);
@@ -668,6 +663,13 @@ class OrderSearch extends Order
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
+        }
+
+        if(is_null($not_with_work )){
+            $query = $query->andFilterWhere([
+                'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
+            ]);
+
         }
         return $dataProvider;
     }
