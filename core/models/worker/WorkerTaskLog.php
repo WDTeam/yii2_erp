@@ -119,7 +119,16 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
         $data['values'] = $model->getConditionsValues();
         $data['worker_task_description'] = $model->getWorker_task_description();
         $worker_task = WorkerTask::findOne($this->worker_task_id);
-        $data['cons'] = $worker_task->getConditions();
+        $cons= $worker_task->getConditions();
+        foreach($data['values'] as $k1=>$v1){
+            foreach($cons as $k2=>$v2){
+                if($v1["worker_tasklog_condition"]==$v2['id']){
+                    $data['values']["$k1"]['name']=$v2["name"];
+                    $data['values']["$k1"]['judge']=$v2["judge"];
+                    $data['values']["$k1"]['value']=$v2["value"];
+                }
+            }
+        }
         
         return $data;
     }

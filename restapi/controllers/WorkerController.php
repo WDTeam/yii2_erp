@@ -1099,8 +1099,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            unset($task['is_del']);
-            $tasks['task_doing'][]=$task;
+            $task_log=$task->getDetail();
+            unset($task_log['is_del']);
+            $tasks['task_doing'][]=$task_log;
         }
         $tasks['url']="";
         return $this->send($tasks, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
@@ -1188,9 +1189,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            unset($task['is_del']);
-            unset($task['values']);
-            $tasks['task_done'][]=$task;
+            $task_log=$task->getDetail();
+            unset($task_log['is_del']);
+            $tasks['task_done'][]=$task_log;
         }
         $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
@@ -1277,9 +1278,9 @@ class WorkerController extends \restapi\components\Controller
         }
         $tasks=array();
         foreach($ret as $task){
-            unset($task['is_del']);
-            unset($task['values']);
-            $tasks['task_fail'][]=$task;
+            $task_log=$task->getDetail();
+            unset($task_log['is_del']);
+            $tasks['task_fail'][]=$task_log;
         }
         $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
