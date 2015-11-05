@@ -30,7 +30,7 @@ class EventBind extends Component implements BootstrapInterface
                     $shop_id = $event->sender->shop_id;
                     Shop::runCalculateWorkerCount($shop_id);
                 }catch(\Exception $e){
-                    \Yii::error($e, 'event/bind');
+                    \Yii::error($e, 'event/worker');
                 }
             }
         );
@@ -48,7 +48,7 @@ class EventBind extends Component implements BootstrapInterface
                     $old_id = $attributes['shop_id'];
                     Shop::runCalculateWorkerCount($old_id);
                 }catch(\Exception $e){
-                    \Yii::error($e, 'event/bind');
+                    \Yii::error($e, 'event/worker');
                 }
             }
         );
@@ -63,7 +63,7 @@ class EventBind extends Component implements BootstrapInterface
                     $shop_manager_id = $event->sender->shop_manager_id;
                     ShopManager::runCalculateWorkerCount($shop_manager_id);
                 }catch(\Exception $e){
-                    \Yii::error($e, 'event/bind');
+                    \Yii::error($e, 'event/shop');
                 }
             }
         );
@@ -81,7 +81,7 @@ class EventBind extends Component implements BootstrapInterface
                     $old_id = $attributes['shop_manager_id'];
                     ShopManager::runCalculateWorkerCount($old_id);
                 }catch(\Exception $e){
-                    \Yii::error($e, 'event/bind');
+                    \Yii::error($e, 'event/shop');
                 }
             }
         );
