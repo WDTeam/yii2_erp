@@ -1281,23 +1281,27 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionOrderStatusHistory()
     {
-
         $args = Yii::$app->request->get() or  $args = json_decode(Yii::$app->request->getRawBody(), true);
-        if(!isset($args['access_token'])||!$args['access_token']||!CustomerAccessToken::getCustomer($token)){
+        if(!isset($args['access_token'])||!$args['access_token']||!CustomerAccessToken::getCustomer($args['access_token'])){
             return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
         }
         //判断订单号
         if (!isset($args['order_id'])||!is_numeric($args['order_id'])) {
             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
-        //TODO check whether the orders belong the user
-        $orderSearch = new OrderSearch();
-        $orderArr = array();
-        $orderArr["id"] = $orderId;
-        $orderArr['order_parent_id'] = 0;
-        $orders = $orderSearch->searchOrdersWithStatus($orderArr);
-        $ret['status_history'] = OrderStatus::searchOrderStatusHistory($orderId);
-        $ret['orders'] = $orders;
+        $orderWhere = array("id"=>$args['order_id'],'order_parent_id'=>0);
+        $orderInfo = (new OrderSearch())->searchOrdersWithStatus($orderWhere);
+        if(!$orderInfo){
+             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
+        }
+        $orderResult = array();
+        //订单数据整理
+        $orderResult = [
+            ''
+        ];
+        $ret['status_history'] =  OrderStatus::searchOrderStatusHistory($args['order_id']);
+        $ret['orders'] = $orderInfo;
+
         $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
@@ -1824,7 +1828,7 @@ class OrderController extends \restapi\components\Controller
             }
 
             try {
-                $order = new \core\models\order\Order();
+                $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
 
                 if ($createOrder['status'] == 1) {
