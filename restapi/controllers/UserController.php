@@ -112,11 +112,7 @@ class UserController extends \restapi\components\Controller
 
             if (!empty($model)) {
                 $ret = ['address' => $model];
-<<<<<<< HEAD
-                return $this->send($ret, "常用地址添加成功", 1,200);
-=======
                 return $this->send($ret, "常用地址添加成功", 1,200,null,alertMsgEnum::addAddressSuccess);
->>>>>>> ffe3cc1b8800967605b3e11f9553325c3eda5f31
             } else {
                 return $this->send(null, "常用地址添加失败", 0, 200,null,alertMsgEnum::addAddressFail);
             }
@@ -467,11 +463,7 @@ class UserController extends \restapi\components\Controller
         $params = Yii::$app->request->get() or $params = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-<<<<<<< HEAD
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
-=======
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::userLoginFailed);
->>>>>>> ffe3cc1b8800967605b3e11f9553325c3eda5f31
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
 
@@ -488,11 +480,7 @@ class UserController extends \restapi\components\Controller
                 return $this->send(null, "boss系统错误" . $e, 0, 1024,null,alertMsgEnum::bossError);
             }
         } else {
-<<<<<<< HEAD
-            return $this->send(null, "获取用户信息失败", "0", 403);
-=======
             return $this->send(null, "获取用户信息失败", "0", 200,null,alertMsgEnum::defaultAddressFail);
->>>>>>> ffe3cc1b8800967605b3e11f9553325c3eda5f31
         }
     }
 
