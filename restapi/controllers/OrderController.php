@@ -9,6 +9,7 @@ use \core\models\order\OrderStatusDict;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
+use \core\models\worker\Worker;
 use \core\models\order\OrderStatus;
 use restapi\models\alertMsgEnum;
 use yii\web\Response;
@@ -1221,53 +1222,46 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_id 订单id
      * @apiParam {String} access_token 认证令牌
      *
-     * @apiSuccess {Object[]} status_list 该状态订单.
+     * @apiSuccess {Object[]} orders 订单信息.
+     * @apiSuccess {Object[]} status_history 该状态订单.
      *
      * @apiSuccessExample Success-Response:
 
      * HTTP/1.1 200 OK
-     *  {
-     *    "code": "1",
-     *     "msg": "操作成功",
-     *     "alertMsg": "查询订单状态记录成功"
-     *     "ret": [
-     *        {
-     *         "id": 2,
-     *         "created_at": 1445347126,
-     *         "updated_at": 1445347126,
-     *         "order_id": "2",
-     *         "order_before_status_dict_id": 1,
-     *         "order_before_status_name": "已创建",
-     *         "order_status_dict_id": 1,
-     *         "order_status_name": "已创建",
-     *         "admin_id": 1,
-     *         "order_flag_lock_time": null
-     *         },
-     *         {
-     *         "id": 3,
-     *         "created_at": 1445347126,
-     *         "updated_at": 1445347126,
-     *         "order_id": "2",
-     *         "order_before_status_dict_id": 1,
-     *         "order_before_status_name": "已创建",
-     *         "order_status_dict_id": 2,
-     *         "order_status_name": "已支付",
-     *         "admin_id": 1,
-     *         "order_flag_lock_time": null
-     *         },
-     *         {
-     *         "id": 4,
-     *         "created_at": 1445347126,
-     *         "updated_at": 1445347126,
-     *         "order_id": "2",
-     *         "order_before_status_dict_id": 2,
-     *         "order_before_status_name": "已支付",
-     *         "order_status_dict_id": 3,
-     *         "order_status_name": "已开始智能指派",
-     *         "admin_id": 1,
-     *         "order_flag_lock_time": null
-     *         }
-     *     ]
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *   "alertMsg": "查询订单状态记录成功"
+     *   "ret": {
+     *       "orders": {
+     *           "order_booked_begin_time": "预约开始时间",
+     *           "order_booked_end_time": "预约结束时间",
+     *           "order_address": "服务地址",
+     *           "order_booked_worker_id": "服务阿姨ID",
+     *           "order_booked_worker_name": "服务阿姨姓名",
+     *           "order_status_customer":"订单当前状态",
+     *           "order_code": "订单号",
+     *           "order_money": "订单金额",
+     *           "order_channel_name": "下单渠道",
+     *           "order_pay_type": "支付方式",
+     *           "order_pay_channel_name": "支付渠道名称",
+     *           "order_pay_money": "订单支付金额",
+     *           "order_use_acc_balance": "使用余额",
+     *           "order_use_card_money": "使用服务卡金额",
+     *           "order_use_coupon_money": "使用优惠卷金额",
+     *           "order_use_promotion_money": "使用促销金额"
+     *       },
+     *       "status_history": [
+     *           {
+     *               "created_at": "状态更新时间",
+     *               "order_status_customer": "当前状态"
+     *           },
+     *           {
+     *               "created_at": "状态更新时间",
+     *               "order_status_customer": "当前状态"
+     *           }
+     *       ]
+     *   }
      * }
      *
      * @apiErrorExample Error-Response:
@@ -1295,14 +1289,38 @@ class OrderController extends \restapi\components\Controller
         if (!$orderInfo) {
             return $this->send(null, "该订单不存在", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
-        $orderResult = array();
+        $orderInfo = $orderInfo[0];
         //订单数据整理
-        $orderResult = [
-            ''
+        $workerName = "";
+        if($orderInfo['order_booked_worker_id']){
+            $workerInfo = Worker::getWorkerInfo($orderInfo['order_booked_worker_id']);
+            $workerName = $workerInfo['worker_name'];
+        }
+        $ret['orders']  = [
+            //家庭保洁
+            'order_booked_begin_time'=>$orderInfo['order_booked_begin_time'],
+            'order_booked_end_time' =>$orderInfo['order_booked_end_time'],
+            'order_address'=> $orderInfo['order_address'],
+            'order_booked_worker_id' =>$orderInfo['order_booked_worker_id'],
+            'order_booked_worker_name' =>$workerName,
+            'order_status_customer' =>$orderInfo['order_status_customer'],
+            //订单信息
+            'order_code'=>$orderInfo['order_code'],
+            'order_money'=>$orderInfo['order_money'],
+            'order_channel_name'=>$orderInfo['order_channel_name'],
+            'order_pay_type' =>$orderInfo['order_pay_type'],
+            'order_pay_channel_name' => $orderInfo['order_pay_channel_name'],
+            'order_pay_money' =>$orderInfo['order_pay_money'], 
+            'order_use_acc_balance' =>$orderInfo['order_use_acc_balance'], 
+            'order_use_card_money' => $orderInfo['order_use_card_money'], 
+            'order_use_coupon_money' => $orderInfo['order_use_coupon_money'], 
+            'order_use_promotion_money' => $orderInfo['order_use_promotion_money']
         ];
-        $ret['status_history'] = OrderStatus::searchOrderStatusHistory($args['order_id']);
-        $ret['orders'] = $orderInfo;
-
+        $status_history = OrderStatus::searchOrderStatusHistory($args['order_id']);
+        foreach($status_history as $key=> $val){
+            $ret['status_history'][$key]['created_at'] = $val['created_at'];
+            $ret['status_history'][$key]['order_status_customer'] = $val['order_status_customer'];
+        }
         $this->send($ret, "操作成功", 1, 200, NULL, alertMsgEnum::orderGetOrderStatusHistorySuccess);
     }
 
