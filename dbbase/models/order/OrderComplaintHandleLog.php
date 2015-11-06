@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "ejj_order_complaint_handle_log".
  *
@@ -18,7 +18,7 @@ use Yii;
  * @property string $updated_at
  * @property integer $is_softdel
  */
-class OrderComplaintHandleLog extends \yii\db\ActiveRecord
+class OrderComplaintHandleLog extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -35,7 +35,7 @@ class OrderComplaintHandleLog extends \yii\db\ActiveRecord
     {
         return [
             [['order_complaint_id', 'order_complaint_handle_id', 'created_at', 'updated_at', 'is_softdel'], 'integer'],
-            [['handle_operate'], 'string', 'max' => 2],
+            [['handle_operate'], 'string', 'max' => 15],
             [['handle_option'], 'string', 'max' => 20],
             [['status_before', 'status_after'], 'string', 'max' => 100]
         ];

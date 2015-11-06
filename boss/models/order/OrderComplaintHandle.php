@@ -90,6 +90,7 @@ class OrderComplaintHandle extends OrderComplaintHandleCoreModel{
 							'complaint_section' => $ocarr['complaint_section'],
 							'complaint_assortment' => $ocarr['complaint_assortment'],
 							'complaint_level' => $ocarr['complaint_level'],
+							'complaint_status' => $ocarr['complaint_status'],
 							'updated_at' => time()
 					)
 			);
@@ -147,12 +148,13 @@ class OrderComplaintHandle extends OrderComplaintHandleCoreModel{
 	}
 	/**
 	 * 添加处理投诉日志
-	 * @param unknown $arr
-	 * @return boolean
+	 * @param array $params 参数字段
+	 * @param object $orderComplaintModel 处理投诉对象
+	 * @param interger $orderComplaintId  订单投诉id
 	 */
 	public function addOrderComplaintHandleLog($params,$orderComplaintModel,$orderComplaintId){
-		$ochlModel = new OrderComplaintHandleLog();
 		$orderComplaintHandleModel = $this->getOneOrderComplaintHandle($orderComplaintId);
+		$ochId = !empty($orderComplaintHandleModel->id)? $orderComplaintHandleModel->id:0;
 		$complaint_section = $params['OrderComplaint']['complaint_section'];
 		$complaint_assortment = $params['OrderComplaint']['complaint_assortment'];
 		$complaint_level = $params['OrderComplaint']['complaint_level'];
@@ -166,8 +168,8 @@ class OrderComplaintHandle extends OrderComplaintHandleCoreModel{
 		$modelarr = array(
 				'OrderComplaintHandleLog'=>array(
 						'order_complaint_id'=>$orderComplaintId,
-						'order_complaint_handle_id'=>$orderComplaintHandleModel->id,
-						'handle_operate'=>$orderComplaintHandleModel,
+						'order_complaint_handle_id'=>$ochId,
+						'handle_operate'=>Yii::$app->user->identity->username,
 						'created_at'=>time(),
 						'updated_at'=>time(),
 						'is_softdel'=>0
@@ -175,33 +177,45 @@ class OrderComplaintHandle extends OrderComplaintHandleCoreModel{
 		);
 		//投诉部门变更日志
 		if(!empty($complaint_section) && $complaint_section != $orderComplaintModel->complaint_section){
+			$ochlModel = new OrderComplaintHandleLog();
 			$modelarr['OrderComplaintHandleLog']['status_before'] = @$csarr[$orderComplaintModel->complaint_section];
 			$modelarr['OrderComplaintHandleLog']['status_after'] =  @$csarr[$complaint_section];
+			$modelarr['OrderComplaintHandleLog']['handle_option'] = '投诉部门';
 			$ochlModel->add($modelarr);
 		}
 		//投诉类型变更日志
 		if(!empty($complaint_assortment) && $complaint_assortment != $orderComplaintModel->complaint_assortment){
-			$modelarr['OrderComplaintHandleLog']['status_before'] = @$caarr[$orderComplaintModel->complaint_assortment];
-			$modelarr['OrderComplaintHandleLog']['status_after'] =  @$caarr[$complaint_assortment];
+			$ochlModel = new OrderComplaintHandleLog();
+			$modelarr['OrderComplaintHandleLog']['status_before'] = @$caarr[$orderComplaintModel->complaint_section][$orderComplaintModel->complaint_assortment];
+			$modelarr['OrderComplaintHandleLog']['status_after'] =  @$caarr[$complaint_section][$complaint_assortment];
+			$modelarr['OrderComplaintHandleLog']['handle_option'] = '投诉类型';
 			$ochlModel->add($modelarr);
 		}
 		//投诉级别变更日志
 		if(!empty($complaint_level) && $complaint_level != $orderComplaintModel->complaint_level){
+			$ochlModel = new OrderComplaintHandleLog();
 			$modelarr['OrderComplaintHandleLog']['status_before'] = @$clarr[$orderComplaintModel->complaint_level];
 			$modelarr['OrderComplaintHandleLog']['status_after'] = @$clarr[$complaint_level];
+			$modelarr['OrderComplaintHandleLog']['handle_option'] = '投诉级别';
 			$ochlModel->add($modelarr);
 		}
 		//投诉状态变更日志
 		if(!empty($complaint_status) && $complaint_status != $orderComplaintModel->complaint_status){
+			echo "4";
+			$ochlModel = new OrderComplaintHandleLog();
 			$modelarr['OrderComplaintHandleLog']['status_before'] = @$cssarr[$orderComplaintModel->complaint_status];
 			$modelarr['OrderComplaintHandleLog']['status_after'] = @$cssarr[$complaint_status];
+			$modelarr['OrderComplaintHandleLog']['handle_option'] = '投诉状态';
 			$ochlModel->add($modelarr);
 		}
 		//投诉处理部门日志变更记录
 		if(!empty($handle_section)){
 			if(!empty($orderComplaintHandleModel) && $handle_section != $orderComplaintHandleModel->handle_section){
+				echo "5";
+				$ochlModel = new OrderComplaintHandleLog();
 				$modelarr['OrderComplaintHandleLog']['status_before'] = @$csharr[$orderComplaintHandleModel->handle_section];
 				$modelarr['OrderComplaintHandleLog']['status_after'] = @$csharr[$handle_section];
+				$modelarr['OrderComplaintHandleLog']['handle_option'] = '处理部门';
 				$ochlModel->add($modelarr);
 			}
 		}
@@ -218,5 +232,20 @@ class OrderComplaintHandle extends OrderComplaintHandleCoreModel{
 		}else{
 			return false;
 		}
+	}
+	/**
+	 * 根据订单投诉Id查找日志记录
+	 * @param unknown $orderComplaintId
+	 * @return unknown|boolean
+	 */
+	public function getOrderComplaintHandleLogById($orderComplaintId){
+		$ochModel = new OrderComplaintHandleLog();
+		if(!empty($orderComplaintId)){
+			$result = $ochModel->findAllByOrderComplaintId($orderComplaintId);
+			return $result;
+		}else{
+			return false;
+		}
+		
 	}
 }

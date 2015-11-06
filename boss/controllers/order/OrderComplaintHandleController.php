@@ -10,7 +10,7 @@ use boss\models\order\OrderComplaintSearch;
 class OrderComplaintHandleController extends BaseAuthController{
 	public function actionIndex(){
 		$model = new OrderComplaint();
-		print_r($result);exit("2324342");
+		exit();
 	}
 	public function actionCreate(){
 		$model = new OrderComplaintHandle();
@@ -18,7 +18,8 @@ class OrderComplaintHandleController extends BaseAuthController{
 		$id = Yii::$app->request->getQueryParam('id');
 		if(!empty($id)){
 			$orderComplaintModel = $complaintSearchmodel->getOrder_Complaint_DetailById($id);
-			$ocharr = $model->getOrder_Complaint_Handle($orderComplaintModel->id);
+			$ocharr = $model->getOrder_Complaint_Handle($orderComplaintModel->id);				//操作记录
+			$ochlogModel = $model->getOrderComplaintHandleLogById($orderComplaintModel->id);	//操作日志记录
 			$content = $model->complaintDetail($ocharr);
 			$complaintSection = $model->get_Complaint_Section();
 			$complaintAssortment = $model->get_Complaint_Assortment();
@@ -34,17 +35,24 @@ class OrderComplaintHandleController extends BaseAuthController{
 					'complaintStatus' => $complaintStatus,
 					'complaintLevel' => $complaintLevel,
 					'content'=>$content,
-					'ochModel'=>$ocharr		
+					'ochModel'=>$ocharr,							//操作记录
+					'ochlogModel'=>$ochlogModel                     //操作日志记录
 					]
 					);
 		}else{
 			$parmas = Yii::$app->request->post();
-			//修改订单投诉记录
-			$uocresult = $model->updateOrderComplaint($parmas['OrderComplaint']);
-			//添加投诉处理操作记录
-			$aochresult = $model->addOrderComplaintHandle($parmas['OrderComplaintHandle']);
-			if($uocresult && $aochresult){
-				$this->redirect('order/order-complaint/');
+			if(!empty($parmas) && is_array($parmas)){
+				$octModel = $complaintSearchmodel->getOrder_Complaint_DetailById($parmas['OrderComplaint']['id']);
+				$model->addOrderComplaintHandleLog($parmas,$octModel,$parmas['OrderComplaint']['id']);
+				//修改订单投诉记录
+				$uocresult = $model->updateOrderComplaint($parmas['OrderComplaint']);
+				//添加投诉处理操作记录
+				$aochresult = $model->addOrderComplaintHandle($parmas['OrderComplaintHandle']);
+				if($uocresult && $aochresult){
+					$this->redirect('/order/order-complaint/');
+				}	
+			}else{
+				die("异常错误！");
 			}
 		}
 	}
