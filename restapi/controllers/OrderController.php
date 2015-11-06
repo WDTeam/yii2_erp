@@ -1271,7 +1271,9 @@ class OrderController extends \restapi\components\Controller
 
                 try {
                     $result = Order::cancelByOrderId($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-
+                  
+                    var_dump($result);
+                    exit;
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                     } else {
