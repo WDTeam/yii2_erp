@@ -99,7 +99,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} leave_time 请假时间戳，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】
+     * @apiParam {String} leave_time 请假时间，如果请假时间格式为:【2015-09-10】
      * @apiParam {String} leave_type 请假类型  1.休假 2事假
      *
      * @apiSuccessExample {json} Success-Response:
