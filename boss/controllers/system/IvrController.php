@@ -24,8 +24,8 @@ class IvrController extends Controller
             if($result['status']){
                 return json_encode(['code'=>1]);
             }
+            OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
+            return json_encode(['code'=>0]);
         }
-        OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
-        return json_encode(['code'=>0]);
     }
 }

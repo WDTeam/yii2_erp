@@ -21,13 +21,13 @@ use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
 
-use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
+
 use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
@@ -633,7 +633,7 @@ class Order extends OrderModel
      */
     public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = ''){
         $order = OrderSearch::getOne($order_id);
-        return self::_cancel($order, $admin_id, $cause_id, $memo);
+        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
     }
 
     /**
@@ -646,7 +646,7 @@ class Order extends OrderModel
      */
     public static function cancelByOrderCode($order_code, $admin_id, $cause_id, $memo = ''){
         $order = OrderSearch::getOneByCode($order_code);
-        return self::_cancel($order, $admin_id, $cause_id, $memo);
+        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
     }
 
     /**
@@ -657,7 +657,7 @@ class Order extends OrderModel
      * @param $memo
      * @return bool
      */
-    private static function _cancel($order, $admin_id, $cause_id, $memo = '')
+    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '')
     {
 
         $order->admin_id = $admin_id;
@@ -682,19 +682,26 @@ class Order extends OrderModel
                     return false;
                 }
             }
-            $result = OrderStatus::_cancel($order);
+            $transact = static::getDb()->beginTransaction();
+            $result = OrderStatus::_cancel($order,$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //调高峰的退款接口
-                FinanceRefundadd::add($order);
+                $result = FinanceRefundadd::add($order);
                 if(in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
                     OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
-                    OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE
-                ])){
-                    Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
+                    OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+                    OrderStatusDict::ORDER_WORKER_BIND_ORDER
+                ]) && $result){
+                    $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
+            }elseif($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
+                $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if($result){
+                $transact->commit();
                 OrderMsg::cancel($order); //取消订单发送通知
+            }else{
+                $transact->rollBack();
             }
             return $result;
         } else {
@@ -819,6 +826,10 @@ class Order extends OrderModel
             'order_before_status_name' => $status_from->order_status_name,
             'order_status_dict_id' => $status_to->id,
             'order_status_name' => $status_to->order_status_name,
+            'order_status_boss' => $status_to->order_status_boss,
+            'order_status_customer' => $status_to->order_status_customer,
+            'order_status_worker' => $status_to->order_status_worker,
+
             'order_src_name' => $this->getOrderSrcName($this->order_src_id),
             'order_channel_name' => $this->getOrderChannelList($this->channel_id),
             'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',

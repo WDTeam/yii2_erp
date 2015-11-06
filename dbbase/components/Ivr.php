@@ -60,7 +60,6 @@ namespace dbbase\components;
 use yii\base\Component;
 use yii\base\Event;
 use yii\web\Application;
-use core\behaviors\IvrlogBehavior;
 use yii\web\HttpException;
 use yii\base\ExitException;
 use yii\base\BootstrapInterface;
@@ -101,14 +100,14 @@ class Ivr extends Component implements BootstrapInterface
         }
     }
     
-    public function behaviors()
-    {
-        return [
-            [
-                'class'=>IvrlogBehavior::className(),
-            ]
-        ];
-    }
+//     public function behaviors()
+//     {
+//         return [
+//             [
+//                 'class'=>IvrlogBehavior::className(),
+//             ]
+//         ];
+//     }
     /**
      * 发送语音播报
      * @param string|int $telephone 电话号码
@@ -156,21 +155,6 @@ class Ivr extends Component implements BootstrapInterface
     public function callback($data)
     {
         $this->cb_data = $data;
-        
-        $text = json_encode($data);
-        $sendres = \Yii::$app->mailer->compose()
-        ->setFrom('service@corp.1jiajie.com')
-        ->setTo([
-            'lidenggao@1jiajie.com',
-//             'weibeinan@1jiajie.com',
-//             'guohongbo@1jiajie.com',
-//             'linhongyou@1jiajie.com'
-        
-        ])
-        ->setSubject('ivr callback ')
-        ->setTextBody($text)
-        ->send();
-        
         $this->trigger(self::EVENT_CALLBACK);
         return $data;
     }

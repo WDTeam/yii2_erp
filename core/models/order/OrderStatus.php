@@ -293,12 +293,13 @@ class OrderStatus extends Order
      * 取消订单
      * @param $order
      * @param $must_models
+     * @param $transact
      * @return bool
      */
-    protected static function _cancel(&$order, $must_models = [])
+    protected static function _cancel(&$order, $must_models = [], $transact = null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CANCEL);
-        return self::_statusChange($order, $status, $must_models);
+        return self::_statusChange($order, $status, $must_models, $transact);
     }
 
     /**

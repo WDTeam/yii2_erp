@@ -22,18 +22,13 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://101.200.179.70:27017/boss_dev',
+        ],
         /**
          * 极光推送,默认为开发环境配置
-        * //正式
-        $app_key='507d4a12d19ebbab7205f6bb';
-        $master_secret = '30d1653625e797b7f80b56bb';
-        // 测试
-        $app_key='6b79c45db3ed3aa1706778f9';
-        $master_secret = '7bcba44668a3ff6469fb57a5';
-        //dev
-        $app_key='3037ca7c859cca4c996f7144';
-        $master_secret = 'a064811d7e4596c32d0e6884';
-        */
+         */
         'jpush'=>[
             'class'=>'dbbase\components\JPush',
             'app_key'=>'3037ca7c859cca4c996f7144',
@@ -135,23 +130,16 @@ return [
          */
         'log' => [
             'targets' => [
-                'fileError' => [
-                    'class' => 'yii\log\FileTarget',
+                'email' => [
+                    'class' => 'yii\log\EmailTarget',
+                    'mailer'=>'mailer',
                     'levels' => ['error'],
-                    'categories' => ['yii\*'],
-                    'logFile' => '@app/runtime/logs/error.log',
-                ],
-                'fileWarning' => [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['warning'],
-                    'categories' => ['yii\*'],
-                    'logFile' => '@app/runtime/logs/warning.log',
-                ],
-                'fileInfo' => [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['trace', 'info'],
-                    'categories' => ['yii\*'],
-                    'logFile' => '@app/runtime/logs/info.log',
+                    'categories' => ['event\*'],
+                    'message' => [
+                        'from'=>'service@corp.1jiajie.com',
+                        'to' => ['lidenggao@1jiajie.com'],
+                        'subject' => '事件绑定处理错误日志',
+                    ],
                 ],
             ],
         ],
@@ -273,6 +261,15 @@ return [
             'ORDER_BOOKED_WORKER_ASSIGN_TIME'=>900,
             'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME'=>300,
             'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME'=>900,
+        ],
+        'uploadpath' =>true, //true上传到七牛 false 上传的本地
+        'worker_base_salary'=>3000,//阿姨的底薪
+        'unit_order_money_nonself_fulltime' =>50,//小家政全时段阿姨补贴的每单的金额
+        'order_count_per_week'=>12,//小家政全时段阿姨的底薪策略是保单，每周12单
+        'service'=>[
+            'user'=>[
+                'domain'=>'http://dev.service.1jiajie.com:80/'
+            ]
         ]
     ], 
 ];

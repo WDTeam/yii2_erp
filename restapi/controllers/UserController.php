@@ -992,7 +992,7 @@ class UserController extends \restapi\components\Controller
 
                 $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
-            
+
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
@@ -1017,32 +1017,46 @@ class UserController extends \restapi\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "获取评论级别成功",
-     *       "alertMsg": "获取评论级别成功",
-     *       "ret": {
-     *          "id": "1",
-     *          "customer_comment_level": "级别代号",
-     *          "customer_comment_level_name": "级别名称"
-     *           }
+     * {
+     *    "code": 1,
+     *    "msg": "获取评论级别成功",
+     *    "ret": {
+     *        "comment": [
+     *            {
+     *                "id": "1",
+     *                "customer_comment_level": "0",
+     *                "customer_comment_level_name": "满意"
+     *            },
+     *            {
+     *                "id": "2",
+     *                "customer_comment_level": "1",
+     *                "customer_comment_level_name": "一般"
+     *            },
+     *            {
+     *                "id": "3",
+     *                "customer_comment_level": "2",
+     *                "customer_comment_level_name": "不满意"
+     *            }
+     *        ]
+     *    },
+     *    "alertMsg": "获取评论级别成功"
+     * }
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *       "alertMsg": "用户认证已经过期,请重新登录，",
-     *       "ret": {}
-     *
-     *     }
+     * {
+     *    "code": 0,
+     *    "msg": "用户认证已经过期,请重新登录.",
+     *    "ret": {},
+     *    "alertMsg": "用户认证已经过期,请重新登录"
+     * }
      *
      */
     public function actionGetCommentLevel()
     {
-       
+
         $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
@@ -1254,7 +1268,7 @@ class UserController extends \restapi\components\Controller
                     }
                 }
 
-               
+
                 foreach ($level as $key => $val) {
                     unset($val['is_del']);
                     $array[$key] = $val;
@@ -1275,7 +1289,7 @@ class UserController extends \restapi\components\Controller
 
     /**
      * @api {GET} /user/get-comment-count [GET] /user/get-comment-count （100%）
-     * @apiDescription 获取用户评价数量 郝建设()
+     * @apiDescription 获取用户评价数量 (郝建设)
      * @apiName actionGetCommentCount
      * @apiGroup User
      *
@@ -1284,26 +1298,25 @@ class UserController extends \restapi\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "获取用户评论数量成功",
-     *       "alertMsg": "获取用户评论数量成功",
-     *       "ret": {
-     *          "CommentCount":"评论数量"
-     *
-     *           }
+     * {
+     *    "code": 1,
+     *    "msg": "获取用户评价数量",
+     *    "ret": {
+     *        "CommentCount": "6"
+     *    },
+     *    "alertMsg": "获取用户评价数量"
+     * }
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，",
-     *       "alertMsg": "用户认证已经过期,请重新登录，",
-     *       "ret": {}
-     *
-     *     }
+     * {
+     *    "code": 0,
+     *    "msg": "用户认证已经过期,请重新登录.",
+     *    "ret": {},
+     *    "alertMsg": "用户认证已经过期,请重新登录"
+     * }
      *
      */
     public function actionGetCommentCount()
@@ -1542,7 +1555,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-user-feedback  [GET] /user/get-user-feedback （100%）
+     * @api {POST} /user/get-user-feedback  [POST] /user/get-user-feedback （100%）
      * @apiDescription 用户意见反馈 (郝建设)
      * @apiName actionGetUserFeedback
      * @apiGroup User
@@ -1603,6 +1616,99 @@ class UserController extends \restapi\components\Controller
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+        }
+    }
+
+    /**
+     * @api {GET} /user/get-money-score-coupon [GET] /user/get-money-score-coupon （100%）
+     *
+     * @apiDescription  个人中心获取用户的账户余额、积分、优惠券数（李勇）
+     * @apiName actionCoupons
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *   "code": 1,
+     *   "msg": "获取个人中心信息成功",
+     *   "ret": [
+     *       {
+     *           "money": "优惠券id",
+     *           "score": "优惠券名称",
+     *           "coupon": "优惠券价值"
+     *       }
+     *     ],
+     *   "msg": "获取个人中心信息成功"
+     *   }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 Not Found
+     *       {
+     *          "code": 0,
+     *          "msg": "用户认证已经过期,请重新登录",
+     *          "ret": {},
+     *          "alertMsg": "用户认证已经过期,请重新登录"
+     *        }
+     *
+     */
+    public function actionGetMoneyScoreCoupon()
+    {
+
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::customerLoginFailed);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        $customer_id = $customer->id;
+
+        $result = array();
+        /**
+         * 获取客户余额
+         * @param int $customer_id 用户id
+         */
+        try {
+            $userBalance = Customer::getBalanceById($customer_id);
+        } catch (\Exception $e) {
+            return $this->send($e, "获取用户余额系统错误", 1024, 200, null, alertMsgEnum::bossError);
+        }
+        if ($userBalance['response'] == 'success') {
+            $userBalanceMoney = $userBalance['balance'];
+        } elseif ($userBalance['response'] == 'error') {
+            return $this->send(null, "获取用户余额系统错误", 0, 200, null, alertMsgEnum::bossError);
+        }
+        $result["money"] = $userBalanceMoney;
+        /**
+         * 获取客户积分
+         * @param int $customer_id 用户id
+         */
+        try {
+            $score = CustomerExtScore::getCustomerScore($customer_id);
+        } catch (\Exception $e) {
+            return $this->send($e, "获取用户积分系统错误", 1024, 200, null, alertMsgEnum::bossError);
+        }
+        if ($score === false) {
+            return $this->send(null, "没有此阿姨", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
+        }
+        $result["score"] = $score;
+        /**
+         * 获取优惠券数
+         * @param int $customer_id 用户id
+         */
+        try {
+            $CouponCount = CouponCustomer::CouponCount($customer_id);
+        } catch (\Exception $e) {
+            return $this->send($e, "获取用户优惠券数系统错误", 1024, 200, null, alertMsgEnum::bossError);
+        }
+        $result["coupon"] = $CouponCount;
+        if (!empty($result)) {
+            return $this->send($result, "获取个人中心信息成功", 1, 200, null, alertMsgEnum::getMoneyScoreCouponSuccess);
+        } else {
+            return $this->send(null, "获取个人中心信息失败", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
     }
 

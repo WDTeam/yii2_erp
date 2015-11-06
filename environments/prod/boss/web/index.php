@@ -6,7 +6,6 @@ error_reporting(E_ALL);
 require(__DIR__ . '/../../vendor/autoload.php');
 require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 require(__DIR__ . '/../../dbbase/config/bootstrap.php');
-require(__DIR__ . '/../../boss/config/bootstrap.php');
 
 $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../dbbase/config/dbbase-config.php'),

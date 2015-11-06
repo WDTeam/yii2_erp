@@ -57,19 +57,7 @@ class FinanceRefundadd extends FinanceRefund
 	     	$this->isstatus=2;
 	        $this->create_time=time();
 	     	$this->is_del=0;
-			$is_dataste=$this->save();
-			if($is_dataste){
-				$arra=['status'=>200,'msg'=>'数据库写入成功'];
-				return  json_encode($arra);
-			}else{
-				$arra=['status'=>504,'msg'=>'数据库写入失败'];
-				return  json_encode($arra);
-			}
-					
-		/* }else{
-			$arra=['status'=>401,'msg'=>'传入的不是一个数组'];
-			return  json_encode($arra);	
-		} */
+			return $this->save();
 	 
 	 }
     
