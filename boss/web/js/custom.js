@@ -78,35 +78,60 @@ $(document).ready(function(){
 
 	});
 
-	//日派单管理列表td样式
-	$(".kv-grid-table tr td").css("background-color","#fff");
 
-
-
-    //----------------------------------------------------
+	//运营管理-->已开通城市管理前端js
     var $div_li =$("div.tab_menu label");
     var $_label =$("div.ipo label");
     var $btn_tabradio =$("div.btn_ipo .over_flow label");
+    var $tab_text =$("div.tab_text");
+    var $btn_tab_box =$("div.btn_tab_box");
+
     $div_li.click(function(){
         $(this).addClass("selected").siblings().removeClass("selected");
         var index =  $div_li.index(this);
         $("div.tab_box > div").eq(index).show().siblings().hide();
     });
 
-
-    $_label.click(function(){
-        $(this).addClass("selected");
+    $_label.each(function(){
+    	$(this).click(function(){
+    		if($(this).hasClass("selected")){
+        	$(this).click(function(){
+        		$(this).removeClass("selected");
+        	});
+        }else{
+        	$(this).click(function(){
+        		$(this).addClass("selected");
+        	});
+        };
         var tab_index =  $_label.index(this);
         var btn_tab_index =  $_label.index(this);
         $("div.tab_text > div").eq(tab_index).show().siblings().hide();
         $("div.btn_tab_box > div").eq(btn_tab_index).show().siblings().hide();
+    	});
     });
-
+  
     $btn_tabradio.each(function(){
     	$(this).click(function(){
-    		$(this).addClass("selected");
+    		if ($(this).hasClass("selected")) {
+    			$(this).click(function(){
+					$(this).removeClass("selected");
+    			})
+    		}else{
+    			$(this).click(function(){
+					$(this).addClass("selected");
+    			})
+    		}
     	})
     });
+
+    $("#btn_submit").click(function(){
+    	var input_value = $("input").val();
+    	if(input_value == ""){
+    		alert("信息不能为空！！！");
+    	}
+    });
+
+    //--------------------------------------------------------------------------------------结束
 
 });
 
