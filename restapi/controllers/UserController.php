@@ -1693,9 +1693,9 @@ class UserController extends \restapi\components\Controller
         }
         $result["coupon"]=$CouponCount;
         if(!empty($result)){
-            return $this->send($e, "获取个人中心信息成功", 1, 200,null,alertMsgEnum::getMoneyScoreCouponSuccess);
+            return $this->send($result, "获取个人中心信息成功", 1, 200,null,alertMsgEnum::getMoneyScoreCouponSuccess);
         }else{
-            return $this->send($e, "获取个人中心信息失败", 0, 200,null,alertMsgEnum::getMoneyScoreCouponFail);
+            return $this->send(null, "获取个人中心信息失败", 0, 200,null,alertMsgEnum::getMoneyScoreCouponFail);
         }
     }
 
