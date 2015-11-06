@@ -53,10 +53,10 @@ class OrderPop extends Model
     private static function _pushStatus($order,$status)
     {
         $url = \Yii::$app->params['order_pop']['api_url'].'push-order-status';
-        $data[order_id] = $order->order_code;
-        $data[status] = $status;
-        $data[platform_version] = self::VERSION;
-        $data[sign] = self::_getSign($data);
+        $data["order_id"] = $order->id;
+        $data["status"] = $status;
+        $data["platform_version"] = self::VERSION;
+        $data["sign"] = self::_getSign($data);
         $json = self::_postCurl($url,$data);
         $result = json_decode($json,true);
         return (isset($result['code'])&&$result['code']==0);
