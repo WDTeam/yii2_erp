@@ -82,7 +82,6 @@ class UserController extends \restapi\components\Controller
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
-
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -95,23 +94,26 @@ class UserController extends \restapi\components\Controller
         if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
             return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200, null, alertMsgEnum::addAddressNoPhone);
         }
-
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
-        if (!empty($customer) && !empty($customer->id)) {
-            $model = CustomerAddress::addAddress($customer->id, @$param['operation_province_name'], @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'], @$param['customer_address_phone']);
+        try {
+            if (!empty($customer) && !empty($customer->id)) {
+                $model = CustomerAddress::addAddress($customer->id, @$param['operation_province_name'], @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'], @$param['customer_address_phone']);
 
-            #销毁删除表示
-            unset($model['is_del']);
+                #销毁删除表示
+                unset($model['is_del']);
 
-            if (!empty($model)) {
-                $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功", 1, 200, null, alertMsgEnum::addAddressSuccess);
+                if (!empty($model)) {
+                    $ret = ['address' => $model];
+                    return $this->send($ret, "常用地址添加成功", 1, 200, null, alertMsgEnum::addAddressSuccess);
+                } else {
+                    return $this->send(null, "常用地址添加失败", 0, 200, null, alertMsgEnum::addAddressFail);
+                }
             } else {
-                return $this->send(null, "常用地址添加失败", 0, 200, null, alertMsgEnum::addAddressFail);
+                return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
             }
-        } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        } catch (\Exception $e) {
+            return $this->send($e, "boss系统错误", 1024, 1024, null, alertMsgEnum::bossError);
         }
     }
 
@@ -388,7 +390,7 @@ class UserController extends \restapi\components\Controller
         @$addressId = $params['address_id'];
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录",401, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         if (empty($addressId)) {
             return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::updateAddressNoAddressId);
@@ -1587,7 +1589,7 @@ class UserController extends \restapi\components\Controller
      */
     public function actionGetUserFeedback()
     {
-        $param = Yii::$app->request->post(); 
+        $param = Yii::$app->request->post();
 
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
@@ -1605,14 +1607,14 @@ class UserController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $feedback = Customer::addFeedback($customer->id, $param['feedback_content']); 
-               if ($feedback["response"]=='success') {
+                $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
+                if ($feedback["response"] == 'success') {
                     return $this->send('{}', "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
                 } else {
                     return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::bossError);
+                return $this->send($e, "boss系统错误", 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);

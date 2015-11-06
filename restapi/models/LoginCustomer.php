@@ -35,7 +35,7 @@ class LoginCustomer
             return $msg;
         }
         //验证通过
-        $msg['code'] = 1;
+        $msg['code'] = 401;
         $msg['msg'] = '验证通过';
         $msg['customer_id'] = $customer->id;
         return $msg;
