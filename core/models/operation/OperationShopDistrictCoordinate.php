@@ -57,8 +57,8 @@ class OperationShopDistrictCoordinate extends \dbbase\models\operation\Operation
                 $data[$i][] = $coordinateinfo['operation_shop_district_coordinate_start_latitude'][$key];
                 $data[$i][] = $coordinateinfo['operation_shop_district_coordinate_end_longitude'][$key];
                 $data[$i][] = $coordinateinfo['operation_shop_district_coordinate_end_latitude'][$key];
-                $data[$i][] = $coordinateinfo['operation_area_id'][$key];
-                $data[$i][] = $coordinateinfo['operation_area_name'][$key];
+                $data[$i][] = $coordinateinfo['operation_area_id'];
+                $data[$i][] = $coordinateinfo['operation_area_name'];
                 $data[$i][] = time();
                 $data[$i][] = time();
                 $i++;

@@ -82,7 +82,7 @@ class CustomerSearch extends Customer
         }
 
 		if ($this->time_end) {
-            $query->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
+            $query->andFilterWhere(['<', 'created_at', strtotime($this->time_end) + 24 * 3600]);
         }
 
 		if($this->customer_global_search){

@@ -1,6 +1,6 @@
 define({
   "name": "REST API",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "这里描述了所有客户端需要访问的API，任何的API访问请参考这里的内容",
   "header": {
     "title": "My own header title",
@@ -14,7 +14,7 @@ define({
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2015-11-04T09:09:55.053Z",
+    "time": "2015-11-06T03:32:06.983Z",
     "url": "http://apidocjs.com",
     "version": "0.13.1"
   }

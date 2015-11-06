@@ -150,7 +150,11 @@ class OperationShopDistrictController extends BaseAuthController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model' => $model,'city_name' => $this->city_name]);
+            return $this->render('view', [
+                'model' => $model,
+                //'city_id' => $this->city_id,
+                'city_name' => $this->city_name
+            ]);
         }
     }
 
@@ -166,6 +170,7 @@ class OperationShopDistrictController extends BaseAuthController
         $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
         $cityname = OperationCity::getCityName($this->city_id);
         $citymodel = OperationCity::getCityInfo($this->city_id);
+        
         if (!empty($post)) {
             $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
             $post['OperationShopDistrict']['operation_city_name'] = $cityname;
@@ -177,6 +182,7 @@ class OperationShopDistrictController extends BaseAuthController
             $post['OperationShopDistrict']['operation_area_id'] = $area_id;
             $post['OperationShopDistrict']['operation_area_name'] = $area_name;
         }
+
         if ($model->load($post) && $model->save()) {
             $coordinate = array();
             $coordinate['operation_shop_district_id'] = $model->id;
@@ -189,14 +195,17 @@ class OperationShopDistrictController extends BaseAuthController
             $coordinate['operation_shop_district_coordinate_end_latitude'] = $post['operation_shop_district_coordinate_end_latitude'];
             $coordinate['operation_area_id'] = $area_id;
             $coordinate['operation_area_name'] = $area_name;
+
             OperationShopDistrictCoordinate::settingShopDistrictCoordinate($coordinate);
-//            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
+
         } else {
             $areaList = OperationArea::getAreaList($this->city_id);
             $model->operation_area_id = $model->operation_area_id.'_'.$model->operation_area_name;
             return $this->render('create', [
                 'model' => $model,
+                //'city_id' => $this->city_id,
                 'city_name' => $this->city_name,
                 'citymodel' => $citymodel,
                 'areaList' => $areaList,
@@ -263,6 +272,7 @@ class OperationShopDistrictController extends BaseAuthController
             $model->operation_area_id = $model->operation_area_id.'_'.$model->operation_area_name;
             return $this->render('update', [
                 'model' => $model,
+                //'city_id' => $this->city_id,
                 'city_name' => $this->city_name,
                 'citymodel' => $citymodel,
                 'areaList' => $areaList,

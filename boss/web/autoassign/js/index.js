@@ -16,19 +16,19 @@ function websocketConnect() {
             $('#connectStatus').html('<font color="#41A317">连接成功！</font>');
             if ($('#srvIsSuspend').val()==true)
             {
-                $('#start').html('开始自动派单');
+                $('#start').html('开始智能派单');
                 $('#start').attr('disabled', true);
-                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">自动派单已暂停！</font>');
+                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">智能派单已暂停！</font>');
             }else{
                 $('#start').attr('disabled', false);
-                $('#start').html('停止自动派单');
-                $('#connectStatus').html('<font color="#41A317">连接成功，自动派单已启动！</font>');
+                $('#start').html('停止智能派单');
+                $('#connectStatus').html('<font color="#41A317">连接成功，智能派单已启动！</font>');
             }
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
-            $('#connectStatus').html('<font color="#FF0000">链接断开！请检查服务器地址是否正确，或被网络防火墙禁止访问</font>');
-            $('#start').html('开始自动派单');
+            $('#connectStatus').html('<font color="#FF0000">链接已断开！</font>');
+            $('#start').html('开始智能派单');
             $('#start').attr('disabled', true);
         };
 
@@ -38,10 +38,10 @@ function websocketConnect() {
             var srv_continue = 1;
             var srv_suspend = 2;
             if( msg == srv_continue){
-                $('#connectStatus').html('<font color="#41A317">连接成功，自动派单已启动！</font>');
+                $('#connectStatus').html('<font color="#41A317">连接成功，智能派单已启动！</font>');
             }else if(msg == srv_suspend)
             {
-                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">自动派单已暂停！</font>');
+                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">智能派单已暂停！</font>');
             }else if(msg == "Assign Server is OK"){
 
             }else{
@@ -52,7 +52,7 @@ function websocketConnect() {
         websocket.onerror = function (evt, e) {
             console.log('Error occured: ' + evt.data);
             $('#connectStatus').html('<font color="#FF0000">连接错误，请检查网络环境是否正常！</font>');
-            $('#start').html('开始自动派单');
+            $('#start').html('开始智能派单');
             $('#start').attr('disabled', true);
         };
     }
@@ -101,19 +101,19 @@ function getStatus(status){
     }else{
         //: （0-5分）: 1，(5-10)：2，已失败转到人工处理：1001
         switch(status){
-            case '1': return '正在指派给全职阿姨';break;
-            case '2': return '正在指派给兼职阿姨';break;
-            case '1001' : return '系统派单失败转人工处理'; break;
+            case 1: return '正在指派给全职阿姨';break;
+            case 2: return '正在指派给兼职阿姨';break;
+            case 1001 : return '系统派单失败转人工处理'; break;
         }
     }
 }
 
 function execCommand(cmd){
     var data = cmd ;
-    if($('#start').html() == '开始自动派单'){
-        $('#start').html('停止自动派单');
-    }else if($('#start').html() == '停止自动派单'){
-        $('#start').html('开始自动派单');
+    if($('#start').html() == '开始智能派单'){
+        $('#start').html('停止智能派单');
+    }else if($('#start').html() == '停止智能派单'){
+        $('#start').html('开始智能派单');
     }
     websocket.send(data);
 }

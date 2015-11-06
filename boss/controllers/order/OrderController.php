@@ -35,7 +35,8 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::serviceStart(2);
+        return Yii::$app->params;
+//        return Order::serviceStart(2);
     }
 
     public function actionCancelOrder()
@@ -202,7 +203,7 @@ class OrderController extends BaseAuthController
                     'ext_pop' => $order->orderExtPop,
                     'ext_customer' => $order->orderExtCustomer,
                     'ext_flag' => $order->orderExtFlag,
-                    'operation_long_time' => Order::MANUAL_ASSIGN_lONG_TIME,
+                    'operation_long_time' => Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME'],
                     'booked_time_range' => $booked_time_range,
                     'booked_workers' => $workers
                 ];

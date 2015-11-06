@@ -22,7 +22,7 @@ use core\models\finance\FinanceOrderChannel;
  */
 class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 {
-    public static function generateAccessToken($phone, $code){
+    public static function generateAccessToken($phone, $code, $channal_id=1){
         $check_code = CustomerCode::checkCode($phone, $code);
         
         //var_dump($check_code);
@@ -31,19 +31,18 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             return $check_code;
         }
         
-       
-
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //没有客户则创建
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
-                $customer = new Customer;
-                $customer->customer_phone = $phone;
-                $customer->created_at = time();
-                $customer->updated_at = 0;
-                $customer->is_del = 0;
-                $customer->save();
+//                $customer = new Customer;
+//                $customer->customer_phone = $phone;
+//                $customer->created_at = time();
+//                $customer->updated_at = 0;
+//                $customer->is_del = 0;
+//                $customer->save();
+                $hasAdded = Customer::addCustomer($phone, $channal_id);
             }
 
             $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();

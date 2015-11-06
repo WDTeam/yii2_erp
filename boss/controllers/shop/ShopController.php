@@ -88,13 +88,14 @@ class ShopController extends BaseAuthController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if($model->load(Yii::$app->request->post())){
+            if($model->changeAuditStatus(0,'修改内容')){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -146,6 +147,7 @@ class ShopController extends BaseAuthController
     {
         $model = $this->findModel($id);
         if(\Yii::$app->request->isPost){
+            exit;
             $cause = Yii::$app->request->post('cause','');
             $model->joinBlacklist($cause);
             \Yii::$app->session->setFlash('default', '添加成功');

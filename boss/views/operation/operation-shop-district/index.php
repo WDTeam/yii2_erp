@@ -1,3 +1,6 @@
+<style>
+    .col-md-2 {margin-top: 15px;}
+</style>
 <?php
 
 use yii\helpers\Html;
@@ -15,19 +18,20 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 
 $this->params['breadcrumbs'][] = ['label' => $city_name];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
     <?php $form = ActiveForm::begin([
 		'options' => ['enctype' => 'multipart/form-data', 'accept-charset' => 'UTF-8'],
         'action' => ['index', 'city_id' => $city_id, 'city_name' => $city_name],
         'method' => 'post',
     ]);
     ?>
-  
     <div class='col-md-2'>
+        <h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> <?=Html::encode($this->title)?><?=Html::encode($city_name)?> </h3>
+    </div>
+    <div class='col-md-3'>
         <?= $form->field($model, 'district_upload_url')->fileInput(['maxlength' => true]) ?>
     </div>
      
-    <div class='col-md-4 form-inline'>
+    <div class='col-md-2 form-inline'>
       <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
     </div> 
     <?php ActiveForm::end(); ?>
@@ -95,9 +99,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader'=>true,
 
         'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' - '.Html::encode($city_name).' </h3>',
+            'heading'=>'',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', '增加商圈'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', '增加商圈'), ['create', 'city_id' => $city_id, 'city_name' => $city_name], ['class' => 'btn btn-success']),
             //'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false
         ],

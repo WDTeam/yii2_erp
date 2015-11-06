@@ -1029,7 +1029,8 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取阿姨请假表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        return $this->send($ret, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
+        $result["leave_time"]=$ret;
+        return $this->send($result, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
     }    
     
      /**
@@ -1063,12 +1064,6 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_is_settlemented": "是否已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
-     *               "values": [
-     *                   {
-     *                       "worker_tasklog_condition": "条件索引",
-     *                       "worker_tasklog_value": "条件值"
-     *                   }
-     *               ],
      *               "worker_task_description": "任务描述"
      *           },
      *           "url": "右上角任务说明链接（后台没有返回空）"
@@ -1107,7 +1102,7 @@ class WorkerController extends \restapi\components\Controller
         foreach($ret as $task){
             $task_log=$task->getDetail();
             unset($task_log['is_del']);
-            $tasks['task_doing']=$task_log;
+            $tasks['task_doing'][]=$task_log;
         }
         $tasks['url']="";
         return $this->send($tasks, "操作成功", 1, 200,null,alertMsgEnum::taskDoingSuccess);
@@ -1197,7 +1192,7 @@ class WorkerController extends \restapi\components\Controller
         foreach($ret as $task){
             $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
             unset($task_log['is_del']);
-            $tasks["task_done"]=$task_log;
+            $tasks['task_done'][]=$task_log;
         }
         $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
@@ -1286,9 +1281,9 @@ class WorkerController extends \restapi\components\Controller
         foreach($ret as $task){
             $task_log=WorkerTaskLog::findOne(['id'=>$task['id']])->getDetail();
             unset($task_log['is_del']);
-            $tasks["task_fail"]=$task_log;
+            $tasks['task_fail'][]=$task_log;
         }
-            $tasks["url"]="";
+        $tasks["url"]="";
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
     }
 
@@ -1325,12 +1320,26 @@ class WorkerController extends \restapi\components\Controller
      *           "values": [
      *               {
      *                   "worker_tasklog_condition": "条件索引",
-     *                   "worker_tasklog_value": "条件值"
+     *                   "worker_tasklog_value": "条件完成值",
+     *                   "name": "主动接单",
+     *                   "judge": ">=",
+     *                   "value": "条件值"
      *               }
-     *           ],
+     *            ],
      *           "worker_task_description": "任务描述",
-     *           "order_list": [订单信息]
-     *       },
+     *           "order_list": [
+     *                   {
+     *                       "order_code": "订单号",
+     *                       "created_at": "创建时间",
+     *                       "order_booked_count": "预约服务数量（时长）"
+     *                   },
+     *                   {
+     *                       "order_code": "订单号",
+     *                       "created_at": "创建时间",
+     *                       "order_booked_count": "预约服务数量（时长）"
+     *                   }
+     *            ]
+     *        },
      *       "alertMsg": "操作成功"
      *    }
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -1371,7 +1380,16 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        $task_log['order_list']=$order_list;
+        $order_lists=array();
+        $order_arr=array();
+        foreach ($order_list as $order){
+             $order_arr["order_code"]=$order["order_code"];
+             $order_arr["created_at"]=$order["created_at"];
+             $order_arr["order_booked_count"]=$order["order_booked_count"];
+             $order_lists[]=$order_arr;
+        } 
+       
+        $task_log['order_list']=$order_lists;
         if(empty($task_log)){
               return $this->send(null, "查看任务失败", 0,200,null,alertMsgEnum::checkTaskFail);
         }

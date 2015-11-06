@@ -50,6 +50,36 @@ class FinancePopOrderController extends Controller
 
     
     
+   /**
+   * redis 测试方法   仅适用于潘高峰个人使用   
+   * @date: 2015-11-4
+   * @author: peak pan
+   * @return:
+   **/ 
+    
+    public function actionIndexredis()
+    {
+    	$name='gaofengceshi';
+    	//添加
+    	//\Yii::$app->redis->SADD($name,$datainfo);
+    	//一共有多少的数量
+    	//$rt=\Yii::$app->redis->SCARD($name);
+    	//取走并删除
+    	//$rt=\Yii::$app->redis->SPOP($name);
+    	//var_dump($rt);
+    	//exit;
+    	//for($i=1;$i<20000;$i++){
+    	//	$datainfo='1000000'.$i;
+    		//\Yii::$app->redis->zadd($name,$datainfo,$i);
+    		//添加
+    	//	\Yii::$app->redis->SADD($name,$datainfo);	
+    		//echo  $i; 
+    	//}
+    	
+    	//echo  'ok'; exit;
+    	
+    }
+   
     /**
     * 对账方法
     * @date: 2015-9-23
@@ -149,11 +179,11 @@ class FinancePopOrderController extends Controller
     		 
     		 $FinanceRecordLog = new FinanceRecordLogSearch;
     		 
-    		 $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
-    		 if($customer_info>0){
-    		 	\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
-    		 	return $this->redirect(['index']);
-    		 }
+    		// $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
+    		 //if($customer_info>0){
+    		 	///\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
+    		 	//return $this->redirect(['index']);
+    		// }
     		 
     		
     		 

@@ -884,8 +884,6 @@ class Worker extends \dbbase\models\worker\Worker
             Yii::$app->redis->close();
             return true;
         }
-
-
     }
 
     /**
@@ -900,12 +898,6 @@ class Worker extends \dbbase\models\worker\Worker
             return false;
         }
 
-        //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
-        $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
-        foreach ((array)$oldDistrictIdsArr as $val) {
-            echo self::DISTRICT.'_'.$val['operation_shop_district_id'];
-            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
-        }
         //添加新的商圈绑定阿姨关系 [1,3,4]
         foreach ((array)$districtIdsArr as $val) {
             //如果商圈不存在，默认添加商圈set，并存储阿姨id
@@ -913,6 +905,17 @@ class Worker extends \dbbase\models\worker\Worker
         }
         Yii::$app->redis->close();
         return true;
+    }
+
+    public static function deleteDistrictWorkerRelationToRedis($worker_id){
+        if(empty($worker_id) || empty($districtIdsArr)){
+            return false;
+        }
+        //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
+        $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
+        foreach ((array)$oldDistrictIdsArr as $val) {
+            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
+        }
     }
 
     /**
@@ -959,16 +962,18 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @param $worker_phone
      * @param $worker_type
+     * @param $worker_identity_id 阿姨身份id 1全时2兼职
      * @return bool
      */
-    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type){
+    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type,$worker_identity_id){
         if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
             return false;
         }
         $workerInfo['info'] = [
             'worker_id'=>$worker_id,
             'worker_phone'=>$worker_phone,
-            'worker_type'=>$worker_type
+            'worker_identity_id'=>$worker_type,
+            'worker_type'=>$worker_identity_id
         ];
         $workerInfo['schedule'] = [];
         $workerInfo['order'] = [];
@@ -978,14 +983,39 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
+     * 更新阿姨信息到redis
+     * @param $worker_id
+     * @param $worker_phone
+     * @param $worker_type
+     * @param $worker_identity_id 阿姨身份id 1全时2兼职
+     * @return bool
+     */
+    public static function updateWorkerInfoToRedis($worker_id,$worker_phone,$worker_type,$worker_identity_id){
+        if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
+            return false;
+        }
+        $workerInfo = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
+        if($workerInfo){
+            $workerInfo = json_decode($workerInfo,1);
+            $workerInfo['info'] = [
+                'worker_id'=>$worker_id,
+                'worker_phone'=>$worker_phone,
+                'worker_type'=>$worker_type,
+                'worker_identity_id'=>$worker_identity_id
+            ];
+            $workerInfo = json_encode($workerInfo);
+            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        }
+    }
+    /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $worker_identity_id 阿姨身份 1全时2兼职
      * @param int $orderBookBeginTime 待指派订单预约开始时间
      * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
+    public static function getDistrictFreeWorker($district_id,$worker_identity_id=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
@@ -1000,7 +1030,7 @@ class Worker extends \dbbase\models\worker\Worker
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
 
-            if($val['info']['worker_type']==$worker_type){
+            if($val['info']['worker_identity_id']==$worker_identity_id){
                 $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
                 if(array_diff($orderBookTime,$workerEnabledTime)){
                     continue;
@@ -1034,13 +1064,13 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $worker_identity_id 阿姨身份 1全时2兼职
      * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
      * @throws ErrorException
      */
 
-    public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
+    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_id=1,$orderBookTimeArr){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
@@ -1049,7 +1079,7 @@ class Worker extends \dbbase\models\worker\Worker
         foreach ($districtWorkerResult as $val) {
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
-            if($val['info']['worker_type']==$worker_type){
+            if($val['info']['worker_identity_id']==$worker_identity_id){
                 $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
                     if($t_val['orderBookBeginTime']>=$t_val['orderBookEndTime']){
@@ -1429,8 +1459,10 @@ class Worker extends \dbbase\models\worker\Worker
             case 2:
                 return '通过基础培训';
             case 3:
-                return '已上岗';
+                return '已试工';
             case 4:
+                return '已上岗';
+            case 5:
                 return '通过晋升培训';
         }
        /* if($worker_auth_status==1){

@@ -36,7 +36,8 @@ if($workerBlockModel===null){
         'pluginOptions'=>[
             'locale'=>['format'=>'date'],
             'separator'=>' 至 ',
-            'opens'=>'right'
+            'opens'=>'right',
+            'minDate'=>'date'
         ]
     ]);
     echo $form->field($workerBlockModel, 'worker_block_status')->radioList([ '1' => '开启','0' => '关闭'], ['inline' => true]);

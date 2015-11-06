@@ -3,7 +3,6 @@ namespace core\models\order;
 
 
 use core\models\worker\WorkerStat;
-use dbbase\models\order\OrderOtherDict;
 use dbbase\models\order\OrderWorkerRelation as OrderWorkerRelationModel;
 use Yii;
 

@@ -7,13 +7,13 @@
 */
 namespace boss\controllers\order;
 
-use Yii;
-use core\models\Order\Order;
-use boss\models\AutoAssignSerach;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use boss\components\BaseAuthController;
-use autoassign\ClientCommand;
+
+use Yii;
+use yii\filters\VerbFilter;
+
+define("WEBPATH", str_replace("\\","/", __DIR__));
+define("CONFIG_PATH", Yii::$app->basePath."/../autoassign/autoassign.config.php");
 
 /**
  * AutoOrderController implements the CRUD actions for Order model.
@@ -37,7 +37,7 @@ class AutoAssignController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $config = (array)json_decode(Yii::$app->redis->get('REDIS_AUTOASSIGN_CONFIG'));
+        $config = require(CONFIG_PATH);
         $srvInfo = (array)json_decode(Yii::$app->redis->get('_REDIS_SERVER_RUN_STATUS_'));
         $srvIsSuspend = json_decode(Yii::$app->redis->get('REDIS_IS_SERVER_SUSPEND'));
         return $this->render('index', ['srvInfo' => $srvInfo,'config'=>$config,'srvIsSuspend'=>$srvIsSuspend]);

@@ -12,7 +12,7 @@ use dbbase\models\finance\FinanceOrderChannel;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use core\models\shop\Shop;
-use core\models\payment\PaymentRefund;
+use core\models\payment\Payment;
 /**
  * FinanceRefundController implements the CRUD actions for FinanceRefund model.
  */
@@ -158,16 +158,14 @@ class FinanceRefundController extends BaseAuthController
     		$model=FinanceRefund::findOne($requestModel['id']);
     		if($requestModel['edit']=='baksite'){
     	    //退款
-    			$obj = new PaymentRefund();
-    			
     			if(!isset($model->finance_refund_pop_nub) || !isset($model->customer_id)){
     			\Yii::$app->getSession()->setFlash('default','充值记录查询无此记录,退款失败！');
     			return $this->redirect(['index', 'id' =>$requestModel['id']]);
     			}
-    			$s = $obj->call_pay_refund($model->finance_refund_pop_nub,$model->customer_id);
+    			//通知胜强退款
+    			$s =Payment::orderRefund($model->finance_refund_pop_nub,$model->customer_id);
     			
-    			
-    			if($s){
+    			if($s['status']==1){
     				//成功
     				$model->finance_pop_order_pay_status='4';
     			}else{

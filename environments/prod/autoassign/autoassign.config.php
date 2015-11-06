@@ -1,6 +1,6 @@
 <?php
 /*
- * BOSS 自动派单运行服务配置 For Prod
+ * BOSS 自动派单运行服务配置 For Local
  * @author 张航<zhanghang@1jiajie.com>
  * @link http://boss.1jiajie.com/auto-assign/
  * @copyright Copyright (c) 2015 E家洁 LLC
@@ -17,7 +17,7 @@ return [
     /*
      * Redis 服务IP（推荐使用域名）
      */
-    'REDIS_SERVER_IP' => 'boss.1jiajie.com',
+    'REDIS_SERVER_IP' => 'dev.boss.1jiajie.com',
     /*
      * Redis 服务PORT
      */
@@ -40,10 +40,10 @@ return [
      */
     'SERVER_LISTEN_PORT' => 9501,
     
-     /*
+    /*
      * SWOOLE 服务IP（推荐使用域名）
      */
-    'SWOOLE_SERVER_IP' => 'boss.1jiajie.com',
+    'SWOOLE_SERVER_IP' => 'dev.boss.1jiajie.com',
 
     /*
      * 设置启动的worker进程数
@@ -92,8 +92,8 @@ return [
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
 
     // 配置 BOSS API 地址
-    'BOSS_API_URL' => 'http://api.1jiajie.com/order/push/',
+    'BOSS_API_URL' => 'http://api.me/order/push/',
 
     // 配置 BOSS CONFIG 地址
-    'BOSS_CONFIG_URL' => 'http://boss.1jiajie.com/config/',
+    'BOSS_CONFIG_URL' => 'http://api.me/config/',
 ];

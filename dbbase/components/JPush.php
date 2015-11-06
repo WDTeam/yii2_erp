@@ -9,15 +9,19 @@ namespace dbbase\components;
 use yii\base\Object;
 use JPush\Model as M;
 use JPush\JPushClient;
-use JPush\Exception\APIConnectionException;
 use JPush\Exception\APIRequestException;
+use yii\base\Component;
+use yii\base\Event;
 
-class JPush extends Object
+class JPush extends Component
 {
     public $app_key;
     public $master_secret;
     
     public $client;
+    public $data;
+    
+    const EVENT_PUSH_AFTER = 'event_push_after';
     
     public function init()
     {
@@ -41,10 +45,16 @@ class JPush extends Object
             ->setAudience(M\Audience(M\Tag($tags)))
             ->setNotification(M\notification($msg))
             ->send();
-            return $result;
         }catch(APIRequestException $e){
-            return $e;
+            $result = $e;
         }
+        $this->data = [
+            'tags'=>$tags,
+            'msg'=>$msg,
+            'extras'=>$extras
+        ];
+        $this->trigger(self::EVENT_PUSH_AFTER);
+        return $result;
     }
     /**
      * 复杂应用完整信息push
@@ -65,10 +75,18 @@ class JPush extends Object
             ))
             ->setMessage(M\message($msg, $title, $category, $extras))
             ->send();
-            return $result;
         }catch(APIRequestException $e){
-            return $e;
+            $result = $e;
         }
+        $this->data = [
+            'tags'=>$tags,
+            'msg'=>$msg,
+            'extras'=>$extras,
+            'title'=>$title,
+            'category'=>$category,
+        ];
+        $this->trigger(self::EVENT_PUSH_AFTER);
+        return $result;
     }
     /**
      * 推送消息,不建议使用,仅供参考

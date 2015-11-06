@@ -11,7 +11,6 @@ define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
 define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
 define("REDIS_IS_SERVER_SUSPEND","REDIS_IS_SERVER_SUSPEND");
-define("REDIS_AUTOASSIGN_CONFIG","REDIS_AUTOASSIGN_CONFIG");
 
 $assign_config = require(CONFIG_PATH);
 
@@ -37,7 +36,6 @@ class server
         $this->config = $config;
         $this->connectRedis();
         $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
-        $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
         $this->saveStatus(null);
         $this->serv = new swoole_websocket_server($config['SERVER_LISTEN_IP'], $config['SERVER_LISTEN_PORT']);
         //初始化swoole服务
@@ -81,7 +79,7 @@ class server
     function onWorkerStart(swoole_server $server, $worker_id) {
         //echo 'onWorkStart ID:=' . $worker_id . "\n";
         cli_set_process_title($this->config['SERVER_WORKER_PROCESS_ID'] . $worker_id);
-
+        echo "worker_id ".$worker_id." is start";
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
@@ -350,9 +348,13 @@ class server
     public function onTask($server, $task_id, $from_id, $data) {
         //echo 'onTask'."\n";
         $this->serv = $server;
-       
+        echo 'task start time :'.time();
+        echo "当前服务器主进程的PID:".$server->master_pid."</br>";
+        echo "当前服务器管理进程的PID:".$server->manager_pid."</br>";
+        echo "当前Worker进程的编号:".$server->worker_id."</br>";
+        echo '$from_id is '.$from_id.'; task_id is '.$task_id." called"."</br>";
         //return $this->taskOrder($data, $server);
-        
+        echo '当前任务订单数据为:'.$data;
         if (empty($data['lock']))
         {
             $this->lockOrder($data);//加入状态锁
@@ -375,12 +377,15 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
+            echo '指派结果为:'.$result;
             $d = json_decode($result,true);
-            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-            $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
-            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
-            $d = json_encode($d);
-            $this->broadcast($server,$d);
+            if(isset($d['order_code'])){
+                $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+                $d['assign_start_time'] = isset($d['assign_start_time'])?date('Y-m-d H:i:s', $d['assign_start_time']) : '';
+                $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+                $d = json_encode($d);
+                $this->broadcast($server,$d);
+            }
         } catch (Exception $ex) {
             echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
             var_dump($data);
@@ -393,6 +398,9 @@ class server
      */
     public function onFinish($server,$task_id, $data) {
         echo date('Y-m-d H:i:s').'订单:＝ '.$data['order_id']." 本次任务完成\n";
+        echo "当前Worker进程的编号:".$server->worker_id."</br>";
+        echo '; task_id is '.$task_id." called"."</br>";
+        echo '任务结束时间为:'.time();
 //        $d = $data;
 //        if(isset($d['order_id'])) {
 //            unset($d['order_id']);

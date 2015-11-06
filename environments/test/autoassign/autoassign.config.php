@@ -1,6 +1,6 @@
 <?php
 /*
- * BOSS 自动派单运行服务配置 For Test
+ * BOSS 自动派单运行服务配置 For Local
  * @author 张航<zhanghang@1jiajie.com>
  * @link http://boss.1jiajie.com/auto-assign/
  * @copyright Copyright (c) 2015 E家洁 LLC
@@ -40,7 +40,7 @@ return [
      */
     'SERVER_LISTEN_PORT' => 9501,
     
-        /*
+    /*
      * SWOOLE 服务IP（推荐使用域名）
      */
     'SWOOLE_SERVER_IP' => 'test.boss.1jiajie.com',

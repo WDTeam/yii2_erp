@@ -44,7 +44,8 @@ $workerVacationModel->worker_vacation_type = 2;
         'pluginOptions'=>[
             'locale'=>['format'=>'date'],
             'separator'=>' 至 ',
-            'opens'=>'right'
+            'opens'=>'right',
+            'minDate'=>'date'
         ]
     ]);?>
     <?= $form->field($workerVacationModel, 'worker_vacation_extend');?>

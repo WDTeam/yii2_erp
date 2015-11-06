@@ -38,7 +38,7 @@ class WorkerCode extends \dbbase\models\worker\WorkerCode
             }
             
             $workerCode->worker_code = $worker_code;
-            $workerCode->worker_code_expiration = 60;
+            $workerCode->worker_code_expiration = 1800;
             $workerCode->worker_phone = $phone;
             $workerCode->created_at = time();
             $workerCode->updated_at = 0;
@@ -70,5 +70,26 @@ class WorkerCode extends \dbbase\models\worker\WorkerCode
             return true;
         }
         return false;
+    }
+    
+    /**
+     * 检测是否可以发送验证码 验证规则：一人一天只能发送5次，60秒可以发送一次，验证码有效期为30分钟
+     * @param $phone 阿姨手机号
+     * @return bloon true:可以发送;false:不能发送
+     */
+    public static function whetherSendCode($phone){
+        $now_time=time();
+        $worker_code_info= self::find()->where(['worker_phone'=>$phone])->orderBy(['id'=>SORT_DESC])->one();
+        $last_send_time=$worker_code_info['created_at'];
+        if($last_send_time+60>$now_time){
+            return 1;
+        }
+        $today_begin=strtotime(date('Y-m-d',time()));
+        $today_end=$today_begin+3600 * 24;
+        $worker_code_num= self::find()->where(['and',"worker_phone=$phone",['>', 'created_at', "$today_begin"],['<', 'created_at', "$today_end"]])->count();
+        if($worker_code_num>=5){
+            return 2;
+        }
+        return 3;
     }
 }

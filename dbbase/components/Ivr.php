@@ -60,7 +60,6 @@ namespace dbbase\components;
 use yii\base\Component;
 use yii\base\Event;
 use yii\web\Application;
-use core\behaviors\IvrlogBehavior;
 use yii\web\HttpException;
 use yii\base\ExitException;
 use yii\base\BootstrapInterface;
@@ -101,14 +100,14 @@ class Ivr extends Component implements BootstrapInterface
         }
     }
     
-    public function behaviors()
-    {
-        return [
-            [
-                'class'=>IvrlogBehavior::className(),
-            ]
-        ];
-    }
+//     public function behaviors()
+//     {
+//         return [
+//             [
+//                 'class'=>IvrlogBehavior::className(),
+//             ]
+//         ];
+//     }
     /**
      * 发送语音播报
      * @param string|int $telephone 电话号码
@@ -117,12 +116,13 @@ class Ivr extends Component implements BootstrapInterface
      */
     public function send($telephone, $orderId, $orderMessage)
     {
-        $sign = md5($this->app_id.$this->token.time());
+        $time = time();
+        $sign = md5($this->app_id.$this->token.$time);
         $ivrarr = [
             'tel' => $telephone,				//手机号  测试手机号13311009484
             'appId'  => $this->app_id,		    //APPID
             'sign' => $sign,			        //签名
-            'timestamp' => time(),
+            'timestamp' => $time,
             'orderMessage' => $orderMessage,
             'orderId' => $orderId
         ];

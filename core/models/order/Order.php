@@ -20,15 +20,14 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
-use core\models\order\OrderStatusDict;
 
-use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
+
 use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
@@ -37,7 +36,7 @@ use boss\models\operation\OperationCategory;
 /**
  * This is the model class for table "{{%order}}".
  *
- * @property string $id
+ * @property integer $id
  * @property string $created_at
  * @property string $updated_at
  * @property string $order_code
@@ -58,7 +57,7 @@ use boss\models\operation\OperationCategory;
  * @property string $order_service_type_name
  * @property integer $order_src_id
  * @property string $order_src_name
- * @property string $channel_id
+ * @property integer $channel_id
  * @property string $order_channel_name
  * @property string $order_unit_money
  * @property string $order_money
@@ -111,6 +110,9 @@ use boss\models\operation\OperationCategory;
 class Order extends OrderModel
 {
 
+    const ADMIN_SYSTEM = 1;
+    const ADMIN_CUSTOMER = 2;
+    const ADMIN_WORKER = 3;
     /**
      * 创建新订单
      * @param $attributes [
@@ -122,7 +124,7 @@ class Order extends OrderModel
      *  int $order_booked_end_time 预约结束时间 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
-     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
@@ -151,6 +153,7 @@ class Order extends OrderModel
             'order_booked_begin_time','order_booked_end_time','address_id',
             'customer_id','admin_id','order_pay_type'
         ];
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         foreach($attributes as $k=>$v){
             if(!in_array($k,$attributes_keys)){
                 unset($attributes[$k]);
@@ -217,7 +220,7 @@ class Order extends OrderModel
      *  string $channel_id 下单渠道 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
-     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $admin_id 操作人id  1系统 2客户 3阿姨 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
@@ -259,6 +262,7 @@ class Order extends OrderModel
                 ['status' => false, 'errors' => $v.'为必填项！'];
             }
         }
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
 
@@ -290,7 +294,7 @@ class Order extends OrderModel
                     //第一个订单为父订单其余为子订单
                     $attributes['order_parent_id'] = $order->id;
                     $attributes['order_is_parent'] = 0;
-                    $orderExtPay += $order->orderExtPay;
+                    $orderExtPay += $order->orderExtPay->order_pay_money;
                 }
             }
         }
@@ -309,19 +313,19 @@ class Order extends OrderModel
 
     /**
      * 在线支付完后调用
+     * @user 李胜强
      * @param $order_id int 订单id
-     * @param $admin_id int  后台管理员id 系统0 客户1
      * @param $pay_channel_id int  支付渠道id
      * @param $order_pay_channel_name string 支付渠道名称
      * @param $order_pay_flow_num string 支付流水号
      * @return bool
      */
-    public static function isPaymentOnline($order_id, $admin_id, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num)
+    public static function isPaymentOnline($order_id, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num)
     {
         $order = OrderSearch::getOne($order_id);
         $order->setAttributes([
             'order_pay_type' => OrderExtPay::ORDER_PAY_TYPE_ON_LINE,
-            'admin_id' => $admin_id,
+            'admin_id' => Order::ADMIN_CUSTOMER,
             'pay_channel_id' => $pay_channel_id,
             'order_pay_channel_name' => $order_pay_channel_name,
             'order_pay_flow_num' => $order_pay_flow_num
@@ -331,16 +335,16 @@ class Order extends OrderModel
 
     /**
      * 批量支付回调接口
+     * @user 李胜强
      * @param $batch_code int 订单id
-     * @param $admin_id int  后台管理员id 系统0 客户1
      * @param $pay_channel_id int  支付渠道id
      * @param $order_pay_channel_name string 支付渠道名称
      * @param $order_pay_flow_num string 支付流水号
      * @return bool
      */
-    public static function isBatchPaymentOnline($batch_code, $admin_id, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num)
+    public static function isBatchPaymentOnline($batch_code, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num)
     {
-        return OrderStatus::_batchPayment($batch_code, $admin_id, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num);
+        return OrderStatus::_batchPayment($batch_code,Order::ADMIN_CUSTOMER , $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num);
     }
 
     /**
@@ -351,7 +355,7 @@ class Order extends OrderModel
     public static function sysAssignUndone($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->admin_id = 1;
+        $order->admin_id = Order::ADMIN_SYSTEM;
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             if (OrderStatus::_sysAssignUndone($order, [])) {
                 //把订单从订单池中移除
@@ -372,7 +376,7 @@ class Order extends OrderModel
     {
         $worker = Worker::getWorkerInfoByPhone($worker_phone);
         $assign_type = OrderExtWorker::ASSIGN_TYPE_IVR;
-        return self::assignDone($order_id, $worker, 1, $assign_type);
+        return self::assignDone($order_id, $worker, Order::ADMIN_WORKER, $assign_type);
     }
 
     /**
@@ -385,7 +389,7 @@ class Order extends OrderModel
     {
         $worker = Worker::getWorkerInfo($worker_id);
         $assign_type = OrderExtWorker::ASSIGN_TYPE_WORKER;
-        return self::assignDone($order_id, $worker, 1, $assign_type);
+        return self::assignDone($order_id, $worker, Order::ADMIN_WORKER, $assign_type);
     }
 
     /**
@@ -394,7 +398,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return array|bool
      */
-    public static function manualAssignUndone($order_id, $admin_id = 1)
+    public static function manualAssignUndone($order_id, $admin_id = Order::ADMIN_SYSTEM)
     {
         $order = OrderSearch::getOne($order_id);
         if ($order->orderExtFlag->order_flag_send == 3) { //小家政和客服都无法指派出去
@@ -443,28 +447,18 @@ class Order extends OrderModel
         }
     }
 
-    /**
-     * 批量解锁
-     */
-    public static function manualAssignUnlock()
-    {
-        $lockedOrders = OrderExtFlag::find()->where(['>', 'order_flag_lock', 0])->andWhere(['<', 'order_flag_lock_time', time() - Order::MANUAL_ASSIGN_lONG_TIME])->all();
-        foreach ($lockedOrders as $v) {//解锁操作超时订单
-            self::manualAssignUndone($v['order_id']);
-        }
-    }
 
     /**
      * 人工指派成功
      * @param $order_id
      * @param $worker_id
      * @param $admin_id
-     *  @param bool $isCS
+     *  @param bool $is_cs
      * @return array
      */
-    public static function manualAssignDone($order_id, $worker_id, $admin_id, $isCS = false)
+    public static function manualAssignDone($order_id, $worker_id, $admin_id, $is_cs = false)
     {
-        $assign_type = $isCS ? OrderExtWorker::ASSIGN_TYPE_CS : OrderExtWorker::ASSIGN_TYPE_SHOP;
+        $assign_type = $is_cs ? OrderExtWorker::ASSIGN_TYPE_CS : OrderExtWorker::ASSIGN_TYPE_SHOP;
         $worker = Worker::getWorkerInfo($worker_id);
         return self::assignDone($order_id, $worker, $admin_id, $assign_type);
     }
@@ -476,12 +470,13 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $assign_type
      * @return array
-     * TODO 避免同一时间 给阿姨指派多个服务时间冲突的订单问题 需要处理
      */
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
         $order = OrderSearch::getOne($order_id);
+        $orderids = [];
+        //阿姨服务时间是否冲突
         $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
         if($order->order_is_parent==1){
             $child_list = OrderSearch::getChildOrder($order_id);
@@ -498,9 +493,18 @@ class Order extends OrderModel
         } else {
             $transact = static::getDb()->beginTransaction();
             $result = self::_assignDone($order, $worker, $admin_id, $assign_type,$transact);
-            if($result && $order->order_is_parent==1) {
+            $orderids[] = $order->id;
+            //处理阿姨排班表
+            Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$order->id,$order->order_booked_count,$order->order_booked_begin_time,$order->order_booked_end_time);
+            if($result && $order->order_is_parent==1) { //如果是周期订单
                 foreach ($child_list as $child) {
                     $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
+                    $orderids[] = $child->id;
+                    if(!$result){
+                        break;
+                    }
+                    //处理阿姨排班表
+                    Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$child->id,$child->order_booked_count,$child->order_booked_begin_time,$child->order_booked_end_time);
                 }
             }
             if($result) {
@@ -508,6 +512,12 @@ class Order extends OrderModel
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 //更新阿姨接单数量
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //第二个参数是阿姨的接单次数
+                OrderMsg::assignDone($order); //指派成功发送通知
+            }else{
+                foreach($orderids as $orderid) {
+                    //失败后删除阿姨的订单信息
+                    Worker::deleteWorkerOrderInfoToRedis($worker['id'], $orderid);
+                }
             }
         }
         return ['status' => $result, 'errors' => $order->errors];
@@ -534,7 +544,7 @@ class Order extends OrderModel
         $order->order_worker_shop_name = $worker["shop_name"];
         $order->order_worker_assign_type = $assign_type; //接单方式
         $order->admin_id = $admin_id;
-        if ($admin_id > 1) { //大于1属于人工操作
+        if ($admin_id > 3) { //大于3属于人工操作
             $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
         } elseif ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
             $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
@@ -566,7 +576,11 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = 1;
-        return OrderStatus::_serviceDone($order);
+        $result = OrderStatus::_serviceDone($order);
+        if($result) {
+            OrderMsg::serviceDone($order); //发送通知
+        }
+        return $result;
     }
 
     /**
@@ -575,7 +589,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return bool
      */
-    public static function customerAcceptDone($order_id,$admin_id=0)
+    public static function customerAcceptDone($order_id,$admin_id=Order::ADMIN_CUSTOMER)
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
@@ -613,16 +627,44 @@ class Order extends OrderModel
      * 取消订单
      * @param $order_id
      * @param $admin_id
-     * @param $memo
-     * @param $cause
+     * @param $cause_id
+     * @param string $memo
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $cause, $memo = '')
-    {
+    public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = ''){
         $order = OrderSearch::getOne($order_id);
+        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+    }
+
+    /**
+     * 取消订单
+     * @param $order_code
+     * @param $admin_id
+     * @param $cause_id
+     * @param string $memo
+     * @return bool
+     */
+    public static function cancelByOrderCode($order_code, $admin_id, $cause_id, $memo = ''){
+        $order = OrderSearch::getOneByCode($order_code);
+        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+    }
+
+    /**
+     * 取消订单
+     * @param $order
+     * @param $admin_id
+     * @param $cause_id
+     * @param $memo
+     * @return bool
+     */
+    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '')
+    {
+
         $order->admin_id = $admin_id;
-        $order->order_cancel_cause_id = $cause;
-        $order->order_cancel_cause_detail = OrderOtherDict::getName($cause);
+        if($cause_id>0) {
+            $order->order_cancel_cause_id = $cause_id;
+            $order->order_cancel_cause_detail = OrderOtherDict::getName($cause_id);
+        }
         $order->order_cancel_cause_memo = $memo;
         $current_status = $order->orderExtStatus->order_status_dict_id;
         if (in_array($current_status, [  //只有在以下状态下才可以取消订单
@@ -634,10 +676,32 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            $result = OrderStatus::_cancel($order);
+            //如果是第三方订单则同步状态到第三方
+            if($order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
+                if(!OrderPop::cancelToPop($order)) { //第三方同步失败则直接取消失败
+                    return false;
+                }
+            }
+            $transact = static::getDb()->beginTransaction();
+            $result = OrderStatus::_cancel($order,$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //调高峰的退款接口
-                FinanceRefundadd::add($order);
+                $result = FinanceRefundadd::add($order);
+                if(in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
+                    OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+                    OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+                    OrderStatusDict::ORDER_WORKER_BIND_ORDER
+                ]) && $result){
+                    $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
+                }
+            }elseif($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
+                $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
+            }
+            if($result){
+                $transact->commit();
+                OrderMsg::cancel($order); //取消订单发送通知
+            }else{
+                $transact->rollBack();
             }
             return $result;
         } else {
@@ -651,7 +715,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return bool
      */
-    public static function customerDel($order_id, $admin_id = 0)
+    public static function customerDel($order_id, $admin_id = Order::ADMIN_CUSTOMER)
     {
         $order = OrderSearch::getOne($order_id);
         $order->order_customer_hidden = 1;
@@ -762,6 +826,10 @@ class Order extends OrderModel
             'order_before_status_name' => $status_from->order_status_name,
             'order_status_dict_id' => $status_to->id,
             'order_status_name' => $status_to->order_status_name,
+            'order_status_boss' => $status_to->order_status_boss,
+            'order_status_customer' => $status_to->order_status_customer,
+            'order_status_worker' => $status_to->order_status_worker,
+
             'order_src_name' => $this->getOrderSrcName($this->order_src_id),
             'order_channel_name' => $this->getOrderChannelList($this->channel_id),
             'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',

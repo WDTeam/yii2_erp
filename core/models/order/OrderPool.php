@@ -37,8 +37,8 @@ class OrderPool extends Model
             'address' => $order->order_address,
             'need' => $order->orderExtCustomer->order_customer_need,
             'money' => $order->orderExtPay->order_pay_type==1?$order->order_money:'0.00',
-            'is_booked_worker' => ($order->order_booked_worker_id==$worker_id),
-            'order_time' => [[$order->order_booked_begin_time.'-'.$order->order_booked_end_time]]
+            'is_booked_worker' => ($order->order_booked_worker_id==$worker_id)?"true":"false",
+            'order_time' => [$order->order_booked_begin_time.'-'.$order->order_booked_end_time]
         ];
         if($order->order_is_parent==1){
             $child_list = OrderSearch::getChildOrder($order_id);

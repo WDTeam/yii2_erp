@@ -39,3 +39,5 @@ boss/config/main-local.php
 /common/config/main.php~
 /swoole.log
 /autoassign/server.log
+/boss/web/index.php
+/boss/web/index-test.php

@@ -11,7 +11,6 @@ namespace core\models\order;
 
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderOtherDict;
-use dbbase\models\order\OrderStatusDict;
 use Yii;
 use core\models\worker\Worker;
 
@@ -36,9 +35,9 @@ class OrderPush extends Order
         $part_time = 2; //兼职
         $push_status = 0; //推送状态
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            if($order->order_booked_worker_id>0 && time() - $order->orderExtStatus->updated_at < 900){ //先判断有没有指定阿姨
+            if($order->order_booked_worker_id>0 && time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_BOOKED_WORKER_ASSIGN_TIME']){ //先判断有没有指定阿姨
                 $workers[] = Worker::getWorkerInfo($order->order_booked_worker_id);
-            }elseif (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+            }elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME']) {
                 //获取全职阿姨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $full_time;
@@ -47,7 +46,7 @@ class OrderPush extends Order
                     $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                     $push_status = $part_time;
                 }
-            } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
+            } elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME']) {
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $part_time;
             }
@@ -99,10 +98,9 @@ class OrderPush extends Order
             }
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
                 OrderPool::addOrderToWorkerPushList($order_id,$v['id']); //把订单添加到接单大厅
-                $result = Yii::$app->jpush->push(["worker_{$v['id']}"], "阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"); //TODO 发送内容
+                $result = Yii::$app->jpush->push(["worker_{$v['worker_phone']}"], json_encode(["order_code"=>$order->order_code,"msg"=>"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"])); //TODO 发送内容
                 if (isset($result->isOK)) {
-                    $worker_id = intval(str_replace('worker_', '', $v));
-                    OrderWorkerRelation::jpushPushSuccess($order_id, $worker_id, 1);
+                    OrderWorkerRelation::jpushPushSuccess($order_id, $v['id'], 1);
                     $jpush_flag = true;
                 }
             }
@@ -131,7 +129,7 @@ class OrderPush extends Order
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
             if (!empty($worker)) {
                 $week = ['日','一','二','三','四','五','六'];
-                $range =  date('H点', $order->order_booked_begin_time).'至'. date('H点', $order->order_booked_end_time).($order->order_booked_count % 60 > 0 ? "半" : "");
+                $range =  date('H点i分', $order->order_booked_begin_time).'至'. date('H点i分', $order->order_booked_end_time);
                 $ivr_msg = "服务时间是:" . date('y年m月d日', $order->order_booked_begin_time) . "，星期".$week[date('w', $order->order_booked_begin_time)]."，".$range
                     ."，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时。服务地址是：{$order->order_address}！";
                 $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, $ivr_msg);

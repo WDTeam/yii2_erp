@@ -1,3 +1,6 @@
+<style>
+    .kv-grid-table tr td {background-color: #fff;}
+</style>
 <?php
 
 use yii\helpers\Html;

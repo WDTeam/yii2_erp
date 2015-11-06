@@ -116,6 +116,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiDescription 用户端首页初始化,获得开通城市列表，广告轮播图 等初始化数据(赵顺利--假数据 )
      *
      * @apiParam {String} city_name 城市
+     * @apiParam {String} [access_token] 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
@@ -246,7 +247,9 @@ class ConfigureController extends \restapi\components\Controller
      *                  "colour"=>"",
      *                  "sort"=>"2"
      *              },
-     *          ]
+     *              ],
+     *              "isBlock":"0", 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。
+     *              "isEffect": "0" 用户token是否有效，0表示正常，1表示失效，如果access_token为空，该值为0。
      *      }
      * }
      *
@@ -265,6 +268,12 @@ class ConfigureController extends \restapi\components\Controller
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
+        }
+        @$access_token=$param['access_token'];
+        $isEffect="0";
+        if(!empty($access_token)&&!CustomerAccessToken::checkAccessToken($access_token))
+        {
+            $isEffect="1";
         }
         //获取城市列表
         $city_list = OperationCity::getOnlineCitys();
@@ -353,7 +362,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '1',
                 'category_name' => '专业保洁',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/zhuanyebaojie.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/cleaning',
                 'category_introduction' => '44项定制清洁服务',
                 'category_price' => '25.00',
                 'category_price_unit' => '小时',
@@ -366,7 +375,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '2',
                 'category_name' => '洗护服务',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/washProtect',
                 'category_introduction' => '衣服、皮鞋、美包',
                 'category_price' => '9.00',
                 'category_price_unit' => '件',
@@ -378,7 +387,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '3',
                 'category_name' => '家电维修',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiadianweixiu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
                 'category_introduction' => '油烟机、空调等深度清洁',
                 'category_price' => '100.00',
                 'category_price_unit' => '台',
@@ -390,7 +399,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '4',
                 'category_name' => '家具养护',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiajuyanghu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
                 'category_introduction' => '地板家具深度养护、除螨',
                 'category_price' => '',
                 'category_price_unit' => '',
@@ -402,7 +411,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '5',
                 'category_name' => '生活急救箱',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/shenghuojijiu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/firstAidKit',
                 'category_introduction' => '管道维修疏通、除虫',
                 'category_price' => '',
                 'category_price_unit' => '',
@@ -454,6 +463,8 @@ class ConfigureController extends \restapi\components\Controller
                 'sort' => '4',
             ],
         ];
+        $isBlock="0";
+
 
         $ret = [
             'city_list' => $city_list,
@@ -462,6 +473,8 @@ class ConfigureController extends \restapi\components\Controller
             'home_order_server' => $home_order_server,
             'server_list' => $server_list,
             'footer_link' => $footer_link,
+            'isBlock' => $isBlock,
+            'isEffect' => $isEffect,
         ];
 
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);

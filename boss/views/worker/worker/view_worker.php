@@ -166,7 +166,8 @@ $this->title = $model->worker_name;
                 'editModel'=>$model->workerExtRelation,
                 'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
-                'label'=>'阿姨身高(cm)'
+                'label'=>'阿姨身高(cm)',
+                'value'=>workerExt::getWorkerHeightShow($model->workerExtRelation->worker_height),
             ],
 
             [

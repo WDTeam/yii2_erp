@@ -17,7 +17,7 @@ class wxjspay_class extends WxPayNotify{
         $input->SetBody($param['body']);
         $input->SetAttach($param['subject']);
         $input->SetOut_trade_no($param['out_trade_no']);
-        $input->SetTotal_fee($param['general_pay_money']);
+        $input->SetTotal_fee($param['payment_money']);
         $input->SetTime_start($param['time_start']);
         $input->SetTime_expire($param['time_expire']);
         $input->SetGoods_tag($param['subject']);
@@ -98,7 +98,7 @@ class wxjspay_class extends WxPayNotify{
         $input->SetBody($param['body']);
         $input->SetAttach($param['subject']);
         $input->SetOut_trade_no($param['out_trade_no']);
-        $input->SetTotal_fee($param['general_pay_money']);
+        $input->SetTotal_fee($param['payment_money']);
         $input->SetTime_start($param['time_start']);
         $input->SetTime_expire($param['time_expire']);
         $input->SetGoods_tag($param['subject']);
