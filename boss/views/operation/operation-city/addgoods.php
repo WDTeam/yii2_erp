@@ -3,8 +3,23 @@
     body { font:12px/19px Arial, Helvetica, sans-serif; color:#666;}
     .tab_menu,.tab_box,.tab_text ,.btn_tab_box{float: left;}
     .hid{display:none}
-    label {width: 150px;height:30px; line-height:30px;background-color: #f6a202; margin: 5px 30px; border-radius: 5px;}
-    .boxx {padding:4px;}
+    label {
+        width: 150px;
+        height:30px; 
+        line-height:30px;
+        background-color: #fff; 
+        color: #f6a202;
+        margin: 5px 20px; 
+        border-radius: 5px;
+        border: 1px solid #f6a202;
+    }
+    label:hover{background-color: #f6a202; color: #fff;}
+    .selected {background-color: #f6a202; color: #fff;}
+    .boxx {padding:4px; color: #f6a202; font-weight: bold;}
+    input[type='radio'] {opacity: 0;}
+    input[type='text'] {border-radius: 5px;border: none; margin: 0 5px 0 0; height: 28px; border: 1px solid #f6a202;}
+    input[type='submit'] {border: none; border: 1px solid #f6a202; width: 150px; background-color: #fff; border-radius: 5px; height: 28px; margin: 5px 0 0 10px;color: #f6a202; font-weight: bold;}
+    .over_flow {height: 180px; overflow-y: auto; border: 1px solid #f6a202;}
 </style>
 <?php
 
@@ -65,9 +80,11 @@ $form = ActiveForm::begin([
         <?php
             //实现方式：把所有的数据都先查出来，对应隐藏;目前没有找到更好的实现方法
             //服务类型数据
+        echo "<div class='over_flow'>";
             foreach ($categorylist as $key => $value) {
                 echo '<label for="cate_'. $key .'"><input id="cate_'. $key .'" type="radio" name="'. $key .'" value="'.$key.'"/>'.$value.'</label><br>';
-            }    						  
+            } 
+        echo "</div>";   						  
         ?>
 	</div>
 
@@ -77,15 +94,17 @@ $form = ActiveForm::begin([
             foreach ($goods as $key => $value) {
 
                 echo '<div class="hid ipo">';
+                echo "<div class='over_flow'>";
                 foreach ($value as $k => $v) {
 
                     //隐藏的服务项目名称信息
                     echo '<input type="hidden" name="'. $key . '['. $v['id'] .']' .'[operation_goods_name]" value="'. $v['operation_goods_name'] .'" />';
 
-                    echo '<label for="goods_'. $key . $k .'"><input id="goods_'. $key . $k .'" type="checkbox" name="'. $key . '['. $v['id'] .']' .'[operation_goods_id]" value="'.$v['id'].'"/>'.$v['operation_goods_name'].'</label><br>';
+                    echo '<label for="goods_'. $key . $k .'"><input id="goods_'. $key . $k .'" type="radio" name="'. $key . '['. $v['id'] .']' .'[operation_goods_id]" value="'.$v['id'].'"/>'.$v['operation_goods_name'].'</label><br>';
                 }
+                echo "</div>";
                 echo '</div>';
-            }    						  
+            }
         ?>
 	</div>
 
@@ -118,9 +137,11 @@ $form = ActiveForm::begin([
 
                 foreach ($value as $k => $v) {
                     echo '<div class="hid btn_ipo">';
+                    echo "<div class='over_flow'>";
                     foreach ((array)$shopdistrictinfo as $id => $name) {
-                        echo '<label for="district_'. $key . $k . $id .'">' .$name. '<input id="district_'. $key . $k . $id .'" type="checkbox" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'"></label><br>';
+                        echo '<label for="district_'. $key . $k . $id .'"><input id="district_'. $key . $k . $id .'" type="radio" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'">' .$name. '</label><br>';
                     }
+                    echo '</div>';
                     echo '</div>';
                 }
             }    						  
