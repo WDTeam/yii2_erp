@@ -139,7 +139,7 @@ $form = ActiveForm::begin([
                     echo '<div class="hid btn_ipo">';
                     echo "<div class='over_flow'>";
                     foreach ((array)$shopdistrictinfo as $id => $name) {
-                        echo '<label for="district_'. $key . $k . $id .'"><input id="district_'. $key . $k . $id .'" type="radio" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'">' .$name. '</label><br>';
+                        echo '<label for="district_'. $key . $k . $id .'"><input id="district_'. $key . $k . $id .'" type="checkbox" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'">' .$name. '</label><br>';
                     }
                     echo '</div>';
                     echo '</div>';
