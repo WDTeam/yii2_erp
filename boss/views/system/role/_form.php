@@ -66,12 +66,16 @@ use kartik\icons\Icon;
                     foreach ($group as $key){
                         if(isset($permissions[$key])){
                             $data[$key] = $permissions[$key];
+                            unset($permissions[$key]);
                         }
                     }
                     echo $form->field($model, '_permissions')->checkboxList($data, [
                         'id'=>'item_'.$name,
                     ])->label($name);
                 }
+                echo $form->field($model, '_permissions')->checkboxList($permissions, [
+                    'id'=>'item_orther',
+                ])->label('其它');
 //                 echo $form->field($model, '_permissions')->checkboxList($permissions, ['class'=>'test'])->label('', ['hidden' => 'hidden']);
             ?>
             </div>
