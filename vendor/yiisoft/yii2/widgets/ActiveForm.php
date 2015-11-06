@@ -359,6 +359,7 @@ class ActiveForm extends Widget
      */
     public static function validate($model, $attributes = null)
     {
+
         $result = [];
         if ($attributes instanceof Model) {
             // validating multiple models

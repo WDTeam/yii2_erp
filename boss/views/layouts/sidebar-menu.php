@@ -296,6 +296,21 @@ echo Menu::widget(
                                 'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
+		
+		
+		[
+		'label' => '规则管理',
+		'url' => ['operation/coupon/coupon-rule/'],
+		'icon' => 'fa fa-angle-right',
+		],
+		[
+		'label' => '用户管理',
+		'url' => ['operation/coupon/coupon-userinfo/'],
+		'icon' => 'fa fa-angle-right',
+		],
+		
+		
+		
 
                         ]
                     ],

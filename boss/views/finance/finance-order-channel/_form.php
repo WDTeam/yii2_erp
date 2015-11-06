@@ -47,10 +47,10 @@ $model->finance_order_channel_source=0;
     		
 ]],
 
-     		'finance_order_channel_source'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>FinanceOrderChannelSearch::get_sourcedate(1,2),
+     		/* 'finance_order_channel_source'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>FinanceOrderChannelSearch::get_sourcedate(1,2),
      		'options'=>[
      		
-     		]],
+     		]], */
      		
      		
      		

@@ -38,7 +38,10 @@ $this->title = $model->worker_name;
             'options'=>[
                 'enctype'=>'multipart/form-data'
             ],
+            'enableAjaxValidation' => true,
+            'validationUrl'=>Yii::$app->urlManager->createUrl(['worker/worker/ajax-validate-worker-info','worker_id'=>$model->id]),
         ],
+
         'mode' => Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
         'panel' => [
             'heading' => $this->title,
@@ -57,6 +60,14 @@ $this->title = $model->worker_name;
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
+                    'pluginEvents'=> [
+                        "change" => "function() {
+                            $('#select2-worker-shop_id-container>.select2-selection__clear').mousedown();
+                            $('.select2-selection__choice__remove').each(function(index,obj){
+                                   $('.select2-selection__choice__remove').click()
+                            })
+                         }",
+                    ]
                 ],
                 'value'=>Worker::getOnlineCityName($model->worker_work_city),
             ],
@@ -66,14 +77,18 @@ $this->title = $model->worker_name;
                 'widgetOptions' => [
                     'class'=>\kartik\widgets\Select2::className(),
                     'initValueText' => Worker::getShopName($model->shop_id), // set the initial display text
-                    'options' => ['placeholder' => 'Search for a shop_menager ...'],
+                    'options' => ['placeholder' => '选择门店'],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'minimumInputLength' => 0,
                         'ajax' => [
-                            'url' => \yii\helpers\Url::to(['show-shop']),
+                            'url' => Url::to(['show-shop']),
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                            'data' => new JsExpression('function(params) { return {
+                                    city_id:$("#worker-worker_work_city").val(),
+                                    q:params.term,
+                              };
+                            }')
                         ],
                         'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                         'templateResult' => new JsExpression('function(city) { return city.text; }'),
@@ -133,7 +148,18 @@ $this->title = $model->worker_name;
                     'options' => ['placeholder' => '选择商圈','multiple' => true],
                     'pluginOptions' => [
                         'tags' => true,
-                        'maximumInputLength' => 10
+                        'maximumInputLength' => 10,
+                        'ajax' => [
+                            'url' => Url::to(['show-district']),
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {
+                            city_id: $("#worker-worker_work_city").val(),
+                            name: params.term
+                        }; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(content) { return content.text; }'),
+                        'templateSelection' => new JsExpression('function (content) { return content.text; }'),
                     ],
                 ],
                 'value'=>$model::getWorkerDistrictShow($model->id),

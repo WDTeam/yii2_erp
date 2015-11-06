@@ -35,13 +35,14 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'label' => '阿姨姓名',
             'value' => function ($dataProvider) {
                 if($dataProvider->id) {
-                    return Html::a($dataProvider->worker->worker_name, Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->worker->id]), [
+                    return Html::a('<span class="btn btn-primary">'.$dataProvider->worker->worker_name.'</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->worker->id]), [
                         'title' => '查看',
-                        'style' => 'margin-right:5%',
-                        'data-pjax'=>0,
-                        'target'=>'_blank'
+                        'style' => 'margin-right:5%'
                     ]);
                 }
+//                if($dataProvider->id){
+//                    return '<a href="" pjax-data=0'>$dataProvider->worker->worker_name.'</a>';
+//                }
             },
         ],
         [
@@ -191,7 +192,7 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                         'title' => '查看',
                         'style' => 'margin-right:5%',
                         'data-pjax'=>0,
-                        'target'=>'_blank'
+                        'target' => '_blank',
                     ]);
                 }
             }
@@ -322,7 +323,7 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
 
             'buttons' => [
                 'order' => function ($url, $model) {
-                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearchIndex[order_worker_phone]='.$model->worker_phone]), [
+                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearch[order_worker_phone]='.$model->worker_phone, 'id' => $model->id]), [
                         'title' =>'订单',
                         'style' => 'margin-right:5%',
                         'data-pjax'=>'0',

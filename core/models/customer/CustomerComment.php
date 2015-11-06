@@ -18,7 +18,7 @@ use Yii;
 use core\models\order\OrderComplaint;
 use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
-
+use core\models\order\OrderComplaint;
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -201,7 +201,8 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                     $data['created_at'] = time();
                     $data['is_softdel'] = 1;
                     //提交给投诉接口
-                    OrderComplaint::appModel($data);
+                    $OrderComplaintinfo=new OrderComplaint;
+                    $OrderComplaintinfo->appModel($data);
                 }
                 $transaction->commit();
                 return true; 

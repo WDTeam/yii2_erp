@@ -4,7 +4,7 @@ namespace boss\models\order;
 
 use Yii;
 use yii\caching\ArrayCache;
-
+use boss\models\order\OrderComplaintHandle;
 
 /**
  * This is the model class for table "ejj_order_complaint".
@@ -94,5 +94,16 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     public function level($num){
     	$arr = self::ComplaintLevel();
     	return @$arr[$num];
+    }
+    /**
+     * 根据投诉Id返回处理投诉的具体内容
+     * @param integer $orderComplaintId 
+     * @return string $result 返回处理的内容
+     */
+    public function getOrderComplaintHandleDetail($orderComplaintId){
+    	$ochdModel = new OrderComplaintHandle();
+    	$ocharr = $ochdModel->getOrder_Complaint_Handle($orderComplaintId);
+    	$result = $ochdModel->complaintDetail($ocharr);
+    	return $result;
     }
 }

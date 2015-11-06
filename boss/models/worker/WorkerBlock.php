@@ -18,6 +18,14 @@ use Yii;
  */
 class WorkerBlock extends \core\models\worker\WorkerBlock
 {
+
+    public function rules(){
+        $rules = [
+            ['daterange','required']
+        ];
+        return array_merge(parent::rules(),$rules);
+    }
+
     public function getDateRange(){
         if(empty($this->worker_block_start_time) || empty($this->worker_block_finish_time)){
             $dateRange = '';

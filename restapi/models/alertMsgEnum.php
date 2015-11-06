@@ -400,6 +400,12 @@ class alertMsgEnum
      //提交意见反馈不能为空
     const UserFeedbackContent = '提交意见反馈不能为空';
     
+    //个人中心获取用户的账户余额、积分、优惠券数
+    //获取个人中心信息失败
+    const getMoneyScoreCouponFail = '获取个人中心信息失败';
+    //获取个人中心信息成功
+    const getMoneyScoreCouponSuccess = '获取个人中心信息成功';
+    
     
 
 }

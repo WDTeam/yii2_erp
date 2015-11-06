@@ -48,13 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
     		'items'=>['1' => '确定', '2' => '取消'],
     		],
     		
-    		[
+    		/* [
     		'format' => 'raw',
     		'label' => '下单显示',
     		'attribute'=>'finance_order_channel_source',
     		'type'=> DetailView::INPUT_RADIO_LIST,
     		'items'=>FinanceOrderChannelSearch::get_sourcedate(1,2),
-    		],
+    		], */
     		
     		[
     		'format' => 'raw',

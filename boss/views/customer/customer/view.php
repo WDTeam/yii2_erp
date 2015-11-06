@@ -257,7 +257,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'订单总数',
             'format'=>'raw',
-            'value'=>Html::a($order_count, ['order/index', 'OrderSearch[customer_id]'=>$model->id]),
+            'value'=>Html::a($order_count, ['order/order/index', 'OrderSearch[customer_id]'=>$model->id]),
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],

@@ -47,15 +47,15 @@ use boss\models\finance\FinanceOrderChannelSearch;
     		},
     		'width' => "100px",
     		],
-    		[
+    		
+    		/* [
     		'format' => 'raw',
     		'label' => '来源',
     		'value' => function ($dataProvider) {
     			return FinanceOrderChannelSearch::get_sourcedate($dataProvider->finance_order_channel_source,1);
     		},
     		'width' => "100px",
-    		],
-    		
+    		], */
     		[
     		'format' => 'raw',
     		'label' => '状态',

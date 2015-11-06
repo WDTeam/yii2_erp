@@ -37,6 +37,13 @@ use yii\web\JsExpression;
             ],
             'pluginOptions' => [
                 'allowClear' => true
+            ],
+            'pluginEvents'=> [
+                "change" => "function() {
+                    $('#select2-shopsearch-operation_shop_district_id-container>.select2-selection__clear').mousedown();
+                    $('#select2-shopsearch-shop_manager_id-container>.select2-selection__clear').mousedown();
+
+                }",
             ]
         ]); ?>
         </div>
