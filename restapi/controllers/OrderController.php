@@ -1241,6 +1241,7 @@ class OrderController extends \restapi\components\Controller
      *           "order_booked_worker_id": "服务阿姨ID",
      *           "order_booked_worker_name": "服务阿姨姓名",
      *           "order_status_customer":"订单当前状态",
+     *           "order_service_type_name":"订单服务类别",
      *           "order_code": "订单号",
      *           "order_money": "订单金额",
      *           "order_channel_name": "下单渠道",
@@ -1306,6 +1307,7 @@ class OrderController extends \restapi\components\Controller
             'order_booked_worker_name' =>$workerName,
             'order_status_customer' =>$orderInfo['order_status_customer'],
             //订单信息
+            'order_service_type_name'=>$orderInfo['order_service_type_name'],
             'order_code'=>$orderInfo['order_code'],
             'order_money'=>$orderInfo['order_money'],
             'order_channel_name'=>$orderInfo['order_channel_name'],
