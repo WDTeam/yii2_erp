@@ -84,7 +84,7 @@ use core\models\customer\Customer;
     </div>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'customer_global_search')->label('客户手机'); ?>
+        <?php echo $form->field($model, 'customer_global_search')->label('客户手机, '); ?>
     </div>
 
     <?php //echo $form->field($model, 'id') ?>
