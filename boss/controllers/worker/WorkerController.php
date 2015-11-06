@@ -800,11 +800,11 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerDetailInfo(19077));die;
-        echo '星期1 8:00 10:00';
+        //var_dump(Worker::getWorkerDetailInfo(19077));die;
+        //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
-        echo '<br>';
-        //var_dump(Worker::getWorkerTimeLine(1,2));
+        //echo '<br>';
+        var_dump(Worker::getWorkerTimeLine(1,2));die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
