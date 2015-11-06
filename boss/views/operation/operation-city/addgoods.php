@@ -13,13 +13,15 @@
         border-radius: 5px;
         border: 1px solid #f6a202;
     }
-    label:hover{background-color: #f6a202; color: #fff;}
+    input[type='submit']:hover,label:hover{background-color: #f6a202; color: #fff;}
     .selected {background-color: #f6a202; color: #fff;}
     .boxx {padding:4px; color: #f6a202; font-weight: bold;}
     input[type='radio'] {opacity: 0;}
+    input[type='checkbox'] {opacity: 0;}
     input[type='text'] {border-radius: 5px;border: none; margin: 0 5px 0 0; height: 28px; border: 1px solid #f6a202;}
     input[type='submit'] {border: none; border: 1px solid #f6a202; width: 150px; background-color: #fff; border-radius: 5px; height: 28px; margin: 5px 0 0 10px;color: #f6a202; font-weight: bold;}
-    .over_flow {height: 180px; overflow-y: auto; border: 1px solid #f6a202;}
+    .over_flow {height: 280px; overflow-y: auto; overflow-x:hidden;}
+    .clear_both {clear:both;}
 </style>
 <?php
 
@@ -139,7 +141,7 @@ $form = ActiveForm::begin([
                     echo '<div class="hid btn_ipo">';
                     echo "<div class='over_flow'>";
                     foreach ((array)$shopdistrictinfo as $id => $name) {
-                        echo '<label for="district_'. $key . $k . $id .'"><input id="district_'. $key . $k . $id .'" type="radio" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'">' .$name. '</label><br>';
+                        echo '<label for="district_'. $key . $k . $id .'"><input id="district_'. $key . $k . $id .'" type="checkbox" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'">' .$name. '</label><br>';
                     }
                     echo '</div>';
                     echo '</div>';

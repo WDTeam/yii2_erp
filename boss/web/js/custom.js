@@ -86,6 +86,7 @@ $(document).ready(function(){
     //----------------------------------------------------
     var $div_li =$("div.tab_menu label");
     var $_label =$("div.ipo label");
+    var $btn_tabradio =$("div.btn_ipo .over_flow label");
     $div_li.click(function(){
         $(this).addClass("selected").siblings().removeClass("selected");
         var index =  $div_li.index(this);
@@ -99,6 +100,12 @@ $(document).ready(function(){
         var btn_tab_index =  $_label.index(this);
         $("div.tab_text > div").eq(tab_index).show().siblings().hide();
         $("div.btn_tab_box > div").eq(btn_tab_index).show().siblings().hide();
+    });
+
+    $btn_tabradio.each(function(){
+    	$(this).click(function(){
+    		$(this).addClass("selected");
+    	})
     });
 
 });
