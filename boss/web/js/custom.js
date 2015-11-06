@@ -86,47 +86,21 @@ $(document).ready(function(){
     //----------------------------------------------------
     var $div_li =$("div.tab_menu label");
     var $_label =$("div.ipo label");
-    var $btn_tab = $("div.ipo label");
     $div_li.click(function(){
-        //alert(10);
-        // $(this).addClass("selected").siblings().removeClass("selected");
+        $(this).addClass("selected").siblings().removeClass("selected");
         var index =  $div_li.index(this);
-        console.log(index);
         $("div.tab_box > div").eq(index).show().siblings().hide();
-        //alert(10);
-    }).hover(function(){
-        $(this).addClass("hover");
-    },function(){
-        $(this).removeClass("hover");
     });
 
 
     $_label.click(function(){
-        // $(this).addClass("selected")
-        //     .siblings().removeClass("selected");
+        $(this).addClass("selected");
         var tab_index =  $_label.index(this);
-            $("div.tab_text > div")
-            .eq(tab_index).show()
-            .siblings().hide();
-    }).hover(function(){
-        $(this).addClass("hover");
-    },function(){
-        $(this).removeClass("hover");
+        var btn_tab_index =  $_label.index(this);
+        $("div.tab_text > div").eq(tab_index).show().siblings().hide();
+        $("div.btn_tab_box > div").eq(btn_tab_index).show().siblings().hide();
     });
 
-    $btn_tab.click(function(){
-        $(this).addClass("selected")
-            .siblings().removeClass("selected");
-        var btn_tab_index =  $_label.index(this);
-        $("div.btn_tab_box > div")
-            .eq(btn_tab_index).show()
-            .siblings().hide();
-    }).hover(function(){
-        $(this).addClass("hover");
-    },function(){
-        $(this).removeClass("hover");
-    })
-    //-------------------------------------------------------------
 });
 
 function ApplyToRadio(self){
