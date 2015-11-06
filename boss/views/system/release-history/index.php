@@ -1,0 +1,19 @@
+<?php
+
+use yii\helpers\BaseMarkdown;
+
+$this->title = Yii::t('app', '发布记录');
+?>
+<div class="site-index">
+
+    <div class="body-content">
+        <?php 
+            $dir =dirname(__FILE__);
+            $handle = fopen($dir.'/releasehistory.txt', 'r');
+            while(!feof($handle)){
+                echo BaseMarkdown::process(fgets($handle,1024));
+            }
+        ?>
+    </div>
+
+</div>
