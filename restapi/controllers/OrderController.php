@@ -1197,10 +1197,6 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [order_cancel_reason] 取消原因
      * @apiParam {String} order_id 订单号
      *
-     * @apiParam {String} recursive_order_id 周期订单
-     * @apiParam {String} order_id 订单id
-     *
-     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -1270,6 +1266,9 @@ class OrderController extends \restapi\components\Controller
                     $reason = '其他原因#' . $reason;
                 }
                 try {
+                    
+                    print_r($reason);
+                    exit;
                     $result = Order::cancelByOrderId($orderId,Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE,$reason);
 
                     if ($result) {
