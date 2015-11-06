@@ -29,15 +29,22 @@ class m150918_125452_create_table_finance_order_channel extends Migration
 
         $this->createIndex('pay_channel_id','{{%finance_order_channel}}','pay_channel_id');
         $this->execute(
-			"INSERT INTO {{%finance_order_channel}} VALUES ('1', '11', 'APP微信客户端', '1', '1', '2', '0','1443339882', '1');
-			INSERT INTO {{%finance_order_channel}} VALUES ('2', '10', 'H5手机微信', '1', '1', '1', '0','1443339882', '0');
+
+
+
+			"
 			INSERT INTO {{%finance_order_channel}} VALUES ('3', '8', 'APP百度钱包客户端', '1', '1', '2', '0','1443339882', '0');
-			INSERT INTO {{%finance_order_channel}} VALUES ('4', '12', 'APP银联客户端', '1', '1', '2', '0','1443339882', '0');
-			INSERT INTO {{%finance_order_channel}} VALUES ('5', '6', 'APP支付宝客户端', '1', '1', '1', '0','1443339882', '0');
-			INSERT INTO {{%finance_order_channel}} VALUES ('6', '6', 'WEB官网', '1', '1', '1', '0','1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('7', '8', 'H5百度直达号e家洁', '1', '1', '2','0','1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('8', '1', '美团上门', '0.01', '1', '1', '0','1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('9', '2', '点评到家', '1', '1', '1', '0','1443339882', '0');
+
+
+
+            INSERT INTO {{%finance_order_channel}} VALUES ('1', '11', 'APP微信客户端', '1', '1', '2', '0','1443339882', '1');
+			INSERT INTO {{%finance_order_channel}} VALUES ('2', '10', 'H5手机微信', '1', '1', '1', '0','1443339882', '0');
+			INSERT INTO {{%finance_order_channel}} VALUES ('4', '12', 'APP银联客户端', '1', '1', '2', '0','1443339882', '0');
+			INSERT INTO {{%finance_order_channel}} VALUES ('5', '6', 'APP支付宝客户端', '1', '1', '1', '0','1443339882', '0');
+			INSERT INTO {{%finance_order_channel}} VALUES ('6', '6', 'WEB官网', '1', '1', '1', '0','1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('10', '3', '京东到家', '1', '1', '1', '0','1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('11', '4', '糯米网团购', '1', '1', '1', '0','1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('12', '2', '大众点评团购', '1', '1', '1', '0','1443339882', '0');

@@ -25,13 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title">客户信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11])->label('客户手机'); ?>
+                <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11,"autocomplete"=>"off","aria-describedby"=>"sizing-addon1"])->label('客户手机'); ?>
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
                 <div class="form-group field-order-address_id required">
                     <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
                     <div class="col-sm-6">
                         <input type="hidden" value="" name="Order[address_id]">
                         <div id="order-address_id"></div>
+                        <div id="order_address_progress" class="progress" style="display: none;">
+                            <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div>
+                        </div>
                         <?= Html::button('新增地址', ['class' =>  'btn btn-sm btn-warning','id'=>'add_address_btn']); ?>
                         <div class="help-block help-block-error "></div>
                         <div id="address_form" style="display: none;">
@@ -59,13 +62,26 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                 </div>
-                <?= $form->field($model, 'order_service_item_id')->inline()->radioList([])->label('选择服务项') ?>
+                <div class="form-group field-order-order_service_item_id required">
+                    <label for="order-order_service_item_id" class="control-label col-sm-3">选择服务项</label>
+                    <div class="col-sm-6">
+                        <div id="order_service_item_progress" class="progress" style="display: none;">
+                            <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div>
+                        </div>
+                        <input type="hidden" value="" name="Order[order_service_item_id]">
+                        <div id="order-order_service_item_id"></div>
+                        <div class="help-block help-block-error "></div>
+                    </div>
+                </div>
+
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">服务信息</h3>
             </div>
             <div class="panel-body">
+                <div class="hide">
                 <?= $form->field($model, 'order_booked_worker_id')->inline()->radioList(['0'=>'不指定']); ?>
+                </div>
                 <?= $form->field($model, 'orderBookedDate')->label('服务日期')->widget(
                     DatePicker::className(), [
                     'inline' => true,
@@ -160,6 +176,9 @@ $this->registerCss('
     .radio{
         overflow:hidden;
         padding-bottom:7px;
+    }
+    #order-order_customer_phone{
+        font-size:20px;
     }
 ');
 ?>

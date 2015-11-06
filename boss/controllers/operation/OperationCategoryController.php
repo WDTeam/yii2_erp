@@ -9,6 +9,8 @@ use boss\models\operation\OperationCategorySearch;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+use crazyfd\qiniu\Qiniu;
 
 /**
  * OperationCategoryController implements the CRUD actions for OperationCategory model.
@@ -69,6 +71,9 @@ class OperationCategoryController extends BaseAuthController
         $model = new OperationCategory;
 
         if ($model->load(Yii::$app->request->post())) {
+
+            $model->uploadImgToQiniu('operation_category_icon');
+
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();

@@ -44,20 +44,28 @@ use yii\base\Widget;
         <div class="col-md-2">
 
             <?php
-                $name = $model->getOrderChannelName($model->payment_source);
-                echo $form->field($model, 'payment_source')->widget(Select2::classname(),[
+                if( !empty($model->payment_channel_id) )
+                {
+                    $name = $model->getPayChannelName($model->payment_channel_id);
+                }
+                else
+                {
+                    $name = '请选择支付渠道';
+                }
+                echo $form->field($model, 'payment_channel_id')->widget(Select2::classname(),[
                 'initValueText' => $name, // set the initial display text
-                'attribute'=>'payment_source',
+                'attribute'=>'payment_channel_name',
                 'model'=>$model,
-                'options' => ['placeholder' => '请选择数据来源 ...'],
+                'options' => ['placeholder' => '请选择支付方式 ...'],
+                'data' => $model::getPayChannelList(),
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 0,
-                    'ajax' => [
-                        'url' => Url::to(['order-channel']),
-                        'dataType' => 'json',
+                    //'minimumInputLength' => 0,
+                    //'ajax' => [
+                    //    'url' => Url::to(['pay-channel']),
+                    //    'dataType' => 'json',
                         //'data' => new JsExpression('function(params) { return console.log(params);{q:params.term}; }')
-                    ],
+                    //],
                     //'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                     //'templateResult' => new JsExpression('function(model) { return model.finance_order_channel_name; }'),
                     //'templateSelection' => new JsExpression('function (model) { return model.finance_order_channel_name; }')
@@ -82,7 +90,7 @@ use yii\base\Widget;
 
         <?php // echo $form->field($model, 'payment_source') ?>
 
-        <?php // echo $form->field($model, 'payment_source_name') ?>
+        <?php // echo $form->field($model, 'payment_channel_name') ?>
 
         <?php // echo $form->field($model, 'payment_mode') ?>
 
@@ -115,7 +123,7 @@ use yii\base\Widget;
         <?php // echo $form->field($model, 'updated_at') ?>
 
         <div class="col-md-2">
-            <label class="control-label" for="Paymentsearch-payment_source_name"></label>
+            <label class="control-label" for="Paymentsearch-payment_channel_name"></label>
                 <div class="form-group">
                     <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
                     <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>

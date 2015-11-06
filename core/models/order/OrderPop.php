@@ -17,17 +17,32 @@ class OrderPop extends Model
 
     const VERSION = 1.0;
 
+    /**
+     * 取消订单同步到POP
+     * @param $order
+     * @return bool
+     */
     public static function cancelToPop($order)
     {
         return self::_pushStatus($order,self::POP_STATUS_CANCEL);
     }
 
-    public static function assignToPop($order)
+    /**
+     * 指派完成同步到POP
+     * @param $order
+     * @return bool
+     */
+    public static function assignDoneToPop($order)
     {
         return self::_pushStatus($order,self::POP_STATUS_ASSIGN);
     }
 
-    public static function doneToPop($order)
+    /**
+     * 订单完成同步到POP
+     * @param $order
+     * @return bool
+     */
+    public static function serviceDoneToPop($order)
     {
         return self::_pushStatus($order,self::POP_STATUS_DONE);
     }

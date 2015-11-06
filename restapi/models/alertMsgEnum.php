@@ -317,16 +317,18 @@ class alertMsgEnum
     const addAddressSuccess = '常用地址添加成功';
     //常用地址添加失败
     const addAddressFail = '常用地址添加失败';
+    
+    
     //常用地址列表
     //获取地址列表成功
-    const getAddressesSuccess = '常用地址添加失败';
+    const getAddressesSuccess = '获取地址列表成功';
     //删除用户常用地址
     //地址信息获取失败,请添加地址id
     const deleteAddressNoAddressId = '地址信息获取失败,请添加地址id';
     //删除成功
-    const deleteAddressSuccess = '删除成功';
+    const deleteAddressSuccess = '地址删除成功';
     //删除失败
-    const deleteAddressFail = '删除失败';
+    const deleteAddressFail = '地址删除失败';
     //设置默认地址
     //地址信息获取失败
     const setDefaultAddressNoAddressId = '地址信息获取失败';
@@ -360,6 +362,9 @@ class alertMsgEnum
     //用户余额和消费记录
     //查询成功
     const getUserMoneySuccess = '查询成功';
+     //查询失败
+    const getUserMoneyError = '查询失败';
+    
     //获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
     //用户积分明细列表
     const getUserScoreSuccess = '用户积分明细列表';

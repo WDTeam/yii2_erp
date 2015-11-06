@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
+use kartik\widgets\FileInput;
 
 /**
  * @var yii\web\View $this
@@ -14,7 +15,7 @@ use kartik\datecontrol\DateControl;
 
 <div class="operation-category-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -28,11 +29,22 @@ use kartik\datecontrol\DateControl;
             'form' => $form,
             'columns' => 1,
             'attributes' => [
-                'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务品类名称...', 'maxlength'=>60]],
+                'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务类型名称...', 'maxlength'=>30]],
+                'operation_category_price_description'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务类型价格备注...', 'maxlength'=>30]],
             ]
 
 
             ]); ?>
+            <?= $form->field($model, 'operation_category_icon')->widget(FileInput::classname(), [
+                'options' => ['multiple' => true],
+                'pluginOptions' => [
+                    'previewFileType' => 'any',
+                    'showPreview' => true,
+                    'showCaption' => false,
+                    'showRemove' => true,
+                    'showUpload' => false,
+                ]
+            ])?>
         </div>
         <div class="panel-footer">
             <div class="form-group">

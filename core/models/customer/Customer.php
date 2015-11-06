@@ -267,18 +267,19 @@ class Customer extends \dbbase\models\customer\Customer
         }
         $begin_balance = $customerExtBalance->customer_balance;
         $diff = $end_balance - $begin_balance;
+        $operate_balance = abs($diff);
+        $operate_type = 0;
+        $operate_type_name = '';
         if($diff > 0){
-            $operate_balance = abs($diff);
             $operate_type = 1;
-            $operate_type_name = '增加';
+            $operate_type_name = '充值';
         }else if($diff == 0){
-            $operate_balance = abs($diff);
-            $operate_type = 0;
-            $operate_type_name = '没变';
+//            $operate_type = 0;
+//            $operate_type_name = '没变';
+            return ['respone'=>'error', 'errcode'=>3, 'errmsg'=>'余额不变，错误操作余额'];
         }else{
-            $operate_balance = abs($diff);
             $operate_type = -1;
-            $operate_type_name = '减少';
+            $operate_type_name = '扣款';
         }
         $transaction = \Yii::$app->db->beginTransaction();
         try{
@@ -298,6 +299,9 @@ class Customer extends \dbbase\models\customer\Customer
             $customerExtBalanceLog->is_del = 0;
             $customerExtBalanceLog->save();
             $transaction->commit();
+            $formated_date = date('Y年m月d日', time());
+            $msg = "【余额变动】您于".$formated_date.$operate_type_name.$operate_balance."，当前余额".$end_balance."元。下载APP（http://t.cn/8schPc6）可以随时查看账户消费记录，如有疑问请联系客服：4006767636。";
+            $string = Yii::$app->sms->send($customer->customer_phone, $msg, 1);
             return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
         }catch(\Exception $e){
             $transaction->rollback();
