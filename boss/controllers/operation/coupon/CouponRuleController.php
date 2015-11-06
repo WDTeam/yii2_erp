@@ -5,14 +5,14 @@ namespace boss\controllers\operation\coupon;
 use Yii;
 use dbbase\models\operation\coupon\CouponRule;
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 /**
  * CouponRuleController implements the CRUD actions for CouponRule model.
  */
-class CouponRuleController extends BaseAuthController
+class CouponRuleController extends Controller
 {
     public function behaviors()
     {
