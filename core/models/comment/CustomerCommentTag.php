@@ -14,7 +14,7 @@ class CustomerCommentTag extends \dbbase\models\customer\CustomerCommentTag
      */
     public static function getCommentTag($type)
     {
-        return self::find()->select('id,customer_tag_name,customer_comment_level,is_online,is_del')->where(["customer_comment_level" => $type])->asArray()->all();
+        return self::find()->select('id,customer_tag_name,customer_comment_level,is_online')->where(["customer_comment_level" => $type])->asArray()->all();
     }
     
     
