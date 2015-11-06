@@ -27,12 +27,12 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} operation_province_name 省
-     * @apiParam {String} operation_city_name 市名
-     * @apiParam {String} operation_area_name 地区名（朝阳区）
-     * @apiParam {String} customer_address_detail 详细地址
-     * @apiParam {String} customer_address_nickname 被服务者昵称
-     * @apiParam {String} customer_address_phone 被服务者手机
+     * @apiParam {String} operation_province_name 省 如:北京
+     * @apiParam {String} operation_city_name 市名  如:北京市
+     * @apiParam {String} operation_area_name 地区名  如:朝阳区
+     * @apiParam {String} customer_address_detail 详细地址  如:光华路SOHO2单元708
+     * @apiParam {String} customer_address_nickname 被服务者昵称 如:小强
+     * @apiParam {String} customer_address_phone 被服务者手机 如:138 3838 3888
      *
      * @apiSuccess {Object[]} address 新增地址.
      *
@@ -209,7 +209,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {int}    address_id 地址id
+     * @apiParam {int}    address_id 地址id 
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -262,14 +262,14 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {int}    address_id 地址id
+     * @apiParam {int}    address_id 地址id                         如：1
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} [operation_province_name] 省
-     * @apiParam {String} [operation_city_name] 市名
-     * @apiParam {String} [operation_area_name] 地区名（朝阳区）
-     * @apiParam {String} [customer_address_detail] 详细地址
-     * @apiParam {String} [customer_address_nickname] 被服务者昵称
-     * @apiParam {String} [customer_address_phone] 被服务者手机
+     * @apiParam {String} [operation_province_name] 省              如：北京
+     * @apiParam {String} [operation_city_name] 市名                如：北京市
+     * @apiParam {String} [operation_area_name] 地区名（朝阳区）     如：朝阳区
+     * @apiParam {String} [customer_address_detail] 详细地址         如：光华路SOHO 2单元 708
+     * @apiParam {String} [customer_address_nickname] 被服务者昵称   如：小强
+     * @apiParam {String} [customer_address_phone] 被服务者手机      如：136 3838 3888
      *
      *
      * @apiSuccessExample Success-Response:
@@ -335,14 +335,14 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {int}    address_id 地址id
-     * @apiParam {String} [operation_province_name] 省
-     * @apiParam {String} [operation_city_name] 市名
-     * @apiParam {String} [operation_area_name] 地区名（朝阳区）
-     * @apiParam {String} [customer_address_detail] 详细地址信息
-     * @apiParam {String} [customer_address_nickname] 被服务者昵称
-     * @apiParam {String} [customer_address_phone] 被服务者手机
+     * @apiParam {int}    address_id 地址id                         如：1
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)       如：android_4.2.2
+     * @apiParam {String} [operation_province_name] 省              如：北京
+     * @apiParam {String} [operation_city_name] 市名                如：北京市
+     * @apiParam {String} [operation_area_name] 地区名（朝阳区）     如：朝阳区
+     * @apiParam {String} [customer_address_detail] 详细地址         如：光华路SOHO 2单元 708
+     * @apiParam {String} [customer_address_nickname] 被服务者昵称   如：小强
+     * @apiParam {String} [customer_address_phone] 被服务者手机      如：136 3838 3888
      *
      * @apiSuccess {Object[]} address 新增地址.
      *
@@ -1587,7 +1587,7 @@ class UserController extends \restapi\components\Controller
      */
     public function actionGetUserFeedback()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->post(); 
 
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
@@ -1605,8 +1605,8 @@ class UserController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
-                if ($feedback) {
+                $feedback = Customer::addFeedback($customer->id, $param['feedback_content']); 
+               if ($feedback["response"]=='success') {
                     return $this->send('{}', "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
                 } else {
                     return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
