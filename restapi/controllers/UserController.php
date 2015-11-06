@@ -1531,7 +1531,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
         }
         if ($score === false) {
-            return $this->send(null, "没有此阿姨", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
+            return $this->send(null, "没有此阿姨", 0, 300, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
         $result["score"] = $score;
         /**
@@ -1548,7 +1548,7 @@ class UserController extends \restapi\components\Controller
         if (!empty($result)) {
             return $this->send($result, "获取个人中心信息成功", 1, 200, null, alertMsgEnum::getMoneyScoreCouponSuccess);
         } else {
-            return $this->send(null, "获取个人中心信息失败", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
+            return $this->send(null, "获取个人中心信息失败", 0, 300, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
     }
 

@@ -1583,8 +1583,8 @@ class OrderController extends \restapi\components\Controller
      *       "address": "服务地址",
      *       "need": "备注说明",
      *       "money": "订单价格",
-     *       "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式",
-     *       "times" => '2:00:00',
+     *       "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式", # 11月六号 涛涛说不要这个时间标示 18:22
+     *       "times" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22
      *                    "order_time":
      *                 [
      *                    '开始时间 - 结束时间',
@@ -1635,13 +1635,13 @@ class OrderController extends \restapi\components\Controller
                 try {
                     #指定阿姨订单列表 待抢单订单列表
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page']);
-                    foreach ($workerCount as $key => $val) {
-                        if (@$val['is_booker_worker']) {
-                            $workerCount[$key]['times'] = '2:00:00';
-                        } else {
-                            $workerCount[$key]['times'] = '';
-                        }
-                    }
+//                    foreach ($workerCount as $key => $val) {
+//                        if (@$val['is_booker_worker']) {
+//                            $workerCount[$key]['times'] = '2:00:00';
+//                        } else {
+//                            $workerCount[$key]['times'] = '';
+//                        }
+//                    }
                     #指定阿姨订单数
                     $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     #待抢单订单数
