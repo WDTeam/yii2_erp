@@ -86,7 +86,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": 0,
+     *       "code": 401,
      *        "msg": "用户无效,请先登录",
      *        "ret": {},
      *        "alertMsg": "用户认证已经过期,请重新登录"
@@ -102,7 +102,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
 
@@ -241,7 +241,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -255,7 +255,7 @@ class OrderController extends \restapi\components\Controller
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
         if (is_null($args['order_service_item_id'])) {
@@ -409,7 +409,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -421,7 +421,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -509,7 +509,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -523,7 +523,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -615,7 +615,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -628,7 +628,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -746,7 +746,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -759,7 +759,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -835,7 +835,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -849,7 +849,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -903,7 +903,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -917,7 +917,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $args["owr.worker_id"] = $worker->id;
@@ -1000,7 +1000,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1014,7 +1014,7 @@ class OrderController extends \restapi\components\Controller
 
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1096,7 +1096,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1109,7 +1109,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $beginTime = strtotime('-3 month');
         $endTime = time();
@@ -1168,7 +1168,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1183,7 +1183,7 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -1268,7 +1268,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1279,7 +1279,7 @@ class OrderController extends \restapi\components\Controller
     {
         $args = Yii::$app->request->get() or $args = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($args['access_token']) || !$args['access_token'] || !CustomerAccessToken::getCustomer($args['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         //判断订单号
         if (!isset($args['order_id']) || !is_numeric($args['order_id'])) {
@@ -1354,7 +1354,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1380,7 +1380,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (!CustomerAccessToken::checkAccessToken($token)) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($token);
@@ -1485,7 +1485,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1498,7 +1498,7 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1554,7 +1554,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1633,7 +1633,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1649,7 +1649,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         #判断传递的参数
@@ -1718,7 +1718,7 @@ class OrderController extends \restapi\components\Controller
                 return $this->send(null, "leveltype指定参数错误,不能大于2", 0, 200, null, alertMsgEnum::levelType);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1759,7 +1759,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *    "code": 0,
+     *    "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1775,7 +1775,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         #获取用户ip
@@ -1863,7 +1863,7 @@ class OrderController extends \restapi\components\Controller
                 return $this->send(null, "boss系统错误,添加周期订单失败" . $e, 1024, 200, NULL, alertMsgEnum::orderCreateRecursiveOrderFaile);
             }
         } else {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1891,7 +1891,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *     "code": 0,
+     *     "code": 401,
      *     "msg": "用户无效,请先登录",
      *     "ret": {},
      *     "alertMsg": "用户认证已经过期,请重新登录"
@@ -1907,7 +1907,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
@@ -1925,7 +1925,7 @@ class OrderController extends \restapi\components\Controller
                 return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024, 200, NULL, alertMsgEnum::orderSetWorkerOrderFaile);
             }
         } else {
-            return $this->send(null, "用户无效,请先登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -2007,7 +2007,7 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         try {
             $orderSearch = new OrderSearch();
@@ -2099,7 +2099,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         try {
             $order = OrderSearch::getOne($param['id'])->getAttributes();

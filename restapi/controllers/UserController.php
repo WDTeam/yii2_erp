@@ -73,7 +73,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "常用地址添加失败",
      *       "ret": {},
      *       "alertMsg":"常用地址添加失败",
@@ -162,7 +162,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录",
      *       "ret": {},
      *       "alertMsg":"获取常用地址列表失败",
@@ -225,10 +225,10 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录"，
      *        "ret": {},
-     *       "alertMeg": "删除失败"
+     *       "alertMeg": "用户认证已经过期,请重新登录"
      *     }
      */
     public function actionDeleteAddress()
@@ -286,7 +286,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "地址信息获取失败",
      *       "ret": {},
      *       "alertMeg": "地址信息获取失败"
@@ -360,20 +360,20 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "ret": {},
-     *       "msg": "用户认证已经过期,请重新登录。",
-     *       "alertMeg": "用户认证已经过期,请重新登录。",
+     *       "msg": "用户认证已经过期,请重新登录",
+     *       "alertMeg": "用户认证已经过期,请重新登录",
      *     }
      * @apiError AddressNotFound 地址信息获取失败.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "ret": {},
-     *       "alertMeg": "用户认证已经过期,请重新登录。",
-     *       "msg": "地址信息获取失败"
+     *       "alertMeg": "用户认证已经过期,请重新登录",
+     *       "msg": "用户认证已经过期,请重新登录"
      *
      *     }
      */
@@ -458,7 +458,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录。"
      *
      *     }
@@ -467,7 +467,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "地址信息获取失败"
      *
      *     }
@@ -522,7 +522,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -532,7 +532,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "不存在要删除的阿姨"
      *
      *     }
@@ -611,7 +611,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -668,7 +668,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -768,7 +768,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，",
      *       "alertMsg": "用户认证已经过期,请重新登录，",
      *       "ret": {}
@@ -858,7 +858,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录",
      *       "alertMsg": "用户认证已经过期,请重新登录",
      *       "ret": {},
@@ -942,7 +942,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，",
      *       "alertMsg": "用户认证已经过期,请重新登录，",
      *       "ret": {}
@@ -1114,7 +1114,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，",
      *       "alertMsg": "用户认证已经过期,请重新登录，"
      *       "ret": {}
@@ -1235,7 +1235,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，",
      *       "alertMsg": "用户认证已经过期,请重新登录，",
      *       "ret":{}
@@ -1368,7 +1368,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，",
      *       "alertMsg": "用户认证已经过期,请重新登录，",
      *       "ret": {}
@@ -1448,7 +1448,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，",
      *       "alertMsg": "用户认证已经过期,请重新登录，",
      *       "ret": {}
@@ -1525,7 +1525,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "微信id或签名不允许为空",
      *       "ret":{},
      *       "alertMsg": "获取用户信息失败"
@@ -1578,7 +1578,7 @@ class UserController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "0",
+     *       "code": 401,
      *       "msg": "用户反馈信息提交失败",
      *       "ret":{},
      *       "alertMsg": "用户反馈信息提交失败"
@@ -1637,7 +1637,7 @@ class UserController extends \restapi\components\Controller
      *   "ret": 
      *       {
      *           "money": "客户余额",
-     *           "score": "用户积分价格",
+     *           "score": "用户积分数",
      *           "coupon": "优惠券数量"
      *       },
      *   "msg": "获取个人中心信息成功"

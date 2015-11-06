@@ -24,4 +24,10 @@ use dbbase\models\operation\OperationAdvertContent as CommonOperationAdvertConte
 class OperationAdvertContent extends CommonOperationAdvertContent
 {
     
+    public static function getAdvertList($paramWhere = array()){
+        $advertList = self::find()
+                   ->andFilterWhere([‘like‘,‘name‘,‘洋‘]);
+                
+        
+    }
 }
