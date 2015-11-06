@@ -1029,7 +1029,8 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取阿姨请假表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        return $this->send($ret, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
+        $leave_time['leave_time']=$ret;
+        return $this->send($leave_time, "获取阿姨请假表成功", 1, 200,null,alertMsgEnum::workerLeaveSuccess);
     }    
     
      /**
