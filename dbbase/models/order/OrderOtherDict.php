@@ -69,6 +69,7 @@ class OrderOtherDict extends ActiveRecord
 
     public static function getName($id)
     {
-        return self::findOne($id)->order_other_dict_name;
+        $order_other_dict = self::findOne($id);
+        return $order_other_dict->order_other_dict_name;
     }
 }
