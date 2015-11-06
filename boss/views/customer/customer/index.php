@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 			[
                 'format' => 'raw',
-                'label' => '来源',
+                'label' => '注册来源',
                 'value' => function ($dataProvider) {
                     $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
                     $channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
