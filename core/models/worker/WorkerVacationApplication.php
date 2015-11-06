@@ -32,22 +32,23 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
             $time = strtotime("+$i day");
             $date = date('Y-m-d',$time);
             $week = (int)date("W",$time);
+            $isEnable = true;
             if($vacationType==1){
                 //本周是否已请休假
                 if(in_array($week,$weekArr)){
-                    $timeLine[$date] = false;
+                    $isEnable = false;
                     continue;
                 }
             }else{
                 //如果本周请了事假,则连续两周都不能请事假
                 if($week%2==1){
                     if(in_array($week,$weekArr) || in_array($week+1,$weekArr)){
-                        $timeLine[$date] = false;
+                        $isEnable = false;
                         continue;
                     }
                 }else{
                     if(in_array($week,$weekArr) || in_array($week-1,$weekArr)){
-                        $timeLine[$date] = false;
+                        $isEnable = false;
                         continue;
                     }
                 }
@@ -57,12 +58,15 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
             //周5,6,7 不可请假
             $weekday = (int)date("w",$time);
             if(in_array($weekday,$noWeekday)){
-                $timeLine[$date] = false;
+                $isEnable = false;
                 continue;
             }
             //阿姨是否已预约出去
 
-            $timeLine[$date] = true;
+            $timeLine[] = [
+                'date'=>$date,
+                'enable'=>$isEnable
+            ];
         }
 
         return $timeLine;
