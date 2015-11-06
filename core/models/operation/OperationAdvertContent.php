@@ -60,4 +60,11 @@ class OperationAdvertContent extends CommonOperationAdvertContent
                 
         
     }
+
+    /**
+     * 根据城市和平台等获取广告信息
+     */
+    public static function getAdvert()
+    {
+    }
 }

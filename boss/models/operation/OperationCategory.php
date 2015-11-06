@@ -37,10 +37,11 @@ class OperationCategory extends \core\models\operation\OperationCategory
         return [
             [['operation_category_name'], 'string', 'max' => 30],
             ['operation_category_name', 'unique', 'message' => '该服务类型已存在'],
-            [['operation_category_name'], 'required'],
+            [['operation_category_name', 'operation_category_icon', 'operation_category_price_description'], 'required'],
             [['operation_category_parent_id', 'sort', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
             [['operation_category_icon', 'operation_category_price_description'], 'string', 'max' => 128],
-            [['operation_category_url'], 'string', 'max' => 258]
+            [['operation_category_url'], 'string', 'max' => 258],
+            ['operation_category_icon', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
         ];
     }
 
@@ -52,7 +53,7 @@ class OperationCategory extends \core\models\operation\OperationCategory
         return [
             'id' => Yii::t('app', '编号'),
             'operation_category_name' => Yii::t('app', '服务类型名称'),
-            'operation_category_icon' => Yii::t('app', '类型图片'),
+            'operation_category_icon' => Yii::t('app', '服务类型图片'),
             'operation_category_price_description' => Yii::t('app', '价格备注'),
             'operation_category_url' => Yii::t('app', '跳转地址'),
             'created_at' => Yii::t('app', '创建时间'),
