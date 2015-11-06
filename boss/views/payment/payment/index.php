@@ -37,12 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options' => ['width'=>70],
             ],
             [
-                'attribute' => 'payment_source_name',
+                'attribute' => 'payment_channel_name',
                 'label' => '支付渠道',
             ],
             [
                 'attribute' => 'payment_mode',
-                'options'=>['width'=>70,],
+                'options'=>['width'=>0,],
                 "value" => function($model){
                     return $model::$PAY_MODE[$model->payment_mode];
                 }

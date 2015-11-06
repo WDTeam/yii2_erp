@@ -17,9 +17,9 @@ class PaymentSearch extends Payment
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'customer_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_channel_id','payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at'], 'integer'],
             [['payment_money', 'payment_actual_money'], 'number'],
-            [['order_id', 'payment_source_name', 'payment_transaction_id', 'payment_eo_order_id', 'payment_memo', 'payment_admin_name', 'payment_handle_admin_name', 'payment_verify'], 'safe'],
+            [['order_id', 'payment_channel_name', 'payment_transaction_id', 'payment_eo_order_id', 'payment_memo', 'payment_admin_name', 'payment_handle_admin_name', 'payment_verify'], 'safe'],
         ];
     }
 
@@ -62,6 +62,7 @@ class PaymentSearch extends Payment
             'payment_money' => $this->payment_money,
             'payment_actual_money' => $this->payment_actual_money,
             'payment_source' => $this->payment_source,
+            'payment_channel_id' => $this->payment_channel_id,
             'payment_mode' => $this->payment_mode,
             'payment_status' => $this->payment_status,
             'payment_type' => $this->payment_type,
@@ -72,7 +73,7 @@ class PaymentSearch extends Payment
             'updated_at' => $this->updated_at
         ]);
 
-        $query->andFilterWhere(['like', 'payment_source_name', $this->payment_source_name])
+        $query->andFilterWhere(['like', 'payment_channel_name', $this->payment_channel_name])
             ->andFilterWhere(['like', 'payment_transaction_id', $this->payment_transaction_id])
             ->andFilterWhere(['like', 'payment_eo_order_id', $this->payment_eo_order_id])
             ->andFilterWhere(['like', 'payment_memo', $this->payment_memo])
