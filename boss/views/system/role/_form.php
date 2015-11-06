@@ -64,7 +64,9 @@ use kartik\icons\Icon;
                 foreach ($groups as $name=>$group){
                     $data = [];
                     foreach ($group as $key){
-                        $data[$key] = $permissions[$key];
+                        if(isset($permissions[$key])){
+                            $data[$key] = $permissions[$key];
+                        }
                     }
                     echo $form->field($model, '_permissions')->checkboxList($data, [
                         'class'=>'test',
