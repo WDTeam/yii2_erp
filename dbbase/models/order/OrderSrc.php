@@ -15,6 +15,12 @@ use dbbase\models\ActiveRecord;
  */
 class OrderSrc extends ActiveRecord
 {
+    const ORDER_SRC_BOSS = 1;
+    const ORDER_SRC_IOS = 2;
+    const ORDER_SRC_ANDROID = 3;
+    const ORDER_SRC_POP = 4;
+    const ORDER_SRC_H5 = 5;
+
     /**
      * @inheritdoc
      */

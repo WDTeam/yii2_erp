@@ -2,9 +2,10 @@
 
 namespace core\models\payment;
 
-use core\models\finance\FinanceOrderChannel;
+use core\models\finance\FinancePayChannel;
 
 use Yii;
+use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%payment_log}}".
@@ -40,7 +41,11 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
         $this->trigger('writeTextLog');
 
         //渠道名称
-        $param->data['pay_channel_name'] = FinanceOrderChannel::getOrderChannelByName($param->data['pay_channel_id']);
+        try{
+            $param->data['pay_channel_name'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
+        }catch(Exception $e){
+            $param->data['pay_channel_name'] = '未找到渠道';
+        }
 
         //写入数据库日志
         $this->doSave($param);

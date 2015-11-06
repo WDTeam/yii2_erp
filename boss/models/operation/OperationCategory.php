@@ -3,11 +3,19 @@
 namespace boss\models\operation;
 
 use Yii;
+
 /**
- * This is the model class for table "{{%operation_category}}".
+ * This is the model class for table "ejj_operation_category".
  *
  * @property integer $id
  * @property string $operation_category_name
+ * @property string $operation_category_icon
+ * @property string $operation_category_price_description
+ * @property string $operation_category_url
+ * @property integer $operation_category_parent_id
+ * @property string $operation_category_parent_name
+ * @property integer $sort
+ * @property integer $is_softdel
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -16,10 +24,10 @@ class OperationCategory extends \core\models\operation\OperationCategory
     /**
      * @inheritdoc
      */
-    //public static function tableName()
-    //{
-        //return '{{%operation_category}}';
-    //}
+    public static function tableName()
+    {
+        return '{{%operation_category}}';
+    }
 
     /**
      * @inheritdoc
@@ -27,10 +35,12 @@ class OperationCategory extends \core\models\operation\OperationCategory
     public function rules()
     {
         return [
-            [['created_at', 'updated_at'], 'integer'],
             [['operation_category_name'], 'string', 'max' => 30],
             ['operation_category_name', 'unique', 'message' => '该服务类型已存在'],
             [['operation_category_name'], 'required'],
+            [['operation_category_parent_id', 'sort', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
+            [['operation_category_icon', 'operation_category_price_description'], 'string', 'max' => 128],
+            [['operation_category_url'], 'string', 'max' => 258]
         ];
     }
 
@@ -41,9 +51,14 @@ class OperationCategory extends \core\models\operation\OperationCategory
     {
         return [
             'id' => Yii::t('app', '编号'),
-            'operation_category_name' => Yii::t('app', '服务品类名称'),
+            'operation_category_name' => Yii::t('app', '服务类型名称'),
+            'operation_category_icon' => Yii::t('app', '类型图片'),
+            'operation_category_price_description' => Yii::t('app', '价格备注'),
+            'operation_category_url' => Yii::t('app', '跳转地址'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
+
+
             'operation_category_app_ico' => Yii::t('app', 'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)'),
             'operation_category_app_homepage_max_ico' => Yii::t('app', 'APP端首页大图'),
             'operation_category_app_homepage_min_ico' => Yii::t('app', 'APP端首页小图'),

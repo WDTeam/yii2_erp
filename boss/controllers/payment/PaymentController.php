@@ -114,22 +114,11 @@ class PaymentController extends BaseAuthController
         return $model->save(false);
     }
 
-    /**
-     * 获取订单渠道
-     * @return string
-     */
-    public function actionOrderChannel()
-    {
-
-        $channel = FinanceOrderChannel::get_order_channel_list();
-        foreach ($channel as $k => $v) {
-            $channel[$k]['text'] = $v['finance_order_channel_name'];
-        }
-        return json_encode(['results' => $channel]);
-    }
-
     public function actionTest()
     {
+        $model = new Payment();
+        $model->getPayChannelList();
+        exit;
         $data = Payment::orderRefund(1,1010);
         dump($data);
         exit;

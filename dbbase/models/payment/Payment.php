@@ -71,7 +71,7 @@ class Payment extends \yii\db\ActiveRecord
             //直达号在线支付
             'zhidahao_h5_online_pay'=>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //在线退款
-            'refund'                =>  ['customer_id','order_id','payment_money','payment_actual_money','payment_source','payment_source_name','payment_mode','payment_status','payment_memo','payment_type','admin_id','payment_admin_name'],
+            'refund'                =>  ['customer_id','order_id','payment_money','payment_actual_money','payment_source','payment_source_name','payment_mode','payment_status','payment_memo','payment_type','admin_id','payment_admin_name','payment_verify'],
         ];
     }
 

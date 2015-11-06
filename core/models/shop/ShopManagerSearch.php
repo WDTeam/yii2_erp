@@ -57,10 +57,8 @@ class ShopManagerSearch extends ShopManager
             'complain_coutn' => $this->complain_coutn,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query
             ->andFilterWhere(['like', 'street', $this->street])
-            ->andFilterWhere(['like', 'principal', $this->principal])
-            ->andFilterWhere(['like', 'tel', $this->tel])
             ->andFilterWhere(['like', 'other_contact', $this->other_contact])
             ->andFilterWhere(['like', 'bankcard_number', $this->bankcard_number])
             ->andFilterWhere(['like', 'account_person', $this->account_person])
@@ -73,11 +71,12 @@ class ShopManagerSearch extends ShopManager
             ->andFilterWhere(['like', 'bl_address', $this->bl_address])
             ->andFilterWhere(['like', 'bl_photo_url', $this->bl_photo_url])
             ->andFilterWhere(['like', 'bl_business', $this->bl_business])
-            ->andFilterWhere(['like', 'level', $this->level]);
-        
-        $query->orFilterWhere(['like', 'principal', $this->name])
-            ->orFilterWhere(['like', 'name', $this->name])
-            ->orFilterWhere(['like', 'tel', $this->name]);
+            ->andFilterWhere(['like', 'level', $this->level])
+            ->andFilterWhere(['or',
+                ['like', 'principal', $this->name],
+                ['like', 'name', $this->name],
+                ['like', 'tel', $this->name]
+            ]);
 
         return $dataProvider;
     }
