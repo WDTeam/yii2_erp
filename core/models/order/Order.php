@@ -20,6 +20,7 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
+use core\models\operation\OperationCategory;
 
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
@@ -31,7 +32,6 @@ use dbbase\models\finance\FinanceOrderChannel;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
-use boss\models\operation\OperationCategory;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -779,7 +779,12 @@ class Order extends OrderModel
             'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价
             'city_id' => $address['operation_city_id'],
             'district_id' => $goods['district_id'],
-            'order_address' => $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone'] , //地址信息
+            'order_address' => (empty($address['operation_province_name'])?'': $address['operation_province_name'].',')
+                . $address['operation_city_name'] . ','
+                . $address['operation_area_name'] . ','
+                . $address['customer_address_detail'] . ','
+                . $address['customer_address_nickname'] . ','
+                . $address['customer_address_phone'] , //地址信息
             'order_lat' => $address['customer_address_latitude'],
             'order_lng' => $address['customer_address_longitude']
         ]);
