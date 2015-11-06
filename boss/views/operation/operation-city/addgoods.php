@@ -55,22 +55,20 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
 
 -->
 
+    <!-- 实现方式：所有的数据都先查出来，对应隐藏，目前没有找到更好的实现方法 -->        
 	<div class="tab_menu">
         <?php
+            //服务类型
             foreach ($categorylist as $key => $value)
             {
                 echo '<label for=""><input type="radio" name="radio_replyresult" value="'.$key.'"/>'.$value.'</label><br>';
             }    						  
         ?>
-<!--
-		<label for="">1<input type="radio" value="" name="1"></label><br>
-		<label for="">2<input  type="radio" value="" name="2"></label><br>
-		<label for="">3<input  type="radio" value="" name="3"></label>
--->
 	</div>
-    <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
+
 	<div class="tab_box">
         <?php
+            //服务类型下对应的服务项目
             foreach ($goods as $key => $value)
             {
                 echo '<div class="hid ipo">';
@@ -81,8 +79,10 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
             }    						  
         ?>
 	</div>
+
 	<div class="tab_text">
         <?php
+            //服务项目下对应的价格
             foreach ($goods as $key => $value)
             {
                 foreach ($value as $k => $v) {
@@ -96,15 +96,10 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
             }    						  
         ?>
 	</div>
+
 	<div class="btn_tab_box">
         <?php
-            //echo '<pre>';
-            //print_r($shopdistrictinfo);
-            //foreach((array)$shopdistrictinfo as $k => $v){
-                //echo $k;
-                //echo '<br>';
-                //echo $v;
-            //}
+            //当前城市下对应的商圈
             foreach ($goods as $key => $value)
             {
                 foreach ($value as $k => $v) {
@@ -116,12 +111,4 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
                 }
             }    						  
         ?>
-<!--
-		<div class="hid btn_ipo">
-			<label for="">1<input type="checkbox" value=""></label><br>
-			<label for="">2<input  type="checkbox" value=""></label><br>
-			<label for="">3<input  type="checkbox" value=""></label>
-		</div>
-	</div>
--->
 <?php ActiveForm::end(); ?>
