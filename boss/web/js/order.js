@@ -8,8 +8,10 @@ var goods_list = new Object();
 var district_id = 0;
 
 $("#order-order_customer_phone").keyup(function(e){
-    if(e.keyCode == 13){
-       getCustomerInfo();
+    var phone = $(this).val();
+    var reg = /^1[3-9][0-9]{9}$/;
+    if(reg.test(phone)) {
+        getCustomerInfo();
     }
 });
 
@@ -56,8 +58,7 @@ $(document).on("click","#add_address_btn",function(){
     if($('#address_0').length==0 && $('#order-customer_id').val()!='') {
         $form = '<div class="radio" id="address_0">' + $('#address_form').html() + '</div>';
         $("#order-address_id").append($form);
-        $('#address_0').find(".phone_form").val($("#order-order_customer_phone").val());
-        $('#address_0').find(".nickname_form").val('客户');
+
     }
 });
 
@@ -118,6 +119,12 @@ $(document).on("click",".save_address_btn",function(){
     var detail = $('#address_'+address_id+' .detail_form').val();
     var nickname = $('#address_'+address_id+' .nickname_form').val();
     var phone = $('#address_'+address_id+' .phone_form').val();
+    if(nickname==''){
+        nickname = '客户';
+    }
+    if(phone == ''){
+        phone = $("#order-order_customer_phone").val();
+    }
     var customer_id = $('#order-customer_id').val();
     if(address_id==0 && customer_id==''){
         alert('请先选择客户再添加地址！');
@@ -143,7 +150,7 @@ $(document).on("click",".save_address_btn",function(){
                     + v.customer_address_nickname + ' '
                     + v.customer_address_phone + '</label>' +
                     '<label class="col-sm-4" style="color: #FF0000;">' +
-                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
+                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
                     '</label>' +
                     '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
                 );
@@ -321,6 +328,7 @@ function getCustomerInfo(){
                 if (customer.id) {
                     $("#order-customer_id").val(customer.id);
                     $("#customer_balance").text(customer.customer_balance);
+                    $("#order-address_id").html('');
                     $.ajax({
                         type: "GET",
                         url: "/order/order/customer-address/?id=" + customer.id,
@@ -330,7 +338,6 @@ function getCustomerInfo(){
                                 $("#add_address_btn").click();
                             } else {
                                 address_list = address;
-                                $("#order-address_id").html('');
                                 for (var k in address) {
                                     var v = address[k];
                                     $("#order-address_id").append(
@@ -343,7 +350,7 @@ function getCustomerInfo(){
                                         + v.customer_address_nickname + ' '
                                         + v.customer_address_phone + '</label>' +
                                         '<label class="col-sm-4" style="color: #FF0000;">' +
-                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
+                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
                                         '</label>' +
                                         '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
                                         '</div>'

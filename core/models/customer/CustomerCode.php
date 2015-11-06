@@ -56,7 +56,7 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
             $customerCode->updated_at = 0;
             $customerCode->is_del = 0;
             $customerCode->save();
-            $msg = '您本次的验证码为'.$customer_code.', 欢迎使用e家洁APP';
+            $msg = $customer_code.'，守住验证码，不能告诉别人哦！唯一客服热线4006767636';
             $string = Yii::$app->sms->send($phone, $msg, 1);
             $transaction->commit();
             return true;

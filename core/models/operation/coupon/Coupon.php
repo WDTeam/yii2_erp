@@ -289,7 +289,24 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 	public function getCouponCustomerRelation(){
 		return $this->hasMany(CouponCustomer::className(), ['coupon_id' => 'id']);
 	}
-
+    
+    
+    /*****************************coupon and coupon code info**********************************/
+    /**
+     * get coupon basic info by id
+	 */
+	public static function getCouponBasicInfoById($coupon_id){
+		$coupon = self::find()->select(['id as coupon_id', 'coupon_name', 'coupon_price'])->where(['id'=>$coupon_id])->asArray()->one();
+		return $coupon;
+	}
+    
+    /**
+     * get coupon basic info by code
+     */
+    public static function getcouponBasicInfoByCode($coupon_code){
+        $coupon_code_arr = CouponCode::find()->select(['id', 'coupon_id', 'coupon_name', 'coupon_price', 'coupon_code'])->where(['coupon_code'=>$coupon_code])->asArray()->one();
+        return $coupon_code_arr;
+    }
 
 	/**************************************coupon for order**************************************/
 	/**
@@ -311,16 +328,6 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 			->all();
 		return $able_coupons;
 	}
-
-	/**
-     * get coupon basic info by id
-	 */
-	public static function getCouponBasicInfoById($coupon_id){
-		$coupon = self::find()->select(['id as coupon_id', 'coupon_name', 'coupon_price'])->where(['id'=>$coupon_id])->asArray()->one();
-		return $coupon;
-	}
-
-	
 
 	/**
      * set custoemr's coupon used after pay by coupon
