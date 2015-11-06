@@ -99,7 +99,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} leave_time 请假时间戳，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】
+     * @apiParam {String} leave_time 请假时间，如果请假时间格式为:【2015-09-10】
      * @apiParam {String} leave_type 请假类型  1.休假 2事假
      *
      * @apiSuccessExample {json} Success-Response:
@@ -129,7 +129,7 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        $worker_identity_id = $checkResult['workerInfo']['worker_identity_id'];
+       if($checkResult['workerInfo']['worker_identity_id']!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         //判断数据完整
         if(!isset($param['leave_type']) || !$param['leave_type']|| !in_array($param['leave_type'], array(1, 2))){
             return $this->send(null, "请假类型不正确", 0, 403,null,alertMsgEnum::workerApplyLeaveTypeFailed);
@@ -140,37 +140,22 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403,null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         try{
-            if($worker_identity_id!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID,$vacationType);
          }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         }
-        $vacationTimeArr = explode("_",$param['leave_time']);
-        $vacationTime = array_keys($vacationTimeLine);
+        //初始化允许请假的时间
+        $allowVacationTime = array();
+        foreach($vacationTimeLine as $val){
+            if($val['enable']) $allowVacationTime[] = $val['date'];
+        }
         //根据请假类型判断请假时间合法性
-        $firstDay = $vacationTimeArr[0];
-        $secondDay = isset($vacationTimeArr[1])?$vacationTimeArr[1]:"";
-        if(!in_array($firstDay, $vacationTime)||!$vacationTimeLine[$firstDay]){
+        if(!in_array($param['leave_time'], $allowVacationTime)){
             return $this->send(null, "请假时间不在请假时间范围内", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
-        if($vacationType==1&&count($vacationTimeArr)>2){
-            return $this->send(null, "休假最多只能选择两天", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
-        }
-        if($vacationType==2&&count($vacationTimeArr)>1){
-            return $this->send(null, "事假最多只能选择一天", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
-        }
         //休假或者事假申请（一天）
-        if(!WorkerVacationApplication::createVacationApplication($workerID,$firstDay,$vacationType)){
+        if(!WorkerVacationApplication::createVacationApplication($workerID,$param['leave_time'],$vacationType)){
             return $this->send(null, "请假申请失败", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
-        }
-        //如果选择休假且选择了两天
-        if($vacationType==1&&$secondDay){//休假
-            if(!in_array($secondDay, $vacationTime)||!$vacationTimeLine[$secondDay]){
-                return $this->send(null, "请假时间不在请假时间范围内", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
-            }
-            if(!WorkerVacationApplication::createVacationApplication($workerID,$secondDay,$vacationType)){
-                return $this->send(null, "请假申请失败", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
-            }
         }
         return $this->send(null, "您的请假已提交，请耐心等待审批",1,200,null,alertMsgEnum::workerApplyLeaveSuccess);
         

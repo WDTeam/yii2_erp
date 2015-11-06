@@ -265,7 +265,7 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-
+        //\core\models\operation\OperationAdvertContent::getAdvertList(array('id'=>1),array('operation_advert_online_time'=>21345,'operation_advert_offline_time'=>1233));
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
         }

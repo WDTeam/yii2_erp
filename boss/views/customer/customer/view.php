@@ -155,7 +155,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'创建时间',
             'format'=>'raw',
-            'value'=>date('Y-m-d H:i', $model->customer_phone),
+            'value'=>date('Y-m-d H:i', $model->created_at),
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],

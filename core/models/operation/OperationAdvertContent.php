@@ -24,9 +24,39 @@ use dbbase\models\operation\OperationAdvertContent as CommonOperationAdvertConte
 class OperationAdvertContent extends CommonOperationAdvertContent
 {
     
-    public static function getAdvertList($paramWhere = array()){
-       // $advertList = self::find()
-                  // ->andFilterWhere(['and',‘name‘,‘洋‘]);
+    /** 
+     * 获取广告图列表 TODO:未开发完成
+     * @param type $generalWhere 普通查询条件
+     * @param type $sectionWhere 区间查询条件
+     */
+    public static function getAdvertList($generalWhere = array(),$sectionWhere=array()){
+        $query = new \yii\db\Query();
+        
+        $list = $query->from('{{%operation_advert_content}}')
+            ->select('*')
+            ->where($generalWhere);
+        //广告上线时间
+        if(isset($sectionWhere['operation_advert_online_time'])){
+            $query->andWhere(['>','operation_advert_online_time',$sectionWhere['operation_advert_online_time']]);
+        }
+        //广告下线时间
+        if(isset($sectionWhere['operation_advert_offline_time'])){
+            $query->andWhere(['<','operation_advert_offline_time',$sectionWhere['operation_advert_offline_time']]);
+        }
+        //活动开始时间
+        if(isset($sectionWhere['operation_advert_start_time'])){
+            $query->andWhere(['>','operation_advert_start_time',$sectionWhere['operation_advert_start_time']]);
+        }
+        //活动结束时间
+        if(isset($sectionWhere['operation_advert_end_time'])){
+            $query->andWhere(['<','operation_advert_end_time',$sectionWhere['operation_advert_end_time']]);
+        }
+        $query->orderBy(['operation_advert_content_orders' =>'ASC']);
+        echo  $query->createCommand()->getRawSql();
+   
+
+
+
                 
         
     }

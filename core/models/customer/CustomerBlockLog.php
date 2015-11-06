@@ -139,7 +139,7 @@ class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
         if (!$customer->is_del) {
             return false;
         }
-        $customerBlockLog = self::find()->where(['customer_id'=>$customer_id])->one();
+        $customerBlockLog = self::find()->where(['customer_id'=>$customer_id])->orderBy('created_at desc')->one();
         if ($customerBlockLog == NULL) {
             return false;
         }
