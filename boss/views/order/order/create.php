@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title">客户信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11])->label('客户手机'); ?>
+                <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11,"autocomplete"=>"off","aria-describedby"=>"sizing-addon1"])->label('客户手机'); ?>
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
                 <div class="form-group field-order-address_id required">
                     <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
@@ -65,7 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title">服务信息</h3>
             </div>
             <div class="panel-body">
+                <div class="hide">
                 <?= $form->field($model, 'order_booked_worker_id')->inline()->radioList(['0'=>'不指定']); ?>
+                </div>
                 <?= $form->field($model, 'orderBookedDate')->label('服务日期')->widget(
                     DatePicker::className(), [
                     'inline' => true,
@@ -160,6 +162,9 @@ $this->registerCss('
     .radio{
         overflow:hidden;
         padding-bottom:7px;
+    }
+    #order-order_customer_phone{
+        font-size:20px;
     }
 ');
 ?>

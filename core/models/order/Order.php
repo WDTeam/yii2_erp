@@ -591,7 +591,7 @@ class Order extends OrderModel
         $transact = static::getDb()->beginTransaction();
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = 1;
-        $result = OrderStatus::_serviceDone($order,$transact);
+        $result = OrderStatus::_serviceDone($order,[],$transact);
         if($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
             $result = OrderPop::serviceDoneToPop($order); //第三方同步失败则取消失败
         }
@@ -704,7 +704,7 @@ class Order extends OrderModel
                 }
             }
             $transact = static::getDb()->beginTransaction();
-            $result = OrderStatus::_cancel($order,$transact);
+            $result = OrderStatus::_cancel($order,[],$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT) {
                 //调高峰的退款接口
                 $result = FinanceRefundadd::add($order);
