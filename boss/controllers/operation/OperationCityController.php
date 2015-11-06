@@ -218,9 +218,11 @@ class OperationCityController extends BaseAuthController
     
     /**
      * 添加服务
+     *
      * @param $city_id
      */
-    public function actionAddgoods($city_id, $cityAddGoods = ''){
+    public function actionAddgoods($city_id, $cityAddGoods = '')
+    {
 
         $post = Yii::$app->request->post();
 
@@ -230,30 +232,23 @@ class OperationCityController extends BaseAuthController
             $categorylist = array();
             $goods = array();
 
-            //echo '<pre>';
-            //print_r($categoryinfo);die;
+            //获取服务类型数据
             foreach ((array)$categoryinfo as $key => $value) {
                 $categorylist[$value['id']] = $value['operation_category_name'];
                 $goods[$value['id']] = OperationGoods::find()
                     ->where(['operation_category_id' => $value['id']])
                     ->asArray()
                     ->all();
-                //print_r($goods);
             }
 
+            //获取对应城市商圈数据
             $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-            //echo '<pre>';
-            //print_r($shopdistrict);die;
             $shopdistrictinfo = [];
             foreach ((array)$shopdistrict as $key => $value) {
                 $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
             }
 
-            //echo '<pre>';
-            //print_r($shopdistrictinfo);die;
             $city_name = OperationCity::getCityName($city_id);
-            //echo '<pre>';
-            //print_r($categorylist);die;
             return $this->render('addgoods', [
                 'cityAddGoods' => $cityAddGoods,
                 'city_id' => $city_id,
@@ -262,6 +257,7 @@ class OperationCityController extends BaseAuthController
                 'goods' => $goods,
                 'shopdistrictinfo' => $shopdistrictinfo,
             ]);
+
         }else{
             if(empty($post['categorygoods'])){
                 return $this->redirect(['addgoods', 'city_id' => $city_id, 'cityAddGoods' => $cityAddGoods]);
@@ -269,7 +265,13 @@ class OperationCityController extends BaseAuthController
             $categorylist = $post['categorylist'];  //服务品类
             $categorygoods = explode('-', $post['categorygoods']); //服务
             $goods_id = $categorygoods[0];
-            return $this->redirect(['settinggoodsinfo', 'city_id' => $city_id, 'goods_id' => $goods_id, 'cityAddGoods' => $cityAddGoods]);
+
+            return $this->redirect([
+                'settinggoodsinfo',
+                'city_id' => $city_id,
+                'goods_id' => $goods_id,
+                'cityAddGoods' => $cityAddGoods
+            ]);
         }
     }
 
@@ -281,9 +283,11 @@ class OperationCityController extends BaseAuthController
      */
     public function actionSettinggoodsinfo($city_id = '', $goods_id = '', $cityAddGoods = ''){
 
-        echo '<pre>';
         $post = Yii::$app->request->post();
 
+        if (!isset($post['city_id'])) {
+            return $this->redirect(['index']);
+        }
         //城市数据
         $city_id = $post['city_id'];
         $city_name = $post['city_name'];
@@ -292,24 +296,13 @@ class OperationCityController extends BaseAuthController
         unset($post['city_name']);
         unset($post['_csrf']);
 
-
-        //print_r($post);die;
         //去掉接收数据中没有选择的服务类型
         foreach ($post as $keys => $values) {
             if (!is_array($values)) {
                 unset($post[$keys]);
             }
-            //print_r($post);
-            //去掉接收数据中没有选中的服务项目
-            //foreach ($values as $key => $value) {
-                //if (!isset($value['operation_goods_id'])) {
-                    //unset($post[$keys]);
-                //}
-            //}
-            //print_r($post);
         }
 
-        //print_r($post);die;
         //服务类型的数据
         foreach ($post as $keys => $values) {
 
@@ -317,26 +310,32 @@ class OperationCityController extends BaseAuthController
             $operation_category_id = $keys;
             $operation_category_name = OperationCategory::getCategoryName($keys);
 
-            //去掉接收数据中没有选中的服务项目
+            //去掉接收数据中没有选中的或是没有输入销售价格的服务项目
             foreach ($values as $key => $value) {
-                if (!isset($value['operation_goods_id'])) {
+                if (!isset($value['operation_goods_id']) || $value['operation_goods_id'] == '' || !isset($value['operation_goods_price']) || $value['operation_goods_price'] == '' || !isset($value['district']) || empty($value['district'])) {
                     unset($values[$key]);
                 }
             }
-            print_r($values);
+
+            //如果没有输入销售价格,不能上线
+            if (!isset($values) || empty($values)) {
+                break;
+            }
 
             //服务项目的数据
-            /*
             foreach ($values as $key => $value) {
                 $operation_goods_id = $value['operation_goods_id'];
                 $operation_goods_name = $value['operation_goods_name'];
                 $operation_goods_price = $value['operation_goods_price'];
-                $operation_goods_market_price = $value['operation_goods_market_price'];
-                $operation_shop_district_goods_lowest_consume_num = $value['operation_shop_district_goods_lowest_consume_num'];
+
+                $operation_goods_market_price = $value['operation_goods_market_price'] ?  $value['operation_goods_market_price']: 0;
+
+                $operation_shop_district_goods_lowest_consume_num = $value['operation_shop_district_goods_lowest_consume_num'] ? $value['operation_shop_district_goods_lowest_consume_num'] : 0;
+
                 $operation_spec_strategy_unit = $value['operation_spec_strategy_unit'];
 
                 //商圈的数据
-                foreach ($value as $k => $v) {
+                foreach ($value['district'] as $k => $v) {
                     $model = new OperationShopDistrictGoods();
 
                     //城市数据
@@ -362,26 +361,13 @@ class OperationCityController extends BaseAuthController
                     //服务项目规格数据
                     $model->operation_spec_strategy_unit = $operation_spec_strategy_unit;
 
-                    //$model->insert();
+                    $model->insert();
                 }
             }
-             */
         }
 
+        //return $this->redirect(['opencity']);
         die;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         $this->releaseGoods();die;

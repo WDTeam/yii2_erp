@@ -66,4 +66,11 @@ class OperationCity extends CommonOperationCity
     public static function getProvinceCityList(){
         return self::find()->where(['operation_city_is_online' => 1])->orderBy('province_id')->asArray()->all();
     }
+
+    /**
+     *
+     */
+    public static function saveOnlineCity()
+    {
+    }
 }
