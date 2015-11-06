@@ -35,19 +35,19 @@ class m150921_090403_create_table_system_user extends Migration
         $this->insert('{{%system_user}}', [
             'id'=>2,
             'username'=>'customer',
-            'password_hash'=>'\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
+            'password_hash'=>'$2y$13$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
             'status'=>1
         ]);
         $this->insert('{{%system_user}}', [
             'id'=>3,
             'username'=>'worker',
-            'password_hash'=>'\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
+            'password_hash'=>'$2y$13$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
             'status'=>1
         ]);
         $this->insert('{{%system_user}}', [
             'id'=>4,
             'username'=>'admin',
-            'password_hash'=>'\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
+            'password_hash'=>'$2y$13$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS',
             'status'=>1
         ]);
     }
@@ -58,15 +58,4 @@ class m150921_090403_create_table_system_user extends Migration
 
         return true;
     }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }

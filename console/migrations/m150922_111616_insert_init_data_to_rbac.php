@@ -71,7 +71,7 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         $this->insert('{{%auth_item}}', [
             'name'=>'super_admin',
             'type'=>1,
-            'description'=>'管理员',
+            'description'=>'超级管理员',
         ]);
         /**
          * 给角色授权
