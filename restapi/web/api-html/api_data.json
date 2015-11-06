@@ -524,7 +524,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -708,7 +708,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n\n}",
           "type": "json"
         }
       ]
@@ -796,7 +796,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -863,7 +863,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1034,7 +1034,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1195,7 +1195,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1397,7 +1397,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1453,7 +1453,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1511,7 +1511,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"查询订单状态记录成功\"\n  \"ret\": {\n      \"orders\": {\n          \"order_booked_begin_time\": \"预约开始时间\",\n          \"order_booked_end_time\": \"预约结束时间\",\n          \"order_address\": \"服务地址\",\n          \"order_booked_worker_id\": \"服务阿姨ID\",\n          \"order_booked_worker_name\": \"服务阿姨姓名\",\n          \"order_status_customer\":\"订单当前状态\",\n          \"order_code\": \"订单号\",\n          \"order_money\": \"订单金额\",\n          \"order_channel_name\": \"下单渠道\",\n          \"order_pay_type\": \"支付方式\",\n          \"order_pay_channel_name\": \"支付渠道名称\",\n          \"order_pay_money\": \"订单支付金额\",\n          \"order_use_acc_balance\": \"使用余额\",\n          \"order_use_card_money\": \"使用服务卡金额\",\n          \"order_use_coupon_money\": \"使用优惠卷金额\",\n          \"order_use_promotion_money\": \"使用促销金额\"\n      },\n      \"status_history\": [\n          {\n              \"created_at\": \"状态更新时间\",\n              \"order_status_customer\": \"当前状态\"\n          },\n          {\n              \"created_at\": \"状态更新时间\",\n              \"order_status_customer\": \"当前状态\"\n          }\n      ]\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"查询订单状态记录成功\"\n  \"ret\": {\n      \"orders\": {\n          \"order_booked_begin_time\": \"预约开始时间\",\n          \"order_booked_end_time\": \"预约结束时间\",\n          \"order_address\": \"服务地址\",\n          \"order_booked_worker_id\": \"服务阿姨ID\",\n          \"order_booked_worker_name\": \"服务阿姨姓名\",\n          \"order_status_customer\":\"订单当前状态\",\n          \"order_service_type_name\":\"订单服务类别\",\n          \"order_code\": \"订单号\",\n          \"order_money\": \"订单金额\",\n          \"order_channel_name\": \"下单渠道\",\n          \"order_pay_type\": \"支付方式\",\n          \"order_pay_channel_name\": \"支付渠道名称\",\n          \"order_pay_money\": \"订单支付金额\",\n          \"order_use_acc_balance\": \"使用余额\",\n          \"order_use_card_money\": \"使用服务卡金额\",\n          \"order_use_coupon_money\": \"使用优惠卷金额\",\n          \"order_use_promotion_money\": \"使用促销金额\"\n      },\n      \"status_history\": [\n          {\n              \"created_at\": \"状态更新时间\",\n              \"order_status_customer\": \"当前状态\"\n          },\n          {\n              \"created_at\": \"状态更新时间\",\n              \"order_status_customer\": \"当前状态\"\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -1520,7 +1520,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1629,7 +1629,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1717,7 +1717,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1773,7 +1773,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1840,7 +1840,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -1889,7 +1889,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2012,7 +2012,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2107,7 +2107,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2216,7 +2216,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2276,7 +2276,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -2803,42 +2803,42 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "operation_province_name",
-            "description": "<p>省</p> "
+            "description": "<p>省 如:北京</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "operation_city_name",
-            "description": "<p>市名</p> "
+            "description": "<p>市名  如:北京市</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "operation_area_name",
-            "description": "<p>地区名（朝阳区）</p> "
+            "description": "<p>地区名  如:朝阳区</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "customer_address_detail",
-            "description": "<p>详细地址</p> "
+            "description": "<p>详细地址  如:光华路SOHO2单元708</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "customer_address_nickname",
-            "description": "<p>被服务者昵称</p> "
+            "description": "<p>被服务者昵称 如:小强</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "customer_address_phone",
-            "description": "<p>被服务者手机</p> "
+            "description": "<p>被服务者手机 如:138 3838 3888</p> "
           }
         ]
       }
@@ -2877,7 +2877,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"常用地址添加失败\",\n  \"ret\": {},\n  \"alertMsg\":\"常用地址添加失败\",\n}",
+          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": 401,\n  \"msg\": \"常用地址添加失败\",\n  \"ret\": {},\n  \"alertMsg\":\"常用地址添加失败\",\n}",
           "type": "json"
         }
       ]
@@ -2936,7 +2936,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -2976,7 +2976,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": [\n    {\n        \"money\": \"优惠券id\",\n        \"score\": \"优惠券名称\",\n        \"coupon\": \"优惠券价值\"\n    }\n  ],\n\"msg\": \"获取个人中心信息成功\"\n}",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
           "type": "json"
         }
       ]
@@ -3060,12 +3060,12 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"地址信息获取失败\"\n\n}",
+          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": 401,\n  \"msg\": \"地址信息获取失败\"\n\n}",
           "type": "json"
         }
       ]
@@ -3131,7 +3131,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录.\"，\n   \"ret\": {},\n  \"alertMeg\": \"删除失败\"\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录\"，\n   \"ret\": {},\n  \"alertMeg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -3203,12 +3203,12 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"不存在要删除的阿姨\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"不存在要删除的阿姨\"\n\n}",
           "type": "json"
         }
       ]
@@ -3278,7 +3278,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录\",\n  \"ret\": {},\n  \"alertMsg\":\"获取常用地址列表失败\",\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录\",\n  \"ret\": {},\n  \"alertMsg\":\"获取常用地址列表失败\",\n}",
           "type": "json"
         }
       ]
@@ -3291,7 +3291,7 @@
     "type": "GET",
     "url": "/user/get-comment-count",
     "title": "[GET] /user/get-comment-count （100%）",
-    "description": "<p>获取用户评价数量 郝建设()</p> ",
+    "description": "<p>获取用户评价数量 (郝建设)</p> ",
     "name": "actionGetCommentCount",
     "group": "User",
     "parameter": {
@@ -3318,7 +3318,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取用户评论数量成功\",\n  \"alertMsg\": \"获取用户评论数量成功\",\n  \"ret\": {\n     \"CommentCount\":\"评论数量\"\n\n      }",
+          "content": "    HTTP/1.1 200 OK\n{\n   \"code\": 1,\n   \"msg\": \"获取用户评价数量\",\n   \"ret\": {\n       \"CommentCount\": \"6\"\n   },\n   \"alertMsg\": \"获取用户评价数量\"\n}",
           "type": "json"
         }
       ]
@@ -3337,7 +3337,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n\n}",
+          "content": "    HTTP/1.1 200 Not Found\n{\n   \"code\": 0,\n   \"msg\": \"用户认证已经过期,请重新登录.\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -3377,7 +3377,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取评论级别成功\",\n  \"alertMsg\": \"获取评论级别成功\",\n  \"ret\": {\n     \"id\": \"1\",\n     \"customer_comment_level\": \"级别代号\",\n     \"customer_comment_level_name\": \"级别名称\"\n      }",
+          "content": "    HTTP/1.1 200 OK\n{\n   \"code\": 1,\n   \"msg\": \"获取评论级别成功\",\n   \"ret\": {\n       \"comment\": [\n           {\n               \"id\": \"1\",\n               \"customer_comment_level\": \"0\",\n               \"customer_comment_level_name\": \"满意\"\n           },\n           {\n               \"id\": \"2\",\n               \"customer_comment_level\": \"1\",\n               \"customer_comment_level_name\": \"一般\"\n           },\n           {\n               \"id\": \"3\",\n               \"customer_comment_level\": \"2\",\n               \"customer_comment_level_name\": \"不满意\"\n           }\n       ]\n   },\n   \"alertMsg\": \"获取评论级别成功\"\n}",
           "type": "json"
         }
       ]
@@ -3396,7 +3396,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n\n}",
+          "content": "    HTTP/1.1 200 Not Found\n{\n   \"code\": 0,\n   \"msg\": \"用户认证已经过期,请重新登录.\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -3462,7 +3462,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\"\n  \"ret\": {}\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\"\n  \"ret\": {}\n\n}",
           "type": "json"
         }
       ]
@@ -3542,7 +3542,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n\n}",
           "type": "json"
         }
       ]
@@ -3601,7 +3601,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\":{}\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\":{}\n}",
           "type": "json"
         }
       ]
@@ -3613,7 +3613,7 @@
   {
     "type": "POST",
     "url": "/user/get-user-feedback",
-    "title": "[GET] /user/get-user-feedback （100%）",
+    "title": "[POST] /user/get-user-feedback （100%）",
     "description": "<p>用户意见反馈 (郝建设)</p> ",
     "name": "actionGetUserFeedback",
     "group": "User",
@@ -3667,7 +3667,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户反馈信息提交失败\",\n  \"ret\":{},\n  \"alertMsg\": \"用户反馈信息提交失败\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户反馈信息提交失败\",\n  \"ret\":{},\n  \"alertMsg\": \"用户反馈信息提交失败\"\n}",
           "type": "json"
         }
       ]
@@ -3726,7 +3726,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n\n}",
           "type": "json"
         }
       ]
@@ -3796,7 +3796,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n}",
           "type": "json"
         }
       ]
@@ -3855,7 +3855,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录\",\n  \"ret\": {},\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录\",\n  \"ret\": {},\n\n}",
           "type": "json"
         }
       ]
@@ -3921,7 +3921,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"微信id或签名不允许为空\",\n  \"ret\":{},\n  \"alertMsg\": \"获取用户信息失败\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"微信id或签名不允许为空\",\n  \"ret\":{},\n  \"alertMsg\": \"获取用户信息失败\"\n}",
           "type": "json"
         }
       ]
@@ -3987,7 +3987,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -4018,7 +4018,7 @@
             "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
-            "description": "<p>地址id</p> "
+            "description": "<p>地址id                         如：1</p> "
           },
           {
             "group": "Parameter",
@@ -4032,42 +4032,42 @@
             "type": "<p>String</p> ",
             "optional": true,
             "field": "operation_province_name",
-            "description": "<p>省</p> "
+            "description": "<p>省              如：北京</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "operation_city_name",
-            "description": "<p>市名</p> "
+            "description": "<p>市名                如：北京市</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "operation_area_name",
-            "description": "<p>地区名（朝阳区）</p> "
+            "description": "<p>地区名（朝阳区）     如：朝阳区</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "customer_address_detail",
-            "description": "<p>详细地址</p> "
+            "description": "<p>详细地址         如：光华路SOHO 2单元 708</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "customer_address_nickname",
-            "description": "<p>被服务者昵称</p> "
+            "description": "<p>被服务者昵称   如：小强</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "customer_address_phone",
-            "description": "<p>被服务者手机</p> "
+            "description": "<p>被服务者手机      如：136 3838 3888</p> "
           }
         ]
       }
@@ -4095,7 +4095,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"地址信息获取失败\",\n  \"ret\": {},\n  \"alertMeg\": \"地址信息获取失败\"\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"地址信息获取失败\",\n  \"ret\": {},\n  \"alertMeg\": \"地址信息获取失败\"\n}",
           "type": "json"
         }
       ]
@@ -4123,59 +4123,59 @@
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
-            "description": "<p>地址id</p> "
+            "description": "<p>地址id                         如：1</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)       如：android_4.2.2</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "operation_province_name",
-            "description": "<p>省</p> "
+            "description": "<p>省              如：北京</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "operation_city_name",
-            "description": "<p>市名</p> "
+            "description": "<p>市名                如：北京市</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "operation_area_name",
-            "description": "<p>地区名（朝阳区）</p> "
+            "description": "<p>地区名（朝阳区）     如：朝阳区</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "customer_address_detail",
-            "description": "<p>详细地址信息</p> "
+            "description": "<p>详细地址         如：光华路SOHO 2单元 708</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "customer_address_nickname",
-            "description": "<p>被服务者昵称</p> "
+            "description": "<p>被服务者昵称   如：小强</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "customer_address_phone",
-            "description": "<p>被服务者手机</p> "
+            "description": "<p>被服务者手机      如：136 3838 3888</p> "
           }
         ]
       }
@@ -4220,12 +4220,12 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"ret\": {},\n  \"msg\": \"用户认证已经过期,请重新登录。\",\n  \"alertMeg\": \"用户认证已经过期,请重新登录。\",\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"ret\": {},\n  \"msg\": \"用户认证已经过期,请重新登录\",\n  \"alertMeg\": \"用户认证已经过期,请重新登录\",\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"0\",\n  \"ret\": {},\n  \"alertMeg\": \"用户认证已经过期,请重新登录。\",\n  \"msg\": \"地址信息获取失败\"\n\n}",
+          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": 401,\n  \"ret\": {},\n  \"alertMeg\": \"用户认证已经过期,请重新登录\",\n  \"msg\": \"用户认证已经过期,请重新登录\"\n\n}",
           "type": "json"
         }
       ]
@@ -4375,7 +4375,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n}",
+          "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\",\n  \"alertMsg\": \"用户认证已经过期,请重新登录，\",\n  \"ret\": {}\n}",
           "type": "json"
         }
       ]
@@ -4422,7 +4422,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": {\n          \"id\": \"编号\",\n          \"worker_id\": \"阿姨ID\",\n          \"worker_task_id\": \"任务ID\",\n          \"worker_task_cycle_number\": \"任务周期序号\",\n          \"worker_task_name\": \"任务名称\",\n          \"worker_task_log_start\": 任务本周期开始时间,\n          \"worker_task_log_end\": \"任务本周期结束时间\",\n          \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n          \"worker_task_done_time\": \"任务完成时间\",\n          \"worker_task_reward_type\": \"任务奖励类型\",\n          \"worker_task_reward_value\": \"任务奖励值\",\n          \"created_at\": \"创建时间\",\n          \"updated_at\": \"更新时间\",\n          \"values\": [\n              {\n                  \"worker_tasklog_condition\": \"条件索引\",\n                  \"worker_tasklog_value\": \"条件值\"\n              }\n          ],\n          \"worker_task_description\": \"任务描述\",\n          \"order_list\": [订单信息]\n      },\n      \"alertMsg\": \"操作成功\"\n   }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": {\n          \"id\": \"编号\",\n          \"worker_id\": \"阿姨ID\",\n          \"worker_task_id\": \"任务ID\",\n          \"worker_task_cycle_number\": \"任务周期序号\",\n          \"worker_task_name\": \"任务名称\",\n          \"worker_task_log_start\": 任务本周期开始时间,\n          \"worker_task_log_end\": \"任务本周期结束时间\",\n          \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n          \"worker_task_done_time\": \"任务完成时间\",\n          \"worker_task_reward_type\": \"任务奖励类型\",\n          \"worker_task_reward_value\": \"任务奖励值\",\n          \"created_at\": \"创建时间\",\n          \"updated_at\": \"更新时间\",\n          \"values\": [\n              {\n                  \"worker_tasklog_condition\": \"条件索引\",\n                  \"worker_tasklog_value\": \"条件完成值\",\n                  \"name\": \"主动接单\",\n                  \"judge\": \">=\",\n                  \"value\": \"条件值\"\n              }\n           ],\n          \"worker_task_description\": \"任务描述\",\n          \"order_list\": [\n                  {\n                      \"order_code\": \"订单号\",\n                      \"created_at\": \"创建时间\",\n                      \"order_booked_count\": \"预约服务数量（时长）\"\n                  },\n                  {\n                      \"order_code\": \"订单号\",\n                      \"created_at\": \"创建时间\",\n                      \"order_booked_count\": \"预约服务数量（时长）\"\n                  }\n           ]\n       },\n      \"alertMsg\": \"操作成功\"\n   }",
           "type": "json"
         }
       ]
