@@ -19,6 +19,9 @@ use yii\data\ActiveDataProvider;
 class OrderSearch extends Order
 {
 
+    public $stypechannel;
+    public $created_at_end;
+
     public function rules()
     {
         return [
@@ -88,10 +91,7 @@ class OrderSearch extends Order
         $params = [
             OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
             OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
-            OrderStatusDict::ORDER_CHECKED, //已核实 已对账
             OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
-            OrderStatusDict::ORDER_PAYOFF_SHOP_DONE, //已完成门店结算
-            OrderStatusDict::ORDER_DIED, //已归档
         ];
         //查询
         $query = new \yii\db\Query();
@@ -207,18 +207,19 @@ class OrderSearch extends Order
      * 订单状态为系统指派失败的订单
      * @author lin
      * @param $admin_id 操作人id
-     * @param $isCS bool 是否是客服获取
+     * @param $is_cs bool 是否是客服获取
      * @return $this|static
      */
-    public static function getWaitManualAssignOrder($admin_id, $isCS = false)
+    public static function getWaitManualAssignOrder($admin_id, $is_cs = false)
     {
-        $flag_send = $isCS ? 2 : 1;
+        $flag_send = $is_cs ? 2 : 1;
 
         $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
             ['>', 'order_booked_begin_time', time()] //服务开始时间大于当前时间
         )->andWhere([ //先查询该管理员正在指派的订单
             'orderExtStatus.order_status_dict_id' => OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
-            'orderExtFlag.order_flag_lock' => $admin_id
+            'orderExtFlag.order_flag_lock' => $admin_id,
+            'order_parent_id' => 0
         ])->orderBy(['order_booked_begin_time' => SORT_ASC])->one();
         if (empty($order)) {//如果没有正在指派的订单再查询待指派的订单
             $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where([
@@ -242,11 +243,16 @@ class OrderSearch extends Order
             ])->orderBy(['order_booked_begin_time' => SORT_ASC])->one();
             if (!empty($order)) {
                 //获取到订单后加锁并置为已开始人工派单的状态
-                $order->order_flag_lock = $admin_id;
-                $order->order_flag_lock_time = time(); //加锁时间
-                $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($isCS ? 1 : 2); //指派时先标记是谁指派不了
-                $order->admin_id = $admin_id;
-                if (OrderStatus::manualAssignStart($order, ['OrderExtFlag'])) {
+                if($order->order_is_parent==1){
+                    $result = OrderStatus::batchManualAssignStart($order->order_batch_code,$admin_id,$is_cs);
+                }else{
+                    $order->order_flag_lock = $admin_id;
+                    $order->order_flag_lock_time = time(); //加锁时间
+                    $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_cs ? 1 : 2); //指派时先标记是谁指派不了
+                    $order->admin_id = $admin_id;
+                    $result = OrderStatus::manualAssignStart($order, ['OrderExtFlag']);
+                }
+                if ($result) {
                     OrderPool::remOrderForWorkerPushList($order->id); //从接单大厅中删除此订单
                     return Order::findOne($order->id);
                 }
@@ -593,6 +599,7 @@ class OrderSearch extends Order
 
         $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
         innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
+        innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')->
         innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
 
         $dataProvider = new ActiveDataProvider([
@@ -621,13 +628,16 @@ class OrderSearch extends Order
                 ]);
             }
         }
+        if(!isset($attributes["OrderSearch"]["id"])){
+            $attributes["OrderSearch"]["id"]=null;
+        }
         if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
             $attributes["OrderSearch"]["oc.customer_id"]=null;
         }
 
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $this->id,
+                'id' => $attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,

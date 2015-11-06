@@ -10,7 +10,8 @@ use restapi\models\alertMsgEnum;
 class SendSmsController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} /send-sms/send-v 发短消息
+     * @api {GET} /send-sms/send-v [GET ] /send-sms/send-v
+     * @apiDescription 发短消息
      * @apiName actionSendV
      * @apiGroup SendSms
      *
@@ -55,17 +56,17 @@ class SendSmsController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /send-sms/send-message-code 短信验证码 (赵顺利100%)
+     * @api {GET} /send-sms/send-message-code [GET] /send-sms/send-message-code (100%)
      * @apiName actionSendMessageCode
      * @apiGroup SendSms
-     * @apiDescription 请求向用户手机发送验证码用于登录
+     * @apiDescription 请求向用户手机发送验证码用于登录(赵顺利)
      * @apiParam {String} phone 用户手机号
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *        "code":"ok"
+     *        "code":"1"
      *        "msg": "短信发送成功"
      *     }
      *
@@ -74,7 +75,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "电话号码不符合规则"
      *     }
      */
@@ -85,38 +86,44 @@ class SendSmsController extends \restapi\components\Controller
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!CustomerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendUserCodeFailed);
+                return $this->send(null, "短信发送失败", 0, 200,null,alertMsgEnum::sendUserCodeFailed);
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendUserCodeFailed);
+            return $this->send(null, "电话号码不符合规则", 0, 200,null,alertMsgEnum::sendUserCodeFailed);
 
         }
         return $this->send(null, "短信发送成功", 1, 200,null, alertMsgEnum::sendUserCodeSuccess);
     }
 
     /**
-     * @api {GET} /send-sms/send-worker-message-code 阿姨登录短信验证码 （李勇100%）
+     * @api {GET} /send-sms/send-worker-message-code Send-Worker-Message-Code（100%）
+     * 
+     * @apiDescription 请求向阿姨手机发送验证码用于登录（李勇）
      * @apiName actionSendWorkerMessageCode
      * @apiGroup SendSms
-     * @apiDescription 请求向阿姨手机发送验证码用于登录
      * @apiParam {String} phone 用户手机号
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *        "code":1
-     *        "msg": "短信发送成功"
-     *     }
+     *       {
+     *           "code": 1,
+     *           "msg": "短信发送成功",
+     *           "ret": {},
+     *           "alertMsg": "验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636"
+     *        }
      *
      * @apiError PhoneNotFound The id of the User was not found.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 404 Not Found
-     *     {
-     *       "code":0,
-     *       "msg": "电话号码不符合规则"
-     *     }
+     *     HTTP/1.1 200 Not Found
+     *      {
+     *          "code": 0,
+     *          "msg": "阿姨不存在或在黑名单或离职或删号",
+     *          "ret": {},
+     *          "alertMsg": "验证码已发失败"
+     *      }
+     * 
      */
     public function actionSendWorkerMessageCode()
     {
@@ -127,13 +134,13 @@ class SendSmsController extends \restapi\components\Controller
             if($login_info['can_login']==1){
                 //验证通过
                 if (!WorkerCode::generateAndSend($phone)) {
-                    return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
+                    return $this->send(null, "短信发送失败", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
                 }
             }else{
-                 return $this->send(null, "阿姨不存在或在黑名单或离职或删号", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
+                 return $this->send(null, "阿姨不存在或在黑名单或离职或删号", 0, 2,null,alertMsgEnum::sendWorkerCodeFaile);
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
+            return $this->send(null, "电话号码不符合规则", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
 
         }
         return $this->send(null, "短信发送成功",1,200,null,alertMsgEnum::sendWorkerCodeSuccess);

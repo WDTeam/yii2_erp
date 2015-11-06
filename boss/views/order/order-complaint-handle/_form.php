@@ -1,46 +1,48 @@
 <?php
+use boss\assets\AppAsset;
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
+
+AppAsset::addCss($this, 'css/order_complaint_handle/style.css');
+
 $this->title = '订单投诉管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<style>
-.contented{
-	display: none;
-}
-</style>
-投诉详情
-<table>
-	<thead>
-		<tr>
-			<th>投&nbsp;&nbsp;&nbsp;&nbsp;诉ID:<?= Html::encode($orderComplaintModel->id); ?></th>
-			<th>投诉阿姨:</th>
-			<th>投诉详情:</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>
-				订单编号:<?= Html::encode($orderComplaintModel->order->order_code); ?><br/>
-				客户手机:<?= Html::encode($orderComplaintModel->complaint_phone); ?><br/>
-				投诉来源:<?= Html::encode($orderComplaintModel->complaint_channel); ?>
-			</td>
-			<td>
-				阿姨姓名:<?= Html::encode($orderComplaintModel->orderExtWorker->order_worker_name);?><br/>
-				阿姨编号:<?= Html::encode($orderComplaintModel->orderExtWorker->worker_id);?><br/>
-				阿姨身份:<?= Html::encode($orderComplaintModel->orderExtWorker->order_worker_type_name);?><br/>
-				阿姨手机:<?= Html::encode($orderComplaintModel->orderExtWorker->order_worker_phone);?><br/>
-				所属门店:<?= Html::encode($orderComplaintModel->orderExtWorker->order_worker_shop_name);?><br/>
-			</td>
-			<td><? Html::encode($content); ?></td>
-		</tr>
-	</tbody>
-</table>
-操作记录
-<table>
-	<thead>
+<div class="container">
+	<div class="row">
+		<span class="details">投诉详情</span><hr />
+	</div>
+	<div class="row">
+		<table class="table-bordered">
+			<tr>
+				<th>投诉ID:</th>
+				<th>投诉阿姨:</th>
+				<th>投诉详情:</th>
+			</tr>
+			<tr>
+				<td>
+					订单编号:<br/>
+					客户手机:<br/>
+					投诉来源:
+				</td>
+				<td>
+					阿姨姓名:<br/>
+					阿姨编号:<br/>
+					阿姨身份:<br/>
+					阿姨手机:<br/>
+					所属门店:<br/>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<span class="details">操作记录</span><hr />
+	</div>
+	<div class="row">
+		<table class="table-bordered">
 		<tr>
 			<th>时间</th>
 			<th>操作人</th>
@@ -48,97 +50,155 @@ $this->params['breadcrumbs'][] = $this->title;
 			<th>由</th>
 			<th>变更为</th>
 		</tr>
-	</thead>
-	<tbody>
 		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td>11234</td>
+			<td>32456</td>
+			<td>43256</td>
+			<td>24356</td>
+			<td>2134567</td>
 		</tr>
-	</tbody>
-</table>
-<?php if(($orderComplaintModel->complaint_status != 1) && !empty($ochModel) && is_array($ochModel)){?>
-处理方案
-<table>
-	<thead>
+	</table>
+	</div>
+	<div class="row">
+		<span class="details">处理方案</span><hr />
+	</div>
+	<div class="row">
+		<table class="table-bordered">
 		<tr>
 			<th>时间</th>
 			<th>操作人</th>
 			<th>处理方案</th>
 		</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($ochModel as $key=>$object){?>
 		<tr>
-			<td><?= Html::encode(date("Y-m-d H:i:s",$object->created_at));?></td>
-			<td><?= Html::encode($object->handle_operate); ?></td>
-			<td><?= Html::encode($object->handle_plan); ?></td>
+			<td>wesdrfgh</td>
+			<td>sadf</td>
+			<td>adfg</td>
 		</tr>
-		<?php }?>
-	</tbody>
-</table>
-<?php }?>
-操作
-<hr>
- <?php $form = ActiveForm::begin(['action' => ['order/order-complaint-handle/create'],'method'=>'post','type'=>ActiveForm::TYPE_HORIZONTAL]); 
-        ?>
-        <input type="hidden" value="<?= $orderComplaintModel->id;?>" name="OrderComplaint[id]">
-<div>
-		投诉部门:<?php if(!empty($complaintSection)){foreach ($complaintSection as $keycs=>$valcs){?>
-		<?= $valcs; ?><input type="radio" name="OrderComplaint[complaint_section]"  value="<?= $keycs; ?>" <?php if($keycs == $orderComplaintModel->complaint_section){?>checked="checked"<?php }?>>
-		<?php }}?>
-</div>
-<div style="width: 900px; height:100px;">
-		投诉类型:<?php if(!empty($complaintAssortment)){foreach ($complaintAssortment as $keyca=>$valca){?>
-	  	<ul id="assortment<?= $keyca; ?>" class="contented" style="color:#999999;<?php if($keyca == $orderComplaintModel->complaint_section){?>display:block;<?php }?>" >
-	  	<?php foreach ($valca as $keyca2=>$valca2){?>
-	  	<li style="float:left;">
-	  	<?= $valca2;?><input type="radio" name="OrderComplaint[complaint_assortment]" value="<?= $keyca2; ?>" <?php if($keyca2 == $orderComplaintModel->complaint_assortment){?>checked="checked"<?php }?>>
-	  	</li>
-	   <?php }?>
-	   </ul>
-	   <?php }}?>
-</div>
-<hr>
-<div>
-	   投诉级别:<?php if(!empty($complaintLevel)){foreach ($complaintLevel as $keycl=>$valcl){?>
-		<?= $valcl; ?><input type="radio" name="OrderComplaint[complaint_level]" value="<?= $keycl;?>"<?php if($keycl == $orderComplaintModel->complaint_level){?>checked="checked"<?php }?>>
-	  <?php }}?>
-</div>
-	  <hr>
-阿姨处理
-<hr>
-<div>
-<input type="hidden" value="<?= $orderComplaintModel->id;?>" name="OrderComplaintHandle[order_complaint_id]">
-投诉状态:
-<?php if(!empty($complaintStatus)){foreach ($complaintStatus as $keycs=>$valcs){?>
-		<?= $valcs; ?><input type="radio" name="OrderComplaint[complaint_status]" value="<?= $keycs;?>">
-	  <?php }}?>
-</div>
-<div>
-处理部门:
-<?php if(!empty($complaintSection)){foreach ($complaintSection as $keycls=>$valcls){?>
-		<?= $valcls; ?><input type="radio" name="OrderComplaintHandle[handle_section]" value="<?= $keycls;?>">
-		<?php }}?>
-</div>
-<div>
-处理方案:
-	<textarea rows="5" cols="40" name="OrderComplaintHandle[handle_plan]"></textarea>
-</div>
-<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-    ActiveForm::end(); ?>
-<?php 
-$this->registerJs('
-	    $(function () {
-			$("input[name=\"OrderComplaint[complaint_section]\"]").click(function(){
-				var id= $(this).val();
-				$(".contented").hide();
-				$("#assortment"+id).show();
-			});
+	</table>
+	</div>
+	<div class="row">
+		<span class="details">操作</span><hr />
+	</div>
+	<div class="row">
+		<div class="col-md-1 text-left"><span class="">投诉部门:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">线下运营部</label>
+			<input type="radio" id="2"><label for="2">客服部</label>
+			<input type="radio" id="3"><label for="3">线下推广部部</label>
+			<input type="radio" id="4"><label for="4">公司</label>
+			<input type="radio" id="5"><label for="5">财务</label>
+			<input type="radio" id="6"><label for="6">系统</label>
+			<input type="radio" id="7"><label for="7">活动</label>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">投诉类型:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">无</label>
+			<input type="radio" id="2"><label for="2">客服部</label>
+			<input type="radio" id="3"><label for="3">线下推广部部</label>
+			<input type="radio" id="4"><label for="4">公司</label>
+			<input type="radio" id="5"><label for="5">财务</label>
+			<input type="radio" id="6"><label for="6">系统</label>
+			<input type="radio" id="7"><label for="7">活动</label>
+			<input type="radio" id="1"><label for="1">无</label>
+			<input type="radio" id="2"><label for="2">客服部</label>
+			<input type="radio" id="3"><label for="3">线下推广部部</label>
+			<input type="radio" id="4"><label for="4">公司</label>
+			<input type="radio" id="5"><label for="5">财务</label>
+			<input type="radio" id="6"><label for="6">系统</label>
+			<input type="radio" id="7"><label for="7">活动</label>
+			<input type="radio" id="1"><label for="1">无</label>
+			<input type="radio" id="2"><label for="2">客服部</label>
+			<input type="radio" id="3"><label for="3">线下推广部部</label>
+			<input type="radio" id="4"><label for="4">公司</label>
+			<input type="radio" id="5"><label for="5">财务</label>
+			<input type="radio" id="6"><label for="6">系统</label>
+			<input type="radio" id="7"><label for="7">活动</label>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">投诉级别:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">S</label>
+			<input type="radio" id="2"><label for="2">A</label>
+			<input type="radio" id="3"><label for="3">B</label>
+			<input type="radio" id="4"><label for="4">C</label>
+		</div>
+	</div>
 
-        })
-    ');
 
-?>
+	<hr>
+	<div class="row mar-top">
+		<div class="col-md-12 text-left"><span class="">阿姨处理:</span><span class="yellow-text">封号一天</span></div>
+	</div>
+	<hr>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">订单状态:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">待处理</label>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">处理部门:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">线下运营部</label>
+			<input type="radio" id="2"><label for="2">客服部</label>
+			<input type="radio" id="3"><label for="3">线下推广部部</label>
+			<input type="radio" id="4"><label for="4">公司</label>
+			<input type="radio" id="5"><label for="5">财务</label>
+			<input type="radio" id="6"><label for="6">系统</label>
+			<input type="radio" id="7"><label for="7">活动</label>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">处理方案:</span></div>
+		<div class="col-md-9">
+			<textarea name="" id="" cols="100" rows="6"></textarea>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<input class="btn" type="button" value="确定">
+	</div>
+
+
+	<hr>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">客户赔付:</span></div>
+		<div class="col-md-11">
+			<select name="" id="">
+				<option value="1">1</option>
+				<option value="1">1</option>
+				<option value="1">1</option>
+			</select>
+		</div>
+	</div>
+	<hr>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">订单状态:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">待处理</label>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">处理部门:</span></div>
+		<div class="col-md-9">
+			<input type="radio" id="1"><label for="1">线下运营部</label>
+			<input type="radio" id="2"><label for="2">客服部</label>
+			<input type="radio" id="3"><label for="3">线下推广部部</label>
+			<input type="radio" id="4"><label for="4">公司</label>
+			<input type="radio" id="5"><label for="5">财务</label>
+			<input type="radio" id="6"><label for="6">系统</label>
+			<input type="radio" id="7"><label for="7">活动</label>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<div class="col-md-1 text-left"><span class="">处理方案:</span></div>
+		<div class="col-md-9">
+			<textarea name="" id="" cols="100" rows="6"></textarea>
+		</div>
+	</div>
+	<div class="row mar-top">
+		<input class="btn" type="button" value="确定">
+	</div>
+</div>

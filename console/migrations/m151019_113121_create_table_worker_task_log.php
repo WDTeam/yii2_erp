@@ -22,7 +22,7 @@ class m151019_113121_create_table_worker_task_log extends Migration
             'worker_task_is_done' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务是否完成,0未处理，1完成，-1结束且未完成\'',
             'worker_task_done_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务完成时间\'',
             'worker_task_reward_type'=>Schema::TYPE_SMALLINT . '(3) DEFAULT 0 COMMENT \'任务奖励类型\'',
-            'worker_task_reward_value'=>Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'任务奖励值\'',
+            'worker_task_reward_value'=>Schema::TYPE_DECIMAL. '(10,2) COMMENT \'任务奖励值\'',
             'worker_task_is_settlemented'=>Schema::TYPE_SMALLINT . '(3) DEFAULT 0 COMMENT \'是否已结算\'',
             
             'created_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'创建时间\'' ,

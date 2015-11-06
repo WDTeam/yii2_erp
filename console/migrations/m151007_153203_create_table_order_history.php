@@ -31,6 +31,9 @@ class m151007_153203_create_table_order_history extends Migration
             'order_before_status_name' => Schema::TYPE_STRING . '(128)   DEFAULT \'\' COMMENT \'状态变更前订单状态\'',
             'order_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned  DEFAULT 0 COMMENT \'订单状态字典ID\'',
             'order_status_name' => Schema::TYPE_STRING . '(128)   DEFAULT \'\' COMMENT \'订单状态\'',
+            'order_status_boss' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'BOOS状态名称\'',
+            'order_status_customer' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'客户端状态名称\'',
+            'order_status_worker' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT 0 COMMENT \'阿姨端状态名称\'',
 //==============================订单标记
             'order_flag_send' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了\'',
             'order_flag_urgent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'加急\'',
@@ -42,6 +45,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_worker_jpush' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了极光推送\'',
             'order_flag_worker_ivr' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了IVR\'',
             'order_flag_change_booked_worker' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否可换指定阿姨\'',
+            'order_flag_is_checked' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否已对账\'',
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',

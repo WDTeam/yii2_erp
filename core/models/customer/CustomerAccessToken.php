@@ -24,11 +24,14 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 {
     public static function generateAccessToken($phone, $code){
         $check_code = CustomerCode::checkCode($phone, $code);
-        // var_dump($check_code);
-        // exit();
+        
+        //var_dump($check_code);
+        //exit();
         if ($check_code == false) {
             return $check_code;
         }
+        
+       
 
         $transaction = \Yii::$app->db->beginTransaction();
         try{
@@ -110,9 +113,11 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         //     return false;
         // }
         $customer = Customer::find()->where(['customer_phone'=>$customerAccessToken->customer_phone])->one();
+        unset($customer["is_del"]);
         return $customer == NULL ? false : $customer;
     }
-
+    
+    /****************************access token for pop************************************/
     /**
      * 验证POP调用BOSS系统的签名
      */
@@ -183,5 +188,101 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             return false;
         }
         
+    }
+    
+    /******************************access token for weixin*******************************/
+    /**
+     * create weixin customer while weixin id is availible
+     */
+    public static function createWeixinCustomer($phone, $code, $weixin_id){
+        $access_token = self::generateAccessToken($phone, $code);
+        if(!$access_token){
+            return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'生成access_token 失败'];
+        }
+        $customer = self::getCustomer($access_token);
+        if(!$customer){
+            return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'获取客户信息失败'];
+        }
+        $customer->customer_is_weixin = 1;
+        $customer->weixin_id = $weixin_id;
+        $customer->updated_at = time();
+        if(!$customer->validate()){
+            return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'创建微信客户失败'];
+        }
+        $customer->save();
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'access_token'=>$access_token, 'customer'=>$customer];
+    }
+    
+    /**
+     * check sign for weixin 
+     */
+    public static function checkSignForWeixin($weixin_id, $sign){
+        $key = 'weixin_to_boss';
+		
+        if (md5($weixin_id.$key) != $sign) {
+            return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'check sign failed'];
+        }
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>''];
+    }
+    
+    /**
+     * generate access token for weixin customer
+     */
+    public static function generateAccessTokenForWeixin($weixin_id, $sign){
+        $check_sign = self::checkSignForWeixin($weixin_id, $sign);
+        if($check_sign['response'] == 'error'){
+            return $check_sign;
+        }
+        
+        $customer_arr_info = self::getCustomerByWeixinId($weixin_id);
+        if($customer_arr_info['response'] == 'error'){
+            return $customer_arr_info;
+        }
+        $phone = $customer_arr_info['customer']['customer_phone'];
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
+            if (!empty($customerAccessTokens)) {
+                foreach ($customerAccessTokens as $customerAccessToken) {
+                    $customerAccessToken->is_del = 1;
+                    $customerAccessToken->validate();
+                    $customerAccessToken->save();
+                }
+            }
+        
+            $customerAccessToken = new CustomerAccessToken;
+            $randstr = '';
+            for ($i=0; $i < 4; $i++) { 
+                $randstr .= rand(0, 9);
+            }
+
+            $customerAccessToken->customer_access_token = md5($phone.$randstr);
+            $customerAccessToken->customer_access_token_expiration = 365 * 24 * 3600;
+            $customerAccessToken->customer_code_id = 0;
+            $customerAccessToken->customer_code = '';
+            $customerAccessToken->customer_phone = $phone;
+            $customerAccessToken->created_at = time();
+            $customerAccessToken->updated_at = 0;
+            $customerAccessToken->is_del = 0;
+            $customerAccessToken->validate();
+            $customerAccessToken->save();
+            $transaction->commit();
+            return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'access_token'=>$customerAccessToken->customer_access_token, 'customer'=>$customer_arr_info['customer']];
+
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return ['response'=>'error', 'errcode'=>'4', 'errmsg'=>'generate access token failed'];
+        }
+    }
+    
+    /**
+     * get customer by weixin_id
+     */
+    public static function getCustomerByWeixinId($weixin_id){
+        $customer = Customer::find()->where(['weixin_id'=>$weixin_id])->asArray()->one();
+        if(empty($customer)){
+            return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'customer is not exist'];
+        }
+        return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'customer'=>$customer];
     }
 }

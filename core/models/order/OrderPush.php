@@ -88,6 +88,7 @@ class OrderPush extends Order
     {
         $ivr_flag = false;
         $jpush_flag = false;
+        $order = OrderSearch::getOne($order_id);
         $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_IVR_PUSH_SUCCESS);
         $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS);
         foreach ($workers as $v) {
@@ -98,7 +99,7 @@ class OrderPush extends Order
             }
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
                 OrderPool::addOrderToWorkerPushList($order_id,$v['id']); //把订单添加到接单大厅
-                $result = Yii::$app->jpush->push(["worker_{$v['id']}"], '订单来啦！'); //TODO 发送内容
+                $result = Yii::$app->jpush->push(["worker_{$v['id']}"], "阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"); //TODO 发送内容
                 if (isset($result->isOK)) {
                     $worker_id = intval(str_replace('worker_', '', $v));
                     OrderWorkerRelation::jpushPushSuccess($order_id, $worker_id, 1);
@@ -154,6 +155,7 @@ class OrderPush extends Order
     public static function workerSMSPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = 1;
         $order->order_flag_worker_sms = $order->orderExtFlag->order_flag_worker_sms + 1;
         return $order->doSave(['OrderExtFlag']);
     }

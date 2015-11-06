@@ -74,7 +74,7 @@ $this->title = Yii::t('boss', '评论管理');
     		'order_id',
     		[
     		'format' => 'raw',
-    		'label' => '客户名称',
+    		'label' => '客户',
     		'value' => function ($dataProvider) {
     			$info=core\models\customer\Customer::getCustomerById($dataProvider->customer_id);
     			if(count($info)>0){$name=$info['customer_name']; }else{ $name='暂无';}
@@ -84,7 +84,7 @@ $this->title = Yii::t('boss', '评论管理');
     		],
     		[
     		'format' => 'raw',
-    		'label' => '阿姨姓名',
+    		'label' => '阿姨',
     		'value' => function ($dataProvider) {
 				$info=core\models\worker\Worker::getWorkerInfo($dataProvider->worker_id);
 				if(count($info)>0){$name=$info['worker_name']; }else{ $name='暂无';}

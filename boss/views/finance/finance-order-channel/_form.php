@@ -7,7 +7,11 @@ use kartik\datecontrol\DateControl;
 use dbbase\models\finance\FinancePayChannel;
 use boss\models\finance\FinanceOrderChannelSearch;
 $model->finance_order_channel_is_lock=1;
-$model->is_del=0;
+$model->is_del=1;
+$model->finance_order_channel_sort=1;
+$model->finance_order_channel_is_lock=1;
+$model->finance_order_channel_source=0;
+
 /**
  * @var yii\web\View $this
  * @var dbbase\models\FinanceOrderChannel $model

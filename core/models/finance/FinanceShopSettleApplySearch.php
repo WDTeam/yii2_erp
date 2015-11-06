@@ -91,6 +91,11 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
         $this->finance_shop_settle_apply_fee = self::MANAGE_FEE_PER_ORDER * $this->finance_shop_settle_apply_order_count;
     }
     
+    public function getCanPayedShopSettlementList(){
+        $shopSettleApplyArray = self::find()->where(['finance_shop_settle_apply_status'=>FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])->all();
+        return $shopSettleApplyArray;
+    }
+    
     public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();
