@@ -1587,7 +1587,7 @@ class UserController extends \restapi\components\Controller
      */
     public function actionGetUserFeedback()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->post(); 
 
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
