@@ -9,6 +9,7 @@
 namespace boss\models\order;
 
 use core\models\customer\Customer;
+use core\models\order\OrderSrc;
 use core\models\order\OrderWorkerRelation;
 use dbbase\models\finance\FinanceOrderChannel;
 use core\models\operation\OperationArea;
@@ -191,7 +192,7 @@ class Order extends OrderModel
     {
         $post['Order']['admin_id'] = Yii::$app->user->id;
         $post['Order']['order_ip'] = Yii::$app->request->userIP;
-        $post['Order']['order_src_id'] = 1; //订单来源BOSS
+        $post['Order']['order_src_id'] = OrderSrc::ORDER_SRC_BOSS; //下单方式BOSS
         $post['Order']['order_is_use_balance'] =  $post['Order']['order_pay_type']==2?1:0; //是否使用余额
         $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
         $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
