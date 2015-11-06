@@ -596,7 +596,7 @@ class ServiceController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取单次服务排班表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        return $this->send($single_worker_time, "获取单次服务排班表成功",null,alertMsgEnum::singleServiceTimeSuccess);
+        return $this->send($single_worker_time, "获取单次服务排班表成功",1,200,null,alertMsgEnum::singleServiceTimeSuccess);
     }
 
     /**
