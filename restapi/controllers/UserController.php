@@ -1637,7 +1637,7 @@ class UserController extends \restapi\components\Controller
      *   "ret": 
      *       {
      *           "money": "客户余额",
-     *           "score": "用户积分价格",
+     *           "score": "用户积分数",
      *           "coupon": "优惠券数量"
      *       },
      *   "msg": "获取个人中心信息成功"
