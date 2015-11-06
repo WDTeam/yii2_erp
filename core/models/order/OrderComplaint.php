@@ -158,8 +158,11 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
     	if(!empty($arr) && is_array($arr)){
     		$arr['complaint_channel'] = '1';
     		$narr = array('OrderComplaint'=>$arr);
-    		$this->load($narr);
-    		$this->save();
+    		if($this->load($narr) && $this->save()){
+    			return true;
+    		}else{
+    			return false;
+    		}
     	}else{
     		return false;
     	} 
