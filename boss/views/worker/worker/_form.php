@@ -175,17 +175,67 @@ use core\models\worker\WorkerIdentityConfig;
                 ],
             ]); ?>
 
-            <div class="operation-city-form">
-
-            <?=AreaCascade::widget([
-                'model' => $worker_ext,
-                'options' => ['class' => 'form-control inline'],
-                'label' =>'阿姨居住地',
-                'grades' => 'county',
-            ]);
-            ?>
-
-            </div>
+            <?= $form->field($worker_ext, 'worker_live_province')->widget(Select2::classname(), [
+                'name' => 'worker_live_province',
+                'hideSearch' => false,
+                'data' => Worker::getAreaListByLevel(1),
+                'options' => ['placeholder' => '选择省份'],
+                'pluginOptions' => [
+                    'maximumInputLength' => 10,
+                ],
+                'pluginEvents'=> [
+                    "change" => "function() {
+                                $('#select2-workerext-worker_live_city-container>.select2-selection__clear').mousedown();
+                                $('#select2-workerext-worker_live_area-container>.select2-selection__clear').mousedown();
+                             }",
+                ]
+            ]); ?>
+            <?= $form->field($worker_ext, 'worker_live_city')->widget(Select2::classname(), [
+                'name' => 'worker_live_city',
+                'hideSearch' => false,
+                'data' => Worker::getAreaListByLevel(2),
+                'options' => ['placeholder' => '选择城市'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'maximumInputLength' => 10,
+                    'ajax' => [
+                        'url' => Url::to(['show-area']),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {
+                                        parent_id: $("#workerext-worker_live_province").val(),
+                                        name: params.term
+                                    }; }')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(content) { return content.text; }'),
+                    'templateSelection' => new JsExpression('function (content) { return content.text; }'),
+                ],
+                'pluginEvents'=> [
+                    "change" => "function() {
+                                $('#select2-workerext-worker_live_area-container>.select2-selection__clear').mousedown();
+                             }",
+                ]
+            ]); ?>
+            <?= $form->field($worker_ext, 'worker_live_area')->widget(Select2::classname(), [
+                'name' => 'worker_district',
+                'hideSearch' => false,
+                'options' => ['placeholder' => '选择区县'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'maximumInputLength' => 10,
+                    'ajax' => [
+                        'url' => Url::to(['show-area']),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {
+                                        parent_id: $("#workerext-worker_live_city").val(),
+                                        name: params.term
+                                    }; }')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(content) { return content.text; }'),
+                    'templateSelection' => new JsExpression('function (content) { return content.text; }'),
+                ],
+            ]); ?>
             <?= $form->field($worker_ext, 'worker_live_street')->textInput(['placeholder' => '输入阿姨居住详细地址...', 'maxlength' => 10]); ?>
         </div>
 

@@ -65,7 +65,8 @@ $this->title = $model->worker_name;
                             $('#select2-worker-shop_id-container>.select2-selection__clear').mousedown();
                             $('.select2-selection__choice__remove').each(function(index,obj){
                                    $('.select2-selection__choice__remove').click()
-                            })
+                            });
+
                          }",
                     ]
                 ],
@@ -260,27 +261,113 @@ $this->title = $model->worker_name;
             ],
             [
                 'columns'=>[
+//                    [
+//                        'attribute' => 'worker_live_province',
+//                        'editModel'=>$model->workerExtRelation,
+//                        'viewModel'=>$model->workerExtRelation,
+//                        'type' => DetailView::INPUT_TEXT,
+//                    ],
                     [
                         'attribute' => 'worker_live_province',
                         'editModel'=>$model->workerExtRelation,
                         'viewModel'=>$model->workerExtRelation,
-                        'type' => DetailView::INPUT_TEXT,
                         'label'=>'阿姨居住地',
+                        'type' => DetailView::INPUT_WIDGET,
+                        'widgetOptions' => [
+                            'class'=>\kartik\widgets\Select2::className(),
+                            'name' => 'worker_district',
+                            'hideSearch' => false,
+                            'data' => Worker::getAreaListByLevel(1),
+                            'options' => ['placeholder' => '选择省份'],
+                            'pluginOptions' => [
+                                'maximumInputLength' => 10,
+                            ],
+                            'pluginEvents'=> [
+                                "change" => "function() {
+                                $('#select2-workerext-worker_live_city-container>.select2-selection__clear').mousedown();
+                                $('#select2-workerext-worker_live_area-container>.select2-selection__clear').mousedown();
+                             }",
+                            ]
+                        ],
+                        'value'=>$model::getArea($model->workerExtRelation->worker_live_province),
                     ],
                     [
                         'attribute' => 'worker_live_city',
                         'editModel'=>$model->workerExtRelation,
                         'viewModel'=>$model->workerExtRelation,
-                        'type' => DetailView::INPUT_TEXT,
-                        'labelColOptions'=>['style'=>'display:none']
+                        'labelColOptions'=>['style'=>'display:none'],
+                        'type' => DetailView::INPUT_WIDGET,
+                        'widgetOptions' => [
+                            'class'=>\kartik\widgets\Select2::className(),
+                            'hideSearch' => false,
+                            'data' => Worker::getAreaListByLevel(2),
+                            'options' => ['placeholder' => '选择城市'],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'maximumInputLength' => 10,
+                                'ajax' => [
+                                    'url' => Url::to(['show-area']),
+                                    'dataType' => 'json',
+                                    'data' => new JsExpression('function(params) { return {
+                                        parent_id: $("#workerext-worker_live_province").val(),
+                                        name: params.term
+                                    }; }')
+                                ],
+                                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                'templateResult' => new JsExpression('function(content) { return content.text; }'),
+                                'templateSelection' => new JsExpression('function (content) { return content.text; }'),
+                            ],
+                            'pluginEvents'=> [
+                                "change" => "function() {
+                                $('#select2-workerext-worker_live_area-container>.select2-selection__clear').mousedown();
+                             }",
+                            ]
+                        ],
+                        'value'=>$model::getArea($model->workerExtRelation->worker_live_city),
                     ],
                     [
                         'attribute' => 'worker_live_area',
                         'editModel'=>$model->workerExtRelation,
                         'viewModel'=>$model->workerExtRelation,
-                        'type' => DetailView::INPUT_TEXT,
-                        'labelColOptions'=>['style'=>'display:none']
+                        'labelColOptions'=>['style'=>'display:none'],
+                        'type' => DetailView::INPUT_WIDGET,
+                        'widgetOptions' => [
+                            'class'=>\kartik\widgets\Select2::className(),
+                            'hideSearch' => false,
+                            'data' => Worker::getAreaListByParentId($model->workerExtRelation->worker_live_city),
+                            'options' => ['placeholder' => '选择区县'],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'maximumInputLength' => 10,
+                                'ajax' => [
+                                    'url' => Url::to(['show-area']),
+                                    'dataType' => 'json',
+                                    'data' => new JsExpression('function(params) { return {
+                                        parent_id: $("#workerext-worker_live_city").val(),
+                                        name: params.term
+                                    }; }')
+                                ],
+                                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                'templateResult' => new JsExpression('function(content) { return content.text; }'),
+                                'templateSelection' => new JsExpression('function (content) { return content.text; }'),
+                            ],
+                        ],
+                        'value'=>$model::getArea($model->workerExtRelation->worker_live_area),
                     ],
+//                    [
+//                        'attribute' => 'worker_live_city',
+//                        'editModel'=>$model->workerExtRelation,
+//                        'viewModel'=>$model->workerExtRelation,
+//                        'type' => DetailView::INPUT_TEXT,
+//                        'labelColOptions'=>['style'=>'display:none']
+//                    ],
+//                    [
+//                        'attribute' => 'worker_live_area',
+//                        'editModel'=>$model->workerExtRelation,
+//                        'viewModel'=>$model->workerExtRelation,
+//                        'type' => DetailView::INPUT_TEXT,
+//                        'labelColOptions'=>['style'=>'display:none']
+//                    ],
                 ]
             ],
             [

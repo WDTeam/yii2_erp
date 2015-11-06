@@ -12,6 +12,7 @@ use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\order\OrderStatus;
+use \core\models\order\OrderStatusHistory;
 use restapi\models\alertMsgEnum;
 use yii\web\Response;
 use Yii;
@@ -1153,33 +1154,35 @@ class OrderController extends \restapi\components\Controller
         $orderInfo = $orderInfo[0];
         //订单数据整理
         $workerName = "";
-        if($orderInfo['order_booked_worker_id']){
+        if ($orderInfo['order_booked_worker_id']) {
             $workerInfo = Worker::getWorkerInfo($orderInfo['order_booked_worker_id']);
             $workerName = $workerInfo['worker_name'];
         }
-        $ret['orders']  = [
+        $ret['orders'] = [
             //家庭保洁
-            'order_booked_begin_time'=>$orderInfo['order_booked_begin_time'],
-            'order_booked_end_time' =>$orderInfo['order_booked_end_time'],
-            'order_address'=> $orderInfo['order_address'],
-            'order_booked_worker_id' =>$orderInfo['order_booked_worker_id'],
-            'order_booked_worker_name' =>$workerName,
-            'order_status_customer' =>$orderInfo['order_status_customer'],
+            'order_booked_begin_time' => $orderInfo['order_booked_begin_time'],
+            'order_booked_end_time' => $orderInfo['order_booked_end_time'],
+            'order_address' => $orderInfo['order_address'],
+            'order_booked_worker_id' => $orderInfo['order_booked_worker_id'],
+            'order_booked_worker_name' => $workerName,
+            'order_status_customer' => $orderInfo['order_status_customer'],
             //订单信息
-            'order_service_type_name'=>$orderInfo['order_service_type_name'],
-            'order_code'=>$orderInfo['order_code'],
-            'order_money'=>$orderInfo['order_money'],
-            'order_channel_name'=>$orderInfo['order_channel_name'],
-            'order_pay_type' =>$orderInfo['order_pay_type'],
+            'order_service_type_name' => $orderInfo['order_service_type_name'],
+            'order_code' => $orderInfo['order_code'],
+            'order_money' => $orderInfo['order_money'],
+            'order_channel_name' => $orderInfo['order_channel_name'],
+            'order_pay_type' => $orderInfo['order_pay_type'],
             'order_pay_channel_name' => $orderInfo['order_pay_channel_name'],
-            'order_pay_money' =>$orderInfo['order_pay_money'], 
-            'order_use_acc_balance' =>$orderInfo['order_use_acc_balance'], 
-            'order_use_card_money' => $orderInfo['order_use_card_money'], 
-            'order_use_coupon_money' => $orderInfo['order_use_coupon_money'], 
+            'order_pay_money' => $orderInfo['order_pay_money'],
+            'order_use_acc_balance' => $orderInfo['order_use_acc_balance'],
+            'order_use_card_money' => $orderInfo['order_use_card_money'],
+            'order_use_coupon_money' => $orderInfo['order_use_coupon_money'],
             'order_use_promotion_money' => $orderInfo['order_use_promotion_money']
         ];
-        $status_history = OrderStatus::searchOrderStatusHistory($args['order_id']);
-        foreach($status_history as $key=> $val){
+        
+        $status_history =  OrderStatusHistory::findByOrderId($args['order_id']);
+        
+        foreach ($status_history as $key => $val) {
             $ret['status_history'][$key]['created_at'] = $val['created_at'];
             $ret['status_history'][$key]['order_status_customer'] = $val['order_status_customer'];
         }
@@ -1265,12 +1268,12 @@ class OrderController extends \restapi\components\Controller
                 if (!in_array($reason, $order_cancel_reason)) {
                     $reason = '其他原因#' . $reason;
                 }
-                try {
-                    
-                    print_r($reason);
-                    exit;
-                    $result = Order::cancelByOrderId($orderId,Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE,$reason);
 
+                try {
+                    $result = Order::cancelByOrderId($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
+                  
+                    var_dump($result);
+                    exit;
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                     } else {
@@ -1286,7 +1289,6 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200, null, alertMsgEnum::orderCancelFaile);
         }
     }
-
 
     /**
      * @api {DELETE} /order/hiden-order [DELETE]/order/hiden-order（ 100%）
@@ -1352,7 +1354,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 阿姨全部订单月份列表 (赵顺利)
      * @apiParam {String} access_token    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} platform_version 平台版本号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
