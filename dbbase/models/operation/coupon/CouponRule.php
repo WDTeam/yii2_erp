@@ -52,7 +52,7 @@ class CouponRule extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'ejj_coupon_rule';
+        return '{{%coupon_rule}}';
     }
 
     /**
@@ -79,34 +79,34 @@ class CouponRule extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('core', '主键'),
             'couponrule_name' => Yii::t('core', '优惠券名称'),
-            'couponrule_channelname' => Yii::t('core', '渠道名称(主要使用到一码多用分渠道发)'),
-            'couponrule_classify' => Yii::t('core', '1 一码一用  2 一码多用'),
-            'couponrule_category' => Yii::t('core', '优惠券分类0为一般优惠券1为赔付优惠券'),
+            'couponrule_channelname' => Yii::t('core', '渠道名称'),//(主要使用到一码多用分渠道发)
+            'couponrule_classify' => Yii::t('core', '类型'),//1 一码一用  2 一码多用
+            'couponrule_category' => Yii::t('core', '分类'),//优惠券分类0为一般优惠券1为赔付优惠券
             'couponrule_category_name' => Yii::t('core', '优惠券范畴'),
-            'couponrule_type' => Yii::t('core', '优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券'),
+            'couponrule_type' => Yii::t('core', '优惠券类别'),//优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券
             'couponrule_type_name' => Yii::t('core', '优惠券类型名称'),
             'couponrule_service_type_id' => Yii::t('core', '服务类别id'),
             'couponrule_service_type_name' => Yii::t('core', '服务类别名称'),
             'couponrule_commodity_id' => Yii::t('core', '如果是商品优惠券id'),
             'couponrule_commodity_name' => Yii::t('core', '如果是商品名称'),
-            'couponrule_city_limit' => Yii::t('core', '城市限制0为不限1为单一城市限制'),
+            'couponrule_city_limit' => Yii::t('core', '地区限制'),//城市限制0为不限1为单一城市限制
             'couponrule_city_id' => Yii::t('core', '关联城市'),
             'couponrule_city_name' => Yii::t('core', '城市名称'),
-            'couponrule_customer_type' => Yii::t('core', '适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员'),
+            'couponrule_customer_type' => Yii::t('core', '适用客户类型'),//适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员
             'couponrule_customer_type_name' => Yii::t('core', '适用客户类别名称'),
             'couponrule_get_start_time' => Yii::t('core', '优惠券的用户可领取开始时间'),
             'couponrule_get_end_time' => Yii::t('core', '优惠券的用户可领取结束时间'),
-            'couponrule_use_start_time' => Yii::t('core', '优惠券的用户可使用的开始时间'),
-            'couponrule_use_end_time' => Yii::t('core', '优惠券的用户可使用的结束时间'),
-            'couponrule_code' => Yii::t('core', '如果是1码多用的优惠码'),
+            'couponrule_use_start_time' => Yii::t('core', '开始时间'),//优惠券的用户可使用的开始时间
+            'couponrule_use_end_time' => Yii::t('core', '结束时间'),//优惠券的用户可使用的结束时间
+            'couponrule_code' => Yii::t('core', '优惠码'),//如果是1码多用的优惠码
             'couponrule_Prefix' => Yii::t('core', '优惠码前缀'),
             'couponrule_use_end_days' => Yii::t('core', '领取后过期天数'),
-            'couponrule_promote_type' => Yii::t('core', '优惠券优惠类型0为立减1为满减2为每减'),
+            'couponrule_promote_type' => Yii::t('core', '优惠类型'),//优惠券优惠类型0为立减1为满减2为每减
             'couponrule_promote_type_name' => Yii::t('core', '优惠券优惠类型名称'),
             'couponrule_order_min_price' => Yii::t('core', '满减或每减时订单最小金额'),
-            'couponrule_price' => Yii::t('core', '优惠券单价'),
-            'couponrule_price_sum' => Yii::t('core', '优惠券总价'),
-            'couponrule_code_num' => Yii::t('core', '优惠码个数'),
+            'couponrule_price' => Yii::t('core', '优惠券单价'),//优惠券单价
+            'couponrule_price_sum' => Yii::t('core', '优惠券总价'),//优惠券总价
+            'couponrule_code_num' => Yii::t('core', '优惠码数量'),//优惠码个数
             'couponrule_code_max_customer_num' => Yii::t('core', '如果是一码多用单个优惠码最大使用人数限制'),
             'is_disabled' => Yii::t('core', '是否禁用'),
             'created_at' => Yii::t('core', '创建时间'),
@@ -117,12 +117,8 @@ class CouponRule extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     * @return EjjQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new EjjQuery(get_called_class());
-    }
+   
+    
+    
+    
 }

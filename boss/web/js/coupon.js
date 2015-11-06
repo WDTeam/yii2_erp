@@ -1,3 +1,32 @@
+//gaofeng status
+$(":radio[value=0]").attr('checked', true);
+$(".field-couponrule-couponrule_channelname").hide();
+
+$(document).on("change","#couponrule-couponrule_classify input[type='radio']",function(){
+    var couponrule_classify = $(this).val();
+	//alert(coupon_category);
+	//exit;
+	switch(couponrule_classify){
+		case '1':
+			$(".field-couponrule-couponrule_channelname").hide();
+		break;	
+		case '2':
+			$(".field-couponrule-couponrule_channelname").show();
+		break;
+		default:
+		break;
+	}
+});
+
+
+
+
+
+
+
+
+
+//gaofeng end
 //coupon category
 $(":radio[value=0]").attr('checked', true);
 $(document).on("change","#coupon-coupon_category input[type='radio']",function(){
@@ -18,6 +47,7 @@ $(document).on("change","#coupon-coupon_category input[type='radio']",function()
 		break;
 	}
 });
+
 
 
 //coupon service type

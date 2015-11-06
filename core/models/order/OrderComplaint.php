@@ -154,7 +154,7 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
      * app投诉添加业务逻辑
      * @param array $arr
      */
-    public static function appModel($arr){
+    public function appModel($arr){
     	if(!empty($arr) && is_array($arr)){
     		$arr['complaint_channel'] = '1';
     		$narr = array('OrderComplaint'=>$arr);
