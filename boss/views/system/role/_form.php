@@ -69,9 +69,8 @@ use kartik\icons\Icon;
                         }
                     }
                     echo $form->field($model, '_permissions')->checkboxList($data, [
-                        'class'=>'test',
                         'id'=>'item_'.$name,
-                    ])->label($name, []);
+                    ])->label($name);
                 }
 //                 echo $form->field($model, '_permissions')->checkboxList($permissions, ['class'=>'test'])->label('', ['hidden' => 'hidden']);
             ?>
