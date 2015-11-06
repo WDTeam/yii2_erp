@@ -17,7 +17,8 @@ namespace core\models\customer;
 use Yii;
 use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
-use core\models\order\OrderComplaint;
+use core\models\comment\CustomerCommentLevel;
+//use core\models\order\OrderComplaint;
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -49,7 +50,24 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         return $comment_list;
     }
 
-
+    /**
+     * 获取阿姨评论统计信息
+     * @param $worker_id
+     * @return array
+     */
+    public static function getWorkerCommentCount($worker_id){
+        $commentLevel = CustomerCommentLevel::find()->where(['is_del'=>0])->select('customer_comment_level,customer_comment_level_name')->asArray()->all();
+        $workerCommentResult = [];
+        foreach ($commentLevel as $val) {
+            $level_count = self::find()->where(['customer_comment_level'=>$val['customer_comment_level'],'worker_id'=>$worker_id])->count();
+            $workerCommentResult[] = [
+                'level' => $val['customer_comment_level'],
+                'level_name'=>$val['customer_comment_level_name'],
+                'level_count'=>$level_count
+            ];
+        }
+        return $workerCommentResult;
+    }
     
     /**
      * 根据阿姨的id,开始时间和结束时间获取评价列表

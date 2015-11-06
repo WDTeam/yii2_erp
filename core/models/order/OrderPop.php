@@ -9,6 +9,9 @@
 namespace core\models\order;
 
 
+
+use yii\base\Model;
+
 class OrderPop extends Model
 {
     const POP_STATUS_CANCEL = -1;
