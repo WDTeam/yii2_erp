@@ -100,8 +100,8 @@ class EventBind extends Component implements BootstrapInterface
                         'tags' => $data['tags'], 
                         'msg' => $data['msg'],
                         'extras'=>$data['extras'],
-                        'title'=>$data['title'],
-                        'category'=>$data['category'],
+                        'title'=>isset($data['title'])?$data['title']:'',
+                        'category'=>isset($data['category'])?$data['category']:'',
                         'created_at'=>date('Y-m-d H:i:s'),
                         'create_time'=>time(),
                     ]);
