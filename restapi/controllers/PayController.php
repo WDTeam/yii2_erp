@@ -1,4 +1,5 @@
 <?php
+
 namespace restapi\controllers;
 
 use Yii;
@@ -9,6 +10,7 @@ use \core\models\customer\CustomerAccessToken;
 
 class PayController extends \restapi\components\Controller
 {
+
     /**
      * @api {POST} /pay/balance-pay [POST] /pay/balance-pay  (100%)
      * @apiDescription 会员余额支付 (赵顺利)
@@ -24,6 +26,8 @@ class PayController extends \restapi\components\Controller
      * {
      *      "code": "1",
      *      "msg":"支付成功",
+     *      "ret":{},
+     *      "alertMsg":"支付成功",
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -32,18 +36,20 @@ class PayController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"0",
-     *      "msg": "支付失败"
+     *      "code":0,
+     *      "msg": "支付失败",
+     *      "ret": {},
+     *      "alertMsg": "支付失败",
      *  }
      *
      */
     public function actionBalancePay()
     {
         $params = Yii::$app->request->post() or
-        $params = json_decode(Yii::$app->request->rawBody, true);
+                $params = json_decode(Yii::$app->request->rawBody, true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403,null,alertMsgEnum::balancePayFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::balancePayFailed);
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
         $date = [
@@ -52,10 +58,10 @@ class PayController extends \restapi\components\Controller
         ];
 
         if (empty(Payment::balancePay($date))) {
-            return $this->send(null, "支付失败", 0, 403,null,alertMsgEnum::balancePayFailed);
+            return $this->send(null, "支付失败", 0, 403, null, alertMsgEnum::balancePayFailed);
         }
 
-        return $this->send(null, "支付成功",1,200,null,alertMsgEnum::balancePaySuccess);
+        return $this->send(null, "支付成功", 1, 200, null, alertMsgEnum::balancePaySuccess);
     }
 
     /**
@@ -127,6 +133,7 @@ class PayController extends \restapi\components\Controller
      * {
      *      "code": 1,
      *      "msg": "数据返回成功",
+     *      "alertMsg": "数据返回成功",
      *      "ret": {
      *          "sp_no": 1049,
      *          "code_url":"weixin://wxpay/bizpayurl?pr=kK7sllh",
@@ -157,8 +164,10 @@ class PayController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"0",
-     *      "msg": "支付失败"
+     *      "code": 401,
+     *      "msg": "支付失败",
+     *      "ret": {},
+     *      "alertMsg": "支付失败",
      *  }
      *
      */
@@ -167,9 +176,9 @@ class PayController extends \restapi\components\Controller
         $model = new PayParam();
         $name = $model->formName();
         $data[$name] = Yii::$app->request->post() or
-        $data[$name] = json_decode(Yii::$app->request->rawBody, true);
+                $data[$name] = json_decode(Yii::$app->request->rawBody, true);
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403,null,alertMsgEnum::onlinePayFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::onlinePayFailed);
         }
         $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
 
@@ -182,8 +191,8 @@ class PayController extends \restapi\components\Controller
             $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
         } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
             $model->scenario = 'alipay_web_online_pay';
-            $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
-            $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
+            $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] : '';    //同步回调地址
+            $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url'] : '';    //显示商品URL
         } elseif ($data[$name]['channel_id'] == '7') {
             $model->scenario = 'zhidahao_h5_online_pay';
             $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
@@ -200,10 +209,9 @@ class PayController extends \restapi\components\Controller
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
             $retInfo = Payment::getPayParams($model->payment_type, $model->customer_id, $model->channel_id, $model->order_id, $ext_params);
-            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'],200,null,alertMsgEnum::onlinePayFailed);
+            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePayFailed);
         }
-        return $this->send(null, $model->errors, 0,403,null,alertMsgEnum::onlinePayFailed);
-
+        return $this->send(null, $model->errors, 0, 403, null, alertMsgEnum::onlinePayFailed);
     }
 
     /**
@@ -220,6 +228,7 @@ class PayController extends \restapi\components\Controller
      * {
      *      "code": "ok",
      *      "msg":"操作成功",
+     *      "alertMsg":"操作成功",
      *      "ret":
      *      {
      *          "cardList":
@@ -333,5 +342,3 @@ class PayController extends \restapi\components\Controller
     }
 
 }
-
-?>

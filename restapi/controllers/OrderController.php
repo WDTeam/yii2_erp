@@ -1427,39 +1427,6 @@ class OrderController extends \restapi\components\Controller
         }
     }
 
-    /**
-     * @api {POST} /order/add-comment [POST]/order/add-comment（100%）
-     * @apiDescription 评价订单(郝建设 该功能写在UserController里面 /user/user-sugges)
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiName actionAddComment
-     * @apiGroup Order
-     *
-     * @apiParam {String} order_id 订单id
-     * @apiParam {String} sub_id 子订单id
-     * @apiParam {String} content 评价内容
-     * @apiParam {String} is_anonymous 是否匿名评价
-     * @apiParam {String} rate 星级
-     * @apiParam {String} tag 评价标签
-     *
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "订单评价成功成功",
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     */
 
     /**
      * @api {DELETE} /order/hiden-order [DELETE]/order/hiden-order（ 100%）
@@ -1943,10 +1910,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/get-order-customer [GET]/order/get-order-customer(100%）
+     * @api {GET} /order/get-customer-recursive-order [GET]/order/get-customer-recursive-order(100%）
      *
      * @apiDescription 获取周期订单 （郝建设）
-     * @apiName actionGetOrderCustomer
+     * @apiName actionGetCustomerRecursiveOrder
      * @apiGroup Order
      *
      * @apiParam {String} access_token    用户认证
@@ -1991,7 +1958,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，"
      *       "ret":{},
      *       "alertMsg": "操作成功"
@@ -1999,7 +1966,7 @@ class OrderController extends \restapi\components\Controller
      *     }
      *
      */
-    public function actionGetOrderCustomer()
+    public function actionGetCustomerRecursiveOrder()
     {
         $param = Yii::$app->request->get();
 
@@ -2083,7 +2050,7 @@ class OrderController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": 401,
      *       "msg": "用户认证已经过期,请重新登录，"
      *       "ret":{},
      *       "alertMsg": "操作成功"
