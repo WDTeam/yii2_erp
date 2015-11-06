@@ -135,23 +135,28 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     /**
      * 为POP客户下发access_token
      */
-    public static function generateAccessTokenForPop($phone, $sign, $channal_id){
+    public static function generateAccessTokenForPop($phone, $sign, $channal_id=1){
         $check_sign = self::checkSign($phone, $sign, $channal_id);
         if (!$check_sign) {
             return false;
         }
-
+        $is_block_arr_info = Customer::isBlockByPhone($phone);
+        if($is_block_arr_info['response'] == 'success' && $is_block_arr_info['is_block'] == 1){
+            return ['response'=>'error', 'errcode'=>5, 'errmsg'=>'该账号已锁定，不可登陆成功'];
+        }
+        
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //没有客户则创建
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
-                $customer = new Customer;
-                $customer->customer_phone = $phone;
-                $customer->created_at = time();
-                $customer->updated_at = 0;
-                $customer->is_del = 0;
-                $customer->save();
+//                $customer = new Customer;
+//                $customer->customer_phone = $phone;
+//                $customer->created_at = time();
+//                $customer->updated_at = 0;
+//                $customer->is_del = 0;
+//                $customer->save();
+                $hasAdded = Customer::addCustomer($phone, $channal_id);
             }
 
             $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
@@ -186,7 +191,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $transaction->rollback();
             return false;
         }
-        
     }
     
     /******************************access token for weixin*******************************/
@@ -237,6 +241,12 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         if($customer_arr_info['response'] == 'error'){
             return $customer_arr_info;
         }
+        
+        $is_block_arr_info = Customer::isBlock($customer_arr_info['customer']['id']);
+        if($is_block_arr_info['response'] == 'success' && $is_block_arr_info['is_block'] == 1){
+            return ['response'=>'error', 'errcode'=>5, 'errmsg'=>'该账号已锁定，不可登陆成功'];
+        }
+            
         $phone = $customer_arr_info['customer']['customer_phone'];
         $transaction = \Yii::$app->db->beginTransaction();
         try{
