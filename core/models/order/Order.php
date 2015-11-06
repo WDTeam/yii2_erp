@@ -708,7 +708,8 @@ class Order extends OrderModel
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT
                 || $current_status == OrderStatusDict::ORDER_INIT && $cause_id==OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE ) {
                 //调高峰的退款接口
-                $result = FinanceRefundadd::add($order);
+                $finance_refund_add = new FinanceRefundadd();
+                $result = $finance_refund_add->add($order);
                 if(in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
                     OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
