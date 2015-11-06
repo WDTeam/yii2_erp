@@ -1320,12 +1320,26 @@ class WorkerController extends \restapi\components\Controller
      *           "values": [
      *               {
      *                   "worker_tasklog_condition": "条件索引",
-     *                   "worker_tasklog_value": "条件值"
+     *                   "worker_tasklog_value": "条件完成值",
+     *                   "name": "主动接单",
+     *                   "judge": ">=",
+     *                   "value": "条件值"
      *               }
-     *           ],
+     *            ],
      *           "worker_task_description": "任务描述",
-     *           "order_list": [订单信息]
-     *       },
+     *           "order_list": [
+     *                   {
+     *                       "order_code": "订单号",
+     *                       "created_at": "创建时间",
+     *                       "order_booked_count": "预约服务数量（时长）"
+     *                   },
+     *                   {
+     *                       "order_code": "订单号",
+     *                       "created_at": "创建时间",
+     *                       "order_booked_count": "预约服务数量（时长）"
+     *                   }
+     *            ]
+     *        },
      *       "alertMsg": "操作成功"
      *    }
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -1366,7 +1380,16 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取任务的订单列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        $task_log['order_list']=$order_list;
+        $order_lists=array();
+        $order_arr=array();
+        foreach ($order_list as $order){
+             $order_arr["order_code"]=$order["order_code"];
+             $order_arr["created_at"]=$order["created_at"];
+             $order_arr["order_booked_count"]=$order["order_booked_count"];
+             $order_lists[]=$order_arr;
+        } 
+       
+        $task_log['order_list']=$order_lists;
         if(empty($task_log)){
               return $this->send(null, "查看任务失败", 0,200,null,alertMsgEnum::checkTaskFail);
         }
