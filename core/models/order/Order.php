@@ -9,26 +9,34 @@
 
 namespace core\models\order;
 
+/** core */
 use core\models\finance\FinanceRefundadd;
+
 use core\models\operation\coupon\Coupon;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
-use core\models\customer\Customer;
-use core\models\customer\CustomerAddress;
-use core\models\payment\PaymentCustomerTransRecord;
-use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
-use core\models\worker\WorkerStat;
 use core\models\operation\OperationCategory;
 
+use core\models\customer\Customer;
+use core\models\customer\CustomerAddress;
+
+use core\models\payment\PaymentCustomerTransRecord;
+
+use core\models\worker\Worker;
+use core\models\worker\WorkerStat;
+
+/** dbbase */
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
+
 use dbbase\models\finance\FinanceOrderChannel;
 
+/** yii */
 use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
