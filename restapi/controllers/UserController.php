@@ -68,7 +68,6 @@ class UserController extends \restapi\components\Controller
      *        }
      *     }
      *
-     * @apiError AddressNotFound 常用地址添加失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
@@ -78,7 +77,6 @@ class UserController extends \restapi\components\Controller
      *       "alertMsg":"常用地址添加失败",
      *     }
      * 
-     * @apiError UserNotFound 用户认证失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     {
@@ -165,7 +163,6 @@ class UserController extends \restapi\components\Controller
      *        }
      *     }
      *
-     * @apiError 地址信息获取失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
@@ -237,7 +234,6 @@ class UserController extends \restapi\components\Controller
      *       "msg": "地址删除成功"
      *     }
      *
-     * @apiError 地址删除失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 delete Not Found
      *     {
@@ -318,7 +314,6 @@ class UserController extends \restapi\components\Controller
      *       "alertMeg": "用户认证已经过期,请重新登录",
      *     }
      * 
-     * @apiError 地址信息获取失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
@@ -396,7 +391,6 @@ class UserController extends \restapi\components\Controller
      *       "alertMeg": "用户认证已经过期,请重新登录",
      *     }
      * 
-     * @apiError AddressNotFound 地址信息获取失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
@@ -480,7 +474,6 @@ class UserController extends \restapi\components\Controller
      *
      *     }
      *
-     * @apiError UserNotFound 用户认证失败.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 Not Found
      *     HTTP/1.1 200 Not Found
@@ -602,7 +595,6 @@ class UserController extends \restapi\components\Controller
      *       "msg": "余额获取失败",
      *       "ret": {},
      *       "alertMsg": "余额获取失败",
-     *
      *     }
      */
     public function actionGetUserMoney()
@@ -1493,7 +1485,6 @@ class UserController extends \restapi\components\Controller
      *          "alertMsg": "用户认证已经过期,请重新登录"
      *        }
      *
-     * @apiError 获取用户余额系统错误.
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 moeny Not Found
      *     {
