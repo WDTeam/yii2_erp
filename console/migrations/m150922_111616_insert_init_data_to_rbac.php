@@ -11,11 +11,6 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
          * 添加授权项
          */
         $this->insert('{{%auth_item}}', [
-            'name'=>'shopmanager/shop-manager/index',
-            'type'=>2,
-            'description'=>'家政公司管理列表页',
-        ]);
-        $this->insert('{{%auth_item}}', [
             'name'=>'sidebar-customer',
             'type'=>2,
             'description'=>'左侧菜单栏-顾客管理模块',
@@ -64,6 +59,71 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'name'=>'sidebar-worker',
             'type'=>2,
             'description'=>'左侧菜单栏-阿姨管理模块',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'shopmanager/shop-manager/index',
+            'type'=>2,
+            'description'=>'家政公司管理列表页',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'shopmanager/shop-manager/create',
+            'type'=>2,
+            'description'=>'添加新家政',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'shop/shop/index',
+            'type'=>2,
+            'description'=>'查询所有门店',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'shop/shop/create',
+            'type'=>2,
+            'description'=>'添加新门店',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'worker/worker/index',
+            'type'=>2,
+            'description'=>'查看所有阿姨',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'worker/worker/create',
+            'type'=>2,
+            'description'=>'录入新阿姨',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'customer/customer/index',
+            'type'=>2,
+            'description'=>'查看所有客户',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'customer/customer-comment',
+            'type'=>2,
+            'description'=>'评价列表',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'customer/customer-comment-tag',
+            'type'=>2,
+            'description'=>'评价标签管理',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'order/order/index',
+            'type'=>2,
+            'description'=>'查看所有订单',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'order/order/create',
+            'type'=>2,
+            'description'=>'创建新订单',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'order/order/assign',
+            'type'=>2,
+            'description'=>'人工派单',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'order/auto-assign/index',
+            'type'=>2,
+            'description'=>'智能派单',
         ]);
         /**
          * 添加角色

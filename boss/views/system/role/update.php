@@ -4,7 +4,7 @@ $this->title = Yii::t('app', 'Update ') . Yii::t('app', '{name}', ['name' => $mo
 $this->params['breadcrumbs'] = [
     [
         'label' => Yii::t('app', 'Roles'),
-        'url' => ['/role']
+        'url' => ['index']
     ],
     $this->title
 ];
