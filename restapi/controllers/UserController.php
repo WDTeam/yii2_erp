@@ -1611,7 +1611,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiDescription  个人中心获取用户的账户余额、积分、优惠券数（李勇）
      * @apiName actionCoupons
-     * @apiGroup user
+     * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)

@@ -1432,7 +1432,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "order_id",
             "description": "<p>订单号</p> "
@@ -1444,7 +1444,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单删除成功\",\n  \"alertMsg\": \"订单取消成功\"\n   \"ret\":{ }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单删除成功\",\n  \"alertMsg\": \"订单取消成功\"\n   \"ret\":{}\n}",
           "type": "json"
         }
       ]
@@ -2937,6 +2937,65 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/get-money-score-coupon",
+    "title": "[GET] /user/get-money-score-coupon （100%）",
+    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
+    "name": "actionCoupons",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": [\n    {\n        \"money\": \"优惠券id\",\n        \"score\": \"优惠券名称\",\n        \"coupon\": \"优惠券价值\"\n    }\n  ],\n\"msg\": \"获取个人中心信息成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]
