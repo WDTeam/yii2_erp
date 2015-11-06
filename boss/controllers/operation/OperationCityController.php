@@ -223,6 +223,7 @@ class OperationCityController extends BaseAuthController
     public function actionAddgoods($city_id, $cityAddGoods = ''){
 
         $post = Yii::$app->request->post();
+
         if(empty($post)) {
             $categoryinfo = OperationCategory::getCategoryList();
 
@@ -278,7 +279,111 @@ class OperationCityController extends BaseAuthController
      * @param $goods_id
      * @return string
      */
-    public function actionSettinggoodsinfo($city_id, $goods_id, $cityAddGoods = ''){
+    public function actionSettinggoodsinfo($city_id = '', $goods_id = '', $cityAddGoods = ''){
+
+        echo '<pre>';
+        $post = Yii::$app->request->post();
+
+        //城市数据
+        $city_id = $post['city_id'];
+        $city_name = $post['city_name'];
+
+        unset($post['city_id']);
+        unset($post['city_name']);
+        unset($post['_csrf']);
+
+
+        //print_r($post);die;
+        //去掉接收数据中没有选择的服务类型
+        foreach ($post as $keys => $values) {
+            if (!is_array($values)) {
+                unset($post[$keys]);
+            }
+            //print_r($post);
+            //去掉接收数据中没有选中的服务项目
+            //foreach ($values as $key => $value) {
+                //if (!isset($value['operation_goods_id'])) {
+                    //unset($post[$keys]);
+                //}
+            //}
+            //print_r($post);
+        }
+
+        //print_r($post);die;
+        //服务类型的数据
+        foreach ($post as $keys => $values) {
+
+            //服务类型的id
+            $operation_category_id = $keys;
+            $operation_category_name = OperationCategory::getCategoryName($keys);
+
+            //去掉接收数据中没有选中的服务项目
+            foreach ($values as $key => $value) {
+                if (!isset($value['operation_goods_id'])) {
+                    unset($values[$key]);
+                }
+            }
+            print_r($values);
+
+            //服务项目的数据
+            /*
+            foreach ($values as $key => $value) {
+                $operation_goods_id = $value['operation_goods_id'];
+                $operation_goods_name = $value['operation_goods_name'];
+                $operation_goods_price = $value['operation_goods_price'];
+                $operation_goods_market_price = $value['operation_goods_market_price'];
+                $operation_shop_district_goods_lowest_consume_num = $value['operation_shop_district_goods_lowest_consume_num'];
+                $operation_spec_strategy_unit = $value['operation_spec_strategy_unit'];
+
+                //商圈的数据
+                foreach ($value as $k => $v) {
+                    $model = new OperationShopDistrictGoods();
+
+                    //城市数据
+                    $model->operation_city_id = $city_id;
+                    $model->operation_city_name = $city_name;
+
+                    //服务类型数据
+                    $model->operation_category_id = $operation_category_id;
+                    $model->operation_category_name = $operation_category_name;
+
+                    //服务项目数据
+                    $model->operation_goods_id = $operation_goods_id;
+                    $model->operation_shop_district_goods_name = $operation_goods_name;
+                    $model->operation_shop_district_goods_price = $operation_goods_price;
+                    $model->operation_shop_district_goods_market_price = $operation_goods_market_price;
+                    $model->operation_shop_district_goods_lowest_consume_num = $operation_shop_district_goods_lowest_consume_num;
+
+                    //商圈数据
+                    $model->operation_shop_district_id = $v;
+                    $operation_shop_district_name = OperationShopDistrict::getShopDistrictName($v);
+                    $model->operation_shop_district_name = $operation_shop_district_name;
+
+                    //服务项目规格数据
+                    $model->operation_spec_strategy_unit = $operation_spec_strategy_unit;
+
+                    //$model->insert();
+                }
+            }
+             */
+        }
+
+        die;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $this->releaseGoods();die;
         $post = Yii::$app->request->post();
 
@@ -632,8 +737,16 @@ class OperationCityController extends BaseAuthController
                             'operation_shop_district_goods_market_price' => 10,
                             'operation_shop_district_goods_lowest_consume_num' => 5,
                             'operation_spec_strategy_unit' => '个数',
-                            'operation_shop_district_id' => 1,
-                            'operation_shop_district_name' => '商圈1',
+                            'district' => [
+                                0 => [
+                                    'operation_shop_district_id' => 1,
+                                    'operation_shop_district_name' => '商圈1',
+                                ],
+                                1 => [
+                                    'operation_shop_district_id' => 2,
+                                    'operation_shop_district_name' => '商圈2',
+                                ]
+                            ],
                         ],
                         1 => [
                             'operation_goods_id' => 2,
