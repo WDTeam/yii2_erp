@@ -346,6 +346,6 @@ class OrderStatus extends Order
      */
     public static function searchOrderStatusHistory($order_id)
     {
-        return OrderStatusHistory::find()->where(["order_id" => $order_id])->orderBy(["created_at" => SORT_DESC])->all();
+        return OrderStatusHistory::find()->where(["order_id" => $order_id])->orderBy(["id" => SORT_DESC])->all();
     }
 }
