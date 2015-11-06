@@ -61,9 +61,9 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
-        }
+//        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+//            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
+//        }
         if(!isset($param['worker_id']) ||!$param['worker_id']||!intval($param['worker_id'])){
             return $this->send(null, '阿姨ID传输错误', 0, 403,null,alertMsgEnum::workerInfoFailed);
         }
@@ -71,12 +71,15 @@ class WorkerController extends \restapi\components\Controller
         try{
             $workerId = intval($param['worker_id']);
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
+            print_r($workerInfo);die;
             $ret = array();
             if(!empty($workerInfo)){
+                //籍贯、身份证
                 $ret = [
                     "worker_name" => $workerInfo['worker_name'],
-                    "worker_phone" => $workerInfo['worker_phone'],
-                    "worker_photo" => $workerInfo['worker_photo'],
+                    "worker_stat_order_num" => $workerInfo['worker_stat_order_num'],//服务次数
+                    "worker_live_province" =>$workerInfo['worker_live_province'],//籍贯
+                    
                     "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
                     "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
                     "worker_type" => $workerInfo["worker_type"],
@@ -364,7 +367,7 @@ class WorkerController extends \restapi\components\Controller
             if($commentList){
                 foreach($commentList as $key=>$val){
                     $retData[$key]['comment_id'] = $val['id'];
-                    $retData[$key]['comment_content'] = $val['customer_comment_content'];
+                    $retData[$key]['comment_content'] = $val['customer_comment_tag_names'].','.$val['customer_comment_content'];
                     $retData[$key]['comment_time'] = date('Y-m-d',$val['created_at']);
                 }
             }
@@ -439,7 +442,7 @@ class WorkerController extends \restapi\components\Controller
         }
         if($conplainList){
             foreach($conplainList as $key=>$val){
-                $conplainList[$key]['complaint_time'] = date('Y-m-d H:i:s',$val['complaint_time']);
+                $conplainList[$key]['complaint_time'] = date('Y-m-d',$val['complaint_time']);
             }
         }
         //数据返回
