@@ -133,6 +133,12 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'type'=>1,
             'description'=>'超级管理员',
         ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'mini_box_group',
+            'type'=>1,
+            'description'=>'MiNi BOX 组',
+        ]);
+        
         /**
          * 给角色授权
          */
@@ -198,6 +204,10 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         $this->insert('{{%auth_assignment}}', [
             'item_name'=>'super_admin',
             'user_id'=>4,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'mini_box_group',
+            'user_id'=>5,
         ]);
     }
 
