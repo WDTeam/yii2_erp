@@ -25,8 +25,8 @@ class OperationAdvertContent extends CommonOperationAdvertContent
 {
     
     public static function getAdvertList($paramWhere = array()){
-        $advertList = self::find()
-                   ->andFilterWhere([‘like‘,‘name‘,‘洋‘]);
+       // $advertList = self::find()
+                  // ->andFilterWhere(['and',‘name‘,‘洋‘]);
                 
         
     }
