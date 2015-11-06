@@ -592,7 +592,7 @@ class ConfigureController extends \restapi\components\Controller
         @$token = $params['access_token'];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,403,null,alertMsgEnum::getWorkerInitFailed);
+            return $this->send(null, "用户无效,请先登录", 401,403,null,alertMsgEnum::getWorkerInitFailed);
         }
         //获取阿姨待服务订单
         $args["owr.worker_id"] = $worker->id;
