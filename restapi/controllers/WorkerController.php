@@ -1061,7 +1061,7 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_done_time": "任务完成时间",
      *               "worker_task_reward_type": "任务奖励类型",
      *               "worker_task_reward_value": "任务奖励值",
-     *               "worker_task_is_settlemented": "是否已结算",
+     *               "worker_task_is_settlemented": "是否已结算0未结算，1已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "worker_task_description": "任务描述"
@@ -1118,7 +1118,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} per_page  第几页
-     * @apiParam {String} page  每页显示多少条
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
@@ -1140,7 +1140,7 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_done_time": "任务完成时间",
      *               "worker_task_reward_type": "任务奖励类型",
      *               "worker_task_reward_value": "任务奖励值",
-     *               "worker_task_is_settlemented": "是否已结算",
+     *               "worker_task_is_settlemented": "是否已结算0未结算，1已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "values": [
@@ -1174,14 +1174,14 @@ class WorkerController extends \restapi\components\Controller
         if($checkResult['code']!=1){
             return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         }
-        if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
+        if(!isset($param['page_num']) || !$param['page_num']||!isset($param['per_page']) || !$param['per_page']){
             return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 200,null,alertMsgEnum::taskDoneNoPage);
         }
         $worker_id = $checkResult['workerInfo']['worker_id'];
-        $page = $param['page'];
+        $page_num = $param['page_num'];
         $per_page = $param['per_page'];
         try{
-            $ret= WorkerTaskLog::getDonedTasks($worker_id,1,$page,$per_page);
+            $ret= WorkerTaskLog::getDonedTasks($worker_id,1,$per_page,$page_num);
         }catch (\Exception $e) {
             return $this->send($e, "获取已完成的任务的系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
@@ -1195,6 +1195,8 @@ class WorkerController extends \restapi\components\Controller
             $tasks['task_done'][]=$task_log;
         }
         $tasks["url"]="";
+        $tasks["page_num"]=$page_num;
+        $tasks["per_page"]=$per_page;
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskDoneSuccess);
     }
     
@@ -1205,8 +1207,8 @@ class WorkerController extends \restapi\components\Controller
      * @apiName actionTaskFail
      * @apiGroup Worker
      * 
-     * @apiParam {String} per_page  第几页
-     * @apiParam {String} page   每页显示多少条
+     * @apiParam {String} per_page   第几页
+     * @apiParam {String} page_num   每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
@@ -1228,7 +1230,7 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_done_time": "任务完成时间",
      *               "worker_task_reward_type": "任务奖励类型",
      *               "worker_task_reward_value": "任务奖励值",
-     *               "worker_task_is_settlemented": "是否已结算",
+     *               "worker_task_is_settlemented": "是否已结算0未结算，1已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "values": [
@@ -1263,14 +1265,14 @@ class WorkerController extends \restapi\components\Controller
         if($checkResult['code']!=1){
             return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::workerLoginFailed);
         } 
-        if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
+        if(!isset($param['page_num']) || !$param['page_num']||!isset($param['per_page']) || !$param['per_page']){
             return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 200,null,alertMsgEnum::taskFailNoPage);
         }
         $worker_id = $checkResult['workerInfo']['worker_id'];
-        $page = $param['page'];
+        $page_num= $param['page_num'];
         $per_page = $param['per_page'];
         try{
-            $ret= WorkerTaskLog::getDonedTasks($worker_id,-1,$page,$per_page);
+            $ret= WorkerTaskLog::getDonedTasks($worker_id,-1,$per_page,$page_num);
         }catch (\Exception $e) {
             return $this->send($e, "boss系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
@@ -1284,6 +1286,8 @@ class WorkerController extends \restapi\components\Controller
             $tasks['task_fail'][]=$task_log;
         }
         $tasks["url"]="";
+        $tasks["page_num"]=$page_num;
+        $tasks["per_page"]=$per_page;
         return $this->send($tasks, "操作成功", 1,200,null,alertMsgEnum::taskFailSuccess);
     }
 
@@ -1315,6 +1319,7 @@ class WorkerController extends \restapi\components\Controller
      *           "worker_task_done_time": "任务完成时间",
      *           "worker_task_reward_type": "任务奖励类型",
      *           "worker_task_reward_value": "任务奖励值",
+     *           "worker_task_is_settlemented": "是否已结算0未结算，1已结算",
      *           "created_at": "创建时间",
      *           "updated_at": "更新时间",
      *           "values": [

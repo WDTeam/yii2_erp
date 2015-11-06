@@ -478,7 +478,7 @@ class Order extends OrderModel
         $orderids = [];
         //阿姨服务时间是否冲突
         $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
-        if($order->order_is_parent==1){
+        if($order->order_is_parent==1){ //如果是周期订单
             $child_list = OrderSearch::getChildOrder($order_id);
             foreach($child_list as $child){
                 $conflict += OrderSearch::WorkerOrderExistsConflict($worker['id'], $child->order_booked_begin_time, $child->order_booked_end_time);
@@ -507,13 +507,19 @@ class Order extends OrderModel
                     Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$child->id,$child->order_booked_count,$child->order_booked_begin_time,$child->order_booked_end_time);
                 }
             }
+
+            if($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
+                $result = OrderPop::assignDoneToPop($order); //第三方同步失败则取消失败
+            }
+
             if($result) {
-                $transact->commit();
+                //TODO 如果是第三方订单则同步状态过去
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-                //更新阿姨接单数量
-                WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //第二个参数是阿姨的接单次数
+                WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //更新阿姨接单数量 第二个参数是阿姨的接单次数
+                $transact->commit();
                 OrderMsg::assignDone($order); //指派成功发送通知
             }else{
+                $transact->rollBack();
                 foreach($orderids as $orderid) {
                     //失败后删除阿姨的订单信息
                     Worker::deleteWorkerOrderInfoToRedis($worker['id'], $orderid);
@@ -574,11 +580,18 @@ class Order extends OrderModel
      */
     public static function serviceDone($order_id)
     {
+        $transact = static::getDb()->beginTransaction();
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = 1;
-        $result = OrderStatus::_serviceDone($order);
+        $result = OrderStatus::_serviceDone($order,$transact);
+        if($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
+            $result = OrderPop::serviceDoneToPop($order); //第三方同步失败则取消失败
+        }
         if($result) {
+            $transact->commit();
             OrderMsg::serviceDone($order); //发送通知
+        }else{
+            $transact->rollBack();
         }
         return $result;
     }
@@ -694,7 +707,7 @@ class Order extends OrderModel
                 ]) && $result){
                     $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
-            }elseif($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
+            }elseif($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if($result){
