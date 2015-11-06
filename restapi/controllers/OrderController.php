@@ -1266,9 +1266,7 @@ class OrderController extends \restapi\components\Controller
                     $reason = '其他原因#' . $reason;
                 }
                 try {
-                    
-                    print_r($reason);
-                    exit;
+                
                     $result = Order::cancelByOrderId($orderId,Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE,$reason);
 
                     if ($result) {
@@ -1352,7 +1350,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 阿姨全部订单月份列表 (赵顺利)
      * @apiParam {String} access_token    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} platform_version 平台版本号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
