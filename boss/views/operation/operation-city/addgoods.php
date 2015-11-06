@@ -35,7 +35,7 @@ use boss\components\AreaCascade;
 <?php
 $this->title = Yii::t('app', 'Add Service');
 //    echo '<br><input type="checkbox" val="categorylist" id="alllist">全选';
-if($cityAddGoods == 'success'){
+if($action == 'success'){
     $this->params['breadcrumbs'][] = ['label' => $city_name];
 }else {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '开通') . $city_name, 'url' => ['release']];
@@ -128,7 +128,7 @@ $form = ActiveForm::begin([
                         echo '<div class="boxx">销售价格：<input type="text" name="'. $key .'['. $v['id'] .'][operation_goods_price]">元/' . $v['operation_spec_strategy_unit'] . '</div>';
     
                         echo '<div class="boxx">市场价格：<input type="text" name="'. $key .'['. $v['id'] .'][operation_goods_market_price]">元/' . $v['operation_spec_strategy_unit'] . '</div>';
-                        echo '<div class="boxx">最低消费：<input type="text" name="'. $key .'['. $v['id'] .'][operation_shop_district_goods_lowest_consume_num]">元/' . $v['operation_spec_strategy_unit'] . '</div>';
+                        echo '<div class="boxx">最低消费：<input type="text" name="'. $key .'['. $v['id'] .'][operation_shop_district_goods_lowest_consume_num]">' . $v['operation_spec_strategy_unit'] . '</div>';
                     echo '</div>';
                 }
             }    						  

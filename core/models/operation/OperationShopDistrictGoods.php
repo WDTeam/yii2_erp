@@ -518,6 +518,31 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         'operation_shop_district_goods_status'=>'1']);
     }
 
+    /**
+     * 根据商品id获取商品在商圈的具体信息
+     *
+     * @param  inter  $shop_district_id    商品在商圈里的编号
+     * @return array  $result              上线商品的信息
+     */
+    public static function getDistrictGoodsInfo($operation_goods_id)
+    {
+        $result = self::find()
+            ->select([
+                'operation_goods_id',
+                'operation_shop_district_id',
+                'operation_category_id',
+                'operation_spec_strategy_unit',
+                'operation_shop_district_goods_price',
+                'operation_shop_district_goods_market_price',
+                'operation_shop_district_goods_lowest_consume_num',
+            ])
+            ->where([
+                'operation_goods_id' => $operation_goods_id,
+                'operation_shop_district_goods_status' => '1',
+            ])
+            ->asArray()
+            ->all();
 
-
+        return $result;
+    }
 }

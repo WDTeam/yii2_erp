@@ -199,19 +199,21 @@ class OperationCityController extends BaseAuthController
         if(empty($post)){
             $model = new OperationCity;
             //$citylist = OperationCity::getOnlineCityList(2); //未开通的城市列表
-            $citylist = OperationCity::getCityList(); //城市列表
+            //城市列表
+            $citylist = OperationCity::getCityList(); 
             return $this->render('Release', [
                 'model' => $model,
                 'citylist' => $citylist,
             ]);
         }else{
+
             if(empty($post['OperationCity']['city_name'])){
                 return $this->redirect(['release']);
             }
             $cityinfo = explode('-', $post['OperationCity']['city_name']);
             $city_id = $cityinfo[0];
             $city_name = $cityinfo[1];
-            return $this->redirect(['addgoods', 'city_id' => $city_id]);
+            return $this->redirect(['addgoods', 'city_id' => $city_id, 'action' => 'create']);
         }
     }
 
@@ -221,12 +223,12 @@ class OperationCityController extends BaseAuthController
      *
      * @param $city_id
      */
-    public function actionAddgoods($city_id, $cityAddGoods = '')
+    public function actionAddgoods($city_id, $goods_id = '', $action = '')
     {
 
         $post = Yii::$app->request->post();
 
-        if(empty($post)) {
+        if(empty($post) && isset($action) && $action == 'create') {
             $categoryinfo = OperationCategory::getCategoryList();
 
             $categorylist = array();
@@ -250,7 +252,7 @@ class OperationCityController extends BaseAuthController
 
             $city_name = OperationCity::getCityName($city_id);
             return $this->render('addgoods', [
-                'cityAddGoods' => $cityAddGoods,
+                'action' => $action,
                 'city_id' => $city_id,
                 'city_name' => $city_name,
                 'categorylist' => $categorylist,
@@ -258,9 +260,46 @@ class OperationCityController extends BaseAuthController
                 'shopdistrictinfo' => $shopdistrictinfo,
             ]);
 
-        }else{
+        } elseif (isset($goods_id) && isset($action) && $goods_id != 0 && $action = 'editGoods') {
+            $districtgoodsinfo = OperationShopDistrictGoods::getDistrictGoodsInfo($goods_id);
+
+            //echo '<pre>';
+            //print_r($districtgoodsinfo);die;
+
+            $categoryinfo = OperationCategory::getCategoryList();
+
+            $categorylist = array();
+            $goods = array();
+
+            //获取服务类型数据
+            foreach ((array)$categoryinfo as $key => $value) {
+                $categorylist[$value['id']] = $value['operation_category_name'];
+                $goods[$value['id']] = OperationGoods::find()
+                    ->where(['operation_category_id' => $value['id']])
+                    ->asArray()
+                    ->all();
+            }
+
+            //获取对应城市商圈数据
+            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
+            $shopdistrictinfo = [];
+            foreach ((array)$shopdistrict as $key => $value) {
+                $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
+            }
+
+            $city_name = OperationCity::getCityName($city_id);
+            return $this->render('settinggoodsinfo', [
+                'action' => $action,
+                'city_id' => $city_id,
+                'city_name' => $city_name,
+                'categorylist' => $categorylist,
+                'goods' => $goods,
+                'shopdistrictinfo' => $shopdistrictinfo,
+                'districtgoodsinfo' => $districtgoodsinfo,
+            ]);
+        } else {
             if(empty($post['categorygoods'])){
-                return $this->redirect(['addgoods', 'city_id' => $city_id, 'cityAddGoods' => $cityAddGoods]);
+                return $this->redirect(['addgoods', 'city_id' => $city_id, 'action' => $action]);
             }
             $categorylist = $post['categorylist'];  //服务品类
             $categorygoods = explode('-', $post['categorygoods']); //服务
@@ -270,7 +309,7 @@ class OperationCityController extends BaseAuthController
                 'settinggoodsinfo',
                 'city_id' => $city_id,
                 'goods_id' => $goods_id,
-                'cityAddGoods' => $cityAddGoods
+                'action' => $action
             ]);
         }
     }
@@ -281,12 +320,43 @@ class OperationCityController extends BaseAuthController
      * @param $goods_id
      * @return string
      */
-    public function actionSettinggoodsinfo($city_id = '', $goods_id = '', $cityAddGoods = ''){
+    public function actionSettinggoodsinfo($city_id = '', $goods_id = '', $action = ''){
 
         $post = Yii::$app->request->post();
+        $goodsInfo = OperationGoods::getGoodsInfo($goods_id);
 
+        //设置页面渲染
         if (!isset($post) || empty($post)) {
-            return $this->redirect(['index']);
+            //$shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
+            //$shopdistrictinfo = [];
+            //foreach ((array)$shopdistrict as $key => $value) {
+                //$shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
+            //}
+            //$city_name = OperationCity::getCityName($city_id);
+            //$shopdistrictinfoall = [];
+            //$goodsshopdistrictinfo = [];
+            //$citys = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
+            //if($action == 'editGoods' || !empty($citys)){
+                //$cityshopdistrictgoodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
+
+                //foreach((array)$cityshopdistrictgoodsinfo as $key => $value){
+                    //[>*查找该商品上线的数据*<]
+                    //if($value['operation_shop_district_goods_status'] == 1){
+                        //$shopdistrictinfoall[] = $value['operation_shop_district_id'];
+                        //$goodsshopdistrictinfo[$value['operation_shop_district_id']] = $value;
+                    //}
+                //}
+            //}
+            //return $this->render('settinggoodsinfo', [
+                //'city_id' => $city_id,
+                //'city_name' => $city_name,
+                //'goodsInfo' => $goodsInfo,
+                //'action' => $action,
+                //'shopdistrictinfo' => $shopdistrictinfo,
+                //'shopdistrictinfoall' => $shopdistrictinfoall,
+                //'goodsshopdistrictinfo' => $goodsshopdistrictinfo,
+            //]);
+            //return $this->redirect(['opencity']);
         } else {
             OperationShopDistrictGoods::saveOnlineCity($post);
             return $this->redirect(['opencity']);
@@ -308,7 +378,7 @@ class OperationCityController extends BaseAuthController
             $shopdistrictinfoall = [];
             $goodsshopdistrictinfo = [];
             $citys = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
-            if($cityAddGoods == 'editGoods' || !empty($citys)){
+            if($action == 'editGoods' || !empty($citys)){
                 $cityshopdistrictgoodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
 
                 foreach((array)$cityshopdistrictgoodsinfo as $key => $value){
@@ -323,19 +393,19 @@ class OperationCityController extends BaseAuthController
                 'city_id' => $city_id,
                 'city_name' => $city_name,
                 'goodsInfo' => $goodsInfo,
-                'cityAddGoods' => $cityAddGoods,
+                'action' => $action,
                 'shopdistrictinfo' => $shopdistrictinfo,
                 'shopdistrictinfoall' => $shopdistrictinfoall,
                 'goodsshopdistrictinfo' => $goodsshopdistrictinfo,
             ]);
         }else{
             if(empty($post['shopdistrict'])){
-                return $this->redirect(['settinggoodsinfo', 'city_id' => $city_id, 'goods_id' => $goods_id, 'cityAddGoods' => $cityAddGoods]);
+                return $this->redirect(['settinggoodsinfo', 'city_id' => $city_id, 'goods_id' => $goods_id, 'action' => $action]);
             }
             $shopdistrict = $post['shopdistrict'];
             $shopdistrictGoods = $post['goodsinfo'];
             $citys = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
-            if($cityAddGoods == 'editGoods' || (!empty($citys))){
+            if($action == 'editGoods' || (!empty($citys))){
                 OperationShopDistrictGoods::updateShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
             }else {
                 OperationShopDistrictGoods::insertShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
@@ -440,9 +510,7 @@ class OperationCityController extends BaseAuthController
             $goods_info['operation_goods_price'][] = $value['operation_shop_district_goods_price'];
             $goods_info['operation_goods_lowest_consume'][] = $value['operation_shop_district_goods_lowest_consume'];
             $goods_info['operation_goods_start_time'][] = $value['operation_shop_district_goods_start_time'];
-            $goods_info['operation_goods_end_time'][] = $value['operation_shop_district_goods_end_time'];
-            
-            $shopdistrictgoods['shopdistrictid'][] = $value['operation_shop_district_id'];
+            $goods_info['operation_goods_end_time'][] = $value['operation_shop_district_goods_end_time']; $shopdistrictgoods['shopdistrictid'][] = $value['operation_shop_district_id'];
             $shopdistrictgoods['operation_goods_market_price'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_market_price'];
             $shopdistrictgoods['operation_goods_price'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_price'];
             $shopdistrictgoods['operation_goods_lowest_consume'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_lowest_consume'];
