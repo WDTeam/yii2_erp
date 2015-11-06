@@ -161,7 +161,7 @@ echo DetailView::widget([
         ],
 		[
             'attribute'=>'', 
-            'label'=>'来源',
+            'label'=>'注册来源',
             'format'=>'raw',
             'value'=>$channal_name_str,
             'type'=>DetailView::INPUT_TEXT,
