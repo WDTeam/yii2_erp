@@ -12,6 +12,7 @@ use JPush\JPushClient;
 use JPush\Exception\APIRequestException;
 use yii\base\Component;
 use yii\base\Event;
+use yii\helpers\ArrayHelper;
 
 class JPush extends Component
 {
@@ -51,7 +52,8 @@ class JPush extends Component
         $this->data = [
             'tags'=>$tags,
             'msg'=>$msg,
-            'extras'=>$extras
+            'extras'=>$extras,
+            'result'=>ArrayHelper::toArray($result),
         ];
         $this->trigger(self::EVENT_PUSH_AFTER);
         return $result;
@@ -84,6 +86,7 @@ class JPush extends Component
             'extras'=>$extras,
             'title'=>$title,
             'category'=>$category,
+            'result'=>ArrayHelper::toArray($result),
         ];
         $this->trigger(self::EVENT_PUSH_AFTER);
         return $result;

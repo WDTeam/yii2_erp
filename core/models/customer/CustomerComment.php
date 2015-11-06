@@ -15,7 +15,6 @@
 namespace core\models\customer;
 
 use Yii;
-use core\models\order\OrderComplaint;
 use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
 use core\models\order\OrderComplaint;
