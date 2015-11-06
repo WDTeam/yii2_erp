@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'id'=>$model->id,
                                 'online'=>0
                             ],[
-                                'onclick'=>'confirm("是否要下线阿姨任务？");',
+                                'onclick'=>'return confirm("是否要下线阿姨任务？");',
                             ]);
                         }else{
                             return Html::a('上线', [

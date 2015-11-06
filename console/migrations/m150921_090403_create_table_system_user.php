@@ -14,7 +14,7 @@ class m150921_090403_create_table_system_user extends Migration
               `auth_key` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
               `password_hash` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '加密密文',
               `password_reset_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'token',
-              `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '邮箱',
+              `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '邮箱',
               `status` smallint(6) DEFAULT NULL DEFAULT '10' COMMENT '状态',
               `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
               `updated_at` int(11) DEFAULT NULL COMMENT '修改时间',
@@ -24,13 +24,32 @@ class m150921_090403_create_table_system_user extends Migration
               KEY `created_at` (`created_at`)
             ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='后台用户表'
        ")->execute();
-        \Yii::$app->db->createCommand("
-            INSERT INTO {{%system_user}} VALUES
-            (1,'system','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1','','admin@demo.com',1,1438409505,1438409505),
-            (2,'customer','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1','','admin@demo.com',1,1438409505,1438409505),
-            (3,'worker','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1','','admin@demo.com',1,1438409505,1438409505),
-            (4,'admin','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS','','admin@demo.com',1,1438409505,1438409505);
-        ")->execute();
+        /**
+         * 插入默认用户
+         */
+        $this->insert('{{%system_user}}', [
+            'id'=>1,
+            'username'=>'system',
+            'status'=>1
+        ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>2,
+            'username'=>'customer',
+            'password_hash'=>'\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
+            'status'=>1
+        ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>3,
+            'username'=>'worker',
+            'password_hash'=>'\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
+            'status'=>1
+        ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>4,
+            'username'=>'admin',
+            'password_hash'=>'\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS1',
+            'status'=>1
+        ]);
     }
 
     public function down()
