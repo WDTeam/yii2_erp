@@ -56,8 +56,7 @@ $(document).on("click","#add_address_btn",function(){
     if($('#address_0').length==0 && $('#order-customer_id').val()!='') {
         $form = '<div class="radio" id="address_0">' + $('#address_form').html() + '</div>';
         $("#order-address_id").append($form);
-        $('#address_0').find(".phone_form").val($("#order-order_customer_phone").val());
-        $('#address_0').find(".nickname_form").val('客户');
+
     }
 });
 
@@ -118,6 +117,12 @@ $(document).on("click",".save_address_btn",function(){
     var detail = $('#address_'+address_id+' .detail_form').val();
     var nickname = $('#address_'+address_id+' .nickname_form').val();
     var phone = $('#address_'+address_id+' .phone_form').val();
+    if(nickname==''){
+        nickname = '客户';
+    }
+    if(phone == ''){
+        phone = $("#order-order_customer_phone").val();
+    }
     var customer_id = $('#order-customer_id').val();
     if(address_id==0 && customer_id==''){
         alert('请先选择客户再添加地址！');

@@ -28,7 +28,7 @@ use kartik\datecontrol\DateControl;
             'form' => $form,
             'columns' => 1,
             'attributes' => [
-                'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务品类名称...', 'maxlength'=>60]],
+                'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务品类名称...', 'maxlength'=>30]],
             ]
 
 

@@ -2,15 +2,103 @@
 
 namespace core\models\operation;
 
-use Yii;
-use dbbase\models\operation\OperationShopDistrictGoods as CommonOperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrict;
+use core\models\operation\OperationCategory;
 use core\models\operation\OperationCity;
+
+use Yii;
 use yii\data\ActiveDataProvider;
 
-class OperationShopDistrictGoods extends CommonOperationShopDistrictGoods
+class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopDistrictGoods
 {
     public static $city_id;
+
+    /**
+     * 上线城市
+     *
+     * @param array $post    要上线的城市，服务类型，服务项目和商圈信息
+     */
+    public static function saveOnlineCity($post)
+    {
+        //城市数据
+        $city_id = $post['city_id'];
+        $city_name = $post['city_name'];
+
+        unset($post['city_id']);
+        unset($post['city_name']);
+        unset($post['_csrf']);
+
+        //去掉接收数据中没有选择的服务类型
+        foreach ($post as $keys => $values) {
+            if (!is_array($values)) {
+                unset($post[$keys]);
+            }
+        }
+
+        //服务类型的数据
+        foreach ($post as $keys => $values) {
+
+            //服务类型的id
+            $operation_category_id = $keys;
+            $operation_category_name = OperationCategory::getCategoryName($keys);
+
+            //去掉接收数据中没有选中的或是没有输入销售价格的服务项目
+            foreach ($values as $key => $value) {
+                if (!isset($value['operation_goods_id']) || $value['operation_goods_id'] == '' || !isset($value['operation_goods_price']) || $value['operation_goods_price'] == '' || !isset($value['district']) || empty($value['district'])) {
+                    unset($values[$key]);
+                }
+            }
+
+            //如果没有输入销售价格,不能上线
+            if (!isset($values) || empty($values)) {
+                break;
+            }
+
+            //服务项目的数据
+            foreach ($values as $key => $value) {
+                $operation_goods_id = $value['operation_goods_id'];
+                $operation_goods_name = $value['operation_goods_name'];
+                $operation_goods_price = $value['operation_goods_price'];
+
+                $operation_goods_market_price = $value['operation_goods_market_price'] ?  $value['operation_goods_market_price']: 0;
+
+                $operation_shop_district_goods_lowest_consume_num = $value['operation_shop_district_goods_lowest_consume_num'] ? $value['operation_shop_district_goods_lowest_consume_num'] : 0;
+
+                $operation_spec_strategy_unit = $value['operation_spec_strategy_unit'];
+
+                //商圈的数据
+                foreach ($value['district'] as $k => $v) {
+                    $model = new OperationShopDistrictGoods();
+
+                    //城市数据
+                    $model->operation_city_id = $city_id;
+                    $model->operation_city_name = $city_name;
+
+                    //服务类型数据
+                    $model->operation_category_id = $operation_category_id;
+                    $model->operation_category_name = $operation_category_name;
+
+                    //服务项目数据
+                    $model->operation_goods_id = $operation_goods_id;
+                    $model->operation_shop_district_goods_name = $operation_goods_name;
+                    $model->operation_shop_district_goods_price = $operation_goods_price;
+                    $model->operation_shop_district_goods_market_price = $operation_goods_market_price;
+                    $model->operation_shop_district_goods_lowest_consume_num = $operation_shop_district_goods_lowest_consume_num;
+
+                    //商圈数据
+                    $model->operation_shop_district_id = $v;
+                    $operation_shop_district_name = OperationShopDistrict::getShopDistrictName($v);
+                    $model->operation_shop_district_name = $operation_shop_district_name;
+
+                    //服务项目规格数据
+                    $model->operation_spec_strategy_unit = $operation_spec_strategy_unit;
+
+                    $model->insert();
+                }
+            }
+        }
+    }
+
     /**
      * 插入城市商圈商品
      */
@@ -311,8 +399,44 @@ class OperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         return self::find()->asArray()->where(['operation_city_id' => $city_id, 'operation_goods_id' => $goods_id])->All();
     }
     
-    public static function getCityCategory($city_id){
-        return self::find()->asArray()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id');
+    
+    /**
+     * 根据城市获取已上线的服务类型数据
+     *
+     * @param  inter  $city_id     城市编号
+     * @param  string $city_name   城市名称
+     * @return array
+     */
+    public static function getCityCategory($city_id = '', $city_name = '')
+    {
+        if ($city_id == '' && $city_name == '') {
+            return '参数错误';
+        }
+
+        if (isset($city_id) && $city_id != '') {
+            $query = new \yii\db\Query();
+            $query = $query->select([
+                'osdg.operation_category_name',
+                'oc.id',
+                'oc.operation_category_icon',
+                'oc.operation_category_price_description',
+            ])
+            //->distinct()
+            ->from('{{%operation_shop_district_goods}} as osdg')
+            ->leftJoin('{{%operation_category}} as oc','osdg.operation_category_id = oc.id')
+            ->groupBy('osdg.operation_category_name')
+            ->andFilterWhere([
+                'operation_city_id' => $city_id,
+                //'operation_city_name' => $city_name,
+                'operation_shop_district_goods_status' => 1,
+            ]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+
+            return $dataProvider->query->all();
+        }
+
     }
     
     public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id){
