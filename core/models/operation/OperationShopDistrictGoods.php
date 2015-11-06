@@ -98,6 +98,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             }
         }
     }
+
     /**
      * 插入城市商圈商品
      */
@@ -398,8 +399,44 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         return self::find()->asArray()->where(['operation_city_id' => $city_id, 'operation_goods_id' => $goods_id])->All();
     }
     
-    public static function getCityCategory($city_id){
-        return self::find()->asArray()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id');
+    
+    /**
+     * 根据城市获取已上线的服务类型数据
+     *
+     * @param  inter  $city_id     城市编号
+     * @param  string $city_name   城市名称
+     * @return array
+     */
+    public static function getCityCategory($city_id = '', $city_name = '')
+    {
+        if ($city_id == '' && $city_name == '') {
+            return '参数错误';
+        }
+
+        if (isset($city_id) && $city_id != '') {
+            $query = new \yii\db\Query();
+            $query = $query->select([
+                'osdg.operation_category_name',
+                'oc.id',
+                'oc.operation_category_icon',
+                'oc.operation_category_price_description',
+            ])
+            //->distinct()
+            ->from('{{%operation_shop_district_goods}} as osdg')
+            ->leftJoin('{{%operation_category}} as oc','osdg.operation_category_id = oc.id')
+            ->groupBy('osdg.operation_category_name')
+            ->andFilterWhere([
+                'operation_city_id' => $city_id,
+                //'operation_city_name' => $city_name,
+                'operation_shop_district_goods_status' => 1,
+            ]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+
+            return $dataProvider->query->all();
+        }
+
     }
     
     public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id){
