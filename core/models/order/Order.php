@@ -792,7 +792,7 @@ class Order extends OrderModel
             $goods = $goods['data'];
         }
         $order_booked_count = floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600); //TODO 精品保洁另算时长
-        if(order_booked_count>6){
+        if($order_booked_count>6){
             $this->addError('order_booked_count', "服务时长最大六个小时！");
             return false;
         }
