@@ -207,16 +207,16 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['isExport'])){
             $isExport = 1;
         }
+        $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
+        $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
+        $financeSearchModel->load($requestParams);
+        if(!empty($financeSearchModel->worker_tel)){
+            $financeSearchModel->worker_id = $financeSearchModel->getWorkerIdByWorkerTel($financeSearchModel->worker_tel);
+        }
+        $requestPhone = $financeSearchModel->worker_tel;
+        $financeSearchModel->worker_tel = null;
+        $dataProvider = $financeSearchModel->search(null);
         if($isExport == 0){
-            $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
-            $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
-            $financeSearchModel->load($requestParams);
-            if(!empty($financeSearchModel->worker_tel)){
-                $financeSearchModel->worker_id = $financeSearchModel->getWorkerIdByWorkerTel($financeSearchModel->worker_tel);
-            }
-            $requestPhone = $financeSearchModel->worker_tel;
-            $financeSearchModel->worker_tel = null;
-            $dataProvider = $financeSearchModel->search(null);
             $financeSearchModel->worker_tel = $requestPhone;
             return $this->render('query', [
                 'dataProvider' => $dataProvider,
@@ -224,7 +224,7 @@ class FinanceSettleApplyController extends BaseAuthController
             ]);
         }
         if($isExport == 1){
-            $this->export($requestParams);
+            $this->export($dataProvider->query->all());
         }
     }
     
@@ -235,10 +235,8 @@ class FinanceSettleApplyController extends BaseAuthController
      * 3.写入每个阿姨实时的收入数据
      * @return type
      */
-    public function export($requestParams){
+    public function export($financeSettleApplySearchArray){
         $exportArray = [];
-        $financeSearchModel = new FinanceSettleApplySearch;
-        $financeSettleApplySearchArray = $financeSearchModel->getCanPayedSettlementList();
         $i = 0;
         foreach($financeSettleApplySearchArray as $financeSettleApplySearch){
             $exportRow = [];
