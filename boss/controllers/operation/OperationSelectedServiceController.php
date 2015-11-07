@@ -111,9 +111,12 @@ class OperationSelectedServiceController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (($model = OperationSelectedService::findOne($id)) !== null) {
+            $this->findModel($id)->delete();
+        } else {
+            return $this->redirect(['index']);
+        }
 
-        return $this->redirect(['index']);
     }
 
     /**
