@@ -125,14 +125,16 @@ class ServiceController extends \restapi\components\Controller
             foreach ($categories as $category) {
                 $goodses = OperationGoods::getCategoryGoods($category['id']);
                 if (!empty($goodses)) {
-                    $gobject = [
-                        'goods_id' => $gItem['goods_id'],
-                        'goods_no' => $gItem['operation_goods_no'],
-                        'goods_name' => $gItem['operation_goods_name'],
-                        'goods_introduction' => $gItem['operation_goods_introduction'],
-                        'goods_english_name' => $gItem['operation_goods_english_name'],
-                    ];
-                    $gDate[] = $gobject;
+                    foreach ($goodses as $gItem) {
+                        $gobject = [
+                            'goods_id' => $gItem['goods_id'],
+                            'goods_no' => $gItem['operation_goods_no'],
+                            'goods_name' => $gItem['operation_goods_name'],
+                            'goods_introduction' => $gItem['operation_goods_introduction'],
+                            'goods_english_name' => $gItem['operation_goods_english_name'],
+                        ];
+                        $gDate[] = $gobject;
+                    }
                 }
             }
         }
