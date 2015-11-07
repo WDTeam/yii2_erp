@@ -127,7 +127,7 @@ class ServiceController extends \restapi\components\Controller
                 if (!empty($goodses)) {
                     foreach ($goodses as $gItem) {
                         $gobject = [
-                            'goods_id' => $gItem['goods_id'],
+                            'goods_id' => $gItem['id'],
                             'goods_no' => $gItem['operation_goods_no'],
                             'goods_name' => $gItem['operation_goods_name'],
                             'goods_introduction' => $gItem['operation_goods_introduction'],
