@@ -168,7 +168,7 @@ class Order extends OrderModel
             }
         }
         foreach($attributes_required as $v){
-            if(!isset($attributes[$v])){
+            if(empty($attributes[$v])){
                 $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
                 return false;
             }
@@ -1014,7 +1014,7 @@ class Order extends OrderModel
     {
         $shop_district_info = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($shop_district_info)) {
-            return ['code' => 502, 'msg' => '获取商品信息失败：没有匹配的商圈'];
+            return ['code' => 502, 'msg' => '该地址没有商圈，获取服务项目失败！'];
         } else {
             if ($goods_id == 0) {
                 $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
@@ -1022,7 +1022,7 @@ class Order extends OrderModel
                 $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id'],$goods_id);
             }
             if (empty($goods)) {
-                return ['code' => 501, 'msg' => '获取商品信息失败：没有匹配的商品'];
+                return ['code' => 501, 'msg' => '没有匹配到服务项目！'];
             } else if($goods_id == 0){
                 return ['code' => 200, 'data' => $goods, 'district_id' => $shop_district_info['operation_shop_district_id']];
             } else {

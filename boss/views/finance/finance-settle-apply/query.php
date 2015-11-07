@@ -64,7 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
              'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before' =>$this->render('_query_links', ['model' => $searchModel]),
             'after'=>false,
             'showFooter'=>false
         ],

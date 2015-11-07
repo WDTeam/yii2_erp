@@ -23,4 +23,27 @@ use dbbase\models\operation\OperationAdvertPosition as CommonOperationAdvertPosi
 class OperationAdvertPosition extends CommonOperationAdvertPosition
 {
    
+    /**
+     * 验证同平台版本广告位置是否重复
+     *
+     * @param array $post    要验证的广告位置信息
+     */
+    public static function verifyRepeat($post)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where([
+                'operation_platform_id'          => $post['operation_platform_id'],
+                'operation_platform_version_id'  => $post['operation_platform_version_id'],
+                'operation_advert_position_name' => $post['operation_advert_position_name'],
+            ])
+            ->asArray()
+            ->one();
+
+        if (isset($data) && $data['id'] > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

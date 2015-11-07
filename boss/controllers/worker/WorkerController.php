@@ -807,7 +807,7 @@ class WorkerController extends BaseAuthController
         //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         //echo '<br>';
-        var_dump(Worker::getWorkerTimeLine(1,2));die;
+        var_dump(Worker::getWorkerCycleTimeLine(1,2,19077));die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
