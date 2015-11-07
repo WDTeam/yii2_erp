@@ -27,8 +27,9 @@ class UpdateOwnerShopManagerRule extends Rule
     {
         $auth = \Yii::$app->authManager;
         $rule = new self();
-        $rule = $auth->getRule($rule->name);
-        if(empty($rule)){
+        $_rule = $auth->getRule($rule->name);
+        if(empty($_rule)){
+            $rule = new self();
             $auth->add($rule);
             $update_owner_shopmanager = $auth->createPermission('update_owner_shop_manager');
             $update_owner_shopmanager->description = '更新自己的小家政';
@@ -38,7 +39,7 @@ class UpdateOwnerShopManagerRule extends Rule
             $update_shopmanager = $auth->getPermission('shopmanager/shop-manager/view');
             if(empty($update_shopmanager)){
                 $update_shopmanager = $auth->createPermission('shopmanager/shop-manager/view');
-                $update_shopmanager->description = '更新小家政';
+                $update_shopmanager->description = '更新所有小家政';
                 $auth->add($update_shopmanager);
             }
             $auth->addChild($update_owner_shopmanager, $update_shopmanager);
