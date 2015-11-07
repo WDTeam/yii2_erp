@@ -131,7 +131,8 @@ class AuthController extends \restapi\components\Controller
      *       "ret":{
      *          "user":{}
      *          "access_token":"807b62127fdc2554607a01529d9e4b7e"
-     *       }
+     *       },
+     *       "alertMsg": "登陆成功"
      *     }
      *
      * @apiError UserNotFound The id of the User was not found.
@@ -141,7 +142,8 @@ class AuthController extends \restapi\components\Controller
      *     { 
      *       "code":"0",
      *       "msg": "用户名,签名或渠道id错误",
-     *       "ret": null 
+     *       "ret": null,
+     *       "alertMsg": "用户名,签名或渠道id错误" 
      *     }
      */
     public function actionLoginFromPop()
@@ -232,7 +234,8 @@ class AuthController extends \restapi\components\Controller
      *               "updated_ad": "最后更新时间"
      *           },
      *           "access_token": "token值"
-     *       }
+     *       },
+     *      "alertMsg": "登陆成功" 
      *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
