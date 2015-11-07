@@ -80,7 +80,7 @@ class RoleController extends BaseAuthController
         ->column();
         $permissions = $auth->getPermissions();
         $permissions = ArrayHelper::map($permissions, 'name', 'description');
-        return $this->render('create', [
+        return $this->render('update', [
             'model' => $model,
             'permissions' => $permissions
         ]);

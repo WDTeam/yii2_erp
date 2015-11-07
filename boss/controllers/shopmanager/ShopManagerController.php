@@ -39,8 +39,9 @@ class ShopManagerController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new ShopManagerSearch;
-//         $searchModel->audit_status = 0;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $query = Yii::$app->request->getQueryParams();
+//         \Yii::$app->user->
+        $dataProvider = $searchModel->search($query);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
