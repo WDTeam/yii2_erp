@@ -207,25 +207,25 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '服务项目和类型管理',
+                                'label' => '配置服务品类和服务项目',
                                 'url' => ['/operation/operation-category/'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '城市和商圈管理',
+                                'label' => '配置城市和商圈信息',
                                 'url' => ['/operation/operation-city'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '已开通城市管理',
+                                'label' => '配置保洁任务信息',
+                                'url' => ['/operation/operation-selected-service'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '已开通城市服务管理',
                                 'url' => ['/operation/operation-city/opencity'],
                                 'icon' => 'fa fa-angle-right',
 
-                            ],
-                            [
-                                'label' => '精品保洁管理',
-                                'url' => ['/operation/operation-selected-service'],
-                                'icon' => 'fa fa-angle-right',
                             ],
                         ]
                     ],

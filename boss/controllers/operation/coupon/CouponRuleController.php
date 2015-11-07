@@ -121,8 +121,8 @@ class CouponRuleController extends Controller
 		    $model->created_at=time();//创建时间
 		    $model->updated_at=time();//更新时间
 		    $model->is_del=0;//是否逻辑删除
-		    $model->system_user_id=Yii::$app->user->identity->id;;//优惠码创建人id
-		    $model->system_user_name=Yii::$app->user->identity->username;;//优惠码创建人
+		    $model->system_user_id=Yii::$app->user->identity->id;//优惠码创建人id
+		    $model->system_user_name=Yii::$app->user->identity->username;//优惠码创建人
 		    $model->save();
 		    
 		  // var_dump($model->errors);exit;
