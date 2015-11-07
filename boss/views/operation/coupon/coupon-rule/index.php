@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 
 /**
  * @var yii\web\View $this
@@ -26,20 +27,74 @@ $this->params['breadcrumbs'][] = $this->title;
 
            // 'id',
             'couponrule_name',
-            'couponrule_channelname',
-            'couponrule_classify',
-            'couponrule_category',
+    		[
+    		'format' => 'raw',
+    		'label' => '优惠券',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->couponrule_code ==0 ?'一码一用': $dataProvider->couponrule_code;
+    		},
+    		],
+    		[
+    		'format' => 'raw',
+    		'label' => '渠道名称',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->couponrule_channelname ==0 ?'暂无': $dataProvider->couponrule_channelname;
+    		},
+    		],
+    		
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '类型',
+    		'value' => function ($dataProvider) {
+    		$configdate=CouponRuleSearch::couponconfig();
+    		return $configdate[1][$dataProvider->couponrule_classify];
+    		},
+    		],
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '分类',
+    		'value' => function ($dataProvider) {
+    			$configdate=CouponRuleSearch::couponconfig();
+    			return $configdate[2][$dataProvider->couponrule_category];
+    		},
+    		],
 //            'couponrule_category_name', 
-           'couponrule_type', 
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '优惠券类别',
+    		'value' => function ($dataProvider) {
+    			$configdate=CouponRuleSearch::couponconfig();
+    			return $configdate[3][$dataProvider->couponrule_type];
+    		},
+    		],
 //            'couponrule_type_name', 
 //            'couponrule_service_type_id', 
 //            'couponrule_service_type_name', 
 //            'couponrule_commodity_id', 
 //            'couponrule_commodity_name', 
-            'couponrule_city_limit', 
+    		[
+    		'format' => 'raw',
+    		'label' => '地区限制',
+    		'value' => function ($dataProvider) {
+    			$configdate=CouponRuleSearch::couponconfig();
+    			return $configdate[4][$dataProvider->couponrule_city_limit];
+    		},
+    		],
 //            'couponrule_city_id', 
 //            'couponrule_city_name', 
-            'couponrule_customer_type', 
+
+    		[
+    		'format' => 'raw',
+    		'label' => '适用客户类型',
+    		'value' => function ($dataProvider) {
+    			$configdate=CouponRuleSearch::couponconfig();
+    			return $configdate[5][$dataProvider->couponrule_customer_type];
+    		},
+    		],
+    		
 //            'couponrule_customer_type_name', 
 //            'couponrule_get_start_time:datetime', 
 //            'couponrule_get_end_time:datetime', 
@@ -54,6 +109,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'couponrule_price', 
             'couponrule_price_sum', 
            'couponrule_code_num', 
+           [
+           'format' => 'raw',
+           'label' => '剩余优惠券',
+           'value' => function ($dataProvider) {
+           	$countsum=$dataProvider->couponrule_price_sum-5;
+           	return $countsum;
+           },
+           ],
+
 //            'couponrule_code_max_customer_num', 
 //            'is_disabled', 
 //            'created_at', 

@@ -191,7 +191,7 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['admin_id','order_service_type_id','order_service_item_id','order_src_id','channel_id','order_booked_begin_time','address_id','order_unit_money','order_code', 'order_booked_count','order_money'],'required'],
+            [['admin_id','order_service_type_id','order_service_item_id','order_src_id','order_booked_begin_time','address_id','order_unit_money','order_code', 'order_booked_count','order_money'],'required'],
 
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id',
                 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'order_cancel_cause_id',

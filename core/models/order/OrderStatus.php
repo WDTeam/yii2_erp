@@ -341,11 +341,5 @@ class OrderStatus extends Order
         return $order->doSave($save_models, $transact);
     }
 
-    /**
-     * 查询订单状态历史
-     */
-    public static function searchOrderStatusHistory($order_id)
-    {
-        return OrderStatusHistory::find()->where(["order_id" => $order_id])->orderBy(["created_at" => SORT_DESC])->all();
-    }
+
 }

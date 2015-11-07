@@ -28,26 +28,23 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} [worker_id]  阿姨id
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *      "msg": "阿姨信息查询成功",
-     *      "alertMsg": "获取阿姨信息成功"，
-     *      "ret": {
-      *         "worker_name": "阿姨姓名",
-     *          "worker_phone": "阿姨手机号",
-     *          "worker_photo": "头像地址",
-     *          "worker_identity_description": "阿姨身份说明",
-     *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
-     *          "worker_type_description": "角色",
-     *          "worker_star": "星级"
-     *          "personal_skill": [
-     *              "阿姨技能1",
-     *              "阿姨技能2",
-     *              "阿姨技能3"
-     *          ]
-     *        }
-     *     } 
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "阿姨信息查询成功",
+     *   "alertMsg": "获取阿姨信息成功",
+     *   "ret": {
+     *       "worker_photo": "阿姨头像地址",
+     *       "worker_name": "阿姨姓名",
+     *       "worker_idcard": "阿姨身份证号码",
+     *       "worker_stat_order_num": "阿姨服务次数",
+     *       "worker_live_province": "110000",
+     *       "worker_district": "阿姨服务商圈",
+     *       "worker_comment_satisfied": "阿姨评价满意数",
+     *       "worker_comment_commonly": "阿姨评价满",
+     *       "worker_comment_unsatisfy": "阿姨不满意数"
+     *   }
+     * }
      *
      * @apiErrorExample Error-Response:
      * HTTP/1.1 200
@@ -61,9 +58,9 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
-        }
+//        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+//            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
+//        }
         if(!isset($param['worker_id']) ||!$param['worker_id']||!intval($param['worker_id'])){
             return $this->send(null, '阿姨ID传输错误', 0, 403,null,alertMsgEnum::workerInfoFailed);
         }
@@ -73,16 +70,17 @@ class WorkerController extends \restapi\components\Controller
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
             $ret = array();
             if(!empty($workerInfo)){
+                //籍贯、身份证
                 $ret = [
+                    "worker_photo"=>$workerInfo['worker_photo'],
                     "worker_name" => $workerInfo['worker_name'],
-                    "worker_phone" => $workerInfo['worker_phone'],
-                    "worker_photo" => $workerInfo['worker_photo'],
-                    "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
-                    "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
-                    "worker_type" => $workerInfo["worker_type"],
-                    "worker_type_description" => $workerInfo["worker_type_description"],
-                    'worker_star' => number_format($workerInfo["worker_star"],1),
-                    "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
+                    "worker_idcard" => $workerInfo['worker_idcard'],//身份证
+                    "worker_stat_order_num" => $workerInfo['worker_stat_order_num'],//服务次数
+                    "worker_live_province" =>$workerInfo['worker_live_province'],//籍贯
+                    "worker_district"=>  implode("、",array_column($workerInfo['worker_district'],"operation_shop_district_name")),//服务商圈
+                    "worker_comment_satisfied"=>$workerInfo["worker_comment"][0]['level_count'],//满意数
+                    "worker_comment_commonly"=>$workerInfo["worker_comment"][1]['level_count'],//评价一般
+                    "worker_comment_unsatisfy"=>$workerInfo["worker_comment"][2]['level_count'],//不满意数
                 ];
             }
             return $this->send($ret, '阿姨信息查询成功', 1, 200,null,alertMsgEnum::workerInfoSuccess);
@@ -364,7 +362,7 @@ class WorkerController extends \restapi\components\Controller
             if($commentList){
                 foreach($commentList as $key=>$val){
                     $retData[$key]['comment_id'] = $val['id'];
-                    $retData[$key]['comment_content'] = $val['customer_comment_content'];
+                    $retData[$key]['comment_content'] = $val['customer_comment_tag_names'].','.$val['customer_comment_content'];
                     $retData[$key]['comment_time'] = date('Y-m-d',$val['created_at']);
                 }
             }
@@ -439,7 +437,7 @@ class WorkerController extends \restapi\components\Controller
         }
         if($conplainList){
             foreach($conplainList as $key=>$val){
-                $conplainList[$key]['complaint_time'] = date('Y-m-d H:i:s',$val['complaint_time']);
+                $conplainList[$key]['complaint_time'] = date('Y-m-d',$val['complaint_time']);
             }
         }
         //数据返回
