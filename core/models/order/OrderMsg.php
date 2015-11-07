@@ -17,7 +17,7 @@ class OrderMsg extends Model
     public static function payment($order)
     {
         try {
-            $msg = "【预约成功】您已成功预约,服务时长{$order->order_booked_count}小时，{$order->order_service_item_name}，已支付费用{$order->orderExtPay->order_pay_money}元，订单待指派。如有疑问可致电客服热线4006767636。【e家洁】";
+            $msg = "【预约成功】您已成功预约,服务时长{$order->order_booked_count}小时，{$order->order_service_item_name}，已支付费用{$order->orderExtPay->order_pay_money}元，订单待指派。如有疑问可致电客服热线4006767636。";
             Yii::$app->sms->send($order->orderExtCustomer->order_customer_phone, $msg);
         } catch (Exception $e) {
 
@@ -57,7 +57,7 @@ class OrderMsg extends Model
     public static function cancel($order)
     {
         try {
-            $customer_msg = "【订单取消】您预约的" . date('y年m月d日H点i分', $order->order_booked_begin_time) . "的" . $order->order_service_item_name . "因" . $order->order_cancel_cause_detail . "已取消，感谢您对e家洁的关注与支持。如有疑问可致电客服热线4006767636。【e家洁】";
+            $customer_msg = "【订单取消】您预约的" . date('y年m月d日H点i分', $order->order_booked_begin_time) . "的" . $order->order_service_item_name . "因" . $order->order_cancel_cause_detail . "已取消，感谢您对e家洁的关注与支持。如有疑问可致电客服热线4006767636。";
             Yii::$app->sms->send($order->orderExtCustomer->order_customer_phone, $customer_msg);
             if ($order->orderExtWorker->worker_id > 0) {
                 $worker_msg = "亲爱的阿姨，" . date('y年m月d日H点i分', $order->order_booked_begin_time) . "的订单已被取消，请重新安排您的工作时间，如有疑问请联系e家洁客服：4006767636";

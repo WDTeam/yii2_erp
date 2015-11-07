@@ -94,33 +94,7 @@ class Order extends OrderModel
         return $countys;
     }
 
-    public function getThisOrderBookedTimeRangeList()
-    {
-        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,$this->orderBookedDate,1);
-        $order_booked_time_range = [];
-        foreach($time_range[0]['timeline'] as $range){
-            if($range['enable']) {
-                $order_booked_time_range[$range['time']] = $range['time'];
-            }
-        }
-        return $order_booked_time_range;
-    }
 
-    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
-    {
-        if($district_id>0) {
-            $date = strtotime($date);
-            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
-        }
-        $order_booked_time_range = [];
-        for ($i = 8; $i <= 18; $i++) {
-            $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
-            $hour2 = str_pad($i + intval($range), 2, '0', STR_PAD_LEFT);
-            $minute = ($range - intval($range) == 0) ? '00' : '30';
-            $order_booked_time_range["{$hour}:00-{$hour2}:{$minute}"] = "{$hour}:00-{$hour2}:{$minute}";
-        }
-        return $order_booked_time_range;
-    }
 
 
     /**
