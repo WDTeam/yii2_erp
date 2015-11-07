@@ -254,7 +254,7 @@ return [
             'allowNegative' => false,
         ],
         "order_pop"=>[
-            'api_url'=>'http://test.1jiajie.com/ejj-pop-api/web/'
+            'api_url'=>'http://192.168.15.106/open/web/'
         ],
         'order'=>[
             'MANUAL_ASSIGN_lONG_TIME'=>900,
