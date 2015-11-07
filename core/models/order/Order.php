@@ -168,7 +168,7 @@ class Order extends OrderModel
             }
         }
         foreach($attributes_required as $v){
-            if(!isset($attributes[$v])){
+            if(empty($attributes[$v])){
                 $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
                 return false;
             }

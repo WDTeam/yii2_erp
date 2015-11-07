@@ -171,6 +171,10 @@ class Order extends OrderModel
         $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
         $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
         //预约时间处理
+        if(empty($post['Order']['orderBookedTimeRange'])){
+            $this->addError('orderBookedTimeRange','预约服务时间不能不选！');
+            return false;
+        }
         $time = explode('-',$post['Order']['orderBookedTimeRange']);
         $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
         $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');
