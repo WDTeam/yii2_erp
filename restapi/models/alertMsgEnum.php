@@ -127,6 +127,13 @@ class alertMsgEnum
     const customerLoginSuccess = '登陆成功';
     //用户登录失败
     const customerLoginFail = '登陆失败';
+    //用户名,签名,渠道id不能为空
+    const loginFromPopNoPhone = '用户名,签名,渠道id不能为空';
+    //客户登录失败(第三方渠道)
+    const loginFromPopFail = '登录失败';
+    //登陆成功
+    const loginFromPopSuccess = '登陆成功';
+    
     //用户登录手机号或验证码不能为空
     const customerLoginDataDefect = '用户名或验证码不能为空';
     //阿姨登录

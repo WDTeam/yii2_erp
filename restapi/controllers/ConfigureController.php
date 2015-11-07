@@ -1,14 +1,15 @@
 <?php
 namespace restapi\controllers;
-
 use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
+use \core\models\operation\OperationAdvertContent;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
 use \core\models\order\OrderStatusDict;
 use \core\models\worker\WorkerAccessToken;
+
 use \restapi\models\alertMsgEnum;
 
 class ConfigureController extends \restapi\components\Controller
@@ -265,18 +266,31 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-        //\core\models\operation\OperationAdvertContent::getAdvertList(array('id'=>1),array('operation_advert_online_time'=>21345,'operation_advert_offline_time'=>1233));
-        if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
+        
+        if(!isset($param['city_id'])||!intval($param['city_id'])){
+            $param['city_id'] = "110000";
         }
-        @$access_token=$param['access_token'];
+        //判断token是否有效
         $isEffect="0";
-        if(!empty($access_token)&&!CustomerAccessToken::checkAccessToken($access_token))
-        {
-            $isEffect="1";
-        }
+        if(isset($param['access_token'])&&CustomerAccessToken::checkAccessToken($param['access_token'])) $isEffect="1";
+        
+        
         //获取城市列表
-        $city_list = OperationCity::getOnlineCitys();
+        try{
+            $onlineCitys = OperationCity::getOnlineCitys();
+                           OperationShopDistrictGoods::getCityShopDistrictGoodsList($param['city_id']);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
+        }
+        //整理开通的城市
+        $onlineCityList = array();
+        foreach($onlineCitys as $key=>$val){
+            $onlineCityList[$key]['city_id'] = $val['city_id'];
+            $onlineCityList[$key]['city_name'] = $val['city_name'];
+        }
+        
+        
+        
         //页首链接
         $header_link = [
             'comment_link' => [
