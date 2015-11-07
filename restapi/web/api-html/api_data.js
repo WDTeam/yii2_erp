@@ -344,197 +344,6 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "/order/append-order",
-    "title": "[POST] /order/append-order( 90% )",
-    "name": "ActionAppendOrder",
-    "group": "Order",
-    "description": "<p>追加订单 (谢奕 -- 目前产品已删除该需求)</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_service_type_id",
-            "description": "<p>服务类型商品id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_src_id",
-            "description": "<p>订单来源id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_booked_begin_time",
-            "description": "<p>服务开始时间 时间戳 如 *'1443695400'</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_booked_end_time",
-            "description": "<p>服务结束时间 时间戳 如 *'1443695400'</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_customer_phone",
-            "description": "<p>用户手机号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_parent_id",
-            "description": "<p>追加父订单id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "address_id",
-            "description": "<p>订单地址id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "address",
-            "description": "<p>订单地址</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "city",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_pop_order_code",
-            "description": "<p>第三方订单号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_pop_group_buy_code",
-            "description": "<p>第三方团购号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>Integer</p> ",
-            "optional": true,
-            "field": "order_pop_order_money",
-            "description": "<p>第三方订单金额,预付金额</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "coupon_id",
-            "description": "<p>优惠劵id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "channel_id",
-            "description": "<p>下单渠道</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_booked_worker_id",
-            "description": "<p>指定阿姨id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>Number</p> ",
-            "optional": true,
-            "field": "order_customer_need",
-            "description": "<p>客户需求</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_customer_memo",
-            "description": "<p>客户备注</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>Integer</p> ",
-            "optional": true,
-            "field": "order_is_use_balance",
-            "description": "<p>是否使用余额 1 使用 0 不适用 默认1</p> "
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/order/action-append-order"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object</p> ",
-            "optional": false,
-            "field": "order",
-            "description": "<p>成功订单对象</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": \"1\",\n    \"msg\": \"以下单成功，正在等待阿姨抢单\",\n    \"alertMsg\": \"以下单成功，正在等待阿姨抢单\",\n    \"ret\":{\n        \"order\": {}\n\n    }\n\n  }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "POST",
     "url": "/order/create-order",
     "title": "[POST] /order/create-order(100%)",
     "description": "<p>创建订单 (谢奕)</p> ",
@@ -909,13 +718,6 @@ define({ "api": [
             "optional": false,
             "field": "order_id",
             "description": "<p>订单号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "recursive_order_id",
-            "description": "<p>周期订单</p> "
           }
         ]
       }
@@ -1287,7 +1089,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\",\n      \"times\" => '2:00:00',\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1431,8 +1233,8 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/orders",
-    "title": "[GET] /order/orders (90%)",
-    "description": "<p>查询用户订单 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "title": "[GET] /order/orders (100%)",
+    "description": "<p>查询用户订单 (谢奕)</p> ",
     "name": "actionOrders",
     "group": "Order",
     "parameter": {
@@ -1540,10 +1342,10 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/order/orders-count",
-    "title": "[GET] /order/orders-count(70%)",
+    "title": "[GET] /order/orders-count(100%)",
     "name": "actionOrdersCount",
     "group": "Order",
-    "description": "<p>获得用户各种状态的订单数量 （谢奕 --缺少周期订单）</p> ",
+    "description": "<p>获得用户各种状态的订单数量 （谢奕）</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1770,7 +1572,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "description": "<p>平台版本号</p> "
           }
         ]
       }
@@ -5169,7 +4971,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨信息成功\"，\n \"ret\": {\n    \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\"\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"阿姨信息查询成功\",\n  \"alertMsg\": \"获取阿姨信息成功\",\n  \"ret\": {\n      \"worker_photo\": \"阿姨头像地址\",\n      \"worker_name\": \"阿姨姓名\",\n      \"worker_idcard\": \"阿姨身份证号码\",\n      \"worker_stat_order_num\": \"阿姨服务次数\",\n      \"worker_live_province\": \"110000\",\n      \"worker_district\": \"阿姨服务商圈\",\n      \"worker_comment_satisfied\": \"阿姨评价满意数\",\n      \"worker_comment_commonly\": \"阿姨评价满\",\n      \"worker_comment_unsatisfy\": \"阿姨不满意数\"\n  }\n}",
           "type": "json"
         }
       ]

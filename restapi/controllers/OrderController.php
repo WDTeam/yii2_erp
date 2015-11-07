@@ -335,7 +335,7 @@ class OrderController extends \restapi\components\Controller
 
             $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetOrdersSuccess);
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误" . $e, 1024, 200, null, alertMsgEnum::orderGetOrdersFaile);
+            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderGetOrdersFaile);
         }
     }
 
@@ -525,7 +525,7 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to, $not_with_work);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to, 'order.created_at', $not_with_work);
         } catch (\Exception $e) {
-            return $this->send($e, "服务异常", 1024, 200, null, alertMsgEnum::orderGetWorkerOrderFaile);
+            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderGetWorkerOrderFaile);
         }
         $ret = [];
         $ret['limit'] = $limit;
@@ -654,14 +654,14 @@ class OrderController extends \restapi\components\Controller
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $arr);
         } catch (Exception $e) {
-            return $this->send($e, "服务异常", 0, 200, null, alertMsgEnum::orderGetWorkerServiceOrderSuccess);
+            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderGetWorkerServiceOrderFaile);
         }
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetWorkerServiceOrderFaile);
+        $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderGetWorkerServiceOrderSuccess);
     }
 
     /**
@@ -1179,9 +1179,9 @@ class OrderController extends \restapi\components\Controller
             'order_use_coupon_money' => $orderInfo['order_use_coupon_money'],
             'order_use_promotion_money' => $orderInfo['order_use_promotion_money']
         ];
-        
-        $status_history =  OrderStatusHistory::findByOrderId($args['order_id']);
-        
+
+        $status_history = OrderStatusHistory::findByOrderId($args['order_id']);
+
         foreach ($status_history as $key => $val) {
             $ret['status_history'][$key]['created_at'] = $val['created_at'];
             $ret['status_history'][$key]['order_status_customer'] = $val['order_status_customer'];
@@ -1271,9 +1271,7 @@ class OrderController extends \restapi\components\Controller
 
                 try {
                     $result = Order::cancelByOrderId($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-                  
-                    var_dump($result);
-                    exit;
+
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                     } else {
@@ -1343,7 +1341,7 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "订单删除失败", 0, 200, null, alertMsgEnum::orderDeleteFaile);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 1024, 200, null, alertMsgEnum::orderDeleteFaile);
+                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderDeleteFaile);
             }
         }
     }
@@ -1511,7 +1509,7 @@ class OrderController extends \restapi\components\Controller
                     $ret["orderData"] = $workerCount; // $workerCount; 实际返回数组名称
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024, null, alertMsgEnum::userLoginFailed);
+                    return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::userLoginFailed);
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
@@ -1541,7 +1539,7 @@ class OrderController extends \restapi\components\Controller
                     ];
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024, null, alertMsgEnum::userLoginFailed);
+                    return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::userLoginFailed);
                 }
             } else {
                 return $this->send(null, "leveltype指定参数错误,不能大于2", 0, 200, null, alertMsgEnum::levelType);
@@ -1686,10 +1684,10 @@ class OrderController extends \restapi\components\Controller
                         return $this->send(null, "添加失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                     }
                 } else {
-                    return $this->send(null, "boss系统错误,添加周期订单失败", 1024, 200, NULL, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误,添加周期订单失败" . $e, 1024, 200, NULL, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
             }
         } else {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
@@ -1751,24 +1749,11 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
             } catch (Exception $e) {
-                return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024, 200, NULL, alertMsgEnum::orderSetWorkerOrderFaile);
+                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderSetWorkerOrderFaile);
             }
         } else {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
-    }
-
-    /**
-     * 智能派单自动推送访问接口
-     *
-     * @author  linhongyou
-     * @param $id
-     * @return array
-     */
-    public function actionPush($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderPush::push($id);
     }
 
     /**
@@ -1855,10 +1840,10 @@ class OrderController extends \restapi\components\Controller
                 $r_order['sub_order'] = $arr;
                 return $this->send($r_order, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send(null, "boss系统错误" . $e, 1024, null, alertMsgEnum::orderGetOrderWorkerFaile);
+                return $this->send($r_order, "操作失败", 0, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
             }
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误" . $e, 1024, null, alertMsgEnum::orderGetOrderWorkerFaile);
+            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderGetOrderWorkerFaile);
         }
     }
 
@@ -1936,11 +1921,24 @@ class OrderController extends \restapi\components\Controller
                 $ret["orderData"] = $order;
                 return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024, null, alertMsgEnum::orderGetOrderWorkerFaile);
+                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::userLoginFailed);
             }
         } catch (Exception $e) {
-            return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 0, 10240, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderGetOrderWorkerFaile);
         }
+    }
+
+    /**
+     * 智能派单自动推送访问接口
+     *
+     * @author  linhongyou
+     * @param $id
+     * @return array
+     */
+    public function actionPush($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderPush::push($id);
     }
 
 }

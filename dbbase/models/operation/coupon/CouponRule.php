@@ -61,9 +61,9 @@ class CouponRule extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['couponrule_classify', 'couponrule_category', 'couponrule_type', 'couponrule_service_type_id', 'couponrule_commodity_id', 'couponrule_city_limit', 'couponrule_city_id', 'couponrule_customer_type', 'couponrule_get_start_time', 'couponrule_get_end_time', 'couponrule_use_start_time', 'couponrule_use_end_time', 'couponrule_use_end_days', 'couponrule_promote_type', 'couponrule_code_num', 'couponrule_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
+            [['couponrule_classify', 'couponrule_category', 'couponrule_type', 'couponrule_service_type_id', 'couponrule_commodity_id', 'couponrule_city_limit', 'couponrule_city_id', 'couponrule_use_end_days', 'couponrule_promote_type', 'couponrule_code_num', 'couponrule_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
             [['couponrule_order_min_price', 'couponrule_price', 'couponrule_price_sum'], 'number'],
-            [['couponrule_name', 'couponrule_category_name', 'couponrule_type_name', 'couponrule_service_type_name', 'couponrule_commodity_name', 'couponrule_customer_type_name'], 'string', 'max' => 100],
+            [['couponrule_name','couponrule_category_name', 'couponrule_type_name', 'couponrule_service_type_name', 'couponrule_commodity_name', 'couponrule_customer_type_name'], 'string', 'max' => 100],
             [['couponrule_channelname'], 'string', 'max' => 80],
             [['couponrule_city_name', 'couponrule_promote_type_name'], 'string', 'max' => 60],
             [['couponrule_code', 'system_user_name'], 'string', 'max' => 40],
@@ -81,14 +81,19 @@ class CouponRule extends \yii\db\ActiveRecord
             'couponrule_name' => Yii::t('core', '优惠券名称'),
             'couponrule_channelname' => Yii::t('core', '渠道名称'),//(主要使用到一码多用分渠道发)
             'couponrule_classify' => Yii::t('core', '类型'),//1 一码一用  2 一码多用
+            
             'couponrule_category' => Yii::t('core', '分类'),//优惠券分类0为一般优惠券1为赔付优惠券
             'couponrule_category_name' => Yii::t('core', '优惠券范畴'),
             'couponrule_type' => Yii::t('core', '优惠券类别'),//优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券
             'couponrule_type_name' => Yii::t('core', '优惠券类型名称'),
-            'couponrule_service_type_id' => Yii::t('core', '服务类别id'),
-            'couponrule_service_type_name' => Yii::t('core', '服务类别名称'),
-            'couponrule_commodity_id' => Yii::t('core', '如果是商品优惠券id'),
-            'couponrule_commodity_name' => Yii::t('core', '如果是商品名称'),
+            
+            'couponrule_service_type_id' => Yii::t('core', '服务类别id'),//分类
+            'couponrule_service_type_name' => Yii::t('core', '服务类别名称'),//分类 名称
+            
+            'couponrule_commodity_id' => Yii::t('core', '如果是商品优惠券id'),//洗衣的内心id
+            'couponrule_commodity_name' => Yii::t('core', '如果是商品名称'),//洗衣
+            
+            
             'couponrule_city_limit' => Yii::t('core', '地区限制'),//城市限制0为不限1为单一城市限制
             'couponrule_city_id' => Yii::t('core', '关联城市'),
             'couponrule_city_name' => Yii::t('core', '城市名称'),

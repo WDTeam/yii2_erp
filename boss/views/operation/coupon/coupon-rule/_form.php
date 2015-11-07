@@ -3,10 +3,15 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
-use kartik\datecontrol\DateControl;
-use kartik\widgets\Select2;
 use kartik\date\DatePicker;
+use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
+use boss\components\AreaCascade;
 
+//use core\models\operation\OperationShopDistrictGoods;
+
+	
+
+$configdate=CouponRuleSearch::couponconfig();
 $model->couponrule_classify=1;
 $model->couponrule_category=1;
 $model->couponrule_type=1;
@@ -37,16 +42,21 @@ $model->couponrule_promote_type=1;
     		 		'form' => $form,
     		 		'columns' => 1,
     		 		'attributes' => [
+    				'couponrule_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>' 优惠券名称...', 'maxlength'=>100]],
+'couponrule_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券单价...', 'maxlength'=>8]],
+'couponrule_price_sum'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券总价...', 'maxlength'=>8]],			
     		 'couponrule_classify'=>[
     		 'type'=> Form::INPUT_RADIO_LIST,
-    		 'items'=>['1' => '一码一用', '2' => '一码多用'],'options'=>[]],
+    		 'items'=>$configdate[1],'options'=>[]],
+			 'couponrule_code'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'如果是1码多用的优惠码...', 'maxlength'=>40]],
     		'couponrule_channelname'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'渠道名称(主要使用到一码多用分渠道发)...', 'maxlength'=>80]],
-
+             'couponrule_code_max_customer_num'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'一码多用单个优惠码最大使用人数限制...']],
+    				
+				'couponrule_Prefix'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码前缀...', 'maxlength'=>20]],	
+    			'couponrule_code_num'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码个数...']],
     		'couponrule_category'=>[
     		'type'=> Form::INPUT_RADIO_LIST,
-    		'items'=>['1' => '一般优惠券', '2' => '赔付优惠券'],'options'=>[]],
-    		
-
+    		'items'=>$configdate[2],'options'=>[]],
     				]
     				]);
     				?>
@@ -61,47 +71,74 @@ $model->couponrule_promote_type=1;
     		 		'attributes' => [		
     		'couponrule_type'=>[
     		'type'=> Form::INPUT_RADIO_LIST,
-    		'items'=>['1' => '全网优惠券', '2' => '类别优惠券','3' => '商品优惠券'],'options'=>[]],
+    		'items'=>$configdate[3],'options'=>[]],
 
     		'couponrule_service_type_id'=>[
      		'type' => Form::INPUT_DROPDOWN_LIST,
-     		'items' => ['1'=>'服务类别名称1','2'=>'服务类别名称2'],
+     		'items' => $configdate[7],
      		'options' => [
-     		'prompt' => '服务类别名称',
+     		'prompt' => '服务类型',
      		],
      		],
     		
     		
     		'couponrule_commodity_id'=>[
     		'type' => Form::INPUT_DROPDOWN_LIST,
-    		'items' => ['1'=>'商品优惠券名称1','2'=>'商品优惠券名称2'],
+    		'items' => $configdate[8],
     		'options' => [
-    		'prompt' => '商品优惠券名称',
+    		'prompt' => '商品类型',
     		],
     		],
     		
 
     		'couponrule_city_limit'=>[
     		'type'=> Form::INPUT_RADIO_LIST,
-    		'items'=>['1' => '不限', '2' => '单一城市'],'options'=>[]],
+    		'items'=>$configdate[4],'options'=>[]],
     		
-    		
-    		'couponrule_city_id'=>[
+    	]
+]);
+?>	
+
+
+
+
+<?php
+echo AreaCascade::widget([
+		'model' => $model,
+		'options' => ['class' => 'form-control'],
+		'label' =>'选择城市',
+		'grades' => 'city',
+		]);
+        ?>
+
+   
+        
+        
+        
+
+    		<!-- 'couponrule_city_id'=>[
     		'type' => Form::INPUT_DROPDOWN_LIST,
     		'items' => ['1'=>'北京','2'=>'天津'],
     		'options' => [
     		'prompt' => '请选择地区',
     		],
-    		],
+    		], -->
+
+<?
+    		echo Form::widget([
+    		 		'model' => $model,
+    		 		'form' => $form,
+    		 		'columns' => 1,
+    		 		'attributes' => [
+
+
     		'couponrule_customer_type'=>[
     		'type'=> Form::INPUT_CHECKBOX_LIST,
-    		'items'=>['1' => '所有用户', '2' => '新用户', '3' => '老用户', '4' => '会员'],'options'=>[]],
+    		'items'=>$configdate[5],'options'=>[]],
 
 			'couponrule_promote_type'=>[
-			'type'=> Form::INPUT_CHECKBOX_LIST,
-			'items'=>['1' => '立减', '2' => '满减'],'options'=>[]],
-
-
+			'type'=> Form::INPUT_RADIO_LIST,
+			'items'=>$configdate[6],'options'=>[]],
     		]
     		]);
     ?>
@@ -153,40 +190,10 @@ $model->couponrule_promote_type=1;
     		 		'columns' => 1,
     		 		'attributes' => [
 'couponrule_use_end_days'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'领取后过期天数...']], 
-
-'couponrule_code_num'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码个数...']], 
-
-'couponrule_code_max_customer_num'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'如果是一码多用单个优惠码最大使用人数限制...']], 
-
 'couponrule_order_min_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'满减或每减时订单最小金额...', 'maxlength'=>8]], 
 
-'couponrule_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券单价...', 'maxlength'=>8]], 
-
-'couponrule_price_sum'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券总价...', 'maxlength'=>8]], 
-
-'couponrule_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>' 优惠券名称...', 'maxlength'=>100]], 
-
-'couponrule_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券范畴...', 'maxlength'=>100]], 
-
-'couponrule_type_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券类型名称...', 'maxlength'=>100]], 
-
-'couponrule_service_type_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'服务类别名称...', 'maxlength'=>100]], 
-
-'couponrule_commodity_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'如果是商品名称...', 'maxlength'=>100]], 
-
-'couponrule_customer_type_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'适用客户类别名称...', 'maxlength'=>100]], 
-
-'couponrule_city_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'城市名称...', 'maxlength'=>60]], 
-
-'couponrule_promote_type_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券优惠类型名称...', 'maxlength'=>60]], 
-
-'couponrule_code'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'如果是1码多用的优惠码...', 'maxlength'=>40]], 
-
-'couponrule_Prefix'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码前缀...', 'maxlength'=>20]], 
-
     ]
-    ]);
-    		 
+    ]);		 
     		 
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>

@@ -5,6 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use boss\components\AreaCascade;
+
 /**
  * @var yii\web\View $this
  * @var dbbase\models\OperationCity $model
@@ -18,7 +19,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'release').Yii::t('ap
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">
-<!--                    <i class="glyphicon glyphicon-search"></i> -->
                     基础信息</h3>
             </div>
             <div class="panel-body">
@@ -30,8 +30,5 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'release').Yii::t('ap
             </div>
         </div>
     </div>
-<!--    <div id="cityshopdistrict">
-        
-    </div>-->
 
 </div>
