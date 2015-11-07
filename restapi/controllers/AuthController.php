@@ -157,16 +157,17 @@ class AuthController extends \restapi\components\Controller
 
         if ($checkRet) {
             $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_id);
-            if (empty($token)) {
-                return $this->send(null, "生成token错误", 0);
-            } else {
-                $user = CustomerAccessToken::getCustomer($token);
+			if($token['response'] == 'error'){
+				return $this->send(null, $token['errmsg'], 0);
+			}else{
+				$access_token = $token['access_token'];
+                $user = CustomerAccessToken::getCustomer($access_token);
                 $ret = [
                     "user" => $user,
-                    "access_token" => $token
+                    "access_token" => $access_token
                 ];
                 return $this->send($ret, "登陆成功");
-            }
+			}
         } else {
             return $this->send(null, "用户名,签名或渠道id错误", 0, 200);
         }
