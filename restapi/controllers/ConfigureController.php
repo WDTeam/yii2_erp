@@ -284,7 +284,6 @@ class ConfigureController extends \restapi\components\Controller
             'isBlock' => $isBlock,
             'isEffect' => $isEffect,
         ];
-
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
     }
 
