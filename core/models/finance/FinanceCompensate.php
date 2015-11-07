@@ -34,9 +34,12 @@ class FinanceCompensate extends FinanceCompensateModel
     public function rules()
     {
         return [
-            [['id', 'finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_softdel'], 'integer'],
-            [['finance_compensate_oa_code', 'finance_compensate_coupon', 'finance_compensate_reason', 'finance_compensate_proposer', 'finance_compensate_auditor', 'comment'], 'safe'],
-            [['finance_compensate_money'], 'number'],
+            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_softdel','finance_compensate_status'], 'integer'],
+            [['finance_compensate_money','finance_compensate_total_money','finance_compensate_insurance_money','finance_compensate_company_money','finance_compensate_worker_money'], 'number'],
+            [['finance_compensate_reason', 'comment','worker_tel','worker_name','customer_name'], 'string'],
+            [['finance_compensate_oa_code'], 'string', 'max' => 40],
+            [['finance_compensate_coupon','finance_compensate_coupon_money'], 'string', 'max' => 150],
+            [['finance_compensate_proposer', 'finance_compensate_auditor'], 'string', 'max' => 20]
         ];
     }
 
