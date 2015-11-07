@@ -58,9 +58,9 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-//        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-//            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
-//        }
+        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
+        }
         if(!isset($param['worker_id']) ||!$param['worker_id']||!intval($param['worker_id'])){
             return $this->send(null, '阿姨ID传输错误', 0, 403,null,alertMsgEnum::workerInfoFailed);
         }
