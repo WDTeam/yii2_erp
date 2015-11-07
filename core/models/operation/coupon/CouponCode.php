@@ -41,7 +41,7 @@ class CouponCode extends \dbbase\models\operation\coupon\CouponCode
 	}
 
 	/**
- 	 * generate coupon code 
+ 	 * erate coupon code 
 	 */
 	public static function generateCouponCode(){
 		$coupon_code['length'] = 8;
@@ -108,9 +108,9 @@ class CouponCode extends \dbbase\models\operation\coupon\CouponCode
         
     }
     /**
-     * generate coupon for customer by code
+     * erate coupon for customer by code
      */
-    public static function generateCouponByCode($phone, $code){
+    public static function erateCouponByCode($phone, $code){
         //check customer exists
    
         $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
@@ -146,7 +146,7 @@ class CouponCode extends \dbbase\models\operation\coupon\CouponCode
             if($coupon->coupon_get_end_at < time()) return false;
             break;
         }
-        //generate coupon for customer
+        //erate coupon for customer
         $couponCustomer = new CouponCustomer;
         $couponCustomer->customer_id = $customer->id;
         $couponCustomer->coupon_id = $coupon->id;

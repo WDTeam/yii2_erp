@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $operation_category_name
  * @property string $operation_category_icon
+ * @property string $operation_category_introduction
  * @property string $operation_category_price_description
  * @property string $operation_category_url
  * @property integer $operation_category_parent_id
@@ -36,8 +37,9 @@ class OperationCategory extends \core\models\operation\OperationCategory
     {
         return [
             [['operation_category_name'], 'string', 'max' => 30],
-            ['operation_category_name', 'unique', 'message' => '该服务类型已存在'],
-            [['operation_category_name', 'operation_category_icon', 'operation_category_price_description'], 'required'],
+            ['operation_category_name', 'unique', 'message' => '该服务品类已存在'],
+            [['operation_category_name', 'operation_category_icon', 'operation_category_price_description', 'operation_category_introduction'], 'required'],
+            [['operation_category_introduction'], 'string'],
             [['operation_category_parent_id', 'sort', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
             [['operation_category_icon', 'operation_category_price_description'], 'string', 'max' => 128],
             [['operation_category_url'], 'string', 'max' => 258],
@@ -52,8 +54,9 @@ class OperationCategory extends \core\models\operation\OperationCategory
     {
         return [
             'id' => Yii::t('app', '编号'),
-            'operation_category_name' => Yii::t('app', '服务类型名称'),
-            'operation_category_icon' => Yii::t('app', '服务类型图片'),
+            'operation_category_name' => Yii::t('app', '服务品类名称'),
+            'operation_category_icon' => Yii::t('app', '服务品类图片'),
+            'operation_category_introduction' => Yii::t('app', '服务品类简介'),
             'operation_category_price_description' => Yii::t('app', '价格备注'),
             'operation_category_url' => Yii::t('app', '跳转地址'),
             'created_at' => Yii::t('app', '创建时间'),
