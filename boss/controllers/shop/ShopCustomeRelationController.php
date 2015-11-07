@@ -58,14 +58,14 @@ class ShopCustomeRelationController extends BaseAuthController
         	if(!isset($dateinfo['ShopCustomeRelation']['shopid'])){
         		//父级id
         		$model->baseid= 0;
-        		$stype=1;
+        		$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOP;
         	}else{
         		//门店选择家政公司  会根据家政公司选择父id
         		if(!isset($dateinfo['ShopCustomeRelation']['shop_manager_id'])){
         			\Yii::$app->getSession()->setFlash('default','请选择家政公司！');
         			return $this->redirect(['index']);
         		}else{
-        			$stype=2;
+        			$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOPMANAGER;
         			$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
         		}
         		$model->baseid= $resinfo['id'];
