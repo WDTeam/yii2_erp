@@ -1198,7 +1198,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} [order_cancel_reason] 取消原因
-     * @apiParam {String} order_id 订单号
+     * @apiParam {String} order_code 订单号
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1227,12 +1227,12 @@ class OrderController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
+        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_code']) || !$param['order_code']) {
             return $this->send(null, "验证码或订单号不能为空", 0, 200, null, alertMsgEnum::orderCancelVerifyFaile);
         }
 
         $token = $param['access_token'];
-        $orderId = $param['order_id'];
+        $orderId = $param['order_code'];
         $reason = '';
 
         if (isset($param['order_cancel_reason'])) {
@@ -1270,7 +1270,7 @@ class OrderController extends \restapi\components\Controller
                 }
 
                 try {
-                    $result = Order::cancelByOrderId($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
+                    $result = Order::cancelByOrderCode($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
 
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
