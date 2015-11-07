@@ -41,7 +41,7 @@ class UpdateOwnerShopManagerRule extends Rule
                 $update_shopmanager->description = '更新小家政';
                 $auth->add($update_shopmanager);
             }
-            $auth->addChild($update_shopmanager, $update_owner_shopmanager);
+            $auth->addChild($update_owner_shopmanager, $update_shopmanager);
         }
     }
 }

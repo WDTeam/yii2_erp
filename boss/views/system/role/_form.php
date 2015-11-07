@@ -69,11 +69,11 @@ use kartik\icons\Icon;
                             unset($permissions[$key]);
                         }
                     }
-                    echo $form->field($model, '_permissions')->checkboxList($data, [
+                    echo $form->field($model, 'permissions')->checkboxList($data, [
                         'id'=>'item_'.$name,
                     ])->label($name);
                 }
-                echo $form->field($model, '_permissions')->checkboxList($permissions, [
+                echo $form->field($model, 'permissions')->checkboxList($permissions, [
                     'id'=>'item_orther',
                 ])->label('其它');
 //                 echo $form->field($model, '_permissions')->checkboxList($permissions, ['class'=>'test'])->label('', ['hidden' => 'hidden']);
@@ -84,6 +84,6 @@ use kartik\icons\Icon;
     <?php ActiveForm::end(); ?>
 </div>
 <?php $this->registerJs(<<<JSCONTENT
-    $('.panel-body input[name="Auth[_permissions]"]').remove();
+    $('.panel-body input[name="Auth[permissions]"]').remove();
 JSCONTENT
 );?>
