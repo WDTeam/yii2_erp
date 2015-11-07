@@ -197,6 +197,6 @@ class AuthController extends BaseAuthController
 //             echo '"'.$permission.'"<br/>';
         }
         //处理生成rbac目录下的权限
-        \boss\rbac\UpdateOwnerShopManagerRule::add();
+//         \boss\rbac\UpdateOwnerShopManagerRule::add();
     }
 }
