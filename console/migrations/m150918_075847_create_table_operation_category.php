@@ -17,6 +17,7 @@ class m150918_075847_create_table_operation_category extends Migration
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'编号\'' ,
             'operation_category_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'服务品类名称\'',
             'operation_category_icon' => Schema::TYPE_STRING . '(128) DEFAULT NULL COMMENT \'服务品类图片\'',
+            'operation_category_introduction'=>  Schema::TYPE_TEXT.' NOT NULL COMMENT \'服务品类介绍\'' ,
             'operation_category_price_description' => Schema::TYPE_STRING . '(128) DEFAULT NULL COMMENT \'价格备注\'',
             'operation_category_url' => Schema::TYPE_STRING . '(258) DEFAULT NULL COMMENT \'跳转的链接\'',
             'operation_category_parent_id' => Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'上级id(为0是顶级分类)\'',
