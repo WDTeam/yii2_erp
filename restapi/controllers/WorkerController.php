@@ -59,10 +59,10 @@ class WorkerController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
+            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 200,null,alertMsgEnum::userLoginFailed);
         }
         if(!isset($param['worker_id']) ||!$param['worker_id']||!intval($param['worker_id'])){
-            return $this->send(null, '阿姨ID传输错误', 0, 403,null,alertMsgEnum::workerInfoFailed);
+            return $this->send(null, '阿姨ID传输错误', 0, 200,null,alertMsgEnum::workerInfoFailed);
         }
         //数据调取
         try{
@@ -85,7 +85,7 @@ class WorkerController extends \restapi\components\Controller
             }
             return $this->send($ret, '阿姨信息查询成功', 1, 200,null,alertMsgEnum::workerInfoSuccess);
         }catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerInfoFailed);
+            return $this->send(null,$e->getMessage(), 1024, 200,null,alertMsgEnum::workerInfoFailed);
         }
     }
 
