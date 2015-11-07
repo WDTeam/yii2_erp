@@ -30,7 +30,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
         
-        
+        $test = Yii::$app->user->identity->getShopManagerList();
         
         if(1==1){
         	return $this->render('indexshop');
