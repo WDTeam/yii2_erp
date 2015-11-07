@@ -125,9 +125,16 @@ $(document).ready(function(){
     });
 
     $("#btn_submit").click(function(){
-    	var input_value = $("input").val();
-    	if(input_value == ""){
-    		alert("信息不能为空！！！");
+    	var price_value = $("#sale_price").val();
+    	var city_value = $btn_tabradio.hasClass("selected");
+    	if(city_value==false && price_value==""){
+    		alert("请填写销售价格,请选择使用商圈。");
+    		return false;
+    	}else if(city_value==false){
+    		alert("请选择使用商圈。");
+    		return false;
+    	}else if (price_value=="") {
+			alert("请填写销售价格");
     	}
     });
 

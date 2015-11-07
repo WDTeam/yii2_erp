@@ -36,6 +36,7 @@ class WorkerController extends \restapi\components\Controller
      *   "ret": {
      *       "worker_photo": "阿姨头像地址",
      *       "worker_name": "阿姨姓名",
+     *       "worker_age":"阿姨年龄",
      *       "worker_idcard": "阿姨身份证号码",
      *       "worker_stat_order_num": "阿姨服务次数",
      *       "worker_live_province": "110000",

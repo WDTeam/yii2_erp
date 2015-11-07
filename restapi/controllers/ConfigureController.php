@@ -116,7 +116,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      * @apiDescription 用户端首页初始化,获得开通城市列表，广告轮播图 等初始化数据(赵顺利--假数据 )
      *
-     * @apiParam {String} city_name 城市
+     * @apiParam {String} city_id 城市ID
      * @apiParam {String} [access_token] 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -266,19 +266,16 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-        
         if(!isset($param['city_id'])||!intval($param['city_id'])){
-            $param['city_id'] = "110000";
+            $param['city_id'] = "110100";
         }
         //判断token是否有效
         $isEffect="0";
         if(isset($param['access_token'])&&CustomerAccessToken::checkAccessToken($param['access_token'])) $isEffect="1";
-        
-        
         //获取城市列表
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
-                           OperationShopDistrictGoods::getCityShopDistrictGoodsList($param['city_id']);
+            $cityShopDistrictGoodsList = OperationShopDistrictGoods::getCityShopDistrictGoodsListArray($param['city_id']);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
@@ -288,6 +285,29 @@ class ConfigureController extends \restapi\components\Controller
             $onlineCityList[$key]['city_id'] = $val['city_id'];
             $onlineCityList[$key]['city_name'] = $val['city_name'];
         }
+        //整理开通的服务类型
+        $serviceGoodsList = array();
+//         'category_id' => '2',
+//                'category_name' => '洗护服务',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/washProtect',
+//                'category_introduction' => '衣服、皮鞋、美包',
+//                'category_price' => '9.00',
+//                'category_price_unit' => '件',
+//                'category_price_description' => '￥9/件起',
+//                'colour' => '7fce0f',
+//                'sort' => '3',
+                 
+        foreach($cityShopDistrictGoodsList as $key=>$val){
+            if($val['operation_shop_district_goods_status']!=1) continue;
+            $serviceGoodsList[$key]['category_name'] = $val['operation_category_name'];
+            $serviceGoodsList[$key]['category_icon'] = $val['operation_goods_img'];
+            $serviceGoodsList[$key]['category_introduction'] = $val['operation_shop_district_goods_introduction'];
+            $serviceGoodsList[$key]['category_price'] = $val['operation_shop_district_goods_price'];
+            $serviceGoodsList[$key]['category_price_unit'] = $val['operation_spec_strategy_unit'];
+            $serviceGoodsList[$key]['colour'] = "7fce0f";
+        }
+        
         
         
         
@@ -358,82 +378,81 @@ class ConfigureController extends \restapi\components\Controller
 
         ];
         //获取该城市的首页服务类型
-        $server_list = [
-            [
-                'category_id' => '6',
-                'category_name' => '保洁任务',
-                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/baojierenwu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/3',
-                'category_introduction' => '37项定制化精品保洁',
-                'category_price' => '30',
-                'category_price_unit' => '小时',
-                'category_price_description' => '￥30/小时',
-                'colour' => 'ff701a',
-                'sort' => '1',
-
-            ],
-            [
-                'category_id' => '1',
-                'category_name' => '专业保洁',
-                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/zhuanyebaojie.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/cleaning',
-                'category_introduction' => '44项定制清洁服务',
-                'category_price' => '25.00',
-                'category_price_unit' => '小时',
-                'category_price_description' => '￥25/小时',
-                'colour' => 'ffb518',
-                'sort' => '2',
-
-            ],
-            [
-                'category_id' => '2',
-                'category_name' => '洗护服务',
-                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/washProtect',
-                'category_introduction' => '衣服、皮鞋、美包',
-                'category_price' => '9.00',
-                'category_price_unit' => '件',
-                'category_price_description' => '￥9/件起',
-                'colour' => '7fce0f',
-                'sort' => '3',
-            ],
-            [
-                'category_id' => '3',
-                'category_name' => '家电维修',
-                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiadianweixiu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
-                'category_introduction' => '油烟机、空调等深度清洁',
-                'category_price' => '100.00',
-                'category_price_unit' => '台',
-                'category_price_description' => '￥100/台起',
-                'colour' => '2cc2f9',
-                'sort' => '4',
-            ],
-            [
-                'category_id' => '4',
-                'category_name' => '家具养护',
-                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiajuyanghu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
-                'category_introduction' => '地板家具深度养护、除螨',
-                'category_price' => '',
-                'category_price_unit' => '',
-                'category_price_description' => '￥250起',
-                'colour' => 'e6001f',
-                'sort' => '5',
-            ],
-            [
-                'category_id' => '5',
-                'category_name' => '生活急救箱',
-                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/shenghuojijiu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/firstAidKit',
-                'category_introduction' => '管道维修疏通、除虫',
-                'category_price' => '',
-                'category_price_unit' => '',
-                'category_price_description' => '￥160起',
-                'colour' => 'e544a3',
-                'sort' => '6',
-            ],
-        ];
+//        $server_list = [
+//            [
+//                'category_id' => '6',
+//                'category_name' => '保洁任务',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/baojierenwu.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/3',
+//                'category_introduction' => '37项定制化精品保洁',
+//                'category_price' => '30',
+//                'category_price_unit' => '小时',
+//                'category_price_description' => '￥30/小时',
+//                'colour' => 'ff701a',
+//                'sort' => '1',
+//            ],
+//            [
+//                'category_id' => '1',
+//                'category_name' => '专业保洁',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/zhuanyebaojie.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/cleaning',
+//                'category_introduction' => '44项定制清洁服务',
+//                'category_price' => '25.00',
+//                'category_price_unit' => '小时',
+//                'category_price_description' => '￥25/小时',
+//                'colour' => 'ffb518',
+//                'sort' => '2',
+//
+//            ],
+//            [
+//                'category_id' => '2',
+//                'category_name' => '洗护服务',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/washProtect',
+//                'category_introduction' => '衣服、皮鞋、美包',
+//                'category_price' => '9.00',
+//                'category_price_unit' => '件',
+//                'category_price_description' => '￥9/件起',
+//                'colour' => '7fce0f',
+//                'sort' => '3',
+//            ],
+//            [
+//                'category_id' => '3',
+//                'category_name' => '家电维修',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiadianweixiu.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
+//                'category_introduction' => '油烟机、空调等深度清洁',
+//                'category_price' => '100.00',
+//                'category_price_unit' => '台',
+//                'category_price_description' => '￥100/台起',
+//                'colour' => '2cc2f9',
+//                'sort' => '4',
+//            ],
+//            [
+//                'category_id' => '4',
+//                'category_name' => '家具养护',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiajuyanghu.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
+//                'category_introduction' => '地板家具深度养护、除螨',
+//                'category_price' => '',
+//                'category_price_unit' => '',
+//                'category_price_description' => '￥250起',
+//                'colour' => 'e6001f',
+//                'sort' => '5',
+//            ],
+//            [
+//                'category_id' => '5',
+//                'category_name' => '生活急救箱',
+//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/shenghuojijiu.png',
+//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/firstAidKit',
+//                'category_introduction' => '管道维修疏通、除虫',
+//                'category_price' => '',
+//                'category_price_unit' => '',
+//                'category_price_description' => '￥160起',
+//                'colour' => 'e544a3',
+//                'sort' => '6',
+//            ],
+//        ];
 
         $footer_link = [
             [
@@ -481,11 +500,11 @@ class ConfigureController extends \restapi\components\Controller
 
 
         $ret = [
-            'city_list' => $city_list,
+            'city_list' => $onlineCityList,
             'header_link' => $header_link,
             'pic_list' => $pic_list,
             'home_order_server' => $home_order_server,
-            'server_list' => $server_list,
+            'server_list' => $serviceGoodsList,
             'footer_link' => $footer_link,
             'isBlock' => $isBlock,
             'isEffect' => $isEffect,
