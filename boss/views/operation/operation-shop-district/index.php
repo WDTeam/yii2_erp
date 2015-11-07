@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'delete' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '删除'), ['/operation/operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
+                        return Html::a(Yii::t('yii', '删除'), ['/operation/operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"删除商圈将删除商圈下的服务项目，\n您确定要删除吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['/operation/operation-shop-district/delete','id' => $model->id]),
