@@ -425,6 +425,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'oc.id',
                 'oc.operation_category_icon',
                 'oc.operation_category_price_description',
+                'oc.operation_category_introduction',
             ])
             //->distinct()
             ->from('{{%operation_shop_district_goods}} as osdg')
