@@ -348,9 +348,6 @@ class WorkerController extends BaseAuthController
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
         $condition = '';
-        if($q!=null){
-            $condition = ['name' =>['LIKE',$q]];
-        }
         if($city_id){
             $condition = ['city_id'=>$city_id];
         }
@@ -367,6 +364,7 @@ class WorkerController extends BaseAuthController
         }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $data = OperationShopDistrict::getCityShopDistrictList($city_id);
+        $new_data = [];
         foreach ((array)$data as $val) {
             $new_data[] = ['id'=>$val['id'],'text'=>$val['operation_shop_district_name']];
         }
@@ -374,6 +372,24 @@ class WorkerController extends BaseAuthController
         return $out;
     }
 
+    public function actionShowArea($parent_id,$name=null){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if(empty($parent_id)){
+            return $out;
+        }
+        $condition = "parent_id=$parent_id";
+        if(!empty($name)){
+            $condition .= " and area_name like '%$name%'";
+        }
+        $data = OperationArea::getAllData($condition);
+        $new_data = [];
+        foreach ((array)$data as $val) {
+            $new_data[] = ['id'=>$val['id'],'text'=>$val['area_name']];
+        }
+        $out['results']=$new_data;
+        return $out;
+    }
 
     /**
      * 创建阿姨请假信息
@@ -784,10 +800,11 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        echo '星期1 8:00 10:00';
+        //var_dump(Worker::getWorkerDetailInfo(19077));die;
+        //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
-        echo '<br>';
-        //var_dump(Worker::getWorkerTimeLine(1,2));
+        //echo '<br>';
+        var_dump(Worker::getWorkerTimeLine(1,2));die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);

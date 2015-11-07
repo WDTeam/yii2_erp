@@ -3,6 +3,7 @@
  */
 window.coupons = new Array();
 window.cards = new Array();
+var customer = new Object();
 var address_list = new Object();
 var goods_list = new Object();
 var district_id = 0;
@@ -245,12 +246,15 @@ function getGoods(){
             break;
         }
     }
-
+    $("#order_service_item_progress").show();
+    $("#order_service_item_progress .progress-bar").css("width","100%");
     $.ajax({
         type: "GET",
         url: "/order/order/get-goods/?lng=" + lng + "&lat=" + lat,
         dataType: "json",
         success: function (data) {
+            $("#order_service_item_progress").hide();
+            $("#order_service_item_progress .progress-bar").css("width","1%");
             if(data.code==200){
                 $("#order-order_service_item_id").html('');
                 district_id = data.district_id;
@@ -272,11 +276,11 @@ function getGoods(){
 }
 
 function getCoupons(){
-    if(window.customer != undefined) {
+    if(customer.id != undefined) {
         var goods = goods_list[$("#order-order_service_item_id input:checked").val()];
         $.ajax({
             type: "GET",
-            url: "/order/order/coupons/?id=" + window.customer.id+"&cate_id="+goods.operation_category_id,
+            url: "/order/order/coupons/?id=" + customer.id+"&cate_id="+goods.operation_category_id,
             dataType: "json",
             success: function (coupons) {
                 if (coupons.length > 0) {
@@ -294,10 +298,10 @@ function getCoupons(){
     }
 }
 function getCards(){
-    if(window.customer != undefined) {
+    if(customer.id != undefined) {
         $.ajax({
             type: "GET",
-            url: "/order/order/cards/?id=" + window.customer.id,
+            url: "/order/order/cards/?id=" + customer.id,
             dataType: "json",
             success: function (cards) {
                 if (cards.length > 0) {
@@ -318,22 +322,26 @@ function getCards(){
 function getCustomerInfo(){
     var phone = $("#order-order_customer_phone").val();
     var reg = /^1[3-9][0-9]{9}$/;
-    if(reg.test(phone)) {
+    if(reg.test(phone) && (customer.customer_phone==undefined || phone!=customer.customer_phone)) {
+        $("#order-address_id").html('');
+        $("#order_address_progress").show();
+        $("#order_address_progress .progress-bar").css("width","1%");
         $.ajax({
             type: "GET",
             url: "/order/order/customer/?phone=" + phone,
             dataType: "json",
-            success: function (customer) {
-                window.customer=customer;
+            success: function (data) {
+                $("#order_address_progress .progress-bar").css("width","100%");
+                customer=data;
                 if (customer.id) {
                     $("#order-customer_id").val(customer.id);
                     $("#customer_balance").text(customer.customer_balance);
-                    $("#order-address_id").html('');
                     $.ajax({
                         type: "GET",
                         url: "/order/order/customer-address/?id=" + customer.id,
                         dataType: "json",
                         success: function (address) {
+                            $("#order_address_progress").hide();
                             if (address.length==0) {
                                 $("#add_address_btn").click();
                             } else {

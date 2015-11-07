@@ -28,7 +28,8 @@ class OrderOtherDict extends ActiveRecord
     const NAME_JPUSH_PUSH_SUCCESS = 6;
     const NAME_JPUSH_PUSH_FAILURE = 7;
 
-    const NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE = 8;
+    const NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE = 8;  //其它原因
+    const NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE = 15; //支付异常
 
 
     /**
@@ -68,6 +69,7 @@ class OrderOtherDict extends ActiveRecord
 
     public static function getName($id)
     {
-        return self::findOne($id)->order_other_dict_name;
+        $order_other_dict = self::findOne($id);
+        return $order_other_dict->order_other_dict_name;
     }
 }

@@ -40,16 +40,17 @@ class m151007_153209_create_table_order_other_dict extends Migration
                 [12, 2,'重复订单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [13, 2,'时间调整',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [14, 2,'用户不需要',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [15, 2,'支付失败',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
 
-                [15, 1,'其他',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [16, 1,'用户所在地超范围',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [17, 1,'无服务阿姨',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [18, 1,'无人联系客户',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [19, 1,'爽约（阿姨未接到通知）',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [20, 1,'爽约（阿姨主动爽约）',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [21, 1,'超时未指派',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [22, 1,'胡乱承诺',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [23, 1,'服务体验差',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [16, 1,'其他',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [17, 1,'用户所在地超范围',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [18, 1,'无服务阿姨',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [19, 1,'无人联系客户',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [20, 1,'爽约（阿姨未接到通知）',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [21, 1,'爽约（阿姨主动爽约）',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [22, 1,'超时未指派',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [23, 1,'胡乱承诺',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [24, 1,'服务体验差',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
 
 
             ]

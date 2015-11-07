@@ -75,28 +75,28 @@ class AuthController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['phone']) || !$param['phone'] || !isset($param['verify_code']) || !$param['verify_code']) {
-            return $this->send(null, "用户手机号或验证码不能为空", 0, 200, null, alertMsgEnum::customerLoginDataDefect);
+            return $this->send(null, "用户手机号或验证码不能为空", 403, 200, null, alertMsgEnum::customerLoginDataDefect);
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
         try {
             $checkRet = CustomerCode::checkCode($phone, $verifyCode);
         } catch (\Exception $e) {
-            return $this->send($e, "验证手机号和验证码系统错误", 1024, 200, null, alertMsgEnum::bossError);
+            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if ($checkRet) {
             try {
                 $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
             } catch (\Exception $e) {
-                return $this->send($e, "生成token系统错误", 1024, 200, null, alertMsgEnum::bossError);
+                return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
             }
             if (empty($token)) {
-                return $this->send(null, "生成token错误", 0, 200, null, alertMsgEnum::customerLoginFail);
+                return $this->send(null, "生成token错误", 0, 403, null, alertMsgEnum::customerLoginFail);
             } else {
                 try {
                     $user = CustomerAccessToken::getCustomer($token);
                 } catch (\Exception $e) {
-                    return $this->send($e, "获取登录用户信息系统错误", 1024, 200, null, alertMsgEnum::bossError);
+                    return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
                 }
                 $ret = [
                     "user" => $user,
@@ -106,7 +106,7 @@ class AuthController extends \restapi\components\Controller
 
             }
         } else {
-            return $this->send(null, "用户名或验证码错误", 0, 200, null, alertMsgEnum::customerLoginFail);
+            return $this->send(null, "用户名或验证码错误", 0, 403, null, alertMsgEnum::customerLoginFail);
         }
     }
 
@@ -131,7 +131,8 @@ class AuthController extends \restapi\components\Controller
      *       "ret":{
      *          "user":{}
      *          "access_token":"807b62127fdc2554607a01529d9e4b7e"
-     *       }
+     *       },
+     *       "alertMsg": "登陆成功"
      *     }
      *
      * @apiError UserNotFound The id of the User was not found.
@@ -141,34 +142,47 @@ class AuthController extends \restapi\components\Controller
      *     { 
      *       "code":"0",
      *       "msg": "用户名,签名或渠道id错误",
-     *       "ret": null
+     *       "ret": null,
+     *       "alertMsg": "用户名,签名或渠道id错误" 
      *     }
      */
     public function actionLoginFromPop()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['phone']) || !$param['phone'] || !isset($param['sign']) || !$param['sign'] || !isset($param['channel_id']) || !$param['channel_id']) {
-            return $this->send(null, "用户名,签名,渠道id不能为空", 0, 200, "数据不完整");
+            return $this->send(null, "用户名,签名,渠道id不能为空", 0, 403,null,alertMsgEnum::loginFromPopNoPhone);
         }
         $phone = $param['phone'];
         $sign = $param['sign'];
         $channel_id = $param['channel_id'];
-        $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_id);
-
+        try {
+            $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_id);
+        } catch (\Exception $e) {
+            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+        }
         if ($checkRet) {
-            $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_id);
-            if (empty($token)) {
-                return $this->send(null, "生成token错误", 0);
-            } else {
-                $user = CustomerAccessToken::getCustomer($token);
+            try {
+                $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_id);
+            } catch (\Exception $e) {
+                return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+            }
+            if($token['response'] == 'error'){
+                    return $this->send(null, $token['errmsg'], 0, 403,null,alertMsgEnum::loginFromPopFail);
+            }else{
+                $access_token = $token['access_token'];
+                try {
+                    $user = CustomerAccessToken::getCustomer($access_token);
+                } catch (\Exception $e) {
+                    return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+                }
                 $ret = [
                     "user" => $user,
-                    "access_token" => $token
+                    "access_token" => $access_token
                 ];
-                return $this->send($ret, "登陆成功");
+                return $this->send($ret, "登陆成功",1, 200,null,alertMsgEnum::loginFromPopSuccess);
             }
         } else {
-            return $this->send(null, "用户名,签名或渠道id错误", 0, 200);
+            return $this->send(null, "用户名,签名或渠道id错误", 0, 403,null,alertMsgEnum::loginFromPopFail);
         }
     }
 
@@ -220,7 +234,8 @@ class AuthController extends \restapi\components\Controller
      *               "updated_ad": "最后更新时间"
      *           },
      *           "access_token": "token值"
-     *       }
+     *       },
+     *      "alertMsg": "登陆成功" 
      *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -238,45 +253,45 @@ class AuthController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['phone']) || !$param['phone'] || !isset($param['verify_code']) || !$param['verify_code']) {
-            return $this->send(null, "用户名或验证码不能为空", 0, 200, null, alertMsgEnum::workerLoginDataDefect);
+            return $this->send(null, "用户名或验证码不能为空", 0, 403, null, alertMsgEnum::workerLoginDataDefect);
         }
         $phone = $param['phone'];
         $verify_code = $param['verify_code'];
         //验证手机号
         if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
-            return $this->send(null, "请输入正确手机号", 0, 200, null, alertMsgEnum::workerLoginWrongPhoneNumber);
+            return $this->send(null, "请输入正确手机号", 0, 403, null, alertMsgEnum::workerLoginWrongPhoneNumber);
         }
         try {
             $login_info = Worker::checkWorkerLogin($phone);
         } catch (\Exception $e) {
-            return $this->send($e, "验证阿姨是否为系统用户系统错误", 1024, 200, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if (!empty($login_info)) {
             if ($login_info['can_login'] == 0 && $login_info['login_type'] == 1) {
-                return $this->send(null, "不存在该阿姨", 0, 200, null, alertMsgEnum::workerLoginNoWorker);
+                return $this->send(null, "不存在该阿姨", 0, 403, null, alertMsgEnum::workerLoginNoWorker);
             } elseif ($login_info['can_login'] == 0 && $login_info['login_type'] == 2) {
-                return $this->send(null, "阿姨已在黑名单", 0, 200, null, alertMsgEnum::workerLoginIsBlackList);
+                return $this->send(null, "阿姨已在黑名单", 0, 403, null, alertMsgEnum::workerLoginIsBlackList);
             } elseif ($login_info['can_login'] == 0 && $login_info['login_type'] == 3) {
-                return $this->send(null, "阿姨已离职", 0, 200, null, alertMsgEnum::workerLoginIsDimission);
+                return $this->send(null, "阿姨已离职", 0, 403, null, alertMsgEnum::workerLoginIsDimission);
             } elseif ($login_info['can_login'] == 0 && $login_info['login_type'] == 4) {
-                return $this->send(null, "阿姨已删除", 0, 200, null, alertMsgEnum::workerLoginIsDel);
+                return $this->send(null, "阿姨已删除", 0, 403, null, alertMsgEnum::workerLoginIsDel);
             }
         } else {
-            return $this->send(null, "验证阿姨是否为系统用户系统错误", 1024, 200, null, alertMsgEnum::workerLoginFail);
+            return $this->send(null, "验证阿姨是否为系统用户系统错误", 0, 403, null, alertMsgEnum::workerLoginFail);
         }
         try {
             $checkRet = WorkerCode::checkCode($phone, $verify_code);
         } catch (\Exception $e) {
-            return $this->send($e, "验证手机号和验证码系统错误", 1024, 200, null, alertMsgEnum::bossError);
+            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if ($checkRet) {
             try {
                 $token = WorkerAccessToken::generateAccessToken($phone, $verify_code);
             } catch (\Exception $e) {
-                return $this->send($e, "生成token系统错误", 1024, 200, null, alertMsgEnum::bossError);
+                return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
             }
             if (empty($token)) {
-                return $this->send(null, "生成token错误", 0, 200, null, alertMsgEnum::workerLoginFail);
+                return $this->send(null, "生成token错误", 0, 403, null, alertMsgEnum::workerLoginFail);
             } else {
                 $user = WorkerAccessToken::getWorker($token)->getAttributes();
                 $user['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($user['worker_identity_id']);
@@ -288,7 +303,7 @@ class AuthController extends \restapi\components\Controller
             }
 
         } else {
-            return $this->send(null, "用户名或验证码错误", 0, 200, null, alertMsgEnum::workerLoginFail);
+            return $this->send(null, "用户名或验证码错误", 0, 403, null, alertMsgEnum::workerLoginFail);
         }
     }
 
@@ -355,7 +370,7 @@ class AuthController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (empty($param['phone']) || empty($param['verify_code']) || empty($param['weixin_id'])) {
-            return $this->send(null, "参数不完整，登录失败。", 0, 200, null, alertMsgEnum::uesrWeiXinLoginFailed);
+            return $this->send(null, "参数不完整，登录失败。", 0, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
@@ -373,10 +388,10 @@ class AuthController extends \restapi\components\Controller
             }
             else
             {
-                return $this->send(null, $date['errmsg'], 0, 200, null, alertMsgEnum::uesrWeiXinLoginFailed);
+                return $this->send(null, $date['errmsg'], 0, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
             }
         } catch (\Exception $e) {
-            return $this->send($e, "生成token系统错误", 1024, 200, null, alertMsgEnum::uesrWeiXinLoginFailed);
+            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
         }
     }
 

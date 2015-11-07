@@ -571,7 +571,7 @@ class ServiceController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200,null,alertMsgEnum::customerLoginFailed);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
             return $this->send(null, "请填写服务地址或服务时长", 0, 200,null,alertMsgEnum::singleServiceTimeDataDefect);
@@ -596,7 +596,7 @@ class ServiceController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取单次服务排班表系统错误", 1024, 200,null,alertMsgEnum::bossError);
         }
-        return $this->send($single_worker_time, "获取单次服务排班表成功",null,alertMsgEnum::singleServiceTimeSuccess);
+        return $this->send($single_worker_time, "获取单次服务排班表成功",1,200,null,alertMsgEnum::singleServiceTimeSuccess);
     }
 
     /**
@@ -736,7 +736,7 @@ class ServiceController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200,null,alertMsgEnum::customerLoginFailed);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']|| !isset($param['worker_id']) || !$param['worker_id']) {
             return $this->send(null, "请填写服务地址或服务时长或选择阿姨", 0, 200,null,alertMsgEnum::recursiveServiceTimeDataDefect);
@@ -816,7 +816,7 @@ class ServiceController extends \restapi\components\Controller
     {
        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200,null,alertMsgEnum::customerLoginFailed);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude']){
             return $this->send(null, "请填写服务地址", 0, 200,null,alertMsgEnum::serverWorkerListNoAddress);

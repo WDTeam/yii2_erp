@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
            [
                'attribute'=>'roles',
                'value'=>function ($model){
-                   return implode(',', $model->roles);
+                   return implode(',', $model->getRolesLabel());
                }
            ], 
            [

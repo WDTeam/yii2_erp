@@ -26,7 +26,7 @@ class OperationCity extends CommonOperationCity
     }
 
     public static function getOnlineCitys($online = 1){
-        return  self::find()->where(['operation_city_is_online' => $online])->all();
+        return  self::find()->where(['operation_city_is_online' => $online])->asArray()->all();
     }
     
     public static function getCityList(){
