@@ -524,7 +524,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
      * @param  inter  $shop_district_id    商品在商圈里的编号
      * @return array  $result              上线商品的信息
      */
-    public static function getDistrictGoodsInfo($operation_goods_id)
+    public static function getDistrictGoodsInfo($operation_goods_id, $city_id)
     {
         $result = self::find()
             ->select([
@@ -538,6 +538,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             ])
             ->where([
                 'operation_goods_id' => $operation_goods_id,
+                'operation_city_id' => $city_id,
                 'operation_shop_district_goods_status' => '1',
             ])
             ->asArray()

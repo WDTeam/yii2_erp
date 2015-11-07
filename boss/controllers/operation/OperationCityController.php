@@ -59,9 +59,13 @@ class OperationCityController extends BaseAuthController
         ]);
     }
     
+    /**
+     *
+     */
     public function actionOpencity(){
         $citylist = OperationCity::getCityOnlineInfoList();
-        foreach((array)$citylist as $key => $value){
+
+        foreach ((array)$citylist as $key => $value) {
             $city_id = $value['city_id'];
             $citygoodsList = OperationShopDistrictGoods::getCityShopDistrictGoodsListArray($city_id);
             foreach((array)$citygoodsList as $k => $v){
@@ -261,7 +265,19 @@ class OperationCityController extends BaseAuthController
             ]);
 
         } elseif (isset($goods_id) && isset($action) && $goods_id != 0 && $action = 'editGoods') {
-            $districtgoodsinfo = OperationShopDistrictGoods::getDistrictGoodsInfo($goods_id);
+            //编辑的商品具体信息
+            $districtgoodsinfo = [];
+            $districtgoodslist = OperationShopDistrictGoods::getDistrictGoodsInfo($goods_id, $city_id);
+            //处理为前端页面容易使用的格式
+            foreach ($districtgoodslist as $keys => $values) {
+                $districtgoodsinfo['operation_goods_id'] = $values['operation_goods_id'];
+                $districtgoodsinfo['operation_category_id'] = $values['operation_category_id'];
+                $districtgoodsinfo['operation_shop_district_goods_price'] = $values['operation_shop_district_goods_price'];
+                $districtgoodsinfo['operation_shop_district_goods_price'] = $values['operation_shop_district_goods_price'];
+                $districtgoodsinfo['operation_shop_district_goods_market_price'] = $values['operation_shop_district_goods_market_price'] ? $values['operation_shop_district_goods_market_price'] : '';
+                $districtgoodsinfo['operation_shop_district_goods_lowest_consume_num'] = $values['operation_shop_district_goods_lowest_consume_num'] ? $values['operation_shop_district_goods_lowest_consume_num'] : '';
+                $districtgoodsinfo['operation_shop_district_id'][] = $values['operation_shop_district_id'];
+            }
 
             //echo '<pre>';
             //print_r($districtgoodsinfo);die;
@@ -281,8 +297,8 @@ class OperationCityController extends BaseAuthController
             }
 
             //获取对应城市商圈数据
-            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
             $shopdistrictinfo = [];
+            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
             foreach ((array)$shopdistrict as $key => $value) {
                 $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
             }
@@ -325,6 +341,8 @@ class OperationCityController extends BaseAuthController
         $post = Yii::$app->request->post();
         $goodsInfo = OperationGoods::getGoodsInfo($goods_id);
 
+        //echo '<pre>';
+        //print_r($post);die;
         //设置页面渲染
         if (!isset($post) || empty($post)) {
             //$shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
@@ -358,7 +376,15 @@ class OperationCityController extends BaseAuthController
             //]);
             //return $this->redirect(['opencity']);
         } else {
+            echo '<pre>';
+            print_r($post);die;
             OperationShopDistrictGoods::saveOnlineCity($post);
+
+            if ($city_id == '') {
+                $city_id = $post['city_id'];
+            }
+            //开通城市
+            OperationCity::setoperation_city_is_online($city_id);
             return $this->redirect(['opencity']);
         }
 
