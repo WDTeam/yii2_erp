@@ -49,33 +49,6 @@ $form = ActiveForm::begin([
     'action' => ['settinggoodsinfo', 'city_id' => $city_id],
 ]);
 ?>
-<!--
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title"> 服务品类</h3>
-        </div>
-    <div class="panel-body ">
-        <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
-        <div class="row">
-            <div class="col-md-2">先选择品类</div>
-            <div class="col-md-offset-2 col-md-2">后选择商品</div>
-        </div>
-        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-            <?php //echo Html::radioList('categorylist[]', [], $categorylist, ['class'=>'MyRadioStyle col-md-2'])  ?>
-            <div class="col-md-2"></div>
-            <div id="categoryGoodsContent" class="MyRadioStyle col-md-6">
-            </div>
-        </div>
-    </div>
-        <div class="panel-footer">
-            <div class="form-group">
-                <div class="col-sm-12">
-                <?php //echo Html::submitButton('下一步', ['class' => 'btn btn-success btn-lg btn-block']);?>
-                </div>
-            </div>
-        </div>
--->
-
     <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
     <input type="hidden" class="city_name" name="city_name" value="<?= $city_name?>" />
 

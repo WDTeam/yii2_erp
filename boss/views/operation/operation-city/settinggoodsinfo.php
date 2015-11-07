@@ -53,11 +53,6 @@ $form = ActiveForm::begin([
     <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
     <input type="hidden" class="city_name" name="city_name" value="<?= $city_name?>" />
 
-    <?php
-        //echo '<pre>';
-        //print_r($districtgoodsinfo);
-        //$districtgoodsinfo;
-    ?>
 	<div class="tab_menu">
         <?php
             //实现方式：把所有的数据都先查出来，对应隐藏;目前没有找到更好的实现方法
