@@ -40,17 +40,17 @@ use yii\helpers\ArrayHelper;
  */
 class Worker extends \core\models\worker\Worker
 {
-
+    public $worker_district;
     /**
      * @inheritdoc
      */
-//    public function rules()
-//    {
-//        $rules = [
-//            [['worker_district'], 'required'],
-//        ];
-//        return array_merge(parent::rules(),$rules);
-//    }
+    public function rules()
+    {
+        $rules = [
+            [['worker_district'], 'required'],
+        ];
+        return array_merge(parent::rules(),$rules);
+    }
 
     /**
     * 获取阿姨首页按钮css样式class
@@ -164,15 +164,15 @@ class Worker extends \core\models\worker\Worker
     /**
      * 设置worker_district属性
      */
-    public function getworker_district(){
-        $workerDistrictArr = self::getWorkerDistrict($this->id);
-        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
-    }
+//    public function getworker_district(){
+//        $workerDistrictArr = self::getWorkerDistrict($this->id);
+//        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
+//    }
     /**
      * 设置worker_district属性
      */
-    public function setworker_district(){
-
-    }
+//    public function setworker_district(){
+//        return 1;
+//    }
 
 }

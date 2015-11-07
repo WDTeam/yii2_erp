@@ -387,7 +387,6 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         Yii::$app->db->createCommand()->update(self::tableName(), ['operation_shop_district_goods_status' => 2], ['operation_goods_id' => $goodsid, 'operation_city_id' => $cityid])->execute();
     }
 
-
     /**
      * 删除城市下边商品
      *
@@ -572,5 +571,15 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             return 0;
         }
 
+    }
+
+    /**
+     * 删除商圈下边商品
+     *
+     * @param inter $operation_shop_district_id    商圈id
+     */
+    public static function delShopDistrictGoods($operation_shop_district_id)
+    {
+        self::deleteAll(['operation_shop_district_id' => $operation_shop_district_id]);
     }
 }

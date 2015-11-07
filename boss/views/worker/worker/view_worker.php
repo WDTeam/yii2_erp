@@ -104,7 +104,7 @@ $this->title = $model->worker_name;
                 'widgetOptions'=>[
                     'options'=>[
                         'accept' => 'image/*',
-                        'name'=>'Worker[worker_photo]',
+                        'name'=>'worker_photo'
                     ],
                     'pluginOptions' => [
                         'showPreview' => true,
@@ -114,7 +114,9 @@ $this->title = $model->worker_name;
                         'initialPreview'=>[
                             Worker::getWorkerPhotoShow($model->worker_photo)
                         ],
-                    ]
+
+                    ],
+                    'pluginLoading'=>true,
                 ],
                 'value'=>$model->worker_photo
             ],

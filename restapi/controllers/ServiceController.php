@@ -103,7 +103,7 @@ class ServiceController extends \restapi\components\Controller
      *  HTTP/1.1 200 OK
      *  {
      *      "code": "1",
-     *      "msg": "success",
+     *      "msg": "数据获取成功",
      *      "ret":
      *      [
      *          {
@@ -139,7 +139,7 @@ class ServiceController extends \restapi\components\Controller
             }
         }
 
-        return $this->send($gDate, "数据获取成功", null, alertMsgEnum::getGoodsesSuccess);
+        return $this->send($gDate, "数据获取成功", 1, 200, null, alertMsgEnum::getGoodsesSuccess);
     }
 
     /**

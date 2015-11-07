@@ -791,12 +791,17 @@ class Order extends OrderModel
         }else{
             $goods = $goods['data'];
         }
+        $order_booked_count = floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600); //TODO 精品保洁另算时长
+        if($order_booked_count>6){
+            $this->addError('order_booked_count', "服务时长最大六个小时！");
+            return false;
+        }
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
             'order_service_item_name' => $goods['operation_shop_district_goods_name'], //商品名称
             'order_service_type_id' => $goods['operation_category_id'], //品类ID
             'order_service_type_name' => $goods['operation_category_name'], //品类名称
-            'order_booked_count' => floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600), //TODO 精品保洁另算时长
+            'order_booked_count' => $order_booked_count,
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价
@@ -812,6 +817,12 @@ class Order extends OrderModel
             'order_lng' => $address['customer_address_longitude']
         ]);
 
+        $range = date('G:i',$this->order_booked_begin_time).'-'.date('G:i',$this->order_booked_end_time);
+        $ranges = $this->getThisOrderBookedTimeRangeList();
+        if(!in_array($range,$ranges)){
+            $this->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
+            return false;
+        }
 
         if ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP) { //第三方预付
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
@@ -1060,26 +1071,16 @@ class Order extends OrderModel
 
     /**
      * 获取已上线商圈列表
-     * @date: 2015-10-26
-     * @author: peak pan
-     * @return:
-     * */
+     * @date 2015-10-26
+     * @author peak pan
+     * @return array
+      */
     public static function getDistrictList()
     {
         $districtList = OperationShopDistrict::getCityShopDistrictList();
         return $districtList ? ArrayHelper::map($districtList, 'id', 'operation_shop_district_name') : [];
     }
 
-    /**
-     * 核实用户订单唯一性
-     * @param   $customer_id   int 用户id
-     * @param   $order_id       int  订单id
-     * @return  int
-     */
-    public static function validationOrderCustomer($customer_id, $order_id)
-    {
-        return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
-    }
 
     /*
      * 获取订单状态列表
@@ -1132,6 +1133,46 @@ class Order extends OrderModel
     public function getOrderBookedTimeArrange()
     {
         return date('H:i', $this->order_booked_begin_time) . '-' . date('H:i', $this->order_booked_end_time);
+    }
+
+    /**
+     * 根据本订单获取可选下单时间列表
+     * @return array
+     */
+    public function getThisOrderBookedTimeRangeList()
+    {
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1);
+        $order_booked_time_range = [];
+        foreach($time_range[0]['timeline'] as $range){
+            if($range['enable']) {
+                $order_booked_time_range[$range['time']] = $range['time'];
+            }
+        }
+        return $order_booked_time_range;
+    }
+
+    /**
+     * 获取可下单时间列表
+     * @param int $district_id
+     * @param int $range
+     * @param int $date
+     * @param int $days
+     * @return array
+     */
+    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
+    {
+        if($district_id>0) {
+            $date = strtotime($date);
+            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
+        }
+        $order_booked_time_range = [];
+        for ($i = 8; $i <= 18; $i++) {
+            $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $hour2 = str_pad($i + intval($range), 2, '0', STR_PAD_LEFT);
+            $minute = ($range - intval($range) == 0) ? '00' : '30';
+            $order_booked_time_range["{$hour}:00-{$hour2}:{$minute}"] = "{$hour}:00-{$hour2}:{$minute}";
+        }
+        return $order_booked_time_range;
     }
 
 }

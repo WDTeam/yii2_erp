@@ -304,9 +304,15 @@ class OperationShopDistrictController extends BaseAuthController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (($model = OperationShopDistrict::findOne($id)) !== null) {
+            OperationShopDistrictCoordinate::delCoordinateInfo($id);
+            OperationShopDistrictGoods::delShopDistrictGoods($id);
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        } else {
+            return $this->redirect(['index']);
+        }
     }
 
     /**
