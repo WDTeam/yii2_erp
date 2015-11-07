@@ -552,4 +552,25 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
         return $result;
     }
+
+    /**
+     * 查找商圈是否存在;有,则代表上线
+     *
+     * @param inter $district_id    商圈id
+     */
+    public static function getShopDistrict($district_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where(['operation_shop_district_id' => $district_id])
+            ->asarray()
+            ->one();
+
+        if (isset($data['id']) && $data['id'] > 0) {
+            return $data['id'];
+        } else {
+            return 0;
+        }
+
+    }
 }

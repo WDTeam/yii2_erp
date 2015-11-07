@@ -1743,10 +1743,10 @@ class OrderController extends \restapi\components\Controller
             try {
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
 
-                if ($setWorker) {
+                if ($setWorker&&is_null($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
+                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, $setWorker["errors"]);
                 }
             } catch (Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
