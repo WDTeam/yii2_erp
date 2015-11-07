@@ -57,7 +57,7 @@ class OrderPop extends Model
         $data["status"] = $status;
         $data["platform_version"] = self::VERSION;
         $data["sign"] = self::_getSign($data);
-        $json = self::_postCurl($url,$data);
+        $json = file_get_contents($url.'?'.http_build_query($data));
         $result = json_decode($json,true);
         return (isset($result['code'])&&$result['code']==0);
     }
@@ -73,18 +73,5 @@ class OrderPop extends Model
             }
         }
         return md5($sign . $key);
-    }
-
-    private static function _postCurl($url,$post_data="")
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt($ch, CURLOPT_POST,true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$post_data ); //$data是每个接口的json字符串
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //不加会包证书问题
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //不加会包证书问题
-        curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type: application/json; charset=utf-8'));
-        return curl_exec ($ch);
     }
 }
