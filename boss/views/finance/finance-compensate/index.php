@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
+use core\models\finance\FinanceCompensate;
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -46,7 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'title' => Yii::t('yii', 'View'),'data-pjax'=>'0','target' => '_blank',
                                               ]);},
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="btn btn-primary">更新</span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/update','id' => $model->id]), [
+                                    return 
+                                                $model->finance_compensate_status == FinanceCompensate::FINANCE_COMPENSATE_REVIEW_PASSED?'':  
+                                                  Html::a('<span class="btn btn-primary">更新</span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/update','id' => $model->id]), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
