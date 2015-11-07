@@ -37,7 +37,7 @@ class WorkerSearch extends Worker
             ]);
             return $dataProvider;
         }else{
-            $query = Worker::find();
+            $query = Worker::find()->where(['isdel'=>0]);
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);
@@ -65,7 +65,6 @@ class WorkerSearch extends Worker
                 'worker_is_dimission' => $this->worker_is_dimission,
                 'created_ad' => $this->created_ad,
                 'updated_ad' => $this->updated_ad,
-                'isdel' => $this->isdel,
             ]);
 
             $query->andFilterWhere(['like', 'worker_name', $this->worker_name])
