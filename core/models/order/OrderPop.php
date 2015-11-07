@@ -68,7 +68,9 @@ class OrderPop extends Model
         $sign = '';
         ksort($prams);
         foreach ($prams as $k => $v) {
-            $sign .= $k . $v;
+            if($k != $sign) {
+                $sign .= $k . $v;
+            }
         }
         return md5($sign . $key);
     }
