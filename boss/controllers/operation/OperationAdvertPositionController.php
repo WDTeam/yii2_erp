@@ -91,14 +91,21 @@ class OperationAdvertPositionController extends BaseAuthController
         $model = new OperationAdvertPosition();
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
-            $platform = OperationPlatform::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_id']])->one();
-            $version = OperationPlatformVersion::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_version_id']])->one();
-            $model->operation_platform_name = $platform['operation_platform_name'];
-            $model->operation_platform_version_name = $version['operation_platform_version_name'];
-            $model->created_at = time();
-            $model->updated_at = time();
-            $model->load($post);
-            $model->save();
+
+            //验证输入的信息是否重复
+            $result = OperationAdvertPosition::verifyRepeat($post['OperationAdvertPosition']);
+            if ($result == true) {
+                \Yii::$app->getSession()->setFlash('default',"创建失败!同平台版本上广告位置不能重复！");
+            } else {
+                $platform = OperationPlatform::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_id']])->one();
+                $version = OperationPlatformVersion::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_version_id']])->one();
+                $model->operation_platform_name = $platform['operation_platform_name'];
+                $model->operation_platform_version_name = $version['operation_platform_version_name'];
+                $model->created_at = time();
+                $model->updated_at = time();
+                $model->load($post);
+                $model->save();
+            }
             return $this->redirect(['index']);
         } else {
             $platform = OperationPlatform::find()->all();
