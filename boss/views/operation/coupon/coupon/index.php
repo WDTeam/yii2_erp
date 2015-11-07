@@ -8,6 +8,9 @@ use yii\widgets\Pjax;
 use core\models\operation\coupon\Coupon;
 use core\models\operation\coupon\CouponCode;
 
+use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
+$configdate=CouponRuleSearch::couponconfig();
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider

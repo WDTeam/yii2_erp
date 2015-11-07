@@ -1,7 +1,11 @@
 //gaofeng status
 $(":radio[value=0]").attr('checked', true);
-$(".field-couponrule-couponrule_channelname").hide();
 
+$(".field-couponrule-couponrule_channelname").hide();
+$(".field-couponrule-couponrule_code_max_customer_num").hide();
+$(".field-couponrule-couponrule_code").hide();
+$(".field-couponrule-couponrule_prefix").show();
+$(".field-couponrule-couponrule_code_num").show();
 $(document).on("change","#couponrule-couponrule_classify input[type='radio']",function(){
     var couponrule_classify = $(this).val();
 	//alert(coupon_category);
@@ -9,9 +13,18 @@ $(document).on("change","#couponrule-couponrule_classify input[type='radio']",fu
 	switch(couponrule_classify){
 		case '1':
 			$(".field-couponrule-couponrule_channelname").hide();
+		    $(".field-couponrule-couponrule_code_max_customer_num").hide();
+			$(".field-couponrule-couponrule_code").hide();
+			$(".field-couponrule-couponrule_prefix").show();
+			$(".field-couponrule-couponrule_code_num").show();
 		break;	
 		case '2':
 			$(".field-couponrule-couponrule_channelname").show();
+		    $(".field-couponrule-couponrule_code_max_customer_num").show();
+			$(".field-couponrule-couponrule_code").show();
+			$(".field-couponrule-couponrule_prefix").hide();
+			$(".field-couponrule-couponrule_code_num").hide();
+
 		break;
 		default:
 		break;
@@ -19,6 +32,50 @@ $(document).on("change","#couponrule-couponrule_classify input[type='radio']",fu
 });
 
 
+$(":radio[value=0]").attr('checked', true);
+$(".field-couponrule-couponrule_service_type_id").hide();
+$(".field-couponrule-couponrule_commodity_id").hide();
+
+
+
+$(document).on("change","#couponrule-couponrule_type input[type='radio']",function(){
+    var couponrule_type = $(this).val();
+	
+	switch(couponrule_type){
+		case '1':
+			$(".field-couponrule-couponrule_service_type_id").hide();
+			$(".field-couponrule-couponrule_commodity_id").hide();
+		break;	
+		case '2':
+			$(".field-couponrule-couponrule_service_type_id").show();
+			$(".field-couponrule-couponrule_commodity_id").hide();
+		break;
+		case '3':
+			$(".field-couponrule-couponrule_service_type_id").hide();
+			$(".field-couponrule-couponrule_commodity_id").show();
+		break;
+		default:
+		break;
+	}
+});
+
+
+
+$(".field-CouponRule-province_city_county_town").hide();
+$(document).on("change","#couponrule-couponrule_city_limit input[type='radio']",function(){
+    var couponrule_city_limit = $(this).val();
+	
+	switch(couponrule_city_limit){
+		case '1':
+			$(".field-CouponRule-province_city_county_town").hide();
+		break;	
+		case '2':
+			$(".field-CouponRule-province_city_county_town").show();
+		break;
+		default:
+		break;
+	}
+});
 
 
 

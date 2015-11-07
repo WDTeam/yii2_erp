@@ -47,7 +47,7 @@ $this->title = Yii::t('boss', '评论管理');
     		'format' => 'raw',
     		'label' => '城市',
     		'value' => function ($dataProvider) {
-    		$cityname=core\models\operation\OperationArea::getAreaname($dataProvider->city_id);
+    		$cityname=\core\models\operation\OperationArea::getAreaname($dataProvider->city_id);
     		return  $cityname;
     		},
     		'width' => "100px",
