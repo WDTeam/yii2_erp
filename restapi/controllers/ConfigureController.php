@@ -122,144 +122,130 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *          "code": "1",
-     *          "msg": "操作成功",
-     *          "ret": {
-     *              "city_list": [
-     *              {
-     *                  "id": 1,
-     *                  "province_id": 120000,
-     *                  "province_name": "天津",
-     *                  "city_id": 120100,
-     *                  "city_name": "天津市",
-     *                  "operation_city_is_online": 1,
-     *                  "created_at": 1444283773,
-     *                  "updated_at": 1444283773
-     *              },
-     *              {
-     *                  "id": 2,
-     *                  "province_id": 110000,
-     *                  "province_name": "北京",
-     *                  "city_id": 110100,
-     *                  "city_name": "北京市",
-     *                  "operation_city_is_online": 1,
-     *                  "created_at": 1444368462,
-     *                  "updated_at": 1444368462
-     *              },
-     *              {
-     *                  "id": 3,
-     *                  "province_id": 140000,
-     *                  "province_name": "山西省",
-     *                  "city_id": 140300,
-     *                  "city_name": "阳泉市",
-     *                  "operation_city_is_online": 1,
-     *                  "created_at": 1444413962,
-     *                  "updated_at": 1444413962
-     *              },
-     *              {
-     *                  "id": 4,
-     *                  "province_id": 140000,
-     *                  "province_name": "山西省",
-     *                  "city_id": 140100,
-     *                  "city_name": "太原市",
-     *                  "operation_city_is_online": 1,
-     *                  "created_at": 1444635891,
-     *                  "updated_at": 1444635891
-     *              }
-     *              ],
-     *              "pic_list": [
-     *              {
-     *                  "img_path": "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-     *                  "link": "http://wap.1jiajie.com/trainAuntie1.html",
-     *                  "url_title": "标准服务"
-     *              },
-     *              {
-     *                  "img_path": "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-     *                  "link": "http://wap.1jiajie.com/pledge.html",
-     *                  "url_title": "服务承诺"
-     *              },
-     *              {
-     *                  "img_path": "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-     *                  "link": "",
-     *                  "url_title": ""
-     *              }
-     *              ],
-     *              "home_order_server": [
-     *              {
-     *                  "title"=>"单次保洁",
-     *                  "introduction"=>"新用户第1小时免费",
-     *                  "icon"=>"",
-     *                  "url"=>"",
-     *                  "sort"=>"1",  排序
-     *                  "bg_colour"=>"",  背景颜色
-     *                  "font_colour"=>"",  字体颜色
-     *                  "category_id" => "1",
-     *                  "category_name" => "专业保洁",
-     *                  "category_icon" => "",
-     *                  "category_introduction" => "44项定制清洁服务",
-     *                  "category_price" => "25.00",
-     *                  "category_price_unit" => "小时",
-     *                  "category_price_description" => "￥25/小时",
-     *              },
-     *              ],
-     *              "server_list": [
-     *              {
-     *                  "category_id": "6",   服务品类id
-     *                  "category_name": "精品保洁",  服务品类名
-     *                  "category_icon": "",   小图片
-     *                  "category_url": "",    调转地址url
-     *                  "category_introduction": "",  简介
-     *                  "category_price": "",  价格
-     *                  "category_price_unit": "",  价格单位
-     *                  "category_price_description": "",  价格备注
-     *                  "colour"=>"",
-     *                  "sort": "1"   排序
-     *              },
-     *              {
-     *                  "category_id": "1",
-     *                  "category_name": "专业保洁",
-     *                  "category_icon": "",
-     *                  "category_url": "",
-     *                  "category_introduction": "44项定制清洁服务",
-     *                  "category_price": "25.00",
-     *                  "category_price_unit": "小时",
-     *                  "category_price_description": "￥25/小时",
-     *                  "colour"=>"",
-     *                  "sort": "2"
-     *              },
-     *              ],
-     *              "footer_link":[
-     *              {
-     *                  "link_id"=>"1",
-     *                  "title"=>"首页",
-     *                  "url"=>"",   跳转链接
-     *                  "link_icon_check" => "http://dev.m2.1jiajie.com/statics/images/nav_01.png", 选中图片
-     *                  "link_icon_uncheck" => "http://dev.m2.1jiajie.com/statics/images/nav_d_01.png", 未选中图片
-     *                  "colour_check" => "#f7b136", 选中颜色
-     *                  "colour_uncheck" => "#555",  未选中颜色
-     *                  "sort"=>"1"  排序
-     *              },
-     *              {
-     *                  "link_id"=>"2",
-     *                  "title"=>"订单",
-     *                  "url"=>"",
-     *                  "link_icon"=>"",
-     *                  "colour"=>"",
-     *                  "sort"=>"2"
-     *              },
-     *              ],
-     *              "isBlock":"0", 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。
-     *              "isEffect": "0" 用户token是否有效，0表示正常，1表示失效，如果access_token为空，该值为0。
-     *      }
-     * }
-     *
-     * @apiError CityNotFound 城市尚未开通.
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *   "alertMsg": "查询成功",
+     *   "ret": {
+     *       "city_list": [
+     *           {
+     *               "city_id": "110100",
+     *               "city_name": "北京市"
+     *           }
+     *       ],
+     *       "header_link": {
+     *           "comment_link": {
+     *            "title": "意见反馈",
+     *             "url": "http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png",
+     *             "img": "http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png"
+     *           },
+     *           "phone_link": {
+     *               "title": "18210922324",
+     *               "url": "",
+     *               "img": "http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png"
+     *           }
+     *       },
+     *       "pic_list": [
+     *           {
+     *               "img_path": "焦点图图片地址",
+     *               "link": "焦点图跳转地址",
+     *               "url_title": "焦点图说明"
+     *           }
+     *       ],
+     *       "home_order_server": [
+     *           {
+     *               "title": "单次保洁",
+     *               "introduction": "新用户第1小时免费",
+     *               "icon": "http://dev.m2.1jiajie.com/statics/images/dancibaojie.png",
+     *               "url": "http://dev.m2.1jiajie.com/#/order/createOnceOrder/1",
+     *               "bg_colour": "ffb518",
+     *               "font_colour": "ffffff",
+     *               "category_id": "1",
+     *               "category_name": "专业保洁",
+     *               "category_icon": "",
+     *               "category_introduction": "44项定制清洁服务",
+     *               "category_price": "25.00",
+     *               "category_price_unit": "小时",
+     *               "category_price_description": "￥25/小时"
+     *           },
+     *           {
+     *               "title": "周期保洁",
+     *               "introduction": "一次下单 清洁无忧",
+     *               "icon": "http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png",
+     *               "url": "http://dev.m2.1jiajie.com/#/order/createOnceOrder/2",
+     *               "sort": "2",
+     *               "bg_colour": "ff8a44",
+     *               "font_colour": "ffffff",
+     *               "category_id": "1",
+     *               "category_name": "专业保洁",
+     *               "category_icon": "",
+     *               "category_introduction": "44项定制清洁服务",
+     *               "category_price": "25.00",
+     *               "category_price_unit": "小时",
+     *               "category_price_description": "￥25/小时"
+     *           }
+     *       ],
+     *       "server_list": [
+     *           {
+     *               "category_name": "手机",
+     *               "category_icon": "http://7b1f97.com1.z0.glb.clouddn.com/14466933444319563ac9e0ec743",
+     *               "category_introduction": "23年发生DVDrtyghkmvnvfdd",
+     *               "category_price": "1.0000",
+     *               "category_price_unit": "件",
+     *               "colour": "7fce0f"
+     *           }
+     *       ],
+     *       "footer_link": [
+     *           {
+     *               "link_id": "1",
+     *               "title": "首页",
+     *               "url": "#",
+     *               "link_icon_check": "http://dev.m2.1jiajie.com/statics/images/nav_01.png",
+     *               "link_icon_uncheck": "http://dev.m2.1jiajie.com/statics/images/nav_d_01.png",
+     *              "colour_check": "f7b136",
+     *               "colour_uncheck": "555555",
+     *               "sort": "1"
+     *           },
+     *           {
+     *               "link_id": "2",
+     *               "title": "订单",
+     *               "url": "http://dev.m2.1jiajie.com/index.html#/order/index",
+     *               "link_icon_check": "http://dev.m2.1jiajie.com/statics/images/nav_02.png",
+     *               "link_icon_uncheck": "http://dev.m2.1jiajie.com/statics/images/nav_d_02.png",
+     *               "colour_check": "f7b136",
+     *               "colour_uncheck": "555555",
+     *               "sort": "2"
+     *           },
+     *           {
+     *               "link_id": "3",
+     *               "title": "优惠券",
+     *               "url": "http://dev.m2.1jiajie.com/index.html#/promoCode/index",
+     *               "link_icon_check": "http://dev.m2.1jiajie.com/statics/images/nav_03.png",
+     *               "link_icon_uncheck": "http://dev.m2.1jiajie.com/statics/images/nav_d_03.png",
+     *               "colour_check": "f7b136",
+     *               "colour_uncheck": "555555",
+     *               "sort": "3"
+     *           },
+     *           {
+     *               "link_id": "4",
+     *               "title": "我的",
+     *               "url": "http://dev.m2.1jiajie.com/index.html#/personalCenter/index",
+     *               "link_icon_check": "http://dev.m2.1jiajie.com/statics/images/nav_04.png",
+     *               "link_icon_uncheck": "http://dev.m2.1jiajie.com/statics/images/nav_d_04.png",
+     *               "colour_check": "f7b136",
+     *               "colour_uncheck": "555555",
+     *               "sort": "4"
+     *           }
+     *       ],
+     *       "isBlock": "0",
+     *       "isEffect": "0"
+     *   }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
+     *     HTTP/1.1 200 OK
      *     {
      *       "code":"0",
+     *       "alertMsg": "城市尚未开通",
      *       "msg": "城市尚未开通"
      *     }
      */
