@@ -4,6 +4,7 @@ namespace restapi\controllers;
 use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
+use \core\models\operation\OperationGoods;
 use \core\models\operation\OperationShopDistrictCoordinate;
 use \core\models\worker\Worker;
 use core\models\customer\CustomerWorker;
