@@ -116,6 +116,11 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+
+        //PaymentCustomerTransRecord::analysisRecord(1,0,'order_pay', 1);
+        PaymentCustomerTransRecord::refundRecord(1, 'order_refund',1,['payment_channel_id'=>1,'payment_eo_order_id'=>111111]);
+        exit;
+
         $model = new Payment();
         $model->getPayChannelList();
         exit;

@@ -1,10 +1,6 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: funson
- * Date: 14-9-9
- * Time: 下午4:54
- * To change this template use File | Settings | File Templates.
+ * @author CoLee
  */
 namespace boss\controllers\system;
 
@@ -20,26 +16,6 @@ use yii\helpers\ArrayHelper;
 
 class RoleController extends BaseAuthController
 {
-//     public function behaviors()
-//     {
-//         return [
-//             'verbs' => [
-//                 'class' => VerbFilter::className(),
-//                 'actions' => [
-//                     'delete' => ['post'],
-//                 ],
-//             ],
-//             'access' => [
-//                 'class' => AccessControl::className(),
-//                 'rules' => [
-//                     [
-//                         'allow' => true,
-//                         'roles' => ['@']
-//                     ]
-//                 ]
-//             ],
-//         ];
-//     }
 
     public function actionIndex()
     {

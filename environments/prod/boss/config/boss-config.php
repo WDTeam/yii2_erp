@@ -22,7 +22,6 @@ $config =  [
             'identityClass' => 'core\models\system\SystemUser',
             'enableAutoLogin' => true,
         ],
-        
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],

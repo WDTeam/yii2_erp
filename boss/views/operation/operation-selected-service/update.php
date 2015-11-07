@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Selected S
 //$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-<div class="operation-goods-update">
+<div class="operation-selected-service-update">
     <?= $this->render('_form', [
         'model' => $model,
         'status' => 'update',

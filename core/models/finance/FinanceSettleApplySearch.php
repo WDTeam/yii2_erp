@@ -103,7 +103,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'query'=>[ 'settle_apply_create_start_time', 'settle_apply_create_end_time','worker_tel', 'finance_settle_apply_status','worker_type_id','worker_identity_id'],
             'count'=>[ 'worker_tel'],
             'save'=>[ 'worker_tel'],
-            'default'=>['worker_id','id', 'shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ],
+            'default'=>['worker_id','id', 'shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id','worker_tel', ],
         ];
     }
 

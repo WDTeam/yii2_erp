@@ -35,7 +35,7 @@ use boss\components\AreaCascade;
                 'name'=>[
                     'type'=> Form::INPUT_TEXT, 
                     'options'=>[
-                        'maxlength'=>255,
+                        'maxlength'=>20,
                     ]
                     
                 ],
@@ -73,7 +73,7 @@ use boss\components\AreaCascade;
                 ]], 
                 
                 'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>[
-                    'maxlength'=>50]], 
+                    'maxlength'=>11]], 
         
                 'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>[
                     'maxlength'=>200]],
@@ -115,7 +115,7 @@ use boss\components\AreaCascade;
             'columns' => 1,
             'attributes' => [
         
-                'bl_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>255]],
+                'bl_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>20]],
                 
                 'bl_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>255]],
         
@@ -124,7 +124,7 @@ use boss\components\AreaCascade;
                     'type'=> Form::INPUT_DROPDOWN_LIST, 
                     'items'=>ShopManager::$bl_types],
                 
-                'bl_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>50]],
+                'bl_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>10]],
                 
                 'bl_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>200]],
                 
@@ -183,7 +183,7 @@ use boss\components\AreaCascade;
                     'options'=>[ 'maxlength'=>255]
                 ],
                 
-                'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['rows'=> 6]],
+                'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['rows'=> 6],],
                 
             ]
             ]);?>

@@ -50,6 +50,18 @@ class m150921_090403_create_table_system_user extends Migration
             'password_hash'=>'$2y$13$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS',
             'status'=>1
         ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>5,
+            'username'=>'minibox_test',
+            'password_hash'=>'$2y$13$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS',
+            'status'=>1
+        ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>999,
+            'username'=>'colee',
+            'password_hash'=>'$2y$13$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS',
+            'status'=>1
+        ]);
     }
 
     public function down()

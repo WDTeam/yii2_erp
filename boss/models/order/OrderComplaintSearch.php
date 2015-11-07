@@ -57,7 +57,7 @@ class OrderComplaintSearch extends OrderComplaint{
  			return $dataProvider;
 		}
 		$query->andFilterWhere([
-				'id' => $this->id,
+				OrderComplaint::tableName().'.id' => $this->id,
 				'complaint_type' => $this->complaint_type,
 				'complaint_status' => $this->complaint_status,
 				'complaint_channel' => $this->complaint_channel,

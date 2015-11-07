@@ -3,6 +3,9 @@
 namespace core\models\system;
 
 use yii\helpers\ArrayHelper;
+use core\models\shop\ShopCustomeRelation;
+use core\models\shop\Shop;
+use core\models\shop\ShopManager;
 class SystemUser extends \dbbase\models\system\SystemUser
 {
     public $repassword;
@@ -118,6 +121,54 @@ class SystemUser extends \dbbase\models\system\SystemUser
         //             'admin-create' => ['username', 'email', 'password', 'repassword', 'status', 'role'],
         //             'admin-update' => ['username', 'email', 'password', 'repassword', 'status', 'role']
         ]);
+    }
+    /**
+     * 获取用户对应的家政公司ID
+     */
+    public function getShopManagerIds()
+    {
+        return (array)ShopCustomeRelation::find()
+        ->select(['shop_manager_id'])
+        ->where([
+            'system_user_id'=>$this->id,
+            'stype'=>ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER,
+            'is_del'=>0
+        ])->column();
+    }
+    /**
+     * 获取用户对应的家政公司列表
+     */
+    public function getShopManagerList()
+    {
+        $ids = $this->getShopManagerIds();
+        $res = (array)ShopManager::find()
+        ->andFilterWhere(['in','id', $ids])
+        ->all();
+        return $res;
+    }
+    /**
+     * 获取用户对应的门店ID
+     */
+    public function getShopIds()
+    {
+        return (array)ShopCustomeRelation::find()
+        ->select(['shopid'])
+        ->where([
+            'system_user_id'=>$this->id,
+            'stype'=>ShopCustomeRelation::TYPE_STYPE_SHOP,
+            'is_del'=>0
+        ])->column();
+    }
+    /**
+     * 获取用户对应的门店列表
+     */
+    public function getShopList()
+    {
+        $ids = $this->getShopIds();
+        $res = (array)Shop::find()
+        ->andFilterWhere(['in','id', $ids])
+        ->all();
+        return $res;
     }
     
     /**
