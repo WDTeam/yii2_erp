@@ -93,6 +93,53 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
+     * @api {GET} /service/service-items [GET] ( for pop )
+     * @apiName actionServiceItems
+     * @apiGroup service
+     * @apiDescription 获得所有服务项目[服务id, 服务编号,服务名,服务描述,服务英文名称]
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "1",
+     *      "msg": "success",
+     *      "ret":
+     *      [
+     *          {
+     *              "goods_id": "2", 服务id
+     *              "goods_no": null,  服务编号
+     *              "goods_name": "空调清洗",  服务名
+     *              "goods_introduction": "", 服务简介
+     *              "goods_english_name": "", 服务英文名称
+     *          },
+     *       ],
+     *  }
+     *
+     */
+    public function actionServiceItems()
+    {
+        $categories = OperationCategory::getAllCategory();
+        $gDate = [];
+        if (!empty($categories)) {
+            foreach ($categories as $category) {
+                $goodses = OperationGoods::getCategoryGoods($category['id']);
+                if (!empty($goodses)) {
+                    $gobject = [
+                        'goods_id' => $gItem['goods_id'],
+                        'goods_no' => $gItem['operation_goods_no'],
+                        'goods_name' => $gItem['operation_goods_name'],
+                        'goods_introduction' => $gItem['operation_goods_introduction'],
+                        'goods_english_name' => $gItem['operation_goods_english_name'],
+                    ];
+                    $gDate[] = $gobject;
+                }
+            }
+        }
+
+        return $this->send($gDate, "数据获取成功", null, alertMsgEnum::getGoodsesSuccess);
+    }
+
+    /**
      * @api {GET} /service/home-services [GET] /service/home-services（20% ）
      * @apiName actionHomeServices
      * @apiGroup service
