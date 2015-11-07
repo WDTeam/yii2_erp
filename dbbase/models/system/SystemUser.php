@@ -53,6 +53,10 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     {
         return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'name');
     }
+    public function getRolesLabel()
+    {
+        return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'description');
+    }
     public function afterSave($insert, $changedAttributes)
     {
         $this->setRoles($this->_roles);

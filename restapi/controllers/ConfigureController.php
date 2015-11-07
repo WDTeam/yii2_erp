@@ -265,7 +265,7 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-
+        //\core\models\operation\OperationAdvertContent::getAdvertList(array('id'=>1),array('operation_advert_online_time'=>21345,'operation_advert_offline_time'=>1233));
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
         }
@@ -362,7 +362,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '1',
                 'category_name' => '专业保洁',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/zhuanyebaojie.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/cleaning',
                 'category_introduction' => '44项定制清洁服务',
                 'category_price' => '25.00',
                 'category_price_unit' => '小时',
@@ -375,7 +375,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '2',
                 'category_name' => '洗护服务',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/washProtect',
                 'category_introduction' => '衣服、皮鞋、美包',
                 'category_price' => '9.00',
                 'category_price_unit' => '件',
@@ -387,7 +387,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '3',
                 'category_name' => '家电维修',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiadianweixiu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
                 'category_introduction' => '油烟机、空调等深度清洁',
                 'category_price' => '100.00',
                 'category_price_unit' => '台',
@@ -399,7 +399,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '4',
                 'category_name' => '家具养护',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiajuyanghu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/homeApplianceCleaning',
                 'category_introduction' => '地板家具深度养护、除螨',
                 'category_price' => '',
                 'category_price_unit' => '',
@@ -411,7 +411,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_id' => '5',
                 'category_name' => '生活急救箱',
                 'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/shenghuojijiu.png',
-                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/firstAidKit',
                 'category_introduction' => '管道维修疏通、除虫',
                 'category_price' => '',
                 'category_price_unit' => '',
@@ -592,7 +592,7 @@ class ConfigureController extends \restapi\components\Controller
         @$token = $params['access_token'];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0,403,null,alertMsgEnum::getWorkerInitFailed);
+            return $this->send(null, "用户无效,请先登录", 401,403,null,alertMsgEnum::getWorkerInitFailed);
         }
         //获取阿姨待服务订单
         $args["owr.worker_id"] = $worker->id;

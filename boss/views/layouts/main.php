@@ -30,11 +30,11 @@ AppAsset::register($this);
 <body class="skin-blue fixed">
     <?php $this->beginBody() ?>
     <header class="header">
-        <a href="<?= Yii::$app->homeUrl ?>" class="logo">
-            <!-- Add the class icon to your logo image or logo icon to add the margining -->
-            <!-- <?= Yii::$app->name ?> -->
-            
-        </a>
+        <?php echo Html::a('', Yii::$app->homeUrl, [
+            'class'=>'logo',
+            'style'=>Yii::$app->user->can('mini_box_group')?"background-image: url('/adminlte/img/logo_partner.png');
+                background-size:inherit":'',
+        ]);?>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top .fixed" role="navigation">
             <!-- Sidebar toggle button-->
@@ -138,7 +138,9 @@ AppAsset::register($this);
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
     Copyright © 2015 e家洁.
-    All rights reserved. v1.4.0
+    All rights reserved. <?php echo Html::a('<span>v1.4.0</span>', Yii::$app->urlManager->createUrl(['/system/release-history'],[]), [
+                            'title' => Yii::t('yii', '查看发布历史'),'data-pjax'=>'0','target' => '_blank',
+                        ]) ?>
     </div>
 </footer>
 </body>

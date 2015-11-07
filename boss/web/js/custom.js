@@ -31,16 +31,18 @@ $(document).ready(function(){
 	// });
 
 	$('.MyRadioStyle input').each(function(){
-		ApplyToRadio($(this));
+        ApplyToRadio($(this));
 	});
 
 
 	 //触发单选框的change事件
 	 $('.MyRadioStyle input').on('ifChecked', function(event){
-	 	$(this).trigger("change");
+         //alert(1);
+         $(this).trigger("change");
 	 });
 	 $('.MyRadioStyle input').on('ifUnchecked', function(event){
-	 	$(this).trigger("change");
+         //alert(2);
+		 //$(this).trigger("change");
 	 });
 
 	//给所有的type=file外层添加一个<a>
@@ -76,22 +78,74 @@ $(document).ready(function(){
 
 	});
 
-	//日派单管理列表td样式
-	$(".kv-grid-table tr td").css("background-color","#fff");
-	
+
+	//运营管理-->已开通城市管理前端js
+    var $div_li =$("div.tab_menu label");
+    var $_label =$("div.ipo label");
+    var $btn_tabradio =$("div.btn_ipo .over_flow label");
+    var $tab_text =$("div.tab_text");
+    var $btn_tab_box =$("div.btn_tab_box");
+
+    $div_li.click(function(){
+        $(this).addClass("selected").siblings().removeClass("selected");
+        var index =  $div_li.index(this);
+        $("div.tab_box > div").eq(index).show().siblings().hide();
+    });
+
+    $_label.each(function(){
+    	$(this).click(function(){
+    		if($(this).hasClass("selected")){
+        	$(this).click(function(){
+        		$(this).removeClass("selected");
+        	});
+        }else{
+        	$(this).click(function(){
+        		$(this).addClass("selected");
+        	});
+        };
+        var tab_index =  $_label.index(this);
+        var btn_tab_index =  $_label.index(this);
+        $("div.tab_text > div").eq(tab_index).show().siblings().hide();
+        $("div.btn_tab_box > div").eq(btn_tab_index).show().siblings().hide();
+    	});
+    });
+  
+    $btn_tabradio.each(function(){
+    	$(this).click(function(){
+    		if ($(this).hasClass("selected")) {
+    			$(this).click(function(){
+					$(this).removeClass("selected");
+    			})
+    		}else{
+    			$(this).click(function(){
+					$(this).addClass("selected");
+    			})
+    		}
+    	})
+    });
+
+    $("#btn_submit").click(function(){
+    	var input_value = $("input").val();
+    	if(input_value == ""){
+    		alert("信息不能为空！！！");
+    	}
+    });
+
+    //--------------------------------------------------------------------------------------结束
+
 });
 
 function ApplyToRadio(self){
-	var label = self;
-	var label_text = label.parent().text();
-
+    var label = self;
+    var label_text = label.parent().text();
+    //console.log(self.parent());
+//alert(label.css('iradio_line-blue'));
 	////截取文字长度
 	//if(label_text.length > 6) {
 	//	label.parent().attr('title', label_text);
 	//	label_text = label_text.substr(0,6) + '...';
 	//}
-
-	label.parent().html('').append(self);
+    //label.parent().html('').append(self);
 
 	self.iCheck({
 		checkboxClass: 'icheckbox_line-blue',

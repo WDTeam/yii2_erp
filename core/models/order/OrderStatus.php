@@ -33,6 +33,7 @@ class OrderStatus extends Order
                     OrderPool::addOrder($order->id);
                 }
             }
+            OrderMsg::payment($order);
             return true;
         }
         return false;
@@ -266,12 +267,13 @@ class OrderStatus extends Order
      * 完成评价 用户确认
      * @param $order
      * @param $must_models
+     * @param $transact
      * @return bool
      */
-    protected static function _customerAcceptDone(&$order, $must_models = [])
+    protected static function _customerAcceptDone(&$order, $must_models = [], $transact = null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE);
-        return self::_statusChange($order, $status, $must_models);
+        return self::_statusChange($order, $status, $must_models, $transact);
     }
 
 
@@ -292,12 +294,13 @@ class OrderStatus extends Order
      * 取消订单
      * @param $order
      * @param $must_models
+     * @param $transact
      * @return bool
      */
-    protected static function _cancel(&$order, $must_models = [])
+    protected static function _cancel(&$order, $must_models = [], $transact = null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CANCEL);
-        return self::_statusChange($order, $status, $must_models);
+        return self::_statusChange($order, $status, $must_models, $transact);
     }
 
     /**
@@ -338,11 +341,5 @@ class OrderStatus extends Order
         return $order->doSave($save_models, $transact);
     }
 
-    /**
-     * 查询订单状态历史
-     */
-    public static function searchOrderStatusHistory($order_id)
-    {
-        return OrderStatusHistory::find()->where(["order_id" => $order_id])->orderBy(["created_at" => SORT_DESC])->all();
-    }
+
 }

@@ -64,7 +64,7 @@ class AuthController extends BaseAuthController
         $model = new Auth();
         $model->type = Auth::TYPE_PERMISSION;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -162,4 +162,36 @@ class AuthController extends BaseAuthController
 //         }
 //         //         $auth->assign($createPost, 1);
 //     }
+    /**
+     * 默认授权项
+     */
+    public function actionInit()
+    {
+        $string = $this->renderPartial('default_config');
+        $lines = explode(PHP_EOL, $string);
+        $datas = [];
+        foreach ($lines as $key=>$line){
+            if(preg_match('/--/u', $line))
+            {
+                $datas[] = explode('--', $line);
+            }
+        }
+        
+        $auth = Yii::$app->authManager;
+        foreach ($datas as $data)
+        {
+            $permission = $data[1];
+            $len = explode('/', $permission);
+            if(count($len)<3){
+                $permission .= '/index';
+            }
+            $is_has = $auth->getPermission($permission);
+            if(!$is_has){
+                $item = $auth->createPermission($permission);
+                $item->description = $data[0];
+                $auth->add($item);
+            }
+            echo '"'.$permission.'"<br/>';
+        }
+    }
 }

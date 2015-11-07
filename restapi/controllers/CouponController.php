@@ -177,7 +177,7 @@ class CouponController extends \restapi\components\Controller
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 401, 200,null,alertMsgEnum::customerLoginFailed);
         } 
         if ( !isset($param['city_id']) || !$param['city_id']) {
             return $this->send(null, "请选择城市", 0, 200,null,alertMsgEnum::couponsCityNoChoice);
@@ -283,7 +283,7 @@ class CouponController extends \restapi\components\Controller
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null,$checkResult['msg'], 0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null,$checkResult['msg'], 401, 200,null,alertMsgEnum::customerLoginFailed);
         } 
         //获取该用户所有的优惠码列表
         try{
@@ -382,7 +382,7 @@ class CouponController extends \restapi\components\Controller
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 401, 200,null,alertMsgEnum::customerLoginFailed);
         } 
         if ( !isset($param['city_id']) || !$param['city_id']) {
             return $this->send(null, "城市id不能为空", 0, 200,null,alertMsgEnum::couponsOverDueNoChoice);
@@ -449,7 +449,7 @@ class CouponController extends \restapi\components\Controller
         //检测用户是否登录
         $checkResult = LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'],0, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, $checkResult['msg'],401, 200,null,alertMsgEnum::customerLoginFailed);
         }
         try{
             $CouponCount =CouponCustomer::CouponCount($checkResult['customer_id']);

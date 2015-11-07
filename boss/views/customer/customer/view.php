@@ -155,13 +155,13 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'创建时间',
             'format'=>'raw',
-            'value'=>date('Y-m-d H:i', $model->customer_phone),
+            'value'=>date('Y-m-d H:i', $model->created_at),
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
 		[
             'attribute'=>'', 
-            'label'=>'来源',
+            'label'=>'注册来源',
             'format'=>'raw',
             'value'=>$channal_name_str,
             'type'=>DetailView::INPUT_TEXT,
@@ -257,7 +257,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'订单总数',
             'format'=>'raw',
-            'value'=>Html::a($order_count, ['order/index', 'OrderSearch[customer_id]'=>$model->id]),
+            'value'=>Html::a($order_count, ['order/order/index', 'OrderSearch[customer_id]'=>$model->id]),
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],

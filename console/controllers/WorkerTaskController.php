@@ -53,7 +53,7 @@ class WorkerTaskController extends Controller
             }
             
         }
-        //检查结算
+        //检查已完成的任务，处理结算状态
         $tasks = (array)WorkerTaskLog::find()
         ->where('worker_task_is_done=1')
         ->andWhere('worker_task_is_settlemented is NULL OR worker_task_is_settlemented=0')

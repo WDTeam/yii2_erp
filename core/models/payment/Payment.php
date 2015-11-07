@@ -9,8 +9,6 @@ use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
 
-use dbbase\models\payment\PaymentCommon;
-use dbbase\models\payment\PaymentRefund;
 
 use Yii;
 
@@ -94,7 +92,11 @@ class Payment extends \dbbase\models\payment\Payment
                     'order_pop_order_money'
                 ];
                 $dataArray = OrderSearch::getOrderInfo($order_id,$fields,$payment_type);
-                $pay_money = 0;
+                $pay_money = 0;    //在线支付
+                $order_use_acc_balance = 0;  //使用余额
+                $card_id = 0;
+                $order_use_card_money = 0;   //使用服务卡
+
                 //判断是普通订单还是周期订单
                 if(count($dataArray) > 1)
                 {
@@ -102,12 +104,34 @@ class Payment extends \dbbase\models\payment\Payment
                     foreach( $dataArray as $val )
                     {
                         $pay_money += $val['order_pay_money'];    //在线支付
+                        $order_use_acc_balance += $val['order_use_acc_balance'];    //使用余额
+                        $card_id = $val['card_id'];    //服务卡号
+                        $order_use_card_money += $val['order_use_card_money'];    //使用服务卡
+
                     }
                 }
                 else
                 {
                     $one = current($dataArray);
-                    $pay_money = $one['order_pay_money'];
+                    $pay_money = $one['order_pay_money'];   //在线支付
+                    $order_use_acc_balance = $one['order_use_acc_balance'];    //使用余额
+                    $card_id = $one['card_id'];    //服务卡号
+                    $order_use_card_money = $one['order_use_card_money'];    //使用服务卡
+                }
+
+                //判断余额是否和订单余额不一致
+                if( !empty($order_use_acc_balance) && $order_use_acc_balance > 0 )
+                {
+                    //获取用户余额
+                    $customerBalance = Customer::getBalanceById($customer_id);
+                    if($customerBalance['balance'] < $order_use_acc_balance)
+                    return ['status'=>0 , 'info'=>'用户余额不足,请重新下单', 'data'=>''];
+                }
+
+                //判断服务卡余额是否和订单服务卡支付不一致
+                if( !empty($order_use_card_money) && $order_use_card_money > 0 && !empty($card_id) )
+                {
+                    //TODO::服务卡逻辑
                 }
                 $payment_mode = 1;//在线支付
                 break;
@@ -166,6 +190,7 @@ class Payment extends \dbbase\models\payment\Payment
 
         //获取支付渠道名称
         $data['payment_source_name'] = FinanceOrderChannel::getOrderChannelByName($data['payment_source']);
+
         //使用场景
         $model->scenario = $scenario;
         $model->attributes = $data;
@@ -278,7 +303,13 @@ class Payment extends \dbbase\models\payment\Payment
         //组装支付订单号
         $rand = mt_rand(1000,9999);
         $date = date("ymd",time());
-        return $date.$transType.$rand.$id;
+        //生成商户订单号
+        $payment_eo_order_id = $date.$transType.$rand.$id;
+        //查询当前ID的数据是否存在
+        $model = Payment::findOne($id);
+        $model->setAttribute('payment_eo_order_id',$payment_eo_order_id);
+        $model->doSave();
+        return $payment_eo_order_id;
     }
 
     /**
@@ -314,7 +345,7 @@ class Payment extends \dbbase\models\payment\Payment
     /**
      * 微信APP(1)
      */
-    private function wxApp()
+    private function wxApp($data)
     {
         $param = [
             "body"	=> $this->body(),
@@ -763,33 +794,7 @@ class Payment extends \dbbase\models\payment\Payment
                 "sign_type"=> "RSA",
                 "sign"=> "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
             ];
-            /*
-            $_POST = array (
-                "payment_type" => "1",
-                "subject" => "e家洁在线支付",
-                "trade_no" => "2015102942279250",
-                "buyer_email" => "18311474301",
-                "gmt_create" => "2015-10-29 15:57:07",
-                "notify_type" => "trade_status_sync",
-                "quantity" => "1",
-                "out_trade_no" => "1510290160566",
-                "seller_id" => "2088801136967007",
-                "notify_time" => "2015-10-29 15:57:09",
-                "body" => "e家洁在线支付0.02元",
-                "trade_status" => "TRADE_FINISHED",
-                "is_total_fee_adjust" => "N",
-                "total_fee" => "0.02",
-                "gmt_payment" => "2015-10-29 15:57:08",
-                "seller_email" => "47632990@qq.com",
-                "gmt_close" => "2015-10-29 15:57:08",
-                "price" => "0.02",
-                "buyer_id" => "2088802381237501",
-                "notify_id" => "2983afc3b92e376e84923e4c75e0f3574s",
-                "use_coupon" => "N",
-                "sign_type" => "RSA",
-                "sign" => "ZlCICZ/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc=",
-            );
-            */
+
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -822,12 +827,10 @@ class Payment extends \dbbase\models\payment\Payment
             //验证签名
             $class = new \alipay_wap_class();
             $verify_result = $class->callback();
-            /*
-            if(!empty($_GET['debug']))
+            if($_GET['debug'])
             {
                 $verify_result = true;
             }
-            */
             //签名验证成功
             if($verify_result)
             {
@@ -1312,25 +1315,29 @@ class Payment extends \dbbase\models\payment\Payment
         {
             case 1:
                 //支付普通订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1,$attribute);
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
                 {
-                    Order::isPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
                 }
                 break;
             case 2:
                 //支付周期订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2,$attribute);
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
                 {
-                    Order::isBatchPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
                 }
                 break;
             case 3:
                 //支付充值交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment',2,$attribute);
+                break;
+            case 4:
+                //退款
+                PaymentCustomerTransRecord::refundRecord($attribute['order_id']);
                 break;
         }
         //支付充值
@@ -1342,23 +1349,69 @@ class Payment extends \dbbase\models\payment\Payment
      * 订单支付退款
      * @param $data
      */
-    public static function orderRefund($data)
+    public static function orderRefund($order_id, $customer_id)
     {
-        $orderInfo = self::orderInfo($data['order_id']);
-        //获取余额支付
-        $balancePay = $orderInfo->orderExtPay->order_use_acc_balance;  //余额支付
-
-        //获取服务卡支付
-        $service_card_on = $orderInfo->orderExtPay->card_id;    //服务卡ID
-        $service_card_pay = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
-
+        //获取订单信息
+        $orderInfo = OrderSearch::getOrderInfo($order_id);
+        $orderInfo = current($orderInfo);
         //执行自有退款
-        if( !empty($balancePay) ){
-            //余额支付退款
-            Customer::incBalance($data['customer_id'],$balancePay);
-        }elseif( !empty($service_card_on) && !empty($service_card_pay) ){
-            //服务卡支付退款
+        if( empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] < 0 )
+        {
+
+            if( !empty($orderInfo['order_use_acc_balance']) && $orderInfo['order_use_acc_balance'] > 0 )
+            {
+                //余额支付退款
+                //Customer::incBalance($customer_id,$orderInfo['order_use_acc_balance']);
+                self::paymentTransRecord(['order_id'=>$order_id]);
+            }
+            elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
+            {
+                //服务卡支付退款
+                //TODO::调用服务卡退款
+                //self::paymentTransRecord(['order_id'=>$order_id]);
+            }
         }
+        elseif( !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
+        {
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            //查询线上支付记录
+            $paymentInfo = Payment::find()->where(['payment_mode'=>1,'payment_status'=>1,'order_id'=>$order_id,'customer_id'=>$customer_id])->asArray()->one();
+            if( empty($paymentInfo))
+            {
+                return ['status'=>0,'info'=>'未找到支付数据','data'=>''];
+            }
+
+            //线上退款,创建一条线上退款记录,状态未确认
+            $model = new Payment();
+            $model->scenario = 'refund';
+            $model->setAttributes([
+                'customer_id' => $customer_id,
+                'order_id' => $order_id,
+                'payment_money' => $orderInfo['order_pay_money'],   //订单支付金额
+                'payment_actual_money' => $paymentInfo['payment_actual_money'],     //实际支付金额
+                'payment_source' => $paymentInfo['payment_source'],
+                'payment_source_name' => $paymentInfo['payment_source_name'],
+                'payment_mode' => 3,
+                'payment_status' => 1,
+                'payment_memo' => '',
+                'payment_type' => 4,
+                'admin_id' => Yii::$app->user->id,
+                'payment_admin_name' => Yii::$app->user->identity->username,
+            ]);
+
+            //调用退款
+            if($model->doSave() && $model->paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4]))
+            {
+                $transaction->commit();
+                return ['status'=>1,'info'=>'已确认退记录完成','data'=>''];
+            }
+            else
+            {
+                $transaction->rollBack();
+            }
+        }
+        return ['status'=>0,'info'=>'未找到订单数据','data'=>''];
     }
 
     /**

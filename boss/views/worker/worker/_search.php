@@ -34,11 +34,15 @@ use kartik\date\DatePicker;
             'pluginOptions' => [
                 'allowClear' => true
             ],
+            'pluginEvents'=> [
+                "change" => "function() {
+                            $('#select2-workersearch-shop_id-container>.select2-selection__clear').mousedown();
+                         }",
+            ]
         ]); ?>
     </div>
     <div class='col-md-3'>
         <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
-            'initValueText' => '门店', // set the initial display text
             'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],
             'pluginOptions' => [
                 'allowClear' => true,
@@ -46,12 +50,25 @@ use kartik\date\DatePicker;
                 'ajax' => [
                     'url' => \yii\helpers\Url::to(['show-shop']),
                     'dataType' => 'json',
-                    'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    'data' => new JsExpression('function(params) { return {
+                            city_id:$("#workersearch-worker_work_city").val(),
+                            q:params.term,
+                      };
+                    }')
                 ],
+                'initSelection'=> new JsExpression('function (element, callback) {
+                        callback({
+                            shop_id:"'.$model->shop_id.'",
+                            text:"'.$model->getShopName($model->shop_id).'"
+                        });
+                }'),
                 'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                 'templateResult' => new JsExpression('function(city) { return city.text; }'),
                 'templateSelection' => new JsExpression('function (city) { return city.text; }'),
             ],
+            'pluginEvents'=> [
+                "change" => "function() { $('#select2-worker-shop_id-container>.select2-selection__clear').mousedown()}",
+            ]
         ]); ?>
     </div>
     <div class='col-md-3'>

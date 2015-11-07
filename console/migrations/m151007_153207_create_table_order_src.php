@@ -27,7 +27,8 @@ class m151007_153207_create_table_order_src extends Migration
                 [1,time(),time(),'BOSS',0],
                 [2,time(),time(),'IOS',0],
                 [3,time(),time(),'Android',0],
-                [4,time(),time(),'POP',0]
+                [4,time(),time(),'POP',0],
+                [5,time(),time(),'H5',0]
             ]
         );
     }

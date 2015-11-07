@@ -60,7 +60,6 @@ namespace dbbase\components;
 use yii\base\Component;
 use yii\base\Event;
 use yii\web\Application;
-use core\behaviors\IvrlogBehavior;
 use yii\web\HttpException;
 use yii\base\ExitException;
 use yii\base\BootstrapInterface;
@@ -101,14 +100,14 @@ class Ivr extends Component implements BootstrapInterface
         }
     }
     
-    public function behaviors()
-    {
-        return [
-            [
-                'class'=>IvrlogBehavior::className(),
-            ]
-        ];
-    }
+//     public function behaviors()
+//     {
+//         return [
+//             [
+//                 'class'=>IvrlogBehavior::className(),
+//             ]
+//         ];
+//     }
     /**
      * 发送语音播报
      * @param string|int $telephone 电话号码

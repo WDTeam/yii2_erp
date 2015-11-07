@@ -114,48 +114,16 @@ class PaymentController extends BaseAuthController
         return $model->save(false);
     }
 
-    /**
-     * 获取订单渠道
-     * @return string
-     */
-    public function actionOrderChannel()
-    {
-
-        $channel = FinanceOrderChannel::get_order_channel_list();
-        foreach ($channel as $k => $v) {
-            $channel[$k]['text'] = $v['finance_order_channel_name'];
-        }
-        return json_encode(['results' => $channel]);
-    }
-
     public function actionTest()
     {
-        $data = file_get_contents('shanghai.txt');
-        $data = str_replace("\n","",$data);
-        dump($data);
-        dump(json_decode($data));
-
-
-        $data = file_get_contents('beijing.txt');
-        $data = str_replace("\n","",$data);
-        dump($data);
-        dump(json_decode($data));
+        $model = new Payment();
+        $model->getPayChannelList();
         exit;
-        $customerBalance = Customer::getBalanceById(1);
-        dump($customerBalance['balance']);
+        $data = Payment::orderRefund(1,1010);
+        dump($data);
         exit;
         $data = \core\models\payment\Payment::getPayParams(1, 1, 24, 45, ['return_url' => 'http://www.baidu.com']);
         dump($data);
-        exit;
-
-        $attr = [
-            'id'=>45,
-			'address_id'=>9,
-        ];
-        $order = \core\models\order\OrderSearch::getOne($attr['id']);
-        //dump($order->orderExtWorker->worker_id);exit;
-        $data = $order->modify($attr);
-        var_dump($data);
         exit;
         /**
          * 调用(调起)在线支付,发送给支付接口的数据
@@ -205,8 +173,21 @@ class PaymentController extends BaseAuthController
         $order_id = 1212;
         $order_channel_id = 24;
         $type='order_pay';
-        $data = PaymentCustomerTransRecord::analysisRecord('Z651511017242523',$order_channel_id,$type,2);
+        $data = PaymentCustomerTransRecord::analysisRecord('1',$order_channel_id,$type,2);
+        var_dump($data);
+        exit;
 
+        $customerBalance = Customer::getBalanceById(1);
+        dump($customerBalance['balance']);
+        exit;
+
+        $attr = [
+            'id'=>45,
+            'address_id'=>9,
+        ];
+        $order = \core\models\order\OrderSearch::getOne($attr['id']);
+        //dump($order->orderExtWorker->worker_id);exit;
+        $data = $order->modify($attr);
         var_dump($data);
         exit;
         $data = [

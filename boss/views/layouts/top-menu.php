@@ -56,25 +56,26 @@ $menuItemsMain = [
         'active' => false,
         //'visible' => Yii::$app->user->can('haha'),
         'items' => [
-          [
-              'label' => '<i class="fa fa-file-text"></i> ' . Yii::t('app', '设置系统授权项'),
-              'url' => ['/system/auth'],
-          ],
-          [
-              'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置系统用户角色'),
-              'url' => ['/system/role'],
-          ],
-          [
-          'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置用户关系'),
-          'url' => ['/shop/shop-custome-relation'],
-          ],
-          [
-              'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置系统用户权限'),
-              'url' => ['/system/system-user'],
-          ],
-          [
+            [
+              'label' => '<i class="fa fa-file-text"></i> ' . Yii::t('app', '管理系统授权项'),
+              'url' => ['system/auth/index'],
+            ],
+            [
+              'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '管理系统角色'),
+              'url' => ['system/role/index'],
+            ],
+            
+            [
+              'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '管理系统用户'),
+              'url' => ['system/system-user/index'],
+            ],
+            [
+            'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置用户关系'),
+            'url' => ['shop/shop-custome-relation/index'],
+            ],
+            [
               'label' => '<i class="fa fa-sign-out"></i> ' . Yii::t('app', '退出系统'),
-              'url' => ['/system/site/logout'],
+              'url' => ['system/site/logout'],
             ],
         ],
     ],

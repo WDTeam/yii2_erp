@@ -36,16 +36,16 @@ class Payment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source_name','payment_money','payment_source_name'], 'required'],
+            [['order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source','payment_money','payment_channel_id'], 'required'],
             [['customer_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['payment_money', 'payment_actual_money'], 'number'],
-            [['payment_source_name'], 'string', 'max' => 20],
+            [['payment_channel_name'], 'string', 'max' => 20],
             [['payment_transaction_id'], 'string', 'max' => 40],
             [['payment_admin_name', 'payment_handle_admin_name'], 'string', 'max' => 30],
             [['customer_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['payment_memo','show_url','return_url'], 'string', 'max' => 255],
             [['payment_verify'], 'string', 'max' => 32],
-            [['payment_type'],'in','range'=>[1,2,3]],   //支付类型:1普通订单支付,2周期订单支付,3充值
+            [['payment_type'],'in','range'=>[1,2,3,4]],   //支付类型:1普通订单支付,2周期订单支付,3充值
         ];
     }
 
@@ -61,17 +61,17 @@ class Payment extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return[
-            'default'                =>  ['id','payment_actual_money','payment_transaction_id','payment_eo_order_id'],
+            'default'                => ['id','payment_actual_money','payment_transaction_id','payment_eo_order_id'],
             //支付宝WEB
-            'alipay_web_online_pay' =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','return_url','show_url'],
+            'alipay_web_online_pay' =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','return_url','show_url'],
             //在线支付
-            'online_pay'            =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id'],
+            'online_pay'            =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id'],
             //微信在线支付
-            'wx_h5_online_pay'      =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','openid'],
+            'wx_h5_online_pay'      =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','openid'],
             //直达号在线支付
-            'zhidahao_h5_online_pay'=>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            'zhidahao_h5_online_pay'=>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //在线退款
-            'refund'                =>  ['payment_type','customer_id','order_id','payment_money','payment_source','payment_source_name','payment_mode','payment_status','payment_eo_order_id','payment_type','admin_id','payment_admin_name','payment_verify'],
+            'refund'                =>  ['customer_id','order_id','payment_money','payment_actual_money','payment_source','payment_channel_id','payment_channel_name','payment_mode','payment_status','payment_memo','payment_type','admin_id','payment_admin_name','payment_verify'],
         ];
     }
 
@@ -108,8 +108,9 @@ class Payment extends \yii\db\ActiveRecord
             'order_id' => Yii::t('app', '订单ID'),
             'payment_money' => Yii::t('app', '发起充值/交易金额'),
             'payment_actual_money' => Yii::t('app', '实际充值/交易金额'),
-            'payment_source' => Yii::t('app', '数据来源:1=APP微信,2=H5微信,3=APP百度钱包,4=APP银联,5=APP支付宝,6=WEB支付宝,7=HT淘宝,8=H5百度直达号,9=HT刷卡,10=HT现金,11=HT刷卡'),
-            'payment_source_name' => Yii::t('app', '数据来源名称'),
+            'payment_source' => Yii::t('app', '数据来源'),
+            'payment_channel_id' => Yii::t('app', '支付渠道ID'),
+            'payment_channel_name' => Yii::t('app', '支付渠道名称'),
             'payment_mode' => Yii::t('app', '交易方式:1=消费,2=充值,3=退款,4=补偿'),
             'payment_status' => Yii::t('app', '状态：0=失败,1=成功'),
             'payment_transaction_id' => Yii::t('app', '第三方交易流水号'),

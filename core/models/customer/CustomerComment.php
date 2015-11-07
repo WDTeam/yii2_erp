@@ -15,10 +15,10 @@
 namespace core\models\customer;
 
 use Yii;
-use core\models\order\OrderComplaint;
 use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
-
+use core\models\comment\CustomerCommentLevel;
+//use core\models\order\OrderComplaint;
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -50,7 +50,24 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         return $comment_list;
     }
 
-
+    /**
+     * 获取阿姨评论统计信息
+     * @param $worker_id
+     * @return array
+     */
+    public static function getWorkerCommentCount($worker_id){
+        $commentLevel = CustomerCommentLevel::find()->where(['is_del'=>0])->select('customer_comment_level,customer_comment_level_name')->asArray()->all();
+        $workerCommentResult = [];
+        foreach ($commentLevel as $val) {
+            $level_count = self::find()->where(['customer_comment_level'=>$val['customer_comment_level'],'worker_id'=>$worker_id])->count();
+            $workerCommentResult[] = [
+                'level' => $val['customer_comment_level'],
+                'level_name'=>$val['customer_comment_level_name'],
+                'level_count'=>$level_count
+            ];
+        }
+        return $workerCommentResult;
+    }
     
     /**
      * 根据阿姨的id,开始时间和结束时间获取评价列表
@@ -159,20 +176,30 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->is_del = 1;
                 $customerComment->save();
                 // var_dump($customerComment->errors);
-                $transaction->commit();
+              
                 
                 
                 //增加使用次数
                $arraydate= explode(',',$array['customer_comment_tag_ids']);
+               
+              
                 foreach ($arraydate as $ted){
+                    
+                   
+                    
                 	$dateinfo=CustomerCommentTag::findOne($ted);
-                	$dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
-                	$dateinfo->save();
+                       
+                       // var_dump($dateinfo);exit;
+                        if(isset($dateinfo->customer_tag_count)){ 
+                       $dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
+                	$dateinfo->save();     
+                        }
+     
                 	unset($dateinfo);
                 }
-                
+
 				//通知订单 ，改变订单状态
-				if(!isset($array['adminid'])){$array['adminid']=0;}
+		if(!isset($array['adminid'])){$array['adminid']=0;}
                 Order::customerAcceptDone($array['order_id'],$array['adminid']); 
                 
                 if ($array['customer_comment_level'] == '3') {
@@ -191,10 +218,11 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                     $data['created_at'] = time();
                     $data['is_softdel'] = 1;
                     //提交给投诉接口
-                    OrderComplaint::appModel($data);
+                    $OrderComplaintinfo=new OrderComplaint;
+                    $OrderComplaintinfo->appModel($data);
                 }
-
-                return $customerComment;
+                $transaction->commit();
+                return true; 
             } catch (\Exception $e) {
                 $transaction->rollback();
                 return false;

@@ -3,6 +3,7 @@
 namespace core\models\worker;
 
 
+use core\models\customer\CustomerComment;
 use dbbase\models\Help;
 use JPush\Exception\APIRequestException;
 use Symfony\Component\Console\Helper\Helper;
@@ -106,7 +107,7 @@ class Worker extends \dbbase\models\worker\Worker
         }else{
             $workerDetailResult = self::find()
                 ->where(['id'=>$worker_id])
-                ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_star,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
+                ->select('id,shop_id,worker_name,worker_idcard,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_star,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
                 ->joinWith('workerExtRelation')
                 ->joinWith('workerStatRelation')
                 ->asArray()
@@ -117,7 +118,9 @@ class Worker extends \dbbase\models\worker\Worker
                 $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
                 $workerDetailResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerDetailResult['worker_identity_id']);
                 $workerDetailResult['worker_live_place'] = self::getWorkerPlaceShow($workerDetailResult['worker_live_province'],$workerDetailResult['worker_live_city'],$workerDetailResult['worker_live_area'],$workerDetailResult['worker_live_street']);
-                $workerDetailResult['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
+                $workerDetailResult['worker_district'] = self::getWorkerDistrict($worker_id);
+                //$workerDetailResult['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
+                $workerDetailResult['worker_comment'] = CustomerComment::getWorkerCommentCount($worker_id);
                 unset($workerDetailResult['workerStatRelation']);
                 unset($workerDetailResult['workerExtRelation']);
             }else{
@@ -795,10 +798,11 @@ class Worker extends \dbbase\models\worker\Worker
     protected static function getDayTimes(){
 
         $timeLine= [
-            '8:00','8:30','9:00','9:30','10:00',
-            '10:30','11:00','11:30','12:00','12:30',
-            '13:00','13:30','14:00','14:30','15:00','16:30',
-            '17:00','17:30','18:00','18:30','19:00','19:30',
+            '8:00','8:30','9:00','9:30',
+            '10:00','10:30','11:00','11:30','12:00',
+            '12:30','13:00','13:30','14:00','14:30',
+            '15:00','15:30','16:00','16:30','17:00',
+            '17:30','18:00','18:30','19:00','19:30',
             '20:00','20:30','21:00','21:30','22:00'
         ];
 
@@ -1300,6 +1304,18 @@ class Worker extends \dbbase\models\worker\Worker
             return [];
         }
     }
+    /**
+     * 获取阿姨所属商圈名称
+     */
+    public static function getWorkerDistrictShow($worker_id){
+        $workerDistrictArr = self::getWorkerDistrict($worker_id);
+        if($workerDistrictArr){
+            $workerDistrictNameArr = ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_name');
+            return implode(' ',$workerDistrictNameArr);
+        }else{
+            return '';
+        }
+    }
 
     /**
      * 获取阿姨地址
@@ -1331,17 +1347,22 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 获取阿姨所属商圈名称
+     * 获取地区列表
+     * @param $parent_id 父级列表
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getWorkerDistrictShow($worker_id){
-        $workerDistrictArr = self::getWorkerDistrict($worker_id);
-        if($workerDistrictArr){
-            $workerDistrictNameArr = ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_name');
-            return implode(' ',$workerDistrictNameArr);
-        }else{
-            return '';
-        }
+    public static function getAreaListByParentId($parent_id){
+        $condition = ['parent_id' => $parent_id];
+        $areaList = OperationArea::getAllData($condition);
+        return $areaList?ArrayHelper::map($areaList,'id','area_name'):[];
     }
+
+    public static function getAreaListByLevel($level){
+        $condition = ['level' => $level];
+        $areaList = OperationArea::getAllData($condition);
+        return $areaList?ArrayHelper::map($areaList,'id','area_name'):[];
+    }
+
 
     /**
      * 获取阿姨性别名称

@@ -58,7 +58,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
      */
     public static function getArrayRole()
     {
-        return ArrayHelper::map(\Yii::$app->authManager->getRoles(), 'name', 'name');
+        return ArrayHelper::map(\Yii::$app->authManager->getRoles(), 'name', 'description');
     }
     
     public function getRoleLabel()

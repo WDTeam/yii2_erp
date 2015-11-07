@@ -26,10 +26,10 @@ use core\models\shop\Shop;
 use core\models\customer\CustomerWorker;
 use core\models\operation\OperationArea;
 use core\models\worker\WorkerSkill;
+use core\models\operation\OperationShopDistrict;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerVacationApplication;
 use yii\web\ServerErrorHttpException;
-
 
 /**
  * WorkerController implements the CRUD actions for Worker model.
@@ -95,6 +95,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionView($id)
     {
+
         $workerModel = $this->findModel($id,true);
         $workerExtModel = WorkerExt::findOne($id);
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
@@ -197,7 +198,9 @@ class WorkerController extends BaseAuthController
         $workerExtModel = new WorkerExt;
         $workerStatModel = new WorkerStat();
         $workerAuthModel = new WorkerAuth();
+
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
+
             $workerModel->created_ad = time();
             $workerModel->uploadImgToQiniu('worker_photo');
             if($workerModel->save()){
@@ -223,18 +226,33 @@ class WorkerController extends BaseAuthController
                     }
                 }
                 return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
-            }else{
-                var_dump($workerModel->errors);die;
-                //\Yii::$app->session->setFlash('default', '保存失败');
-                throw new ServerErrorHttpException('录入新阿姨失败');
             }
-
-
         } else {
             return $this->render('create', [
                 'worker' => $workerModel,
                 'worker_ext' => $workerExtModel,
             ]);
+        }
+    }
+
+    /**
+     * ajax验证 阿姨信息(电话和身份证号是否唯一)
+     * @return array
+     */
+    public function actionAjaxValidateWorkerInfo(){
+        $worker_id = Yii::$app->request->get('worker_id');
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //修改阿姨
+        if ($worker_id) {
+            $workerModel = $this->findModel($worker_id);
+            $workerModel->load(Yii::$app->request->post());
+            return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
+        //添加阿姨
+        }else{
+            $workerModel = new Worker;
+            $workerModel->load(Yii::$app->request->post());
+            return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
+
         }
     }
 
@@ -325,13 +343,13 @@ class WorkerController extends BaseAuthController
      * @param q string 关键字
      * @return result array 门店信息
      */
-    public function actionShowShop($q = null)
+    public function actionShowShop($city_id=null,$q = null)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
         $condition = '';
-        if($q!=null){
-            $condition = 'name LIKE "%' . $q .'%"';
+        if($city_id){
+            $condition = ['city_id'=>$city_id];
         }
         $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
         $out['results'] = array_values($shopResult);
@@ -339,6 +357,39 @@ class WorkerController extends BaseAuthController
         return $out;
     }
 
+    public function actionShowDistrict($city_id=null,$q=null){
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if(empty($city_id)){
+            return $out;
+        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $data = OperationShopDistrict::getCityShopDistrictList($city_id);
+        $new_data = [];
+        foreach ((array)$data as $val) {
+            $new_data[] = ['id'=>$val['id'],'text'=>$val['operation_shop_district_name']];
+        }
+        $out['results']=$new_data;
+        return $out;
+    }
+
+    public function actionShowArea($parent_id,$name=null){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if(empty($parent_id)){
+            return $out;
+        }
+        $condition = "parent_id=$parent_id";
+        if(!empty($name)){
+            $condition .= " and area_name like '%$name%'";
+        }
+        $data = OperationArea::getAllData($condition);
+        $new_data = [];
+        foreach ((array)$data as $val) {
+            $new_data[] = ['id'=>$val['id'],'text'=>$val['area_name']];
+        }
+        $out['results']=$new_data;
+        return $out;
+    }
 
     /**
      * 创建阿姨请假信息
@@ -749,10 +800,11 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        echo '星期1 8:00 10:00';
+        //var_dump(Worker::getWorkerDetailInfo(19077));die;
+        //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
-        echo '<br>';
-        //var_dump(Worker::getWorkerTimeLine(1,2));
+        //echo '<br>';
+        var_dump(Worker::getWorkerTimeLine(1,2));die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
