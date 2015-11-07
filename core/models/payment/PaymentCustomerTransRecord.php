@@ -237,9 +237,10 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         $transRecord['order_channel_id'] = $orderInfo['channel_id'];   //订单渠道
         $transRecord['payment_customer_trans_record_order_channel'] = $orderInfo['order_channel_name']; //	订单渠道名称
-        $transRecord['pay_channel_id'] = $payment_data['pay_channel_id'] ? $payment_data['pay_channel_id'] : 0;   //	支付渠道
-        $transRecord['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($payment_data['pay_channel_id']); //	支付渠道名称
+        $transRecord['pay_channel_id'] = $payment_data['payment_channel_id'] ? $payment_data['payment_channel_id'] : 0;   //	支付渠道
+        $transRecord['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($payment_data['payment_channel_id']); //	支付渠道名称
         $transRecord['payment_customer_trans_record_mode_name'] = self::getCustomerTransRecordModeByName($transRecord['payment_customer_trans_record_mode']); //	交易方式名称
+        $transRecord['payment_customer_trans_record_eo_order_id'] = $payment_data['payment_eo_order_id'];    //商户订单号
 
         //创建记录日志
         try {
