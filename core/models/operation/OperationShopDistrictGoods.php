@@ -53,7 +53,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
             //如果没有输入销售价格,过滤掉
             if (!isset($values) || empty($values)) {
-                break;
+                continue;
             }
 
             //服务项目的数据

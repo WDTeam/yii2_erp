@@ -14,7 +14,7 @@ use boss\components\SearchBox;
 $this->title = Yii::t('app', 'Operation Selected Service');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="operation-goods-index">
+<div class="operation-selected-service-index">
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
