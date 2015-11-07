@@ -141,7 +141,7 @@ class AuthController extends \restapi\components\Controller
      *     { 
      *       "code":"0",
      *       "msg": "用户名,签名或渠道id错误",
-     *       "ret": null
+     *       "ret": null 
      *     }
      */
     public function actionLoginFromPop()
