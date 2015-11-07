@@ -60,16 +60,12 @@ class RoleController extends BaseAuthController
     public function actionUpdate($id)
     {
         $name = $id;
-        if($name == 'admin') {
-            Yii::$app->session->setFlash('success', Yii::t('app', 'The Administrator has all permissions'));
-            return $this->redirect(['view', 'id' => $name]);
-        }
         $model = $this->findModel($name);
         if ($model->load(Yii::$app->request->post())) {
             $permissions = $this->preparePermissions(Yii::$app->request->post());
             if($model->updateRole($name, $permissions)) {
                 Yii::$app->session->setFlash('success', " '$model->name' " . Yii::t('app', 'successfully updated'));
-                return $this->redirect(['view', 'id' => $name]);
+                return $this->redirect(['update', 'id' => $name]);
             }
         } else {
             $permissions = $this->getPermissions();
