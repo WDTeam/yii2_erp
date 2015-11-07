@@ -29,8 +29,8 @@ use kartik\widgets\FileInput;
             'form' => $form,
             'columns' => 1,
             'attributes' => [
-                'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务类型名称...', 'maxlength'=>30]],
-                'operation_category_price_description'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务类型价格备注...', 'maxlength'=>30]],
+                'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务品类名称...', 'maxlength'=>30]],
+                'operation_category_price_description'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'输入服务品类价格备注...', 'maxlength'=>30]],
             ]
 
 

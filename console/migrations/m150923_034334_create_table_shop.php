@@ -38,6 +38,19 @@ class m150923_034334_create_table_shop extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ");
+        
+        $this->insert('{{%shop}}', [
+            'id'=>1,
+            'name'=>'E家洁自营门店',
+            'shop_manager_id'=>1,
+            'province_id'=>110000,
+            'city_id'=>110100,
+            'county_id'=>110105,
+            'street'=>'光华SOHO 2单元708',
+            'principal'=>'云涛',
+            'tel'=>'123456',
+            'audit_status'=>1
+        ]);
     }
 
     public function down()

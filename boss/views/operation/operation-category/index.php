@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //           'id',
             [
-                'header'=>"服务类型",
+                'header'=>"服务品类",
                 'attribute'=>'operation_category_name'
             ],
             [
@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a(
                             '<span class="glyphicon glyphicon-list"></span>',
                             Yii::$app->urlManager->createUrl(['/operation/operation-category-type','category_id' => $model->id]),
-                            ['title' => Yii::t('yii', '服务类型列表'), 'class' => 'btn btn-warning btn-sm',]
+                            ['title' => Yii::t('yii', '服务品类列表'), 'class' => 'btn btn-warning btn-sm',]
                         );
                     },
                 ],
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
             'before'=>
-            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务类型', ['create'], ['class' => 'btn btn-success']).
+            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).
             Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务项目', ['/operation/operation-goods/create'], ['class' => 'btn btn-success']).
             Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理', ['/operation/operation-spec'], ['class' => 'btn btn-success']),
             'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
