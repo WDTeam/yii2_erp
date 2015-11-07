@@ -817,10 +817,10 @@ class Order extends OrderModel
             'order_lng' => $address['customer_address_longitude']
         ]);
 
-        $range = date('G:i',$this->order_booked_end_time).'-'.date('G:i',$this->order_booked_begin_time);
+        $range = date('G:i',$this->order_booked_begin_time).'-'.date('G:i',$this->order_booked_end_time);
         $ranges = $this->getThisOrderBookedTimeRangeList();
         if(!in_array($range,$ranges)){
-            $this->addError('order_booked_count', "该时间段没有服务的阿姨！");
+            $this->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
             return false;
         }
 
