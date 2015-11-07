@@ -1251,9 +1251,8 @@ class OrderController extends \restapi\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-            $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
-
-            if ($orderValidation) {
+          #  $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
+            #if ($orderValidation) {
                 /**
                  * $order_id订单号
                  * $amdin_id管理员id,没有请填写0
@@ -1270,8 +1269,9 @@ class OrderController extends \restapi\components\Controller
                 }
 
                 try {
+                   
                     $result = Order::cancelByOrderCode($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-
+                    
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                     } else {
@@ -1283,9 +1283,9 @@ class OrderController extends \restapi\components\Controller
             } else {
                 return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200, NULL, alertMsgEnum::orderCancelFaile);
             }
-        } else {
-            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200, null, alertMsgEnum::orderCancelFaile);
-        }
+//        } else {
+//            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200, null, alertMsgEnum::orderCancelFaile);
+//        }
     }
 
     /**
