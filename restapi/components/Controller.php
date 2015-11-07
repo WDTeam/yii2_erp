@@ -31,7 +31,7 @@ class Controller extends \yii\rest\Controller
      */
     public function send($ret, $msg = "操作成功", $code = 1, $value = 200, $text = null, $alertMsg = "")
     {
-        //$value = 200;
+        $value = 200;
         if (is_null($ret)) $ret = new Object();
         $result = [
             'code' => $code,
