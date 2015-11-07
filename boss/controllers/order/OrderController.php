@@ -18,6 +18,7 @@ use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use core\models\system\SystemUser;
 
+use dbbase\models\order\OrderOtherDict;
 use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtPay;
 
@@ -35,7 +36,7 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Yii::$app->params;
+        return Order::cancelByOrderCode('101511045457209',1,OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE,'测试');
 //        return Order::serviceStart(2);
     }
 

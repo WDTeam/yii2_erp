@@ -697,12 +697,6 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            //如果是第三方订单则同步状态到第三方
-            if($order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
-                if(!OrderPop::cancelToPop($order)) { //第三方同步失败则直接取消失败
-                    return false;
-                }
-            }
             $transact = static::getDb()->beginTransaction();
             $result = OrderStatus::_cancel($order,[],$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT
