@@ -42,7 +42,7 @@ class ShopManagerController extends BaseAuthController
     {
         $ids = \Yii::$app->user->identity->getShopManagerIds();
         if(!\Yii::$app->user->can('group_shopmanager_admin') && !in_array($id, $ids)){
-            throw new BadRequestHttpException(403, '没有访问权限');
+            throw new BadRequestHttpException('没有访问权限', 403);
         }
     }
 
