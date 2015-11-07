@@ -292,7 +292,6 @@ class ConfigureController extends \restapi\components\Controller
      * @apiDescription 检查阿姨端版本更新 (赵顺利)
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
-     *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
