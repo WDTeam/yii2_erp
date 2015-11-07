@@ -337,7 +337,7 @@ class OrderController extends BaseAuthController
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
             if ($model->createNew($post)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->order_code]);
             }
         } else {//init
             $model->order_booked_count = 2; //服务时长初始值2小时
@@ -557,13 +557,13 @@ class OrderController extends BaseAuthController
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
+     * @param string $code
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($code)
     {
-        if (($model = Order::findOne($id)) !== null) {
+        if (($model = OrderSearch::getOneByCode($code)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
