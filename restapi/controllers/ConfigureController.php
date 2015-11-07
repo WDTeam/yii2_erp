@@ -244,7 +244,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code":"0",
+     *       "code":0,
      *       "alertMsg": "城市尚未开通",
      *       "msg": "城市尚未开通"
      *     }
@@ -273,19 +273,9 @@ class ConfigureController extends \restapi\components\Controller
         }
         //整理开通的服务类型
         $serviceGoodsList = array();
-//         'category_id' => '2',
-//                'category_name' => '洗护服务',
-//                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
-//                'category_url' => 'http://dev.m2.1jiajie.com/#/typeServer/washProtect',
-//                'category_introduction' => '衣服、皮鞋、美包',
-//                'category_price' => '9.00',
-//                'category_price_unit' => '件',
-//                'category_price_description' => '￥9/件起',
-//                'colour' => '7fce0f',
-//                'sort' => '3',
-                 
         foreach($cityShopDistrictGoodsList as $key=>$val){
             if($val['operation_shop_district_goods_status']!=1) continue;
+            $serviceGoodsList[$key]['category_id'] = $val['operation_category_id'];
             $serviceGoodsList[$key]['category_name'] = $val['operation_category_name'];
             $serviceGoodsList[$key]['category_icon'] = $val['operation_goods_img'];
             $serviceGoodsList[$key]['category_introduction'] = $val['operation_shop_district_goods_introduction'];
@@ -293,10 +283,6 @@ class ConfigureController extends \restapi\components\Controller
             $serviceGoodsList[$key]['category_price_unit'] = $val['operation_spec_strategy_unit'];
             $serviceGoodsList[$key]['colour'] = "7fce0f";
         }
-        
-        
-        
-        
         //页首链接
         $header_link = [
             'comment_link' => [
@@ -310,6 +296,7 @@ class ConfigureController extends \restapi\components\Controller
                 'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png',
             ],
         ];
+        
         //获取首页轮播图
         $pic_list = [
             [
@@ -328,6 +315,7 @@ class ConfigureController extends \restapi\components\Controller
                 "url_title" => ""
             ]
         ];
+        //服务分类
         $home_order_server = [
             [
                 'title' => '单次保洁',
@@ -364,7 +352,7 @@ class ConfigureController extends \restapi\components\Controller
 
         ];
         //获取该城市的首页服务类型
-//        $server_list = [
+//        $serviceGoodsList = [
 //            [
 //                'category_id' => '6',
 //                'category_name' => '保洁任务',
