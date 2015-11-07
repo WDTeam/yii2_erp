@@ -44,12 +44,14 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
             //去掉接收数据中没有选中的或是没有输入销售价格的服务项目
             foreach ($values as $key => $value) {
-                if (!isset($value['operation_goods_id']) || $value['operation_goods_id'] == '' || !isset($value['operation_goods_price']) || $value['operation_goods_price'] == '' || !isset($value['district']) || empty($value['district'])) {
+                if (!isset($value['operation_goods_id']) || $value['operation_goods_id'] == ''
+                    || !isset($value['operation_goods_price']) || $value['operation_goods_price'] == ''
+                    || !isset($value['district']) || empty($value['district'])) {
                     unset($values[$key]);
                 }
             }
 
-            //如果没有输入销售价格,不能上线
+            //如果没有输入销售价格,过滤掉
             if (!isset($values) || empty($values)) {
                 break;
             }
@@ -59,6 +61,9 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 $operation_goods_id = $value['operation_goods_id'];
                 $operation_goods_name = $value['operation_goods_name'];
                 $operation_goods_price = $value['operation_goods_price'];
+
+                //删除掉旧数据，再插入新数据
+                self::delCityShopDistrictGoods($operation_goods_id, $city_id);
 
                 $operation_goods_market_price = $value['operation_goods_market_price'] ?  $value['operation_goods_market_price']: 0;
 
@@ -385,8 +390,9 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
     /**
      * 删除城市下边商品
-     * @param type $goods_id
-     * @param type $city_id
+     *
+     * @param inter $goods_id    服务项目编号
+     * @param inter $city_id     上线城市编号
      */
     public static function delCityShopDistrictGoods($goods_id, $city_id){
         return self::deleteAll(['operation_goods_id' => $goods_id, 'operation_city_id' => $city_id]);
@@ -519,7 +525,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     }
 
     /**
-     * 根据商品id获取商品在商圈的具体信息
+     * 根据服务项目id和城市id获取商品在商圈的具体信息
      *
      * @param  inter  $shop_district_id    商品在商圈里的编号
      * @return array  $result              上线商品的信息

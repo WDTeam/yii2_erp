@@ -60,7 +60,7 @@ class OperationCityController extends BaseAuthController
     }
     
     /**
-     *
+     * 上线城市列表
      */
     public function actionOpencity(){
         $citylist = OperationCity::getCityOnlineInfoList();
@@ -119,9 +119,7 @@ class OperationCityController extends BaseAuthController
                 \Yii::$app->getSession()->setFlash('default','该城市已开通过！');
                 return $this->redirect(['create']);
             }
-//            $path = UploadFile::widget(['fileInputName' => 'file']);
-//            echo $path;exit;
-//            print_r($_FILES);exit;
+
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();
@@ -196,6 +194,7 @@ class OperationCityController extends BaseAuthController
 
     /**
      * 城市列表
+     *
      * @return type
      */
     public function actionRelease(){
@@ -223,7 +222,7 @@ class OperationCityController extends BaseAuthController
 
     
     /**
-     * 添加服务
+     * 添加和更新服务项目
      *
      * @param $city_id
      */
@@ -232,29 +231,32 @@ class OperationCityController extends BaseAuthController
 
         $post = Yii::$app->request->post();
 
+        //获取服务类型数据
+        $categoryinfo = OperationCategory::getCategoryList();
+        $categorylist = array();
+        $goods = array();
+
+        //获取服务项目数据
+        foreach ((array)$categoryinfo as $key => $value) {
+            $categorylist[$value['id']] = $value['operation_category_name'];
+            $goods[$value['id']] = OperationGoods::find()
+                ->where(['operation_category_id' => $value['id']])
+                ->asArray()
+                ->all();
+        }
+
+        //获取对应城市商圈数据
+        $shopdistrictinfo = [];
+        $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
+        foreach ((array)$shopdistrict as $key => $value) {
+            $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
+        }
+
+        $city_name = OperationCity::getCityName($city_id);
+
+        //添加服务项目
         if(empty($post) && isset($action) && $action == 'create') {
-            $categoryinfo = OperationCategory::getCategoryList();
 
-            $categorylist = array();
-            $goods = array();
-
-            //获取服务类型数据
-            foreach ((array)$categoryinfo as $key => $value) {
-                $categorylist[$value['id']] = $value['operation_category_name'];
-                $goods[$value['id']] = OperationGoods::find()
-                    ->where(['operation_category_id' => $value['id']])
-                    ->asArray()
-                    ->all();
-            }
-
-            //获取对应城市商圈数据
-            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-            $shopdistrictinfo = [];
-            foreach ((array)$shopdistrict as $key => $value) {
-                $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
-            }
-
-            $city_name = OperationCity::getCityName($city_id);
             return $this->render('addgoods', [
                 'action' => $action,
                 'city_id' => $city_id,
@@ -264,10 +266,13 @@ class OperationCityController extends BaseAuthController
                 'shopdistrictinfo' => $shopdistrictinfo,
             ]);
 
-        } elseif (isset($goods_id) && isset($action) && $goods_id != 0 && $action = 'editGoods') {
+        //更新服务项目
+        } elseif (isset($goods_id) && $goods_id != 0 && isset($action) && $action = 'editGoods') {
+
             //编辑的商品具体信息
             $districtgoodsinfo = [];
             $districtgoodslist = OperationShopDistrictGoods::getDistrictGoodsInfo($goods_id, $city_id);
+
             //处理为前端页面容易使用的格式
             foreach ($districtgoodslist as $keys => $values) {
                 $districtgoodsinfo['operation_goods_id'] = $values['operation_goods_id'];
@@ -279,31 +284,6 @@ class OperationCityController extends BaseAuthController
                 $districtgoodsinfo['operation_shop_district_id'][] = $values['operation_shop_district_id'];
             }
 
-            //echo '<pre>';
-            //print_r($districtgoodsinfo);die;
-
-            $categoryinfo = OperationCategory::getCategoryList();
-
-            $categorylist = array();
-            $goods = array();
-
-            //获取服务类型数据
-            foreach ((array)$categoryinfo as $key => $value) {
-                $categorylist[$value['id']] = $value['operation_category_name'];
-                $goods[$value['id']] = OperationGoods::find()
-                    ->where(['operation_category_id' => $value['id']])
-                    ->asArray()
-                    ->all();
-            }
-
-            //获取对应城市商圈数据
-            $shopdistrictinfo = [];
-            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-            foreach ((array)$shopdistrict as $key => $value) {
-                $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
-            }
-
-            $city_name = OperationCity::getCityName($city_id);
             return $this->render('settinggoodsinfo', [
                 'action' => $action,
                 'city_id' => $city_id,
@@ -314,24 +294,15 @@ class OperationCityController extends BaseAuthController
                 'districtgoodsinfo' => $districtgoodsinfo,
             ]);
         } else {
-            if(empty($post['categorygoods'])){
-                return $this->redirect(['addgoods', 'city_id' => $city_id, 'action' => $action]);
-            }
-            $categorylist = $post['categorylist'];  //服务品类
-            $categorygoods = explode('-', $post['categorygoods']); //服务
-            $goods_id = $categorygoods[0];
-
             return $this->redirect([
-                'settinggoodsinfo',
-                'city_id' => $city_id,
-                'goods_id' => $goods_id,
-                'action' => $action
+                'opencity',
             ]);
         }
     }
 
     /**
      * 设置服务并开通该城市
+     *
      * @param $city_id
      * @param $goods_id
      * @return string
@@ -341,49 +312,15 @@ class OperationCityController extends BaseAuthController
         $post = Yii::$app->request->post();
         $goodsInfo = OperationGoods::getGoodsInfo($goods_id);
 
-        //echo '<pre>';
-        //print_r($post);die;
-        //设置页面渲染
         if (!isset($post) || empty($post)) {
-            //$shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-            //$shopdistrictinfo = [];
-            //foreach ((array)$shopdistrict as $key => $value) {
-                //$shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
-            //}
-            //$city_name = OperationCity::getCityName($city_id);
-            //$shopdistrictinfoall = [];
-            //$goodsshopdistrictinfo = [];
-            //$citys = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
-            //if($action == 'editGoods' || !empty($citys)){
-                //$cityshopdistrictgoodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
-
-                //foreach((array)$cityshopdistrictgoodsinfo as $key => $value){
-                    //[>*查找该商品上线的数据*<]
-                    //if($value['operation_shop_district_goods_status'] == 1){
-                        //$shopdistrictinfoall[] = $value['operation_shop_district_id'];
-                        //$goodsshopdistrictinfo[$value['operation_shop_district_id']] = $value;
-                    //}
-                //}
-            //}
-            //return $this->render('settinggoodsinfo', [
-                //'city_id' => $city_id,
-                //'city_name' => $city_name,
-                //'goodsInfo' => $goodsInfo,
-                //'action' => $action,
-                //'shopdistrictinfo' => $shopdistrictinfo,
-                //'shopdistrictinfoall' => $shopdistrictinfoall,
-                //'goodsshopdistrictinfo' => $goodsshopdistrictinfo,
-            //]);
-            //return $this->redirect(['opencity']);
+            return $this->redirect(['opencity']);
         } else {
-            echo '<pre>';
-            print_r($post);die;
             OperationShopDistrictGoods::saveOnlineCity($post);
 
             if ($city_id == '') {
                 $city_id = $post['city_id'];
             }
-            //开通城市
+            //设置开通城市状态
             OperationCity::setoperation_city_is_online($city_id);
             return $this->redirect(['opencity']);
         }

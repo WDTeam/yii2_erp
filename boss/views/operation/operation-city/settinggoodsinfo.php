@@ -110,7 +110,15 @@ $form = ActiveForm::begin([
                     } 
         ?>
         <?php
-                    echo '><input id="goods_'. $key . $k .'" type="radio" name="'. $key . '['. $v['id'] .']' .'[operation_goods_id]" value="'.$v['id'].'"/>'.$v['operation_goods_name'].'</label><br>';
+                    echo '><input id="goods_'. $key . $k .'" type="radio" name="'. $key . '['. $v['id'] .']' .'[operation_goods_id]" value="'.$v['id'].'"';
+        ?>
+        <?php
+                    if($v['id'] == $districtgoodsinfo['operation_goods_id']){
+                        echo 'checked="checked"';
+                    } 
+        ?>
+        <?php
+                    echo '/>'.$v['operation_goods_name'].'</label><br>';
                 }
                 echo "</div>";
                 echo '</div>';
