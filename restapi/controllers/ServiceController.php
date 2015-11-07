@@ -94,7 +94,7 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /service/service-items [GET] ( for pop )
+     * @api {GET} /service/service-items [GET] /service/service-items ( for pop )
      * @apiName actionServiceItems
      * @apiGroup service
      * @apiDescription 获得所有服务项目[服务id, 服务编号,服务名,服务描述,服务英文名称]
