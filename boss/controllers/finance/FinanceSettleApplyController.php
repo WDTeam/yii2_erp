@@ -203,20 +203,29 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSearchModel = new FinanceSettleApplySearch;
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSearchModel->scenario = 'query';
-        $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
-        $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
-        $financeSearchModel->load($requestParams);
-        if(!empty($financeSearchModel->worker_tel)){
-            $financeSearchModel->worker_id = $financeSearchModel->getWorkerIdByWorkerTel($financeSearchModel->worker_tel);
+        $isExport = 0;
+        if(isset($requestParams['isExport'])){
+            $isExport = 1;
         }
-        $requestPhone = $financeSearchModel->worker_tel;
-        $financeSearchModel->worker_tel = null;
-        $dataProvider = $financeSearchModel->search(null);
-        $financeSearchModel->worker_tel = $requestPhone;
-        return $this->render('query', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $financeSearchModel,
-        ]);
+        if($isExport == 0){
+            $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
+            $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
+            $financeSearchModel->load($requestParams);
+            if(!empty($financeSearchModel->worker_tel)){
+                $financeSearchModel->worker_id = $financeSearchModel->getWorkerIdByWorkerTel($financeSearchModel->worker_tel);
+            }
+            $requestPhone = $financeSearchModel->worker_tel;
+            $financeSearchModel->worker_tel = null;
+            $dataProvider = $financeSearchModel->search(null);
+            $financeSearchModel->worker_tel = $requestPhone;
+            return $this->render('query', [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $financeSearchModel,
+            ]);
+        }
+        if($isExport == 1){
+            $this->export($requestParams);
+        }
     }
     
     /**
@@ -226,7 +235,7 @@ class FinanceSettleApplyController extends BaseAuthController
      * 3.写入每个阿姨实时的收入数据
      * @return type
      */
-    public function actionExport(){
+    public function export($requestParams){
         $exportArray = [];
         $financeSearchModel = new FinanceSettleApplySearch;
         $financeSettleApplySearchArray = $financeSearchModel->getCanPayedSettlementList();
