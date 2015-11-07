@@ -10,38 +10,38 @@ use yii\widgets\Pjax;
  * @var boss\models\operation\coupon\CouponUserinfo $searchModel
  */
 
-$this->title = Yii::t('app', 'Coupon Userinfos');
+$this->title = Yii::t('app', '优惠券用户管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coupon-userinfo-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
+   
+   <div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i>优惠券用户搜索</h3>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Coupon Userinfo',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <div class="panel-body">
+        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+        </div>
+    </div>
+   
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'customer_id',
             'customer_tel',
             'coupon_userinfo_id',
             'coupon_userinfo_code',
-//            'coupon_userinfo_name', 
-//            'coupon_userinfo_price', 
-//            'coupon_userinfo_gettime:datetime', 
-//            'coupon_userinfo_usetime:datetime', 
-//            'coupon_userinfo_endtime:datetime', 
-//            'order_code', 
+            'coupon_userinfo_name', 
+            'coupon_userinfo_price', 
+            'coupon_userinfo_gettime:datetime', 
+            'coupon_userinfo_usetime:datetime', 
+            'coupon_userinfo_endtime:datetime', 
+            'order_code', 
 //            'system_user_id', 
 //            'system_user_name', 
 //            'is_used', 
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['coupon-userinfo/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
+                                                    'title' => Yii::t('yii', '修改'),
                                                   ]);}
 
                 ],
@@ -65,13 +65,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed'=>true,
         'floatHeader'=>true,
 
-
-
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
-            'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'type'=>'info', 
+			'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 添加绑定手机号', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                     
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>
