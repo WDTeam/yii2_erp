@@ -521,7 +521,6 @@ class Order extends OrderModel
             }
 
             if($result) {
-                //TODO 如果是第三方订单则同步状态过去
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //更新阿姨接单数量 第二个参数是阿姨的接单次数
                 $transact->commit();
