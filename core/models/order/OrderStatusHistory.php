@@ -26,5 +26,15 @@ class OrderStatusHistory extends \dbbase\models\order\OrderStatusHistory
        ])->select('order_id,created_at,order_before_status_dict_id,order_status_dict_id')->one();
     }
 
+
+    /**
+     * 查询状态历史
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findByOrderId($order_id)
+    {
+        return self::find()->where(["order_id" => $order_id])->orderBy(["order_id" => SORT_DESC])->all();
+    }
    
 }

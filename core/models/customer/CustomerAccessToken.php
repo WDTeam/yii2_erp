@@ -138,7 +138,7 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     public static function generateAccessTokenForPop($phone, $sign, $channal_id=1){
         $check_sign = self::checkSign($phone, $sign, $channal_id);
         if (!$check_sign) {
-            return false;
+            return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'验证签名失败'];
         }
         $is_block_arr_info = Customer::isBlockByPhone($phone);
         if($is_block_arr_info['response'] == 'success' && $is_block_arr_info['is_block'] == 1){
@@ -185,11 +185,11 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $customerAccessToken->validate();
             $customerAccessToken->save();
             $transaction->commit();
-            return $customerAccessToken->customer_access_token;
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'access_token'=>$customerAccessToken->customer_access_token];
 
         }catch(\Exception $e){
             $transaction->rollback();
-            return false;
+            return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'生成access token失败'];
         }
     }
     

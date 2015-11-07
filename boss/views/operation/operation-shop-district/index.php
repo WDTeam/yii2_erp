@@ -48,11 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=>"上线状态",
                 'attribute'=> 'operation_shop_district_status',
                 'format'=>'html',
-                'value' => function ($model) {
-                    if ($model->operation_shop_district_status == 1) {
-                        return '未上线';
-                    } elseif ($model->operation_shop_district_status == 2) {
+                'value' => function ($model) use ($districtModel) {
+                    $id = $districtModel::getShopDistrict($model->id);
+                    if ($id > 0) {
                         return '已上线';
+                    } elseif ($id == 0) {
+                        return '未上线';
                     } else {
                         return '状态异常，请手动编辑状态';
                     }
@@ -79,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'delete' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '删除'), ['/operation/operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
+                        return Html::a(Yii::t('yii', '删除'), ['/operation/operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"删除商圈将删除商圈下的服务项目，\n您确定要删除吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['/operation/operation-shop-district/delete','id' => $model->id]),

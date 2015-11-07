@@ -59,7 +59,20 @@ class FinancePopOrderController extends Controller
     
     public function actionIndexredis()
     {
-    	$name='gaofengceshi';
+    	
+    	echo sprintf("%'.06d\n", 1);  exit;
+    	
+    
+    	
+    	
+    	
+    	
+    	//\Yii::$app->redis->SADD($name,$datainfo);
+    	
+    	//exit;
+   // $rty=\Yii::$app->redis->EXISTS($name);
+    	//var_dump($rty);exit;
+    	
     	//添加
     	//\Yii::$app->redis->SADD($name,$datainfo);
     	//一共有多少的数量
