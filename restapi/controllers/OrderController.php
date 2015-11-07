@@ -1757,19 +1757,6 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * 智能派单自动推送访问接口
-     *
-     * @author  linhongyou
-     * @param $id
-     * @return array
-     */
-    public function actionPush($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderPush::push($id);
-    }
-
-    /**
      * @api {GET} /order/get-customer-recursive-order [GET]/order/get-customer-recursive-order(100%）
      *
      * @apiDescription 获取周期订单 （郝建设）
@@ -1939,6 +1926,19 @@ class OrderController extends \restapi\components\Controller
         } catch (Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::orderGetOrderWorkerFaile);
         }
+    }
+
+    /**
+     * 智能派单自动推送访问接口
+     *
+     * @author  linhongyou
+     * @param $id
+     * @return array
+     */
+    public function actionPush($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderPush::push($id);
     }
 
 }
