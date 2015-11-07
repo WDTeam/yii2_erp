@@ -18,9 +18,8 @@ use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
-use boss\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
-use dbbase\models\order\OrderStatusDict;
+use core\models\order\OrderStatusDict;
 
 
 class Order extends OrderModel
@@ -59,6 +58,16 @@ class Order extends OrderModel
             '很久没打扫了'=>'很久没打扫了',
             '阿姨不要很多话'=>'阿姨不要很多话'
         ];
+    }
+
+    public static function getStatusDictList($status_id = 0)
+    {
+        return OrderStatusDict::getBossStatusDictList($status_id);
+    }
+
+    public function getStatusHistoryTime()
+    {
+        return ArrayHelper::map($this->orderStatusHistory, 'order_status_dict_id', 'created_at');
     }
 
     /**

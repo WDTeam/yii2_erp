@@ -86,6 +86,12 @@ class OrderExtPay extends ActiveRecord
         ];
     }
 
+    public function getOrderPayTypeName()
+    {
+        $names = $this->orderPayTypeLabels();
+        return isset($names[$this->order_pay_type])?$names[$this->order_pay_type]:'未支付';
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

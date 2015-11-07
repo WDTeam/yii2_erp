@@ -2,8 +2,6 @@
 
 namespace boss\models\order;
 
-use core\models\order\Order;
-
 use Yii;
 use yii\data\ActiveDataProvider;
 use boss\models\worker\Worker;
