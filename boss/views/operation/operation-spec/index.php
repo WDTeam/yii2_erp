@@ -45,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {update}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['/operation/operation-spec/update','id' => $model->id]), ['title' => Yii::t('yii', 'Edit'),]);
