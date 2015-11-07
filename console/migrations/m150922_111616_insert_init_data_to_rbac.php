@@ -61,14 +61,14 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'description'=>'显示左侧菜单栏-阿姨管理模块',
         ]);
         $this->insert('{{%auth_item}}', [
-            'name'=>'group_shop_admin',
+            'name'=>'all_shop_admin',
             'type'=>2,
-            'description'=>'管理所有门店',
+            'description'=>'门店全部功能',
         ]);
         $this->insert('{{%auth_item}}', [
-            'name'=>'group_shopmanager_admin',
+            'name'=>'all_shopmanager_admin',
             'type'=>2,
-            'description'=>'管理所有家政',
+            'description'=>'家政全部功能',
         ]);
         /**
          * 添加角色
@@ -79,17 +79,17 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'description'=>'超级管理员',
         ]);
         $this->insert('{{%auth_item}}', [
-            'name'=>'shop_manager_group',
+            'name'=>'group_shop_manager',
             'type'=>1,
             'description'=>'小家政公司组',
         ]);
         $this->insert('{{%auth_item}}', [
-            'name'=>'shop_group',
+            'name'=>'group_shop',
             'type'=>1,
             'description'=>'门店组',
         ]);
         $this->insert('{{%auth_item}}', [
-            'name'=>'mini_box_group',
+            'name'=>'group_mini_box',
             'type'=>1,
             'description'=>'MiNi BOX 组',
         ]);
@@ -139,11 +139,11 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         ]);
         $this->insert('{{%auth_item_child}}', [
             'parent'=>'super_admin',
-            'child'=>'group_shopmanager_admin',
+            'child'=>'all_shopmanager_admin',
         ]);
         $this->insert('{{%auth_item_child}}', [
             'parent'=>'super_admin',
-            'child'=>'group_shop_admin',
+            'child'=>'all_shop_admin',
         ]);
         /**
          * 给用户分配角色
@@ -165,7 +165,7 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'user_id'=>4,
         ]);
         $this->insert('{{%auth_assignment}}', [
-            'item_name'=>'mini_box_group',
+            'item_name'=>'group_mini_box',
             'user_id'=>5,
         ]);
     }
