@@ -102,7 +102,7 @@ $(document).on("click",".cancel_address_btn",function(){
             + v.customer_address_nickname + ' '
             + v.customer_address_phone + '</label>' +
             '<label class="col-sm-4" style="color: #FF0000;">' +
-            (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
+            (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
             '</label>' +
             '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
         );
@@ -153,7 +153,7 @@ $(document).on("click",".save_address_btn",function(){
                     + v.customer_address_nickname + ' '
                     + v.customer_address_phone + '</label>' +
                     '<label class="col-sm-4" style="color: #FF0000;">' +
-                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
+                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
                     '</label>' +
                     '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
                 );
@@ -270,7 +270,7 @@ function getGoods(){
                     );
                 }
             }else{
-                alert(data.msg);
+                $("#order-order_service_item_id").html('<p style="font-size: 14px;" class="form-control-static">'+data.msg+'</p>');
             }
         }
     });
@@ -359,7 +359,7 @@ function getCustomerInfo(){
                                         + v.customer_address_nickname + ' '
                                         + v.customer_address_phone + '</label>' +
                                         '<label class="col-sm-4" style="color: #FF0000;">' +
-                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
+                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
                                         '</label>' +
                                         '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
                                         '</div>'

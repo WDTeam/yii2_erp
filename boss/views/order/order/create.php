@@ -60,10 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
                 <div class="form-group field-order-order_service_item_id required">
-                    <label for="order-order_service_item_id" class="control-label col-sm-3">选择服务项</label>
+                    <label for="order-order_service_item_id" class="control-label col-sm-3">服务项目</label>
                     <div class="col-sm-6">
                         <input type="hidden" value="" name="Order[order_service_item_id]">
-                        <div id="order-order_service_item_id"></div>
+                        <div id="order-order_service_item_id"><p class="form-control-static" style="font-size: 14px;">根据服务地址获取该地址的可服务项目。</p></div>
                         <div class="help-block help-block-error "></div>
                     </div>
                 </div>
