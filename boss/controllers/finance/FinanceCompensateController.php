@@ -119,7 +119,7 @@ class FinanceCompensateController extends Controller
      */
     public function actionCreate()
     {
-        $model = new FinanceCompensate;
+        $model = new FinanceCompensateSearch;
         $postParams = null;
         if(Yii::$app->request->post() != null){
             $postParams = Yii::$app->request->post();
@@ -207,7 +207,7 @@ class FinanceCompensateController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = FinanceCompensate::findOne($id)) !== null) {
+        if (($model = FinanceCompensateSearch::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
