@@ -286,6 +286,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_total_money',    //交易总额
                 'payment_customer_trans_record_service_card_on', //服务卡ID
                 'payment_customer_trans_record_service_card_pay', //服务卡内容
+                'payment_customer_trans_record_eo_order_id',
                 'payment_customer_trans_record_verify',
             ],
             //1=在线支付（在线）onlinePay

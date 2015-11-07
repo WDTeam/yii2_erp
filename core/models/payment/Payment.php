@@ -1498,14 +1498,17 @@ class Payment extends \dbbase\models\payment\Payment
                     'order_id' => $order_id,
                     'payment_money' => $orderInfo['order_pay_money'],   //订单支付金额
                     'payment_actual_money' => $paymentInfo['payment_actual_money'],     //实际支付金额
+                    'payment_source' => $paymentInfo['payment_source'],
                     'payment_channel_id' => $paymentInfo['payment_channel_id'],
                     'payment_channel_name' => $paymentInfo['payment_channel_name'],
                     'payment_mode' => 3,    //退款
                     'payment_status' => 1,  //退款成功状态
+                    'payment_transaction_id'=>0,
                     'payment_memo' => '',
                     'payment_type' => 4,    //退款类型
                     'admin_id' => Yii::$app->user->id,
                     'payment_admin_name' => Yii::$app->user->identity->username,
+                    'payment_eo_order_id'=>$model->createOutTradeNo(2,$order_id),
                     'payment_verify' => $model->sign(),
                 ]);
 
