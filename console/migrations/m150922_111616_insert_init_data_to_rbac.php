@@ -79,10 +79,6 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
          */
         $this->insert('{{%auth_item_child}}', [
             'parent'=>'super_admin',
-            'child'=>'shopmanager/shop-manager/index',
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent'=>'super_admin',
             'child'=>'sidebar-customer',
         ]);
         $this->insert('{{%auth_item_child}}', [
