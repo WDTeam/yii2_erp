@@ -186,7 +186,7 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
             ->leftJoin('{{%order_complaint}} as ocomplain','order.id = ocomplain.order_id')
             ->andFilterWhere([
                 'order_booked_worker_id' => $worker_id
-            ])->limit($offset, $per_page_num);
+            ])->offset($offset)->limit($per_page_num);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
