@@ -24,9 +24,10 @@ class OrderMsg extends Model
         }
     }
 
-    public static function assignDone($order)
+    public static function assignDone($order_id)
     {
         try {
+            $order = OrderSearch::getOne($order_id);
             $week = ['日', '一', '二', '三', '四', '五', '六'];
             $range = date('H点i分', $order->order_booked_begin_time) . '至' . date('H点i分', $order->order_booked_end_time);
             $time_msg = date('y年m月d日', $order->order_booked_begin_time) . "，星期" . $week[date('w', $order->order_booked_begin_time)] . "，" . $range
@@ -34,7 +35,7 @@ class OrderMsg extends Model
 
 //        $customer_msg = "【订单受理】您预约的服务已由{$order->orderExtWorker->order_worker_name}接单，服务人员电话：{$order->orderExtWorker->order_worker_phone}。如有疑问可致电客服热线4006767636。";
 //        Yii::$app->sms->send($order->orderExtCustomer->order_customer_phone,$customer_msg);
-            $worker_msg = "亲爱的阿姨，您有一个新的待服务订单，订单详情如下：服务时间：{$time_msg}；服务地点{$order->order_address}；客户电话：{$order->orderExtCustomer->order_customer_phone}. 如有疑问请联系e家洁客服：4006767636";
+            $worker_msg = "亲爱的阿姨，您有一个新的待服务订单，订单详情如下：服务时间：{$time_msg}；服务地点:{$order->order_address}；客户电话：{$order->orderExtCustomer->order_customer_phone}. 如有疑问请联系e家洁客服：4006767636";
             Yii::$app->sms->send($order->orderExtWorker->order_worker_phone, $worker_msg);
         } catch (Exception $e) {
 

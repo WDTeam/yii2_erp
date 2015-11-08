@@ -527,7 +527,7 @@ class Order extends OrderModel
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //更新阿姨接单数量 第二个参数是阿姨的接单次数
                 $transact->commit();
-                OrderMsg::assignDone($order); //指派成功发送通知
+                OrderMsg::assignDone($order->id); //指派成功发送通知
             }else{
                 $transact->rollBack();
                 foreach($orderids as $orderid) {
