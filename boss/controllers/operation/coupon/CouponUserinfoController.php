@@ -39,7 +39,7 @@ class CouponUserinfoController extends Controller
     	
     	
     	//用户ID，优惠券ID，优惠券金额，交易记录号,点单号
-    	$rty=\core\models\operation\coupon\CouponRule::getCouponBasicInfoById('1');
+    	$rty=\core\models\operation\coupon\CouponUserinfo::generateCouponByCode('15172543897','yy007891');
     	
     	var_dump($rty);  exit;
     	
