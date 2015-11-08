@@ -181,7 +181,7 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
 
-        $customer = Customer::getCustomerById($this->customer_id);
+        $customer = Customer::getCustomerById($attributes['customer_id']);
         if(!empty($customer)) {
             $attributes['order_customer_phone'] = $customer->customer_phone;
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
@@ -193,7 +193,7 @@ class Order extends OrderModel
         //如果客户选择使用余额则去获取客户余额
         if(!empty($attributes['order_is_use_balance'])) {
             try {
-                $customer = Customer::getCustomerInfo($this->order_customer_phone);
+                $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
                 $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
