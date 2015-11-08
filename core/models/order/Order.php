@@ -129,6 +129,7 @@ class Order extends OrderModel
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
      *  int $order_booked_begin_time 预约开始时间 必填
+     *  int $order_booked_count 预约时长 必填
      *  int $order_booked_end_time 预约结束时间 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
@@ -152,14 +153,14 @@ class Order extends OrderModel
         $attributes_keys = [
             'order_ip','order_service_item_id','order_src_id','channel_id',
             'order_booked_begin_time','order_booked_end_time','address_id',
-            'customer_id','admin_id','order_pay_type',
+            'customer_id','admin_id','order_pay_type','order_booked_count',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
             'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_cs_memo','order_flag_sys_assign'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id',
             'order_booked_begin_time','order_booked_end_time','address_id',
-            'customer_id','admin_id','order_pay_type'
+            'customer_id','admin_id','order_pay_type','order_booked_count'
         ];
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         foreach($attributes as $k=>$v){
@@ -241,6 +242,7 @@ class Order extends OrderModel
      * @param $booked_list [
      *      [
      *          int $order_booked_begin_time 预约开始时间 必填
+     *          int $order_booked_code 预约时长 必填
      *          int $order_booked_end_time 预约结束时间 必填
      *          int $coupon_id 优惠券id
      *      ]
@@ -290,6 +292,7 @@ class Order extends OrderModel
             $order = new Order();
             $booked = [
                 'order_booked_begin_time'=>$v['order_booked_begin_time'],
+                'order_booked_count'=>$v['order_booked_count'],
                 'order_booked_end_time'=>$v['order_booked_end_time'],
                 'coupon_id'=>isset($v['coupon_id'])?$v['order_booked_end_time']:0
             ];
@@ -784,17 +787,11 @@ class Order extends OrderModel
         }else{
             $goods = $goods['data'];
         }
-        $order_booked_count = floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600); //TODO 精品保洁另算时长
-        if($order_booked_count>6){
-            $this->addError('order_booked_count', "服务时长最大六个小时！");
-            return false;
-        }
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
             'order_service_item_name' => $goods['operation_shop_district_goods_name'], //商品名称
             'order_service_type_id' => $goods['operation_category_id'], //品类ID
             'order_service_type_name' => $goods['operation_category_name'], //品类名称
-            'order_booked_count' => $order_booked_count,
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价

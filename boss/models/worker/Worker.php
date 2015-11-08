@@ -47,7 +47,7 @@ class Worker extends \core\models\worker\Worker
     public function rules()
     {
         $rules = [
-            [['worker_district'], 'required'],
+            [['worker_district','worker_photo'], 'required','on'=>['create','update']], //只有在后台保存和更新阿姨信息时验证
         ];
         return array_merge(parent::rules(),$rules);
     }
