@@ -106,7 +106,7 @@ class AuthItem extends \yii\db\ActiveRecord
             'ordinary_admin'=>$description.'（后台常规管理）',
             'group_shop_manager'=>$description.'（只能管理自己的家政）',
             'group_shop'=>$description.'（只能管理自己的门店）',
-            'group_mini_box'=>$description.'（仅用于区分用户是不是minibox）',
+            'group_mini_box'=>$description.'（用于区分用户是不是minibox，如果是，则只能管理自己的数据）',
         ];
         if(isset($des[$name])){
             return $des[$name];

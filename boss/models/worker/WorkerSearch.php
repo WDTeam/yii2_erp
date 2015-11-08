@@ -6,7 +6,7 @@ use core\models\worker\WorkerVacationApplication;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use core\models\worker\Worker;
+use boss\models\worker\Worker;
 
 /**
  * WorkerSearch represents the model behind the search form about `dbbase\models\Worker`.
@@ -37,7 +37,7 @@ class WorkerSearch extends Worker
             ]);
             return $dataProvider;
         }else{
-            $query = Worker::find()->where(['isdel'=>0]);
+            $query = Worker::findAllQuery();
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);

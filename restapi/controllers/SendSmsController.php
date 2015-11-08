@@ -88,8 +88,15 @@ class SendSmsController extends \restapi\components\Controller
             if (!CustomerCode::generateAndSend($phone)) {
                 return $this->send(null, "短信发送失败", 0, 200,null,alertMsgEnum::sendUserCodeFailed);
             }
+//加入发送验证码失败时的不同提示
+//            $customer_code=CustomerCode::generateAndSend($phone);
+//            if($customer_code['success']==2){
+//                return $this->send(null, "验证码发送超过5次", 0, 403,null,alertMsgEnum::sendUserCodeOverFive);
+//            }elseif($customer_code['success']==3){
+//                return $this->send(null, "验证码发送频率过高（60s）", 0, 403,null,alertMsgEnum::sendUserCodeSixty);
+//            }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0, 200,null,alertMsgEnum::sendUserCodeFailed);
+            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendUserCodeFailed);
 
         }
         return $this->send(null, "短信发送成功", 1, 200,null, alertMsgEnum::sendUserCodeSuccess);
@@ -133,20 +140,20 @@ class SendSmsController extends \restapi\components\Controller
             $login_info = Worker::checkWorkerLogin($phone);
             $whether_send_code = WorkerCode::whetherSendCode($phone);
             if($whether_send_code==1){
-                return $this->send(null, "短信发送频率过高（60s）", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
+                return $this->send(null, "短信发送频率过高（60s）", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
             }elseif($whether_send_code==2){
-                return $this->send(null, "今日短信发送超过5次", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
+                return $this->send(null, "今日短信发送超过5次", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
             }
             if($login_info['can_login']==1){
                 //验证通过
                 if (!WorkerCode::generateAndSend($phone)) {
-                    return $this->send(null, "短信发送失败", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
+                    return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
                 }
             }else{
-                 return $this->send(null, "阿姨不存在或在黑名单或离职或删号", 0, 2,null,alertMsgEnum::sendWorkerCodeFaile);
+                 return $this->send(null, "阿姨不存在或在黑名单或离职或删号", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0, 200,null,alertMsgEnum::sendWorkerCodeFaile);
+            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
 
         }
         return $this->send(null, "短信发送成功",1,200,null,alertMsgEnum::sendWorkerCodeSuccess);
