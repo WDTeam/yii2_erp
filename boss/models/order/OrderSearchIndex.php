@@ -42,11 +42,11 @@ class OrderSearchIndex extends Order
     
     public function search($params)
     {
-        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker']);
+        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])->orderBy(['id'=>SORT_DESC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //             'pagination' => [
-//                 'pageSize' => 2,
+////                 'pageSize' => 2,
 //             ],
         ]);
 
@@ -137,6 +137,7 @@ class OrderSearchIndex extends Order
                 $query->andWhere(['in', 'channel_id', $channelList]);
             }
         }
+
         
         return $dataProvider;
     }
