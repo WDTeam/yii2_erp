@@ -8,20 +8,37 @@ use yii\base\Component;
 use yii\helpers\ArrayHelper;
 class RbacHelper extends Component
 {
-    const CACHE_NAME = 'boss-menus';
+    const CACHE_MENU = 'boss-menus';
+    const CACHE_TOP_MENU = 'boss-top-menus';
     public static $permissions = [];
+    protected static function setPermissions()
+    {
+        if(empty(self::$permissions)){
+            $auth = \Yii::$app->authManager;
+            $permissions = $auth->getPermissions();
+            self::$permissions = ArrayHelper::map($permissions, 'name', 'description');
+        }
+    }
     /**
-     * 处理菜单
+     * 处理左菜单
      * @param array $menus
      */
     public static function menu($menus)
     {
-        $auth = \Yii::$app->authManager;
-        $permissions = $auth->getPermissions();
-        self::$permissions = ArrayHelper::map($permissions, 'name', 'description');
-        
+        self::setPermissions();
         $menus = self::recursiveInitMenu($menus);
-        \Yii::$app->cache->set(self::CACHE_NAME, $menus, 3600*24);
+        \Yii::$app->cache->set(self::CACHE_MENU, $menus, 3600*24);
+        return $menus;
+    }
+    /**
+     * 处理顶部菜单
+     * @param array $menus
+     */
+    public static function topMenu($menus)
+    {
+        self::setPermissions();
+        $menus = self::recursiveInitMenu($menus);
+        \Yii::$app->cache->set(self::CACHE_TOP_MENU, $menus, 3600*24);
         return $menus;
     }
     /**
@@ -63,7 +80,10 @@ class RbacHelper extends Component
      */
     public static function getMenus()
     {
-        $menus = \Yii::$app->cache->get(self::CACHE_NAME);
-        return $menus;
+        return \Yii::$app->cache->get(self::CACHE_MENU);
+    }
+    public static function getTopMenus()
+    {
+        return \Yii::$app->cache->get(self::CACHE_TOP_MENU);
     }
 }

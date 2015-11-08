@@ -7,13 +7,13 @@ use kartik\helpers\Html;
         $url = $menu['url'];
         if(isset($menu['can'])){
             echo Html::activeCheckboxList($model, 'permissions', [
-                $menu['can']=>$menu['label']
+                $menu['can']=>strip_tags($menu['label'])
             ],[
                 'id'=>'item_'.$menu['can'],
             ]);
         }elseif (isset($url[0]) && $url[0]!='#'){
             echo Html::activeCheckboxList($model, 'permissions', [
-                $url[0]=>$menu['label']
+                $url[0]=>strip_tags($menu['label'])
             ],[
                 'id'=>'item_'.$url[0],
             ]);

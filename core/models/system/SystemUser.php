@@ -141,6 +141,9 @@ class SystemUser extends \dbbase\models\system\SystemUser
     public function getShopManagerList()
     {
         $ids = $this->getShopManagerIds();
+        if(empty($ids)){
+            return [];
+        }
         $res = (array)ShopManager::find()
         ->andFilterWhere(['in','id', $ids])
         ->all();
@@ -165,6 +168,9 @@ class SystemUser extends \dbbase\models\system\SystemUser
     public function getShopList()
     {
         $ids = $this->getShopIds();
+        if(empty($ids)){
+            return [];
+        }
         $res = (array)Shop::find()
         ->andFilterWhere(['in','id', $ids])
         ->all();
