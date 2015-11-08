@@ -396,20 +396,20 @@ class OrderController extends BaseAuthController
     public function actionEdit($id)
     {
 
-        $model = Order::findById($id);
+        $model = OrderSearch::getOneByCode($id);
         $post = Yii::$app->request->post();
         $model['admin_id'] = Yii::$app->user->id;
 
         $history = [];
 
         $createRecord = OrderStatusHistory::find()->where([
-            'order_id' => $id,
+            'order_id' => $model->id,
             'order_status_dict_id' => OrderStatusDict::ORDER_INIT,
         ])->one();
         $history['creator_name'] = SystemUser::findOne(['id' => $createRecord['admin_id']])['username'];
 
         $payRecord = OrderStatusHistory::find()->where([
-            'order_id' => $id,
+            'order_id' => $model->id,
             'order_status_dict_id' => OrderStatusDict::ORDER_WAIT_ASSIGN,
         ])->one();
         $history['pay_time'] = $payRecord ? date('Y-m-d H:i:s', $payRecord['created_at']) : null;

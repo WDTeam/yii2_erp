@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if($history['pay_time']):?>
                 <div class="form-group">
                     <label class="control-label col-sm-3"><?= Html::encode($history['pay_time']) ?></label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_pay_channel_name) ?> <?= Html::encode($model->order_pay_money) ?></div>
+                    <div class="col-sm-6 right-text"><?= Html::encode($model->orderExtPay->order_pay_channel_name) ?> <?= Html::encode($model->orderExtPay->order_pay_money) ?></div>
                 </div>
                 <?php endif;?>
         </div>        
@@ -47,15 +47,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">优惠券</label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_use_coupon_money) ?>元</div>
+                    <div class="col-sm-6 right-text"><?= Html::encode($model->orderExtPay->order_use_coupon_money) ?>元</div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">需支付</label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_pay_money) ?>元</div>
+                    <div class="col-sm-6 right-text"><?= Html::encode($model->orderExtPay->order_pay_money) ?>元</div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-3">付款方式</label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_pay_channel_name) ?></div>
+                    <label class="control-label col-sm-3">支付渠道</label>
+                    <div class="col-sm-6 right-text"><?= Html::encode($model->orderExtPay->order_pay_channel_name) ?></div>
                 </div>
             </div>
            <div class="panel-heading">
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <div class="form-group">
                     <label class="control-label col-sm-3">用户电话</label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_customer_phone) ?></div>
+                    <div class="col-sm-6 right-text"><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?></div>
                 </div>
 
                 <div class="form-group field-order-address_id required">
@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body service-info-view">
                 <div class="form-group">
                     <label class="control-label col-sm-3">指定阿姨</label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_worker_name) ?></div>
+                    <div class="col-sm-6 right-text"></div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务时间</label>
@@ -181,11 +181,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body customer-info-view">
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户需求</label>
-                    <div class="col-sm-6 right-text order_customer_need"><?= Html::encode($model->order_customer_need) ?></div>
+                    <div class="col-sm-6 right-text order_customer_need"><?= Html::encode($model->orderExtCustomer->order_customer_need) ?></div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户备注</label>
-                    <div class="col-sm-6 right-text order_customer_memo"><?= Html::encode($model->order_customer_memo) ?></div>
+                    <div class="col-sm-6 right-text order_customer_memo"><?= Html::encode($model->orderExtCustomer->order_customer_memo) ?></div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">客服备注</label>
@@ -193,7 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">系统指派</label>
-                    <div class="col-sm-6 right-text"><?= $model->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
+                    <div class="col-sm-6 right-text"><?= $model->orderExtFlag->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
                 </div>
             </div>
             <div class="panel-heading customer-info-edit">
@@ -201,7 +201,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="panel-body  customer-info-edit">
                 <?php
-                    $model->order_customer_need = explode(',',$model->order_customer_need);
+                    $model->order_customer_need = explode(',',$model->orderExtCustomer->order_customer_need);
                     echo $form->field($model, 'order_customer_need')->inline()->checkboxList($model->customerNeeds)
                 ?>
                 <?= $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]) ?>
@@ -209,7 +209,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <div class="form-group">
                     <label class="control-label col-sm-3">系统指派</label>
-                    <div class="col-sm-6 right-text"><?= $model->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
+                    <div class="col-sm-6 right-text"><?= $model->orderExtFlag->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-12">
