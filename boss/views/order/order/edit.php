@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         <div id="address_form" style="display: none;">
                             <div class="col-sm-4" style="padding-left: 0;">
-                                <?= Html::dropDownList('province','',[''=>'请选择省份']+$model->onlineProvinceList,['class'=>'form-control province_form']); ?>
+                                <?php //Html::dropDownList('province','',[''=>'请选择省份']+$model->onlineProvinceList,['class'=>'form-control province_form']); ?>
                             </div>
                             <div class="col-sm-3" >
                                 <?= Html::dropDownList('city','',[''=>'请选择城市'],['class'=>'form-control city_form']); ?>
