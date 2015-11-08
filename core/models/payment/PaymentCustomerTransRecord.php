@@ -3,6 +3,7 @@
 namespace core\models\payment;
 
 use core\models\customer\Customer;
+use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
 use core\models\finance\FinancePayChannel;
 
@@ -555,8 +556,24 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //保留两位小数
         bcscale(2);
+
+
         //根据订单ID创建交易流水号
         $data['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo(1,$data['order_id']);
+
+        //TODO::潘高峰
+        //优惠券支付
+        if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
+        {
+            //获取优惠券信息
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID
+            $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['data']['coupon_userinfo_code'];   //优惠券CODE
+            $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['data']['coupon_userinfo_price'];   //优惠券金额
+            $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['data']['transaction_id'];   //优惠券交易流水号
+        }
+
+
         //获取扣除余额后的详细信息
         $customerBalanceInfo = Customer::operateBalance($data['customer_id'], $data['payment_customer_trans_record_online_balance_pay'], $data['payment_customer_trans_record_eo_order_id'], 1);
         if($customerBalanceInfo['response'] != 'success' && $data['customer_id'] != $customerBalanceInfo['customer_id'])
@@ -572,17 +589,6 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //余额交易流水号
         $data["payment_customer_trans_record_balance_transaction_id"] = $customerBalanceInfo['trans_serial'];
 
-        //TODO::潘高峰
-        //优惠券支付
-        if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
-        {
-            //获取优惠券信息
-            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
-            $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['coupon_userinfo_id'];   //优惠券ID
-            $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['coupon_userinfo_code'];   //优惠券CODE
-            $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['coupon_userinfo_price'];   //优惠券金额
-            $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['transaction_id'];   //优惠券交易流水号
-        }
 
         //TODO::张仁钊
         //如果使用服务卡支付
