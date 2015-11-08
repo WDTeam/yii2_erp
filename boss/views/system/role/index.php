@@ -30,13 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'name',
-//             'type',
-            'description:ntext',
-//             'rule_name',
-//             'data:ntext',
-//            'created_at', 
-//            'updated_at', 
-
+            [
+                'attribute'=>'description',
+                'value'=>function($model){
+                    return $model->getFullDescription();
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
             ],
