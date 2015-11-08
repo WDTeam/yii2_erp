@@ -176,6 +176,13 @@ class SystemUser extends \dbbase\models\system\SystemUser
         ->all();
         return $res;
     }
+    /**
+     * 判断是不是MINI BOX 用户
+     */
+    public function isMiniBoxUser()
+    {
+        return \Yii::$app->user->can('group_mini_box');
+    }
     
     /**
     * 通过用户id返回用名称
