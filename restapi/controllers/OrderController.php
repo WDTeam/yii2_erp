@@ -36,6 +36,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     * @apiParam {String} order_bookend_count 服务时长
      * @apiParam {String} [address_id] 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
@@ -130,7 +131,11 @@ class OrderController extends \restapi\components\Controller
         if (is_null($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
+        if (is_null($args['order_bookend_count'])) {
+            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+        }
         $attributes['order_pay_type'] = $args['order_pay_type'];
+        $attributes['order_bookend_count'] = $args['order_bookend_count'];
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -1565,6 +1570,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
+     * @apiParam  {int}     order_booked_count 服务时长
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
      * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
@@ -1640,6 +1646,10 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
+        #判断服务时长不能为空
+        if (empty($param['order_booked_count'])) {
+            return $this->send(null, "服务时长不能为空", 0, 200, NULL, alertMsgEnum::orderIsUseBalanceFaile);
+        }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1657,6 +1667,7 @@ class OrderController extends \restapi\components\Controller
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
                 "order_customer_need" => $param['order_customer_need'],
                 "order_customer_memo" => $param['order_customer_memo'],
+                "order_booked_count" => $param['order_booked_count'],
                 "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
