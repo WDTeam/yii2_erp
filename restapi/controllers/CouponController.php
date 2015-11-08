@@ -5,9 +5,7 @@ use Yii;
 use \core\models\operation\CoreOperationShopDistrictGoods;
 use \core\models\operation\CoreOperationCategory;
 use \core\models\customer\CustomerAccessToken;
-use \core\models\operation\coupon\CouponCustomer;
-use \core\models\operation\coupon\Coupon;
-use \core\models\operation\coupon\CouponCode;
+use core\models\operation\coupon\CouponUserinfo;
 use \restapi\models\LoginCustomer;
 use \restapi\models\alertMsgEnum;
 class CouponController extends \restapi\components\Controller
@@ -61,39 +59,21 @@ class CouponController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['coupon_code']) || !$param['coupon_code']||!isset($param['customer_phone']) || !$param['customer_phone']) {
-            return $this->send(null, "优惠码或手机号不能为空", 0, 200,null,alertMsgEnum::exchangeCouponDataDefect);
+            return $this->send(null, "优惠码或手机号不能为空", 0, 403,null,alertMsgEnum::exchangeCouponDataDefect);
         }
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
-        //验证优惠码是否存在
-        try{
-            $exist_coupon=CouponCode::checkCouponCodeIsAble($coupon_code);
-        }catch (\Exception $e) {
-            return $this->send($e, "验证优惠码是否存在可用系统错误", 1024, 200,null,alertMsgEnum::bossError);
-        }
-        if (!$exist_coupon) {
-            return $this->send(null, "优惠码不存在", 0, 200,null,alertMsgEnum::exchangeCouponFail);
-        }
-        //验证优惠码是否已经绑定用户
-        try{
-            $coupon_is_used=CouponCustomer::checkCouponIsUsed($coupon_code);
-        }catch (\Exception $e) {
-            return $this->send($e, "验证优惠码是否已经绑定用户系统错误", 1024, 200,null,alertMsgEnum::bossError);
-        }
-        if ($coupon_is_used) {
-            return $this->send(null, "优惠券已经绑定用户", 0, 200,null,alertMsgEnum::exchangeCouponFail);
-        }
         //兑换优惠码
         try{
-            $exchange_coupon=CouponCode::generateCouponByCode($customer_phone,$coupon_code);
+            $exchange_coupon=CouponUserinfo::generateCouponByCode($customer_phone,$coupon_code);
         }catch (\Exception $e) {
-            return $this->send($e, "兑换优惠券系统错误", 1024, 200,null,alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
         if ($exchange_coupon) {
             unset($exchange_coupon['is_del']);
             return $this->send($exchange_coupon, "兑换成功", 1,200,null,alertMsgEnum::exchangeCouponSuccess);
         } else {
-            return $this->send(null, "兑换失败", 0,200,null,alertMsgEnum::exchangeCouponFail);
+            return $this->send(null, "兑换失败", 0,403,null,alertMsgEnum::exchangeCouponFail);
         }
     }
 
@@ -177,13 +157,13 @@ class CouponController extends \restapi\components\Controller
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 401, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 401, 403,null,alertMsgEnum::customerLoginFailed);
         } 
         if ( !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "请选择城市", 0, 200,null,alertMsgEnum::couponsCityNoChoice);
+            return $this->send(null, "请选择城市", 0, 403,null,alertMsgEnum::couponsCityNoChoice);
         }
         if ( !isset($param['service_type_id']) || !$param['service_type_id']) {
-            return $this->send(null, "请选择服务类别id", 0, 200,null,alertMsgEnum::couponsCityNoService);
+            return $this->send(null, "请选择服务类别id", 0, 403,null,alertMsgEnum::couponsCityNoService);
         }
         $city_id = $param['city_id'];
         $service_type_id = $param['service_type_id'];
@@ -191,7 +171,7 @@ class CouponController extends \restapi\components\Controller
         try{
             $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id,$service_type_id);
         }catch (\Exception $e) {
-            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
         if (!empty($coupons)) {
             $arr_coupons=array();
@@ -201,7 +181,7 @@ class CouponController extends \restapi\components\Controller
             }
             return $this->send($arr_coupons, "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsSuccess);
         } else {
-            return $this->send(null, "优惠券列表为空", 0, 200,null,alertMsgEnum::couponsFail);
+            return $this->send(null, "优惠券列表为空", 0, 403,null,alertMsgEnum::couponsFail);
         }
         
     }
@@ -283,13 +263,13 @@ class CouponController extends \restapi\components\Controller
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null,$checkResult['msg'], 401, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null,$checkResult['msg'], 401, 403,null,alertMsgEnum::customerLoginFailed);
         } 
         //获取该用户所有的优惠码列表
         try{
            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id']);
         }catch (\Exception $e) {
-            return $this->send(null, "获取用户所有的优惠码列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
         if (!empty($coupons)) {
             $arr_coupons=array();
@@ -299,7 +279,7 @@ class CouponController extends \restapi\components\Controller
             }
             return $this->send($arr_coupons, "获取优惠券列表成功", 1, 200,null,alertMsgEnum::allCouponsSuccess);
         } else {
-            return $this->send(null, "优惠券列表为空", 0,200,null,alertMsgEnum::allCouponsFail);
+            return $this->send(null, "优惠券列表为空", 0,403,null,alertMsgEnum::allCouponsFail);
         }
         
     }
@@ -382,17 +362,17 @@ class CouponController extends \restapi\components\Controller
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 401, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, $checkResult['msg'], 401, 403,null,alertMsgEnum::customerLoginFailed);
         } 
         if ( !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "城市id不能为空", 0, 200,null,alertMsgEnum::couponsOverDueNoChoice);
+            return $this->send(null, "城市id不能为空", 0, 403,null,alertMsgEnum::couponsOverDueNoChoice);
         }
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠券列表
         try{
             $coupons=CouponCustomer::GetCustomerDueCouponList($checkResult['customer_id'],$city_id);
         }catch (\Exception $e) {
-            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 200,null,alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
         if (!empty($coupons)) {
             $arr_coupons=array();
@@ -402,7 +382,7 @@ class CouponController extends \restapi\components\Controller
             }
             return $this->send($arr_coupons, "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsOverDueSuccess);
         } else {
-            return $this->send(null, "优惠券列表为空", 0, 200,null,alertMsgEnum::couponsOverDueFail);
+            return $this->send(null, "优惠券列表为空", 0, 403,null,alertMsgEnum::couponsOverDueFail);
         }
         
     }
@@ -449,12 +429,12 @@ class CouponController extends \restapi\components\Controller
         //检测用户是否登录
         $checkResult = LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'],401, 200,null,alertMsgEnum::customerLoginFailed);
+            return $this->send(null, $checkResult['msg'],401, 403,null,alertMsgEnum::customerLoginFailed);
         }
         try{
             $CouponCount =CouponCustomer::CouponCount($checkResult['customer_id']);
         }catch (\Exception $e) {
-            return $this->send($e, "获取用户优惠券数量系统错误", 1024, 200,null,alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
         $ret['couponCount'] = $CouponCount;
         return $this->send($ret, "获取用户优惠券数量成功", 1, 200,null,alertMsgEnum::getCouponCountSuccess);

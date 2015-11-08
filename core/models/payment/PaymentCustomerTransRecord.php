@@ -46,6 +46,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     public static function analysisRecord($order_id,$order_channel_id=0,$type='order_pay',$orderStatus = 1,$payment_data = [])
     {
         $obj = new self();
+        //判断是订单支付还是购买服务卡充值
         if($type == 'order_pay')
         {
             //如果支付订单,查询订单数据
@@ -61,6 +62,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'order_use_acc_balance',
                 'card_id',
                 'order_use_card_money',
+                'coupon_id',
                 'order_use_coupon_money',
                 'order_use_promotion_money',
                 'order_pop_order_money'
@@ -112,7 +114,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             $transRecord['payment_customer_trans_record_cash'] = ($data['order_pay_type'] == 1) ? $data['order_money'] : 0;   //现金支付
             $transRecord['payment_customer_trans_record_online_pay'] = !empty($payment_data['payment_actual_money']) ? $payment_data['payment_actual_money'] : $data['order_pay_money'];    //在线支付
             $transRecord['order_channel_id'] = $data['channel_id'];   //订单渠道
-            $transRecord['payment_customer_trans_record_order_channel'] =$data['order_channel_name'];   //订单渠道名称
+            $transRecord['payment_customer_trans_record_order_channel'] = $data['order_channel_name'];   //订单渠道名称
         }
         elseif($type == 'payment')
         {
@@ -176,8 +178,6 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         }
         elseif( $transRecord['payment_customer_trans_record_online_balance_pay'] > 0 )
         {
-            //如果order_pay_money == 0 直接返回false,去线上支付
-
             //余额支付 + 优惠券
             $transRecord['scenario'] = 8;
             $status = $obj->onlineBalancePay($transRecord);
@@ -308,36 +308,60 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         //保留两位小数
         bcscale(2);
-        //获取用户余额
-        $customerBalance = Customer::getBalanceById($data['customer_id']);
-        //如果余额返回数据错误,余额 = 0 ;
-        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
-        //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
-        //当前余额
-        $data["payment_customer_trans_record_current_balance"] = bcsub($customerBalance['balance'],$data["payment_customer_trans_record_online_balance_pay"]);
+        //如果使用余额支付,扣除余额,否则获取当前用户余额
+        if( !empty($data['payment_customer_trans_record_online_balance_pay']) && $data['payment_customer_trans_record_online_balance_pay'] > 0 )
+        {
+            //获取扣除余额后的详细信息
+            $customerBalanceInfo = Customer::operateBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay'],$data['payment_customer_trans_record_eo_order_id'],1);
+            if($customerBalanceInfo['response'] != 'success' && $data['customer_id'] != $customerBalanceInfo['customer_id'])
+            {
+                return false;
+            }
+            //之前余额
+            $data["payment_customer_trans_record_befor_balance"] = $customerBalanceInfo['begin_balance'];
+            //当前余额
+            $data["payment_customer_trans_record_current_balance"] = $customerBalanceInfo['end_balance'];
+            //余额交易流水号
+            $data["payment_customer_trans_record_balance_transaction_id"] = $customerBalanceInfo['trans_serial'];
+        }
+        else
+        {
+            //获取用户余额
+            $customerBalance = Customer::getBalanceById($data['customer_id']);
+            //如果余额返回数据错误,余额 = 0 ;
+            $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
+            //之前余额
+            $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
+            //当前余额
+            $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
+            //余额交易流水号
+            $data["payment_customer_trans_record_balance_transaction_id"] = 0;
+        }
+
+        //如果使用服务卡支付
+        if( !empty($data["payment_customer_trans_record_service_card_on"]) && !empty($data['payment_customer_trans_record_service_card_pay']) && $data['payment_customer_trans_record_service_card_pay'] > 0 )
+        {
+            //获取服务卡扣费后详细信息
+            //TODO::ZHANGRENZHAO
+        }
+        else
+        {
+            //获取服务卡扣费后详细信息
+            //TODO::ZHANGRENZHAO
+            //服务卡卡号
+            $data["payment_customer_trans_record_service_card_on"] = 0;
+            //服务卡之前余额
+            $data["payment_customer_trans_record_service_card_befor_balance"] = 0;
+            //服务卡当前余额
+            $data["payment_customer_trans_record_service_card_current_balance"] = 0;
+        }
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
-        //TODO::取服务卡余额计算
-        //服务卡卡号
-        $data["payment_customer_trans_record_service_card_on"] = !empty($lastResult['payment_customer_trans_record_service_card_on']) ? $lastResult['payment_customer_trans_record_service_card_on'] : 0;
-        //服务卡之前余额
-        $data["payment_customer_trans_record_service_card_befor_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] : 0;
-        //服务卡当前余额
-        $data["payment_customer_trans_record_service_card_current_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] :0;
         //交易总额
         $data["payment_customer_trans_record_total_money"] = bcadd($lastResult['payment_customer_trans_record_total_money'],$data["payment_customer_trans_record_order_total_money"]);
         //签名
         unset($data['scenario']);
         $data['payment_customer_trans_record_verify'] = self::sign($data);
-
-        //扣除用户余额
-        if( !empty($data["payment_customer_trans_record_online_balance_pay"]) && $data["payment_customer_trans_record_online_balance_pay"] > 0 )
-        {
-            //用户余额扣款
-            //Customer::decBalance(,$data['payment_customer_trans_record_online_balance_pay']);
-            Customer::operateBalance($data['customer_id'], $data["payment_customer_trans_record_current_balance"]);
-        }
 
         //使用场景
         $this->scenario = 1;
@@ -352,6 +376,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         //保留两位小数
         bcscale(2);
+
+        //TODO::刘道强
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //如果余额返回数据错误,余额 = 0 ;
@@ -360,15 +386,24 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
         $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
+        //余额交易流水号
+        $data["payment_customer_trans_record_balance_transaction_id"] = 0;
+
+        //TODO::张仁钊
+        //如果使用服务卡支付
+        //服务卡卡号
+        $data["payment_customer_trans_record_service_card_on"] = 0;
+        //服务卡支付金额
+        $data["payment_customer_trans_record_service_card_pay"] = 0;
+        //服务卡之前余额
+        $data["payment_customer_trans_record_service_card_befor_balance"] = 0;
+        //服务卡当前余额
+        $data["payment_customer_trans_record_service_card_current_balance"] = 0;
+        //服务卡交易流水号
+        $data["payment_customer_trans_record_service_card_transaction_id"] = 0;
 
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
-        //服务卡卡号
-        $data["payment_customer_trans_record_service_card_on"] = !empty($lastResult['payment_customer_trans_record_service_card_on']) ? $lastResult['payment_customer_trans_record_service_card_on'] : 0;
-        //服务卡之前余额
-        $data["payment_customer_trans_record_service_card_befor_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] : 0;
-        //服务卡当前余额
-        $data["payment_customer_trans_record_service_card_current_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] :0;
         //交易总额
         $data["payment_customer_trans_record_total_money"] = bcadd($lastResult['payment_customer_trans_record_total_money'],$data["payment_customer_trans_record_order_total_money"]);
         //签名
@@ -387,6 +422,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         //保留两位小数
         bcscale(2);
+
+        //TODO::刘道强
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //如果余额返回数据错误,余额 = 0 ;
@@ -395,14 +432,24 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
         $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
+        //余额交易流水号
+        $data["payment_customer_trans_record_balance_transaction_id"] = 0;
+
+        //TODO::张仁钊
+        //如果使用服务卡支付
+        //服务卡卡号
+        $data["payment_customer_trans_record_service_card_on"] = 0;
+        //服务卡支付金额
+        $data["payment_customer_trans_record_service_card_pay"] = 0;
+        //服务卡之前余额
+        $data["payment_customer_trans_record_service_card_befor_balance"] = 0;
+        //服务卡当前余额
+        $data["payment_customer_trans_record_service_card_current_balance"] = 0;
+        //服务卡交易流水号
+        $data["payment_customer_trans_record_service_card_transaction_id"] = 0;
+
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
-        //服务卡卡号
-        $data["payment_customer_trans_record_service_card_on"] = !empty($lastResult['payment_customer_trans_record_service_card_on']) ? $lastResult['payment_customer_trans_record_service_card_on'] : 0;
-        //服务卡之前余额
-        $data["payment_customer_trans_record_service_card_befor_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] : 0;
-        //服务卡当前余额
-        $data["payment_customer_trans_record_service_card_current_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] :0;
         //交易总额
         $data["payment_customer_trans_record_total_money"] = bcadd($lastResult['payment_customer_trans_record_total_money'],$data["payment_customer_trans_record_order_total_money"]);
         //签名
@@ -502,26 +549,59 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
      */
     private function onlineBalancePay($data)
     {
+        //支付渠道
+        $data['pay_channel_id'] = 20;   //支付渠道
+        $data['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($data['pay_channel_id']); //	支付渠道名称
+
         //保留两位小数
         bcscale(2);
-        //获取用户余额
-        $customerBalance = Customer::getBalanceById($data['customer_id']);
-        //如果余额返回数据错误,余额 = 0 ;
-        $customerBalance['balance'] = !empty($customerBalance['balance']) ? $customerBalance['balance'] : 0;
+        //根据订单ID创建交易流水号
+        $data['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo(1,$data['order_id']);
+        //获取扣除余额后的详细信息
+        $customerBalanceInfo = Customer::operateBalance($data['customer_id'], $data['payment_customer_trans_record_online_balance_pay'], $data['payment_customer_trans_record_eo_order_id'], 1);
+        if($customerBalanceInfo['response'] != 'success' && $data['customer_id'] != $customerBalanceInfo['customer_id'])
+        {
+            return false;
+        }
+
+        //TODO::刘道强
         //之前余额
-        $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
+        $data["payment_customer_trans_record_befor_balance"] = $customerBalanceInfo['begin_balance'];
         //当前余额
-        $data["payment_customer_trans_record_current_balance"] = bcsub($customerBalance['balance'],$data["payment_customer_trans_record_online_balance_pay"]);
+        $data["payment_customer_trans_record_current_balance"] = $customerBalanceInfo['end_balance'];
+        //余额交易流水号
+        $data["payment_customer_trans_record_balance_transaction_id"] = $customerBalanceInfo['trans_serial'];
+
+        //TODO::潘高峰
+        //优惠券支付
+        if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
+        {
+            //获取优惠券信息
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['coupon_userinfo_id'];   //优惠券ID
+            $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['coupon_userinfo_code'];   //优惠券CODE
+            $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['coupon_userinfo_price'];   //优惠券金额
+            $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['transaction_id'];   //优惠券交易流水号
+        }
+
+        //TODO::张仁钊
+        //如果使用服务卡支付
+        //服务卡卡号
+        $data["payment_customer_trans_record_service_card_on"] = 0;
+        //服务卡支付金额
+        $data["payment_customer_trans_record_service_card_pay"] = 0;
+        //服务卡之前余额
+        $data["payment_customer_trans_record_service_card_befor_balance"] = 0;
+        //服务卡当前余额
+        $data["payment_customer_trans_record_service_card_current_balance"] = 0;
+        //服务卡交易流水号
+        $data["payment_customer_trans_record_service_card_transaction_id"] = 0;
+
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
-        //服务卡卡号
-        $data["payment_customer_trans_record_service_card_on"] = !empty($lastResult['payment_customer_trans_record_service_card_on']) ? $lastResult['payment_customer_trans_record_service_card_on'] : 0;
-        //服务卡之前余额
-        $data["payment_customer_trans_record_service_card_befor_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] : 0;
-        //服务卡当前余额
-        $data["payment_customer_trans_record_service_card_current_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] :0;
         //交易总额
         $data["payment_customer_trans_record_total_money"] = bcadd($lastResult['payment_customer_trans_record_total_money'],$data['payment_customer_trans_record_order_total_money']);
+
         //签名
         unset($data['scenario']);
         $data['payment_customer_trans_record_verify'] = self::sign($data);
@@ -529,9 +609,6 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $this->scenario = 8;
         $this->attributes = $data;
 
-        //用户余额扣款
-        //Customer::decBalance($data['customer_id'],$data['payment_customer_trans_record_online_balance_pay']);
-        Customer::operateBalance($data['customer_id'], $data["payment_customer_trans_record_current_balance"]);
         return $this->doSave();
     }
 
@@ -609,6 +686,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         //保留两位小数
         bcscale(2);
+
+        //TODO::刘道强
         //获取用户余额
         $customerBalance = Customer::getBalanceById($data['customer_id']);
         //如果余额返回数据错误,余额 = 0 ;
@@ -617,14 +696,38 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $data["payment_customer_trans_record_befor_balance"] = $customerBalance['balance'];
         //当前余额
         $data["payment_customer_trans_record_current_balance"] = $customerBalance['balance'];
+        //余额交易流水号
+        $data["payment_customer_trans_record_balance_transaction_id"] = 0;
+
+
+        //TODO::潘高峰
+        //优惠券支付
+        if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
+        {
+            //获取优惠券信息
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['coupon_userinfo_id'];   //优惠券ID
+            $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['coupon_userinfo_code'];   //优惠券CODE
+            $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['coupon_userinfo_price'];   //优惠券金额
+            $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['transaction_id'];   //优惠券交易流水号
+        }
+
+
+        //TODO::张仁钊
+        //如果使用服务卡支付
+        //服务卡卡号
+        $data["payment_customer_trans_record_service_card_on"] = 0;
+        //服务卡支付金额
+        $data["payment_customer_trans_record_service_card_pay"] = 0;
+        //服务卡之前余额
+        $data["payment_customer_trans_record_service_card_befor_balance"] = 0;
+        //服务卡当前余额
+        $data["payment_customer_trans_record_service_card_current_balance"] = 0;
+        //服务卡交易流水号
+        $data["payment_customer_trans_record_service_card_transaction_id"] = 0;
+
         //获取当前用户最后一次交易记录
         $lastResult = $this->lastTranRecordResult($data['customer_id']);
-        //服务卡卡号
-        $data["payment_customer_trans_record_service_card_on"] = !empty($lastResult['payment_customer_trans_record_service_card_on']) ? $lastResult['payment_customer_trans_record_service_card_on'] : 0;
-        //服务卡之前余额
-        $data["payment_customer_trans_record_service_card_befor_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] : 0;
-        //服务卡当前余额
-        $data["payment_customer_trans_record_service_card_current_balance"] = !empty($lastResult['payment_customer_trans_record_service_card_current_balance']) ? $lastResult['payment_customer_trans_record_service_card_current_balance'] :0;
         //交易总额
         $data["payment_customer_trans_record_total_money"] = bcadd($lastResult['payment_customer_trans_record_total_money'],$data['payment_customer_trans_record_order_total_money']);
         //签名
@@ -651,6 +754,34 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'payment_customer_trans_record_service_card_befor_balance'
             ]
         )->where(['customer_id'=>$customer_id])->orderBy(['id' => SORT_DESC])->asArray()->one();
+    }
+
+    /**
+     * 生成商户订单号
+     * 年月日+交易类型+随机数+ORDER_ID
+     * 01 正常订单 02 退款 03 赔付
+     * @return bool|string 订单号
+     */
+    private static function createOutTradeNo($type=1,$order_id=0)
+    {
+        switch($type)
+        {
+            case 1 :
+                $transType = '01';
+                break;
+            case 2 :
+                $transType = '02';
+                break;
+            case 3 :
+                $transType = '03';
+                break;
+        }
+        //组装支付订单号
+        $rand = mt_rand(1000,9999);
+        $date = date("ymd",time());
+        //生成商户订单号
+        $trans_record_eo_order_id = $date.$transType.$rand.$order_id;
+        return $trans_record_eo_order_id;
     }
 
 }
