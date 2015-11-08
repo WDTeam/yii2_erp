@@ -18,7 +18,6 @@ use \core\models\customer\Customer;
  */
 class CustomerCode extends \dbbase\models\customer\CustomerCode
 {
-
     /**
      * 生成验证码并发送
      */
@@ -56,9 +55,9 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
             $customerCode->updated_at = 0;
             $customerCode->is_del = 0;
             $customerCode->save();
+            $transaction->commit();
             $msg = $customer_code.'，守住验证码，不能告诉别人哦！唯一客服热线4006767636';
             $string = Yii::$app->sms->send($phone, $msg, 1);
-            $transaction->commit();
             return true;
         }catch(\Exception $e){
             $transaction->rollback();
