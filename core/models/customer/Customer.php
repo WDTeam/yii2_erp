@@ -9,7 +9,7 @@ use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
 use dbbase\models\Worker;
 use dbbase\models\customer\CustomerFeedback;
-use dbbase\models\customer\CustomerExtBalanceLog;
+use dbbase\models\customer\CustomerExtBalanceRecord;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
@@ -44,24 +44,24 @@ class Customer extends \dbbase\models\customer\Customer
 				$customer->save();
 			
 				//customer balance
-				$customerExtBalance = new CustomerExtBalance;
-				$customerExtBalance->customer_id = $customer->id;
-				$customerExtBalance->customer_phone = $phone;
-				$customerExtBalance->customer_balance = 0;
-				$customerExtBalance->created_at = time();
-				$customerExtBalance->updated_at = 0;
-				$customerExtBalance->is_del = 0;
-				$customerExtBalance->save();
+//				$customerExtBalance = new CustomerExtBalance;
+//				$customerExtBalance->customer_id = $customer->id;
+//				$customerExtBalance->customer_phone = $phone;
+//				$customerExtBalance->customer_balance = 0;
+//				$customerExtBalance->created_at = time();
+//				$customerExtBalance->updated_at = 0;
+//				$customerExtBalance->is_del = 0;
+//				$customerExtBalance->save();
 
 				//customer score
-				$customerExtScore = new CustomerExtScore;
-				$customerExtScore->customer_id = $customer->id;
-				$customerExtScore->customer_phone = $phone;
-				$customerExtScore->customer_score = 0;
-				$customerExtScore->created_at = time();
-				$customerExtScore->updated_at = 0;
-				$customerExtScore->is_del = 0;
-				$customerExtScore->save();
+//				$customerExtScore = new CustomerExtScore;
+//				$customerExtScore->customer_id = $customer->id;
+//				$customerExtScore->customer_phone = $phone;
+//				$customerExtScore->customer_score = 0;
+//				$customerExtScore->created_at = time();
+//				$customerExtScore->updated_at = 0;
+//				$customerExtScore->is_del = 0;
+//				$customerExtScore->save();
 
 				self::addSrcByChannalId($phone, $channal_id);
 				
@@ -185,7 +185,7 @@ class Customer extends \dbbase\models\customer\Customer
 
 		$customer_ext_balance = CustomerExtBalance::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer_ext_balance)) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+			return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>0];
 		}
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customer_ext_balance['customer_balance']];
 	}
@@ -200,109 +200,101 @@ class Customer extends \dbbase\models\customer\Customer
 		}
         $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerExtBalance == NULL) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+			return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>0];
 		}
         return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance['customer_balance']];
     }
-
+    
     /**
-     * 客户账户余额转入
+     * add balance data default 0
      */
-    static public function incBalance($customer_id, $cash)
-    {
-        // $customer_id = \Yii::$app->request->get('customer_id');
-        // $cash = \Yii::$app->request->get('cash');
-        // \Yii::$app->response->format = Response::FORMAT_JSON;
-        $customer = Customer::findOne($customer_id);
-        if ($customer == NULL) {
-			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
-		}
-        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerExtBalance == NULL) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
-		}
-        $balance = $customerExtBalance->customer_balance;
-        $customerExtBalance->customer_balance = bcadd($balance, $cash, 2);
-        if(!$customerExtBalance->validate()){
-			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
-		}
+    public static function addBalance($customer_id, $customer_balance = 0){
+        $customer_phone = self::getCustomerPhoneById($customer_id);
+        if($customer_phone == NULL){
+            return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'该客户不存在'];
+        }
+        $customerExtBalance = new CustomerExtBalance;
+        $customerExtBalance->customer_id = $customer_id;
+        $customerExtBalance->customer_phone = $customer_phone;
+        $customerExtBalance->customer_balance = $customer_balance;
+        $customerExtBalance->created_at = time();
         
+        $customerExtBalance->updated_at = 0;
+        $customerExtBalance->is_del = 0;
+        if(!$customerExtBalance->validate()){
+            return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'插入数据失败'];
+        }
         $customerExtBalance->save();
-        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
+        return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'id'=>$customerExtBalance->id];
     }
 
-    /**
-     * 客户账户余额转出
-     */
-    static public function decBalance($customer_id, $cash)
-    {
-        $customer = Customer::findOne($customer_id);
-        if ($customer == NULL) {
-			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
-		}
-        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerExtBalance == NULL) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
-		}
-        $balance = $customerExtBalance->customer_balance;
-        $customerExtBalance->customer_balance = bcsub($balance, $cash, 2);
-        if(!$customerExtBalance->validate()){
-			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
-		}
-        
-        $customerExtBalance->save();
-        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
-    }
     /**
      * change customer's balance, customer 's last balnce and current balance is availible
      */
-    public static function operateBalance($customer_id, $end_balance){
+    public static function operateBalance($customer_id, $operate_balance, $trans_no, $operate_type){
         $customer = self::findOne($customer_id);
         if($customer === NULL){
             return ['respone'=>'error', 'errcode'=>1, 'errmsg'=>'客户不存在'];
         }
-        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer->id])->one();
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if($customerExtBalance === NULL){
-            return ['respone'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+            $res = Customer::addBalance($customer_id, 0);
+            if($res['response'] == 'error'){
+                return $res;
+            }
+            $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one(); 
         }
         $begin_balance = $customerExtBalance->customer_balance;
-        $diff = $end_balance - $begin_balance;
-        $operate_balance = abs($diff);
-        $operate_type = 0;
-        $operate_type_name = '';
-        if($diff > 0){
-            $operate_type = 1;
-            $operate_type_name = '充值';
-        }else if($diff == 0){
-//            $operate_type = 0;
-//            $operate_type_name = '没变';
-            return ['respone'=>'error', 'errcode'=>3, 'errmsg'=>'余额不变，错误操作余额'];
-        }else{
-            $operate_type = -1;
-            $operate_type_name = '扣款';
+        
+        $trans_prefix = '';
+        switch($operate_type){
+            case -1:
+                $end_balance = $begin_balance + $operate_balance;
+                $operate_type_name = '增加';
+                $trans_prefix = 'inc';
+                break;
+            case 1:
+                $end_balance = $begin_balance - $operate_balance;
+                $operate_type_name = '减少';
+                $trans_prefix = 'dec';
+                break;
+            default:
+                break;
         }
+        
+        //generating trans serial
+        $trans_serial = $trans_prefix.time();
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerExtBalance->customer_balance = $end_balance;
             $customerExtBalance->updated_at = time();
             $customerExtBalance->save();
-            $customerExtBalanceLog = new CustomerExtBalanceLog;
-            $customerExtBalanceLog->customer_id = $customer->id;
-            $customerExtBalanceLog->customer_phone = $customer->customer_phone;
-            $customerExtBalanceLog->customer_ext_balance_begin_balance = $begin_balance;
-            $customerExtBalanceLog->customer_ext_balance_end_balance = $end_balance;
-            $customerExtBalanceLog->customer_ext_balance_operate_balance = $operate_balance;
-            $customerExtBalanceLog->customer_ext_balance_operate_type = $operate_type;
-            $customerExtBalanceLog->customer_ext_balance_operate_type_name = $operate_type_name;
-            $customerExtBalanceLog->created_at = time();
-            $customerExtBalanceLog->updated_at = 0;
-            $customerExtBalanceLog->is_del = 0;
-            $customerExtBalanceLog->save();
-            $transaction->commit();
+            $customerExtBalanceRecord = new CustomerExtBalanceRecord;
+            $customerExtBalanceRecord->customer_id = $customer->id;
+            $customerExtBalanceRecord->customer_phone = $customer->customer_phone;
+            $customerExtBalanceRecord->customer_ext_balance_begin_balance = $begin_balance;
+            $customerExtBalanceRecord->customer_ext_balance_end_balance = $end_balance;
+            $customerExtBalanceRecord->customer_ext_balance_operate_balance = $operate_balance;
+            $customerExtBalanceRecord->customer_ext_balance_operate_type = $operate_type;
+            $customerExtBalanceRecord->customer_ext_balance_operate_type_name = $operate_type_name;
+            $customerExtBalanceRecord->customer_ext_balance_trans_no = $trans_no;
+            $customerExtBalanceRecord->customer_ext_balance_trans_serial = $trans_serial;
+            $customerExtBalanceRecord->created_at = time();
+            $customerExtBalanceRecord->updated_at = 0;
+            $customerExtBalanceRecord->is_del = 0;
+            $customerExtBalanceRecord->save();
             $formated_date = date('Y年m月d日', time());
             $msg = "【余额变动】您于".$formated_date.$operate_type_name.$operate_balance."，当前余额".$end_balance."元。下载APP（http://t.cn/8schPc6）可以随时查看账户消费记录，如有疑问请联系客服：4006767636。";
             $string = Yii::$app->sms->send($customer->customer_phone, $msg, 1);
-            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+            $transaction->commit();
+            
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 
+                    'customer_id'=>$customerExtBalanceRecord->customer_id, 
+                    'begin_balance'=>$customerExtBalanceRecord->customer_ext_balance_begin_balance, 
+                    'end_balance'=>$customerExtBalanceRecord->customer_ext_balance_end_balance, 
+                    'operate_balance'=>$customerExtBalanceRecord->customer_ext_balance_operate_balance,
+                    'trans_no'=>$customerExtBalanceRecord->customer_ext_balance_trans_no,
+                    'trans_serial'=>$customerExtBalanceRecord->customer_ext_balance_trans_serial,];
         }catch(\Exception $e){
             $transaction->rollback();
             return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'操作余额失败'];
@@ -700,6 +692,11 @@ class Customer extends \dbbase\models\customer\Customer
         $count = self::find()->where(['is_del'=>1])->count();
         return $count;
     }
+    
+    /**************************************define relations*********************************/
+//    public function getOrderCount(){
+//        return self->hasOne();
+//    }
 
 
 	/**
