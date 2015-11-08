@@ -86,7 +86,7 @@ use boss\models\order\Order;
                 <?php endif; ?>
             </td>
             <td>
-                <p><a href="/order/order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
+                <p><a href="/order/order/edit?id=<?= Html::encode($model->order_code) ?>">查看订单</a></p>
 
                 <?php if ($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT): ?>
                     <p><a href="###" class="m_tousu">投诉</a></p>
