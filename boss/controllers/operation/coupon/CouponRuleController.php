@@ -81,7 +81,7 @@ class CouponRuleController extends Controller
 				***/
            		for($i=1;$i<=$unm;$i++){
            			$datainfo=$name.sprintf("%'.05d\n",$i);
-           				\Yii::$app->redis->SADD($name,$datainfo);
+           				\Yii::$app->redis->SADD($name,trim($datainfo));
            			}
            			
            	/* }elseif(\Yii::$app->redis->EXISTS($name)=='1') {
