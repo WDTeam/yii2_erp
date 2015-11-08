@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'coupon_userinfo_price', 
             'coupon_userinfo_gettime:datetime', 
             'coupon_userinfo_usetime:datetime', 
-            'coupon_userinfo_endtime:datetime', 
+            'couponrule_use_end_time:datetime', 
             'order_code', 
 //            'system_user_id', 
 //            'system_user_name', 

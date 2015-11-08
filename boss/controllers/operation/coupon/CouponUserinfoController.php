@@ -39,9 +39,9 @@ class CouponUserinfoController extends Controller
     	
     	
     	//用户ID，优惠券ID，优惠券金额，交易记录号,点单号
-    	$rty=\core\models\operation\coupon\CouponRule::getAbleCouponByCateId('1','0');
+    	$rty=\core\models\operation\coupon\CouponRule::getCouponBasicInfoById('1');
     	
-    	var_dump($rty);
+    	var_dump($rty);  exit;
     	
     	
         $searchModel = new CouponUserinfoSearch;
