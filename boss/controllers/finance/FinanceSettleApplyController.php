@@ -210,6 +210,10 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['isExport'])){
             $isExport = 1;
         }
+        if(Yii::$app->user->can('group_mini_box')){
+            $financeSearchModel->shop_id = Yii::$app->user->identity->getShopIds();
+            $financeSearchModel->shop_manager_id = Yii::$app->user->identity->getShopManagerIds();
+        }
         $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
         $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
         $financeSearchModel->load($requestParams);
@@ -442,8 +446,6 @@ class FinanceSettleApplyController extends BaseAuthController
                     $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
                     //现金订单详细数据
                     $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-                    //非现金订单详细数据
-                    $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
                     //任务详细数据
                     $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime,$finance_settle_apply_endtime);
                     //赔偿详细数据

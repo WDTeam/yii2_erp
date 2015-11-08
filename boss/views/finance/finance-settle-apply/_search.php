@@ -51,12 +51,16 @@ use core\models\finance\FinanceSettleApplySearch;
     </div>
     <div class='col-md-2'>
         <?php 
-            echo  $form->field($model, 'worker_type_id')->dropDownList([FinanceSettleApplySearch::SELF_OPERATION=>'自营',FinanceSettleApplySearch::NON_SELF_OPERATION=>'小家政']);
+            if(!Yii::$app->user->can('group_mini_box')){
+                echo  $form->field($model, 'worker_type_id')->dropDownList([FinanceSettleApplySearch::SELF_OPERATION=>'自营',FinanceSettleApplySearch::NON_SELF_OPERATION=>'小家政']);
+            }
         ?>
     </div>
     <div class='col-md-2'>
         <?php 
-            echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceSettleApplySearch::FULLTIME=>'全职',FinanceSettleApplySearch::PARTTIME=>'兼职',FinanceSettleApplySearch::PARKTIME=>'高峰',FinanceSettleApplySearch::INTERVALTIME=>'时段']);
+            if(!Yii::$app->user->can('group_mini_box')){
+                echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceSettleApplySearch::FULLTIME=>'全职',FinanceSettleApplySearch::PARTTIME=>'兼职',FinanceSettleApplySearch::PARKTIME=>'高峰',FinanceSettleApplySearch::INTERVALTIME=>'时段']);
+            }
         ?>
     </div>
     <input type="hidden" name="isExport" id = "isExport" value="0"/>
