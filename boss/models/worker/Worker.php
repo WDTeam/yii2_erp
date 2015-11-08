@@ -3,6 +3,7 @@
 namespace boss\models\worker;
 
 use Yii;
+use yii\base\ErrorException;
 use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "{{%worker}}".
@@ -50,6 +51,61 @@ class Worker extends \core\models\worker\Worker
             [['worker_district','worker_photo'], 'required','on'=>['create','update']], //只有在后台保存和更新阿姨信息时验证
         ];
         return array_merge(parent::rules(),$rules);
+    }
+
+
+    /**
+     * 通过id 获取worker model
+     * @param integer $id
+     * @param integer $hasExt 是否关联阿姨附属表Model
+     * @return model
+     * @throws NotFoundHttpException if not found
+     */
+    public static function findModel($id,$hasExt=false)
+    {
+        if($hasExt==true){
+            $model= Worker::find()->joinWith('workerExtRelation')->where(['id'=>$id,'isdel'=>0])->one();
+        }else{
+            $model= Worker::find()->where(['id'=>$id,'isdel'=>0])->one();
+        }
+        if ($model!== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+    public static function findAllModel($filterCondition=[],$isAuth=false){
+        if(!is_array($filterCondition)){
+            throw new ErrorException('请传递数组参数');
+        }
+        $defaultCondition['isdel'] = 0;
+        if($isAuth!==false){
+            $shopIds = \Yii::$app->user->identity->getShopIds();
+            if($shopIds){
+                $defaultCondition['shop_id'] = $shopIds;
+            }
+        }
+        $condition = array_merge($defaultCondition,$filterCondition);
+        $model = self::findAll($condition);
+        return $model;
+    }
+
+    public static function findAllQuery($filterCondition=[],$isAuth=false){
+        if(!is_array($filterCondition)){
+            throw new ErrorException('请传递数组参数');
+        }
+        $defaultCondition['isdel'] = 0;
+        if($isAuth!==false){
+            $shopIds = \Yii::$app->user->identity->getShopIds();
+            if($shopIds){
+                $defaultCondition['shop_id'] = $shopIds;
+            }
+        }
+        $condition = array_merge($defaultCondition,$filterCondition);
+        $query = self::find()->where($condition);
+        return $query;
     }
 
     /**
