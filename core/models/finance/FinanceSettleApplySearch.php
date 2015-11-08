@@ -149,6 +149,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
         $query->andFilterWhere([
             'shop_id' => $this->shop_id,
+            'worker_type_id'=>FinanceSettleApplySearch::NON_SELF_OPERATION
         ]);
         $query->andFilterWhere(['>=', 'finance_settle_apply_status',self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED]);
         $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
