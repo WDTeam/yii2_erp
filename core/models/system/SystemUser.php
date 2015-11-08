@@ -12,6 +12,13 @@ class SystemUser extends \dbbase\models\system\SystemUser
     private $_statusLabel;
     private $_roleLabel;
     
+    const CLASSIFY_MINIBOX = 2;
+    const USER_CLASSIFYS = [
+        0=>'系统保留',
+        1=>'后台用户',
+        self::CLASSIFY_MINIBOX=>'MINI BOX 用户'
+    ];
+    
     /**
      * @inheritdoc
      */
@@ -22,6 +29,18 @@ class SystemUser extends \dbbase\models\system\SystemUser
             $this->_statusLabel = $statuses[$this->status];
         }
         return $this->_statusLabel;
+    }
+    /**
+     * 显示分类名
+     */
+    public function getClassifyLabel()
+    {
+        $classifys = self::USER_CLASSIFYS;
+        if(isset($classifys[$this->classify])){
+            return $classifys[$this->classify];
+        }else{
+            return '';
+        }
     }
     
     
@@ -63,7 +82,6 @@ class SystemUser extends \dbbase\models\system\SystemUser
     {
         return ArrayHelper::map(\Yii::$app->authManager->getRoles(), 'name', 'description');
     }
-    
     public function getRoleLabel()
     {
         if ($this->_roleLabel === null) {
@@ -181,7 +199,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
      */
     public function isMiniBoxUser()
     {
-        return \Yii::$app->user->can('group_mini_box');
+        return $this->classify==self::CLASSIFY_MINIBOX;
     }
     
     /**
@@ -218,6 +236,8 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return array_merge(
             $labels,
             [
+                'classify'=>'用户类别',
+                'mobile'=>'手机号',
                 'password' => \Yii::t('app', '密码'),
                 'repassword' => \Yii::t('app', '确认密码')
             ]

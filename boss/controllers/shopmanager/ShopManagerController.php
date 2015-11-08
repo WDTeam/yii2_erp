@@ -54,7 +54,10 @@ class ShopManagerController extends BaseAuthController
     {
         $searchModel = new ShopManagerSearch;
         $query = Yii::$app->request->getQueryParams();
-        $query['ids'] = \Yii::$app->user->identity->getShopManagerIds();
+        if(\Yii::$app->user->can('group_mini_box')){
+            $query['ids'] = \Yii::$app->user->identity->getShopManagerIds();
+            $query['ids'] = empty($query['ids'])?[0]:$query['ids'];
+        }
         $dataProvider = $searchModel->search($query);
 
         return $this->render('index', [
