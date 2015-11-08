@@ -181,7 +181,7 @@ class WorkerController extends BaseAuthController
         $workerStatModel = new WorkerStat();
         $workerAuthModel = new WorkerAuth();
 
-        if ($workerModel->setScenario('create') && $workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
+        if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
             $workerModel->created_ad = time();
             $workerModel->uploadImgToQiniu('worker_photo');
             if($workerModel->save()){
