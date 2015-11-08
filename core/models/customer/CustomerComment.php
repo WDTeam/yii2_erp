@@ -41,10 +41,10 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
      * */
     public static function getCustomerCommentworkerlist($worker_id, $customer_comment_level, $newpage, $countpage = 40)
     {
-        if ($newpage == 0 && $newpage == '' && $newpage == null) {
+        if ($newpage == 0 || $newpage == '' || $newpage == null) {
             $newpage = 1;
         } else {
-            $newpage = $newpage * $countpage;
+            $newpage = ($newpage-1) * $countpage;
         }
         $comment_list = self::find()->andWhere(['worker_id' => $worker_id, 'customer_comment_level' => $customer_comment_level])->limit($newpage, $countpage)->asArray()->all();
         return $comment_list;
