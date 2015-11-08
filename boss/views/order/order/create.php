@@ -9,7 +9,7 @@ use dosamigos\datepicker\DatePicker;
  * @var dbbase\models\Order $model
  */
 
-$this->title = '创建订单';
+$this->title = '人工下单';
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
