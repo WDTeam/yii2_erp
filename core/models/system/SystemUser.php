@@ -13,11 +13,14 @@ class SystemUser extends \dbbase\models\system\SystemUser
     private $_roleLabel;
     
     const CLASSIFY_MINIBOX = 2;
-    const USER_CLASSIFYS = [
-        0=>'系统保留',
-        1=>'后台用户',
-        self::CLASSIFY_MINIBOX=>'MINI BOX 用户'
-    ];
+    public static function getClassifes()
+    {
+        return [
+            0=>'系统保留',
+            1=>'后台用户',
+            self::CLASSIFY_MINIBOX=>'MINI BOX 用户'
+        ];
+    }
     
     /**
      * @inheritdoc
@@ -35,7 +38,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
      */
     public function getClassifyLabel()
     {
-        $classifys = self::USER_CLASSIFYS;
+        $classifys = self::getClassifes();
         if(isset($classifys[$this->classify])){
             return $classifys[$this->classify];
         }else{

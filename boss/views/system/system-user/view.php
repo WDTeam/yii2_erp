@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'classify',
                 'value'=>$model->getClassifyLabel(),
                 'type'=>DetailView::INPUT_RADIO_LIST,
-                'items'=>SystemUser::USER_CLASSIFYS,
+                'items'=>SystemUser::getClassifes(),
             ],
             [
                 'attribute'=>'roles',

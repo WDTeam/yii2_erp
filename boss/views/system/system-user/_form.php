@@ -45,7 +45,7 @@ use core\models\system\SystemUser;
             
             'classify'=>[
                 'type'=> Form::INPUT_RADIO_LIST,
-                'items'=>SystemUser::USER_CLASSIFYS,
+                'items'=>SystemUser::getClassifes(),
             ],
             
             'roles'=>[

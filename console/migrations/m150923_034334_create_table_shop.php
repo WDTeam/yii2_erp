@@ -40,7 +40,7 @@ class m150923_034334_create_table_shop extends Migration
         ");
         $this->createIndex('shop_manager_province_id', '{{%shop}}', 'province_id');
         $this->createIndex('shop_manager_city_id', '{{%shop}}', 'city_id');
-        $this->createIndex('shop_manager_city_id', '{{%shop}}', 'shop_manager_id');
+        $this->createIndex('shop_manager_manager_id', '{{%shop}}', 'shop_manager_id');
         
         $this->insert('{{%shop}}', [
             'id'=>1,
