@@ -51,7 +51,14 @@ use boss\components\RbacHelper;
 			    'model'=>$model,
 			]);
 			?>
-			
+			<hr/>
+			<?php 
+			$menus = RbacHelper::getTopMenus();
+			echo $this->render('form_permissions', [
+			    'menus'=>$menus,
+			    'model'=>$model,
+			]);
+			?>
 			
             <?php 
                 echo $form->field($model, 'permissions')->checkboxList(RbacHelper::$permissions, [

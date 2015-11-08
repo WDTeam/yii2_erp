@@ -176,7 +176,9 @@ class ConfigureController extends \restapi\components\Controller
      *                 "category_name": "保洁任务",
      *                 "category_icon": "http://7b1f97.com1.z0.glb.clouddn.com/14468862302219563dbb56de6d3",
      *                 "category_introduction": "地板深度保护",
-     *                 "category_url": "http://www.baidu.com"
+     *                 "category_url": "http://www.baidu.com",
+     *                 "colour": "颜色",
+     *                 "category_price_description": "价格描述"
      *             }
      *         ],
      *         "isBlock": "用户是否为黑名单【1表示黑名单，0表示正常】",
@@ -201,7 +203,9 @@ class ConfigureController extends \restapi\components\Controller
         }
         //判断token是否有效
         $isEffect="0";
-        if(isset($param['access_token'])&&CustomerAccessToken::checkAccessToken($param['access_token'])) $isEffect="1";
+        if(isset($param['access_token'])&&!$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
+            $isEffect="1";
+        }
         //获取城市列表
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
@@ -223,6 +227,9 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
             $serviceCategoryList[$key]['category_introduction'] = "暂无";
             $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
+            $serviceCategoryList[$key]['colour'] = '颜色';
+            $serviceCategoryList[$key]['category_price_description'] = '价格描述';
+            
         }
         //页首链接
         $header_link = [

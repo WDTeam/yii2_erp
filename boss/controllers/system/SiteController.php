@@ -30,7 +30,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
 
-        if(\Yii::$app->user->can('mini_box_group')){
+        if(\Yii::$app->user->identity->isMiniBoxUser()){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');
@@ -53,11 +53,11 @@ class SiteController extends Controller
     	
     	
     	return $this->render('indexshop', [
-    			'date' => $date,
-    			]);
-    	
-    	
-    		return $this->render('indexshop');
+			'date' => $date,
+		]);
+	
+	
+		return $this->render('indexshop');
     		
     }
     
