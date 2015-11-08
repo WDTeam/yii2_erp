@@ -48,26 +48,7 @@ class WorkerController extends BaseAuthController
         ];
     }
 
-    /**
-     * 通过id 获取worker model
-     * @param integer $id
-     * @param integer $hasExt 是否关联阿姨附属表Model
-     * @return model
-     * @throws NotFoundHttpException if not found
-     */
-    protected function findModel($id,$hasExt=false)
-    {
-        if($hasExt==true){
-            $model= Worker::find()->joinWith('workerExtRelation')->where(['id'=>$id,'isdel'=>0])->one();
-        }else{
-            $model= Worker::find()->where(['id'=>$id,'isdel'=>0])->one();
-        }
-        if ($model!== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
+
 
 
     /**
@@ -251,7 +232,8 @@ class WorkerController extends BaseAuthController
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
         //添加阿姨
         }else{
-            $workerModel = Worker::findAll(['isdel'=>0]);
+//            $workerModel = Worker::findAll(['isdel'=>0]);
+            $workerModel = new Worker;
             $workerModel->load(Yii::$app->request->post());
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
 
@@ -804,6 +786,8 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
+        $a = Worker::findAllModel(['isdel'=>0],1);
+        var_dump($a);
         //var_dump(Worker::getWorkerDetailInfo(19077));die;
         //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
