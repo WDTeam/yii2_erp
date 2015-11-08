@@ -313,70 +313,6 @@ if(isset($model->review_section)){
            
             ?>
         
-        <?php 
-            echo '<div id = "nonCashOrderInfo" style = "display:none">';
-            Pjax::begin(); echo GridView::widget([
-               'dataProvider' => $nonCashOrderDataProvider,
-               'columns' => [
-                   ['class' => 'yii\grid\SerialColumn'],
-                   ['attribute'=>'order_id',
-                       'header' => Yii::t('app', '订单号'),
-                        'content'=>function($model,$key,$index)
-                               {return  Html::a('<u>'.$model['order_id'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/view/','id' => $model['order_id']])],['data-pjax'=>'0','target' => '_blank',]);}
-                    ],
-                    ['attribute'=>'order_service_type_name',
-                       'header' => Yii::t('app', '服务类型'),],
-                    ['attribute'=>'order_channel_name',
-                       'header' => Yii::t('app', '渠道'),],
-                    [
-                       'header' => Yii::t('app', '支付方式'),
-                        'attribute' => 'order_pay_type_id',
-                    ],
-                    ['attribute'=>'order_booked_begin_time',
-                       'header' => Yii::t('app', '服务开始时间'),
-                        'content'=>function($model,$key,$index){
-                                   return date('Y-m-d h:m:s',$model['order_booked_begin_time']);
-                       },
-                    ], 
-                    ['attribute'=>'order_booked_count',
-                       'header' => Yii::t('app', '服务工时（小时）'),
-                        'content'=>function($model,$key,$index){
-                                   return $model['order_booked_count'];
-                       },
-                    ], 
-                    ['attribute'=>'order_unit_money',
-                       'header' => Yii::t('app', '费率（元/小时）'),
-                    ], 
-                    ['attribute'=>'order_money',
-                       'header' => Yii::t('app', '订单总金额（元）'),
-                    ], 
-                    [
-                       'header' => Yii::t('app', '优惠金额（元）'),
-                        'content'=>function($model,$key,$index){
-                                   return 0;
-                       },
-                    ],
-                    [
-                       'attribute'=>'finance_worker_order_income_discount_amount',
-                       'header' => Yii::t('app', '用户支付金额（元）'),
-                    ],
-                    [
-                       'attribute'=>'order_pay_money',
-                       'header' => Yii::t('app', '阿姨结算金额（元）'),
-                    ],
-               ],
-               'responsive'=>true,
-               'hover'=>true,
-               'condensed'=>true,
-               'floatHeader'=>true,
-              'panel' => [
-                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 非现金订单明细 </h3>',
-                ],
-           ]); Pjax::end(); 
-           echo '</div>';
-           
-            ?>
-
 <?php 
             echo '<div id = "taskInfo" style = "display:none">';
             Pjax::begin(); echo GridView::widget([
@@ -457,35 +393,30 @@ if(isset($model->review_section)){
                     $(".ordercount").click(function(){
                         $("#allOrderInfo").css('display','block');
                         $("#cashOrderInfo").css('display','none');
-                        $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
                         $("#compensateInfo").css('display','none');
                     });
                     $(".cashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','block');
-                        $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
                         $("#compensateInfo").css('display','none');
                     });
                     $(".noncashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
-                        $("#nonCashOrderInfo").css('display','block');
                         $("#taskInfo").css('display','none');
                         $("#compensateInfo").css('display','none');
                     }); 
                     $(".taskcount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
-                        $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','block');
                         $("#compensateInfo").css('display','none');
                     });
                     $(".deductionmoney").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
-                        $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
                         $("#compensateInfo").css('display','block');
                     });
