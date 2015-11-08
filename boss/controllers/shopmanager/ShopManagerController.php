@@ -41,7 +41,7 @@ class ShopManagerController extends BaseAuthController
     public function can($id)
     {
         $ids = \Yii::$app->user->identity->getShopManagerIds();
-        if(!\Yii::$app->user->can('all_shopmanager_admin') && !in_array($id, $ids)){
+        if(!\Yii::$app->user->can('sidebar_housekeep') && !in_array($id, $ids)){
             throw new BadRequestHttpException('没有访问权限', 403);
         }
     }
