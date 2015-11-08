@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models\coupon;
+namespace core\models\operation\coupon;
 
 use Yii;
 
@@ -22,7 +22,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CouponLog extends \dbbase\models\coupon\CouponLog
+class CouponLog extends \dbbase\models\operation\coupon\CouponLog
 {
     /**
      * @inheritdoc
