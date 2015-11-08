@@ -31,12 +31,7 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         $this->insert('{{%auth_item}}', [
             'name'=>'group_shop_manager',
             'type'=>1,
-            'description'=>'小家政管理',
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name'=>'group_shop',
-            'type'=>1,
-            'description'=>'门店管理',
+            'description'=>'MINI BOX 组',
         ]);
         
         /**
