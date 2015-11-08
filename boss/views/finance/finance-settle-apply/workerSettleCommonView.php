@@ -77,7 +77,7 @@ if(isset($model->review_section)){
         <div class="panel-heading">
             <label class="panel-title">结算明细</label>
         <?php
-            if(($model->finance_settle_apply_order_count > 0) && $review_section > 0 ){
+            if($review_section > 0 ){
                 echo Html::a('结算', ['worker-manual-settlement-done?worker_id='.$model->worker_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
             }
          ?>

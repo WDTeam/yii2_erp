@@ -41,6 +41,12 @@ use core\models\system\SystemUser;
             // 'password_reset_token'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter PasswordResetToken...', 'maxlength'=>255]], 
             
             'email'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 电子邮箱...', 'maxlength'=>255]], 
+            'mobile'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 手机号...', 'maxlength'=>11]],
+            
+            'classify'=>[
+                'type'=> Form::INPUT_RADIO_LIST,
+                'items'=>SystemUser::USER_CLASSIFYS,
+            ],
             
             'roles'=>[
                 'type'=> Form::INPUT_CHECKBOX_LIST,

@@ -18,6 +18,8 @@ class alertMsgEnum
     //用户发送验证码
     const sendUserCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     const sendUserCodeFailed = '验证码已发失败';
+    const sendUserCodeOverFive = '验证码发送超过5次';
+    const sendUserCodeSixty = '验证码发送频率过高（60s）';
     //用户登录
     const userLoginSuccess = '用户登录成功';
     const userLoginFailed = '用户认证已经过期,请重新登录';

@@ -38,6 +38,9 @@ class m150923_034334_create_table_shop extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ");
+        $this->createIndex('shop_manager_province_id', '{{%shop}}', 'province_id');
+        $this->createIndex('shop_manager_city_id', '{{%shop}}', 'city_id');
+        $this->createIndex('shop_manager_city_id', '{{%shop}}', 'shop_manager_id');
         
         $this->insert('{{%shop}}', [
             'id'=>1,

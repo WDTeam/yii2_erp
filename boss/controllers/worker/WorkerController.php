@@ -48,26 +48,7 @@ class WorkerController extends BaseAuthController
         ];
     }
 
-    /**
-     * 通过id 获取worker model
-     * @param integer $id
-     * @param integer $hasExt 是否关联阿姨附属表Model
-     * @return model
-     * @throws NotFoundHttpException if not found
-     */
-    protected function findModel($id,$hasExt=false)
-    {
-        if($hasExt==true){
-            $model= Worker::find()->joinWith('workerExtRelation')->where(['id'=>$id,'isdel'=>0])->one();
-        }else{
-            $model= Worker::find()->where(['id'=>$id,'isdel'=>0])->one();
-        }
-        if ($model!== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
+
 
 
     /**
@@ -96,7 +77,7 @@ class WorkerController extends BaseAuthController
     public function actionView($id)
     {
 
-        $workerModel = $this->findModel($id,true);
+        $workerModel = Worker::findModel($id,true);
         $workerExtModel = WorkerExt::findOne($id);
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
             unset($workerModel->worker_photo);
@@ -251,7 +232,8 @@ class WorkerController extends BaseAuthController
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
         //添加阿姨
         }else{
-            $workerModel = new Worker();
+//            $workerModel = Worker::findAll(['isdel'=>0]);
+            $workerModel = new Worker;
             $workerModel->load(Yii::$app->request->post());
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
 
@@ -287,6 +269,7 @@ class WorkerController extends BaseAuthController
                 if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
                     $workerModel->worker_auth_status = 1;
                     $workerModel->save();
+                    var_dump($workerModel->errors);die;
                 }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==1){
                     $workerModel->worker_auth_status = 2;
                     $workerModel->save();
@@ -361,11 +344,11 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionShowDistrict($city_id=null,$q=null){
-        $out = ['results' => ['id' => '', 'text' => '']];
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ''];
         if(empty($city_id)){
             return $out;
         }
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $data = OperationShopDistrict::getCityShopDistrictList($city_id);
         $new_data = [];
         foreach ((array)$data as $val) {
@@ -803,11 +786,13 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
+        $a = Worker::findAllModel(['isdel'=>0],1);
+        var_dump($a);
         //var_dump(Worker::getWorkerDetailInfo(19077));die;
         //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         //echo '<br>';
-        var_dump(Worker::getWorkerCycleTimeLine(1,2,19077));die;
+        var_dump(WorkerVacationApplication::getApplicationTimeLine(19074,1));die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);

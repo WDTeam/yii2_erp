@@ -93,6 +93,8 @@ class SystemUser extends ActiveRecord implements IdentityInterface
 
             ['roles', 'default', 'value' => self::ROLE_USER],
             ['roles', 'in', 'range' => [self::ROLE_USER]],
+            ['mobile', 'string'],
+            ['classify', 'integer'],
         ];
     }
 
