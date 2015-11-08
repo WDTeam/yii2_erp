@@ -1409,7 +1409,7 @@ class Payment extends \dbbase\models\payment\Payment
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] === $attribute['payment_actual_money'] )
                 {
-                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_id'],$attribute['payment_transaction_id']);
+                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_name'],$attribute['payment_transaction_id']);
                 }
                 else
                 {
@@ -1423,7 +1423,7 @@ class Payment extends \dbbase\models\payment\Payment
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] === $attribute['payment_actual_money'] )
                 {
-                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_id_name'],$attribute['payment_transaction_id']);
+                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_name'],$attribute['payment_transaction_id']);
                 }
                 else
                 {
