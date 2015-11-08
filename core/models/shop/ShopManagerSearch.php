@@ -33,6 +33,10 @@ class ShopManagerSearch extends ShopManager
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        if(isset($params['ids'])){
+            $query->andFilterWhere(['in', 'id', $params['ids']]);
+        }
 
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;

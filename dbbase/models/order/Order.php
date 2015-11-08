@@ -355,6 +355,10 @@ class Order extends ActiveRecord
         return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id'])->from(OrderExtWorker::tableName().' AS orderExtWorker');
     }
 
+    public function getOrderStatusHistory()
+    {
+        return $this->hasMany(OrderStatusHistory::className(),['order_id'=>'id']);
+    }
 
     /**
      * 保存订单
