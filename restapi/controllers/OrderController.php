@@ -884,7 +884,7 @@ class OrderController extends \restapi\components\Controller
         $beginTime = strtotime('-3 month');
         $endTime = time();
 
-        @$limit = $args["access_token"];
+        @$limit = $args["limit"];
         if (is_null($limit)) {
             $limit = 10;
         }
@@ -982,7 +982,7 @@ class OrderController extends \restapi\components\Controller
         $beginTime = strtotime('-3 month');
         $endTime = time();
 
-        @$limit = $args["access_token"];
+        @$limit = $args["limit"];
         if (is_null($limit)) {
             $limit = 10;
         }
