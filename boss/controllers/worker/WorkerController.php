@@ -77,9 +77,9 @@ class WorkerController extends BaseAuthController
     public function actionView($id)
     {
 
-        $workerModel = $this->findModel($id,true);
+        $workerModel = Worker::findModel($id,true);
         $workerExtModel = WorkerExt::findOne($id);
-        if ($workerModel->setScenario('update') && $workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
+        if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
             unset($workerModel->worker_photo);
             $workerModel->uploadImgToQiniu('worker_photo');
             $workerModel->save();
