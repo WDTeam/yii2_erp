@@ -1,9 +1,29 @@
 <?php
+/**
+ * @author CoLee
+ */
 namespace boss\components;
 
 use yii\base\Component;
+use yii\helpers\ArrayHelper;
 class RbacHelper extends Component
 {
+    const CACHE_NAME = 'boss-menus';
+    public static $permissions = [];
+    /**
+     * 处理菜单
+     * @param array $menus
+     */
+    public static function menu($menus)
+    {
+        $auth = \Yii::$app->authManager;
+        $permissions = $auth->getPermissions();
+        self::$permissions = ArrayHelper::map($permissions, 'name', 'description');
+        
+        $menus = self::recursiveInitMenu($menus);
+        \Yii::$app->cache->set(self::CACHE_NAME, $menus, 3600*24);
+        return $menus;
+    }
     /**
      * 递归初始化菜单
      */
@@ -27,6 +47,7 @@ class RbacHelper extends Component
                     $auth->addChild($admin, $permission);
                 }
                 $menu['visible'] = \Yii::$app->user->can($name);
+                unset(self::$permissions[$name]);
             }
             if(isset($menu['items'])){
                 $menu['items'] = self::recursiveInitMenu($menu['items']);
@@ -35,15 +56,14 @@ class RbacHelper extends Component
         }
         return $menus;
     }
+    
+    
     /**
-     * 处理菜单
-     * @param array $menus
+     * 
      */
-    public static function menu($menus)
+    public static function getMenus()
     {
-        $menus = self::recursiveInitMenu($menus);
-        \Yii::$app->cache->set('boss-menus', $menus);
+        $menus = \Yii::$app->cache->get(self::CACHE_NAME);
         return $menus;
     }
-    
 }
