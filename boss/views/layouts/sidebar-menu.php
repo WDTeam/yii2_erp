@@ -169,21 +169,21 @@ echo Menu::widget([
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '创建新订单',
+                    'label' => '人工下单',
                     'url' => [
                         'order/order/create'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '人工指派订单',
+                    'label' => '人工派单',
                     'url' => [
                         'order/order/assign'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '智能指派订单',
+                    'label' => '智能派单',
                     'url' => [
                         'order/auto-assign/index'
                     ],
