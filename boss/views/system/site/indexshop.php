@@ -39,10 +39,10 @@ $shop_manages = Yii::$app->user->identity->getShopManagerList();
                     <div class="col-md-12">
                         <div class="row text-left-padding">
                             <div></div>
-                            <span>负责人：</span><span>王积极</span>
+                            <span>负责人：</span><span><?php echo \Yii::$app->user->identity->username;?></span>
                         </div>
                         <div class="row text-left-padding">
-                            <span>联系电话：</span><span>12395895895</span>
+                            <span>联系电话：</span><span><?php echo \Yii::$app->user->identity->mobile;?></span>
                         </div>
                         <div class="row text-left-padding">
                             <span>办公地址：</span><span>光华路soho</span>

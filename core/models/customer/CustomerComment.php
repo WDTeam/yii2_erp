@@ -46,7 +46,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         } else {
             $newpage = ($newpage-1) * $countpage;
         }
-        $comment_list = self::find()->andWhere(['worker_id' => $worker_id, 'customer_comment_level' => $customer_comment_level])->limit($newpage, $countpage)->asArray()->all();
+        $comment_list = self::find()->andWhere(['worker_id' => $worker_id, 'customer_comment_level' => $customer_comment_level])->offset($offset)->limit($per_page_num)->asArray()->all();
         return $comment_list;
     }
 
