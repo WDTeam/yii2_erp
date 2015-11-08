@@ -32,7 +32,7 @@ class CouponUserinfo extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'ejj_coupon_userinfo';
+        return '{{%coupon_userinfo}}';
     }
 
     /**
@@ -41,9 +41,9 @@ class CouponUserinfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'coupon_userinfo_id', 'coupon_userinfo_gettime', 'coupon_userinfo_usetime', 'coupon_userinfo_endtime', 'system_user_id', 'is_used', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'coupon_userinfo_id','system_user_id', 'is_used','is_del'], 'integer'],
             [['coupon_userinfo_price'], 'number'],
-            [['customer_tel'], 'string', 'max' => 11],
+            [['customer_tel'], 'required'],
             [['coupon_userinfo_code', 'system_user_name'], 'string', 'max' => 40],
             [['coupon_userinfo_name'], 'string', 'max' => 100],
             [['order_code'], 'string', 'max' => 64]
@@ -53,6 +53,7 @@ class CouponUserinfo extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $coupon_rule_name_id;
     public function attributeLabels()
     {
         return [
@@ -66,22 +67,16 @@ class CouponUserinfo extends \yii\db\ActiveRecord
             'coupon_userinfo_gettime' => Yii::t('core', '领取时间'),
             'coupon_userinfo_usetime' => Yii::t('core', '使用时间'),
             'coupon_userinfo_endtime' => Yii::t('core', '过期时间'),
-            'order_code' => Yii::t('core', '如果已经使用订单号'),
-            'system_user_id' => Yii::t('core', '绑定人id'),
+            'order_code' => Yii::t('core', '订单号'),//如果已经使用订单号
+            'system_user_id' => Yii::t('core', '绑定人'),
             'system_user_name' => Yii::t('core', '绑定人名称'),
             'is_used' => Yii::t('core', '是否已经使用'),
             'created_at' => Yii::t('core', '创建时间'),
             'updated_at' => Yii::t('core', '更新时间'),
+            'coupon_rule_name_id' => Yii::t('core', '优惠券规则'),
             'is_del' => Yii::t('core', '是否逻辑删除'),
         ];
     }
 
-    /**
-     * @inheritdoc
-     * @return EjjQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new EjjQuery(get_called_class());
-    }
+    
 }

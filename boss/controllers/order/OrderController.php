@@ -18,6 +18,7 @@ use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use core\models\system\SystemUser;
 
+use dbbase\models\order\OrderOtherDict;
 use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtPay;
 
@@ -35,7 +36,7 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Yii::$app->params;
+        return Order::cancelByOrderCode('101511045457209',1,OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE,'测试');
 //        return Order::serviceStart(2);
     }
 
@@ -50,7 +51,7 @@ class OrderController extends BaseAuthController
         $cancel_type = $params['cancel_type'];
         $cancel_note = $params['cancel_note'];
 
-        $result = Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        $result = Order::cancelByOrderId($order_id, $admin_id, $cancel_type, $cancel_note);
 
         if (is_null($result))
             return true;
@@ -337,12 +338,11 @@ class OrderController extends BaseAuthController
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
             if ($model->createNew($post)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->order_code]);
             }
         } else {//init
             $model->order_booked_count = 2; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
-            $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
             $model->order_flag_sys_assign = 1;//是否系统指派
         }
@@ -558,13 +558,13 @@ class OrderController extends BaseAuthController
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
+     * @param string $code
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($code)
     {
-        if (($model = Order::findOne($id)) !== null) {
+        if (($model = OrderSearch::getOneByCode($code)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

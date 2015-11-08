@@ -29,10 +29,8 @@ class SiteController extends Controller
         if(\Yii::$app->user->isGuest){
             $this->redirect(array('login'));
         }
-        
-        
-        
-        if(1==1){
+
+        if(\Yii::$app->user->can('mini_box_group')){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');

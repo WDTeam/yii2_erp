@@ -36,6 +36,7 @@ class WorkerController extends \restapi\components\Controller
      *   "ret": {
      *       "worker_photo": "阿姨头像地址",
      *       "worker_name": "阿姨姓名",
+     *       "worker_age":"阿姨年龄",
      *       "worker_idcard": "阿姨身份证号码",
      *       "worker_stat_order_num": "阿姨服务次数",
      *       "worker_live_province": "110000",
@@ -58,11 +59,11 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-//        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-//            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 403,null,alertMsgEnum::userLoginFailed);
-//        }
+        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, alertMsgEnum::userLoginFailed, 401, 200,null,alertMsgEnum::userLoginFailed);
+        }
         if(!isset($param['worker_id']) ||!$param['worker_id']||!intval($param['worker_id'])){
-            return $this->send(null, '阿姨ID传输错误', 0, 403,null,alertMsgEnum::workerInfoFailed);
+            return $this->send(null, '阿姨ID传输错误', 0, 200,null,alertMsgEnum::workerInfoFailed);
         }
         //数据调取
         try{
@@ -74,6 +75,7 @@ class WorkerController extends \restapi\components\Controller
                 $ret = [
                     "worker_photo"=>$workerInfo['worker_photo'],
                     "worker_name" => $workerInfo['worker_name'],
+                    "worker_age"  => $workerInfo['worker_age'],
                     "worker_idcard" => $workerInfo['worker_idcard'],//身份证
                     "worker_stat_order_num" => $workerInfo['worker_stat_order_num'],//服务次数
                     "worker_live_province" =>$workerInfo['worker_live_province'],//籍贯
@@ -85,7 +87,7 @@ class WorkerController extends \restapi\components\Controller
             }
             return $this->send($ret, '阿姨信息查询成功', 1, 200,null,alertMsgEnum::workerInfoSuccess);
         }catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerInfoFailed);
+            return $this->send(null,$e->getMessage(), 1024, 200,null,alertMsgEnum::workerInfoFailed);
         }
     }
 

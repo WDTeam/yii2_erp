@@ -139,7 +139,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"807b62127fdc2554607a01529d9e4b7e\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"807b62127fdc2554607a01529d9e4b7e\"\n  },\n  \"alertMsg\": \"登陆成功\"\n}",
           "type": "json"
         }
       ]
@@ -158,7 +158,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名,签名或渠道id错误\",\n  \"ret\": null\n}",
+          "content": "HTTP/1.1 200 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名,签名或渠道id错误\",\n  \"ret\": null,\n  \"alertMsg\": \"用户名,签名或渠道id错误\" \n}",
           "type": "json"
         }
       ]
@@ -314,7 +314,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"登陆成功\",\n      \"ret\": {\n          \"user\": {\n              \"id\": \"阿姨表自增id\",\n              \"shop_id\": \"门店id\",\n              \"worker_name\": \"阿姨姓名\",\n              \"worker_phone\": \"阿姨手机\",\n              \"worker_photo\": \"阿姨头像地址\",\n              \"worker_level\": \"阿姨等级\",\n              \"worker_auth_status\": \"阿姨审核状态 0新录入1已审核2已基础培训3已试工4已上岗5已晋升培训\",\n              \"worker_work_city\": \"阿姨工作城市\",\n              \"worker_work_area\": \"阿姨工作区县\",\n              \"worker_work_street\": \"阿姨常用工作地址\",\n              \"worker_work_lng\": \"阿姨常用工作经度\",\n              \"worker_work_lat\": \"阿姨常用工作纬度\",\n              \"worker_star\": \"阿姨星级\",\n              \"worker_type\": \"阿姨类型 1自有 2非自有\",\n              \"worker_rule_id\": \"阿姨角色id \",\n              \"worker_identity_id\": \"阿姨身份id \",\n              \"worker_is_block\": \"阿姨是否封号 0正常1封号\",\n              \"worker_is_vacation\": \"阿姨是否请假 0正常1请假中\",\n              \"worker_is_blacklist\": \"阿姨是否黑名单 0正常1黑名单\",\n              \"worker_blacklist_reason\": \"阿姨被加入黑名单的原因\",\n              \"worker_blacklist_time\": \"阿姨加入黑名单的原因\",\n              \"worker_is_dimission\": \"阿姨离职原因\",\n              \"worker_dimission_reason\": \"阿姨离职原因\",\n              \"worker_dimission_time\": \"阿姨离职时间\",\n              \"created_ad\": \"阿姨录入时间\",\n              \"updated_ad\": \"最后更新时间\"\n          },\n          \"access_token\": \"token值\"\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"登陆成功\",\n      \"ret\": {\n          \"user\": {\n              \"id\": \"阿姨表自增id\",\n              \"shop_id\": \"门店id\",\n              \"worker_name\": \"阿姨姓名\",\n              \"worker_phone\": \"阿姨手机\",\n              \"worker_photo\": \"阿姨头像地址\",\n              \"worker_level\": \"阿姨等级\",\n              \"worker_auth_status\": \"阿姨审核状态 0新录入1已审核2已基础培训3已试工4已上岗5已晋升培训\",\n              \"worker_work_city\": \"阿姨工作城市\",\n              \"worker_work_area\": \"阿姨工作区县\",\n              \"worker_work_street\": \"阿姨常用工作地址\",\n              \"worker_work_lng\": \"阿姨常用工作经度\",\n              \"worker_work_lat\": \"阿姨常用工作纬度\",\n              \"worker_star\": \"阿姨星级\",\n              \"worker_type\": \"阿姨类型 1自有 2非自有\",\n              \"worker_rule_id\": \"阿姨角色id \",\n              \"worker_identity_id\": \"阿姨身份id \",\n              \"worker_is_block\": \"阿姨是否封号 0正常1封号\",\n              \"worker_is_vacation\": \"阿姨是否请假 0正常1请假中\",\n              \"worker_is_blacklist\": \"阿姨是否黑名单 0正常1黑名单\",\n              \"worker_blacklist_reason\": \"阿姨被加入黑名单的原因\",\n              \"worker_blacklist_time\": \"阿姨加入黑名单的原因\",\n              \"worker_is_dimission\": \"阿姨离职原因\",\n              \"worker_dimission_reason\": \"阿姨离职原因\",\n              \"worker_dimission_time\": \"阿姨离职时间\",\n              \"created_ad\": \"阿姨录入时间\",\n              \"updated_ad\": \"最后更新时间\"\n          },\n          \"access_token\": \"token值\"\n      },\n     \"alertMsg\": \"登陆成功\" \n  }",
           "type": "json"
         }
       ]
@@ -4971,7 +4971,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"阿姨信息查询成功\",\n  \"alertMsg\": \"获取阿姨信息成功\",\n  \"ret\": {\n      \"worker_photo\": \"阿姨头像地址\",\n      \"worker_name\": \"阿姨姓名\",\n      \"worker_idcard\": \"阿姨身份证号码\",\n      \"worker_stat_order_num\": \"阿姨服务次数\",\n      \"worker_live_province\": \"110000\",\n      \"worker_district\": \"阿姨服务商圈\",\n      \"worker_comment_satisfied\": \"阿姨评价满意数\",\n      \"worker_comment_commonly\": \"阿姨评价满\",\n      \"worker_comment_unsatisfy\": \"阿姨不满意数\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"阿姨信息查询成功\",\n  \"alertMsg\": \"获取阿姨信息成功\",\n  \"ret\": {\n      \"worker_photo\": \"阿姨头像地址\",\n      \"worker_name\": \"阿姨姓名\",\n      \"worker_age\":\"阿姨年龄\",\n      \"worker_idcard\": \"阿姨身份证号码\",\n      \"worker_stat_order_num\": \"阿姨服务次数\",\n      \"worker_live_province\": \"110000\",\n      \"worker_district\": \"阿姨服务商圈\",\n      \"worker_comment_satisfied\": \"阿姨评价满意数\",\n      \"worker_comment_commonly\": \"阿姨评价满\",\n      \"worker_comment_unsatisfy\": \"阿姨不满意数\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -5170,8 +5170,8 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "city_name",
-            "description": "<p>城市</p> "
+            "field": "city_id",
+            "description": "<p>城市ID</p> "
           },
           {
             "group": "Parameter",
@@ -5194,26 +5194,16 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"city_list\": [\n             {\n                 \"id\": 1,\n                 \"province_id\": 120000,\n                 \"province_name\": \"天津\",\n                 \"city_id\": 120100,\n                 \"city_name\": \"天津市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444283773,\n                 \"updated_at\": 1444283773\n             },\n             {\n                 \"id\": 2,\n                 \"province_id\": 110000,\n                 \"province_name\": \"北京\",\n                 \"city_id\": 110100,\n                 \"city_name\": \"北京市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444368462,\n                 \"updated_at\": 1444368462\n             },\n             {\n                 \"id\": 3,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140300,\n                 \"city_name\": \"阳泉市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444413962,\n                 \"updated_at\": 1444413962\n             },\n             {\n                 \"id\": 4,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140100,\n                 \"city_name\": \"太原市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444635891,\n                 \"updated_at\": 1444635891\n             }\n             ],\n             \"pic_list\": [\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                 \"url_title\": \"标准服务\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/pledge.html\",\n                 \"url_title\": \"服务承诺\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png\",\n                 \"link\": \"\",\n                 \"url_title\": \"\"\n             }\n             ],\n             \"home_order_server\": [\n             {\n                 \"title\"=>\"单次保洁\",\n                 \"introduction\"=>\"新用户第1小时免费\",\n                 \"icon\"=>\"\",\n                 \"url\"=>\"\",\n                 \"sort\"=>\"1\",  排序\n                 \"bg_colour\"=>\"\",  背景颜色\n                 \"font_colour\"=>\"\",  字体颜色\n                 \"category_id\" => \"1\",\n                 \"category_name\" => \"专业保洁\",\n                 \"category_icon\" => \"\",\n                 \"category_introduction\" => \"44项定制清洁服务\",\n                 \"category_price\" => \"25.00\",\n                 \"category_price_unit\" => \"小时\",\n                 \"category_price_description\" => \"￥25/小时\",\n             },\n             ],\n             \"server_list\": [\n             {\n                 \"category_id\": \"6\",   服务品类id\n                 \"category_name\": \"精品保洁\",  服务品类名\n                 \"category_icon\": \"\",   小图片\n                 \"category_url\": \"\",    调转地址url\n                 \"category_introduction\": \"\",  简介\n                 \"category_price\": \"\",  价格\n                 \"category_price_unit\": \"\",  价格单位\n                 \"category_price_description\": \"\",  价格备注\n                 \"colour\"=>\"\",\n                 \"sort\": \"1\"   排序\n             },\n             {\n                 \"category_id\": \"1\",\n                 \"category_name\": \"专业保洁\",\n                 \"category_icon\": \"\",\n                 \"category_url\": \"\",\n                 \"category_introduction\": \"44项定制清洁服务\",\n                 \"category_price\": \"25.00\",\n                 \"category_price_unit\": \"小时\",\n                 \"category_price_description\": \"￥25/小时\",\n                 \"colour\"=>\"\",\n                 \"sort\": \"2\"\n             },\n             ],\n             \"footer_link\":[\n             {\n                 \"link_id\"=>\"1\",\n                 \"title\"=>\"首页\",\n                 \"url\"=>\"\",   跳转链接\n                 \"link_icon_check\" => \"http://dev.m2.1jiajie.com/statics/images/nav_01.png\", 选中图片\n                 \"link_icon_uncheck\" => \"http://dev.m2.1jiajie.com/statics/images/nav_d_01.png\", 未选中图片\n                 \"colour_check\" => \"#f7b136\", 选中颜色\n                 \"colour_uncheck\" => \"#555\",  未选中颜色\n                 \"sort\"=>\"1\"  排序\n             },\n             {\n                 \"link_id\"=>\"2\",\n                 \"title\"=>\"订单\",\n                 \"url\"=>\"\",\n                 \"link_icon\"=>\"\",\n                 \"colour\"=>\"\",\n                 \"sort\"=>\"2\"\n             },\n             ],\n             \"isBlock\":\"0\", 用户是否为黑名单，1表示黑名单，0表示正常，如果access_token为空，该值一定为0。\n             \"isEffect\": \"0\" 用户token是否有效，0表示正常，1表示失效，如果access_token为空，该值为0。\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"成功\"\n    \"ret\": {\n        \"city_list\": [\n            {\n                \"city_id\": \"110100\",\n                \"city_name\": \"北京市\"\n            }\n        ],\n        \"header_link\": {\n            \"comment_link\": {\n                \"title\": \"意见反馈\",\n                \"url\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\"\n            },\n            \"phone_link\": {\n                \"title\": \"18210922324\",\n                \"url\": \"\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png\"\n            }\n        },\n        \"pic_list\": [\n            {\n                \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                \"url_title\": \"标准服务\"\n            }\n        ],\n        \"home_order_server\": [\n            {\n                \"title\": \"单次保洁\",\n                \"introduction\": \"新用户第1小时免费\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/dancibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/1\",\n                \"bg_colour\": \"ffb518\",\n                \"font_colour\": \"ffffff\"\n            },\n            {\n                \"title\": \"周期保洁\",\n                \"introduction\": \"一次下单 清洁无忧\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/2\",\n                \"bg_colour\": \"ff8a44\",\n                \"font_colour\": \"ffffff\"\n            }\n        ],\n        \"server_list\": [\n            {\n                \"category_id\": \"2\",\n                \"category_name\": \"保洁任务\",\n                \"category_icon\": \"http://7b1f97.com1.z0.glb.clouddn.com/14468862302219563dbb56de6d3\",\n                \"category_introduction\": \"地板深度保护\",\n                \"category_url\": \"http://www.baidu.com\"\n            }\n        ],\n        \"isBlock\": \"用户是否为黑名单【1表示黑名单，0表示正常】\",\n        \"isEffect\": \"用户token是否有效【0表示正常，1表示失效】\"\n    }\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CityNotFound",
-            "description": "<p>城市尚未开通.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"城市尚未开通\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\":0,\n  \"alertMsg\": \"城市尚未开通\",\n  \"msg\": \"城市尚未开通\"\n}",
           "type": "json"
         }
       ]
@@ -6244,6 +6234,26 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
+    "url": "/service/service-items",
+    "title": "[GET] ( for pop )",
+    "name": "actionServiceItems",
+    "group": "service",
+    "description": "<p>获得所有服务项目[服务id, 服务编号,服务名,服务描述,服务英文名称]</p> ",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"success\",\n    \"ret\":\n    [\n        {\n            \"goods_id\": \"2\", 服务id\n            \"goods_no\": null,  服务编号\n            \"goods_name\": \"空调清洗\",  服务名\n            \"goods_introduction\": \"\", 服务简介\n            \"goods_english_name\": \"\", 服务英文名称\n        },\n     ],\n}",
           "type": "json"
         }
       ]

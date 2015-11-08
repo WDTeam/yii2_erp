@@ -94,12 +94,12 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         //控制添加地址时手机号码必须填写
         if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
-            return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 300, null, alertMsgEnum::addAddressNoPhone);
+            return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200, null, alertMsgEnum::addAddressNoPhone);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
@@ -113,7 +113,7 @@ class UserController extends \restapi\components\Controller
                     $ret = ['address' => $model];
                     return $this->send($ret, "常用地址添加成功", 1, 200, null, alertMsgEnum::addAddressSuccess);
                 } else {
-                    return $this->send(null, "常用地址添加失败", 0, 300, null, alertMsgEnum::addAddressFail);
+                    return $this->send(null, "常用地址添加失败", 0, 200, null, alertMsgEnum::addAddressFail);
                 }
             }
         } catch (\Exception $e) {
@@ -191,7 +191,7 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         try {
@@ -207,7 +207,7 @@ class UserController extends \restapi\components\Controller
                 if ($addresses) {
                     return $this->send($ret, "获取地址列表成功", 1, 200, null, alertMsgEnum::addAddressSuccess);
                 } else {
-                    return $this->send(null, "地址信息获取失败", 0, 300, null, alertMsgEnum::setDefaultAddressNoAddressId);
+                    return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::setDefaultAddressNoAddressId);
                 }
             }
         } catch (\Exception $e) {
@@ -262,17 +262,17 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         if (empty($param['address_id'])) {
-            return $this->send(null, "地址信息获取失败,请添加地址id", 0, 300, null, alertMsgEnum::deleteAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败,请添加地址id", 0, 200, null, alertMsgEnum::deleteAddressNoAddressId);
         }
 
         try {
             if (CustomerAddress::deleteAddress($param['address_id'])) {
                 return $this->send(null, "地址删除成功", 1, 200, null, alertMsgEnum::deleteAddressSuccess);
             } else {
-                return $this->send(null, "地址删除失败", 0, 300, null, alertMsgEnum::deleteAddressFail);
+                return $this->send(null, "地址删除失败", 0, 200, null, alertMsgEnum::deleteAddressFail);
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::deleteAddressFail);
@@ -331,15 +331,15 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         if (empty($param['address_id'])) {
-            return $this->send(null, "地址信息获取失败", 0, 300, null, alertMsgEnum::setDefaultAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::setDefaultAddressNoAddressId);
         }
         $model = CustomerAddress::getAddress($param['address_id']);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", 0, 300, null, alertMsgEnum::setDefaultAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::setDefaultAddressNoAddressId);
         }
 
         try {
@@ -347,7 +347,7 @@ class UserController extends \restapi\components\Controller
             ) {
                 return $this->send(null, "设置默认地址成功", 1, 200, null, alertMsgEnum::setDefaultAddressSuccess);
             } else {
-                return $this->send(null, "设置默认地址失败", 0, 300, null, alertMsgEnum::setDefaultAddressFail);
+                return $this->send(null, "设置默认地址失败", 0, 200, null, alertMsgEnum::setDefaultAddressFail);
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::setDefaultAddressFail);
@@ -408,15 +408,15 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['address_id'])) {
-            return $this->send(null, "地址信息获取失败", 0, 300, null, alertMsgEnum::updateAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::updateAddressNoAddressId);
         }
         if (empty($param) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $model = CustomerAddress::getAddress($param['address_id']);
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", 0, 300, null, alertMsgEnum::updateAddressNoAddressId);
+            return $this->send(null, "地址信息获取失败", 0, 200, null, alertMsgEnum::updateAddressNoAddressId);
         }
 
         try {
@@ -425,7 +425,7 @@ class UserController extends \restapi\components\Controller
                 return $this->send(null, "修改常用地址成功", 1, 200, null, alertMsgEnum::updateAddressSuccess);
             } else {
 
-                return $this->send(null, "修改常用地址失败", 0, 300, null, alertMsgEnum::updateAddressFail);
+                return $this->send(null, "修改常用地址失败", 0, 200, null, alertMsgEnum::updateAddressFail);
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::updateAddressFail);
@@ -500,7 +500,7 @@ class UserController extends \restapi\components\Controller
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
@@ -508,15 +508,15 @@ class UserController extends \restapi\components\Controller
             try {
                 $Address = CustomerAddress::getCurrentAddress($customer->id);
                 if (empty($Address)) {
-                    return $this->send(null, "该用户没有默认地址", 0, 300, null, alertMsgEnum::defaultAddressNoAddress);
+                    return $this->send(null, "该用户没有默认地址", 0, 200, null, alertMsgEnum::defaultAddressNoAddress);
                 }
                 $ret = ['address' => $Address];
                 return $this->send($ret, "获取默认地址成功", 1, 200, null, alertMsgEnum::defaultAddressSuccess);
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::defaultAddressFail);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::defaultAddressFail);
             }
         } else {
-            return $this->send(null, "获取用户信息失败", 0, 300, null, alertMsgEnum::defaultAddressFail);
+            return $this->send(null, "获取用户信息失败", 0, 200, null, alertMsgEnum::defaultAddressFail);
         }
     }
 
@@ -605,7 +605,7 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         #获取用户id
@@ -620,7 +620,7 @@ class UserController extends \restapi\components\Controller
                 if ($userBalance['response'] == 'success') {
                     $userBalanceMoney = $userBalance['balance'];
                 } elseif ($userBalance['response'] == 'error') {
-                    return $this->send(null, "查询失败", 0, 300, null, alertMsgEnum::getUserMoneyError);
+                    return $this->send(null, "查询失败", 0, 200, null, alertMsgEnum::getUserMoneyError);
                 }
                 /**
                  * 获取用户消费记录
@@ -632,10 +632,10 @@ class UserController extends \restapi\components\Controller
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功", 1, 200, null, alertMsgEnum::getUserMoneySuccess);
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -688,7 +688,7 @@ class UserController extends \restapi\components\Controller
         @$app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -710,10 +710,10 @@ class UserController extends \restapi\components\Controller
                     $ret["scoreCategory"] = $array;
                     return $this->send($ret, "用户积分明细列表", 1, 200, null, alertMsgEnum::getUserScoreSuccess);
                 } else {
-                    return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+                    return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         }
     }
@@ -769,11 +769,11 @@ class UserController extends \restapi\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
         if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
-            return $this->send(null, "提交参数中缺少必要的参数", 0, 300, null, alertMsgEnum::userSuggestNoOrder);
+            return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
 
         #是否匿名评价,0匿名,1非匿名'
@@ -811,13 +811,13 @@ class UserController extends \restapi\components\Controller
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
-                    return $this->send(null, "添加评论失败", 0, 300, null, alertMsgEnum::userSuggestFail);
+                    return $this->send(null, "添加评论失败", 0, 200, null, alertMsgEnum::userSuggestFail);
                 }
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+                return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
     }
 
@@ -902,13 +902,13 @@ class UserController extends \restapi\components\Controller
                     $ret = ['comment' => $array];
                     return $this->send($ret, "获取评论级别成功", 1, 200, null, alertMsgEnum::getCommentLevelSuccess);
                 } else {
-                    return $this->send(null, "获取评论级别失败", 0, 300, null, alertMsgEnum::getCommentLevelFail);
+                    return $this->send(null, "获取评论级别失败", 0, 200, null, alertMsgEnum::getCommentLevelFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -963,7 +963,7 @@ class UserController extends \restapi\components\Controller
         }
         
         if(@$param['customer_comment_level']===false){
-            return $this->send(null, "提交参数中缺少必要的参数", 0, 300, null, alertMsgEnum::userSuggestNoOrder);
+            return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
         
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -974,13 +974,13 @@ class UserController extends \restapi\components\Controller
                     $ret = ['commentTag' => $level];
                     return $this->send($ret, "获取评论标签成功", 1, 200, null, alertMsgEnum::getCommentLevelTagSuccess);
                 } else {
-                    return $this->send(null, "获取评论标签失败", 0, 300, null, alertMsgEnum::getCommentLevelTagFail);
+                    return $this->send(null, "获取评论标签失败", 0, 200, null, alertMsgEnum::getCommentLevelTagFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1109,13 +1109,13 @@ class UserController extends \restapi\components\Controller
                 if (!empty($level)) {
                     return $this->send($level, "获取标签和子标签成功", 1, 200, null, alertMsgEnum::getLevelTagSuccess);
                 } else {
-                    return $this->send(null, "获取标签和子标签失败", 0, 300, null, alertMsgEnum::getLevelTagFail);
+                    return $this->send(null, "获取标签和子标签失败", 0, 200, null, alertMsgEnum::getLevelTagFail);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1166,10 +1166,10 @@ class UserController extends \restapi\components\Controller
 
                 return $this->send($ret, "获取用户评价数量", 1, 200, null, alertMsgEnum::getCommentCountSuccess);
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1222,13 +1222,13 @@ class UserController extends \restapi\components\Controller
                 if ($service) {
                     return $this->send(["service" => $service], "该服务获取成功", 1, 200, null, alertMsgEnum::getGoodsSuccess);
                 } else {
-                    return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+                    return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1293,12 +1293,12 @@ class UserController extends \restapi\components\Controller
         $param = Yii::$app->request->get() or
                 $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::getUserInfoFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::getUserInfoFailed);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (empty($customer)) {
-            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::getUserInfoFailed);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInfoFailed);
         }
         $ret = [
             "user" => $customer,
@@ -1427,11 +1427,11 @@ class UserController extends \restapi\components\Controller
 
         #验证用户反馈提交
         if (empty($param['feedback_content'])) {
-            return $this->send(null, "提交意见反馈不能为空", 0, 300, null, alertMsgEnum::UserFeedbackContent);
+            return $this->send(null, "提交意见反馈不能为空", 0, 200, null, alertMsgEnum::UserFeedbackContent);
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::getUserInfoFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::getUserInfoFailed);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -1441,13 +1441,13 @@ class UserController extends \restapi\components\Controller
                 if ($feedback["response"] == 'success') {
                     return $this->send('{}', "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
                 } else {
-                    return $this->send(null, "用户反馈信息提交失败", 0, 300, null, alertMsgEnum::getUserFeedbackFailure);
+                    return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::getUserInfoFailed);
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInfoFailed);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 300, null, alertMsgEnum::userLoginFailed);
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
     }
 
@@ -1513,7 +1513,7 @@ class UserController extends \restapi\components\Controller
             $userBalance = Customer::getBalanceById($customer_id);
         } catch (\Exception $e) {
             # return $this->send($e, "获取用户余额系统错误", 1024, 200, null, alertMsgEnum::bossError);
-            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         if ($userBalance['response'] == 'success') {
             $userBalanceMoney = $userBalance['balance'];
@@ -1528,10 +1528,10 @@ class UserController extends \restapi\components\Controller
         try {
             $score = CustomerExtScore::getCustomerScore($customer_id);
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         if ($score === false) {
-            return $this->send(null, "没有此阿姨", 0, 300, null, alertMsgEnum::getMoneyScoreCouponFail);
+            return $this->send(null, "没有此阿姨", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
         $result["score"] = $score;
         /**
@@ -1542,13 +1542,13 @@ class UserController extends \restapi\components\Controller
             $CouponCount = CouponCustomer::CouponCount($customer_id);
         } catch (\Exception $e) {
             #return $this->send($e, "获取用户优惠券数系统错误", 1024, 200, null, alertMsgEnum::bossError);
-            return $this->send(null, $e->getMessage(), 1024, 300, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         $result["coupon"] = $CouponCount;
         if (!empty($result)) {
             return $this->send($result, "获取个人中心信息成功", 1, 200, null, alertMsgEnum::getMoneyScoreCouponSuccess);
         } else {
-            return $this->send(null, "获取个人中心信息失败", 0, 300, null, alertMsgEnum::getMoneyScoreCouponFail);
+            return $this->send(null, "获取个人中心信息失败", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
     }
 

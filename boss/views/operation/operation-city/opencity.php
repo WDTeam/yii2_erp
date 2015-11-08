@@ -35,10 +35,11 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                         <td>
                             <a href="<?= Yii::$app->urlManager->createUrl(
                                 [
-                                    '/operation/operation-city/settinggoodsinfo',
+                                    //'/operation/operation-city/settinggoodsinfo',
+                                    '/operation/operation-city/addgoods',
                                     'city_id' => $value['city_id'],
                                     'goods_id'=> $v['operation_goods_id'],
-                                    'cityAddGoods' => 'editGoods'
+                                    'action' => 'editGoods'
                                 ]
                                 )?>"
                                 class="btn btn-success btn-sm">编辑

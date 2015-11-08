@@ -21,7 +21,7 @@ return [
     /*
      * Redis 服务PORT
      */
-    'REDIS_SERVER_PORT '=> 6379,
+    'REDIS_SERVER_PORT ' => 6379,
     /*
      * Redis 服务运行状态
      */
@@ -29,7 +29,7 @@ return [
     /*
      * Redis 待指派订单池
      */
-    '_REDIS_WAIT_ASSIGN_ORDER_POOL_'=> 'WAIT_ASSIGN_ORDERS_POOL',
+    '_REDIS_WAIT_ASSIGN_ORDER_POOL_' => 'WAIT_ASSIGN_ORDERS_POOL',
     /*
      * 服务监听地址（默认 0.0.0.0 勿改）
      */
@@ -39,7 +39,7 @@ return [
      * 服务监听端口（默认 9501）
      */
     'SERVER_LISTEN_PORT' => 9501,
-    
+
     /*
      * SWOOLE 服务IP（推荐使用域名）
      */

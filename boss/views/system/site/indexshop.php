@@ -6,9 +6,12 @@ use boss\assets\AppAsset;
 AppAsset::addCss($this, 'css/shop/bootstrap.min.css');
 AppAsset::addCss($this, 'css/shop/index.css');
 $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
+
+$shop_manages = Yii::$app->user->identity->getShopManagerList();
 ?>
  <div class="container">
-        <div class="row header">某-某家政公司</div>
+        <?php foreach ($shop_manages as $shop_manager){?>
+        <div class="row header"><?php echo $shop_manager->name;?></div>
         <div class="row bar">
             <div class="order-num border-margin">
                 <span>200</span><br/><span>已接单</span>
@@ -26,6 +29,7 @@ $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
                 <span>200</span><br/><span>已接单</span>
             </div>
         </div>
+        <?php }?>
         <div class="row content">
             <div class="col-md-5 content-margin">
                 <div class="row content-bar">

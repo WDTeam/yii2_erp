@@ -168,7 +168,7 @@ class Order extends OrderModel
             }
         }
         foreach($attributes_required as $v){
-            if(!isset($attributes[$v])){
+            if(empty($attributes[$v])){
                 $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
                 return false;
             }
@@ -521,7 +521,6 @@ class Order extends OrderModel
             }
 
             if($result) {
-                //TODO 如果是第三方订单则同步状态过去
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //更新阿姨接单数量 第二个参数是阿姨的接单次数
                 $transact->commit();
@@ -697,12 +696,6 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            //如果是第三方订单则同步状态到第三方
-            if($order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
-                if(!OrderPop::cancelToPop($order)) { //第三方同步失败则直接取消失败
-                    return false;
-                }
-            }
             $transact = static::getDb()->beginTransaction();
             $result = OrderStatus::_cancel($order,[],$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT
@@ -791,12 +784,17 @@ class Order extends OrderModel
         }else{
             $goods = $goods['data'];
         }
+        $order_booked_count = floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600); //TODO 精品保洁另算时长
+        if($order_booked_count>6){
+            $this->addError('order_booked_count', "服务时长最大六个小时！");
+            return false;
+        }
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
             'order_service_item_name' => $goods['operation_shop_district_goods_name'], //商品名称
             'order_service_type_id' => $goods['operation_category_id'], //品类ID
             'order_service_type_name' => $goods['operation_category_name'], //品类名称
-            'order_booked_count' => floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600), //TODO 精品保洁另算时长
+            'order_booked_count' => $order_booked_count,
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价
@@ -812,6 +810,12 @@ class Order extends OrderModel
             'order_lng' => $address['customer_address_longitude']
         ]);
 
+        $range = date('G:i',$this->order_booked_begin_time).'-'.date('G:i',$this->order_booked_end_time);
+        $ranges = $this->getThisOrderBookedTimeRangeList();
+        if(!in_array($range,$ranges)){
+            $this->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
+            return false;
+        }
 
         if ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP) { //第三方预付
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
@@ -1003,7 +1007,7 @@ class Order extends OrderModel
     {
         $shop_district_info = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($shop_district_info)) {
-            return ['code' => 502, 'msg' => '获取商品信息失败：没有匹配的商圈'];
+            return ['code' => 502, 'msg' => '该地址没有商圈，获取服务项目失败！'];
         } else {
             if ($goods_id == 0) {
                 $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
@@ -1011,7 +1015,7 @@ class Order extends OrderModel
                 $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id'],$goods_id);
             }
             if (empty($goods)) {
-                return ['code' => 501, 'msg' => '获取商品信息失败：没有匹配的商品'];
+                return ['code' => 501, 'msg' => '没有匹配到服务项目！'];
             } else if($goods_id == 0){
                 return ['code' => 200, 'data' => $goods, 'district_id' => $shop_district_info['operation_shop_district_id']];
             } else {
@@ -1060,26 +1064,16 @@ class Order extends OrderModel
 
     /**
      * 获取已上线商圈列表
-     * @date: 2015-10-26
-     * @author: peak pan
-     * @return:
-     * */
+     * @date 2015-10-26
+     * @author peak pan
+     * @return array
+      */
     public static function getDistrictList()
     {
         $districtList = OperationShopDistrict::getCityShopDistrictList();
         return $districtList ? ArrayHelper::map($districtList, 'id', 'operation_shop_district_name') : [];
     }
 
-    /**
-     * 核实用户订单唯一性
-     * @param   $customer_id   int 用户id
-     * @param   $order_id       int  订单id
-     * @return  int
-     */
-    public static function validationOrderCustomer($customer_id, $order_id)
-    {
-        return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
-    }
 
     /*
      * 获取订单状态列表
@@ -1132,6 +1126,46 @@ class Order extends OrderModel
     public function getOrderBookedTimeArrange()
     {
         return date('H:i', $this->order_booked_begin_time) . '-' . date('H:i', $this->order_booked_end_time);
+    }
+
+    /**
+     * 根据本订单获取可选下单时间列表
+     * @return array
+     */
+    public function getThisOrderBookedTimeRangeList()
+    {
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1);
+        $order_booked_time_range = [];
+        foreach($time_range[0]['timeline'] as $range){
+            if($range['enable']) {
+                $order_booked_time_range[$range['time']] = $range['time'];
+            }
+        }
+        return $order_booked_time_range;
+    }
+
+    /**
+     * 获取可下单时间列表
+     * @param int $district_id
+     * @param int $range
+     * @param int $date
+     * @param int $days
+     * @return array
+     */
+    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
+    {
+        if($district_id>0) {
+            $date = strtotime($date);
+            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
+        }
+        $order_booked_time_range = [];
+        for ($i = 8; $i <= 18; $i++) {
+            $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $hour2 = str_pad($i + intval($range), 2, '0', STR_PAD_LEFT);
+            $minute = ($range - intval($range) == 0) ? '00' : '30';
+            $order_booked_time_range["{$hour}:00-{$hour2}:{$minute}"] = "{$hour}:00-{$hour2}:{$minute}";
+        }
+        return $order_booked_time_range;
     }
 
 }

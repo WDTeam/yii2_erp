@@ -5,7 +5,7 @@ namespace boss\models\shop;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\shop\ShopCustomeRelation;
+use core\models\shop\ShopCustomeRelation;
 
 /**
  * ShopCustomeRelationSearch represents the model behind the search form about `dbbase\models\shop\ShopCustomeRelation`.

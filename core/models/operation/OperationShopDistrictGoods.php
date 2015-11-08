@@ -44,14 +44,16 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
             //去掉接收数据中没有选中的或是没有输入销售价格的服务项目
             foreach ($values as $key => $value) {
-                if (!isset($value['operation_goods_id']) || $value['operation_goods_id'] == '' || !isset($value['operation_goods_price']) || $value['operation_goods_price'] == '' || !isset($value['district']) || empty($value['district'])) {
+                if (!isset($value['operation_goods_id']) || $value['operation_goods_id'] == ''
+                    || !isset($value['operation_goods_price']) || $value['operation_goods_price'] == ''
+                    || !isset($value['district']) || empty($value['district'])) {
                     unset($values[$key]);
                 }
             }
 
-            //如果没有输入销售价格,不能上线
+            //如果没有输入销售价格,过滤掉
             if (!isset($values) || empty($values)) {
-                break;
+                continue;
             }
 
             //服务项目的数据
@@ -59,6 +61,9 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 $operation_goods_id = $value['operation_goods_id'];
                 $operation_goods_name = $value['operation_goods_name'];
                 $operation_goods_price = $value['operation_goods_price'];
+
+                //删除掉旧数据，再插入新数据
+                self::delCityShopDistrictGoods($operation_goods_id, $city_id);
 
                 $operation_goods_market_price = $value['operation_goods_market_price'] ?  $value['operation_goods_market_price']: 0;
 
@@ -382,11 +387,11 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         Yii::$app->db->createCommand()->update(self::tableName(), ['operation_shop_district_goods_status' => 2], ['operation_goods_id' => $goodsid, 'operation_city_id' => $cityid])->execute();
     }
 
-
     /**
      * 删除城市下边商品
-     * @param type $goods_id
-     * @param type $city_id
+     *
+     * @param inter $goods_id    服务项目编号
+     * @param inter $city_id     上线城市编号
      */
     public static function delCityShopDistrictGoods($goods_id, $city_id){
         return self::deleteAll(['operation_goods_id' => $goods_id, 'operation_city_id' => $city_id]);
@@ -420,6 +425,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'oc.id',
                 'oc.operation_category_icon',
                 'oc.operation_category_price_description',
+                'oc.operation_category_introduction',
             ])
             //->distinct()
             ->from('{{%operation_shop_district_goods}} as osdg')
@@ -518,6 +524,63 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         'operation_shop_district_goods_status'=>'1']);
     }
 
+    /**
+     * 根据服务项目id和城市id获取商品在商圈的具体信息
+     *
+     * @param  inter  $shop_district_id    商品在商圈里的编号
+     * @return array  $result              上线商品的信息
+     */
+    public static function getDistrictGoodsInfo($operation_goods_id, $city_id)
+    {
+        $result = self::find()
+            ->select([
+                'operation_goods_id',
+                'operation_shop_district_id',
+                'operation_category_id',
+                'operation_spec_strategy_unit',
+                'operation_shop_district_goods_price',
+                'operation_shop_district_goods_market_price',
+                'operation_shop_district_goods_lowest_consume_num',
+            ])
+            ->where([
+                'operation_goods_id' => $operation_goods_id,
+                'operation_city_id' => $city_id,
+                'operation_shop_district_goods_status' => '1',
+            ])
+            ->asArray()
+            ->all();
 
+        return $result;
+    }
 
+    /**
+     * 查找商圈是否存在;有,则代表上线
+     *
+     * @param inter $district_id    商圈id
+     */
+    public static function getShopDistrict($district_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where(['operation_shop_district_id' => $district_id])
+            ->asarray()
+            ->one();
+
+        if (isset($data['id']) && $data['id'] > 0) {
+            return $data['id'];
+        } else {
+            return 0;
+        }
+
+    }
+
+    /**
+     * 删除商圈下边商品
+     *
+     * @param inter $operation_shop_district_id    商圈id
+     */
+    public static function delShopDistrictGoods($operation_shop_district_id)
+    {
+        self::deleteAll(['operation_shop_district_id' => $operation_shop_district_id]);
+    }
 }

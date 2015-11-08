@@ -138,7 +138,7 @@ AppAsset::register($this);
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
     Copyright © 2015 e家洁.
-    All rights reserved. <?php echo Html::a('<span>v1.4.0</span>', Yii::$app->urlManager->createUrl(['/system/release-history'],[]), [
+    All rights reserved. <?php echo Html::a('<span>发布记录</span>', Yii::$app->urlManager->createUrl(['/system/release-notes'],[]), [
                             'title' => Yii::t('yii', '查看发布历史'),'data-pjax'=>'0','target' => '_blank',
                         ]) ?>
     </div>

@@ -2,15 +2,17 @@
 
 namespace core\models\payment;
 
-use core\models\finance\FinanceOrderChannel;
+use core\models\finance\FinancePayChannel;
 use core\models\operation\OperationServiceCardSellRecord;
 use core\models\order\Order;
+use core\models\order\OrderOtherDict;
 use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
 
 
 use Yii;
+use yii\base\Exception;
 
 class Payment extends \dbbase\models\payment\Payment
 {
@@ -188,8 +190,9 @@ class Payment extends \dbbase\models\payment\Payment
             $scenario = 'online_pay';
         }
 
-        //获取支付渠道名称
-        $data['payment_source_name'] = FinanceOrderChannel::getOrderChannelByName($data['payment_source']);
+        //获取渠道ID和名称
+        $data['payment_channel_id'] = self::getParamsToPayChannel($data['payment_source']);
+        $data['payment_channel_name'] = FinancePayChannel::getPayChannelByName($data['payment_channel_id']);
 
         //使用场景
         $model->scenario = $scenario;
@@ -205,6 +208,58 @@ class Payment extends \dbbase\models\payment\Payment
         {
             return ['status'=>0 , 'info'=>'数据返回失败', 'data'=>$model->errors];
         }
+    }
+
+    /**
+     * 转换支付渠道
+     * @param $toid
+     * 7	支付宝
+     * 8	百度钱包
+     * 10	微信后台
+     * 12	银联后台
+     * 13	财付通
+     * 20   余额支付
+     */
+    public static function getParamsToPayChannel($toid)
+    {
+        switch($toid)
+        {
+            case 1:
+                $channel = 13;//财付通
+                break;
+            case 2:
+                $channel = 10;//微信后台
+                break;
+            case 3:
+                $channel = 8;//百度钱包
+                break;
+            case 4:
+                $channel = 12;//银联后台
+                break;
+            case 5:
+                $channel = 7;//支付宝
+                break;
+            case 6:
+                $channel = 7;//支付宝
+                break;
+            case 7:
+                $channel = 8;//百度钱包
+                break;
+            case 20:
+                $channel = 20;//余额支付
+                break;
+            case 21:
+                $channel = 21;//微博
+                break;
+            case 23:
+                $channel = 10;//微信后台
+                break;
+            case 24:
+                $channel = 7;//支付宝
+                break;
+        }
+        return $channel;
+
     }
 
     /**
@@ -598,13 +653,21 @@ class Payment extends \dbbase\models\payment\Payment
         $sign = $class->callback();
 
         //验证支付结果
-        if( !empty($model) && !empty($sign) ){
+        if( !empty($model) && !empty($sign) )
+        {
 
             $model->id = $paymentId; //ID
-            $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['settleAmt'],100,'/');
             $model->payment_transaction_id = $post['queryId'];
             $model->payment_eo_order_id = $post['orderId'];
+
+            //异常状态
+            if( $model->payment_actual_money != $model->payment_money)
+            {
+                $model->payment_status = 2; //异常状态
+            }else{
+                $model->payment_status = 1; //支付状态
+            }
             $model->payment_verify = $model->sign();
 
             //commit
@@ -701,13 +764,20 @@ class Payment extends \dbbase\models\payment\Payment
             //签名验证成功
             if($verify_result)
             {
+
                 $model->id = $paymentId; //ID
-                $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $post['total_fee'];
                 $model->payment_transaction_id = $post['trade_no'];
                 $model->payment_eo_order_id = $post['out_trade_no'];
-                $model->payment_verify = $model->sign();
 
+                //异常状态
+                if( $model->payment_actual_money != $model->payment_money)
+                {
+                    $model->payment_status = 2; //异常状态
+                }else{
+                    $model->payment_status = 1; //支付状态
+                }
+                $model->payment_verify = $model->sign();
                 //commit
                 $connection  = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
@@ -743,32 +813,6 @@ class Payment extends \dbbase\models\payment\Payment
             //{"payment_type":"1","subject":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed8","trade_no":"2015110457346343","buyer_email":"weibeinan2008@163.com","gmt_create":"2015-11-04 18:15:36","notify_type":"trade_status_sync","quantity":"1","out_trade_no":"1511040155118","seller_id":"2088801136967007","notify_time":"2015-11-04 18:39:23","body":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed80.02\u5143","trade_status":"TRADE_SUCCESS","is_total_fee_adjust":"N","total_fee":"0.02","gmt_payment":"2015-11-04 18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
             //15:57:08","price":"0.02","buyer_id":"2088802381237501","notify_id":"2983afc3b92e376e84923e4c75e0f3574s","use_coupon":"N","sign_type":"RSA","sign":"ZlCICZ\/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE\/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc="}
             //18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
-            /*
-             {
-                "payment_type": "1",
-                "subject": "e家洁在线支付",
-                "trade_no": "2015110457346343",
-                "buyer_email": "weibeinan2008@163.com",
-                "gmt_create": "2015-11-04 18:15:36",
-                "notify_type": "trade_status_sync",
-                "quantity": "1",
-                "out_trade_no": "1511040155118",
-                "seller_id": "2088801136967007",
-                "notify_time": "2015-11-04 18:39:23",
-                "body": "e家洁在线支付0.02元",
-                "trade_status": "TRADE_SUCCESS",
-                "is_total_fee_adjust": "N",
-                "total_fee": "0.02",
-                "gmt_payment": "2015-11-04 18:15:36",
-                "seller_email": "47632990@qq.com",
-                "price": "0.02",
-                "buyer_id": "2088412778636439",
-                "notify_id": "e57d71ea1dc40bbf294a7df8d47171834e",
-                "use_coupon": "N",
-                "sign_type": "RSA",
-                "sign": "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
-            }
-             */
 
             $_POST = [
                 "payment_type"=> "1",
@@ -808,7 +852,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 6,  //支付渠道ID
+            'pay_channel_id' => 7,  //支付渠道,支付宝
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -834,11 +878,20 @@ class Payment extends \dbbase\models\payment\Payment
             //签名验证成功
             if($verify_result)
             {
+
+
                 $model->id = $paymentId; //ID
-                $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $post['total_fee'];
                 $model->payment_transaction_id = $post['trade_no'];
                 $model->payment_eo_order_id = $post['out_trade_no'];
+
+                //异常状态
+                if( $model->payment_actual_money != $model->payment_money)
+                {
+                    $model->payment_status = 2; //异常状态
+                }else{
+                    $model->payment_status = 1; //支付状态
+                }
                 $model->payment_verify = $model->sign();
 
                 //commit
@@ -949,11 +1002,20 @@ class Payment extends \dbbase\models\payment\Payment
 
         //验证支付结果
         if(!empty($model) && !empty($status)){
+
+
             $model->id = $paymentId; //ID
-            $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['total_fee'],100,'/');
             $model->payment_transaction_id = $post['transaction_id'];
             $model->payment_eo_order_id = $post['out_trade_no'];
+
+            //异常状态
+            if( $model->payment_actual_money != $model->payment_money)
+            {
+                $model->payment_status = 2; //异常状态
+            }else{
+                $model->payment_status = 1; //支付状态
+            }
             $model->payment_verify = $model->sign();
 
             //commit
@@ -1041,11 +1103,19 @@ class Payment extends \dbbase\models\payment\Payment
 
         //验证支付结果
         if( !empty($model) && !empty($sign) ){
+
             $model->id = $paymentId; //ID
-            $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['total_amount'],100,'/');
             $model->payment_transaction_id = $post['bfb_order_no'];
             $model->payment_eo_order_id = $post['order_no'];
+
+            //异常状态
+            if( $model->payment_actual_money != $model->payment_money)
+            {
+                $model->payment_status = 2; //异常状态
+            }else{
+                $model->payment_status = 1; //支付状态
+            }
             $model->payment_verify = $model->sign();
 
             //commit
@@ -1152,11 +1222,18 @@ class Payment extends \dbbase\models\payment\Payment
             //签名验证成功
             if($status == 'SUCCESS')
             {
+
                 $model->id = $paymentId; //ID
-                $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $model->toMoney($post['total_fee'],100,'/');
                 $model->payment_transaction_id = $post['transaction_id'];
                 $model->payment_eo_order_id = $post['out_trade_no'];
+                //异常状态
+                if( $model->payment_actual_money != $model->payment_money)
+                {
+                    $model->payment_status = 2; //异常状态
+                }else{
+                    $model->payment_status = 1; //支付状态
+                }
                 $model->payment_verify = $model->sign();
 
                 //commit
@@ -1240,13 +1317,20 @@ class Payment extends \dbbase\models\payment\Payment
             //签名验证成功
             if( !empty($status) )
             {
+
                 $model->id = $paymentId; //ID
-                $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $model->toMoney($post['paid_amount'],100,'/');
                 $model->payment_transaction_id = $post['order_id'];
                 $model->payment_eo_order_id = $post['order_no'];
-                $model->payment_verify = $model->sign();
 
+                //异常状态
+                if( $model->payment_actual_money != $model->payment_money)
+                {
+                    $model->payment_status = 2; //异常状态
+                }else{
+                    $model->payment_status = 1; //支付状态
+                }
+                $model->payment_verify = $model->sign();
                 //commit
                 $connection  = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
@@ -1295,18 +1379,24 @@ class Payment extends \dbbase\models\payment\Payment
         foreach( $data as $name=>$val )
         {
             $value = is_numeric($val) ? (int)$val : $val;
-            if( !empty($value) && !in_array($name,$notArray))
+            if( $name == 'payment_money' || $name == 'payment_actual_money' )
+            {
+                $str .= number_format($val,2);
+            }
+            else if( !empty($value) && !in_array($name,$notArray))
             {
                 if(is_numeric($value) && $value < 1) continue;
                 $str .= $value;
             }
         }
+        //1jiajie.com110.007支付宝1jjtb1511040155118140.0024220151104573463431
+        //1jiajie.com110.027支付宝1jjtb1511040155118140.0024220151104573463431
         //return $str;
         return md5(md5($str).'1jiajie.com');
     }
 
     /**
-     * 支付/充值
+     * 支付/充值,交易记录分配入口
      * @param $attribute 支付或订单详细数据
      */
     private function paymentTransRecord($attribute)
@@ -1315,29 +1405,39 @@ class Payment extends \dbbase\models\payment\Payment
         {
             case 1:
                 //支付普通订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1,$attribute);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_channel_id'],'order_pay',1,$attribute);
                 //验证支付金额是否一致
-                if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
+                if( $attribute['payment_money'] === $attribute['payment_actual_money'] )
                 {
-                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_id'],$attribute['payment_transaction_id']);
+                }
+                else
+                {
+                    //金额有误,执行取消订单,调用退款,
+                    Order::cancelByOrderId($attribute['order_id'], Order::ADMIN_SYSTEM,OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE,'异常支付');
                 }
                 break;
             case 2:
                 //支付周期订单交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2,$attribute);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_channel_id'],'order_pay',2,$attribute);
                 //验证支付金额是否一致
-                if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
+                if( $attribute['payment_money'] === $attribute['payment_actual_money'] )
                 {
-                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_id_name'],$attribute['payment_transaction_id']);
+                }
+                else
+                {
+                    //金额有误,执行取消订单,调用退款
+                    Order::cancelByOrderId($attribute['order_id'], Order::ADMIN_SYSTEM,OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE,'异常支付');
                 }
                 break;
             case 3:
                 //支付充值交易记录
-                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment',2,$attribute);
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_channel_id'],'payment',2,$attribute);
                 break;
             case 4:
                 //退款
-                PaymentCustomerTransRecord::refundRecord($attribute['order_id']);
+                PaymentCustomerTransRecord::refundRecord($attribute['order_id'], 'order_refund',1,$attribute['payment_data']);
                 break;
         }
         //支付充值
@@ -1362,7 +1462,7 @@ class Payment extends \dbbase\models\payment\Payment
             {
                 //余额支付退款
                 //Customer::incBalance($customer_id,$orderInfo['order_use_acc_balance']);
-                self::paymentTransRecord(['order_id'=>$order_id]);
+                self::paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4]);
             }
             elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
             {
@@ -1375,40 +1475,56 @@ class Payment extends \dbbase\models\payment\Payment
         {
             $connection  = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
-            //查询线上支付记录
-            $paymentInfo = Payment::find()->where(['payment_mode'=>1,'payment_status'=>1,'order_id'=>$order_id,'customer_id'=>$customer_id])->asArray()->one();
-            if( empty($paymentInfo))
-            {
-                return ['status'=>0,'info'=>'未找到支付数据','data'=>''];
-            }
+            try{
+                //查询线上是否存在退款记录
+                $refundInfo = Payment::find()->where(['payment_mode'=>3,'payment_status'=>1,'order_id'=>$order_id,'customer_id'=>$customer_id])->asArray()->one();
+                if( !empty($refundInfo) )
+                {
+                    return ['status'=>0,'info'=>'已经退款过','data'=>''];
+                }
 
-            //线上退款,创建一条线上退款记录,状态未确认
-            $model = new Payment();
-            $model->scenario = 'refund';
-            $model->setAttributes([
-                'customer_id' => $customer_id,
-                'order_id' => $order_id,
-                'payment_money' => $orderInfo['order_pay_money'],   //订单支付金额
-                'payment_actual_money' => $paymentInfo['payment_actual_money'],     //实际支付金额
-                'payment_source' => $paymentInfo['payment_source'],
-                'payment_source_name' => $paymentInfo['payment_source_name'],
-                'payment_mode' => 3,
-                'payment_status' => 1,
-                'payment_memo' => '',
-                'payment_type' => 4,
-                'admin_id' => Yii::$app->user->id,
-                'payment_admin_name' => Yii::$app->user->identity->username,
-            ]);
+                //查询线上是否存在支付记录
+                $paymentInfo = Payment::find()->where(['payment_mode'=>1,'payment_status'=>1,'order_id'=>$order_id,'customer_id'=>$customer_id])->asArray()->one();
+                if( empty($paymentInfo) )
+                {
+                    return ['status'=>0,'info'=>'未找到支付数据','data'=>''];
+                }
 
-            //调用退款
-            if($model->doSave() && $model->paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4]))
-            {
-                $transaction->commit();
-                return ['status'=>1,'info'=>'已确认退记录完成','data'=>''];
-            }
-            else
-            {
+                //线上退款,创建一条线上退款记录,状态未确认
+                $model = new Payment();
+                $model->scenario = 'refund';
+                $model->setAttributes([
+                    'customer_id' => $customer_id,
+                    'order_id' => $order_id,
+                    'payment_money' => $orderInfo['order_pay_money'],   //订单支付金额
+                    'payment_actual_money' => $paymentInfo['payment_actual_money'],     //实际支付金额
+                    'payment_source' => $paymentInfo['payment_source'],
+                    'payment_channel_id' => $paymentInfo['payment_channel_id'],
+                    'payment_channel_name' => $paymentInfo['payment_channel_name'],
+                    'payment_mode' => 3,    //退款
+                    'payment_status' => 1,  //退款成功状态
+                    'payment_transaction_id'=>0,
+                    'payment_memo' => '',
+                    'payment_type' => 4,    //退款类型
+                    'admin_id' => Yii::$app->user->id,
+                    'payment_admin_name' => Yii::$app->user->identity->username,
+                    'payment_eo_order_id'=>$model->createOutTradeNo(2,$order_id),
+                    'payment_verify' => $model->sign(),
+                ]);
+
+                //调用退款
+                if($model->doSave() && $model->paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4,'payment_data'=>$paymentInfo]))
+                {
+                    $transaction->commit();
+                    return ['status'=>1,'info'=>'已确认退记录完成','data'=>''];
+                }else{
+                    $transaction->rollBack();
+                    return ['status'=>0,'info'=>'数据异常状态','data'=>''];
+                }
+
+            }catch(Exception $e){
                 $transaction->rollBack();
+                return ['status'=>0,'info'=>'数据异常状态','data'=>''];
             }
         }
         return ['status'=>0,'info'=>'未找到订单数据','data'=>''];

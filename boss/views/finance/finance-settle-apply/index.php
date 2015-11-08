@@ -13,19 +13,6 @@ use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 $this->title = Yii::t('finance', '财务审核');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
-<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-<script src="//cdn.bootcss.com/angular.js/1.4.6/angular.js"></script>
-<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
-<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/tooltip.js"></script>
-<style type="text/css">
-    .popover {
-        height:50px;
-        max-width:2000px;
-    }
-</style>
 <form id ="financeSettleApplyForm">
    
 <div class="finance-settle-apply-index">
@@ -91,9 +78,25 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); Pjax::end(); ?>
      </div>
 </div>
-<script>
-$(function () {
-    $('[data-toggle="popover"]').popover();
-});
-</script>
+    <?php 
+         
+            $js=<<<JS
+                    $(".agree").click(
+                        function(){
+                            if(confirm("审核通过该笔结算是吗?")){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }
+                    );
+                    $('.disagree').click(function() {
+                        $('#reasonModal .modal-body').html('加载中……');
+                        $('#reasonModal .modal-body').eq(0).load(this.href);
+                    });
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
 </form>

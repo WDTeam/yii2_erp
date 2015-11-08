@@ -3,7 +3,7 @@
 namespace boss\controllers\shop;
 
 use Yii;
-use dbbase\models\shop\ShopCustomeRelation;
+use core\models\shop\ShopCustomeRelation;
 use boss\models\shop\ShopCustomeRelationSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
@@ -58,14 +58,14 @@ class ShopCustomeRelationController extends BaseAuthController
         	if(!isset($dateinfo['ShopCustomeRelation']['shopid'])){
         		//父级id
         		$model->baseid= 0;
-        		$stype=1;
+        		$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOP;
         	}else{
         		//门店选择家政公司  会根据家政公司选择父id
         		if(!isset($dateinfo['ShopCustomeRelation']['shop_manager_id'])){
         			\Yii::$app->getSession()->setFlash('default','请选择家政公司！');
         			return $this->redirect(['index']);
         		}else{
-        			$stype=2;
+        			$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOPMANAGER;
         			$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
         		}
         		$model->baseid= $resinfo['id'];
@@ -118,30 +118,30 @@ class ShopCustomeRelationController extends BaseAuthController
     	
     		$model->system_user_id= $dateinfo['ShopCustomeRelation']['system_user_id'];
     		
-    		if(!isset($dateinfo['ShopCustomeRelation']['shopid'])){
+    		if(empty($dateinfo['ShopCustomeRelation']['shopid'])){
     		//父级id	
     			$model->baseid= 0;
-    			$stype=1;
+    			$stype= ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER;
     		}else{
     		//门店选择家政公司  会根据家政公司选择父id
     		if(!isset($dateinfo['ShopCustomeRelation']['shop_manager_id'])){
     			\Yii::$app->getSession()->setFlash('default','请选择家政公司！');
     			return $this->redirect(['index']);
     		}else{
-    		$stype=2;
-    		$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
-    		}
-    			$model->baseid= $resinfo['id'];
-    		}
-    		$model->shopid= $dateinfo['ShopCustomeRelation']['shopid'];
-    		$model->shop_manager_id= $dateinfo['ShopCustomeRelation']['shop_manager_id'];
-    		$model->stype= $stype;
-    		$model->is_del= 0;
-    		 $model->save();
-    		return $this->redirect(['index']);
-
-    	} else {
-    		return $this->render('create', [
+        		$stype= ShopCustomeRelation::TYPE_STYPE_SHOP;
+        		$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
+        		}
+        			$model->baseid= $resinfo['id'];
+        		}
+        		$model->shopid= $dateinfo['ShopCustomeRelation']['shopid'];
+        		$model->shop_manager_id= $dateinfo['ShopCustomeRelation']['shop_manager_id'];
+        		$model->stype= $stype;
+        		$model->is_del= 0;
+        		 $model->save();
+        		return $this->redirect(['index']);
+    
+        	} else {
+        		return $this->render('create', [
     				'model' => $model,
     				]);
     	}

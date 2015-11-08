@@ -59,10 +59,25 @@ use core\models\finance\FinanceSettleApplySearch;
             echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceSettleApplySearch::FULLTIME=>'全职',FinanceSettleApplySearch::PARTTIME=>'兼职',FinanceSettleApplySearch::PARKTIME=>'高峰',FinanceSettleApplySearch::INTERVALTIME=>'时段']);
         ?>
     </div>
+    <input type="hidden" name="isExport" id = "isExport" value="0"/>
     <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('app', '导出报表'), ['class' => 'btn btn-default','id'=>'export',]) ?>
     </div>
     <?php ActiveForm::end(); ?>
-
+<?php 
+         
+            $js=<<<JS
+                    $("#export").click(
+                        function(){
+                            $('#isExport').val(1);
+                            return true;
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
 </div>

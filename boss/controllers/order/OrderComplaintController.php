@@ -72,27 +72,6 @@ class OrderComplaintController extends BaseAuthController
     }
 
     /**
-     * Creates a new OrderComplaint model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-    	$model = new FinanceCompensate();
-        $params = Yii::$app->request->getQueryParams();
-        if(!empty($params['id'])){
-        	$id = intval($params['id']);
-        	$orderComplaintModel = $this->findModel($id);
-        	
-        	return $this->render('create', [
-        			'orderComplaintModel' => $orderComplaintModel,'model'=>$model,
-        	]);
-        }else{
-        	false;
-        }
-    }
-
-    /**
      * Updates an existing OrderComplaint model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id

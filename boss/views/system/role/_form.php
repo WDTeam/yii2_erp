@@ -45,8 +45,20 @@ use kartik\icons\Icon;
 			<div class="panel-body">
             <?php 
                 $groups = json_decode('{
-                  "家政管理": ["shopmanager/shop-manager/index", "shopmanager/shop-manager/create"],
-                  "门店管理": ["shop/shop/index", "shop/shop/create"],
+                  "左侧菜单栏": [
+                    "sidebar_customer", 
+                    "sidebar_finance", 
+                    "sidebar_housekeep",
+                    "sidebar_operation",
+                    "sidebar_order",
+                    "sidebar_payment",
+                    "sidebar_pop",
+                    "sidebar_shop",
+                    "sidebar_supplier",
+                    "sidebar_worker"
+                  ],
+                  "家政管理": ["all_shopmanager_admin", "shopmanager/shop-manager/index", "shopmanager/shop-manager/create"],
+                  "门店管理": ["all_shop_admin","shop/shop/index", "shop/shop/create"],
                   "阿姨管理": ["worker/worker/index", "worker/worker/create"],
                   "客户管理": ["customer/customer/index", "customer/customer-comment/index", "customer/customer-comment-tag/index"],
                   "订单管理": ["order/order/index", "order/order/create", "order/order/assign", "order/auto-assign/index", "order/order-complaint/index"],
@@ -69,11 +81,11 @@ use kartik\icons\Icon;
                             unset($permissions[$key]);
                         }
                     }
-                    echo $form->field($model, '_permissions')->checkboxList($data, [
+                    echo $form->field($model, 'permissions')->checkboxList($data, [
                         'id'=>'item_'.$name,
                     ])->label($name);
                 }
-                echo $form->field($model, '_permissions')->checkboxList($permissions, [
+                echo $form->field($model, 'permissions')->checkboxList($permissions, [
                     'id'=>'item_orther',
                 ])->label('其它');
 //                 echo $form->field($model, '_permissions')->checkboxList($permissions, ['class'=>'test'])->label('', ['hidden' => 'hidden']);
@@ -84,6 +96,6 @@ use kartik\icons\Icon;
     <?php ActiveForm::end(); ?>
 </div>
 <?php $this->registerJs(<<<JSCONTENT
-    $('.panel-body input[name="Auth[_permissions]"]').remove();
+    $('.panel-body input[name="Auth[permissions]"]').remove();
 JSCONTENT
 );?>

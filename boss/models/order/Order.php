@@ -18,9 +18,8 @@ use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
-use boss\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
-use dbbase\models\order\OrderStatusDict;
+use core\models\order\OrderStatusDict;
 
 
 class Order extends OrderModel
@@ -61,6 +60,16 @@ class Order extends OrderModel
         ];
     }
 
+    public static function getStatusDictList($status_id = 0)
+    {
+        return OrderStatusDict::getBossStatusDictList($status_id);
+    }
+
+    public function getStatusHistoryTime()
+    {
+        return ArrayHelper::map($this->orderStatusHistory, 'order_status_dict_id', 'created_at');
+    }
+
     /**
      * TODO 获取开通省份列表
      * @return array
@@ -94,33 +103,7 @@ class Order extends OrderModel
         return $countys;
     }
 
-    public function getThisOrderBookedTimeRangeList()
-    {
-        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,$this->orderBookedDate,1);
-        $order_booked_time_range = [];
-        foreach($time_range[0]['timeline'] as $range){
-            if($range['enable']) {
-                $order_booked_time_range[$range['time']] = $range['time'];
-            }
-        }
-        return $order_booked_time_range;
-    }
 
-    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
-    {
-        if($district_id>0) {
-            $date = strtotime($date);
-            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
-        }
-        $order_booked_time_range = [];
-        for ($i = 8; $i <= 18; $i++) {
-            $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
-            $hour2 = str_pad($i + intval($range), 2, '0', STR_PAD_LEFT);
-            $minute = ($range - intval($range) == 0) ? '00' : '30';
-            $order_booked_time_range["{$hour}:00-{$hour2}:{$minute}"] = "{$hour}:00-{$hour2}:{$minute}";
-        }
-        return $order_booked_time_range;
-    }
 
 
     /**
@@ -197,6 +180,10 @@ class Order extends OrderModel
         $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
         $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
         //预约时间处理
+        if(empty($post['Order']['orderBookedTimeRange'])){
+            $this->addError('orderBookedTimeRange','预约服务时间不能不选！');
+            return false;
+        }
         $time = explode('-',$post['Order']['orderBookedTimeRange']);
         $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
         $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');

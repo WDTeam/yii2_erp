@@ -1,6 +1,6 @@
 <?php
 
-$this->title = Yii::t('app', 'Update ') . Yii::t('app', '{name}', ['name' => $model->description]);
+$this->title = '更新角色 '.$model->description;
 $this->params['breadcrumbs'] = [
     [
         'label' => Yii::t('app', 'Roles'),

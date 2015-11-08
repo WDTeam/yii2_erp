@@ -121,9 +121,8 @@ class FinanceShopSettleApplyController extends Controller
         }
         $searchModel->getShopSettleInfo($searchModel->shop_id);
         $financeSettleApplySearchModel = new FinanceSettleApplySearch;
-        
         $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
-        $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search($requestParams);
+        $financeSettleApplyDataProvider = $financeSettleApplySearchModel->searchCanSettledWorker($requestParams);
         return $this->render('shopManualSettlementIndex', [
             'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,
             'model' => $searchModel,
@@ -158,18 +157,24 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->scenario = 'query';
         $requestParams = Yii::$app->request->getQueryParams();
+        $isExport = 0;
+        if(isset($requestParams['isExport'])){
+            $isExport = 1;
+        }
         $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('query', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
+        if($isExport == 0){
+            return $this->render('query', [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+            ]);
+        }if($isExport == 1){
+            $this->export($dataProvider->query->all());
+        }
     }
     
-    public function actionExport(){
+    public function export($shopSettleApplyArray){
         $exportArray = [];
-        $searchModel = new FinanceShopSettleApplySearch;
-        $shopSettleApplyArray = $searchModel->getCanPayedShopSettlementList();
         $i = 0;
         foreach($shopSettleApplyArray as $shopSettleApply){
             $exportRow = [];
@@ -239,6 +244,7 @@ class FinanceShopSettleApplyController extends Controller
         $shopModel = Shop::findById($searchModel->shop_id);
         $financeSettleApplySearchModel = new FinanceSettleApplySearch;
         $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
+        $financeSettleApplySearchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
         $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search(null);
         return $this->render('view', [
              'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,

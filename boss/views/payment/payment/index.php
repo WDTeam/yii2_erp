@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'payment_mode',
-                'options'=>['width'=>0,],
+                'options'=>['width'=>100,],
                 "value" => function($model){
                     return $model::$PAY_MODE[$model->payment_mode];
                 }

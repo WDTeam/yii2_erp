@@ -115,7 +115,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
     	$array['customer_comment_tag_names']='系统确定满意';
     	$array['customer_comment_anonymous']=1;
     	$array['adminid']=1;
-    	$this->addUserSuggest($array);
+    	self::addUserSuggest($array);
     }
     
     /**

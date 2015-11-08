@@ -61,18 +61,27 @@ use yii\helpers\Html;
     
     ?>
 </div>
-  
+  <input type="hidden" name="isExport" id = "isExport" value="0"/>
 
     <div class='col-md-4 form-inline' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
-        <?php 
-        if(($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW)){
-            echo  Html::a(Yii::t('app', '人工结算'), ['shop-manual-settlement-index?review_section='.$model->review_section],['class' => 'btn btn-default']);
-        }
-        ?>
+       <?= Html::submitButton(Yii::t('app', '导出报表'), ['class' => 'btn btn-default','id'=>'export',]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-    
+    <?php 
+         
+            $js=<<<JS
+                    $("#export").click(
+                        function(){
+                            $('#isExport').val(1);
+                            return true;
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
 </div>

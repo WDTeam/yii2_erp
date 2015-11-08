@@ -32,9 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6">
                         <input type="hidden" value="" name="Order[address_id]">
                         <div id="order-address_id"></div>
-                        <div id="order_address_progress" class="progress" style="display: none;">
-                            <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div>
-                        </div>
                         <?= Html::button('新增地址', ['class' =>  'btn btn-sm btn-warning','id'=>'add_address_btn']); ?>
                         <div class="help-block help-block-error "></div>
                         <div id="address_form" style="display: none;">
@@ -63,13 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
                 <div class="form-group field-order-order_service_item_id required">
-                    <label for="order-order_service_item_id" class="control-label col-sm-3">选择服务项</label>
+                    <label for="order-order_service_item_id" class="control-label col-sm-3">服务项目</label>
                     <div class="col-sm-6">
-                        <div id="order_service_item_progress" class="progress" style="display: none;">
-                            <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div>
-                        </div>
                         <input type="hidden" value="" name="Order[order_service_item_id]">
-                        <div id="order-order_service_item_id"></div>
+                        <div id="order-order_service_item_id"><p class="form-control-static" style="font-size: 14px;">根据服务地址获取该地址的可服务项目。</p></div>
                         <div class="help-block help-block-error "></div>
                     </div>
                 </div>
@@ -94,7 +88,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'language'=>'zh-CN'
                 ]);?>
                 <?= $form->field($model, 'order_booked_count')->inline()->radioList($model->orderBookedCountList)->label('服务时长'); ?>
-                <?= $form->field($model, 'orderBookedTimeRange')->inline()->radioList([])->label('服务时间');?>
+                <?= $form->field($model, 'orderBookedTimeRange')->inline()
+                    ->radioList($model->orderBookedTimeRangeList,['itemOptions'=>['disabled'=>"disabled",'labelOptions' => ['class' => 'radio-inline']]])
+                    ->label('服务时间');?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">支付信息</h3>

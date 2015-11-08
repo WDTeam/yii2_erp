@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\widgets\Select2;
 /**
  * @var yii\web\View $this
  * @var boss\models\operation\coupon\CouponUserinfo $model
@@ -16,46 +16,46 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+<!-- system_user_id -->
+    
+    <div class='col-md-2'>
+        <?php echo $form->field($model, 'system_user_id')->widget(Select2::classname(), [
+            'name' => 'system_user_id',
+            'hideSearch' => true,
+            'data' => [0 => '用户领取', 1 =>'后台绑定'],
+            'options' => ['placeholder' => '选择用户类型', 'inline' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>
+    </div>
+    
+    
+   
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'customer_id') ?>
+  <div class='col-md-2'>  
 
     <?= $form->field($model, 'customer_tel') ?>
+</div>
 
-    <?= $form->field($model, 'coupon_userinfo_id') ?>
-
+<div class='col-md-2'>  
     <?= $form->field($model, 'coupon_userinfo_code') ?>
+</div>
 
-    <?php // echo $form->field($model, 'coupon_userinfo_name') ?>
-
-    <?php // echo $form->field($model, 'coupon_userinfo_price') ?>
-
-    <?php // echo $form->field($model, 'coupon_userinfo_gettime') ?>
-
-    <?php // echo $form->field($model, 'coupon_userinfo_usetime') ?>
-
-    <?php // echo $form->field($model, 'coupon_userinfo_endtime') ?>
-
-    <?php // echo $form->field($model, 'order_code') ?>
-
-    <?php // echo $form->field($model, 'system_user_id') ?>
-
-    <?php // echo $form->field($model, 'system_user_name') ?>
-
-    <?php // echo $form->field($model, 'is_used') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'is_del') ?>
-
+    
+<div class='col-md-2'>
+    <?php  echo $form->field($model, 'order_code') ?>
+    </div>
+<div class='col-md-2'>
+    <?php  echo $form->field($model, 'system_user_name') ?>
+</div>
+   
     <div class="form-group">
+    <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
-
+ </div>
     <?php ActiveForm::end(); ?>
 
 </div>

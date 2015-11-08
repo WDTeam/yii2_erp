@@ -43,7 +43,7 @@ class FinanceRefundadd extends FinanceRefund
 	     	$this->finance_pay_channel_id=$order->orderExtPay->pay_channel_id;
 	     	$this->finance_pay_channel_title=$order->orderExtPay->order_pay_channel_name;
 	     	$this->finance_refund_pay_status='1';
-	     	$this->finance_refund_pay_flow_num=$order->order_code;
+	     	$this->finance_refund_pay_flow_num=$order->id;
 	     	$this->finance_order_channel_id=$order->channel_id;
 	     	$this->finance_order_channel_title=$order->order_channel_name;
 	     	$this->finance_refund_worker_id=$order->orderExtWorker->worker_id;

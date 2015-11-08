@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div id = "manualSettle" class="panel panel-info">
             <?php
 
-                 echo $this->render('workerSettleCommonView', ['model'=>$model,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);
+                 echo $this->render('workerSettleCommonView', ['model'=>$model,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);
             ?>
     </div>
 </div>

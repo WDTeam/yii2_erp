@@ -42,7 +42,7 @@ class m151105_101733_create_table_coupon_rule extends Migration
 			'couponrule_use_end_days' 		=> Schema::TYPE_SMALLINT.'(2) DEFAULT 1 COMMENT \'领取后过期天数\'',
 			'couponrule_promote_type' 		=> Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'优惠券优惠类型0为立减1为满减2为每减\'',
 			'couponrule_promote_type_name' 	=> Schema::TYPE_STRING.'(30)  DEFAULT \'\' COMMENT \'优惠券优惠类型名\'',
-			'couponrule_order_min_price'  	=> Schema::TYPE_SMALLINT . '(1) DEFAULT 1 COMMENT \'状态\'',
+			'couponrule_order_min_price'  	=> Schema::TYPE_DECIMAL . '(8,2) DEFAULT 0 COMMENT \'最小金额\'',
 			'couponrule_price' 				=> Schema::TYPE_DECIMAL.'(8,2) DEFAULT 0 COMMENT \'满减或每减时订单最小金额\'',
 			'couponrule_price_sum' 			=> Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'优惠码个数\'',
 			'couponrule_code_num'			 => Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'如果是一码多用单个优惠码最大使用人数限制\'',

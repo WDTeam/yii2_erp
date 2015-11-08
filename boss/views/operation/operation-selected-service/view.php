@@ -13,7 +13,7 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Selected Service'), 'url' => ['operation/operation-selected-service']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="operation-goods-view">
+<div class="operation-selected-service-view">
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -34,11 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime',
         ],
         'deleteOptions'=>[
-        'url'=>['delete', 'id' => $model->id],
-        'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-        'method'=>'post',
-        ],
+            'url'=>['delete', 'id' => $model->id],
+            'data'=>[
+                'method'=>'post',
+            ],
         ],
         'enableEditMode'=>true,
     ]) ?>

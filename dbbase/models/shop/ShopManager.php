@@ -65,7 +65,13 @@ class ShopManager extends \yii\db\ActiveRecord
             [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
-            [['account_person'], 'string', 'max' => 100]
+            [['account_person'], 'string', 'max' => 100],
+        	['name','match','pattern'=>'/^[^\s]{1,20}$/'],
+        	['bl_person','match','pattern'=>'/^[^\s]{1,10}$/'],
+        	['bl_business','match','pattern'=>'/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]{1,400}$/'],
+        	['principal','match','pattern'=>'/^[^\s]{1,10}$/'],	
+        	['tel','match','pattern'=>'/1[3458]{1}\d{9}$/'],
+        	['bl_name','match','pattern'=>'/^[^\s]{1,20}$/']
         ];
     }
 
@@ -98,7 +104,7 @@ class ShopManager extends \yii\db\ActiveRecord
             'bl_address' => Yii::t('app', '营业地址'),
             'bl_create_time' => Yii::t('app', '注册时间'),
             'bl_photo_url' => Yii::t('app', '营业执照URL'),
-            'bl_audit' => Yii::t('app', '注册资本'),
+            'bl_audit' => Yii::t('app', '注册资本(单位：万元)'),
             'bl_expiry_start' => Yii::t('app', '有效期起始时间'),
             'bl_expiry_end' => Yii::t('app', '有效期结束时间'),
             'bl_business' => Yii::t('app', '营业范围'),

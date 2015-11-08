@@ -2,7 +2,7 @@
 
 namespace boss\models\payment;
 
-use core\models\finance\FinanceOrderChannel;
+use core\models\finance\FinancePayChannel;
 
 use Yii;
 use yii\base\ErrorException;
@@ -12,6 +12,7 @@ class Payment extends \core\models\payment\Payment
 {
     //支付状态
     public static $PAY_STATUS = [
+        2=>"异常",
         1=>"成功",
         0=>"失败",
     ];
@@ -25,13 +26,22 @@ class Payment extends \core\models\payment\Payment
     ];
 
     /**
-     * 获取渠道名称
+     * 获取支付名称
      * @param $id
      * @return mixed
      */
-    public function getOrderChannelName($id)
+    public function getPayChannelName($id)
     {
-        return FinanceOrderChannel::getOrderChannelByName($id);
+        return FinancePayChannel::getPayChannelByName($id);
+    }
+
+    /**
+     * 支付渠道列表
+     * @return array
+     */
+    public static function getPayChannelList()
+    {
+        return FinancePayChannel::get_pay_channel_list();
     }
 
     /**
@@ -42,7 +52,7 @@ class Payment extends \core\models\payment\Payment
         return array_merge(parent::attributeLabels(),[
             'payment_money' => Yii::t('app', '支付金额'),
             'payment_actual_money' => Yii::t('app', '实付金额'),
-            'payment_source' => Yii::t('app', '订单渠道'),
+            'payment_source' => Yii::t('app', '来源渠道'),
             'payment_mode' => Yii::t('app', '交易方式'),
             'payment_status' => Yii::t('app', '状态'),
             'payment_transaction_id' => Yii::t('app', '交易流水号'),

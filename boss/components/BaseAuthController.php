@@ -12,12 +12,12 @@ class BaseAuthController extends \yii\web\Controller
     public function beforeAction($action)
     {
         if(\Yii::$app->user->isGuest && $action->id!='login'){
-            $this->redirect(['site/login']);
+            $this->redirect(['system/site/login']);
         }
         $name = $this->id.'/'.$action->id;
         $auth = Yii::$app->authManager;
-        $pre = $auth->getPermission($name);
-        if(empty($pre) || \Yii::$app->user->can($name)){
+        $perm = $auth->getPermission($name);
+        if(empty($perm) || \Yii::$app->user->can($name, \Yii::$app->request->getQueryParams())){
             return true;
         }else{
             throw new ForbiddenHttpException("没有访问权限！");
