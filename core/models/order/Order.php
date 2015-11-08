@@ -180,7 +180,28 @@ class Order extends OrderModel
         }
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
-        if ($this->_create($attributes)) {
+
+        $customer = Customer::getCustomerById($this->customer_id);
+        if(!empty($customer)) {
+            $attributes['order_customer_phone'] = $customer->customer_phone;
+            $attributes['customer_is_vip'] = $customer->customer_is_vip;
+        }else{
+            $this->addError('customer_id', '没有获取到用户信息！');
+            return false;
+        }
+        $customer_balance = 0;
+        //如果客户选择使用余额则去获取客户余额
+        if(!empty($attributes['order_is_use_balance'])) {
+            try {
+                $customer = Customer::getCustomerInfo($this->order_customer_phone);
+                $customer_balance = $customer['customer_balance'];
+            } catch (Exception $e) {
+                $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
+                return false;
+            }
+        }
+
+        if ($this->_create($attributes,null,$customer_balance)) {
             //交易记录1,现金支付,3第三支付,无需线上支付
             if( $this->order_pay_money == 0 ){
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
@@ -269,7 +290,7 @@ class Order extends OrderModel
         }
         foreach($attributes_required as $v){
             if(!isset($attributes[$v])){
-                ['status' => false, 'errors' => $v.'为必填项！'];
+                return ['status' => false, 'errors' => $v.'为必填项！'];
             }
         }
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
@@ -286,6 +307,25 @@ class Order extends OrderModel
             $attributes['order_is_parent'] = 0; //批量订单为普通订单
         }
 
+        $customer = Customer::getCustomerById($attributes['customer_id']);
+        if(!empty($customer)) {
+            $attributes['order_customer_phone'] = $customer->customer_phone;
+            $attributes['customer_is_vip'] = $customer->customer_is_vip;
+        }else{
+            return ['status' => false, 'errors' => '没有获取到用户信息！'];
+        }
+
+        $customer_balance = 0;
+        //如果客户选择使用余额则去获取客户余额
+        if(!empty($attributes['order_is_use_balance'])) {
+            try {
+                $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
+                $customer_balance = $customer['customer_balance'];
+            } catch (Exception $e) {
+                return ['status' => false, 'errors' => '创建时获客户余额信息失败！'];
+            }
+        }
+
         //在线支付初始化
         $orderExtPay = 0;
         foreach ($booked_list as $v) {
@@ -296,7 +336,7 @@ class Order extends OrderModel
                 'order_booked_end_time'=>$v['order_booked_end_time'],
                 'coupon_id'=>isset($v['coupon_id'])?$v['order_booked_end_time']:0
             ];
-            if (!$order->_create($attributes + $booked, $transact)) {
+            if (!$order->_create($attributes + $booked, $transact,$customer_balance)) {
                 $transact->rollBack();
 
                 return ['status' => false, 'errors' => $order->errors];
@@ -746,25 +786,17 @@ class Order extends OrderModel
      * 创建订单
      * @param $attributes
      * @param $transact
+     * @param $customer_balance 客户余额
      * @return bool
      */
-    private function _create($attributes, $transact = null)
+    private function _create($attributes, $transact = null,&$customer_balance)
     {
         $this->setAttributes($attributes);
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_code = OrderTool::createOrderCode(); //创建订单号
 
-        $customer = Customer::getCustomerById($this->customer_id);
-        if(!empty($customer)) {
-            $this->setAttributes([
-                'order_customer_phone' => $customer->customer_phone,
-                'customer_is_vip' => $customer->customer_is_vip,
-            ]);
-        }else{
-            $this->addError('customer_id', '没有获取到用户信息！');
-            return false;
-        }
+
 
         try {
             $address = CustomerAddress::getAddress($this->address_id);
@@ -829,17 +861,12 @@ class Order extends OrderModel
                 }
             }
             if ($this->order_is_use_balance == 1) {
-                try {
-                    $customer = Customer::getCustomerInfo($this->order_customer_phone);
-                } catch (Exception $e) {
-                    $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
-                    return false;
-                }
-                if ($customer['customer_balance'] < $this->order_pay_money) { //用户余额小于需支付金额
-                    $this->order_use_acc_balance = $customer['customer_balance']; //使用余额为用户余额
+                if ($customer_balance < $this->order_pay_money) { //用户余额小于需支付金额
+                    $this->order_use_acc_balance = $customer_balance; //使用余额为用户余额
                 } else {
                     $this->order_use_acc_balance = $this->order_pay_money; //使用余额为需支付金额
                 }
+                $customer_balance -= $this->order_use_acc_balance; //用户余额减去使用余额
                 $this->order_pay_money -= $this->order_use_acc_balance;
             }
         }
