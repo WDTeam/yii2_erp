@@ -29,27 +29,27 @@ return [
         /**
          * 极光推送,默认为开发环境配置
          */
-        'jpush'=>[
-            'class'=>'dbbase\components\JPush',
-            'app_key'=>'3037ca7c859cca4c996f7144',
-            'master_secret'=>'a064811d7e4596c32d0e6884'
+        'jpush' => [
+            'class' => 'dbbase\components\JPush',
+            'app_key' => '3037ca7c859cca4c996f7144',
+            'master_secret' => 'a064811d7e4596c32d0e6884'
         ],
         /**
          * 发短信配置
-        */
-        'sms'=>[
-            'class'=>'dbbase\components\Sms',
-            'userId'=>'J02356',
-            'password'=>'556201',
+         */
+        'sms' => [
+            'class' => 'dbbase\components\Sms',
+            'userId' => 'J02356',
+            'password' => '556201',
         ],
         /**
          * IVR
-        */
-        'ivr'=>[
-            'class'=>'dbbase\components\Ivr',
-            'app_id'=>'5000058',
-            'token'=>'57b62a3462b52a1413a4e1934a60d983',
-            'redirect_uri'=>'system/ivr/callback'
+         */
+        'ivr' => [
+            'class' => 'dbbase\components\Ivr',
+            'app_id' => '5000058',
+            'token' => '57b62a3462b52a1413a4e1934a60d983',
+            'redirect_uri' => 'system/ivr/callback'
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -104,7 +104,7 @@ return [
             ],
         ],
         /**
-         * 配置邮箱账号 
+         * 配置邮箱账号
          *  modified by zhanghang 2015-09-21
          */
         'mailer' => [
@@ -121,7 +121,7 @@ return [
                 'password' => '123qweASDZXC',
                 'port' => '25',
 //                'encryption' => 'ssl',
-        
+
             ],
         ],
         /**
@@ -132,11 +132,11 @@ return [
             'targets' => [
                 'email' => [
                     'class' => 'yii\log\EmailTarget',
-                    'mailer'=>'mailer',
+                    'mailer' => 'mailer',
                     'levels' => ['error'],
                     'categories' => ['event\*'],
                     'message' => [
-                        'from'=>'service@corp.1jiajie.com',
+                        'from' => 'service@corp.1jiajie.com',
                         'to' => ['lidenggao@1jiajie.com'],
                         'subject' => '事件绑定处理错误日志',
                     ],
@@ -146,10 +146,10 @@ return [
         'devicedetect' => [
             'class' => 'alexandernst\devicedetect\DeviceDetect'
         ],
-        
+
         /**
          * 配置控制台命令
-         * 
+         *
          * 使用方法：
          * $output = '';
          * Yii::$app->consoleRunner->run('controller/action param1 param2 ...', $output);
@@ -160,29 +160,29 @@ return [
         ],
     ],
     'modules' => [
-        'datecontrol' =>  [
+        'datecontrol' => [
             'class' => 'kartik\datecontrol\Module',
- 
+
             // format settings for displaying each date attribute
             'displaySettings' => [
                 'date' => 'd-m-Y',
                 'time' => 'H:i:s A',
                 'datetime' => 'd-m-Y H:i:s A',
             ],
- 
+
             // format settings for saving each date attribute
             'saveSettings' => [
-                'date' => 'Y-m-d', 
+                'date' => 'Y-m-d',
                 'time' => 'H:i:s',
                 'datetime' => 'Y-m-d H:i:s',
             ],
-             // automatically use kartik\widgets for each of the above formats
+            // automatically use kartik\widgets for each of the above formats
             'autoWidget' => true,
         ],
         /**
          * 配置动态grid表格控件
          *  add by zhanghang 2015-09-23
-         * 
+         *
          * yii2-dynagrid模块是一个很好的互补的kartik-v / yii2-grid模块,加强个性化特性。涡轮指控你的网格视图,它为每个用户动态和个性化。它允许用户设置和保存自己的网格配置。这个模块提供的主要功能有:
          * 个性化设置,并保存电网在运行时页面大小。你可以设置最小和最大允许页面大小。
          * 个性化设置,并保存网格数据过滤器在运行时。用户可以定义并保存他/她自己的个性化的网格数据过滤器。
@@ -194,28 +194,28 @@ return [
          * Cookie存储
          * 数据库存储
          * 扩展自动验证基于存储和加载已保存的配置设置。
-         * 
+         *
          * 查看完整的演示效果：http://demos.krajee.com/dynagrid-demo
          * 使用参考：http://demos.krajee.com/dynagrid
          */
-        'dynagrid'=> [
-                     'class'=>'\kartik\dynagrid\Module',
-                     // other module settings
+        'dynagrid' => [
+            'class' => '\kartik\dynagrid\Module',
+            // other module settings
         ],
-        'gridview'=> [
-             'class'=>'\kartik\grid\Module',
-             // other module settings
-         ],
+        'gridview' => [
+            'class' => '\kartik\grid\Module',
+            // other module settings
+        ],
         /**
          * 配置 redactor
-         * 
+         *
          * 使用参考：https://github.com/yiidoc/yii2-redactor
          * 方法1：
          * <?= \yii\redactor\widgets\Redactor::widget([
          *    'model' => $model,
          *    'attribute' => 'body'
          * ]) ?>
-         * 
+         *
          * 方法2：
          * <?= $form->field($model, 'body')->widget(\yii\redactor\widgets\Redactor::className(), [
          *     'clientOptions' => [
@@ -226,16 +226,16 @@ return [
          *         'plugins' => ['clips', 'fontcolor','imagemanager']
          *     ]
          * ])?>
-         * 
+         *
          */
         'redactor' => [
             'class' => 'yii\redactor\RedactorModule',
             'uploadDir' => '@webroot/path/to/uploadfolder',
             'uploadUrl' => '@web/path/to/uploadfolder',
-            'imageAllowExtensions'=>['jpg','png','gif']
+            'imageAllowExtensions' => ['jpg', 'png', 'gif']
         ],
     ],
-    'params'=> [
+    'params' => [
         'adminEmail' => 'admin@1jiajie.com',
         'supportEmail' => 'support@1jiajie.com',
         'user.passwordResetTokenExpire' => 3600,
@@ -249,27 +249,27 @@ return [
             'affixesStay' => true,
             'thousands' => ',',
             'decimal' => '.',
-            'precision' => 2, 
+            'precision' => 2,
             'allowZero' => false,
             'allowNegative' => false,
         ],
-        "order_pop"=>[
-            'api_url'=>'http://192.168.15.106/open/web/'
+        "order_pop" => [
+            'api_url' => 'http://192.168.15.106/open/web/'
         ],
-        'order'=>[
-            'MANUAL_ASSIGN_lONG_TIME'=>900,
-            'ORDER_BOOKED_WORKER_ASSIGN_TIME'=>900,
-            'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME'=>300,
-            'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME'=>900,
+        'order' => [
+            'MANUAL_ASSIGN_lONG_TIME' => 900,
+            'ORDER_BOOKED_WORKER_ASSIGN_TIME' => 900,
+            'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME' => 300,
+            'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME' => 900,
         ],
-        'uploadpath' =>true, //true上传到七牛 false 上传的本地
-        'worker_base_salary'=>3000,//阿姨的底薪
-        'unit_order_money_nonself_fulltime' =>50,//小家政全时段阿姨补贴的每单的金额
-        'order_count_per_week'=>12,//小家政全时段阿姨的底薪策略是保单，每周12单
-        'service'=>[
-            'user'=>[
-                'domain'=>'http://dev.service.1jiajie.com:80/'
+        'uploadpath' => true, //true上传到七牛 false 上传的本地
+        'worker_base_salary' => 3000,//阿姨的底薪
+        'unit_order_money_nonself_fulltime' => 50,//小家政全时段阿姨补贴的每单的金额
+        'order_count_per_week' => 12,//小家政全时段阿姨的底薪策略是保单，每周12单
+        'service' => [
+            'user' => [
+                'domain' => 'http://dev.service.1jiajie.com:80/'
             ]
         ]
-    ], 
+    ],
 ];

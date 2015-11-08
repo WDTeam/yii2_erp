@@ -1,5 +1,5 @@
 <?php
-$config =  [
+$config = [
     'id' => 'app-boss',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'boss\controllers',
@@ -9,8 +9,8 @@ $config =  [
 //            'class' => 'funson86\blog\Module',
 //            'controllerNamespace' => 'funson86\blog\controllers\boss'
 //        ],
-        'dynagrid'=> [
-            'class'=>'\kartik\dynagrid\Module',
+        'dynagrid' => [
+            'class' => '\kartik\dynagrid\Module',
         ],
         'gridview' => [
             'class' => 'kartik\grid\Module',
@@ -30,7 +30,7 @@ $config =  [
             'showScriptName' => false,
             //'enableStrictParsing' => true,
             'rules' => [
-                ''=>'system/site/index',
+                '' => 'system/site/index',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -67,9 +67,11 @@ if (!YII_DEBUG) {
         'kartikgii-crud' => ['class' => 'warrence\kartikgii\crud\Generator'],
     ];
 }
-function dump($_data){
+function dump($_data)
+{
     echo '<pre>';
     print_r($_data);
     echo '</pre>';
 }
+
 return $config;
