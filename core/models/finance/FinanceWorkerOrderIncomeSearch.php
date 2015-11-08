@@ -104,18 +104,34 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $dataProvider;
     }
     
-    
-    public function getCashOrderDataProviderFromOrder($worker_id){
+    /**
+     * 根据结算Id获取所有订单收入的流水信息
+     * @param type $settle_id
+     * @return ArrayDataProvider
+     */
+    public function getOrderDataProviderBySettleId($settle_id){
         $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>1])->all();
-        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $data = self::find()->where(['finance_settle_apply_id'=>$settle_id])->asArray()->all();
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
     
-    public function getNonCashOrderDataProviderFromOrder($worker_id){
+    /**
+     * 根据结算Id获取现金订单收入的流水信息
+     * @param type $settle_id
+     * @return ArrayDataProvider
+     */
+    public function getCashOrderDataProviderBySettleId($settle_id){
         $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>[2,3]])->all();
+        $data = self::find()->where(['finance_settle_apply_id'=>$settle_id,'order_pay_type_id'=>OrderExtPay::ORDER_PAY_TYPE_OFF_LINE])->asArray()->all();
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
+    
+    public function getCashOrderDataProviderFromOrder($worker_id){
+        $data = [];
+        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>OrderExtPay::ORDER_PAY_TYPE_OFF_LINE])->all();
         $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;

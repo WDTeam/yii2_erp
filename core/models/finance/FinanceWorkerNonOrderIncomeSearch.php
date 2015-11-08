@@ -133,10 +133,27 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return WorkerTask::getDoneTasksByWorkerId($finance_settle_apply_starttime, $finance_settle_apply_endtime, $workerId);
     }
     
+    public function getTaskDataProviderBySettleId($settle_id){
+        $data = self::find()->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>self::NON_ORDER_INCOME_TASK])->asArray()->all();
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
     public function getTaskDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = $this->getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
+    }
+    
+    /**
+     * 获取赔偿列表
+     * @param type $workerId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
+    public static function getCompensateAwardList($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        return FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
     }
     
     public static function getCompensateMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
@@ -148,12 +165,25 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return $compensateMoney;
     }
     
+    public function getCompensateDataProviderBySettleId($settle_id){
+        $data = self::find()->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>self::NON_ORDER_INCOME_DEDUCTION_COMPANSATE])->asArray()->all();
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
     public function getCompensateDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
     
+    /**
+     * 获取任务奖励的数组，最终会保存到阿姨非订单收入表中
+     * @param type $workerId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
     public function getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
         $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
@@ -165,7 +195,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return $data;
     }
     
-    private function transferWorkerTasksToWorkerNonOrderIncome($taskAward){
+    private function transferWorkerTasksToWorkerNonOrderIncome($taskAward,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome();
         $financeWorkerNonOrderIncome->worker_id = $taskAward->worker_id;
         $financeWorkerNonOrderIncome->finance_worker_non_order_income_code = $taskAward->worker_task_id;
@@ -174,16 +204,43 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         $financeWorkerNonOrderIncome->finance_worker_non_order_income = $taskAward->worker_task_reward_value;
         $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = $taskAward->worker_task_description;
         $financeWorkerNonOrderIncome->finance_worker_non_order_income_complete_time = $taskAward->worker_task_done_time;
-        $worker = Worker::getWorkerInfo($financeWorkerNonOrderIncome->worker_id);
-        if(($worker['worker_type'] ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker['worker_identity_id'] == FinanceSettleApplySearch::FULLTIME)){
-            $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//结算开始日期
-            $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//结算截止日期
-        }else{
-            $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
-            $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
-        }
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = $finance_settle_apply_starttime;//结算开始日期
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = $finance_settle_apply_endtime;//结算截止日期
         $financeWorkerNonOrderIncome->created_at = time();
         return $financeWorkerNonOrderIncome;
+    }
+    
+    private function transferWorkerCompensatesToWorkerNonOrderIncome($compensateAward,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome();
+        $financeWorkerNonOrderIncome->worker_id = $compensateAward->worker_id;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_code = $compensateAward->id;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = self::NON_ORDER_INCOME_DEDUCTION_COMPANSATE;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_name = $compensateAward->finance_compensate_reason;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income = $compensateAward->finance_compensate_worker_money;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = $compensateAward->finance_compensate_reason;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_complete_time = $compensateAward->updated_at;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = $finance_settle_apply_starttime;//结算开始日期
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = $finance_settle_apply_endtime;//结算截止日期
+        $financeWorkerNonOrderIncome->created_at = time();
+        return $financeWorkerNonOrderIncome;
+    }
+    
+    /**
+     * 获取赔偿信息的列表，最终会保存到阿姨非订单收入表
+     * @param type $workerId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
+    public function getCompensateArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $data = [];
+        $compensateAwardList = self::getCompensateAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        $i = 0;
+        foreach($compensateAwardList as $compensateAward){
+            $data[$i] = $this->transferWorkerCompensatesToWorkerNonOrderIncome($compensateAward,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
+            $i++;
+        }
+        return $data;
     }
     
     public function getNonOrderIncomeBySettleApplyId($settleApplyId){

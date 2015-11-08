@@ -26,6 +26,7 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
      */
     public static function getApplicationTimeLine($worker_id,$vacationType){
         $weekArr = self::getWorkerVacationWeekArr($worker_id,$vacationType);
+
         $noWeekday = [0,6,5];
         $timeLine = [];
         for($i=0;$i<14;$i++){
@@ -37,30 +38,27 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
                 //本周是否已请休假
                 if(in_array($week,$weekArr)){
                     $isEnable = false;
-                    continue;
+                }
+                //周5,6,7 不可请假
+                $weekday = (int)date("w",$time);
+                if(in_array($weekday,$noWeekday)){
+                    $isEnable = false;
                 }
             }else{
                 //如果本周请了事假,则连续两周都不能请事假
                 if($week%2==1){
                     if(in_array($week,$weekArr) || in_array($week+1,$weekArr)){
                         $isEnable = false;
-                        continue;
                     }
                 }else{
                     if(in_array($week,$weekArr) || in_array($week-1,$weekArr)){
                         $isEnable = false;
-                        continue;
                     }
                 }
 
             }
 
-            //周5,6,7 不可请假
-            $weekday = (int)date("w",$time);
-            if(in_array($weekday,$noWeekday)){
-                $isEnable = false;
-                continue;
-            }
+
             //阿姨是否已预约出去
 
             $timeLine[] = [
