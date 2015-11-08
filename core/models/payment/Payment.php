@@ -810,9 +810,6 @@ class Payment extends \dbbase\models\payment\Payment
     {
         //POST数据
         if(!empty($data['debug'])){
-            //{"payment_type":"1","subject":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed8","trade_no":"2015110457346343","buyer_email":"weibeinan2008@163.com","gmt_create":"2015-11-04 18:15:36","notify_type":"trade_status_sync","quantity":"1","out_trade_no":"1511040155118","seller_id":"2088801136967007","notify_time":"2015-11-04 18:39:23","body":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed80.02\u5143","trade_status":"TRADE_SUCCESS","is_total_fee_adjust":"N","total_fee":"0.02","gmt_payment":"2015-11-04 18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
-            //15:57:08","price":"0.02","buyer_id":"2088802381237501","notify_id":"2983afc3b92e376e84923e4c75e0f3574s","use_coupon":"N","sign_type":"RSA","sign":"ZlCICZ\/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE\/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc="}
-            //18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
 
             $_POST = [
                 "payment_type"=> "1",
@@ -839,6 +836,31 @@ class Payment extends \dbbase\models\payment\Payment
                 "sign"=> "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
             ];
 
+            $_POST = [
+                "payment_type"=> "1",
+                "subject"=> "e家洁在线支付",
+                "trade_no"=> "2015110900001000440071876428",
+                "buyer_email"=> "xihuange@126.com",
+                "gmt_create"=> "2015-11-09 00:59:27",
+                "notify_type"=> "trade_status_sync",
+                "quantity"=> "1",
+                "out_trade_no"=> "1511090135473",
+                "seller_id"=> "2088801136967007",
+                "notify_time"=> "2015-11-09 01:13:02",
+                "body"=> "e家洁在线支付0.02元",
+                "trade_status"=> "TRADE_SUCCESS",
+                "is_total_fee_adjust"=> "N",
+                "total_fee"=> "0.02",
+                "gmt_payment"=> "2015-11-09 00:59:28",
+                "seller_email"=> "47632990@qq.com",
+                "price"=> "0.02",
+                "buyer_id"=> "2088102035089446",
+                "notify_id"=> "aade9f6f4bddbbfde2e9243e88a3101c4g",
+                "use_coupon"=> "N",
+                "sign_type"=> "RSA",
+                "sign"=> "iAqB1XSFY7mlpuK9zjwW3zXSro+2HWKWG2h638ukP5lvAMa8+qZ/Fqqe6PQ7q0ktX7BPSgvGpaBAwhE/kK25hcaMniZRPyg/mBvmzuS+W2LXd8Zgj47R9hzWNKqX3RBaXtdnwbH06UXiG8wcUoxJSFPRCiLL2AozDw71Ya+aiZU="
+            ];
+
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -849,7 +871,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_price' => $post['total_fee'],   //支付金额
             'payment_log_shop_name' => $post['subject'],   //商品名称
             'payment_log_eo_order_id' => $post['out_trade_no'],   //订单ID
-            'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
+            'payment_log_transaction_id' => $post['trade_no'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
             'pay_channel_id' => 7,  //支付渠道,支付宝
