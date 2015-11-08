@@ -22,11 +22,8 @@ use core\models\finance\FinanceOrderChannel;
  */
 class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 {
-    public static function generateAccessToken($phone, $code, $channal_id=1){
+    public static function generateAccessToken($phone, $code, $channal_id){
         $check_code = CustomerCode::checkCode($phone, $code);
-        
-        //var_dump($check_code);
-        //exit();
         if ($check_code == false) {
             return $check_code;
         }
@@ -36,12 +33,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             //没有客户则创建
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
-//                $customer = new Customer;
-//                $customer->customer_phone = $phone;
-//                $customer->created_at = time();
-//                $customer->updated_at = 0;
-//                $customer->is_del = 0;
-//                $customer->save();
                 $hasAdded = Customer::addCustomer($phone, $channal_id);
             }
 
@@ -68,13 +59,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $customerAccessToken->updated_at = 0;
             $customerAccessToken->is_del = 0;
             $customerAccessToken->validate();
-            // if ($customerAccessToken->hasErrors()) {
-            //     var_dump($customerAccessToken->getErrors());
-            // }
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
-
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
@@ -107,10 +94,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         if ($customerAccessToken == NULL) {
             return false;
         }
-        // $customerCode = CustomerCode::findOne($customerAccessToken->customer_code_id);
-        // if ($customerCode == NULL) {
-        //     return false;
-        // }
         $customer = Customer::find()->where(['customer_phone'=>$customerAccessToken->customer_phone])->one();
         unset($customer["is_del"]);
         return $customer == NULL ? false : $customer;
@@ -135,7 +118,7 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     /**
      * 为POP客户下发access_token
      */
-    public static function generateAccessTokenForPop($phone, $sign, $channal_id=1){
+    public static function generateAccessTokenForPop($phone, $sign, $channal_id){
         $check_sign = self::checkSign($phone, $sign, $channal_id);
         if (!$check_sign) {
             return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'验证签名失败'];
@@ -150,12 +133,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             //没有客户则创建
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
-//                $customer = new Customer;
-//                $customer->customer_phone = $phone;
-//                $customer->created_at = time();
-//                $customer->updated_at = 0;
-//                $customer->is_del = 0;
-//                $customer->save();
                 $hasAdded = Customer::addCustomer($phone, $channal_id);
             }
 
