@@ -71,21 +71,24 @@ function initId(){
 
 //调用后台，保存参数
 function saveParams(){
-   alert("savep");
+
    var id=parseInt($('#id').text());
   // alert("id2::"+id);
    if(isNaN(id)){
       id='';
    }
-   var  dispatcher_kpi_free_time=parseInt($('#free').text());
-   var  dispatcher_kpi_busy_time=parseInt($('#busy').text());
-   var  dispatcher_kpi_rest_time=parseInt($('#rest').text());
+   var  dispatcher_kpi_free_time=parseInt($('#free_time').val());
+   var  dispatcher_kpi_busy_time=parseInt($('#busy_time').val());
+   var  dispatcher_kpi_rest_time=parseInt($('#rest_time').val());
    var  dispatcher_kpi_obtain_count=parseInt($('#obtain_count').text());
    var  dispatcher_kpi_assigned_count=parseInt($('#assigned_count').text());
    var  dispatcher_kpi_assigned_rate=parseFloat($('#assigned_rate').text());
    var  dispatcher_kpi_status=parseInt($('#newStatusId').text());
    alert("dispatcher_kpi_free_time:"+dispatcher_kpi_free_time);
+   alert("dispatcher_kpi_busy_time:"+dispatcher_kpi_busy_time);
+   alert("dispatcher_kpi_rest_time:"+dispatcher_kpi_rest_time);
    alert("dispatcher_kpi_obtain_count:"+dispatcher_kpi_obtain_count);
+   alert("dispatcher_kpi_assigned_count:"+dispatcher_kpi_assigned_count);
    var params = {
       flag:2,
       id:id,
@@ -216,11 +219,9 @@ function endWork(){
 }
 //单击我要接活(小休时)
 function restAcceptWork(){
-   saveParams();
    //停止忙碌时间计算
    stopCount()
-
-   //保存忙碌时间
+   //保存小休时间
    $('#rest_time').val(d);
    //调用后台，更新当日忙碌时间和状态2==============================
    saveParams();
@@ -248,10 +249,8 @@ function restAcceptWork(){
 }
 //单击小休
 function restWork(){
-   saveParams();
    //停止忙碌时间计算
    stopCount();
-
    //保存忙碌时间
    $('#busy_time').val(d);
    //调用后台，更新当日忙碌时间和状态2==============================
@@ -325,14 +324,14 @@ function nonDispatchWork(){
 }
 //单击人工派单成功
 function dispatchWork(){
+   //派单成功加1
+   updateCount(2);
    //调用后台，更新指派成功数量===============================
    saveParams();
    //10秒倒计时
    downtime=setInterval("rundown();", 1000);
    //初始化15分钟倒计时
    stopCount15();
-   //派单成功加1
-   updateCount(2);
    //初始化按钮
    $('#dispatchId').hide();
    $('#startId').hide();
@@ -347,6 +346,8 @@ function waitWork() {
    stopCount()
    //保存空闲时间
    $('#free_time').val(d);
+   //更新应派单数
+   updateCount(1);
    //调用后台，更新当日空闲时间和获得指派单数量===============================
    saveParams();
    //更新状态
@@ -355,11 +356,9 @@ function waitWork() {
    $('#newStatusId').text(2);
    //初始化计时参数
    d=0;t=0;c=0;c1=0;c2=0;r=0;
-
    //15分钟倒计时
    downtime15=setInterval("rundown15();", 1000);
-   //更新应派单数
-   updateCount(1);
+
    //初始化按钮
    $('#waitId').hide();
    $('#dispatchId').show();
@@ -372,7 +371,7 @@ function waitWork() {
 
 //单击开工啦
 function startWork() {
-   alert("start");
+   //alert("start");
    //初始化状态
    $('#statusId').text("空闲");
    $('#dispatcher_kpi_status').val(1)

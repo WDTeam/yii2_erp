@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <!-- 新增样式表begin -->
 <script type="text/javascript" src="../js/dispatcher/jquery.js"></script>
-<script type="text/javascript" src="../js/dispatcher/indexx.js"></script>
+<script type="text/javascript" src="../js/dispatcher/index.js"></script>
 
 <style type="text/css">
     hr { margin-top: 0;}
@@ -73,9 +73,9 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <tr>
             <td>今日</td>
-            <td id="free"></td>
-            <td id="busy"></td>
-            <td id="rest"></td>
+            <td id="free" value=""></td>
+            <td id="busy" value=""></td>
+            <td id="rest" value=""></td>
             <td id="nonAss"><?= Html::encode($model->non_assign_order_count) ?></td>
             <td id="obtain_count"></td>
             <td id="assigned_count"></td>
@@ -87,11 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <div class="row"  >
-        <div class="row"  id="startId" hidden>
-            <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">开工啦</button></div>
+        <div class="row"  id="" >
+            <div class="col-md-2"><button class="btn btn-default" id="startId" name="startId" hidden>开工啦</button></div>
         </div>
-        <div class="row"  id="waitId" hidden>
-            <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">系统分配订单，请稍后~</button></div>
+        <div class="row"  id="" >
+            <div class="col-md-2"><button class="btn btn-default" id="waitId" name="waitId" hidden>系统分配订单，请稍后~</button></div>
         </div>
         <div class="row" style="font-size:14px;" align="center" id="dispatchId" hidden><nobr>
             <div class="col-md-6  form-inline"><span style="padding:50px;">
