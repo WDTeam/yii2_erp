@@ -49,6 +49,8 @@ class m150923_034111_create_table_shopmanager extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
         ");
+        $this->createIndex('shop_province_id', '{{%shop_manager}}', 'province_id');
+        $this->createIndex('shop_city_id', '{{%shop_manager}}', 'city_id');
         
         $this->insert('{{%shop_manager}}', [
             'id'=>1,
