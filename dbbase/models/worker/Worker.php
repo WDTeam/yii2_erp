@@ -51,7 +51,7 @@ class Worker extends \yii\db\ActiveRecord
             [['worker_phone','worker_idcard'],'unique','message'=>'{attribute}{value}已被注册'],
             ['worker_phone','match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
             ['worker_idcard','match','pattern'=>'/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/','message'=>'请填写正确格式的身份证号'],
-            [['shop_id','worker_name','worker_work_city','worker_phone','worker_idcard','worker_type', 'worker_type','worker_identity_id','worker_photo'],'required'],
+            [['shop_id','worker_name','worker_work_city','worker_phone','worker_idcard','worker_type', 'worker_type','worker_identity_id'],'required'],
             [['shop_id', 'worker_level', 'worker_auth_status',  'worker_work_city', 'worker_work_area', 'worker_type', 'worker_rule_id', 'worker_is_block', 'worker_is_blacklist', 'worker_is_dimission','created_ad', 'updated_ad', 'isdel'], 'integer'],
             [['worker_work_lng', 'worker_work_lat'], 'number'],
             [['worker_name'], 'string', 'max' => 20],

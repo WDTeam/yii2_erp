@@ -55,24 +55,4 @@ $config = [
         ],
     ],
 ];
-
-if (!YII_DEBUG) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = 'yii\debug\Module';
-
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii']['class'] = 'yii\gii\Module';
-    //Add this into backend/config/main-local.php
-    $config['modules']['gii']['generators'] = [
-        'kartikgii-crud' => ['class' => 'warrence\kartikgii\crud\Generator'],
-    ];
-}
-function dump($_data)
-{
-    echo '<pre>';
-    print_r($_data);
-    echo '</pre>';
-}
-
 return $config;
