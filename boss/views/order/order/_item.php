@@ -43,8 +43,8 @@ use boss\models\order\Order;
             <input type="hidden" class="customer_phone"
                    value="<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>"/>
             <td style="width: 28%;">
-                用户电话：<span><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?></span><br/>
-                用户身份：<span><?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?></span><br/>
+                客户电话：<span><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?></span><br/>
+                客户身份：<span><?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?></span><br/>
                 下单渠道：<span><?= Html::encode($model->order_channel_name) ?></span><br/>
                 服务时间：<span><?= $model->getOrderBookedDate() . ' ' . $model->getOrderBookedTimeArrange() ?></span><br/>
                 客户地址：<span><?= HtmlPurifier::process($model->order_address) ?></span>
