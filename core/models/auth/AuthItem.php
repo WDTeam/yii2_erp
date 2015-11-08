@@ -22,6 +22,13 @@ use Yii;
 class AuthItem extends \yii\db\ActiveRecord
 {
     /**
+     * Auth type
+     */
+    const TYPE_ROLE = 1;
+    const TYPE_PERMISSION = 2;
+    
+    public $permissions = [];
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -88,5 +95,23 @@ class AuthItem extends \yii\db\ActiveRecord
     public function getAuthItemChildren()
     {
         return $this->hasMany(AuthItemChild::className(), ['child' => 'name']);
+    }
+    
+    public function getFullDescription()
+    {
+        $name = $this->name;
+        $description = $this->description;
+        $des = [
+            'super_admin'=>$description.'（拥有所有权限）',
+            'ordinary_admin'=>$description.'（后台常规管理）',
+            'group_shop_manager'=>$description.'（只能管理自己的家政）',
+            'group_shop'=>$description.'（只能管理自己的门店）',
+            'group_mini_box'=>$description.'（仅用于区分用户是不是minibox）',
+        ];
+        if(isset($des[$name])){
+            return $des[$name];
+        }else{
+            return $description;
+        }
     }
 }
