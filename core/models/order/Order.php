@@ -12,7 +12,7 @@ namespace core\models\order;
 /** core */
 use core\models\finance\FinanceRefundadd;
 
-use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponRule;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;
@@ -1056,7 +1056,11 @@ class Order extends OrderModel
      */
     public static function getCouponById($id)
     {
-        return Coupon::getCouponBasicInfoById($id);
+        $result = CouponRule::getCouponBasicInfoById($id);
+        if(isset($result['is_status']) && $result['is_status']==1){
+            return $result['data'];
+        }
+        return false;
     }
 
     /**

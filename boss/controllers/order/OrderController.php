@@ -2,15 +2,12 @@
 
 namespace boss\controllers\order;
 
-use boss\models\search\SystemUserSearch;
 use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
 use boss\models\order\Order;
 
-use core\models\operation\coupon\Coupon;
-use core\models\finance\FinanceRefundadd;
 use core\models\customer\CustomerAddress;
-use core\models\order\OrderTool;
+use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use core\models\customer\Customer;
@@ -22,7 +19,6 @@ use dbbase\models\order\OrderOtherDict;
 use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtPay;
 
-use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -139,7 +135,11 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->get('id');
         $cate_id = Yii::$app->request->get('cate_id');
-        return Coupon::getAbleCouponByCateId($id, $cate_id);
+        $result = CouponRule::getAbleCouponByCateId($id ,$cate_id);
+        if(isset($result['is_status']) && $result['is_status']==1){
+            return $result['data'];
+        }
+        return false;
     }
 
     public function actionCards($id)
