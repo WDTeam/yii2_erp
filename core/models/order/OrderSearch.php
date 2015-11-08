@@ -112,6 +112,39 @@ class OrderSearch extends Order
         return $data;
     }
 
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     * @return array
+     */
+    public static function getWorkerAndOrderAndDoneTimeCount($worker_id,$begin_time,$end_time)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
+            OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
+            OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $query = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in','os.order_status_dict_id',$params]);
+
+        $data = $query->count();
+
+        return $data;
+    }
+
     /**
      * 通过阿姨ID获取指定月份的完成时间所有订单
      * @param $worker_id 阿姨ID
@@ -143,6 +176,36 @@ class OrderSearch extends Order
                 $query->offset($offset);
             }
             $data = $query->all();
+
+        return $data;
+    }
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     * @return array
+     */
+    public static function getWorkerAndOrderAndCancelTimeCount($worker_id,$begin_time,$end_time)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_CANCEL//取消服务
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $query = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in','os.order_status_dict_id',$params]);
+
+        $data = $query->count();
 
         return $data;
     }

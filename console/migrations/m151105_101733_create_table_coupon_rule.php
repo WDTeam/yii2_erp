@@ -20,7 +20,7 @@ class m151105_101733_create_table_coupon_rule extends Migration
 			'couponrule_classify' 			=> Schema::TYPE_INTEGER.'(4) NOT NULL DEFAULT 0 COMMENT \'1 一码一用  2 一码多用\'',
 			'couponrule_category' 			=> Schema::TYPE_INTEGER.'(4) DEFAULT 0 COMMENT \'优惠券分类0为一般优惠券1为赔付优惠券\'',
 			'couponrule_category_name' 		=> Schema::TYPE_STRING.'(100) DEFAULT \'0\' COMMENT \'优惠券范畴\'',
-			'couponrule_type' 		        => Schema::TYPE_INTEGER.'(4) DEFAULT 0 COMMENT \'实收金额优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\'',
+			'couponrule_type' 		        => Schema::TYPE_STRING.'(40) DEFAULT 0 COMMENT \'实收金额优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\'',
 			'couponrule_type_name' 		    => Schema::TYPE_STRING.'(100)  DEFAULT \'0\' COMMENT \'优惠券类型名称\'',
 			'couponrule_service_type_id' 	=> Schema::TYPE_INTEGER.'(4) DEFAULT 0 COMMENT \'服务类别id\'',
 			'couponrule_service_type_name' 	=> Schema::TYPE_STRING.'(100)  DEFAULT \'\' COMMENT \'服务类别名称\'',
