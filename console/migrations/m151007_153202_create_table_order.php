@@ -39,7 +39,7 @@ class m151007_153202_create_table_order extends Migration
 //===============================服务信息
             'order_unit_money'=>Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'订单单位价格\'',
             'order_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'订单金额\'',
-            'order_booked_count' => Schema::TYPE_DECIMAL.'(8.1) NOT NULL DEFAULT 0 COMMENT \'预约服务数量（时长）\'',
+            'order_booked_count' => Schema::TYPE_DECIMAL.'(8.1) NOT NULL DEFAULT  \'0.0\' COMMENT \'预约服务数量（时长）\'',
             'order_booked_begin_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约开始时间\'',
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约结束时间\'',
             'city_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'城市ID\'',
