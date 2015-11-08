@@ -162,8 +162,8 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 			->all();
 		
 		
-		SELECT `c`.`id`, `cc`.`customer_id`, `c`.`couponrule_name` AS `coupon_name`, `c`.`couponrule_price` AS `coupon_price`, `cc`.`coupon_userinfo_code` AS `coupon_code` FROM `ejj_coupon_userinfo` `cc` LEFT JOIN `ejj_coupon_rule` `c` ON c.id = cc.coupon_userinfo_id WHERE (((((((`cc`.`customer_id`='1') AND (`cc`.`is_used`=0)) AND (`cc`.`is_del`=0)) AND (`c`.`is_disabled`=0)) AND (`c`.`is_del`=0)) AND (`c`.`couponrule_use_start_time` < 1446985732)) AND (`c`.`couponrule_use_end_time` > 1446985732)) AND (((c.couponrule_type=1) AND (c.couponrule_service_type_id=0)) OR (`c`.`couponrule_type`=0))
-		
+		/* SELECT `c`.`id`, `cc`.`customer_id`, `c`.`couponrule_name` AS `coupon_name`, `c`.`couponrule_price` AS `coupon_price`, `cc`.`coupon_userinfo_code` AS `coupon_code` FROM `ejj_coupon_userinfo` `cc` LEFT JOIN `ejj_coupon_rule` `c` ON c.id = cc.coupon_userinfo_id WHERE (((((((`cc`.`customer_id`='1') AND (`cc`.`is_used`=0)) AND (`cc`.`is_del`=0)) AND (`c`.`is_disabled`=0)) AND (`c`.`is_del`=0)) AND (`c`.`couponrule_use_start_time` < 1446985732)) AND (`c`.`couponrule_use_end_time` > 1446985732)) AND (((c.couponrule_type=1) AND (c.couponrule_service_type_id=0)) OR (`c`.`couponrule_type`=0))
+		 */
 		
 		
 	 if(empty($able_coupons)){
