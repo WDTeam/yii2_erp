@@ -893,7 +893,10 @@ class OrderController extends \restapi\components\Controller
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
+        $ret['limit']=$limit;
+        $ret['offset']= $offset;
+        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndDoneTimeCount($worker->id, $beginTime, $endTime)/$limit);
+        $ret['orders'] = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
     }
 
@@ -988,7 +991,10 @@ class OrderController extends \restapi\components\Controller
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
+        $ret['limit']=$limit;
+        $ret['offset']= $offset;
+        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndCancelTimeCount($worker->id, $beginTime, $endTime)/$limit);
+        $ret['orders'] = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
     }
 
