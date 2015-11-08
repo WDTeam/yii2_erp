@@ -218,14 +218,14 @@ echo Menu::widget([
             ],
             'items' => [
                 [
-                    'label' => '支付记录查询',
+                    'label' => '第三方支付记录查询',
                     'url' => [
                         'payment/payment/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '交易记录查询',
+                    'label' => 'E家洁交易记录查询',
                     'url' => [
                         'payment/payment-customer-trans-record/index'
                     ],
