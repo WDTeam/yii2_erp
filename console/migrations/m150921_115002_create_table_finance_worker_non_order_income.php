@@ -15,7 +15,7 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'worker_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
             'finance_worker_non_order_income_code' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入id，可能是任务Id，也可能是赔偿Id\'',
-            'finance_worker_non_order_income_type' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入类型，1,任务；2赔偿\'',
+            'finance_worker_non_order_income_type' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入类型，1,任务；2投诉；3赔偿\'',
             'finance_worker_non_order_income_name' => Schema::TYPE_STRING . '(100) COMMENT \'阿姨收入名称，可能是任务名称，也可能是赔偿名称\'',
             'finance_worker_non_order_income' => Schema::TYPE_DECIMAL . '(10,2)  COMMENT \'阿姨收入\'',
             'finance_worker_non_order_income_des' => Schema::TYPE_TEXT . '  COMMENT \'阿姨收入规则描述\'',

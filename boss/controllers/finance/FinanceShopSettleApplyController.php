@@ -121,9 +121,8 @@ class FinanceShopSettleApplyController extends Controller
         }
         $searchModel->getShopSettleInfo($searchModel->shop_id);
         $financeSettleApplySearchModel = new FinanceSettleApplySearch;
-        
         $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
-        $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search($requestParams);
+        $financeSettleApplyDataProvider = $financeSettleApplySearchModel->searchCanSettledWorker($requestParams);
         return $this->render('shopManualSettlementIndex', [
             'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,
             'model' => $searchModel,
@@ -245,6 +244,7 @@ class FinanceShopSettleApplyController extends Controller
         $shopModel = Shop::findById($searchModel->shop_id);
         $financeSettleApplySearchModel = new FinanceSettleApplySearch;
         $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
+        $financeSettleApplySearchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
         $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search(null);
         return $this->render('view', [
              'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,
