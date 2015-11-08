@@ -368,6 +368,10 @@ class Customer extends \dbbase\models\customer\Customer
 		if(empty($customer)) return false;
 
 //		$channal_name = funcname($channal_id);
+        $channal_info = FinanceOrderChannel::get_order_channel_info($channal_id);
+        if($channal_info == '未知'){
+            return false;
+        }
 		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
 	
 		$customerExtSrc = new CustomerExtSrc;

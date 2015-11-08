@@ -10,6 +10,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\customer\Customer;
+
+
+
 /**
  * CouponUserinfoController implements the CRUD actions for CouponUserinfo model.
  */
@@ -33,6 +36,14 @@ class CouponUserinfoController extends Controller
      */
     public function actionIndex()
     {
+    	
+    	
+    	//用户ID，优惠券ID，优惠券金额，交易记录号,点单号
+    	$rty=\core\models\operation\coupon\CouponRule::getCouponBasicInfoById('1');
+    	
+    	var_dump($rty);  exit;
+    	
+    	
         $searchModel = new CouponUserinfoSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

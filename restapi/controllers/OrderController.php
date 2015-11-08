@@ -884,7 +884,7 @@ class OrderController extends \restapi\components\Controller
         $beginTime = strtotime('-3 month');
         $endTime = time();
 
-        @$limit = $args["access_token"];
+        @$limit = $args["limit"];
         if (is_null($limit)) {
             $limit = 10;
         }
@@ -893,7 +893,10 @@ class OrderController extends \restapi\components\Controller
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
+        $ret['limit']=$limit;
+        $ret['offset']= $offset;
+        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndDoneTimeCount($worker->id, $beginTime, $endTime)/$limit);
+        $ret['orders'] = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
     }
 
@@ -979,7 +982,7 @@ class OrderController extends \restapi\components\Controller
         $beginTime = strtotime('-3 month');
         $endTime = time();
 
-        @$limit = $args["access_token"];
+        @$limit = $args["limit"];
         if (is_null($limit)) {
             $limit = 10;
         }
@@ -988,7 +991,10 @@ class OrderController extends \restapi\components\Controller
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
+        $ret['limit']=$limit;
+        $ret['offset']= $offset;
+        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndCancelTimeCount($worker->id, $beginTime, $endTime)/$limit);
+        $ret['orders'] = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
     }
 
@@ -1680,6 +1686,7 @@ class OrderController extends \restapi\components\Controller
                 $booked_list[] = [
                     'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
                     'order_booked_end_time' => strtotime($val['order_booked_end_time']),
+                    'order_booked_count' => $val['order_booked_count'],
                     'coupon_id' => $val['coupon_id']
                 ];
             }
@@ -1695,7 +1702,7 @@ class OrderController extends \restapi\components\Controller
                         return $this->send(null, "添加失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                     }
                 } else {
-                    return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    return $this->send(null, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);

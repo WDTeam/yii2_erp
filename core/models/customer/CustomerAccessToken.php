@@ -22,7 +22,7 @@ use core\models\finance\FinanceOrderChannel;
  */
 class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 {
-    public static function generateAccessToken($phone, $code, $channal_id){
+    public static function generateAccessToken($phone, $code, $channal_id=0){
         $check_code = CustomerCode::checkCode($phone, $code);
         if ($check_code == false) {
             return $check_code;
@@ -118,7 +118,7 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     /**
      * 为POP客户下发access_token
      */
-    public static function generateAccessTokenForPop($phone, $sign, $channal_id){
+    public static function generateAccessTokenForPop($phone, $sign, $channal_id=0){
         $check_sign = self::checkSign($phone, $sign, $channal_id);
         if (!$check_sign) {
             return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'验证签名失败'];

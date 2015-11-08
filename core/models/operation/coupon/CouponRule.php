@@ -10,7 +10,7 @@ namespace core\models\operation\coupon;
 
 use Yii;
 use core\models\operation\coupon\CouponUserinfo;
-use core\models\coupon\CouponLog;
+use core\models\operation\coupon\CouponLog;
 
 
 class CouponRule extends \dbbase\models\operation\coupon\CouponRule
@@ -19,7 +19,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	
 	/**
 	* 根据优惠码获取优惠规则详情     
-	* @使用人 魏北南 
+	* @使用人 魏北南     测试完成 ok
 	* @date: 2015-11-7
 	* @author: peak pan
 	* @return:
@@ -27,7 +27,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	
     public static function getcouponBasicInfoByCode($coupon_code){
     	
-    	if($coupon_code==0){
+    	if($coupon_code ==''){
     		$array=[
     		'is_status'=>0,
     		'msg'=>'亲你忘记传参数了',
@@ -35,8 +35,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     		];
     		return $array;
     	}
-    	
-        $coupon_code_arr = CouponUserinfo::find()->select(['id', 'coupon_userinfo_id as coupon_id', 'coupon_userinfo_name as coupon_name', 'coupon_userinfo_price as coupon_price', 'coupon_userinfo_code as coupon_code'])->where(['coupon_code'=>$coupon_code])->asArray()->one();
+        $coupon_code_arr = CouponUserinfo::find()->select(['id', 'coupon_userinfo_id as coupon_id', 'coupon_userinfo_name as coupon_name', 'coupon_userinfo_price as coupon_price', 'coupon_userinfo_code as coupon_code'])->where(['coupon_userinfo_code'=>$coupon_code])->asArray()->one();
 
         if(empty($coupon_code_arr)){
         	$array=[
@@ -62,7 +61,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
    *  使用优惠券  李胜强使用
    * @date: 2015-11-8
    * @author: peak pan
-   * @ post （用户ID，优惠券ID，优惠券CODE，优惠券金额，交易记录号）
+   * @ post （用户ID，优惠券ID，优惠券金额，交易记录号,点单号 ）
    * @return: （用户ID，优惠券ID，优惠券CODE，优惠券金额，交易记录号，交易流水号（自己生成，不能重复））   
    **/
 
@@ -73,14 +72,15 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     	->where(['customer_id'=>$customer_id,'coupon_userinfo_id'=>$couponrule_id,'coupon_userinfo_price'=>$couponrule_price])
     	->asArray()
     	->one();
-    	
     	if($coupon_code_arr){
-    	//开始修改状态		
-    	$coupon_code_arr->coupon_userinfo_usetime=time();
-    	$coupon_code_arr->order_code=$order_code;
-    	$coupon_code_arr->is_used=1;
-    	$coupon_code_arr->save();
-    	
+    	//开始修改状态	
+    	$coupon_code=new CouponUserinfo;
+    	$coupon_code_edit=$coupon_code->findOne($coupon_code_arr['id']);
+    	$coupon_code_edit->coupon_userinfo_usetime=time();
+    	$coupon_code_edit->order_code=$order_code;
+    	$coupon_code_edit->is_used=1;
+    	$coupon_code_edit->save();
+
     	$Couponlogobj=new CouponLog;
     	$Couponlogobj->customer_id=$customer_id;
     	$Couponlogobj->order_id=$order_code;
@@ -95,7 +95,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     	$Couponlogobj->created_at=time();
     	$Couponlogobj->updated_at=time();
     	$Couponlogobj->is_del=0;
-    	$Couponlogobj->save();
+    	$Couponlogobj->save(); 
     	
     	if($Couponlogobj->id<>0 && $Couponlogobj->id<>''){
     		
@@ -147,21 +147,14 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	**/
     
 	public static function getAbleCouponByCateId($customer_id, $cate_id){
-		$able_coupons = (new \yii\db\Query())
-			->select(['c.id', 'cc.customer_id', 'c.couponrule_name as coupon_name', 'c.couponrule_price as coupon_price', 'cc.coupon_userinfo_code as coupon_code'])
-			->from(['cc'=>'{{%coupon_userinfo}}'])
-			->leftJoin(['c'=>'{{%coupon_rule}}'], 'c.id = cc.coupon_userinfo_id')
-			->where(['cc.customer_id'=>$customer_id])
-			->andWhere(['cc.is_used'=>0])
-			->andWhere(['cc.is_del'=>0])
-			->andWhere(['c.is_disabled'=>0])
-			->andWhere(['c.is_del'=>0])
-			->andWhere(['<', 'c.couponrule_use_start_time', time()])
-			->andWhere(['>', 'c.couponrule_use_end_time', time()])
-			->andWhere(['or', ['and', 'c.couponrule_type=1', 'c.couponrule_service_type_id='.$cate_id], ['c.couponrule_type'=>0]])
+		$able_coupons = CouponUserinfo::find()
+			->select(['id', 'customer_id', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price', 'coupon_userinfo_code as coupon_code'])
+			->where(['customer_id'=>$customer_id,'is_used'=>0,'is_del'=>0,'is_disabled'=>0])
+			->andWhere(['<', 'couponrule_use_start_time', time()])
+			->andWhere(['>', 'couponrule_use_end_time', time()])
+			->andWhere(['or', ['and', 'couponrule_type=1', 'couponrule_service_type_id='.$cate_id], ['couponrule_type'=>0]])
 			->asArray()
 			->all();
-		
 	 if(empty($able_coupons)){
         	$array=[
         	'is_status'=>1,
@@ -200,8 +193,8 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 			return $array;
 		}
 		
-		$coupon = self::find()
-		->select(['id as coupon_id', 'couponrule_name as coupon_name', 'couponrule_price as coupon_price'])
+		$coupon = CouponUserinfo::find()
+		->select(['id as coupon_id', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price'])
 		->where(['id'=>$coupon_id])
 		->asArray()
 		->one();
@@ -222,6 +215,8 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
         	return $array;
         }
 	}
+	
+	
 	
 	
     /**
