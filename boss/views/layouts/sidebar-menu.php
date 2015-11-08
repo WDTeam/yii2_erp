@@ -41,7 +41,7 @@ echo Menu::widget([
             'options' => [
                 'class' => 'treeview rootTree'
             ],
-            'visible' => (Yii::$app->user->can('sidebar_housekeep')),
+            'can' => 'sidebar_housekeep',
             'items' => [
                 [
                     'label' => '查看所有家政公司',
@@ -65,7 +65,7 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-flag',
-            'visible' => (Yii::$app->user->can('sidebar_shop')),
+            'can' => 'sidebar_shop',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
@@ -92,7 +92,7 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-female',
-            'visible' => (Yii::$app->user->can('sidebar_worker')),
+            'can' => 'sidebar_worker',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
@@ -100,24 +100,18 @@ echo Menu::widget([
                 [
                     'label' => '查看所有阿姨',
                     'url' => [
-                        '/worker/worker'
+                        'worker/worker/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '录入新阿姨',
                     'url' => [
-                        '/worker/worker/create'
+                        'worker/worker/create'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ]
             ]
-            // [
-            // 'label' => '阿姨黑名单(待定)',
-            // 'url' => ['/worker/index?WorkerSearch[worker_is_blacklist]=1'],
-            // 'icon' => 'fa fa-angle-right',
-            // ],
-            
         ],
         [
             'label' => '客户管理',
@@ -125,7 +119,7 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-user',
-            'visible' => (Yii::$app->user->can('sidebar_customer')),
+            'can' => 'sidebar_customer',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
@@ -133,21 +127,24 @@ echo Menu::widget([
                 [
                     'label' => '查看所有客户',
                     'url' => [
-                        '/customer/customer/index?CustomerSearch[is_del]=0'
+                        'customer/customer/index',
+                        'CustomerSearch'=>[
+                            'is_del'=>0
+                        ]
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '评价列表',
                     'url' => [
-                        '/customer/customer-comment'
+                        'customer/customer-comment'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '评价标签管理',
                     'url' => [
-                        '/customer/customer-comment-tag'
+                        'customer/customer-comment-tag'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ]
@@ -159,7 +156,7 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-tag',
-            'visible' => (Yii::$app->user->can('sidebar_order')),
+            'can'=>'sidebar_order',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
@@ -167,42 +164,42 @@ echo Menu::widget([
                 [
                     'label' => '查看所有订单',
                     'url' => [
-                        '/order/order'
+                        'order/order/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '创建新订单',
                     'url' => [
-                        '/order/order/create'
+                        'order/order/create'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '人工指派订单',
                     'url' => [
-                        '/order/order/assign'
+                        'order/order/assign'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '智能指派订单',
                     'url' => [
-                        '/order/auto-assign'
+                        'order/auto-assign/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '处理投诉订单',
                     'url' => [
-                        '/order/order-complaint'
+                        'order/order-complaint/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
                     'label' => '响应异常订单',
                     'url' => [
-                        '/order/order-response'
+                        'order/order-response/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ]
@@ -215,7 +212,7 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-tag',
-            'visible' => (Yii::$app->user->can('sidebar_payment')),
+            'can'=>'sidebar_payment',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
@@ -242,26 +239,11 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-recycle',
-            'visible' => (Yii::$app->user->can('sidebar_operation')),
+            'can'=>'sidebar_operation',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
             'items' => [
-                // [
-                // 'label' => '用户运营(0%)',
-                // 'url' => ['/operation-category'],
-                // 'icon' => 'fa fa-angle-right',
-                // ],
-                // [
-                // 'label' => '阿姨运营(0%)',
-                // 'url' => ['#'],
-                // 'icon' => 'fa fa-angle-right',
-                // ],
-                // [
-                // 'label' => '企业运营(0%)',
-                // 'url' => ['#'],
-                // 'icon' => 'fa fa-angle-right',
-                // ],
                 [
                     'label' => '服务管理',
                     'url' => [
@@ -275,40 +257,34 @@ echo Menu::widget([
                         [
                             'label' => '配置服务品类和服务项目',
                             'url' => [
-                                '/operation/operation-category/'
+                                'operation/operation-category/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '配置城市和商圈信息',
                             'url' => [
-                                '/operation/operation-city'
+                                'operation/operation-city/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '配置保洁任务信息',
                             'url' => [
-                                '/operation/operation-selected-service'
+                                'operation/operation-selected-service/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '已开通城市服务管理',
                             'url' => [
-                                '/operation/operation-city/opencity'
+                                'operation/operation-city/opencity'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
                         
                     ]
                 ],
-                // [
-                // 'label' => '上线城市(80%)',
-                // 'url' => ['/operation-city/release'],
-                // 'icon' => 'fa fa-angle-right',
-                // 'visible' => (Yii::$app->user->identity->username == 'admin'),
-                // ],
                 [
                     'label' => 'CMS管理',
                     'url' => [
@@ -322,26 +298,21 @@ echo Menu::widget([
                         [
                             'label' => '应用平台管理',
                             'url' => [
-                                '/operation/operation-platform'
+                                'operation/operation-platform/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
-                        // [
-                        // 'label' => '系统版本管理',
-                        // 'url' => ['/operation-platform-version'],
-                        // 'icon' => 'fa fa-angle-right',
-                        // ],
                         [
                             'label' => '广告位置管理',
                             'url' => [
-                                '/operation/operation-advert-position'
+                                'operation/operation-advert-position/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '广告内容管理',
                             'url' => [
-                                '/operation/operation-advert-content'
+                                'operation/operation-advert-content/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
@@ -349,19 +320,13 @@ echo Menu::widget([
                         [
                             'label' => '已发布广告管理',
                             'url' => [
-                                '/operation/operation-advert-release'
+                                'operation/operation-advert-release/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
                         
                     ]
                 ],
-                // [
-                // 'label' => '通知管理(0%)',
-                // 'url' => ['#'],
-                // 'icon' => 'fa fa-angle-right',
-                //
-                // ],
                 [
                     'label' => '优惠券管理',
                     'url' => [
@@ -390,59 +355,31 @@ echo Menu::widget([
                         [
                             'label' => '规则管理',
                             'url' => [
-                                'operation/coupon/coupon-rule/'
+                                'operation/coupon/coupon-rule/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '用户管理',
                             'url' => [
-                                'operation/coupon/coupon-userinfo/'
+                                'operation/coupon/coupon-userinfo/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
                     ]
                     
                 ],
-                
-                // [
-                
-                // 'label' => '商圈管理(40%)',
-                // 'url' => ['/operation-shop-district'],
-                // 'icon' => 'fa fa-angle-right',
-                
-                // ],
-                
-                // [
-                // 'label' => '服务管理(80%)',
-                // 'url' => ['/operation-goods'],
-                // 'icon' => 'fa fa-angle-right',
-                // ],
-                
                 [
                     'label' => '启动页管理',
                     'url' => [
-                        '/operation/operation-boot-page'
+                        'operation/operation-boot-page/index'
                     ],
                     'icon' => 'fa fa-angle-right'
-                ]
-                ,
-                /**
-                 * [
-                 * 'label' => '引导页管理(0%)',
-                 * 'url' => ['#'],
-                 * 'icon' => 'fa fa-angle-right',
-                 * ],
-                 * [
-                 * 'label' => '话术管理(0%)',
-                 * 'url' => ['#'],
-                 * 'icon' => 'fa fa-angle-right',
-                 * ],
-                 */
+                ],
                 [
                     'label' => '阿姨任务管理',
                     'url' => [
-                        '/operation/worker-task/index'
+                        'operation/worker-task/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
@@ -495,7 +432,7 @@ echo Menu::widget([
                 '#'
             ],
             'icon' => 'fa fa-credit-card',
-            'visible' => (Yii::$app->user->can('sidebar_finance')),
+            'can'=>'sidebar_finance',
             'options' => [
                 'class' => 'treeview rootTree'
             ],
@@ -513,49 +450,48 @@ echo Menu::widget([
                         [
                             'label' => '渠道管理',
                             'url' => [
-                                '/finance/finance-pay-channel/'
+                                'finance/finance-pay-channel/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '配置对账表头',
                             'url' => [
-                                '/finance/finance-header/index'
+                                'finance/finance-header/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '开始对账',
                             'url' => [
-                                '/finance/finance-pop-order/'
+                                'finance/finance-pop-order/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '查看历史对账记录',
                             'url' => [
-                                '/finance/finance-record-log/'
+                                'finance/finance-record-log/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '对账记录详情',
                             'url' => [
-                                '/finance/finance-pop-order/billinfo'
+                                'finance/finance-pop-order/billinfo'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '坏账管理',
                             'url' => [
-                                '/finance/finance-pop-order/bad'
+                                'finance/finance-pop-order/bad'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
                     ]
                     
-                ]
-                ,
+                ],
                 [
                     'label' => '结算管理',
                     'url' => [
@@ -579,14 +515,18 @@ echo Menu::widget([
                                 [
                                     'label' => '全职结算',
                                     'url' => [
-                                        '/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type=' . FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE . '&review_section=' . FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
+                                        'settle_type'=>FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE,
+                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '兼职结算',
                                     'url' => [
-                                        '/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type=' . FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE . '&review_section=' . FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
+                                        'settle_type'=>FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE,
+                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -605,14 +545,17 @@ echo Menu::widget([
                                 [
                                     'label' => '门店结算',
                                     'url' => [
-                                        '/finance/finance-shop-settle-apply/index?review_section=' . FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-shop-settle-apply/index',
+                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '阿姨结算',
                                     'url' => [
-                                        '/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type=' . FinanceSettleApplySearch::SHOP_WORKER_SETTELE . '&review_section=' . FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
+                                        'settle_type'=>FinanceSettleApplySearch::SHOP_WORKER_SETTELE,
+                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -631,14 +574,17 @@ echo Menu::widget([
                                 [
                                     'label' => '阿姨结算',
                                     'url' => [
-                                        '/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type=' . FinanceSettleApplySearch::ALL_WORKER_SETTELE . '&review_section=' . FinanceShopSettleApplySearch::FINANCE_REVIEW
+                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
+                                        'settle_type'=>FinanceSettleApplySearch::ALL_WORKER_SETTELE,
+                                        'review_section'=>FinanceShopSettleApplySearch::FINANCE_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '门店结算',
                                     'url' => [
-                                        '/finance/finance-shop-settle-apply/index?review_section=' . FinanceShopSettleApplySearch::FINANCE_REVIEW
+                                        'finance/finance-shop-settle-apply/index',
+                                        'review_section'=>FinanceShopSettleApplySearch::FINANCE_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -657,14 +603,14 @@ echo Menu::widget([
                                 [
                                     'label' => '阿姨结算',
                                     'url' => [
-                                        '/finance/finance-settle-apply/query'
+                                        'finance/finance-settle-apply/query'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '门店结算',
                                     'url' => [
-                                        '/finance/finance-shop-settle-apply/query'
+                                        'finance/finance-shop-settle-apply/query'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -685,14 +631,14 @@ echo Menu::widget([
                         [
                             'label' => '财务审核确认',
                             'url' => [
-                                '/finance/finance-refund/'
+                                'finance/finance-refund/'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '退款统计',
                             'url' => [
-                                '/finance/finance-refund/countinfo'
+                                'finance/finance-refund/countinfo'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
@@ -712,14 +658,14 @@ echo Menu::widget([
                         [
                             'label' => '财务确认赔偿',
                             'url' => [
-                                '/finance/finance-compensate/finance-confirm-index'
+                                'finance/finance-compensate/finance-confirm-index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
                             'label' => '赔偿查询',
                             'url' => [
-                                '/finance/finance-compensate/index'
+                                'finance/finance-compensate/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]
@@ -739,7 +685,7 @@ echo Menu::widget([
                         [
                             'label' => '日报表管理',
                             'url' => [
-                                '/finance/finance-office-count/indexoffice'
+                                'finance/finance-office-count/indexoffice'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ]

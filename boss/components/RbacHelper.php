@@ -10,6 +10,10 @@ class RbacHelper extends Component
      */
     public static function menu($menus)
     {
+        $auth = \Yii::$app->authManager;
+        foreach ($menus as $menu){
+            
+        }
         return $menus;
     }
 }
