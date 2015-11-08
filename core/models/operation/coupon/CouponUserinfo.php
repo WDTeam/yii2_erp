@@ -37,7 +37,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		if($customer == NULL){
 			//手机号不存在，无此用户  是否创建此用户
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4011,
 			'msg'=>'此手机号未被注册！',
 			'data'=>false
 			];
@@ -48,7 +48,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
 		if(!empty($couponCustomer)){
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4012,
 			'msg'=>'优惠码已经被领取或使用',
 			'data'=>false,
 			];
@@ -60,7 +60,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$Couponruledate = CouponRule::find()->where(['couponrule_Prefix'=>$coupon])->asArray()->one();
 		if($Couponruledate['id']<>''){
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4013,
 			'msg'=>'优惠券不存在',
 			'data'=>false,
 			];
@@ -71,7 +71,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		 $code_able = self::checkCouponIsclok($code);
 		 if($code_able){
 		 	$array=[
-		 	'is_status'=>1,
+		 	'is_status'=>4014,
 		 	'msg'=>'优惠券不可用',
 		 	'data'=>false,
 		 	];
@@ -80,7 +80,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		 
 		if($Couponruledate->couponrule_get_end_time < time()) {
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4015,
 			'msg'=>'优惠券兑换时间已过期',
 			'data'=>false,
 			];
@@ -90,7 +90,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if($Couponruledate->is_del==1) {
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4016,
 			'msg'=>'优惠券已删除',
 			'data'=>false,
 			];
@@ -101,7 +101,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if($coupon->is_disabled==2){
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4017,
 			'msg'=>'优惠券兑换已禁用',
 			'data'=>false,
 			];
@@ -144,7 +144,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		}else{
 			
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4018,
 			'msg'=>'数据库写入失败',
 			'data'=>false,
 			];
@@ -181,7 +181,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if(empty($couponCustomer)){
 			$array=[
-			'is_status'=>1,
+			'is_status'=>4019,
 			'msg'=>'暂无数据',
 			'data'=>'',
 			];

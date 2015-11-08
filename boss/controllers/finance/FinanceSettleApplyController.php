@@ -210,7 +210,7 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['isExport'])){
             $isExport = 1;
         }
-        if(Yii::$app->user->can('group_mini_box')){
+        if(\Yii::$app->user->identity->isMiniBoxUser()){
             $financeSearchModel->shop_id = Yii::$app->user->identity->getShopIds();
             $financeSearchModel->shop_manager_id = Yii::$app->user->identity->getShopManagerIds();
         }
