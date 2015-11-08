@@ -33,7 +33,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	
 	public static function generateCouponByCode($phone, $code){
 		
-		$customer = Customer::find()->where(['customer_phone'=>$phone])->one();
+		 $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
 		if($customer == NULL){
 			//手机号不存在，无此用户  是否创建此用户
 			$array=[
@@ -42,10 +42,10 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			'data'=>false
 			];
 			return $array;
-		}
+		} 
 		
 		//检查优惠码是否已经被兑换
-		$couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
+		 $couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
 		if(!empty($couponCustomer)){
 			$array=[
 			'is_status'=>4012,
@@ -53,7 +53,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			'data'=>false,
 			];
 			return $array;
-		}
+		} 
 		
 		$coupon=substr($code,0,3);
 		//查看渠道下面的领取开始时间是不是可以领取
@@ -68,17 +68,20 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			
 		}
 		
+		
+		
 		 $code_able = self::checkCouponIsclok($code);
-		 if($code_able){
+		 
+		  if($code_able){
 		 	$array=[
 		 	'is_status'=>4014,
 		 	'msg'=>'优惠券不可用',
 		 	'data'=>false,
 		 	];
 		 	return $array;
-		 }
+		 } 
 		 
-		if($Couponruledate->couponrule_get_end_time < time()) {
+		 if($Couponruledate['couponrule_get_end_time'] < time()) {
 			$array=[
 			'is_status'=>4015,
 			'msg'=>'优惠券兑换时间已过期',
@@ -88,7 +91,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			
 		}
 		
-		if($Couponruledate->is_del==1) {
+		 if($Couponruledate['is_del']==1) {
 			$array=[
 			'is_status'=>4016,
 			'msg'=>'优惠券已删除',
@@ -96,10 +99,10 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			];
 			return $array;
 				
-		}
+		} 
 		
 		
-		if($coupon->is_disabled==2){
+		if($Couponruledate['is_disabled']==2){
 			$array=[
 			'is_status'=>4017,
 			'msg'=>'优惠券兑换已禁用',
@@ -309,15 +312,17 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @author: peak pan
 	* @return:
 	**/
-	private  function checkCouponIsclok($code)
+	private static  function checkCouponIsclok($code)
 	{
 		$now_time=time();
-		$couponCustomer=self::find()->where(['and','coupon_userinfo_code'=>$code,'is_used'=>1,"coupon_userinfo_endtime > $now_time"])->one();
+		$couponCustomer=self::find()
+		->where(['and','coupon_userinfo_code="'.$code.'"','is_used=1',"couponrule_use_end_time > $now_time"])->one();
+		
 		if($couponCustomer){
 			//查询存在  
-			return true;
-		}else{
 			return false;
+		}else{
+			return true;
 		}
 	}
 	
