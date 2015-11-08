@@ -69,7 +69,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     	
     	
     	$coupon_code_arr = CouponUserinfo::find()
-    	->where(['customer_id'=>$customer_id,'coupon_userinfo_id'=>$couponrule_id,'coupon_userinfo_price'=>$couponrule_price])
+    	->where(['customer_id'=>$customer_id,'coupon_userinfo_id'=>$couponrule_id,'coupon_userinfo_price'=>$couponrule_price,is_used=>0])
     	->asArray()
     	->one();
     	if($coupon_code_arr){
