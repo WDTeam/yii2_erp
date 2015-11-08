@@ -433,7 +433,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         //调取数据
         try{
-            $conplainList = OrderComplaint::getWorkerComplain($workerID);
+            $conplainList = OrderComplaint::getWorkerComplain($workerID,$per_page,$page_num);
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerComplainFailed);
         }
