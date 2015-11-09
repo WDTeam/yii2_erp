@@ -17,7 +17,7 @@ class OrderMsg extends Model
     public static function payment($order)
     {
         try {
-            $msg = "【预约成功】您已成功预约,服务时长{$order->order_booked_count}小时，{$order->order_service_item_name}，已支付费用{$order->orderExtPay->order_pay_money}元，订单待指派。如有疑问可致电客服热线4006767636。";
+            $msg = "【预约成功】您已成功预约,服务时长{$order->order_booked_count}小时，{$order->order_service_item_name}，已支付费用".($order->orderExtPay->order_pay_money+$order->orderExtPay->order_use_acc_balance+$order->orderExtPay->order_use_card_money)."元，订单待指派。如有疑问可致电客服热线4006767636。";
             Yii::$app->sms->send($order->orderExtCustomer->order_customer_phone, $msg);
         } catch (Exception $e) {
 

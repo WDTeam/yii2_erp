@@ -9,6 +9,7 @@ use boss\models\order\Order;
 use core\models\customer\CustomerAddress;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderDispatcherKpi;
+use core\models\order\OrderManualAssign;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use core\models\customer\Customer;
@@ -173,7 +174,7 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $is_mini_boss = \Yii::$app->user->identity->isMiniBossUser();
-        $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id, $is_mini_boss);
+        $order = OrderManualAssign::getWaitManualAssignOrder(Yii::$app->user->id, $is_mini_boss);
         if ($order) {
             $week = ['日', '一', '二', '三', '四', '五', '六'];
             $booked_time_range = date("Y-m-d  （周", $order->order_booked_begin_time) . $week[date('w', $order->order_booked_begin_time)] . date('）  H:i-', $order->order_booked_begin_time) . date('H:i', $order->order_booked_end_time);
