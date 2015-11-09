@@ -1690,13 +1690,14 @@ class OrderController extends \restapi\components\Controller
                 $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
                 
-                print_r($createOrder);
-                exit;
-
                 if ($createOrder['status'] == 1) {
                     return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                 } else {
-                    return $this->send($order->errors, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    $err = array();
+                    foreach($createOrder['errors'] as $key=>$val){
+                        $err[$key] = $val[0];
+                    }
+                    return $this->send($err, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
