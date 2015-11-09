@@ -1690,6 +1690,9 @@ class OrderController extends \restapi\components\Controller
                 $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
 
+                print_r($createOrder);
+                var_dump($createOrder);
+                exit;
                 if ($createOrder['status'] == 1) {
                     if (!empty($createOrder)) {
                         return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
