@@ -37,7 +37,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam {String} [address_id] 订单地址id
+     * @apiParam {String} address_id 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -108,30 +108,30 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['customer_id'] = $user->id;
 
-        if (is_null($args['order_service_item_id'])) {
+        if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
-        if (is_null($args['order_src_id'])) {
+        if (empty($args['order_src_id'])) {
             return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
-        if (is_null($args['order_booked_begin_time'])) {
+        if (empty($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
-        if (is_null($args['order_booked_end_time'])) {
+        if (empty($args['order_booked_end_time'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (is_null($args['order_pay_type'])) {
+        if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        if (is_null($args['order_booked_count'])) {
+        if (empty($args['order_booked_count'])) {
             return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
         $attributes['order_pay_type'] = $args['order_pay_type'];
@@ -197,7 +197,7 @@ class OrderController extends \restapi\components\Controller
         if ($is_success) {
             return $this->send($order, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
-            return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
+            return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }
 
