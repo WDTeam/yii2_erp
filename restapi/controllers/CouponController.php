@@ -191,11 +191,11 @@ class CouponController extends \restapi\components\Controller
         $city_id = $param['city_id'];
         $service_type_id = $param['service_type_id'];
         //获取该用户该城市的优惠券列表
-        //try{
+        try{
             $coupons=CouponUserinfo::GetCustomerCouponList($checkResult['customer_id'],$city_id,$service_type_id);
-        //}catch (\Exception $e) {
+        }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
-        //}
+        }
         if ($coupons["is_status"]==1) {
             return $this->send($coupons["data"], "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsSuccess);
         } else {

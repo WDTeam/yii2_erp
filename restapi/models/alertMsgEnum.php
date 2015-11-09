@@ -15,6 +15,11 @@ class alertMsgEnum
     //客户端提示信息文案
     const __default = '查询成功';
     //赵顺利
+    //发短消息
+    //登陆成功
+    const sendVSuccess = '登陆成功';
+    //用户名或验证码错误
+    const sendVFail = '用户名或验证码错误';
     //用户发送验证码
     const sendUserCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     const sendUserCodeFailed = '验证码已发失败';
