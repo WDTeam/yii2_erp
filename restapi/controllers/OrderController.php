@@ -37,7 +37,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam {String} [address_id] 订单地址id
+     * @apiParam {String} address_id 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -108,30 +108,30 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['customer_id'] = $user->id;
 
-        if (is_null($args['order_service_item_id'])) {
+        if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
-        if (is_null($args['order_src_id'])) {
+        if (empty($args['order_src_id'])) {
             return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
-        if (is_null($args['order_booked_begin_time'])) {
+        if (empty($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
-        if (is_null($args['order_booked_end_time'])) {
+        if (empty($args['order_booked_end_time'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (is_null($args['order_pay_type'])) {
+        if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        if (is_null($args['order_booked_count'])) {
+        if (empty($args['order_booked_count'])) {
             return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
         $attributes['order_pay_type'] = $args['order_pay_type'];
@@ -197,7 +197,7 @@ class OrderController extends \restapi\components\Controller
         if ($is_success) {
             return $this->send($order, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
-            return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
+            return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }
 
@@ -893,9 +893,9 @@ class OrderController extends \restapi\components\Controller
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret['limit']=$limit;
-        $ret['offset']= $offset;
-        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndDoneTimeCount($worker->id, $beginTime, $endTime)/$limit);
+        $ret['limit'] = $limit;
+        $ret['offset'] = $offset;
+        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndDoneTimeCount($worker->id, $beginTime, $endTime) / $limit);
         $ret['orders'] = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerDoneOrderHistorySuccess);
     }
@@ -991,9 +991,9 @@ class OrderController extends \restapi\components\Controller
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret['limit']=$limit;
-        $ret['offset']= $offset;
-        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndCancelTimeCount($worker->id, $beginTime, $endTime)/$limit);
+        $ret['limit'] = $limit;
+        $ret['offset'] = $offset;
+        $ret['page_total'] = ceil(OrderSearch::getWorkerAndOrderAndCancelTimeCount($worker->id, $beginTime, $endTime) / $limit);
         $ret['orders'] = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::orderWorkerCancelOrderHistorySuccess);
     }
@@ -1262,38 +1262,38 @@ class OrderController extends \restapi\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-          #  $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
+            #  $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
             #if ($orderValidation) {
-                /**
-                 * $order_id订单号
-                 * $amdin_id管理员id,没有请填写0
-                 * $param['order_cancel_reason'] 取消原因
-                 *
-                 */
-                $order_cancel_reason = array(
-                    '临时有事，改约',
-                    '信息填写有误，重新下单',
-                    '不需要服务了',
-                );
-                if (!in_array($reason, $order_cancel_reason)) {
-                    $reason = '其他原因#' . $reason;
-                }
-
-                try {
-                   
-                    $result = Order::cancelByOrderCode($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-                    
-                    if ($result) {
-                        return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
-                    } else {
-                        return $this->send(null, $orderId . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
-                    }
-                } catch (Exception $e) {
-                    return $this->send(null, $orderId . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
-                }
-            } else {
-                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200, NULL, alertMsgEnum::orderCancelFaile);
+            /**
+             * $order_id订单号
+             * $amdin_id管理员id,没有请填写0
+             * $param['order_cancel_reason'] 取消原因
+             *
+             */
+            $order_cancel_reason = array(
+                '临时有事，改约',
+                '信息填写有误，重新下单',
+                '不需要服务了',
+            );
+            if (!in_array($reason, $order_cancel_reason)) {
+                $reason = '其他原因#' . $reason;
             }
+
+            try {
+
+                $result = Order::cancelByOrderCode($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
+
+                if ($result) {
+                    return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
+                } else {
+                    return $this->send(null, $orderId . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, $orderId . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
+            }
+        } else {
+            return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200, NULL, alertMsgEnum::orderCancelFaile);
+        }
 //        } else {
 //            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200, null, alertMsgEnum::orderCancelFaile);
 //        }
@@ -1761,7 +1761,7 @@ class OrderController extends \restapi\components\Controller
             try {
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
 
-                if ($setWorker&&is_null($setWorker["errors"])) {
+                if ($setWorker && is_null($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
                     return $this->send(null, "阿姨抢单提交失败", 0, 200, null, $setWorker["errors"]);
