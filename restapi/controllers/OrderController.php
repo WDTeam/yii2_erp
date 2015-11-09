@@ -1306,9 +1306,9 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionHidenOrder
      * @apiGroup Order
      *
-     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} access_token  用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {int} order_id 订单号
+     * @apiParam {int}  order_id 订单号
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      *
      * @apiSuccessExample Success-Response:
@@ -1408,7 +1408,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数 (郝建设)
-     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} access_token      阿姨认证
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
      * @apiParam {String} [page]              页面  #leveltype =2 时要传递
@@ -1689,12 +1689,12 @@ class OrderController extends \restapi\components\Controller
             try {
                 $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
-                
+
                 if ($createOrder['status'] == 1) {
                     return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                 } else {
                     $err = array();
-                    foreach($createOrder['errors'] as $key=>$val){
+                    foreach ($createOrder['errors'] as $key => $val) {
                         $err[$key] = $val[0];
                     }
                     return $this->send($err, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);

@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-heading"><h3 class="panel-title">当前状态：<span id="work_status" class="badge badge-warning">休息</span></h3></div>
         <div class="panel-body">
             <table class="table table-bordered">
-                <tr><th>日期</th><th>空闲时间</th><th>忙碌时间</th><th>忙碌时间</th><th>待人工指派</th><th>应指派</th><th>已指派</th><th>指派成功率</th></tr>
+                <tr><th>日期</th><th>空闲时间</th><th>忙碌时间</th><th>小休时间</th><th>待人工指派</th><th>应指派</th><th>已指派</th><th>指派成功率</th></tr>
                 <tr>
                     <th>近七日平均</th>
                     <td id="free_avg"></td>
