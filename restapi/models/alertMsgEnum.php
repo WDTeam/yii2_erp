@@ -155,6 +155,8 @@ class alertMsgEnum
     const workerLoginIsDimission = '阿姨已离职';
     //阿姨已删除
     const workerLoginIsDel = '阿姨已删除';
+    //阿姨未审核或审核未通过
+    const workerLoginUnable = '阿姨未审核或审核未通过';
     //优惠码
     //优惠码或手机号不能为空
     const exchangeCouponDataDefect = '优惠码或手机号不能为空';
