@@ -5,22 +5,27 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\OperationCategory $model
+ * @var boss\models\operation\OperationSpecSearch $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
 
-<div class="operation-category-search">
+<div class="operation-spec-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-
     <div class="row">
         <div class="col-sm-2">
-            <?= $form->field($model, 'operation_category_name') ?>
+            <?= $form->field($model, 'operation_spec_name') ?>
+        </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'operation_spec_description') ?>
+        </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'operation_spec_strategy_unit') ?>
         </div>
 
         <div class="form-group">

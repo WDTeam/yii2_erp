@@ -14,10 +14,24 @@ use yii\filters\VerbFilter;
 use boss\components\BaseAuthController;
 use yii\helpers\ArrayHelper;
 use core\models\auth\AuthItemChild;
+use boss\components\RbacHelper;
+use yii\web\ForbiddenHttpException;
 
 class RoleController extends BaseAuthController
 {
-
+    
+    public function beforeAction($action)
+    {
+        $name = $this->id.'/'.$action->id;
+        $auth = Yii::$app->authManager;
+        $perm = $auth->getPermission($name);
+        if(\Yii::$app->user->can($name) || \Yii::$app->user->can($this->id.'/index')){
+            return true;
+        }else{
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+    }
+    
     public function actionIndex()
     {
         $searchModel = new AuthSearch();
@@ -42,6 +56,7 @@ class RoleController extends BaseAuthController
                 $permission = $auth->getPermission($name);
                 $auth->addChild($role, $permission);
             }
+            RbacHelper::updateConfigVersion();
             return $this->redirect(['index']);
         }
         $permissions = $auth->getPermissions();
@@ -72,6 +87,7 @@ class RoleController extends BaseAuthController
                 $permission = $auth->getPermission($name);
                 $auth->addChild($role, $permission);
             }
+            RbacHelper::updateConfigVersion();
             return $this->refresh();
         }
         $model->permissions = AuthItemChild::find()
