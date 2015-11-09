@@ -260,6 +260,7 @@ class OperationGoodsController extends Controller
         $OperationSpec = OperationSpec::getSpecList();
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
+
         if(!empty($model->operation_tags)){
             $model->operation_tags = implode(';', unserialize($model->operation_tags));
         }
@@ -282,7 +283,11 @@ class OperationGoodsController extends Controller
             
             $model->updated_at = time();
             
-            if($model->save()){
+            if ($model->save()) {
+
+                //关联修改上线商品表冗余的商品名称
+                $goodsInfo = OperationShopDistrictGoods::updateGoodsName($id, $post['OperationGoods']['operation_goods_name']);
+
                 return $this->redirect(['/operation/operation-category']);
             }
         } else {

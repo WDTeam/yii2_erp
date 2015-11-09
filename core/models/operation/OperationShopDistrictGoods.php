@@ -670,4 +670,15 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             return false;
         }
     }
+
+    /**
+     * 更新冗余的服务项目名称
+     *
+     * @param inter   $operation_goods_id                  服务项目编号
+     * @param string  $operation_shop_district_goods_name  服务项目名称
+     */
+    public static function updateGoodsName($operation_goods_id, $operation_shop_district_goods_name)
+    {
+        self::updateAll(['operation_shop_district_goods_name' => $operation_shop_district_goods_name], 'operation_goods_id= ' . $operation_goods_id);
+    }
 }
