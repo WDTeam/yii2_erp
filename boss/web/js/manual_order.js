@@ -2,7 +2,7 @@
  * Created by Administrator on 2015/10/10.
  */
 window.onbeforeunload = onbeforeunload_handler;
-window.work_status = 1; //1休息 2空闲 3忙碌
+window.work_status = 1; //1休息 2空闲 3忙碌 4小休
 window.order_data = new Object();
 window.continue_work_count_down = 10;
 window.count_down_flag = true; //倒计时结束后标记false代表已经处理订单
@@ -12,12 +12,13 @@ $(document).on("click",'#start_work,#continue_work',function(){
     $('#work_status').text('空闲');
     $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');
     getWaitManualAssignOrder();
+    $('#startId').click();
 });
 
 
 $(document).on("click",'#pause_work',function(){
-    window.work_status = 1;
-    $('#work_status').text('休息');
+    window.work_status = 4;
+    $('#work_status').text('小休');
     $("#work_console").html(
         '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
         '<button id="continue_work" class="btn btn-warning" type="button">继续</button>'
@@ -201,6 +202,7 @@ function getWaitManualAssignOrder(){
                 showOrder();
                 $("#work_console").hide();
                 $("#order_assign").show();
+                $('#waitId').click();
             }else{
                 setTimeout(getWaitManualAssignOrder,3000);
             }
