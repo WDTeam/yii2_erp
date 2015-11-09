@@ -40,10 +40,10 @@ class OrderSearch extends Order
     public static function getOrderExtPayData($order_id)
     {
         //如果是数组,使用 IN 查询
-        if( is_array($order_id) ) {
-            $condition = ['in','order_id',$order_id];
-        }else{
-            $condition = ['order_id'=>$order_id];
+        if (is_array($order_id)) {
+            $condition = ['in', 'order_id', $order_id];
+        } else {
+            $condition = ['order_id' => $order_id];
         }
 
         //查询
@@ -59,16 +59,16 @@ class OrderSearch extends Order
      * @param $end_time 结束时间(时间戳)
      * @return array
      */
-    public static function getWorkerAndOrderAndCreateTime($worker_id,$begin_time,$end_time)
+    public static function getWorkerAndOrderAndCreateTime($worker_id, $begin_time, $end_time)
     {
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
             ->select('*')
-            ->where(['ow.worker_id'=>$worker_id])
+            ->where(['ow.worker_id' => $worker_id])
             ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
             //->createCommand()->getRawSql();
             ->all();
@@ -82,7 +82,7 @@ class OrderSearch extends Order
      * @param $end_time 结束时间(时间戳)
      * @return array
      */
-    public static function getWorkerAndOrderAndDoneTime($worker_id,$begin_time,$end_time,$limit=null,$offset=null)
+    public static function getWorkerAndOrderAndDoneTime($worker_id, $begin_time, $end_time, $limit = null, $offset = null)
     {
         //状态
         $params = [
@@ -93,21 +93,54 @@ class OrderSearch extends Order
         //查询
         $query = new \yii\db\Query();
         $query = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
             ->select('*')
-            ->where(['ow.worker_id'=>$worker_id])
+            ->where(['ow.worker_id' => $worker_id])
             ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in','os.order_status_dict_id',$params]);
-            if(!is_null($limit)){
-                $query->limit($limit);
-            }
-            if(!is_null($offset)){
-                $query->offset($offset);
-            }
-            $data = $query->all();
+            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+        if (!is_null($limit)) {
+            $query->limit($limit);
+        }
+        if (!is_null($offset)) {
+            $query->offset($offset);
+        }
+        $data = $query->all();
+
+        return $data;
+    }
+
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     * @return array
+     */
+    public static function getWorkerAndOrderAndDoneTimeCount($worker_id, $begin_time, $end_time)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
+            OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
+            OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $query = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id' => $worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+
+        $data = $query->count();
 
         return $data;
     }
@@ -119,7 +152,7 @@ class OrderSearch extends Order
      * @param $end_time 结束时间(时间戳)
      * @return array
      */
-    public static function getWorkerAndOrderAndCancelTime($worker_id,$begin_time,$end_time,$limit=null,$offset=null)
+    public static function getWorkerAndOrderAndCancelTime($worker_id, $begin_time, $end_time, $limit = null, $offset = null)
     {
         //状态
         $params = [
@@ -128,21 +161,51 @@ class OrderSearch extends Order
         //查询
         $query = new \yii\db\Query();
         $query = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
             ->select('*')
-            ->where(['ow.worker_id'=>$worker_id])
+            ->where(['ow.worker_id' => $worker_id])
             ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in','os.order_status_dict_id',$params]);
-            if(!is_null($limit)){
-                $query->limit($limit);
-            }
-            if(!is_null($offset)){
-                $query->offset($offset);
-            }
-            $data = $query->all();
+            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+        if (!is_null($limit)) {
+            $query->limit($limit);
+        }
+        if (!is_null($offset)) {
+            $query->offset($offset);
+        }
+        $data = $query->all();
+
+        return $data;
+    }
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     * @return array
+     */
+    public static function getWorkerAndOrderAndCancelTimeCount($worker_id, $begin_time, $end_time)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_CANCEL//取消服务
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $query = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id' => $worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+
+        $data = $query->count();
 
         return $data;
     }
@@ -154,25 +217,24 @@ class OrderSearch extends Order
      * @param int $orderStatus
      * @return array
      */
-    public static function getOrderInfo($order_id, $fields='*',$orderStatus = 1)
+    public static function getOrderInfo($order_id, $fields = '*', $orderStatus = 1)
     {
         //判断订单状态
-        switch($orderStatus)
-        {
+        switch ($orderStatus) {
             case 1://1:普通订单
-                $condition = ['id'=>$order_id];
+                $condition = ['id' => $order_id];
                 break;
             case 2://2:周期订单
-                $condition = ['order_batch_code'=>$order_id];
+                $condition = ['order_batch_code' => $order_id];
                 break;
         }
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
-            ->innerJoin('{{%order_ext_pop}} as opp','order.id = opp.order_id')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+            ->innerJoin('{{%order_ext_pop}} as opp', 'order.id = opp.order_id')
             ->select($fields)
             ->where($condition)
             ->all();
@@ -188,12 +250,12 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
             ->select('*')
-            ->where(['id'=>$order_id])
+            ->where(['id' => $order_id])
             ->one();
         $data['customer'] = Customer::getCustomerById($data['customer_id'])->getAttributes();
         return $data;
@@ -204,12 +266,12 @@ class OrderSearch extends Order
      * 订单状态为系统指派失败的订单
      * @author lin
      * @param $admin_id 操作人id
-     * @param $is_cs bool 是否是客服获取
+     * @param $is_mini_boss bool 是否是小家政获取
      * @return $this|static
      */
-    public static function getWaitManualAssignOrder($admin_id, $is_cs = false)
+    public static function getWaitManualAssignOrder($admin_id, $is_mini_boss = true)
     {
-        $flag_send = $is_cs ? 2 : 1;
+        $flag_send = $is_mini_boss ? 1 : 2; //1小家政可派 2客服可派
 
         $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
             ['>', 'order_booked_begin_time', time()] //服务开始时间大于当前时间
@@ -227,7 +289,7 @@ class OrderSearch extends Order
             ])->andWhere([
                 'or',
                 ['orderExtFlag.order_flag_lock' => 0],
-                ['<','orderExtFlag.order_flag_lock_time',time()-Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME']] //查询超时未解锁的订单
+                ['<', 'orderExtFlag.order_flag_lock_time', time() - Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME']] //查询超时未解锁的订单
             ])->andWhere([ //系统指派失败的 或者 已支付待指派并且标记不需要系统指派的订单
                 'or',
                 [
@@ -240,12 +302,12 @@ class OrderSearch extends Order
             ])->orderBy(['order_booked_begin_time' => SORT_ASC])->one();
             if (!empty($order)) {
                 //获取到订单后加锁并置为已开始人工派单的状态
-                if($order->order_is_parent==1){
-                    $result = OrderStatus::batchManualAssignStart($order->order_batch_code,$admin_id,$is_cs);
-                }else{
+                if ($order->order_is_parent == 1) {
+                    $result = OrderStatus::batchManualAssignStart($order->order_batch_code, $admin_id, $is_mini_boss);
+                } else {
                     $order->order_flag_lock = $admin_id;
                     $order->order_flag_lock_time = time(); //加锁时间
-                    $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_cs ? 1 : 2); //指派时先标记是谁指派不了
+                    $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_mini_boss ? 2 : 1); //指派时先标记是谁指派不了 1客服指派不了 2小家政指派不了
                     $order->admin_id = $admin_id;
                     $result = OrderStatus::manualAssignStart($order, ['OrderExtFlag']);
                 }
@@ -296,7 +358,7 @@ class OrderSearch extends Order
      */
     public static function WorkerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
-       $count = Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
+        $count = Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
             ->andWhere(
                 ['or',
                     [
@@ -328,9 +390,9 @@ class OrderSearch extends Order
      * @param int $page
      * @return mixed
      */
-    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1)
+    public static function getPushWorkerOrders($worker_id, $page_size = 20, $page = 1)
     {
-        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page);
+        return OrderPool::getOrdersFromWorkerPushList($worker_id, $page_size, $page);
     }
 
     /**
@@ -340,9 +402,9 @@ class OrderSearch extends Order
      * @param bool $is_booked true指定阿姨 false不指定阿姨
      * @return mixed
      */
-    public static function getPushWorkerOrdersCount($worker_id,$is_booked)
+    public static function getPushWorkerOrdersCount($worker_id, $is_booked)
     {
-        return OrderPool::getOrdersCountFromWorkerPushList($worker_id,$is_booked);
+        return OrderPool::getOrdersCountFromWorkerPushList($worker_id, $is_booked);
     }
 
     /**
@@ -381,7 +443,7 @@ class OrderSearch extends Order
      */
     public static function getOneByCode($code)
     {
-        return Order::findOne(['order_code'=>$code]);
+        return Order::findOne(['order_code' => $code]);
     }
 
     /**
@@ -392,7 +454,7 @@ class OrderSearch extends Order
      */
     public static function getBatchOrder($batch_code)
     {
-        return Order::find()->where(['order_batch_code'=>$batch_code])->all();
+        return Order::find()->where(['order_batch_code' => $batch_code])->all();
     }
 
     /**
@@ -402,7 +464,7 @@ class OrderSearch extends Order
      */
     public static function getChildOrder($order_id)
     {
-        return Order::findAll(['order_parent_id'=>$order_id]);
+        return Order::findAll(['order_parent_id' => $order_id]);
     }
 
 
@@ -413,7 +475,7 @@ class OrderSearch extends Order
      */
     public static function getWaitServiceOrderList()
     {
-        return Order::find()->joinWith(['orderExtStatus'])->select(['id','order_booked_begin_time'])->where(['order_status_dict_id'=>[
+        return Order::find()->joinWith(['orderExtStatus'])->select(['id', 'order_booked_begin_time'])->where(['order_status_dict_id' => [
             OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
             OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
             OrderStatusDict::ORDER_WORKER_BIND_ORDER
@@ -426,7 +488,7 @@ class OrderSearch extends Order
      */
     public static function getStartServiceOrderList()
     {
-        return Order::find()->joinWith(['orderExtStatus'])->select(['id','order_booked_end_time'])->where(['order_status_dict_id'=>OrderStatusDict::ORDER_SERVICE_START])->asArray()->all();
+        return Order::find()->joinWith(['orderExtStatus'])->select(['id', 'order_booked_end_time'])->where(['order_status_dict_id' => OrderStatusDict::ORDER_SERVICE_START])->asArray()->all();
     }
 
     /**
@@ -436,13 +498,12 @@ class OrderSearch extends Order
     public static function getWaitSysCommentOrderList()
     {
         return Order::find()->joinWith(['orderExtStatus'])
-        ->where([
-            'order_status_dict_id'=> OrderStatusDict::ORDER_SERVICE_DONE
-        ])
-        ->andFilterWhere(['<=','order_booked_end_time',strtotime('-1 days')])
-        ->asArray()->all();
+            ->where([
+                'order_status_dict_id' => OrderStatusDict::ORDER_SERVICE_DONE
+            ])
+            ->andFilterWhere(['<=', 'order_booked_end_time', strtotime('-1 days')])
+            ->asArray()->all();
     }
-
 
 
     /**
@@ -450,11 +511,11 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at')
+    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null, $channels = null, $from = null, $to = null, $created_at = 'order.created_at')
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        $query = $this->searchOrdersWithStatusProvider($params, $order_status, $channels, $from, $to)->query;
         $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
@@ -465,11 +526,11 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at',$not_with_work=null)
+    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null, $channels = null, $from = null, $to = null, $created_at = 'order.created_at', $not_with_work = null)
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to,$not_with_work)->query;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params, $order_status, $channels, $from, $to, $not_with_work)->query;
         $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
@@ -480,23 +541,23 @@ class OrderSearch extends Order
      * @param $customer_id
      * @return int|string
      */
-    public function searchOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,$to=null)
+    public function searchOrdersWithStatusCount($attributes, $order_status = null, $channels = null, $from = null, $to = null)
     {
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        $query = $this->searchOrdersWithStatusProvider($params, $order_status, $channels, $from, $to)->query;
         return $query->count();
     }
 
 
     /**
-    * 分页查询阿姨带状态订单数量
-    * @param $customer_id
-    * @return int|string
-    */
-    public function searchWorkerOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,$to=null,$not_with_work=null)
+     * 分页查询阿姨带状态订单数量
+     * @param $customer_id
+     * @return int|string
+     */
+    public function searchWorkerOrdersWithStatusCount($attributes, $order_status = null, $channels = null, $from = null, $to = null, $not_with_work = null)
     {
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to,$not_with_work)->query;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params, $order_status, $channels, $from, $to, $not_with_work)->query;
         return $query->count();
     }
 
@@ -505,15 +566,15 @@ class OrderSearch extends Order
      * 依据订单状态 查询带状态的用户订单query对象
      * @return
      */
-    public function searchOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchOrdersWithStatusProvider($attributes, $order_status = null, $channels = null, $from = null, $to = null)
     {
 
         $query = new \yii\db\Query();
 
         $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id');
+            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -527,34 +588,34 @@ class OrderSearch extends Order
             $query->andFilterWhere(['<', 'order_booked_begin_time', $to]);
         }
         if (!is_null($order_status)) {
-                foreach($order_status as $status_str){
-                    $query = $query->orFilterWhere([
-                        'os.order_status_dict_id' => $status_str
-                    ]);
-                }
+            foreach ($order_status as $status_str) {
+                $query = $query->orFilterWhere([
+                    'os.order_status_dict_id' => $status_str
+                ]);
+            }
         }
 
         if (!is_null($channels)) {
-            foreach($channels as $channels_str){
+            foreach ($channels as $channels_str) {
                 $query = $query->orFilterWhere([
                     'channel_id' => $channels_str
                 ]);
             }
         }
-        if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
+        if (!isset($attributes["OrderSearch"]["oc.customer_id"])) {
             $attributes["OrderSearch"]["oc.customer_id"] = null;
         }
-        if(!isset($attributes["OrderSearch"]["id"])){
+        if (!isset($attributes["OrderSearch"]["id"])) {
             $attributes["OrderSearch"]["id"] = null;
         }
-        
-        if(!isset($attributes["OrderSearch"]["order_batch_code"])){
+
+        if (!isset($attributes["OrderSearch"]["order_batch_code"])) {
             $attributes["OrderSearch"]["order_batch_code"] = null;
         }
-        
+
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' =>$attributes["OrderSearch"]["id"],
+                'id' => $attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
@@ -583,23 +644,21 @@ class OrderSearch extends Order
     }
 
 
-
-
     /**
      *
      * 依据订单状态 查询带状态的阿姨订单query对象
      * @return
      */
-    public function searchWorkerOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null,$not_with_work=null)
+    public function searchWorkerOrdersWithStatusProvider($attributes, $order_status = null, $channels = null, $from = null, $to = null, $not_with_work = null)
     {
         $query = new \yii\db\Query();
 
-        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
-        innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
-        innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id');
+        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')->
+        innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')->
+        innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id');
 
-        if(is_null($not_with_work )){
-            $query->innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
+        if (is_null($not_with_work)) {
+            $query->innerJoin('{{%order_ext_worker}} as owr', 'order.id = owr.order_id');
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -611,12 +670,11 @@ class OrderSearch extends Order
         }
 
 
-
         if (!is_null($to) && is_numeric($to)) {
             $query->andFilterWhere(['<', 'order_booked_begin_time', $to]);
         }
         if (!is_null($order_status)) {
-            foreach($order_status as $status_str){
+            foreach ($order_status as $status_str) {
                 $query = $query->orFilterWhere([
                     'os.order_status_dict_id' => $status_str
                 ]);
@@ -624,17 +682,17 @@ class OrderSearch extends Order
         }
 
         if (!is_null($channels)) {
-            foreach($channels as $channels_str){
+            foreach ($channels as $channels_str) {
                 $query = $query->orFilterWhere([
                     'channel_id' => $channels_str
                 ]);
             }
         }
-        if(!isset($attributes["OrderSearch"]["id"])){
-            $attributes["OrderSearch"]["id"]=null;
+        if (!isset($attributes["OrderSearch"]["id"])) {
+            $attributes["OrderSearch"]["id"] = null;
         }
-        if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
-            $attributes["OrderSearch"]["oc.customer_id"]=null;
+        if (!isset($attributes["OrderSearch"]["oc.customer_id"])) {
+            $attributes["OrderSearch"]["oc.customer_id"] = null;
         }
 
         if ($this->load($attributes) && $this->validate()) {
@@ -665,7 +723,7 @@ class OrderSearch extends Order
             );
         }
 
-        if(is_null($not_with_work )){
+        if (is_null($not_with_work)) {
             $query = $query->andFilterWhere([
                 'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
             ]);
@@ -693,7 +751,7 @@ class OrderSearch extends Order
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        
+
         $query->andFilterWhere([
             'id' => $this->id,
             'order_parent_id' => $this->order_parent_id,
@@ -721,12 +779,13 @@ class OrderSearch extends Order
             'city_id' => $this->city_id,
             'order_status_dict_id' => $this->order_status_dict_id,
         ]);
-        
+
         $query->orFilterWhere(['or', ['order_booked_worker_id' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
 
         //两种特殊状态的订单查询条件是订单服务时间
-        if (isset($this->order_status_dict_id) && is_array($this->order_status_dict_id) 
-        && (in_array(-1, $this->order_status_dict_id) || in_array(-2, $this->order_status_dict_id))) {
+        if (isset($this->order_status_dict_id) && is_array($this->order_status_dict_id)
+            && (in_array(-1, $this->order_status_dict_id) || in_array(-2, $this->order_status_dict_id))
+        ) {
             if (in_array(-1, $this->order_status_dict_id)) {
 
                 //人工指派失败且服务时间在两小时内
@@ -748,69 +807,69 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
             ->andFilterWhere(['like', 'order_address', $this->order_address])
             ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
-                
+
         if (!empty($params['created_from']))
-            $query->andFilterWhere(['>=', Order::tableName().'.created_at', strtotime($params['created_from'])]);
+            $query->andFilterWhere(['>=', Order::tableName() . '.created_at', strtotime($params['created_from'])]);
 
         if (!empty($params['created_to']))
-            $query->andFilterWhere(['<=', Order::tableName().'.created_at', strtotime($params['created_to'])]);
-        
+            $query->andFilterWhere(['<=', Order::tableName() . '.created_at', strtotime($params['created_to'])]);
+
         if (!empty($params['booked_from']))
             $query->andFilterWhere(['>=', 'order_booked_begin_time', strtotime($params['booked_from'])]);
-        
+
         if (!empty($params['booked_to']))
             $query->andFilterWhere(['<=', 'order_booked_begin_time', strtotime($params['booked_to'])]);
         return $dataProvider;
     }
-    
-	/**
-	* 第三方对账专用
-	* @date: 2015-10-23
-	* @author: peak pan
-	* @return:
-	**/
-    
-    public  $finance_record_log_endtime;
-    
+
+    /**
+     * 第三方对账专用
+     * @date: 2015-10-23
+     * @author: peak pan
+     * @return:
+     **/
+
+    public $finance_record_log_endtime;
+
     public function searchpoplist()
     {
-    	$query = Order::find()->joinWith(['orderExtPop']);
-    	$dataProvider = new ActiveDataProvider([
-    			'query' => $query,
-    			]);
+        $query = Order::find()->joinWith(['orderExtPop']);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
-    	$query->andFilterWhere([
-    			'id' => $this->id,
-    			'order_parent_id' => $this->order_parent_id,
-    			'order_is_parent' => $this->order_is_parent,
-    			'updated_at' => $this->updated_at,
-    			'isdel' => $this->isdel,
-    			'order_ip' => $this->order_ip,
-    			'order_service_type_id' => $this->order_service_type_id,
-    			'order_src_id' => $this->order_src_id,
-    			'channel_id' => $this->channel_id,
-    			'order_unit_money' => $this->order_unit_money,
-    			'order_money' => $this->order_money,
-    			'order_booked_count' => $this->order_booked_count,
-    			'order_booked_begin_time' => $this->order_booked_begin_time,
-    			'order_booked_end_time' => $this->order_booked_end_time,
-    			'address_id' => $this->address_id,
-    			'order_booked_worker_id' => $this->order_booked_worker_id,
-    			'checking_id' => $this->checking_id,
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'order_parent_id' => $this->order_parent_id,
+            'order_is_parent' => $this->order_is_parent,
+            'updated_at' => $this->updated_at,
+            'isdel' => $this->isdel,
+            'order_ip' => $this->order_ip,
+            'order_service_type_id' => $this->order_service_type_id,
+            'order_src_id' => $this->order_src_id,
+            'channel_id' => $this->channel_id,
+            'order_unit_money' => $this->order_unit_money,
+            'order_money' => $this->order_money,
+            'order_booked_count' => $this->order_booked_count,
+            'order_booked_begin_time' => $this->order_booked_begin_time,
+            'order_booked_end_time' => $this->order_booked_end_time,
+            'address_id' => $this->address_id,
+            'order_booked_worker_id' => $this->order_booked_worker_id,
+            'checking_id' => $this->checking_id,
 
-    			]);
-    
-    	$query->andFilterWhere(['like', 'order_code', $this->order_code])
-    	->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
-    	->andFilterWhere(['between', 'ejj_order.created_at', $this->created_at,$this->finance_record_log_endtime])
-    	->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
-    	->andFilterWhere(['like', 'order_src_name', $this->order_src_name])
-    	->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
-    	->andFilterWhere(['like', 'order_address', $this->order_address])
-    	->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
-    
-    	return $dataProvider;
+        ]);
+
+        $query->andFilterWhere(['like', 'order_code', $this->order_code])
+            ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
+            ->andFilterWhere(['between', 'ejj_order.created_at', $this->created_at, $this->finance_record_log_endtime])
+            ->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
+            ->andFilterWhere(['like', 'order_src_name', $this->order_src_name])
+            ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
+            ->andFilterWhere(['like', 'order_address', $this->order_address])
+            ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
+
+        return $dataProvider;
     }
-    
-    
+
+
 }

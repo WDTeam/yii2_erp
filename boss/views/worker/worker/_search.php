@@ -25,8 +25,9 @@ use kartik\date\DatePicker;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <?php if(!\Yii::$app->user->identity->isMiniBoxUser()){ ?>
     <div class='col-md-2'>
-        <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
+        <?php echo $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
             'name' => 'worker_work_city',
             'hideSearch' => true,
             'data' => $model::getOnlineCityList(),
@@ -42,7 +43,7 @@ use kartik\date\DatePicker;
         ]); ?>
     </div>
     <div class='col-md-3'>
-        <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
+        <?php echo  $form->field($model, 'shop_id')->widget(Select2::classname(), [
             'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],
             'pluginOptions' => [
                 'allowClear' => true,
@@ -71,8 +72,9 @@ use kartik\date\DatePicker;
             ]
         ]); ?>
     </div>
+    <?php } ?>
     <div class='col-md-3'>
-        <?= $form->field($model, 'worker_identity_id')->widget(Select2::classname(), [
+        <?php echo $form->field($model, 'worker_identity_id')->widget(Select2::classname(), [
             'name' => 'worker_identity_id',
             'hideSearch' => true,
             'data' => \boss\models\worker\WorkerIdentityConfig::getWorkerIdentityList(),

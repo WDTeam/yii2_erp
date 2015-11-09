@@ -210,6 +210,14 @@ function validateItude(obj){
                 //清空
                 obj.val('');
             }
+
+            var patt = /^(\d+(\.\d{1,6})?)$/g;
+
+            if (!patt.test(itude)) {
+                var num = new Number(itude);
+                obj.val(num.toFixed(6));
+                alert('小数点后最多只能六位!');
+            }
         } else {
             obj.css("border-color","red");
             alert('输入值格式不正确,只能为数字');

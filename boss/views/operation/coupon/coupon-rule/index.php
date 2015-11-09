@@ -128,11 +128,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {edit} {delete} {tagssign} {tagssigninfo}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['coupon-rule/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
+                                                  ]);},
+                                                  'tagssign' => function ($url, $model, $key) {
+                                                  	return 
+                                                  	  Html::a('导出优惠券',['operation/coupon/coupon-rule/export','id' => $model->id,'edit'=>'baksite'],['data-pjax'=>'0','class'=>'btn btn-success','target' => '_blank',]);
+                                                  		
+                                                  },
+                                                  
+                                                  'tagssigninfo' => function ($url, $model, $key) {
+                                                  	return Html::a('<span class="glyphicon glyphicon-film"></span>', Yii::$app->urlManager->createUrl(['operation/coupon/coupon-userinfo/create','id' => $model->id,'edit'=>'baksite']),'');
+                                                  }
+                                                  
+                                                  
 
                 ],
             ],

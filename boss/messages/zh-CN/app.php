@@ -114,7 +114,7 @@ return [
     'Set Service' => '设置服务',
     
     'Operation Categories' => '服务品类',
-    'Operation And Categories' => '服务项目和品类',
+    'Operation And Categories' => '服务品类和项目',
     'Category Types' => '服务项类型',
     
     'Auths'=>'授权项',

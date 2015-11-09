@@ -185,6 +185,10 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
+        $orderDataProvider = new ArrayDataProvider();
+        $cashOrderDataProvider = new ArrayDataProvider();
+        $taskDataProvider = new ArrayDataProvider();
+        $compensateDataProvider = new ArrayDataProvider();
         //获取结算模块保存的订单流水信息
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderBySettleId($financeSettleApplySearch->id);
         //获取结算模块保存的现金订单流水信息

@@ -9,7 +9,7 @@ use dosamigos\datepicker\DatePicker;
  * @var dbbase\models\Order $model
  */
 
-$this->title = '创建订单';
+$this->title = '人工下单';
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -104,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h4 class="col-sm-2">
                         总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">0.00</span>
                     </h4>
-                    <h4 class="col-sm-2">
+                    <h4 class="col-sm-5">
                         账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
                     </h4>
                 </div>

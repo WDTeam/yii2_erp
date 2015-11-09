@@ -51,7 +51,7 @@ class OperationShopDistrict extends \dbbase\models\operation\OperationShopDistri
      *
      * @param array $district_arr    商圈信息
      */
-    public static function saveBatchDistrictData($district_arr)
+    public static function saveBatchDistrictData($city_id, $city_name, $district_arr)
     {
         foreach ($district_arr as $keys => $values) {
 

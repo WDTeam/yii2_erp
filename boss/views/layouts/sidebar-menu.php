@@ -169,21 +169,21 @@ echo Menu::widget([
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '创建新订单',
+                    'label' => '人工下单',
                     'url' => [
                         'order/order/create'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '人工指派订单',
+                    'label' => '人工派单',
                     'url' => [
                         'order/order/assign'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '智能指派订单',
+                    'label' => '智能派单',
                     'url' => [
                         'order/auto-assign/index'
                     ],
@@ -218,14 +218,14 @@ echo Menu::widget([
             ],
             'items' => [
                 [
-                    'label' => '支付记录查询',
+                    'label' => '第三方支付记录查询',
                     'url' => [
                         'payment/payment/index'
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
                 [
-                    'label' => '交易记录查询',
+                    'label' => 'E家洁交易记录查询',
                     'url' => [
                         'payment/payment-customer-trans-record/index'
                     ],
