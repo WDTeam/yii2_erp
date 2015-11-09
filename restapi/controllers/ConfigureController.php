@@ -199,7 +199,7 @@ class ConfigureController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->get();
         if(!isset($param['city_name'])||!intval($param['city_name'])){
-            $param['city_id'] = "北京市";
+            $param['city_name'] = "北京市";
         }
         //判断token是否有效
         $isEffect="0";
@@ -209,7 +209,7 @@ class ConfigureController extends \restapi\components\Controller
         //获取城市列表
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
-            $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_id']);
+            $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
