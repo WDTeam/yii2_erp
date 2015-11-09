@@ -84,11 +84,12 @@ function saveParams(){
    var  dispatcher_kpi_assigned_count=parseInt($('#assigned_count').text());
    var  dispatcher_kpi_assigned_rate=parseFloat($('#assigned_rate').text());
    var  dispatcher_kpi_status=parseInt($('#newStatusId').text());
-   alert("dispatcher_kpi_free_time:"+dispatcher_kpi_free_time);
-   alert("dispatcher_kpi_busy_time:"+dispatcher_kpi_busy_time);
-   alert("dispatcher_kpi_rest_time:"+dispatcher_kpi_rest_time);
-   alert("dispatcher_kpi_obtain_count:"+dispatcher_kpi_obtain_count);
-   alert("dispatcher_kpi_assigned_count:"+dispatcher_kpi_assigned_count);
+   //alert("dispatcher_kpi_free_time:"+dispatcher_kpi_free_time);
+   //alert("dispatcher_kpi_busy_time:"+dispatcher_kpi_busy_time);
+   //alert("dispatcher_kpi_rest_time:"+dispatcher_kpi_rest_time);
+   //alert("dispatcher_kpi_obtain_count:"+dispatcher_kpi_obtain_count);
+   //alert("dispatcher_kpi_assigned_count:"+dispatcher_kpi_assigned_count);
+
    var params = {
       flag:2,
       id:id,
@@ -103,7 +104,7 @@ function saveParams(){
 
    $.ajax({
       type: "GET",
-      url: "./order-dispatcher-kpi",
+      url: "/order/order-dispatcher-kpi",
       data: params,
       dataType:'text',
       success:function(msg){
@@ -385,6 +386,7 @@ function startWork() {
    d=Number($('#free_time').val());
    //计算空闲时间
    freeTimedCount();
+
 }
 //空闲时间计算器
 function restTimedCount() {

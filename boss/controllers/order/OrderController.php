@@ -8,6 +8,7 @@ use boss\models\order\Order;
 
 use core\models\customer\CustomerAddress;
 use core\models\operation\coupon\CouponRule;
+use core\models\order\OrderDispatcherKpi;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use core\models\customer\Customer;
@@ -456,7 +457,11 @@ class OrderController extends BaseAuthController
      */
     public function actionAssign()
     {
-        return $this->render('assign');
+        $kpiModel = new OrderDispatcherKpi();
+        $model = $kpiModel->queryHistoricalKpi(yii::$app->user->id,strtotime(date('y-m-d')));
+        return $this->render('assign', [
+            'model' => $model
+        ]);
     }
 
     /**

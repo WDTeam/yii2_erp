@@ -15,6 +15,11 @@ class alertMsgEnum
     //客户端提示信息文案
     const __default = '查询成功';
     //赵顺利
+    //发短消息
+    //登陆成功
+    const sendVSuccess = '登陆成功';
+    //用户名或验证码错误
+    const sendVFail = '用户名或验证码错误';
     //用户发送验证码
     const sendUserCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     const sendUserCodeFailed = '验证码已发失败';
@@ -204,6 +209,11 @@ class alertMsgEnum
     const getCouponCountSuccess = '获取用户优惠券数量成功';
     //获取用户优惠券数量失败
     const getCouponCountFail = '获取用户优惠券数量失败';
+    //获取用户优惠券总额
+    //获取用户优惠券总额成功
+    const getCustomerCouponTotalSuccess = '获取用户优惠券总额成功';
+    //获取用户优惠券总额失败
+    const getCustomerCouponTotalFail = '获取用户优惠券总额失败';
     //单次服务排班表
     //请填写服务地址或服务时长
     const singleServiceTimeDataDefect = '请填写服务地址或服务时长';
@@ -262,6 +272,8 @@ class alertMsgEnum
     const taskFailFail = '您没有任务哦';
     //操作成功
     const taskFailSuccess = '操作成功';
+        //操作失败
+    const GetOrderOneFail = '操作失败';
     //查看任务的详情
     //您没有已完成任务哦
     const checkTaskFail = '查看任务失败';

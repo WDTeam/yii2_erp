@@ -1379,8 +1379,8 @@ class UserController extends \restapi\components\Controller
         }
 
         $ret = [
-            "user" => $date['access_token'],
-            "access_token" => $date['customer']
+            "user" => $date['customer'],
+            "access_token" => $date['access_token']
         ];
         return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
     }

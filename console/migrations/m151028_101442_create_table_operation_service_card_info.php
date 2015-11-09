@@ -25,7 +25,7 @@ class m151028_101442_create_table_operation_service_card_info extends Migration
 			'service_card_info_valid_days' 	=> Schema::TYPE_INTEGER.'(20) NOT NULL DEFAULT 0 COMMENT \'有效时间(天)\'',
 			'created_at' 	=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
 			'updated_at' 	=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'更改时间\'',
-			'is_del' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
+			'is_del' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',
 		],$tableOptions);
     }
 

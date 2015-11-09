@@ -3,7 +3,6 @@
 namespace core\models\operation;
 
 use Yii;
-use dbbase\models\operation\OperationGoods as CommonOperationGoods;
 use boss\models\operation\OperationShopDistrictGoods;
 use yii\web\UploadedFile;
 use crazyfd\qiniu\Qiniu;
@@ -36,7 +35,7 @@ use crazyfd\qiniu\Qiniu;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationGoods extends CommonOperationGoods
+class OperationGoods extends \dbbase\models\operation\OperationGoods
 {
     public static function getCategoryGoods($categoryid){
         return self::find()->asArray()->where(['operation_category_id' => $categoryid])->All();
@@ -91,5 +90,16 @@ class OperationGoods extends CommonOperationGoods
             $imgUrl = $qiniu->getLink($key);
             $this->$field = $imgUrl;
         }
+    }
+
+    /**
+     * 更新冗余的规格名称
+     *
+     * @param inter   $operation_spec_info            规格编号
+     * @param string  $operation_spec_strategy_unit   规格单位备注
+     */
+    public static function updateGoodsSpec($operation_spec_info, $operation_spec_strategy_unit)
+    {
+        self::updateAll(['operation_spec_strategy_unit' => $operation_spec_strategy_unit], 'operation_spec_info = ' . $operation_spec_info);
     }
 }
