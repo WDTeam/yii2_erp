@@ -25,9 +25,13 @@ class RbacHelper extends Component
      */
     public static function menu($menus)
     {
+        $_menus = self::getMenus();
+        if(!empty($_menus)){
+            return $_menus;
+        }
         self::setPermissions();
         $menus = self::recursiveInitMenu($menus);
-        \Yii::$app->cache->set(self::CACHE_MENU, $menus, 3600*24);
+        \Yii::$app->session->set(self::CACHE_MENU, $menus);
         return $menus;
     }
     /**
@@ -36,9 +40,13 @@ class RbacHelper extends Component
      */
     public static function topMenu($menus)
     {
+        $_menus = self::getTopMenus();
+        if(!empty($_menus)){
+            return $_menus;
+        }
         self::setPermissions();
         $menus = self::recursiveInitMenu($menus);
-        \Yii::$app->cache->set(self::CACHE_TOP_MENU, $menus, 3600*24);
+        \Yii::$app->session->set(self::CACHE_TOP_MENU, $menus);
         return $menus;
     }
     /**
@@ -80,10 +88,10 @@ class RbacHelper extends Component
      */
     public static function getMenus()
     {
-        return \Yii::$app->cache->get(self::CACHE_MENU);
+        return \Yii::$app->session->get(self::CACHE_MENU);
     }
     public static function getTopMenus()
     {
-        return \Yii::$app->cache->get(self::CACHE_TOP_MENU);
+        return \Yii::$app->session->get(self::CACHE_TOP_MENU);
     }
 }

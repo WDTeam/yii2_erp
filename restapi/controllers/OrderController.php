@@ -1652,7 +1652,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-     
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
@@ -1669,7 +1669,6 @@ class OrderController extends \restapi\components\Controller
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
                 "order_customer_need" => $param['order_customer_need'],
                 "order_customer_memo" => $param['order_customer_memo'],
-                "order_booked_count" => $param['order_booked_count'],
                 "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
@@ -1690,15 +1689,15 @@ class OrderController extends \restapi\components\Controller
             try {
                 $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
-
+                
                 if ($createOrder['status'] == 1) {
-                    if (!empty($createOrder)) {
-                        return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
-                    } else {
-                        return $this->send(null, "添加失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
-                    }
+                    return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                 } else {
-                    return $this->send(null, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    $err = array();
+                    foreach($createOrder['errors'] as $key=>$val){
+                        $err[$key] = $val[0];
+                    }
+                    return $this->send($err, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
