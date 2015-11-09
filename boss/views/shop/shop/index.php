@@ -101,7 +101,7 @@ $columns[] = 'complain_coutn';
 $columns[] = 'level';
 $columns[] = [
     'class' => 'yii\grid\ActionColumn',
-    'template'=>'{update} {delete} {joinblacklist}',
+    'template'=>'{update} {delete} {joinblacklist} {add-worker}',
     'buttons' => [
         'update' => function ($url, $model) {
             return Html::a(Yii::t('yii', '编辑'), ['view', 'id' => $model->id, 'edit' => 't'], [
@@ -132,6 +132,16 @@ $columns[] = [
             ], [
                 'title' => Yii::t('app', '解除封号'),
                 'class'=>'join-list-btn btn btn-success btn-sm',
+            ]);
+        },
+        'add-worker' => function ($url, $model) {
+        return Html::a('录入新阿姨', [
+                'worker/worker/create',
+                'shop_id' => $model->id,
+                'city_id'=>$model->city_id,
+            ], [
+                'title' => Yii::t('app', '录入新阿姨'),
+                'class'=>'add-worker-btn btn btn-success btn-sm',
             ]);
         },
     ],

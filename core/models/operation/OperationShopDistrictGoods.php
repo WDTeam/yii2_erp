@@ -472,7 +472,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ]);
 
-            $query->andFilterWhere(['like', 'operation_category_name', $city_name]);
+            $query->andFilterWhere(['like', 'osdg.operation_city_name', $city_name]);
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);
