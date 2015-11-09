@@ -14,7 +14,7 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                     <th>省份</th>
                     <th>城市</th>
                     <th>服务品类</th>
-                    <th>服务商品</th>
+                    <th>服务项目</th>
                     <th>已开通商圈数</th>
                     <th>操作</th>
                 </tr>
