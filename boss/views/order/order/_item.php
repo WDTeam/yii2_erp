@@ -28,7 +28,7 @@ use boss\models\order\Order;
     <table cellspacing="0" cellpadding="0" border="1">
         <tr class="first">
             <th colspan="5">订单编号：<?= Html::encode($model->order_code) ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                服务项目：<?= Html::encode($model->order_service_type_name) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                服务项目：<?= Html::encode($model->order_service_item_name) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul>
                 <?php
                     foreach($model->orderStatusHistory as $v){
@@ -43,8 +43,8 @@ use boss\models\order\Order;
             <input type="hidden" class="customer_phone"
                    value="<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>"/>
             <td style="width: 28%;">
-                用户电话：<span><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?></span><br/>
-                用户身份：<span><?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?></span><br/>
+                客户电话：<span><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?></span><br/>
+                客户身份：<span><?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?></span><br/>
                 下单渠道：<span><?= Html::encode($model->order_channel_name) ?></span><br/>
                 服务时间：<span><?= $model->getOrderBookedDate() . ' ' . $model->getOrderBookedTimeArrange() ?></span><br/>
                 客户地址：<span><?= HtmlPurifier::process($model->order_address) ?></span>
@@ -86,7 +86,7 @@ use boss\models\order\Order;
                 <?php endif; ?>
             </td>
             <td>
-                <p><a href="/order/order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
+                <p><a href="/order/order/edit?id=<?= Html::encode($model->order_code) ?>">查看订单</a></p>
 
                 <?php if ($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT): ?>
                     <p><a href="###" class="m_tousu">投诉</a></p>

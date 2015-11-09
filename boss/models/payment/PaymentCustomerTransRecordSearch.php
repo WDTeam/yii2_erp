@@ -35,7 +35,7 @@ class PaymentCustomerTransRecordSearch extends PaymentCustomerTransRecord
     public function search($params)
     {
         $query = PaymentCustomerTransRecord::find();
-
+        $query->orderBy('id DESC');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

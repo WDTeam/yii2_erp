@@ -50,7 +50,9 @@ class FinancePayChannelController extends BaseAuthController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+        	$model->create_time=time();
+        	$model->save();
         return $this->redirect(['index']);
         } else {
         return $this->render('view', ['model' => $model]);

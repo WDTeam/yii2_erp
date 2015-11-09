@@ -10,6 +10,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\customer\Customer;
+use yii\helpers\ArrayHelper;
+
+
 /**
  * CouponUserinfoController implements the CRUD actions for CouponUserinfo model.
  */
@@ -133,12 +136,17 @@ class CouponUserinfoController extends Controller
 	        	return $this->redirect(['index']);	
 	        	}		
         	}
-        	
-        	
             return $this->redirect(['index']);
         } else {
+        	if(isset($_GET['id'])){
+        		$id=$_GET['id'];
+        	}else{
+        		$id=0;
+        	}
+        	$ruledatainfo=\core\models\operation\coupon\CouponRule::find()->select('id,couponrule_name')->where(['is_del'=>0,'is_disabled'=>0])->asArray()->all();
+        	$ruledata=ArrayHelper::map($ruledatainfo,'id','couponrule_name');
             return $this->render('create', [
-                'model' => $model,
+                'model' => $model,'id'=>$id,'ruledata'=>$ruledata
             ]);
         }
     }

@@ -33,7 +33,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	
 	public static function generateCouponByCode($phone, $code){
 		
-		$customer = Customer::find()->where(['customer_phone'=>$phone])->one();
+		 $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
 		if($customer == NULL){
 			//手机号不存在，无此用户  是否创建此用户
 			$array=[
@@ -42,10 +42,10 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			'data'=>false
 			];
 			return $array;
-		}
+		} 
 		
 		//检查优惠码是否已经被兑换
-		$couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
+		 $couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
 		if(!empty($couponCustomer)){
 			$array=[
 			'is_status'=>4012,
@@ -53,7 +53,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			'data'=>false,
 			];
 			return $array;
-		}
+		} 
 		
 		$coupon=substr($code,0,3);
 		//查看渠道下面的领取开始时间是不是可以领取
@@ -68,17 +68,20 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			
 		}
 		
+		
+		
 		 $code_able = self::checkCouponIsclok($code);
-		 if($code_able){
+		 
+		  if($code_able){
 		 	$array=[
 		 	'is_status'=>4014,
 		 	'msg'=>'优惠券不可用',
 		 	'data'=>false,
 		 	];
 		 	return $array;
-		 }
+		 } 
 		 
-		if($Couponruledate->couponrule_get_end_time < time()) {
+		 if($Couponruledate['couponrule_get_end_time'] < time()) {
 			$array=[
 			'is_status'=>4015,
 			'msg'=>'优惠券兑换时间已过期',
@@ -88,7 +91,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			
 		}
 		
-		if($Couponruledate->is_del==1) {
+		 if($Couponruledate['is_del']==1) {
 			$array=[
 			'is_status'=>4016,
 			'msg'=>'优惠券已删除',
@@ -96,10 +99,10 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			];
 			return $array;
 				
-		}
+		} 
 		
 		
-		if($coupon->is_disabled==2){
+		if($Couponruledate['is_disabled']==2){
 			$array=[
 			'is_status'=>4017,
 			'msg'=>'优惠券兑换已禁用',
@@ -158,7 +161,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	
 	/**
 	* 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券）  
-	* 李勇
+	* 李勇  模拟通过
 	* @date: 2015-11-7   api
 	* @author: peak pan
 	* @param $customer_id int 用户id
@@ -170,15 +173,12 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	
 	public static function GetCustomerCouponList($customer_id,$city_id,$service_type_id){
 		$now_time=time();
-		$couponCustomer=(new \yii\db\Query())
-		->select(['{{%coupon_userinfo}}.id','{{%coupon_userinfo}}.couponrule_name', '{{%coupon_userinfo}}.couponrule_price','{{%coupon_rule}}.couponrule_use_start_time','{{%coupon_rule}}.couponrule_use_end_time'])
-		->from('{{%coupon_rule}}')
-		->leftJoin('{{%coupon_userinfo}}', '{{%coupon_userinfo}}.coupon_userinfo_id = {{%coupon_rule}}.id')
-		->where(['and',"{{%coupon_rule}}.couponrule_use_end_time>$now_time",'{{%coupon_userinfo}}.is_del=0','{{%coupon_userinfo}}.is_used=0',"{{%coupon_userinfo}}.customer_id=$customer_id", ['or', ['and','{{%coupon_rule}}.couponrule_city_limit=1',"{{%coupon_rule}}.couponrule_city_id=$city_id"], '{{%coupon_rule}}.couponrule_city_limit=0'],['or', ['and','{{%coupon_rule}}.couponrule_type!=0',"{{%coupon_rule}}.couponrule_service_type_id=$service_type_id"], '{{%coupon_rule}}.couponrule_type=0']] )
-		->orderBy(['{{%coupon_rule}}.couponrule_use_end_time'=>SORT_ASC,'{{%coupon_userinfo}}.coupon_userinfo_price'=>SORT_DESC])
+		$couponCustomer = self::find()
+		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time'])
+		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$service_type_id"], 'couponrule_type=0']] )
+		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
-		
 		if(empty($couponCustomer)){
 			$array=[
 			'is_status'=>4019,
@@ -200,7 +200,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	/**
 	* 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券和过期三十天内的）
 	* @date: 2015-11-7   当前城市下可用（包含通用）排列按照过期时间正序  价格倒序               过期的  30内的包含30 按照价格倒序
-	* @author: peak pan
+	* @author: peak pan  模拟测试通过
 	* @param $customer_id int 用户id
 	* @param $city_id int 城市id
 	* @return $couponCustomer 用户优惠券列表
@@ -210,21 +210,17 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$now_time= date("Y-m-d",time());
 		$last_month = strtotime("$now_time -30 days");
 		$newtime=time();
-		$couponCustomer1=(new \yii\db\Query())
-		->select(['{{%coupon_userinfo}}.id','{{%coupon_userinfo}}.couponrule_name', '{{%coupon_userinfo}}.couponrule_price','{{%coupon_rule}}.couponrule_use_start_time','{{%coupon_rule}}.couponrule_use_end_time'])
-		->from('{{%coupon_rule}}')
-		->leftJoin('{{%coupon_userinfo}}', '{{%coupon_userinfo}}.coupon_userinfo_id = {{%coupon_rule}}.id')
-		->where(['and',"{{%coupon_rule}}.couponrule_use_end_time>$newtime",'{{%coupon_userinfo}}.is_del=0','{{%coupon_userinfo}}.is_used=0',"{{%coupon_userinfo}}.customer_id=$customer_id", ['or', ['and','{{%coupon_rule}}.couponrule_city_limit=1',"{{%coupon_rule}}.couponrule_city_id=$city_id"], '{{%coupon_rule}}.couponrule_city_limit=0']] )
-		->orderBy(['{{%coupon_rule}}.couponrule_use_end_time'=>SORT_ASC,'{{%coupon_userinfo}}.coupon_userinfo_price'=>SORT_DESC])
+		$couponCustomer1 = self::find()
+		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time'])
+		->where(['and',"couponrule_use_end_time>$newtime",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
+		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
 		
-		$couponCustomer2=(new \yii\db\Query())
-		->select(['{{%coupon_userinfo}}.id','{{%coupon_userinfo}}.couponrule_name', '{{%coupon_userinfo}}.couponrule_price','{{%coupon_rule}}.couponrule_use_start_time','{{%coupon_rule}}.couponrule_use_end_time'])
-		->from('{{%coupon_rule}}')
-		->leftJoin('{{%coupon_userinfo}}', '{{%coupon_userinfo}}.coupon_userinfo_id = {{%coupon_rule}}.id')
-		->where(['and',"{{%coupon_rule}}.couponrule_use_end_time>$last_month",'{{%coupon_userinfo}}.is_del=0','{{%coupon_userinfo}}.is_used=0',"{{%coupon_userinfo}}.customer_id=$customer_id", ['or', ['and','{{%coupon_rule}}.couponrule_city_limit=1',"{{%coupon_rule}}.couponrule_city_id=$city_id"], '{{%coupon_rule}}.couponrule_city_limit=0']] )
-		->orderBy(['{{%coupon_userinfo}}.coupon_userinfo_price'=>SORT_DESC])
+		$couponCustomer2 = self::find()
+		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time'])
+		->where(['and',"couponrule_use_end_time>$last_month","couponrule_use_end_time<$newtime",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
+		->orderBy(['coupon_userinfo_price'=>SORT_DESC,'couponrule_use_end_time'=>SORT_ASC,])
 		->asArray()
 		->all();
 		
@@ -264,7 +260,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	
 	/**
 	* 获取用户优惠码数量
-	* 李勇使用
+	* 李勇使用  模拟测试通过
 	* @date: 2015-11-7
 	* @author: peak pan
 	* @customer_id int    用户id
@@ -274,7 +270,20 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	public static function CouponCount($customer_id)
 	{
 		$now_time=time();
-		return CouponCustomer::find()->where(['and','is_del=0',"customer_id=$customer_id",'is_used=0',"coupon_userinfo_endtime>$now_time"] )->count();
+		$count=self::find()->where(['and','is_del=0',"customer_id=$customer_id",'is_used=0',"couponrule_use_end_time>$now_time"] )->count();
+
+		if(empty($count)){
+			$countinfo=0;
+		}else{
+			$countinfo=$count;
+		}
+		
+		$array=[
+		'is_status'=>1,
+		'msg'=>'查询成功',
+		'data'=>$countinfo,
+		];
+		return $array;
 		
 		
 	}
@@ -309,15 +318,17 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @author: peak pan
 	* @return:
 	**/
-	private  function checkCouponIsclok($code)
+	private static  function checkCouponIsclok($code)
 	{
 		$now_time=time();
-		$couponCustomer=self::find()->where(['and','coupon_userinfo_code'=>$code,'is_used'=>1,"coupon_userinfo_endtime > $now_time"])->one();
+		$couponCustomer=self::find()
+		->where(['and','coupon_userinfo_code="'.$code.'"','is_used=1',"couponrule_use_end_time > $now_time"])->one();
+		
 		if($couponCustomer){
 			//查询存在  
-			return true;
-		}else{
 			return false;
+		}else{
+			return true;
 		}
 	}
 	

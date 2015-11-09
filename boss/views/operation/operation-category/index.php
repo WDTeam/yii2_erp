@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--    <div class="page-header">
             <h1><?php //= Html::encode($this->title) ?></h1>
     </div>-->
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <!--    <p>-->
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [

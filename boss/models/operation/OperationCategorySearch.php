@@ -16,7 +16,7 @@ class OperationCategorySearch extends OperationCategory
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['operation_category_name'], 'required'],
+            [['operation_category_name'], 'string'],
         ];
     }
 
@@ -44,7 +44,8 @@ class OperationCategorySearch extends OperationCategory
     {
 
         $query = new \yii\db\Query();;
-        $query = $query->select(['goods.id as goods_id',
+        $query = $query->select([
+            'goods.id as goods_id',
             'category.id',
             'category.operation_category_name',
             'goods.operation_goods_name',
@@ -62,12 +63,11 @@ class OperationCategorySearch extends OperationCategory
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'city_is_online' => $this->city_is_online,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'city_name', $this->city_name]);
+        $query->andFilterWhere(['like', 'category.operation_category_name', $this->operation_category_name]);
 
         return $dataProvider;
     }

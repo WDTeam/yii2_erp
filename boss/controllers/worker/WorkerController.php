@@ -227,7 +227,7 @@ class WorkerController extends BaseAuthController
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //修改阿姨
         if ($worker_id) {
-            $workerModel = $this->findModel($worker_id);
+            $workerModel = Worker::findModel($worker_id);
             $workerModel->load(Yii::$app->request->post());
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
         //添加阿姨
@@ -248,7 +248,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = Worker::findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -264,12 +264,11 @@ class WorkerController extends BaseAuthController
 
         if(Yii::$app->request->post('WorkerAuth')){
             $param = Yii::$app->request->post('WorkerAuth');
-            $workerModel = $this->findModel($id);
+            $workerModel = Worker::findModel($id);
             if($workerAuthModel->load(Yii::$app->request->post()) && $workerAuthModel->save()){
                 if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
                     $workerModel->worker_auth_status = 1;
                     $workerModel->save();
-                    var_dump($workerModel->errors);die;
                 }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==1){
                     $workerModel->worker_auth_status = 2;
                     $workerModel->save();
@@ -314,7 +313,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionDelete($id)
     {
-        $model=$this->findModel($id);
+        $model=Worker::findModel($id);
         $model->isdel = 1;
         $model->save();
         return $this->redirect(['index']);
@@ -518,7 +517,7 @@ class WorkerController extends BaseAuthController
             $modifiedAttributes = $workerBlockModel->getDirtyAttributes();
             //记录阿姨日志
             if($workerBlockModel->save()){
-                $workerModel = $this->findModel($workerId);
+                $workerModel = Worker::findModel($workerId);
                 if(empty($param['id'])){
                     if($param['worker_block_status']==1){
                         $workerModel->worker_is_block = 1;
@@ -786,7 +785,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        $a = Worker::findAllModel(['isdel'=>0],1);
+        $a = Worker::findAllModel(['isdel'=>0],true);
         var_dump($a);
         //var_dump(Worker::getWorkerDetailInfo(19077));die;
         //echo '星期1 8:00 10:00';

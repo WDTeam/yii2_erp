@@ -66,12 +66,12 @@ class ShopManager extends \yii\db\ActiveRecord
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
             [['account_person'], 'string', 'max' => 100],
-        	['name','match','pattern'=>'/^[^\s]{1,20}$/'],
-        	['bl_person','match','pattern'=>'/^[^\s]{1,10}$/'],
-        	['bl_business','match','pattern'=>'/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]{1,400}$/'],
-        	['principal','match','pattern'=>'/^[^\s]{1,10}$/'],	
-        	['tel','match','pattern'=>'/1[3458]{1}\d{9}$/'],
-        	['bl_name','match','pattern'=>'/^[^\s]{1,20}$/']
+//         	['name','match','pattern'=>'/^[^\s]{1,20}$/'],
+//         	['bl_person','match','pattern'=>'/^[^\s]{1,10}$/'],
+//         	['bl_business','match','pattern'=>'/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]{1,400}$/'],
+//         	['principal','match','pattern'=>'/^[^\s]{1,10}$/'],	
+//         	['tel','match','pattern'=>'/1[3458]{1}\d{9}$/'],
+//         	['bl_name','match','pattern'=>'/^[^\s]{1,20}$/']
         ];
     }
 
