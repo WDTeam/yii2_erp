@@ -1669,7 +1669,6 @@ class OrderController extends \restapi\components\Controller
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
                 "order_customer_need" => $param['order_customer_need'],
                 "order_customer_memo" => $param['order_customer_memo'],
-                "order_booked_count" => $param['order_booked_count'],
                 "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
@@ -1686,10 +1685,6 @@ class OrderController extends \restapi\components\Controller
                     'coupon_id' => $val['coupon_id']
                 ];
             }
-            
-            print_r($attributes);
-            print_r($booked_list);
-            exit;
 
             try {
                 $order = new Order();
