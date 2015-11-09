@@ -303,7 +303,7 @@ class CouponController extends \restapi\components\Controller
      * @api {GET} /coupon/get-customer-coupon-total {GET} /coupon/get-customer-coupon-total（100%）
      *
      * @apiDescription 获取用户优惠券总额（李勇）
-     * @apiName actionGetCouponCount
+     * @apiName actionGetCustomerCouponTotal
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
