@@ -101,7 +101,9 @@ $columns[] = 'complain_coutn';
 $columns[] = 'level';
 $columns[] = [
     'class' => 'yii\grid\ActionColumn',
-    'template'=>'{update} {delete} {joinblacklist} {add-worker}',
+    'template'=>Yii::$app->user->identity->isMiniBossUser()?
+        '{update} {add-worker}':
+        '{update} {delete} {joinblacklist} {add-worker}',
     'buttons' => [
         'update' => function ($url, $model) {
             return Html::a(Yii::t('yii', '编辑'), ['view', 'id' => $model->id, 'edit' => 't'], [
@@ -150,7 +152,11 @@ $columns[] = [
 ?>
 <div class="shop-index">
 
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  
+    if(!Yii::$app->user->identity->isMiNiBossUser()){
+        echo $this->render('_search', ['model' => $searchModel]);
+    }
+    ?>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,
