@@ -162,6 +162,20 @@ class alertMsgEnum
     const exchangeCouponSuccess = '兑换成功';
     //兑换优惠券失败
     const exchangeCouponFail = '兑换失败';
+    //此手机号未被注册,请您先注册登录后再兑换优惠券
+    const exchangeCouponNoCustomer = '此手机号未被注册,请您先注册登录后再兑换优惠券';
+    //优惠码已经被领取或使用
+    const exchangeCouponIsUsed = '优惠码已经被领取或使用';
+    //优惠券不存在
+    const exchangeCouponNotExist = '优惠券不存在';
+    //优惠券不可用
+    const exchangeCouponUnuse = '优惠券不可用';
+    //优惠券兑换时间已过期
+    const exchangeCouponIsOver = '优惠券兑换时间已过期';
+    //优惠券已删除
+    const exchangeCouponFailIsdel = '优惠券已删除';
+    //优惠券已禁用
+    const exchangeCouponDisable = '优惠券已禁用';
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';
@@ -186,6 +200,8 @@ class alertMsgEnum
     //用户优惠券数量
     //获取用户优惠券数量成功
     const getCouponCountSuccess = '获取用户优惠券数量成功';
+    //获取用户优惠券数量失败
+    const getCouponCountFail = '获取用户优惠券数量失败';
     //单次服务排班表
     //请填写服务地址或服务时长
     const singleServiceTimeDataDefect = '请填写服务地址或服务时长';
