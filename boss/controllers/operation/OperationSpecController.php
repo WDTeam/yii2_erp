@@ -4,6 +4,7 @@ namespace boss\controllers\operation;
 
 use boss\models\operation\OperationSpec;
 use boss\models\operation\OperationGoods;
+use boss\models\operation\OperationSpecSearch;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -35,11 +36,12 @@ class OperationSpecController extends Controller
     public function actionIndex()
     {
         $OperationSpecModel = new OperationSpec();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationSpec::find(),
-        ]);
+        $searchModel = new OperationSpecSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
             'OperationSpecModel' => $OperationSpecModel,
         ]);
     }
