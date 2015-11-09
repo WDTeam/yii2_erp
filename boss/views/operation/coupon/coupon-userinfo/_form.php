@@ -5,6 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 
+$model->coupon_rule_name_id=$id;
 /**
  * @var yii\web\View $this
  * @var dbbase\models\operation\coupon\CouponUserinfo $model
@@ -23,7 +24,7 @@ use kartik\datecontrol\DateControl;
      		
   'coupon_rule_name_id'=>[
      		'type' => Form::INPUT_DROPDOWN_LIST,
-     		'items' => ['1'=>'规则一','2'=>'规则二','3'=>'规则三','4'=>'规则四',],
+     		'items' =>$ruledata,
      		'options' => [
      		'prompt' => '请选择优惠券规则',
      		],

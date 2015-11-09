@@ -8,6 +8,8 @@ use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use PHPExcel;
+use PHPExcel_IOFactory;
 /**
  * CouponRuleController implements the CRUD actions for CouponRule model.
  */
@@ -167,6 +169,68 @@ class CouponRuleController extends Controller
         return $this->redirect(['index']);
     }
 
+    
+    
+
+    public function actionExport()
+    {
+    	if(isset($_GET['id'])){
+    		$datainfo = CouponRule::find()->select('id,couponrule_name,couponrule_use_start_time,couponrule_use_end_time,couponrule_classify,couponrule_price,couponrule_Prefix')->where(['id'=>$_GET['id']])->asArray()->one();
+    	}else{
+    		\Yii::$app->getSession()->setFlash('default','灰常抱歉,您传入的值不存在！');
+    		return $this->redirect(['index']);
+    	}
+    	$data=\Yii::$app->redis->SMEMBERS($datainfo['couponrule_Prefix']);
+    	
+    	
+    	if(count($data)=='0'){
+    		\Yii::$app->getSession()->setFlash('default','此规则下木有优惠券了！');
+    		return $this->redirect(['index']);
+    	}
+    	
+    	
+    	
+    	$objPHPExcel = new PHPExcel();
+    	ob_start();
+    	$objPHPExcel->getProperties()->setCreator('ejiajie')
+    	->setLastModifiedBy('ejiajie')
+    	->setTitle('Office 2007 XLSX Document')
+    	->setSubject('Office 2007 XLSX Document')
+    	->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+    	->setKeywords('office 2007 openxml php')
+    	->setCategory('Result file');
+    	$objPHPExcel->setActiveSheetIndex(0)
+    	->setCellValue('A1', '优惠码')
+    	->setCellValue('B1', '优惠名称')
+    	->setCellValue('C1', '可用开始时间')
+        ->setCellValue('D1', '可用结束时间')
+        ->setCellValue('E1', '最小金额');
+    	$i = 2;
+    	foreach ($data as $k => $v) {
+    		$objPHPExcel->setActiveSheetIndex(0)
+    		->setCellValue('A' . $i, $v)
+    		->setCellValue('B' . $i, $datainfo['couponrule_name'])
+    		->setCellValue('C' . $i, date('Y-m-d H:i:s', $datainfo['couponrule_use_start_time']))
+            ->setCellValue('D' . $i, date('Y-m-d H:i:s', $datainfo['couponrule_use_end_time']))
+            ->setCellValue('E' . $i, $datainfo['couponrule_price']);
+    		$i++;
+    	}
+    	$objPHPExcel->getActiveSheet()->setTitle('优惠券');
+    	$objPHPExcel->setActiveSheetIndex(0);
+    	$filename = urlencode('优惠券数据导出-'.$datainfo['couponrule_name']) . '_' . date('Y-m-dHis');
+    	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    	ob_end_clean();
+    	header('Content-Type: application/vnd.ms-excel');
+    	header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+    	header('Cache-Control: max-age=0');
+    	$objWriter->save('php://output');
+    	exit;
+    }
+    
+    
+    
+    
+    
     /**
      * Finds the CouponRule model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

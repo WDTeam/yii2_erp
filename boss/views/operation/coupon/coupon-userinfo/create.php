@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coupon-userinfo-create">
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model,'id'=>$id,'ruledata'=>$ruledata
     ]) ?>
 
 </div>
