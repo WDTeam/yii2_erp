@@ -187,7 +187,7 @@ class OperationGoodsController extends Controller
     public function actionCreate()
     {
         $OperationSpec = OperationSpec::getSpecList();
-
+        $OperationCategory = [];
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
 
@@ -216,7 +216,15 @@ class OperationGoodsController extends Controller
             }
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
-            foreach((array)$OperationCategorydata as $key => $value){ $OperationCategory[$value['id']] = $value['operation_category_name']; }
+            foreach ((array)$OperationCategorydata as $key => $value) { 
+                $OperationCategory[$value['id']] = $value['operation_category_name'];
+            }
+
+            if (empty($OperationCategory)) {
+                \Yii::$app->getSession()->setFlash('default','还没有服务品类，请先创建服务品类！');
+                return $this->redirect(['/operation/operation-category']);
+            }
+
             return $this->render('create', [
                 'model' => $model,
                 'OperationCategory' => $OperationCategory,
