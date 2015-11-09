@@ -172,7 +172,7 @@ class OrderController extends BaseAuthController
     public function actionGetWaitManualAssignOrder()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $is_mini_boss = \Yii::$app->user->identity->isMiniBoxUser();
+        $is_mini_boss = \Yii::$app->user->identity->isMiniBossUser();
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id, $is_mini_boss);
         if ($order) {
             $week = ['日', '一', '二', '三', '四', '五', '六'];
