@@ -32,7 +32,7 @@ class m151028_101635_create_table_operation_service_card_sell_record extends Mig
 			'customer_trans_record_paid_at' 				=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'支付时间\'',
 			'created_at' 			=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'订单创建时间\'',
 			'updated_at' 			=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'订单更改时间\'',
-			'is_del' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
+			'is_del' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',
 		],$tableOptions);
     }
 
