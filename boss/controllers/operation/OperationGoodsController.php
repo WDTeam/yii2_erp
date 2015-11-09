@@ -306,9 +306,19 @@ class OperationGoodsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $result = OperationShopDistrictGoods::getShopDistrictGoods($id);
+        if ($result) {
+            \Yii::$app->getSession()->setFlash('default','项目有商圈已经上线，不能删除！');
+            return $this->redirect(['/operation/operation-category']);
+        } else {
 
-        return $this->redirect(['index']);
+            //关联删除服务项目对应的商圈
+            OperationShopDistrictGoods::delShopDistrict($id);
+            $this->findModel($id)->delete();
+        }
+
+        //return $this->redirect(['index']);
+        return $this->redirect(['/operation/operation-category']);
     }
 
     /**
