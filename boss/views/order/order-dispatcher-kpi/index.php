@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     .margin-l-36 {margin-left: 33px;}
 </style>
 <!-- end -->
+<!--初始化界面数据-->
 <input id="idd" name="idd" value="<?= Html::encode($model->id ) ?>" hidden />
 <input id="system_user_id" name="system_user_id" value="<?= Html::encode($model->system_user_id ) ?>" hidden />
 <input id="dispatcher_kpi_status" name="dispatcher_kpi_status" value="<?= Html::encode($model->dispatcher_kpi_status ) ?>" hidden />
@@ -46,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <label style="color:red" >状态：</label><span id="statusId"></span><span id="newStatusId" hidden></span>
     </div>
 </div>
+<!--界面列表-->
 <div class="container">
     <table class="table table-hover table-bordered" style="font-size:14px;" >
         <thead>
@@ -62,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </thead>
         <tbody id="tbody">
         <tr>
-            <td>7日平均</td>
+            <td>近7日平均</td>
             <td id="free_avg"></td>
             <td id="busy_avg"></td>
             <td id="rest_avg"></td>
@@ -83,9 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         </tbody>
     </table>
-
-
-
+    <!--界面按钮-->
     <div class="row"  >
         <div class="row"  id="" >
             <div class="col-md-2"><button class="btn btn-default" id="startId" name="startId" hidden>开工啦</button></div>
@@ -112,5 +112,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <nobr></div>
     </div>
     <hr/>
+    <!--加载订单明细、阿姨指派页面-->
+    <div id="loadManualOderPage" >
+        <?= $this->render('..\order\assign', [
+            'model' => 1,
+            'config' => 2,
+        ]) ?>
+    </div>
 </div>
+
 
