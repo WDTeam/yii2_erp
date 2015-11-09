@@ -61,9 +61,9 @@ use boss\components\RbacHelper;
 			?>
 			
             <?php 
-                echo $form->field($model, 'permissions')->checkboxList(RbacHelper::$permissions, [
-                    'id'=>'item_orther',
-                ])->label('其它');
+//                 echo $form->field($model, 'permissions')->checkboxList(RbacHelper::$permissions, [
+//                     'id'=>'item_orther',
+//                 ])->label('其它');
             ?>
             </div>
 		</div>
