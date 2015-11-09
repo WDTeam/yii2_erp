@@ -182,7 +182,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	public static function GetCustomerCouponList($customer_id,$city_id,$service_type_id){
 		$now_time=time();
 		$couponCustomer = self::find()
-		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time,couponrule_type,couponrule_service_type_id,couponrule_commodity_id'])
+		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
 		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$service_type_id"], 'couponrule_type=0']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
