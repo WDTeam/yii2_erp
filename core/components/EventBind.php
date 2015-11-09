@@ -151,7 +151,7 @@ class EventBind extends Component implements BootstrapInterface
             Ivr::EVENT_CALLBACK,
             function ($event) {
                 try{
-                    $cbdata = (array)$this->sender->cb_data;
+                    $cbdata = (array)$event->sender->cb_data;
                     $mongo = \Yii::$app->mongodb;
                     $collection = $mongo->getCollection('ivr_callback_log');
                     $data['created_at'] = date('Y-m-d H:i:s');
