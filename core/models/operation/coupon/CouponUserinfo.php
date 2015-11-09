@@ -57,7 +57,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$coupon=substr($code,0,3);
 		//查看渠道下面的领取开始时间是不是可以领取
 		$Couponruledate = CouponRule::find()->where(['couponrule_Prefix'=>$coupon])->asArray()->one();
-		if($Couponruledate['id']<>''){
+		if($Couponruledate['id']==''){
 			$array=[
 			'is_status'=>4013,
 			'msg'=>'优惠券不存在',
