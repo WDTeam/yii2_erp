@@ -1633,10 +1633,6 @@ class Worker extends \dbbase\models\worker\Worker
                 //阿姨已删除
                 $login_info['can_login']=0;
                 $login_info['login_type']=4;
-            }elseif($workerInfo['worker_auth_status']=='0'){
-                //阿姨未审核或审核未通过
-                $login_info['can_login']=0;
-                $login_info['login_type']=6;
             }else{
                 //阿姨可以登录
                 $login_info['can_login']=1;

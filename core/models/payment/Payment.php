@@ -893,7 +893,7 @@ class Payment extends \dbbase\models\payment\Payment
             //验证签名
             $class = new \alipay_wap_class();
             $verify_result = $class->callback();
-            if($_GET['debug'])
+            if(!empty($_GET['debug']))
             {
                 $verify_result = true;
             }

@@ -275,8 +275,6 @@ class AuthController extends \restapi\components\Controller
                 return $this->send(null, "阿姨已离职", 0, 403, null, alertMsgEnum::workerLoginIsDimission);
             } elseif ($login_info['can_login'] == 0 && $login_info['login_type'] == 4) {
                 return $this->send(null, "阿姨已删除", 0, 403, null, alertMsgEnum::workerLoginIsDel);
-            } elseif ($login_info['can_login'] == 0 && $login_info['login_type'] == 6) {
-                return $this->send(null, "阿姨未审核或审核未通过", 0, 403, null, alertMsgEnum::workerLoginUnable);
             }
         } else {
             return $this->send(null, "验证阿姨是否为系统用户系统错误", 0, 403, null, alertMsgEnum::workerLoginFail);

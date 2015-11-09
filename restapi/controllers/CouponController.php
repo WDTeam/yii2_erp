@@ -25,25 +25,24 @@ class CouponController extends \restapi\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *       "code": 1,
-     *       "msg": "兑换成功",
-     *       "ret": {
-     *           "customer_id": 1,
-     *           "coupon_id": 5,
-     *           "coupon_code_id": 10,
-     *           "coupon_code": "fkdaibz0",
-     *           "coupon_name": "万能优惠券",
-     *           "coupon_price": "10.00",
-     *           "expirate_at": 1455206400,
-     *           "is_used": 0,
-     *           "created_at": 1446605320,
-     *           "updated_at": 1446605320,
-     *           "id": 10
-     *       },
-     *       "alertMsg": "兑换成功"
-     *     }
-     *
+     *    {
+     *           "code": 1,
+     *           "msg": "兑换成功",
+     *           "ret": {
+     *               "is_status": 1,
+     *               "msg": "数据库写入成功",
+     *               "data": {
+     *                   "id": "优惠券id",
+     *                   "couponrule_price": "优惠券金额",
+     *                   "couponrule_name": "优惠券名称",
+     *                   "couponrule_use_start_time": "优惠券的用户可使用的开始时间",
+     *                   "couponrule_use_end_time": "优惠券的用户可使用的结束时间",
+     *                   "couponrule_service_type_id": "服务类别id"
+     *               }
+     *           },
+     *           "alertMsg": "兑换成功"
+     *       }
+     * 
      * @apiError CouponNotFound 优惠码不存在.
      *
      * @apiErrorExample Error-Response:
@@ -63,7 +62,6 @@ class CouponController extends \restapi\components\Controller
         }
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
-        //兑换优惠码
        //兑换优惠码
         try{
             $exchange_coupon=CouponUserinfo::generateCouponByCode($customer_phone,$coupon_code);
@@ -115,50 +113,21 @@ class CouponController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *   {
-     *   "code": 1,
-     *   "msg": "获取优惠券列表成功",
-     *   "ret": [
-     *       {
-     *           "id": "优惠券id",
-     *           "coupon_name": "优惠券名称",
-     *           "coupon_price": "优惠券价值",
-     *           "coupon_category": "优惠券范畴0为一般优惠券1为赔付优惠券",
-     *           "coupon_category_name": "优惠券范畴",
-     *           "coupon_type": "优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券",
-     *           "coupon_type_name": "优惠券类型名称",
-     *           "coupon_service_type_id": "服务类别id",
-     *           "coupon_service_type_name": "服务类别名称",
-     *           "coupon_service_id": "服务id",
-     *           "coupon_service_name": "服务名称",
-     *           "coupon_city_limit": "城市限制0为不限1为单一城市限制",
-     *           "coupon_city_id": "关联城市",
-     *           "coupon_city_name": "城市名称",
-     *           "coupon_customer_type": "适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员",
-     *           "coupon_customer_type_name": "适用客户类别名称",
-     *           "coupon_time_type": "优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算",
-     *           "coupon_time_type_name": "优惠券有效时间类型名称",
-     *           "coupon_begin_at": "开始时间",
-     *           "coupon_end_at": "领取时间和使用时间一致时的结束时间(过期时间以这个为准)",
-     *           "coupon_get_end_at": "领取时间和使用时间不一致时的领取结束时间",
-     *           "coupon_use_end_days": "领取时间和使用时间不一致时过期天数",
-     *           "coupon_promote_type": "优惠券优惠类型0为立减1为满减2为每减",
-     *           "coupon_promote_type_name": "优惠券优惠类型名称",
-     *           "coupon_order_min_price": "满减或每减时订单最小金额",
-     *           "coupon_code_num": "优惠码个数",
-     *           "coupon_code_max_customer_num": "单个优惠码最大使用人数",
-     *           "is_disabled": "是否禁用",
-     *           "created_at": "创建时间",
-     *           "updated_at": "更新时间",
-     *           "system_user_id": "系统用户id",
-     *           "system_user_name": "系统用户名称",
-     *           "customer_id": "客户id",
-     *           "coupon_id": "优惠规则id",
-     *           "coupon_code_id": "优惠码id",
-     *           "coupon_code": "优惠码",
-     *           "expirate_at": "过期时间",
-     *           "is_used": "是否已经使用"
-     *       }
-     *     ]
+     *       "code": 1,
+     *       "msg": "获取优惠券列表成功",
+     *       "ret": [
+     *           {
+     *               "id": "优惠券id",
+     *               "coupon_userinfo_name": "优惠券名称",
+     *               "coupon_userinfo_price": "优惠券价值",
+     *               "couponrule_use_start_time": "优惠券的用户可使用的开始时间",
+     *               "couponrule_use_end_time": "过期时间",
+     *               "couponrule_type": "实收金额优惠券类型1为全网优惠券2为类别优惠券3为商品优惠券",
+     *               "couponrule_service_type_id": "服务类别id",
+     *               "couponrule_commodity_id": "如果是商品优惠券id"
+     *           }
+     *       ],
+     *       "alertMsg": "获取优惠券列表成功"
      *   }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -217,50 +186,21 @@ class CouponController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *   HTTP/1.1 200 OK
      *   {
-     *   "code": 1,
-     *   "msg": "获取优惠券列表成功",
-     *   "ret": [
-     *       {
-     *           "id": "优惠券id",
-     *           "coupon_name": "优惠券名称",
-     *           "coupon_price": "优惠券价值",
-     *           "coupon_category": "优惠券范畴0为一般优惠券1为赔付优惠券",
-     *           "coupon_category_name": "优惠券范畴",
-     *           "coupon_type": "优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券",
-     *           "coupon_type_name": "优惠券类型名称",
-     *           "coupon_service_type_id": "服务类别id",
-     *           "coupon_service_type_name": "服务类别名称",
-     *           "coupon_service_id": "服务id",
-     *           "coupon_service_name": "服务名称",
-     *           "coupon_city_limit": "城市限制0为不限1为单一城市限制",
-     *           "coupon_city_id": "关联城市",
-     *           "coupon_city_name": "城市名称",
-     *           "coupon_customer_type": "适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员",
-     *           "coupon_customer_type_name": "适用客户类别名称",
-     *           "coupon_time_type": "优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算",
-     *           "coupon_time_type_name": "优惠券有效时间类型名称",
-     *           "coupon_begin_at": "开始时间",
-     *           "coupon_end_at": "领取时间和使用时间一致时的结束时间(过期时间以这个为准)",
-     *           "coupon_get_end_at": "领取时间和使用时间不一致时的领取结束时间",
-     *           "coupon_use_end_days": "领取时间和使用时间不一致时过期天数",
-     *           "coupon_promote_type": "优惠券优惠类型0为立减1为满减2为每减",
-     *           "coupon_promote_type_name": "优惠券优惠类型名称",
-     *           "coupon_order_min_price": "满减或每减时订单最小金额",
-     *           "coupon_code_num": "优惠码个数",
-     *           "coupon_code_max_customer_num": "单个优惠码最大使用人数",
-     *           "is_disabled": "是否禁用",
-     *           "created_at": "创建时间",
-     *           "updated_at": "更新时间",
-     *           "system_user_id": "系统用户id",
-     *           "system_user_name": "系统用户名称",
-     *           "customer_id": "客户id",
-     *           "coupon_id": "优惠规则id",
-     *           "coupon_code_id": "优惠码id",
-     *           "coupon_code": "优惠码",
-     *           "expirate_at": "过期时间",
-     *           "is_used": "是否已经使用"
-     *       }
-     *     ]
+     *       "code": 1,
+     *       "msg": "获取优惠券列表成功",
+     *       "ret": [
+     *           {
+     *               "id": "优惠券id",
+     *               "coupon_userinfo_name": "优惠券名称",
+     *               "coupon_userinfo_price": "优惠券价值",
+     *               "couponrule_use_start_time": "优惠券的用户可使用的开始时间",
+     *               "couponrule_use_end_time": "过期时间",
+     *               "couponrule_type": "实收金额优惠券类型1为全网优惠券2为类别优惠券3为商品优惠券",
+     *               "couponrule_service_type_id": "服务类别id",
+     *               "couponrule_commodity_id": "如果是商品优惠券id"
+     *           }
+     *       ],
+     *       "alertMsg": "获取优惠券列表成功"
      *   }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -363,7 +303,7 @@ class CouponController extends \restapi\components\Controller
      * @api {GET} /coupon/get-customer-coupon-total {GET} /coupon/get-customer-coupon-total（100%）
      *
      * @apiDescription 获取用户优惠券总额（李勇）
-     * @apiName actionGetCouponCount
+     * @apiName actionGetCustomerCouponTotal
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
@@ -373,12 +313,12 @@ class CouponController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *       {
-     *          "code": 1,
-     *          "msg": "获取用户优惠券总额成功",
-     *          "ret": {
-     *              "couponTotal": "优惠券总额"
-     *          },
-     *          "alertMsg": "获取用户优惠券总额成功"
+     *           "code": 1,
+     *           "msg": "获取用户优惠券总额成功",
+     *           "ret": {
+     *               "couponTotal": "30.00"
+     *           },
+     *           "alertMsg": "获取用户优惠券总额成功"
      *       }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -411,7 +351,7 @@ class CouponController extends \restapi\components\Controller
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
         if($CouponTotal["is_status"]==1){
-            $ret['couponTotal'] = $CouponCount["data"];
+            $ret['couponTotal'] = $CouponTotal["data"];
             return $this->send($ret, "获取用户优惠券总额成功", 1, 200,null,alertMsgEnum::getCustomerCouponTotalSuccess);
         }else{
             return $this->send(null, "获取用户优惠券总额失败", 0, 403,null,alertMsgEnum::getCustomerCouponTotalFail);
