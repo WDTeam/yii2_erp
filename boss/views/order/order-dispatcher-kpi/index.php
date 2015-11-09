@@ -112,13 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <nobr></div>
     </div>
     <hr/>
-    <!--加载订单明细、阿姨指派页面-->
-    <div id="loadManualOderPage" >
-        <?= $this->render('..\order\assign', [
-            'model' => 1,
-            'config' => 2,
-        ]) ?>
-    </div>
 </div>
 
 
