@@ -187,7 +187,6 @@ class OperationGoodsController extends Controller
     public function actionCreate()
     {
         $OperationSpec = OperationSpec::getSpecList();
-        $OperationCategory = [];
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
 
@@ -215,6 +214,8 @@ class OperationGoodsController extends Controller
                 return $this->redirect(['/operation/operation-category']);
             }
         } else {
+            $OperationCategory = [];
+
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
             foreach ((array)$OperationCategorydata as $key => $value) { 
                 $OperationCategory[$value['id']] = $value['operation_category_name'];
