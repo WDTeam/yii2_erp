@@ -272,6 +272,8 @@ class alertMsgEnum
     const taskFailFail = '您没有任务哦';
     //操作成功
     const taskFailSuccess = '操作成功';
+        //操作失败
+    const GetOrderOneFail = '操作失败';
     //查看任务的详情
     //您没有已完成任务哦
     const checkTaskFail = '查看任务失败';

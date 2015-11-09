@@ -38,7 +38,7 @@ class CouponUserinfoController extends Controller
     {
     	
     	
-    	var_dump( \core\models\operation\coupon\CouponUserinfo::GetCustomerCouponTotal('1','010')); exit;
+    	//var_dump( \core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('1','010','1')); exit;
     	
     	
         $searchModel = new CouponUserinfoSearch;
