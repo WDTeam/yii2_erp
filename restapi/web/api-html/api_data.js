@@ -404,7 +404,14 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "address_id",
             "description": "<p>订单地址id</p> "
           },
@@ -816,6 +823,13 @@ define({ "api": [
             "optional": false,
             "field": "order_is_use_balance",
             "description": "<p>是否使用余额 0否 1是 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
           },
           {
             "group": "Parameter",
@@ -5170,8 +5184,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "city_id",
-            "description": "<p>城市ID</p> "
+            "field": "city_name",
+            "description": "<p>城市名称</p> "
           },
           {
             "group": "Parameter",
@@ -5329,65 +5343,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
-  },
-  {
-    "type": "GET",
-    "url": "/coupon/all-coupons",
-    "title": "[GET] /coupon/all-coupons（ 100%）",
-    "description": "<p>获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）</p> ",
-    "name": "actionAllCoupons",
-    "group": "coupon",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/CouponController.php",
-    "groupTitle": "coupon"
   },
   {
     "type": "GET",
@@ -6245,7 +6200,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/service/service-items",
-    "title": "[GET] ( for pop )",
+    "title": "[GET] /service/service-items ( for pop )",
     "name": "actionServiceItems",
     "group": "service",
     "description": "<p>获得所有服务项目[服务id, 服务编号,服务名,服务描述,服务英文名称]</p> ",
