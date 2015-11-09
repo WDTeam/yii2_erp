@@ -23,10 +23,10 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
-//         'mongodb' => [
-//             'class' => '\yii\mongodb\Connection',
-//             'dsn' => 'mongodb://101.200.179.70:27017/boss_test',
-//         ],
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://101.200.179.70:27017/boss_test',
+        ],
         /**
          * 极光推送,默认为开发环境配置
          */

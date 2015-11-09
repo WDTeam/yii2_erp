@@ -19,8 +19,8 @@ class SystemUser extends \dbbase\models\system\SystemUser
     {
         return [
             self::CLASSIFY_SYSTEM=>'系统保留',
-            self::CLASSIFY_BOSS=>'后台用户',
-            self::CLASSIFY_MINIBOSS=>'MINI BOX 用户'
+            self::CLASSIFY_BOSS=>'BOSS 用户',
+            self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
         ];
     }
     
