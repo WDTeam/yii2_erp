@@ -132,10 +132,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
             'before'=>
-            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).
-            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务项目', ['/operation/operation-goods/create'], ['class' => 'btn btn-success']).
-            Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理', ['/operation/operation-spec'], ['class' => 'btn btn-success']),
-            'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
+            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类',
+                ['create'],
+                ['class' => 'btn btn-success']
+            ).
+            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务项目',
+                ['/operation/operation-goods/create'],
+                ['class' => 'btn btn-success']
+            ).
+            Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理',
+                ['/operation/operation-spec'],
+                [
+                    'class' => 'btn btn-success',
+                    'data-pjax'=>"0",
+                ]
+            ),
+            'after'=>false,
             'showFooter'=>false,
             'footer' => false
         ],

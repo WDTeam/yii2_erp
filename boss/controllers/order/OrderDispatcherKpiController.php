@@ -34,13 +34,14 @@ class OrderDispatcherKpiController extends Controller
         $kpiModel = new OrderDispatcherKpi();
         $model=null;
         $flag=Yii::$app->request->get("flag");
-        if($flag!=2){//µÚÒ»½øÈë½çÃæ
+        if($flag!=2){//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             $model = $kpiModel->queryHistoricalKpi(yii::$app->user->id,strtotime(date('y-m-d')));
-        }else{//ajax°üÀ¨½çÃæÊý¾Ý
+        }else{//ajaxï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
            $attrs=[
 
                 "id"=>Yii::$app->request->get("id"),
                 "system_user_id"=>yii::$app->user->id,
+               'system_user_name' => yii::$app->user->identity->username,
                 "dispatcher_kpi_date"=> strtotime(date('y-m-d')),
                "dispatcher_kpi_status"=>Yii::$app->request->get("dispatcher_kpi_status"),
                "dispatcher_kpi_free_time"=>Yii::$app->request->get("dispatcher_kpi_free_time"),

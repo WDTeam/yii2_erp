@@ -35,8 +35,7 @@ $(document).ready(function(){
     agvChange();
    //初始化今日派单
     initCount();
-   //更新任务状态
-   dispStatus();
+
    //单击开工啦
    $('#startId').click(function(){startWork();});
    //单击系统派单成功
@@ -83,12 +82,7 @@ function saveParams(){
    var  dispatcher_kpi_obtain_count=parseInt($('#obtain_count').text());
    var  dispatcher_kpi_assigned_count=parseInt($('#assigned_count').text());
    var  dispatcher_kpi_assigned_rate=parseFloat($('#assigned_rate').text());
-   var  dispatcher_kpi_status=parseInt($('#newStatusId').text());
-   //alert("dispatcher_kpi_free_time:"+dispatcher_kpi_free_time);
-   //alert("dispatcher_kpi_busy_time:"+dispatcher_kpi_busy_time);
-   //alert("dispatcher_kpi_rest_time:"+dispatcher_kpi_rest_time);
-   //alert("dispatcher_kpi_obtain_count:"+dispatcher_kpi_obtain_count);
-   //alert("dispatcher_kpi_assigned_count:"+dispatcher_kpi_assigned_count);
+   var  dispatcher_kpi_status=window.work_status;
 
    var params = {
       flag:2,
@@ -113,20 +107,7 @@ function saveParams(){
       }
    });
 }
-//初始化控件
-function initPage(){
-   var status= $('#dispatcher_kpi_status').val();
-   if(status==1){//空闲界面
-      startWork();
-   }else if(status==2){//忙碌界面
-      waitWork();
-   }else if(status==3){//小休界面
-      restWork();
-   }else{//小休，停工
-      restEndWork();
-   }
 
-}
 //初始化今日派单
 function initCount(){
    //平均值换算
@@ -165,25 +146,7 @@ function updateCount(c){
       $('#assigned_rate').text((dispatcher_kpi_assigned_count/dispatcher_kpi_obtain_count).toFixed(2))
    }
 }
-//重新进入界面，待开工开始
-function dispStatus(){
-   $('#statusId').text("待开工");
-   $('#newStatusId').text(0);
-   /*var status= $('#dispatcher_kpi_status').val();
-   if(status==0){//待开工
-      $('#statusId').text("待开工");
-      $('#newStatusId').text(0);
-   }else if(status==1){//空闲
-      $('#statusId').text("空闲");
-      $('#newStatusId').text(1);
-   }else if(status==2){//忙碌
-      $('#statusId').text("忙碌");
-      $('#newStatusId').text(2);
-   }else{//收工
-      $('#statusId').text("收工");
-      $('#newStatusId').text(3);
-   }*/
-}
+
 //单击收工啦(小休时)
 function restEndWork(){
    saveParams();
@@ -194,12 +157,6 @@ function restEndWork(){
 
    //调用后台，更新当日小休时间和状态3==============================
    saveParams();
-
-   //初始化状态
-   $('#statusId').text("收工");
-   $('#dispatcher_kpi_status').val(3)
-   $('#newStatusId').text(3);
-   return;
 }
 //单击收工啦
 function endWork(){
@@ -209,12 +166,6 @@ function endWork(){
    $('#busy_time').val(d);
    //调用后台，更新当日忙碌时间和状态3==============================
    saveParams();
-   //初始化状态
-   $('#statusId').text("收工");
-   $('#dispatcher_kpi_status').val(3)
-   $('#newStatusId').text(3);
-   return;
-
 }
 //单击我要接活(小休时)
 function restAcceptWork(){
@@ -224,24 +175,11 @@ function restAcceptWork(){
    $('#rest_time').val(d);
    //调用后台，更新当日忙碌时间和状态2==============================
    saveParams();
-   //更新状态
-   $('#statusId').text("空闲");
-   $('#dispatcher_kpi_status').val(1)
-   $('#newStatusId').text(1);
    //初始化计时参数
    d=0;t=0;c=0;c1=0;c2=0;r=0;
 
    //获得界面空闲时
    d=Number($('#free_time').val());
-
-   //初始化按钮
-   $('#waitId').show();
-   $('#endId').hide();
-   $('#dispatchId').hide();
-   $('#restId').hide();
-   $('#acceptId').hide();
-   $('#restAcceptId').hide();
-   $('#restEndId').hide();
 
    //计算空闲时间
    freeTimedCount();
@@ -254,24 +192,11 @@ function restWork(){
    $('#busy_time').val(d);
    //调用后台，更新当日忙碌时间和状态2==============================
    saveParams();
-   //更新状态
-   $('#statusId').text("小休");
-   $('#dispatcher_kpi_status').val(2)
-   $('#newStatusId').text(2);
    //初始化计时参数
    d=0;t=0;c=0;c1=0;c2=0;r=0;
 
    //获得界面忙碌时
    d=Number($('#rest_time').val());
-
-   //初始化按钮
-   $('#waitId').hide();
-   $('#endId').hide();
-   $('#dispatchId').hide();
-   $('#restId').hide();
-   $('#acceptId').hide();
-   $('#restEndId').show();
-   $('#restAcceptId').show();
 
    //计算忙碌时间
    restTimedCount();
@@ -284,36 +209,17 @@ function acceptWork(){
    $('#busy_time').val(d);
    //调用后台，更新当日忙碌时间和状态2==============================
    saveParams();
-   //更新状态
-   $('#statusId').text("空闲");
-   $('#dispatcher_kpi_status').val(1)
-   $('#newStatusId').text(1);
    //初始化计时参数
    d=0;t=0;c=0;c1=0;c2=0;r=0;
    //获得界面忙碌时
    d=Number($('#free_time').val());
 
-   //初始化按钮
-   $('#waitId').show();
-   $('#endId').hide();
-   $('#dispatchId').hide();
-   $('#restId').hide();
-   $('#acceptId').hide();
-   $('#restAcceptId').hide();
-   $('#restEndId').hide();
 
    //计算空闲时间
    freeTimedCount();
 }
 //单击无法指派
 function nonDispatchWork(){
-   //初始化按钮
-   $('#dispatchId').hide();
-   $('#startId').hide();
-   $('#endId').show();
-   $('#restId').show();
-   $('#acceptId').show();
-   $('#restAcceptId').hide();
 }
 //单击人工派单成功
 function dispatchWork(){
@@ -321,13 +227,6 @@ function dispatchWork(){
    updateCount(2);
    //调用后台，更新指派成功数量===============================
    saveParams();
-   //初始化按钮
-   $('#dispatchId').hide();
-   $('#startId').hide();
-   $('#endId').show();
-   $('#restId').show();
-   $('#acceptId').show();
-   $('#restAcceptId').hide();
 }
 //系统指派成功，等待客服人工派单
 function waitWork() {
@@ -339,17 +238,9 @@ function waitWork() {
    updateCount(1);
    //调用后台，更新当日空闲时间和获得指派单数量===============================
    saveParams();
-   //更新状态
-   $('#statusId').text("忙碌");
-   $('#dispatcher_kpi_status').val(2)
-   $('#newStatusId').text(2);
    //初始化计时参数
    d=0;t=0;c=0;c1=0;c2=0;r=0;
 
-   //初始化按钮
-   $('#waitId').hide();
-   $('#dispatchId').show();
-   $('#restAcceptId').hide();
    //获得界面忙碌时
    d=Number($('#busy_time').val());
    //计算忙碌时间
@@ -358,16 +249,8 @@ function waitWork() {
 
 //单击开工啦
 function startWork() {
-   //alert("start");
-   //初始化状态
-   $('#statusId').text("空闲");
-   $('#dispatcher_kpi_status').val(1)
-   $('#newStatusId').text(1);
    //调用后台，创建当日记录========================================
    saveParams();
-   //初始化按钮
-   $('#startId').hide();
-   $('#waitId').show();
    //获得界面空闲时间
    d=Number($('#free_time').val());
    //计算空闲时间
