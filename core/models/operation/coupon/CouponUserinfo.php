@@ -119,7 +119,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj->coupon_userinfo_price =$Couponruledate['couponrule_price'];//优惠券价值
 		$couponCustomerobj->coupon_userinfo_gettime = time();
 		$couponCustomerobj->coupon_userinfo_usetime = 0;//使用
-		$couponCustomerobj->coupon_userinfo_endtime =$Couponruledate['coupon_userinfo_endtime'];//
+		$couponCustomerobj->couponrule_use_end_time =$Couponruledate['couponrule_use_end_time'];//
 		$couponCustomerobj->order_code ='0';
 		$couponCustomerobj->system_user_id = $customer->id;
 		$couponCustomerobj->system_user_name = '用户自对';
