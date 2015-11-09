@@ -91,4 +91,14 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
             $this->$field = $imgUrl;
         }
     }
+
+    /**
+     * 更新冗余的规格名称
+     *
+     * @param inter $operation_spec_info
+     */
+    public static function updateGoodsSpec($operation_spec_info, $operation_spec_strategy_unit)
+    {
+        self::updateAll(['operation_spec_strategy_unit' => $operation_spec_strategy_unit], 'operation_spec_info = ' . $operation_spec_info);
+    }
 }
