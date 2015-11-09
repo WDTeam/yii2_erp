@@ -368,9 +368,9 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if($couponCustomer){
 			//查询存在  
-			return false;
-		}else{
 			return true;
+		}else{
+			return false;
 		}
 	}
 	
