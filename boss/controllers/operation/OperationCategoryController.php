@@ -96,7 +96,10 @@ class OperationCategoryController extends BaseAuthController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+
+            $model->uploadImgToQiniu('operation_category_icon');
             $model->updated_at = time();
+
             $model->save();
             return $this->redirect(['index']);
         } else {

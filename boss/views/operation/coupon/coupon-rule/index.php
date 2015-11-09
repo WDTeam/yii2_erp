@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
            'format' => 'raw',
            'label' => '剩余优惠券',
            'value' => function ($dataProvider) {
-           	$countsum=$dataProvider->couponrule_price_sum-5;
+           	$countsum=$rt=\Yii::$app->redis->SCARD($dataProvider->couponrule_Prefix);
            	return $countsum;
            },
            ],
@@ -141,11 +141,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   },
                                                   
                                                   'tagssigninfo' => function ($url, $model, $key) {
-                                                  	return Html::a('<span class="glyphicon glyphicon-film"></span>', Yii::$app->urlManager->createUrl(['operation/coupon/coupon-userinfo/create','id' => $model->id,'edit'=>'baksite']),'');
-                                                  }
-                                                  
-                                                  
-
+                                                  	return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Yii::$app->urlManager->createUrl(['operation/coupon/coupon-userinfo/create','id' => $model->id,'edit'=>'baksite']),'');
+                  }
                 ],
             ],
         ],

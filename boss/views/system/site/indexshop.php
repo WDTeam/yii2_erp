@@ -7,11 +7,12 @@ AppAsset::addCss($this, 'css/shop/bootstrap.min.css');
 AppAsset::addCss($this, 'css/shop/index.css');
 $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
 
-$shop_manages = Yii::$app->user->identity->getShopManagerList();
+$shops = Yii::$app->user->identity->getShopList();
+$shop = $shops[0];
 ?>
  <div class="container">
-        <?php foreach ($shop_manages as $shop_manager){?>
-        <div class="row header"><?php echo $shop_manager->name;?></div>
+        <?php if(isset($shop)){?>
+        <div class="row header"><?php echo $shop->name;?></div>
         <div class="row bar">
             <div class="order-num border-margin">
                 <span>200</span><br/><span>已接单</span>

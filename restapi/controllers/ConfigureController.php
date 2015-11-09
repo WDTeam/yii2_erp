@@ -116,7 +116,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      * @apiDescription 用户端首页初始化,获得开通城市列表，广告轮播图 等初始化数据(赵顺利--假数据 )
      *
-     * @apiParam {String} city_id 城市ID
+     * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -198,8 +198,8 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-        if(!isset($param['city_id'])||!intval($param['city_id'])){
-            $param['city_id'] = "110100";
+        if(!isset($param['city_name'])||!intval($param['city_name'])){
+            $param['city_name'] = "北京市";
         }
         //判断token是否有效
         $isEffect="0";
@@ -209,7 +209,7 @@ class ConfigureController extends \restapi\components\Controller
         //获取城市列表
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
-            $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_id']);
+            $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
@@ -225,10 +225,10 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_id'] = $val['id'];
             $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
             $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
-            $serviceCategoryList[$key]['category_introduction'] = "暂无";
+            $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
             $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
-            $serviceCategoryList[$key]['colour'] = '颜色';
-            $serviceCategoryList[$key]['category_price_description'] = '价格描述';
+            $serviceCategoryList[$key]['colour'] = 'ffffff';
+            $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
             
         }
         //页首链接
