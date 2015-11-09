@@ -1652,7 +1652,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-     
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
@@ -1686,6 +1686,10 @@ class OrderController extends \restapi\components\Controller
                     'coupon_id' => $val['coupon_id']
                 ];
             }
+            
+            print_r($attributes);
+            print_r($booked_list);
+            exit;
 
             try {
                 $order = new Order();
@@ -1695,7 +1699,7 @@ class OrderController extends \restapi\components\Controller
                     if (!empty($createOrder)) {
                         return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                     } else {
-                        return $this->send(null, "添加失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                        return $this->send(null, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                     }
                 } else {
                     return $this->send(null, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
