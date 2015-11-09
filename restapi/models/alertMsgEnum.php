@@ -209,6 +209,11 @@ class alertMsgEnum
     const getCouponCountSuccess = '获取用户优惠券数量成功';
     //获取用户优惠券数量失败
     const getCouponCountFail = '获取用户优惠券数量失败';
+    //获取用户优惠券总额
+    //获取用户优惠券总额成功
+    const getCustomerCouponTotalSuccess = '获取用户优惠券总额成功';
+    //获取用户优惠券总额失败
+    const getCustomerCouponTotalFail = '获取用户优惠券总额失败';
     //单次服务排班表
     //请填写服务地址或服务时长
     const singleServiceTimeDataDefect = '请填写服务地址或服务时长';
