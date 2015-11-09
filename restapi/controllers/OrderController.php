@@ -1652,11 +1652,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-        #判断服务时长不能为空
-        if (empty($param['order_booked_count'])) {
-            return $this->send(null, "服务时长不能为空", 0, 200, NULL, alertMsgEnum::orderIsUseBalanceFaile);
-        }
-
+     
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
