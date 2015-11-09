@@ -1708,11 +1708,11 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (90%)
+     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
-     * @apiDescription 阿姨抢单提交 （郝建设 未测试）
+     * @apiDescription 阿姨抢单提交 （郝建设 ）
      *
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} [platform_version]  平台版本号
@@ -1759,7 +1759,7 @@ class OrderController extends \restapi\components\Controller
                 if ($setWorker && is_null($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, $setWorker["errors"]);
+                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
             } catch (Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
@@ -1934,10 +1934,10 @@ class OrderController extends \restapi\components\Controller
                 $ret["orderData"] = $order;
                 return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::userLoginFailed);
+                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);
             }
         } catch (Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrdersFaile);
         }
     }
 

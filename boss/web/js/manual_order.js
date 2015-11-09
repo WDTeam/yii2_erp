@@ -8,6 +8,7 @@ window.continue_work_count_down = 10;
 window.count_down_flag = true; //倒计时结束后标记false代表已经处理订单
 var refuse_worker_id = 0;
 $(document).on("click",'#start_work,#continue_work',function(){
+    alert(1);
     window.work_status = 2;
     $('#work_status').text('空闲');
     $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');

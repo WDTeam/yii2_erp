@@ -49,9 +49,9 @@ class SendSmsController extends \restapi\components\Controller
                 "access_token" => $token
             ];
 
-            return $this->send($ret, "登陆成功");
+            return $this->send($ret, "登陆成功", 1, 200,null, alertMsgEnum::sendVSuccess);
         } else {
-            return $this->send(null, "用户名或验证码错误", 0);
+            return $this->send(null, "用户名或验证码错误", 0, 403,null, alertMsgEnum::sendVFail);
         }
     }
 
@@ -86,7 +86,7 @@ class SendSmsController extends \restapi\components\Controller
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!CustomerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", 0, 200,null,alertMsgEnum::sendUserCodeFailed);
+                return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendUserCodeFailed);
             }
 //加入发送验证码失败时的不同提示
 //            $customer_code=CustomerCode::generateAndSend($phone);

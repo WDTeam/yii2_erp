@@ -89,6 +89,7 @@ function saveParams(){
    //alert("dispatcher_kpi_rest_time:"+dispatcher_kpi_rest_time);
    //alert("dispatcher_kpi_obtain_count:"+dispatcher_kpi_obtain_count);
    //alert("dispatcher_kpi_assigned_count:"+dispatcher_kpi_assigned_count);
+
    var params = {
       flag:2,
       id:id,
@@ -385,6 +386,7 @@ function startWork() {
    d=Number($('#free_time').val());
    //计算空闲时间
    freeTimedCount();
+
 }
 //空闲时间计算器
 function restTimedCount() {

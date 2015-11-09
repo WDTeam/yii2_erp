@@ -3,7 +3,7 @@
 namespace core\models\order;
 
 use dbbase\models\order\OrderExtCustomer;
-
+use dbbase\order\OrderStatus;
 use core\models\customer\Customer;
 
 use Yii;
@@ -407,6 +407,14 @@ class OrderSearch extends Order
         return OrderPool::getOrdersCountFromWorkerPushList($worker_id, $is_booked);
     }
 
+    /**
+     * @introduction 获得所有待人工指派订单（人工考核界面用）
+     * @author zhangrenzhao
+     * @return int
+     */
+    public static function getAllSystemAssign(){
+        return OrderExtCustomer::find()->where(['customer_id' => $customer_id])->count();
+    }
     /**
      * 获取客户订单数量
      * @author lin
