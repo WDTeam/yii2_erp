@@ -1708,11 +1708,11 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (90%)
+     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
-     * @apiDescription 阿姨抢单提交 （郝建设 未测试）
+     * @apiDescription 阿姨抢单提交 （郝建设 ）
      *
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} [platform_version]  平台版本号
