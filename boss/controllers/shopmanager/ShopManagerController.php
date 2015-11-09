@@ -41,7 +41,7 @@ class ShopManagerController extends BaseAuthController
     public function can($id)
     {
         $ids = \Yii::$app->user->identity->getShopManagerIds();
-        if(\Yii::$app->user->identity->isMiniBoxUser() && !in_array($id, $ids)){
+        if(\Yii::$app->user->identity->isMiniBossUser() && !in_array($id, $ids)){
             throw new BadRequestHttpException('没有访问权限', 403);
         }
     }
@@ -54,7 +54,7 @@ class ShopManagerController extends BaseAuthController
     {
         $searchModel = new ShopManagerSearch;
         $query = Yii::$app->request->getQueryParams();
-        if(\Yii::$app->user->identity->isMiniBoxUser()){
+        if(\Yii::$app->user->identity->isMiniBossUser()){
             $query['ids'] = \Yii::$app->user->identity->getShopManagerIds();
             $query['ids'] = empty($query['ids'])?[0]:$query['ids'];
         }
