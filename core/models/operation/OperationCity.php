@@ -3,7 +3,6 @@
 namespace core\models\operation;
 
 use Yii;
-use dbbase\models\operation\OperationCity as CommonOperationCity;
 
 /**
  * This is the model class for table "{{%operation_city}}".
@@ -14,7 +13,7 @@ use dbbase\models\operation\OperationCity as CommonOperationCity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCity extends CommonOperationCity
+class OperationCity extends \dbbase\models\operation\OperationCity
 {
     public static function getOnlineCityList($online = 1){
         $data = self::find()->where(['operation_city_is_online' => $online])->all();
@@ -50,6 +49,14 @@ class OperationCity extends CommonOperationCity
     /** 设置城市为开通状态**/
     public static function setoperation_city_is_online($cityid){
         return Yii::$app->db->createCommand()->update(self::tableName(), ['operation_city_is_online' => 1], ['city_id' => $cityid])->execute();
+    }
+
+    /**
+     * 设置城市为下线状态
+     */
+    public static function setOperationCityIsOffline($city_id)
+    {
+        return Yii::$app->db->createCommand()->update(self::tableName(), ['operation_city_is_online' => 2], ['city_id' => $city_id])->execute();
     }
     
     /**查询开通城市列表**/
