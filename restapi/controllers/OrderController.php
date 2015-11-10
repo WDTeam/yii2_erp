@@ -218,6 +218,8 @@ class OrderController extends \restapi\components\Controller
                 $args[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
                 $args[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
                 $args[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
+                $args[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? $v['order_booked_begin_time'] : "";
+                $args[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
             }
         }
 
