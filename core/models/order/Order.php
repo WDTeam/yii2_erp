@@ -99,6 +99,7 @@ use yii\helpers\ArrayHelper;
  * @property string $card_id
  * @property string $order_use_card_money
  * @property string $coupon_id
+ * @property string $order_coupon_code
  * @property string $order_use_coupon_money
  * @property string $promotion_id
  * @property string $order_use_promotion_money
@@ -853,6 +854,7 @@ class Order extends OrderModel
                 $coupon = self::getCouponById($this->coupon_id);
                 if(!empty($coupon)) {
                     $this->order_use_coupon_money = $coupon['coupon_price'];
+                    $this->order_coupon_code = $coupon['coupon_code'];
                     $this->order_pay_money -= $this->order_use_coupon_money;
                 }else{
                     $this->addError('coupon_id', '获取优惠券信息失败！');

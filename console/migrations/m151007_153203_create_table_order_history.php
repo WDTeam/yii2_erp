@@ -96,6 +96,7 @@ class m151007_153203_create_table_order_history extends Migration
             'card_id' => Schema::TYPE_INTEGER . '(11) unsigned  DEFAULT 0 COMMENT \'服务卡ID\'',
             'order_use_card_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用服务卡金额\'',
             'coupon_id' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'优惠券ID\'',
+            'order_coupon_code' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'优惠码\'',
             'order_use_coupon_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用优惠卷金额\'',
             'promotion_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'促销id\'',
             'order_use_promotion_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用促销金额\'',

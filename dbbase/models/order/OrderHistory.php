@@ -78,6 +78,7 @@ use dbbase\models\ActiveRecord;
  * @property string $card_id
  * @property string $order_use_card_money
  * @property string $coupon_id
+ * @property string $order_coupon_code
  * @property string $order_use_coupon_money
  * @property string $promotion_id
  * @property string $order_use_promotion_money
@@ -127,7 +128,7 @@ class OrderHistory extends ActiveRecord
             [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name','order_status_boss','order_status_customer','order_status_worker', 'order_service_type_name', 'order_service_item_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo',
-                'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
+                'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo','order_code'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
         ];
     }
@@ -209,6 +210,7 @@ class OrderHistory extends ActiveRecord
             'card_id' => '服务卡ID',
             'order_use_card_money' => '使用服务卡金额',
             'coupon_id' => '优惠券ID',
+            'order_coupon_code' => '优惠码',
             'order_use_coupon_money' => '使用优惠卷金额',
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',
