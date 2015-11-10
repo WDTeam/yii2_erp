@@ -307,52 +307,42 @@ echo DetailView::widget([
 ]); 
 
 //listCustomerCoupon($phone);
-$couponCustomerProvider = new ActiveDataProvider([
-	'query' => \core\models\operation\coupon\CouponCustomer::find()->where(['customer_id'=>$model->id])
-]);
-if((int)($couponCustomerProvider->query->count()) > 0){
-	echo GridView::widget([
-		'dataProvider' => $couponCustomerProvider,
-		// 'responsive' => false,
-		// 'hover' => false,
-		// 'condensed' => false,
-		// 'floatHeader' => false,
-		// 'panel' => [
-		//     'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i>历史状态信息</h3>',
-		//     'type' => 'info',
-		//     'before' =>'',
-		//     'after' =>'',
-		//     'showFooter' => false
-		// ],
-		'columns'=>[
-		    [
-		        'format' => 'raw',
-		        'label' => '类别',
-		        'value' => function($couponCustomerProvider){
-					$coupon = Coupon::find($couponCustomerProvider->coupon_id);
-					return $coupon->coupon_type_name;
-				},
-		        'width' => "80px",
-		    ],
-		    [
-		        'format' => 'raw',
-		        'label' => '金额',
-		        'value' => function($couponCustomerProvider){
-					return $couponCustomerProvider->coupon_price;
-				},
-		        'width' => "80px",
-		    ],
-		    [
-		        'format' => 'raw',
-		        'label' => '到期日',
-		        'value' => function($couponCustomerProvider){
-					return date('Y-m-d H:i:s', $couponCustomerProvider->expirate_at);
-				},
-		        'width' => "80px",
-		    ],
-		],
-	]);
-}
+//$couponCustomerProvider = new ActiveDataProvider([
+//	'query' => \core\models\operation\coupon\CouponCustomer::find()->where(['customer_id'=>$model->id])
+//]);
+//if((int)($couponCustomerProvider->query->count()) > 0){
+//	echo GridView::widget([
+//		'dataProvider' => $couponCustomerProvider,
+//
+//		'columns'=>[
+//		    [
+//		        'format' => 'raw',
+//		        'label' => '类别',
+//		        'value' => function($couponCustomerProvider){
+//					$coupon = Coupon::find($couponCustomerProvider->coupon_id);
+//					return $coupon->coupon_type_name;
+//				},
+//		        'width' => "80px",
+//		    ],
+//		    [
+//		        'format' => 'raw',
+//		        'label' => '金额',
+//		        'value' => function($couponCustomerProvider){
+//					return $couponCustomerProvider->coupon_price;
+//				},
+//		        'width' => "80px",
+//		    ],
+//		    [
+//		        'format' => 'raw',
+//		        'label' => '到期日',
+//		        'value' => function($couponCustomerProvider){
+//					return date('Y-m-d H:i:s', $couponCustomerProvider->expirate_at);
+//				},
+//		        'width' => "80px",
+//		    ],
+//		],
+//	]);
+//}
 
 $customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find()->where(['customer_id'=>$model->id])->orderBy('created_at desc')]);
 if((int)($customerBlockLogProvider->query->count()) > 0){
