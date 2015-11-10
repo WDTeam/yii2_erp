@@ -32,14 +32,5 @@ class OperationServiceCardConsumeRecord extends \yii\db\ActiveRecord
     {
         return '{{%operation_service_card_consume_record}}';
     }
-    /**
-     * 保存服务卡消费记录
-     * @return bool
-     */
-    public function doSave(){
-        if ($this->save()) {
-            return true;
-         }
-        return false;
-    }
+
 }
