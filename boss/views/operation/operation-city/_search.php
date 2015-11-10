@@ -17,19 +17,24 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <div class="row">
+        <div class="col-sm-2">
+            <?= $form->field($model, 'province_name') ?>
+        </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'city_name') ?>
+        </div>
 
-    <?= $form->field($model, 'operation_city_name') ?>
-
-    <?= $form->field($model, 'operation_city_is_online') ?>
-
-    <?= $form->field($model, 'created_at') ?>
-
-    <?= $form->field($model, 'updated_at') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <div class="form-group">
+            <?= Html::submitButton(Yii::t('app', 'Search'), [
+                'class' => 'btn btn-primary',
+                'style' => 'margin-top:17px',
+            ]) ?>
+            <?= Html::resetButton(Yii::t('app', 'Reset'), [
+                'class' => 'btn btn-default',
+                'style' => 'margin-top:17px',
+            ]) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

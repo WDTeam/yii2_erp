@@ -124,12 +124,16 @@ class FinanceCompensateController extends Controller
         $id = null;
         if(Yii::$app->request->post() != null){
             $postParams = Yii::$app->request->post();
-            $id = $postParams['id'];
+            if(isset($postParams['id'])){
+                $id = $postParams['id'];
+            }
         }
         $getParams = null;
         if(Yii::$app->request->get() != null){
             $getParams = Yii::$app->request->get();
-            $id = $getParams['id'];
+            if(isset($getParams['id'])){
+                $id = $getParams['id'];
+            }
         }
         $isNewRecord = true;
         if(!empty($id)){

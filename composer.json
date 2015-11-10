@@ -75,7 +75,8 @@
         "vendor/ejiajie/pay/bfb_app/bfbpay_class.php",
         "vendor/ejiajie/pay/upacp_app/uppay_class.php",
         "vendor/ejiajie/pay/zhidahao_h5/zhidahao_class.php",
-        "vendor/ejiajie/pay/alipay_wap/alipay_wap_class.php"
+        "vendor/ejiajie/pay/alipay_wap/alipay_wap_class.php",
+        "vendor/ejiajie/pay/alipay_app/alipay_app_class.php"
       ]
     }
 }

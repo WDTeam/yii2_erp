@@ -15,37 +15,33 @@
  * 如果没有收到该页面返回的 success 信息，支付宝会在24小时内按一定的时间策略重发通知
  */
 require_once("lib/alipay_notify.class.php");
-class alipay_web_class{
+class alipay_app_class{
     public function __construct(){}
 
     public function get($param){
         require_once("alipay.config.php");
-
         //构造要请求的参数数组，无需改动
         $parameter = array(
-            "service" => "create_direct_pay_by_user",
-            "partner" => trim($alipay_config['partner']),
-            "seller_email" => trim($alipay_config['seller_email']),
-            "payment_type"	=> 1,
-            "notify_url"	=> $param['notify_url'],
-            "return_url"	=> $param['return_url'],
-            "out_trade_no"	=> $param['out_trade_no'],
-            "subject"	=> $param['subject'],
-            "total_fee"	=> $param['total_fee'],
-            "body"	=> $param['body'],
-            "show_url"	=> $param['show_url'],
-            "anti_phishing_key"	=> time(),
-            "exter_invoke_ip"	=> $_SERVER['REMOTE_ADDR'],
-            "_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
+            "partner"			  => trim($alipay_config['partner']),
+            "out_trade_no"		  => $param['out_trade_no'],
+            "subject"		      => $param['subject'],
+            "seller_id"           => $alipay_config['seller_email'],
+            "body"                => $param['body'],
+            "total_fee"			  => $param['payment_money'],
+            "notify_url"		  => $param['notify_url'],
+            "service"             => "mobile.securitypay.pay",
+            "payment_type"        => "1",
+            "_input_charset"      => $alipay_config['input_charset'],
+            "show_url"      => $alipay_config['show_url'],
+            "it_b_pay"      => $alipay_config['it_b_pay']
         );
-
         return $parameter;
 
     }
 
     public function callback(){
         require_once("alipay.config.php");
-        $alipayNotify = new AlipayNotifyWeb($alipay_config);
+        $alipayNotify = new AlipayNotify($alipay_config);
         $verify_result = $alipayNotify->verifyNotify();
         if($verify_result){
             if($_POST['trade_status'] == 'TRADE_FINISHED' || $_POST['trade_status'] == 'TRADE_SUCCESS'){
