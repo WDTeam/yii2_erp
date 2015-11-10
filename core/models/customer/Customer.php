@@ -352,7 +352,8 @@ class Customer extends \dbbase\models\customer\Customer
 
 		$customer_ext_score = CustomerExtScore::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer_ext_score)) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+//            return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+			return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>0];
 		}
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
 	}
@@ -370,7 +371,8 @@ class Customer extends \dbbase\models\customer\Customer
 
 		$customer_ext_score = CustomerExtScore::find()->where(['customer_id'=>$customer_id])->asArray()->one();
 		if(empty($customer_ext_score)) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+//			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+            return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>0];
 		}
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
 	}
