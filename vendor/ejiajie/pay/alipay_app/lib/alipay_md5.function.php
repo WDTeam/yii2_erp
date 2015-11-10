@@ -15,7 +15,7 @@
  * @param $key 私钥
  * return 签名结果
  */
-function md5Sign($prestr, $key) {
+function app_md5Sign($prestr, $key) {
 	$prestr = $prestr . $key;
 	return md5($prestr);
 }
@@ -27,7 +27,7 @@ function md5Sign($prestr, $key) {
  * @param $key 私钥
  * return 签名结果
  */
-function md5Verify($prestr, $sign, $key) {
+function app_md5Verify($prestr, $sign, $key) {
 	$prestr = $prestr . $key;
 	$mysgin = md5($prestr);
 
