@@ -203,7 +203,7 @@ class ConfigureController extends \restapi\components\Controller
         }
         //判断来源版
         $platform_name = "ios";
-        $platform_version_name = "4.4";
+        $platform_version_name = "4.0";
         if(isset($param['app_version'])&&$param['app_version']){
             $platform = explode("_",$param['app_version']);
             $platform_name = $platform[0];
@@ -223,7 +223,6 @@ class ConfigureController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
-        print_R($bannerList);
         //整理开通的城市
         $onlineCityList = array();
         foreach($onlineCitys as $key=>$val){
@@ -240,7 +239,18 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
             $serviceCategoryList[$key]['colour'] = 'ffffff';
             $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
-            
+        }
+        
+        //整理焦点图
+                print_R($bannerList);die;
+
+        $pic_list = array();
+        if(!isset($bannerList['code'])||!empty($bannerList)){
+            foreach($bannerList as $key=>$val){
+                $pic_list["img_path"] = "http://webapi2.1jiajie.com/app/images/ios_banner_1.png";
+                $pic_list["link"] = "http://wap.1jiajie.com/trainAuntie1.html";
+                $pic_list["url_title"] = "标准服务";
+            }
         }
         //页首链接
         $header_link = [
