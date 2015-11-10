@@ -715,7 +715,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 6,  //支付渠道ID
+            'pay_channel_id' => 7,  //支付渠道ID
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
