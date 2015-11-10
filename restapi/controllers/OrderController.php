@@ -208,21 +208,19 @@ class OrderController extends \restapi\components\Controller
                 $array[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
                 $array[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
                 $array[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
-                $array[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? $v['order_booked_begin_time'] : "";
-                $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
+                $array[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? strtotime($v['order_booked_begin_time']) : "";
+                $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? strtotime($v['order_booked_end_time']) : "";
             }
         }
 
-        print_r($array);
-        exit;
         $order = new Order();
         $is_success = array();
         foreach ($array as $keyk => $valv) {
             $is_success[] = $order->createNew($valv);
         }
-//       $array =  array_merge($is_success,$order->errors);
+        
+        
         print_r($is_success);
-
         print_r($order->errors);
         exit;
         $is_success = $order->createNew($attributes);
