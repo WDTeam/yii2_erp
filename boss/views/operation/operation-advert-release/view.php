@@ -14,16 +14,14 @@ $this->title = '已发布广告管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-advert-release-index">
-    <div class="page-header">
-            <!--h1><?= Html::encode($this->title) ?></h1-->
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 已发布广告搜索</h3>
+        </div>
+        <div class="panel-body">
+            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+        </div>
     </div>
-    <div class="row">
-        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
-    </div>
-
-    <p>
-        <?php /* echo Html::a('Create Operation Advert Release', ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
