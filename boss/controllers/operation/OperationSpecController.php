@@ -3,6 +3,8 @@
 namespace boss\controllers\operation;
 
 use boss\models\operation\OperationSpec;
+use boss\models\operation\OperationGoods;
+use boss\models\operation\OperationSpecSearch;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -34,11 +36,12 @@ class OperationSpecController extends Controller
     public function actionIndex()
     {
         $OperationSpecModel = new OperationSpec();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationSpec::find(),
-        ]);
+        $searchModel = new OperationSpecSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
             'OperationSpecModel' => $OperationSpecModel,
         ]);
     }
@@ -105,11 +108,15 @@ class OperationSpecController extends Controller
     {
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
-        if ($model->load($post)){
+        if ($model->load($post)) {
             $operation_spec_values = serialize(array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationSpec']['operation_spec_values'])))));
             $model->operation_spec_values = $operation_spec_values;
             $model->updated_at = time();
-            if($model->save()){
+            if ($model->save()) {
+
+                //关联修改服务项目表冗余的计量单位
+                OperationGoods::updateGoodsSpec($id, $post['OperationSpec']['operation_spec_strategy_unit']);
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

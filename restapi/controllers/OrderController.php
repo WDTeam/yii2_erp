@@ -12,6 +12,7 @@ use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\order\OrderStatus;
+use \core\models\finance\FinanceOrderChannel;
 use \core\models\order\OrderStatusHistory;
 use restapi\models\alertMsgEnum;
 use yii\web\Response;
@@ -98,8 +99,7 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionCreateOrder()
     {
-        $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = Yii::$app->request->post() or $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -107,7 +107,6 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
-
         if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
@@ -117,25 +116,28 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
+        
+        /**
+          if (empty($args['order_booked_begin_time'])) {
+          return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
+          }
+          $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
-        if (empty($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
-        }
-        $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
-
-        if (empty($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
-        }
-        $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
-
+          if (empty($args['order_booked_end_time'])) {
+          return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
+          }
+          $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
+         */
+        
+        
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        if (empty($args['order_booked_count'])) {
-            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
-        }
+//        if (empty($args['order_booked_count'])) {
+//            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+//        }
         $attributes['order_pay_type'] = $args['order_pay_type'];
-        $attributes['order_booked_count'] = $args['order_booked_count'];
+      #  $attributes['order_booked_count'] = $args['order_booked_count'];
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -152,35 +154,28 @@ class OrderController extends \restapi\components\Controller
         } else {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-
         if (isset($args['order_pop_order_code'])) {
             $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
         }
-
         if (isset($args['order_pop_order_money'])) {
             $attributes['order_pop_order_money'] = $args['order_pop_order_money'];
         }
-
         if (isset($args['order_pop_group_buy_code'])) {
             $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
         }
-
-        if (isset($args['coupon_id'])) {
-            $attributes['coupon_id'] = $args['coupon_id'];
-        }
-
+//        if (isset($args['coupon_id'])) {
+//            $attributes['coupon_id'] = $args['coupon_id'];
+//        }
+        
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
         }
-
         if (isset($args['order_booked_worker_id'])) {
             $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
         }
-
         if (isset($args['order_customer_need'])) {
             $attributes['order_customer_need'] = $args['order_customer_need'];
         }
-
         if (isset($args['order_customer_memo'])) {
             $attributes['order_customer_memo'] = $args['order_customer_memo'];
         }
@@ -188,12 +183,67 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_is_use_balance'])) {
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
-
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
+
+//        $args['times'] = array(
+//            "0" => Array(
+//                'order_booked_begin_time' => 1447124669,
+//                'order_booked_count' => 1,
+//                'coupon_id' => 1,
+//                "order_booked_end_time" => 1448124669
+//            ),
+//            "1" => Array(
+//                'order_booked_begin_time' => 1447224669,
+//                'order_booked_count' => 11,
+//                'coupon_id' => 2,
+//                "order_booked_end_time" => 1448224669
+//            )
+//        );
+        if (empty($args['times'])) {
+            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
+        }
+
+        #拼凑数组
+        if ($args['times']) {
+            $array = array();
+            foreach ($args['times'] as $k => $v) {
+                $array[$k]['admin_id'] = isset($attributes['admin_id']) ? $attributes['admin_id'] : "";
+                $array[$k]['order_ip'] = isset($attributes['order_ip']) ? $attributes['order_ip'] : "";
+                $array[$k]['order_is_use_balance'] = isset($attributes['order_is_use_balance']) ? $attributes['order_is_use_balance'] : "";
+                $array[$k]['order_customer_need'] = isset($attributes['order_customer_need']) ? $attributes['order_customer_need'] : "";
+                $array[$k]['order_booked_worker_id'] = isset($attributes['order_booked_worker_id']) ? $attributes['order_booked_worker_id'] : "";
+                $array[$k]['coupon_id'] = isset($v['coupon_id']) ? $v['coupon_id'] : "";
+                $array[$k]['order_customer_memo'] = isset($attributes['order_customer_memo']) ? $attributes['order_customer_memo'] : "";
+                $array[$k]['order_pop_order_money'] = isset($attributes['order_pop_order_money']) ? $attributes['order_pop_order_money'] : "";
+                $array[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
+                $array[$k]['channel_id'] = isset($attributes['channel_id']) ? $attributes['channel_id'] : "";
+                $array[$k]['address_id'] = isset($attributes['address_id']) ? $attributes['address_id'] : "";
+                $array[$k]['order_booked_count'] = isset($v['order_booked_count']) ? $v['order_booked_count'] : "";
+                $array[$k]['order_pop_order_code'] = isset($attributes['order_pop_order_code']) ? $attributes['order_pop_order_code'] : "";
+                $array[$k]['order_pay_type'] = isset($attributes['order_pay_type']) ? $attributes['order_pay_type'] : "";
+                $array[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
+                $array[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
+                $array[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
+                $array[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? $v['order_booked_begin_time'] : "";
+                $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
+            }
+        }
+        
+       print_r($array);
+
         $order = new Order();
+        $is_success = array();
+        $errors = array();
+
+        foreach ($array as $keyk => $valv) {
+            $is_success[] = $order->createNew($valv);
+        }
+//       $array =  array_merge($is_success,$order->errors);
+        print_r($order->errors);
+        exit;
         $is_success = $order->createNew($attributes);
-        $order->errors;
+
         if ($is_success) {
             return $this->send($order, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
@@ -1306,9 +1356,9 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionHidenOrder
      * @apiGroup Order
      *
-     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} access_token  用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {int} order_id 订单号
+     * @apiParam {int}  order_id 订单号
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      *
      * @apiSuccessExample Success-Response:
@@ -1408,7 +1458,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数 (郝建设)
-     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} access_token      阿姨认证
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
      * @apiParam {String} [page]              页面  #leveltype =2 时要传递
@@ -1689,12 +1739,12 @@ class OrderController extends \restapi\components\Controller
             try {
                 $order = new Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
-                
+
                 if ($createOrder['status'] == 1) {
                     return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                 } else {
                     $err = array();
-                    foreach($createOrder['errors'] as $key=>$val){
+                    foreach ($createOrder['errors'] as $key => $val) {
                         $err[$key] = $val[0];
                     }
                     return $this->send($err, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
@@ -1708,15 +1758,15 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (90%)
+     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
-     * @apiDescription 阿姨抢单提交 （郝建设 未测试）
+     * @apiDescription 阿姨抢单提交 （郝建设 ）
      *
-     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} access_token        阿姨认证
      * @apiParam {String} [platform_version]  平台版本号
-     * @apiParam {int}    order_id          订单号
+     * @apiParam {int}    order_id            订单号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1759,7 +1809,7 @@ class OrderController extends \restapi\components\Controller
                 if ($setWorker && is_null($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, $setWorker["errors"]);
+                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
             } catch (Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
@@ -1934,10 +1984,10 @@ class OrderController extends \restapi\components\Controller
                 $ret["orderData"] = $order;
                 return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::userLoginFailed);
+                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);
             }
         } catch (Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrdersFaile);
         }
     }
 
@@ -1952,6 +2002,102 @@ class OrderController extends \restapi\components\Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         return OrderPush::push($id);
+    }
+
+    /**
+     * @api {POST} /order/delete-worker-order [POST]/order/delete-worker-order(100%）
+     * 该功能暂时没有开发,没有得到核实！
+     * [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表
+     * 
+     * @apiDescription 阿姨删除订单 （郝建设）
+     * @apiName actionDeleteWorkerOrder
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token     阿姨认证
+     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} order_id/order_code 周期订单号
+     * 
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *    {
+     *     "code": 1,
+     *     "msg": "删除成功",
+     *     "ret": {}
+     *     "alertMsg": "删除成功"
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": 401,
+     *       "msg": "认证已经过期,请重新登录，"
+     *       "ret":{},
+     *       "alertMsg": "操作成功"
+     *     }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 delete Not Found
+     *     {
+     *       "code": 0,
+     *       "msg": "删除失败",
+     *       "ret": {},
+     *      "alertMeg": "删除失败"
+     *      }
+     */
+    public function actionDeleteWorkerOrder()
+    {
+        $param = Yii::$app->request->post();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+    }
+
+    /**
+     * @api {GET} /order/get-order-channel-list [GET] /order/get-order-channel-list (100%)
+     * @apiName actionGetOrderChannelList（郝建设）
+     * @apiGroup order
+     * @apiDescription 获得订单渠道配置信息
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "1",
+     *      "msg": "数据获取成功",
+     *      "ret":
+     *      [
+     *          {
+     *              "order_channel_id": "8",           订单渠道id
+     *              "order_channel_name": "美团上门",  订单渠道名称
+     *          },
+     *          {
+     *              "order_channel_id": "9",           订单渠道id
+     *              "order_channel_name": "点评到家",  订单渠道名称
+     *          },
+     *       ],
+     *  }
+     *
+     */
+    public function actionGetOrderChannelList()
+    {
+        $orderChannels = FinanceOrderChannel::get_order_channel_list();
+        $gDate = [];
+        if (!empty($orderChannels)) {
+            foreach ($orderChannels as $gItem) {
+                $gobject = [
+                    'order_channel_id' => $gItem['id'],
+                    'order_channel_name' => $gItem['finance_order_channel_name'],
+                ];
+                $gDate[] = $gobject;
+            }
+        }
+
+        return $this->send($gDate, "数据获取成功", 1, 200, null, alertMsgEnum::getGoodsesSuccess);
     }
 
 }

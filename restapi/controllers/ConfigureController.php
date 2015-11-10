@@ -203,7 +203,7 @@ class ConfigureController extends \restapi\components\Controller
         }
         //判断token是否有效
         $isEffect="0";
-        if(isset($param['access_token'])&&!$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
+        if(isset($param['access_token'])&&$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
             $isEffect="1";
         }
         //获取城市列表

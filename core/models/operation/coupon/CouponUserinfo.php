@@ -57,7 +57,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$coupon=substr($code,0,3);
 		//查看渠道下面的领取开始时间是不是可以领取
 		$Couponruledate = CouponRule::find()->where(['couponrule_Prefix'=>$coupon])->asArray()->one();
-		if($Couponruledate['id']<>''){
+		if($Couponruledate['id']==''){
 			$array=[
 			'is_status'=>4013,
 			'msg'=>'优惠券不存在',
@@ -119,7 +119,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj->coupon_userinfo_price =$Couponruledate['couponrule_price'];//优惠券价值
 		$couponCustomerobj->coupon_userinfo_gettime = time();
 		$couponCustomerobj->coupon_userinfo_usetime = 0;//使用
-		$couponCustomerobj->coupon_userinfo_endtime =$Couponruledate['coupon_userinfo_endtime'];//
+		$couponCustomerobj->couponrule_use_end_time =$Couponruledate['couponrule_use_end_time'];//
 		$couponCustomerobj->order_code ='0';
 		$couponCustomerobj->system_user_id = $customer->id;
 		$couponCustomerobj->system_user_name = '用户自对';
@@ -182,7 +182,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	public static function GetCustomerCouponList($customer_id,$city_id,$service_type_id){
 		$now_time=time();
 		$couponCustomer = self::find()
-		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time,couponrule_type,couponrule_service_type_id,couponrule_commodity_id'])
+		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
 		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$service_type_id"], 'couponrule_type=0']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
@@ -368,9 +368,9 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if($couponCustomer){
 			//查询存在  
-			return false;
-		}else{
 			return true;
+		}else{
+			return false;
 		}
 	}
 	

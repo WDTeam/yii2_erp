@@ -414,7 +414,14 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     }
     
     public static function getCityShopDistrictGoodsListArray($city_id = ''){
-        return self::find()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id')->asArray()->all();
+        return self::find()
+            ->where([
+                'operation_city_id' => $city_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
+            ])
+            ->groupBy('operation_goods_id')
+            ->asArray()
+            ->all();
     }
 
     /*
@@ -472,7 +479,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ]);
 
-            $query->andFilterWhere(['like', 'operation_category_name', $city_name]);
+            $query->andFilterWhere(['like', 'osdg.operation_city_name', $city_name]);
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);
@@ -482,12 +489,28 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
     }
     
-    public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id){
+    public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id)
+    {
         $data = self::find()
             ->asArray()
             ->where([
                 'operation_city_id' => $city_id,
                 'operation_goods_id' => $goods_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
+            ])
+            ->all();
+        return count($data);
+    }
+
+    /**
+     * 判断城市下是否有上线的服务项目
+     */
+    public static function getCityGoodsOnlineNum($city_id)
+    {
+        $data = self::find()
+            ->asArray()
+            ->where([
+                'operation_city_id' => $city_id,
                 'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
             ])
             ->all();
@@ -611,7 +634,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             ->select(['id'])
             ->where([
                 'operation_shop_district_id' => $district_id,
-                'operation_shop_district_id' => $district_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ])
             ->asarray()
             ->one();
@@ -669,5 +692,31 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         } else {
             return false;
         }
+    }
+
+    /**
+     * 更新冗余的服务项目名称
+     *
+     * @param inter   $operation_goods_id                  服务项目编号
+     * @param string  $operation_shop_district_goods_name  服务项目名称
+     */
+    public static function updateGoodsName($operation_goods_id, $operation_shop_district_goods_name)
+    {
+        self::updateAll(['operation_shop_district_goods_name' => $operation_shop_district_goods_name], 'operation_goods_id= ' . $operation_goods_id);
+    }
+
+    /**
+     * 在城市下线下点击下线时修改服务项目状态
+     *
+     * @param inter   $operation_goods_id                   服务项目编号
+     * @param inter   $operation_city_id                    点击的城市编号
+     * @param inter   $operation_shop_district_goods_status 要修改的状态
+     */
+    public static function updateShopDistrictGoodsStatus($operation_goods_id, $operation_city_id, $operation_shop_district_goods_status)
+    {
+        self::updateAll(
+            ['operation_shop_district_goods_status' => $operation_shop_district_goods_status],
+            ['operation_goods_id' => $operation_goods_id, 'operation_city_id' => $operation_city_id]
+        );
     }
 }

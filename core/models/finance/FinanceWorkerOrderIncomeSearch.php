@@ -42,9 +42,10 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function rules()
     {
         return [
-            [['id', 'worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
-            [['order_service_type_name', 'order_channel_name', 'order_pay_type_des'], 'safe'],
-            [['order_unit_money', 'order_money', 'finance_worker_order_income_discount_amount', 'order_pay_money', 'finance_worker_order_income_money'], 'number'],
+//            [['worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id'], 'required'],
+//            [['worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
+//            [['order_unit_money', 'order_money', 'finance_worker_order_income_discount_amount', 'order_pay_money', 'finance_worker_order_income_money'], 'number'],
+//            [['order_service_type_name', 'order_channel_name', 'order_pay_type_des'], 'string', 'max' => 64]
         ];
     }
 
@@ -96,12 +97,16 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $dataProvider;
     }
     
-    public function getOrderDataProviderFromOrder($worker_id){
+    public function getOrderDataProviderFromOrder($worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])->all();
-        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $orders = $this->getCanSettledOrders($worker_id);
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
+    }
+    
+    private function getCanSettledOrders($worker_id){
+        return Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])->all();
     }
     
     /**
@@ -129,18 +134,17 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     }
     
     
-    public function getCashOrderDataProviderFromOrder($worker_id){
+    public function getCashOrderDataProviderFromOrder($worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
         $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>OrderExtPay::ORDER_PAY_TYPE_OFF_LINE])->all();
-        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
     
-    public function getWorkerOrderIncomeArrayByWorkerId($worker_id){
-        $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
-        return $this->getWorkerOrderIncomeArrayFromOrders($orders);
+    public function getWorkerOrderIncomeArrayByWorkerId($worker_id,$settleStartTime,$settleEndTime){
+        $orders = $this->getCanSettledOrders($worker_id);
+        return $this->getWorkerOrderIncomeArrayFromOrders($orders,$settleStartTime,$settleEndTime);
     }
     
     public static function getOrderCountByWorkerId($worker_id,$start_time,$end_time){
@@ -157,17 +161,17 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
      * @param type $orders
      * @return type
      */
-    public function getWorkerOrderIncomeArrayFromOrders($orders){
+    public function getWorkerOrderIncomeArrayFromOrders($orders,$settleStartTime,$settleEndTime){
         $data = [];
         $i = 0;
         foreach($orders as $order){
-            $data[$i] = $this->transferOrderToFinanceWorkerOrderIncome($order);
+            $data[$i] = $this->transferOrderToFinanceWorkerOrderIncome($order,$settleStartTime,$settleEndTime);
             $i++;
         }
         return $data;
     }
     
-    private function transferOrderToFinanceWorkerOrderIncome($order){
+    private function transferOrderToFinanceWorkerOrderIncome($order,$settleStartTime,$settleEndTime){
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch();
         $financeWorkerOrderIncomeSearch->worker_id = $order->orderExtWorker->worker_id;
         $financeWorkerOrderIncomeSearch->order_id = $order->id;
@@ -185,14 +189,8 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         $financeWorkerOrderIncomeSearch->finance_worker_order_income_discount_amount = $order->order_use_coupon_money;
         $financeWorkerOrderIncomeSearch->order_pay_money = $order->order_money;
         $financeWorkerOrderIncomeSearch->finance_worker_order_income_money = $order->order_money;
-        $worker = Worker::getWorkerInfo($financeWorkerOrderIncomeSearch->worker_id);
-        if(($worker['worker_type'] ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker['worker_identity_id'] == FinanceSettleApplySearch::FULLTIME)){
-            $financeWorkerOrderIncomeSearch->finance_worker_order_income_starttime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//结算开始日期
-            $financeWorkerOrderIncomeSearch->finance_worker_order_income_starttime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//结算截止日期
-        }else{
-            $financeWorkerOrderIncomeSearch->finance_worker_order_income_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
-            $financeWorkerOrderIncomeSearch->finance_worker_order_income_starttime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
-        }
+        $financeWorkerOrderIncomeSearch->finance_worker_order_income_starttime = $settleStartTime;//结算开始日期
+        $financeWorkerOrderIncomeSearch->finance_worker_order_income_starttime = $settleEndTime;//结算截止日期
         $financeWorkerOrderIncomeSearch->created_at = time();//申请创建时间
         return $financeWorkerOrderIncomeSearch;
     }

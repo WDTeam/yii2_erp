@@ -9,16 +9,11 @@ use kartik\datecontrol\DateControl;
  * @var dbbase\models\operation\coupon\CouponUserinfo $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Coupon Userinfos'), 'url' => ['index']];
+$this->title = $model->coupon_userinfo_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '优惠券用户'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coupon-userinfo-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -38,7 +33,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'coupon_userinfo_price',
             'coupon_userinfo_gettime:datetime',
             'coupon_userinfo_usetime:datetime',
-            'coupon_userinfo_endtime:datetime',
+            'couponrule_use_end_time:datetime',
+    		'couponrule_classify',
+    		'couponrule_category',
+    		'couponrule_type',
+    		'couponrule_service_type_id',
+    		'couponrule_commodity_id',
+    		'couponrule_city_limit',
+    		'couponrule_city_id',
+    		'couponrule_customer_type',
+    		'couponrule_use_end_days',
+    		'couponrule_promote_type',
+    		'couponrule_order_min_price',
+    		'couponrule_price',
+    		'is_disabled',
             'order_code',
             'system_user_id',
             'system_user_name',
