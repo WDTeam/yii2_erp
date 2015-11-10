@@ -331,14 +331,17 @@ class ConfigureController extends \restapi\components\Controller
      *      "msg": "获取数据成功",
      *      "alertMsg": "获取服务类型详情成功",
      *       "ret": [
-     *           {
-     *               "good_id": "商品ID",
-     *               "goods_name": "商品名称",
-     *               "colour": "颜色",
-     *               "icon": "商品图标",
-     *               "goods_price":"商品价格",
-     *               "goods_price_description":"商品价格描述"
-     *           }
+     *             "colour": "dfffrf",
+     *             "category_ico": "",
+     *             "item_list": [
+     *                 {
+     *                     "category_id": "分类ID",
+     *                     "good_id": "商品ID",
+     *                     "goods_name": "商品名称",
+     *                     "icon": "商品图标",
+     *                     "goods_price": "商品价格",
+     *                     "goods_price_description": "商品价格描述"
+     *                 }
      *       ]
      * }
      *
@@ -368,15 +371,20 @@ class ConfigureController extends \restapi\components\Controller
         $itemlist = array();
         if($itemInfo){
             foreach($itemInfo as $key=>$val){
+                $itemlist[$key]['category_id'] = $val['operation_category_id'];
                 $itemlist[$key]['good_id'] = $val['goods_id'];
                 $itemlist[$key]['goods_name'] = $val['operation_goods_name'];
-                $itemlist[$key]['colour'] = "dfffrf";
-                $itemlist[$key]['icon'] = $val['operation_goods_pc_ico'];
+                $itemlist[$key]['icon'] = '';//$val['operation_goods_pc_ico'];
                 $itemlist[$key]['goods_price'] = $val['operation_goods_price'];
                 $itemlist[$key]['goods_price_description'] = $val['operation_goods_price_description'];
             }
         }
-        return $this->send($itemlist, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
+        $ret = [
+            'colour'=>'dfffrf',
+            'category_ico'=>"",
+            'item_list' =>$itemlist
+        ];
+        return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
     }
     
     
