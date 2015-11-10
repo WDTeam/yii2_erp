@@ -245,12 +245,11 @@ class ConfigureController extends \restapi\components\Controller
         $pic_list = array();
         if(!isset($bannerList['code'])&&!empty($bannerList)){
             foreach($bannerList as $key=>$val){
-                $pic_list["img_path"] = $val['operation_advert_picture_text'];
-                $pic_list["link"] = $val['operation_advert_url'];
-                $pic_list["url_title"] = $val['operation_advert_content_name'];
+                $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+                $pic_list[$key]["link"] = $val['operation_advert_url'];
+                $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
             }
         }
-        print_R($pic_list);die;
         //页首链接
         $header_link = [
             'comment_link' => [
