@@ -7,6 +7,7 @@ use core\models\customer\CustomerComment;
 
 use Yii;
 use yii\console\Controller;
+use core\components\ConsoleHelper;
 
 
 class OrderController extends Controller{
@@ -16,7 +17,7 @@ class OrderController extends Controller{
     }
     /**
      * 处理服务开始
-     * @param unknown $order
+     * @param Order $order
      * @author CoLee
      */
     private function serviceStart($order)
@@ -25,12 +26,12 @@ class OrderController extends Controller{
             if($order['order_booked_begin_time']<=time())
             {
                 $res = Order::serviceStart($order['id']);
-                echo 'Order ID:'.$order['id'].' start success!'.PHP_EOL;
+                ConsoleHelper::log('订单（ID：%s）开始', [$order['id']]);
             }else{
-                echo 'Order ID:'.$order['id'].' time:'.date('Y-m-d H:i:s', $order['order_booked_begin_time']).' waiting!'.PHP_EOL;
+                ConsoleHelper::log('订单（ID：%s）等待中……，将在%s启动', [$order['id'], date('Y-m-d H:i:s', $order['order_booked_begin_time'])]);
             }
         }catch(\Exception $e){
-            echo 'Order ID:'.$order['id'].' start error!'.PHP_EOL;
+            ConsoleHelper::log('订单（ID：%s）处理时失败了', [$order['id']]);
         }
     }
     /**
@@ -44,12 +45,12 @@ class OrderController extends Controller{
             if($order['order_booked_end_time']>=time())
             {
                 $res = Order::serviceDone($order['id']);
-                echo 'Order ID:'.$order['id'].' Service done!'.PHP_EOL;
+                ConsoleHelper::log('订单（ID：%s）结束', [$order['id']]);
             }else{
-                echo 'Order ID:'.$order['id'].' time:'.date('Y-m-d H:i:s', $order['order_booked_end_time']).' Service!'.PHP_EOL;
+                ConsoleHelper::log('订单（ID：%s）进行中……，将在%s结束', [$order['id'], date('Y-m-d H:i:s', $order['order_booked_end_time'])]);
             }
         }catch(\Exception $e){
-            echo 'Order ID:'.$order['id'].' done error!'.PHP_EOL;
+            ConsoleHelper::log('订单（ID：%s）处理时失败了', [$order['id']]);
         }
     }
     /**
@@ -73,7 +74,7 @@ class OrderController extends Controller{
                 'customer_comment_phone'=>$order['order_customer_phone'],
             ]);
         }catch(\Exception $e){
-            echo 'Order ID:'.$order['id'].' suggest error!'.PHP_EOL;
+            ConsoleHelper::log('订单（ID：%s）自动评价失败了', [$order['id']]);
         }
     }
     /**
@@ -85,7 +86,7 @@ class OrderController extends Controller{
     public function actionChangeServiceStatus()
     {
         $waiting_list = OrderSearch::getWaitServiceOrderList();
-        echo 'Waiting Total:'.count($waiting_list).PHP_EOL;
+        ConsoleHelper::log('等待开始的订单总数（%s）', [count($waiting_list)]);
         foreach ($waiting_list as $order){
             $this->serviceStart($order);
         }

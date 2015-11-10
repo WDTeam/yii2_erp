@@ -87,7 +87,7 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
         //写入数据库日志
         try{
             $mongo = \Yii::$app->mongodb;
-            $collection = $mongo->getCollection('payment_log');
+            $collection = $mongo->getCollection('trans_record_log');
             $data = $param->data;
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['create_time'] = time();

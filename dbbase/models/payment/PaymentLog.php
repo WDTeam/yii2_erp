@@ -66,7 +66,6 @@ class PaymentLog extends \yii\db\ActiveRecord
             $collection = $mongo->getCollection('payment_log');
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['create_time'] = time();
-            print_r($data);exit;
             return $collection->insert($data);
         }catch(Exception $e){
 
