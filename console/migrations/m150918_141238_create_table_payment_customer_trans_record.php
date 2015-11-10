@@ -15,8 +15,15 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
 
         $this->createTable('{{%payment_customer_trans_record}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
+            'admin_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'管理员ID:0系统\'' ,
+            'admin_name' => Schema::TYPE_STRING . '(30) DEFAULT \'system\' COMMENT \'管理员名称\'' ,
+
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
-            'order_id' => Schema::TYPE_STRING . '(30) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'订单编号\'' ,
+            'order_batch_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'周期订单编号\'' ,
+
+
             'order_channel_id' => Schema::TYPE_SMALLINT . '(6) unsigned DEFAULT 0 NOT NULL COMMENT \'订单渠道\'' ,
             'payment_customer_trans_record_order_channel'  => Schema::TYPE_STRING . '(30) COMMENT \'订单渠道名称\'',
             'pay_channel_id'  => Schema::TYPE_SMALLINT . '(6) unsigned NOT NULL COMMENT \'支付渠道\'',

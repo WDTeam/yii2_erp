@@ -15,6 +15,11 @@ class alertMsgEnum
     //客户端提示信息文案
     const __default = '查询成功';
     //赵顺利
+    //发短消息
+    //登陆成功
+    const sendVSuccess = '登陆成功';
+    //用户名或验证码错误
+    const sendVFail = '用户名或验证码错误';
     //用户发送验证码
     const sendUserCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     const sendUserCodeFailed = '验证码已发失败';
@@ -23,10 +28,8 @@ class alertMsgEnum
     //用户登录
     const userLoginSuccess = '用户登录成功';
     const userLoginFailed = '用户认证已经过期,请重新登录';
-    
     //leveltype指定参数错误,不能大于2
     const levelType = 'leveltype指定参数错误,不能大于2';
-    
     //微信用户登录
     const uesrWeiXinLoginSuccess = '用户登录成功';
     const uesrWeiXinLoginFailed = '用户登录失败';
@@ -135,7 +138,6 @@ class alertMsgEnum
     const loginFromPopFail = '登录失败';
     //登陆成功
     const loginFromPopSuccess = '登陆成功';
-    
     //用户登录手机号或验证码不能为空
     const customerLoginDataDefect = '用户名或验证码不能为空';
     //阿姨登录
@@ -155,6 +157,8 @@ class alertMsgEnum
     const workerLoginIsDimission = '阿姨已离职';
     //阿姨已删除
     const workerLoginIsDel = '阿姨已删除';
+    //阿姨未审核或审核未通过
+    const workerLoginUnable = '阿姨未审核或审核未通过';
     //优惠码
     //优惠码或手机号不能为空
     const exchangeCouponDataDefect = '优惠码或手机号不能为空';
@@ -162,6 +166,20 @@ class alertMsgEnum
     const exchangeCouponSuccess = '兑换成功';
     //兑换优惠券失败
     const exchangeCouponFail = '兑换失败';
+    //此手机号未被注册,请您先注册登录后再兑换优惠券
+    const exchangeCouponNoCustomer = '此手机号未被注册,请您先注册登录后再兑换优惠券';
+    //优惠码已经被领取或使用
+    const exchangeCouponIsUsed = '优惠码已经被领取或使用';
+    //优惠券不存在
+    const exchangeCouponNotExist = '优惠券不存在';
+    //优惠券不可用
+    const exchangeCouponUnuse = '优惠券不可用';
+    //优惠券兑换时间已过期
+    const exchangeCouponIsOver = '优惠券兑换时间已过期';
+    //优惠券已删除
+    const exchangeCouponFailIsdel = '优惠券已删除';
+    //优惠券已禁用
+    const exchangeCouponDisable = '优惠券已禁用';
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';
@@ -186,6 +204,13 @@ class alertMsgEnum
     //用户优惠券数量
     //获取用户优惠券数量成功
     const getCouponCountSuccess = '获取用户优惠券数量成功';
+    //获取用户优惠券数量失败
+    const getCouponCountFail = '获取用户优惠券数量失败';
+    //获取用户优惠券总额
+    //获取用户优惠券总额成功
+    const getCustomerCouponTotalSuccess = '获取用户优惠券总额成功';
+    //获取用户优惠券总额失败
+    const getCustomerCouponTotalFail = '获取用户优惠券总额失败';
     //单次服务排班表
     //请填写服务地址或服务时长
     const singleServiceTimeDataDefect = '请填写服务地址或服务时长';
@@ -211,6 +236,11 @@ class alertMsgEnum
     const serverWorkerListSuccess = '获取周期服务可用阿姨列表成功';
     //商圈不存在
     const serverWorkerListDistrictNotExist = '商圈不存在';
+    //根据经纬度获取商圈信息
+    //商圈不存在
+    const getShopDistrictInfoFail = '商圈不存在';
+    //获取商圈信息成功
+    const getShopDistrictInfoSuccess = '获取商圈信息成功';
     //选择周期服务的第一次服务日期列表
     //请选择服务时长或阿姨
     const firstServiceTimeNoWorker = '请选择服务时长或阿姨';
@@ -244,6 +274,8 @@ class alertMsgEnum
     const taskFailFail = '您没有任务哦';
     //操作成功
     const taskFailSuccess = '操作成功';
+    //操作失败
+    const GetOrderOneFail = '操作失败';
     //查看任务的详情
     //您没有已完成任务哦
     const checkTaskFail = '查看任务失败';
@@ -321,13 +353,13 @@ class alertMsgEnum
     //获取周期订单
     const orderGetOrderWorkerSuccess = "获取阿姨周期订单成功";
     const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
+    //数据不完整,请输入周期订单号
+    const orderGetOrderWorkerNumber = "数据不完整,请输入周期订单号";
     //添加常用地址
     //常用地址添加成功
     const addAddressSuccess = '常用地址添加成功';
     //常用地址添加失败
     const addAddressFail = '常用地址添加失败';
-    
-    
     //常用地址列表
     //获取地址列表成功
     const getAddressesSuccess = '获取地址列表成功';
@@ -371,9 +403,8 @@ class alertMsgEnum
     //用户余额和消费记录
     //查询成功
     const getUserMoneySuccess = '查询成功';
-     //查询失败
+    //查询失败
     const getUserMoneyError = '查询失败';
-    
     //获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
     //用户积分明细列表
     const getUserScoreSuccess = '用户积分明细列表';
@@ -409,17 +440,12 @@ class alertMsgEnum
     const getUserFeedback = '获取用户信息提交成功';
     //用户反馈信息提交失败
     const getUserFeedbackFailure = '用户反馈信息提交失败';
-    
-    
-     //提交意见反馈不能为空
+    //提交意见反馈不能为空
     const UserFeedbackContent = '提交意见反馈不能为空';
-    
     //个人中心获取用户的账户余额、积分、优惠券数
     //获取个人中心信息失败
     const getMoneyScoreCouponFail = '获取个人中心信息失败';
     //获取个人中心信息成功
     const getMoneyScoreCouponSuccess = '获取个人中心信息成功';
-    
-    
 
 }

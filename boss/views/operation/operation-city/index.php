@@ -15,42 +15,18 @@ $this->title = Yii::t('app', 'Operation And Cities').'管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-city-index">
-<!--    <div class="page-header">
-            <h1><?php //= Html::encode($this->title) ?></h1>
-    </div>-->
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 城市搜索</h3>
         </div>
         <div class="panel-body">
-            <?php
-            echo SearchBox::widget([
-                'action' => ['index'],
-                'method' => 'POST',
-                'options' => [],
-                'type' => 'Field',
-                'keyword_value' => isset($params['keyword']) ? $params['keyword'] : '',
-                'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
-                'submit_options' => ['class' => 'btn btn-default form-control'],
-                'fields' => ['搜索字段', 'province_name' => '省份名称', 'city_name' => '城市名称'],
-                'default' => isset($params['fields']) ? $params['fields'] : '',
-            ]);
-            ?>
+            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
         </div>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Operation City',
-]), ['create'], ['class' => 'btn btn-success'])*/
-        ?>
-    </p>
 
     <?php Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
         'columns' => [
             [
                 'header' => Yii::t('app', 'Order Number'),
@@ -71,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>'html',
                 'value' => function ($model) use ($ShopDistrictModel){
                     return $ShopDistrictModel::getCityShopDistrictNum($model->city_id);
-                    //                   return date('Y-m-d H:i:s', $model->created_at);
+                    //return date('Y-m-d H:i:s', $model->created_at);
                 }
             ],
 //            [
@@ -133,7 +109,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>', 
                             Yii::$app->urlManager->createUrl(['/operation/operation-city/view','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                            [
+                                'title' => Yii::t('yii', 'View'),
+                                'class' => 'btn btn-success btn-sm'
+                            ]
                         );
                     },
                     'update' => function ($url, $model) {
@@ -141,7 +120,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
                             Yii::$app->urlManager->createUrl(['/operation/operation-city/update','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
+                            [
+                                'title' => Yii::t('yii', 'Update'),
+                                'class' => 'btn btn-info btn-sm'
+                            ]
                         );
                     },
                     'delete' => function ($url, $model) {
@@ -149,7 +131,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['/operation/operation-city/delete','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                            [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'class' => 'btn btn-danger btn-sm',
+                                'data-pjax'=>"0",
+                                'data-method'=>"post",
+                                'data-confirm'=>"您确定要删除此项吗？",
+                                'aria-label'=>Yii::t('yii', 'Delete')
+                            ]
                         );
                     },
                     'listbtn' => function ($url, $model) {
@@ -163,8 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax'=>'0',
                         ]
                     );
-                        //return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['/operation/operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']);
-                        //.Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district-goods','city_id' => $model->city_id]),['title' => Yii::t('yii', '城市商品列表'), 'class' => 'btn btn-warning btn-sm']);
+                        //return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['/operation/operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']); //.Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district-goods','city_id' => $model->city_id]),['title' => Yii::t('yii', '城市商品列表'), 'class' => 'btn btn-warning btn-sm']);
                     },
                 ],
             ],

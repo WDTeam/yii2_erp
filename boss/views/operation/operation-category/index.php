@@ -14,27 +14,24 @@ $this->title = Yii::t('app', 'Operation And Categories').'管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-index">
-<!--    <div class="page-header">
-            <h1><?php //= Html::encode($this->title) ?></h1>
-    </div>-->
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 品类搜索</h3>
+        </div>
+        <div class="panel-body">
+            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+        </div>
+    </div>
 
-<!--    <p>-->
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Operation Category',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-<!--    </p>-->
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
                 'header' => Yii::t('app', 'Order Number'),
             ],
 
-//           'id',
             [
                 'header'=>"服务品类",
                 'attribute'=>'operation_category_name'
@@ -43,79 +40,86 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=>"服务项目",
                 'attribute'=>'operation_goods_name'
             ],
-//            [
-//               'attribute'=> 'created_at',
-//               'format'=>'html',
-//               'value' => function ($model){
-//                    if(empty($model->created_at)){
-//                        return '';
-//                    }else{
-//                        return date('Y-m-d H:i:s', $model->created_at);
-//                    }
-//               }
-//            ],
-//            [
-//               'attribute'=> 'updated_at',
-//               'format'=>'html',
-//               'value' => function ($model){
-//                    if(empty($model->updated_at)){
-//                        return '';
-//                    }else{
-//                        return date('Y-m-d H:i:s', $model->updated_at);
-//                    }
-//               }
-//            ],
             [
-                'header' => Yii::t('app', 'Operation'),
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {listbtn}',
+                'header' => Yii::t('app', 'Operation'),
+                'template' =>'{view} {update} {delete} {edit}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if(empty($model['goods_id'])){
-
-                        }else {
-                            return Html::a(Yii::t('yii', 'View'), ['/operation/operation-goods/view','id' => $model['goods_id']], ['class' => 'btn btn-success btn-sm']);
+                        if (!empty($model['goods_id'])) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-eye-open">创建</span>',
-                                Yii::$app->urlManager->createUrl(['/operation/operation-goods/view','id' => $model['goods_id']]),
-                                ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                                '<span class="btn btn-primary">查看服务项目</span>',
+                                Yii::$app->urlManager->createUrl([
+                                    '/operation/operation-goods/view',
+                                    'id' => $model['goods_id'],
+                                ]),
+                                [
+                                    'title' => Yii::t('yii', 'Edit'),
+                                ]
                             );
                         }
                     },
                     'update' => function ($url, $model) {
-                        if(empty($model['goods_id'])){
-
-                        }else {
-                             return Html::a(Yii::t('yii', '编辑'), ['/operation/operation-goods/update', 'id' => $model['goods_id']], ['class' => 'btn btn-info btn-sm']);
+                        if (!empty($model['goods_id'])) {
                             return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
-                            Yii::$app->urlManager->createUrl(['/operation/operation-goods/update', 'id' => $model['goods_id']]),
-                            ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm',]
-                             );
-                        }
-                    },
-                    'delete' => function ($url, $model) {
-                        if(empty($model['goods_id'])){
-
-                        }else{
-                            return Html::a(Yii::t('yii', '删除'), ['/operation/operation-goods/delete', 'id' => $model['goods_id']], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-trash">删除</span>',
-                                Yii::$app->urlManager->createUrl(['/operation/operation-goods/delete','id' => $model['goods_id']]),
-                                ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                                '<span class="btn btn-primary">编辑服务项目</span>',
+                                Yii::$app->urlManager->createUrl([
+                                    '/operation/operation-goods/update',
+                                    'id' => $model['goods_id'],
+                                ]),
+                                [
+                                    'title' => Yii::t('yii', 'Edit'),
+                                ]
                             );
                         }
                     },
-                    'listbtn' => function ($url, $model) {
-                        return '';
+                    'edit' => function ($url, $model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-list"></span>',
-                            Yii::$app->urlManager->createUrl(['/operation/operation-category-type','category_id' => $model->id]),
-                            ['title' => Yii::t('yii', '服务品类列表'), 'class' => 'btn btn-warning btn-sm',]
+                            '<span class="btn btn-primary">编辑服务品类</span>',
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-category/update',
+                                'id' => $model['id'],
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'Edit'),
+                            ]
                         );
                     },
+                    'delete' => function ($url, $model) {
+                        if (!empty($model['goods_id'])) {
+                            return Html::a(
+                                '<span class="btn btn-primary">删除服务项目</span>',
+                                Yii::$app->urlManager->createUrl([
+                                    '/operation/operation-goods/delete',
+                                    'id' => $model['goods_id']
+                                ]),
+                                [
+                                    'data-pjax'=>"0",
+                                    'data-method'=>"post",
+                                    'data-confirm'=>"您确定要删除此项吗？",
+                                    'title' => Yii::t('yii', 'Delete'),
+                                ]
+                            );
+                        }
+
+                    }
                 ],
             ],
+            //[
+                //'header' => Yii::t('app', 'Operation'),
+                //'class' => 'yii\grid\ActionColumn',
+                //'template' => '{view} {update} {delete} {listbtn}',
+                //'buttons' => [
+                    //'listbtn' => function ($url, $model) {
+                        //return '';
+                        //return Html::a(
+                            //'<span class="glyphicon glyphicon-list"></span>',
+                            //Yii::$app->urlManager->createUrl(['/operation/operation-category-type','category_id' => $model->id]),
+                            //['title' => Yii::t('yii', '服务品类列表'), 'class' => 'btn btn-warning btn-sm',]
+                        //);
+                    //},
+                //],
+            //],
         ],
         'responsive'=>true,
         'hover'=>true,
@@ -126,10 +130,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
             'before'=>
-            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).
-            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务项目', ['/operation/operation-goods/create'], ['class' => 'btn btn-success']).
-            Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理', ['/operation/operation-spec'], ['class' => 'btn btn-success']),
-            'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
+            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类',
+                ['create'],
+                ['class' => 'btn btn-success']
+            ).
+            Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务项目',
+                ['/operation/operation-goods/create'],
+                ['class' => 'btn btn-success']
+            ).
+            Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理',
+                ['/operation/operation-spec'],
+                [
+                    'class' => 'btn btn-success',
+                    'data-pjax'=>"0",
+                ]
+            ),
+            'after'=>false,
             'showFooter'=>false,
             'footer' => false
         ],

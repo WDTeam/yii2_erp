@@ -12,13 +12,15 @@ class SystemUser extends \dbbase\models\system\SystemUser
     private $_statusLabel;
     private $_roleLabel;
     
-    const CLASSIFY_MINIBOX = 2;
+    const CLASSIFY_SYSTEM = 0;
+    const CLASSIFY_BOSS = 1;
+    const CLASSIFY_MINIBOSS = 2;
     public static function getClassifes()
     {
         return [
-            0=>'系统保留',
-            1=>'后台用户',
-            self::CLASSIFY_MINIBOX=>'MINI BOX 用户'
+            self::CLASSIFY_SYSTEM=>'系统保留',
+            self::CLASSIFY_BOSS=>'BOSS 用户',
+            self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
         ];
     }
     
@@ -198,11 +200,26 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return $res;
     }
     /**
+     * 获取用户所有门店的商圈IDS
+     */
+    public function getShopDistrictIds()
+    {
+        $ids = $this->getShopIds();
+        if(empty($ids)){
+            return [];
+        }
+        $res = (array)Shop::find()
+        ->select('operation_shop_district_id')
+        ->andFilterWhere(['in','id', $ids])
+        ->column();
+        return $res;
+    }
+    /**
      * 判断是不是MINI BOX 用户
      */
-    public function isMiniBoxUser()
+    public function isMiniBossUser()
     {
-        return $this->classify==self::CLASSIFY_MINIBOX;
+        return $this->classify==self::CLASSIFY_MINIBOSS;
     }
     
     /**

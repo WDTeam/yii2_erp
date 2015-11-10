@@ -2,6 +2,7 @@
 
 namespace dbbase\models\order;
 
+use dbbase\models\ActiveRecord;
 use Yii;
 
 /**
@@ -23,7 +24,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class OrderDispatcherKpi extends \yii\db\ActiveRecord
+class OrderDispatcherKpi extends ActiveRecord
 {
     public $dispatcher_kpi_free_time_sum;//7日空闲时间
     public $dispatcher_kpi_busy_time_sum;//7日忙碌时间

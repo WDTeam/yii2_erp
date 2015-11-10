@@ -22,7 +22,7 @@ class OrderStatus extends Order
      * @param $transact
      * @return bool
      */
-    protected static function _payment(&$order, $must_models = [],$transact = null)
+    protected static function _payment(&$order, $must_models = [], $transact = null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         $current_status = $order->orderExtStatus->order_status_dict_id;
@@ -170,10 +170,10 @@ class OrderStatus extends Order
      * 批量开始人工指派
      * @param $batch_code
      * @param $admin_id
-     * @param $is_cs
+     * @param $is_mini_boss
      * @return bool
      */
-    public static function batchManualAssignStart($batch_code, $admin_id, $is_cs)
+    public static function batchManualAssignStart($batch_code, $admin_id, $is_mini_boss)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_START);
         $transact = static::getDb()->beginTransaction();
@@ -181,7 +181,7 @@ class OrderStatus extends Order
         foreach ($orders as $order) {
             $order->order_flag_lock = $admin_id;
             $order->order_flag_lock_time = time(); //加锁时间
-            $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_cs ? 1 : 2); //指派时先标记是谁指派不了
+            $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($is_mini_boss ? 2 : 1); //指派时先标记是谁指派不了
             $order->admin_id = $admin_id;
             if (!self::_statusChange($order, $status, ['OrderExtFlag'], $transact)) {
                 $transact->rollBack();

@@ -55,7 +55,7 @@ use yii\web\JsExpression;
      
       <?= $form->field($model, 'system_user_id')->widget(Select2::classname(), [
         'name' => '用户',
-        'hideSearch' => true,
+        'hideSearch' => false,
         'data' => SystemUser::getuserlist(),
         'options' => ['placeholder' => '请选择用户','class' => 'col-md-2'],
         'pluginOptions' => [

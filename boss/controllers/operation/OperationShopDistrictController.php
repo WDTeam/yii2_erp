@@ -90,7 +90,7 @@ class OperationShopDistrictController extends BaseAuthController
                     \Yii::$app->getSession()->setFlash('default','上传文件数据格式不正确！');
                     return $this->redirect(['index']);
                 }
-                OperationShopDistrict::saveBatchDistrictData($district_arr);
+                OperationShopDistrict::saveBatchDistrictData($city_id, $city_name, $district_arr);
     		}
     	}
 

@@ -30,7 +30,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
 
-        if(\Yii::$app->user->identity->isMiniBoxUser()){
+        if(\Yii::$app->user->identity->isMiniBossUser()){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');

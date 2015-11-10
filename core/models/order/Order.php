@@ -12,7 +12,7 @@ namespace core\models\order;
 /** core */
 use core\models\finance\FinanceRefundadd;
 
-use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponRule;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;
@@ -181,7 +181,7 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
 
-        $customer = Customer::getCustomerById($this->customer_id);
+        $customer = Customer::getCustomerById($attributes['customer_id']);
         if(!empty($customer)) {
             $attributes['order_customer_phone'] = $customer->customer_phone;
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
@@ -193,7 +193,7 @@ class Order extends OrderModel
         //如果客户选择使用余额则去获取客户余额
         if(!empty($attributes['order_is_use_balance'])) {
             try {
-                $customer = Customer::getCustomerInfo($this->order_customer_phone);
+                $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
                 $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
@@ -832,9 +832,7 @@ class Order extends OrderModel
             'order_address' => (empty($address['operation_province_name'])?'': $address['operation_province_name'].',')
                 . $address['operation_city_name'] . ','
                 . $address['operation_area_name'] . ','
-                . $address['customer_address_detail'] . ','
-                . $address['customer_address_nickname'] . ','
-                . $address['customer_address_phone'] , //地址信息
+                . $address['customer_address_detail'], //地址信息
             'order_lat' => $address['customer_address_latitude'],
             'order_lng' => $address['customer_address_longitude']
         ]);
@@ -1056,7 +1054,11 @@ class Order extends OrderModel
      */
     public static function getCouponById($id)
     {
-        return Coupon::getCouponBasicInfoById($id);
+        $result = CouponRule::getCouponBasicInfoById($id);
+        if(isset($result['is_status']) && $result['is_status']==1){
+            return $result['data'];
+        }
+        return false;
     }
 
     /**
@@ -1109,9 +1111,9 @@ class Order extends OrderModel
         if (isset($status) && is_array($status)) {
             $statusList = $statusAC->where(['in', 'id', $status])->asArray()->all();
         } else {
-            $statusList = $statusAC->asArray()->all();
+            $statusList = $statusAC->where(['not in', 'id', [OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,OrderStatusDict::ORDER_SYS_ASSIGN_DONE]])->asArray()->all();
         }
-        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
+        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_boss') : [];
     }
 
     /*

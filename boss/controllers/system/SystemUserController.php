@@ -8,6 +8,8 @@ use core\models\system\SystemUserSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boss\components\RbacHelper;
+use yii\web\ForbiddenHttpException;
 
 /**
  * SystemUserController implements the CRUD actions for SystemUser model.
@@ -24,6 +26,18 @@ class SystemUserController extends BaseAuthController
                 ],
             ],
         ];
+    }
+    
+    public function beforeAction($action)
+    {
+        $name = $this->id.'/'.$action->id;
+        $auth = Yii::$app->authManager;
+        $perm = $auth->getPermission($name);
+        if(\Yii::$app->user->can($name) || \Yii::$app->user->can($this->id.'/index')){
+            return true;
+        }else{
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
     }
 
     /**
@@ -85,6 +99,7 @@ class SystemUserController extends BaseAuthController
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            RbacHelper::updateConfigVersion();
             return $this->redirect(['view', 'id' => $model->id]);
         }else {
             return $this->render('update', [

@@ -9,7 +9,7 @@ use dosamigos\datepicker\DatePicker;
  * @var dbbase\models\Order $model
  */
 
-$this->title = '创建订单';
+$this->title = '人工下单';
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -35,26 +35,28 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::button('新增地址', ['class' =>  'btn btn-sm btn-warning','id'=>'add_address_btn']); ?>
                         <div class="help-block help-block-error "></div>
                         <div id="address_form" style="display: none;">
-                            <div class="col-sm-4" style="padding-left: 0;">
+                            <div class="col-sm-2" style="padding-left: 0px;">
                                 <?= Html::dropDownList('province','',[''=>'请选择省份']+$model->onlineProvinceList,['class'=>'form-control province_form']); ?>
                             </div>
-                            <div class="col-sm-3" >
+                            <div class="col-sm-2" style="padding-left: 0px;">
                                 <?= Html::dropDownList('city','',[''=>'请选择城市'],['class'=>'form-control city_form']); ?>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2" style="padding-left: 0px;">
                                 <?= Html::dropDownList('county','',[''=>'请选择区县'],['class'=>'form-control  county_form']); ?>
                             </div>
-                            <button class="btn btn-sm btn-warning col-sm-1 cancel_address_btn" style="margin-top:10px;" type="button">取消</button>
-                            <div class="col-sm-5" style="padding-left: 0; margin-top:10px;">
+                            <div class="col-sm-4" style="padding-left: 0px;">
                                 <?= Html::textInput('detail','',['placeholder'=>'详细地址','class'=>'form-control  detail_form']); ?>
                             </div>
-                            <div class="col-sm-3" style="margin-top:10px;">
+                            <div class="col-sm-3" style="margin-top:0px; display: none;">
                                 <?= Html::textInput('nickname','',['placeholder'=>'联系人','class'=>'form-control  nickname_form']); ?>
                             </div>
-                            <div class="col-sm-3" style="margin-top:10px;">
+                            <div class="col-sm-3" style="margin-top:0px;display: none;">
                                 <?= Html::textInput('phone','',['placeholder'=>'手机号','class'=>'form-control  phone_form']); ?>
                             </div>
-                            <button class="btn btn-sm btn-warning col-sm-1 save_address_btn" style="margin-top:10px;" type="button">保存</button>
+                            <div class="col-sm-2 btn-group" role="group" style="padding-right: 0px;">
+                                <button class="btn btn-warning col-sm-6 save_address_btn"  type="button">保存</button>
+                                <button class="btn btn-default col-sm-6 cancel_address_btn"  type="button">取消</button>
+                            </div>
                         </div>
                     </div>
 
@@ -104,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h4 class="col-sm-2">
                         总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">0.00</span>
                     </h4>
-                    <h4 class="col-sm-2">
+                    <h4 class="col-sm-5">
                         账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
                     </h4>
                 </div>

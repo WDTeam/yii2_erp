@@ -45,7 +45,8 @@ class Order extends OrderModel
 
     public function getOrderBookedCountList()
     {
-        return ["2" => "两小时", "2.5" => "两个半小时", "3" => "三小时", "3.5" => "三个半小时", "4" => "四小时", "4.5" => "四个半小时", "5" => "五小时", "5.5" => "五个半小时", "6" => "六小时"];
+        return ["2.0" => "两小时", "2.5" => "两个半小时", "3.0" => "三小时", "3.5" => "三个半小时", "4.0" => "四小时", "4.5" => "四个半小时",
+            "5.0" => "五小时", "5.5" => "五个半小时", "6.0" => "六小时"];
     }
 
     public function getCustomerNeeds()
@@ -129,47 +130,7 @@ class Order extends OrderModel
         return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
     }
 
-    /**
-     * 可指派的阿姨格式化
-     * @param $order
-     * @param $worker_list
-     * @return array
-     */
-    public static function assignWorkerFormat($order,$worker_list){
-        //获取常用阿姨
-        $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
-        $used_worker_ids = [];
-        if (is_array($used_worker_list)) {
-            foreach ($used_worker_list as $v) {
-                $used_worker_ids[] = $v['worker_id'];
-            }
-        }
-        $worker_ids = [];
-        $workers = [];
-        if (is_array($worker_list)) {
-            foreach ($worker_list as $k => $v) {
-                $worker_ids[] = $v['id'];
-                $workers[$v['id']] = $worker_list[$k];
-                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
-                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
-                $workers[$v['id']]['order_booked_time_range'] = [];
-                $workers[$v['id']]['memo'] = [];
-                $workers[$v['id']]['status'] = [];
-            }
-            //获取阿姨当天订单
-            $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
-            foreach ($worker_orders as $v) {
-                $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
-            }
-            //获取阿姨跟订单的关系
-            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order->id, $worker_ids);
-            foreach ($order_worker_relations as $v) {
-                $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
-                $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
-            }
-        }
-        return $workers;
-    }
+
 
     public function createNew($post)
     {

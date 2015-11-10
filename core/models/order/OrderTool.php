@@ -19,6 +19,6 @@ class OrderTool extends Model
         $num = time()-strtotime(date('Y-m-d 00:00:00'));
         $code = str_pad($num,5,'0',STR_PAD_LEFT);
         $order_code = date("ymd{$code}");
-        return $prefix.rand(0,9).rand(0,9).$order_code.rand(0,9).rand(0,9);
+        return $prefix.'00'.$order_code.rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9);
     }
 }

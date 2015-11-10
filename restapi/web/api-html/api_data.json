@@ -404,7 +404,14 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "address_id",
             "description": "<p>订单地址id</p> "
           },
@@ -819,6 +826,13 @@
           },
           {
             "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
+          },
+          {
+            "group": "Parameter",
             "type": "<p>string</p> ",
             "optional": true,
             "field": "order_booked_worker_id",
@@ -897,6 +911,77 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "POST",
+    "url": "/order/delete-worker-order",
+    "title": "[POST]/order/delete-worker-order(100%）",
+    "description": "<p>阿姨删除订单 （郝建设） 该功能暂时没有开发,没有得到核实！[功能介绍：] 删除指定阿姨订单列表 待抢单订单列表</p> ",
+    "name": "actionDeleteWorkerOrder",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_id/order_code",
+            "description": "<p>周期订单号</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"删除成功\",\n \"ret\": {}\n \"alertMsg\": \"删除成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"认证已经过期,请重新登录，\"\n  \"ret\":{},\n  \"alertMsg\": \"操作成功\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 delete Not Found\n{\n  \"code\": 0,\n  \"msg\": \"删除失败\",\n  \"ret\": {},\n \"alertMeg\": \"删除失败\"\n }",
           "type": "json"
         }
       ]
@@ -1052,7 +1137,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "description": "<p>阿姨认证</p> "
           },
           {
             "group": "Parameter",
@@ -1089,7 +1174,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": 0/1 # 阿姨是否封号 0正常1封号\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1430,10 +1515,10 @@
   {
     "type": "PUT",
     "url": "/order/set-worker-order",
-    "title": "[PUT]/order/set-worker-order (90%)",
+    "title": "[PUT]/order/set-worker-order (100%)",
     "name": "actionSetWorkerOrder",
     "group": "Order",
-    "description": "<p>阿姨抢单提交 （郝建设 未测试）</p> ",
+    "description": "<p>阿姨抢单提交 （郝建设 ）</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1442,7 +1527,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "description": "<p>阿姨认证</p> "
           },
           {
             "group": "Parameter",
@@ -5170,8 +5255,8 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "city_id",
-            "description": "<p>城市ID</p> "
+            "field": "city_name",
+            "description": "<p>城市名称</p> "
           },
           {
             "group": "Parameter",
@@ -5183,9 +5268,9 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>app版本【ios_user4.4】</p> "
           }
         ]
       }
@@ -5332,65 +5417,6 @@
   },
   {
     "type": "GET",
-    "url": "/coupon/all-coupons",
-    "title": "[GET] /coupon/all-coupons（ 100%）",
-    "description": "<p>获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）（李勇）</p> ",
-    "name": "actionAllCoupons",
-    "group": "coupon",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/CouponController.php",
-    "groupTitle": "coupon"
-  },
-  {
-    "type": "GET",
     "url": "/coupon/coupons",
     "title": "[GET] /coupon/coupons（100%）",
     "description": "<p>下单时获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券）（李勇）</p> ",
@@ -5434,7 +5460,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
+          "content": "  HTTP/1.1 200 OK\n{\n    \"code\": 1,\n    \"msg\": \"获取优惠券列表成功\",\n    \"ret\": [\n        {\n            \"id\": \"优惠券id\",\n            \"coupon_userinfo_name\": \"优惠券名称\",\n            \"coupon_userinfo_price\": \"优惠券价值\",\n            \"couponrule_use_start_time\": \"优惠券的用户可使用的开始时间\",\n            \"couponrule_use_end_time\": \"过期时间\",\n            \"couponrule_type\": \"实收金额优惠券类型1为全网优惠券2为类别优惠券3为商品优惠券\",\n            \"couponrule_service_type_id\": \"服务类别id\",\n            \"couponrule_commodity_id\": \"如果是商品优惠券id\"\n        }\n    ],\n    \"alertMsg\": \"获取优惠券列表成功\"\n}",
           "type": "json"
         }
       ]
@@ -5500,7 +5526,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取优惠券列表成功\",\n\"ret\": [\n    {\n        \"id\": \"优惠券id\",\n        \"coupon_name\": \"优惠券名称\",\n        \"coupon_price\": \"优惠券价值\",\n        \"coupon_category\": \"优惠券范畴0为一般优惠券1为赔付优惠券\",\n        \"coupon_category_name\": \"优惠券范畴\",\n        \"coupon_type\": \"优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\",\n        \"coupon_type_name\": \"优惠券类型名称\",\n        \"coupon_service_type_id\": \"服务类别id\",\n        \"coupon_service_type_name\": \"服务类别名称\",\n        \"coupon_service_id\": \"服务id\",\n        \"coupon_service_name\": \"服务名称\",\n        \"coupon_city_limit\": \"城市限制0为不限1为单一城市限制\",\n        \"coupon_city_id\": \"关联城市\",\n        \"coupon_city_name\": \"城市名称\",\n        \"coupon_customer_type\": \"适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\",\n        \"coupon_customer_type_name\": \"适用客户类别名称\",\n        \"coupon_time_type\": \"优惠券有效时间类型0为有效领取时间和有效使用时间一致1为过期时间从领取时间开始计算\",\n        \"coupon_time_type_name\": \"优惠券有效时间类型名称\",\n        \"coupon_begin_at\": \"开始时间\",\n        \"coupon_end_at\": \"领取时间和使用时间一致时的结束时间(过期时间以这个为准)\",\n        \"coupon_get_end_at\": \"领取时间和使用时间不一致时的领取结束时间\",\n        \"coupon_use_end_days\": \"领取时间和使用时间不一致时过期天数\",\n        \"coupon_promote_type\": \"优惠券优惠类型0为立减1为满减2为每减\",\n        \"coupon_promote_type_name\": \"优惠券优惠类型名称\",\n        \"coupon_order_min_price\": \"满减或每减时订单最小金额\",\n        \"coupon_code_num\": \"优惠码个数\",\n        \"coupon_code_max_customer_num\": \"单个优惠码最大使用人数\",\n        \"is_disabled\": \"是否禁用\",\n        \"created_at\": \"创建时间\",\n        \"updated_at\": \"更新时间\",\n        \"system_user_id\": \"系统用户id\",\n        \"system_user_name\": \"系统用户名称\",\n        \"customer_id\": \"客户id\",\n        \"coupon_id\": \"优惠规则id\",\n        \"coupon_code_id\": \"优惠码id\",\n        \"coupon_code\": \"优惠码\",\n        \"expirate_at\": \"过期时间\",\n        \"is_used\": \"是否已经使用\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 1,\n    \"msg\": \"获取优惠券列表成功\",\n    \"ret\": [\n        {\n            \"id\": \"优惠券id\",\n            \"coupon_userinfo_name\": \"优惠券名称\",\n            \"coupon_userinfo_price\": \"优惠券价值\",\n            \"couponrule_use_start_time\": \"优惠券的用户可使用的开始时间\",\n            \"couponrule_use_end_time\": \"过期时间\",\n            \"couponrule_type\": \"实收金额优惠券类型1为全网优惠券2为类别优惠券3为商品优惠券\",\n            \"couponrule_service_type_id\": \"服务类别id\",\n            \"couponrule_commodity_id\": \"如果是商品优惠券id\"\n        }\n    ],\n    \"alertMsg\": \"获取优惠券列表成功\"\n}",
           "type": "json"
         }
       ]
@@ -5566,7 +5592,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"兑换成功\",\n  \"ret\": {\n      \"customer_id\": 1,\n      \"coupon_id\": 5,\n      \"coupon_code_id\": 10,\n      \"coupon_code\": \"fkdaibz0\",\n      \"coupon_name\": \"万能优惠券\",\n      \"coupon_price\": \"10.00\",\n      \"expirate_at\": 1455206400,\n      \"is_used\": 0,\n      \"created_at\": 1446605320,\n      \"updated_at\": 1446605320,\n      \"id\": 10\n  },\n  \"alertMsg\": \"兑换成功\"\n}",
+          "content": " HTTP/1.1 200 OK\n{\n       \"code\": 1,\n       \"msg\": \"兑换成功\",\n       \"ret\": {\n           \"is_status\": 1,\n           \"msg\": \"数据库写入成功\",\n           \"data\": {\n               \"id\": \"优惠券id\",\n               \"couponrule_price\": \"优惠券金额\",\n               \"couponrule_name\": \"优惠券名称\",\n               \"couponrule_use_start_time\": \"优惠券的用户可使用的开始时间\",\n               \"couponrule_use_end_time\": \"优惠券的用户可使用的结束时间\",\n               \"couponrule_service_type_id\": \"服务类别id\"\n           }\n       },\n       \"alertMsg\": \"兑换成功\"\n   }",
           "type": "json"
         }
       ]
@@ -5652,6 +5678,92 @@
     "version": "0.0.0",
     "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
+  },
+  {
+    "type": "GET",
+    "url": "/coupon/get-customer-coupon-total",
+    "title": "{GET} /coupon/get-customer-coupon-total（100%）",
+    "description": "<p>获取用户优惠券总额（李勇）</p> ",
+    "name": "actionGetCustomerCouponTotal",
+    "group": "coupon",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "city_id",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"获取用户优惠券总额成功\",\n      \"ret\": {\n          \"couponTotal\": \"30.00\"\n      },\n      \"alertMsg\": \"获取用户优惠券总额成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 0,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/CouponController.php",
+    "groupTitle": "coupon"
+  },
+  {
+    "type": "GET",
+    "url": "/order/get-order-channel-list",
+    "title": "[GET] /order/get-order-channel-list (100%)",
+    "name": "actionGetOrderChannelList_____",
+    "group": "order",
+    "description": "<p>获得订单渠道配置信息</p> ",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"数据获取成功\",\n    \"ret\":\n    [\n        {\n            \"order_channel_id\": \"8\",           订单渠道id\n            \"order_channel_name\": \"美团上门\",  订单渠道名称\n        },\n        {\n            \"order_channel_id\": \"9\",           订单渠道id\n            \"order_channel_name\": \"点评到家\",  订单渠道名称\n        },\n     ],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "order"
   },
   {
     "type": "GET",
@@ -5862,6 +5974,72 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
+    "url": "/service/get-shop-district-info",
+    "title": "[GET] /service/get-shop-district-info（100%）",
+    "description": "<p>根据经纬度获取商圈信息（李勇）</p> ",
+    "group": "service",
+    "name": "actionGetShopDistrictInfo",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取商圈信息成功\",\n     \"ret\": {\n         \"id\": \"1\",\n         \"operation_shop_district_id\": \"商圈id\",\n         \"operation_shop_district_name\": \"商圈名称\",\n         \"operation_city_id\": \"城市编号\",\n         \"operation_city_name\": \"城市名称\",\n         \"operation_area_id\": \"区域id\",\n         \"operation_area_name\": \"区域名称\"\n     },\n     \"alertMsg\": \"获取商圈信息成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "queryNotSupportFound",
+            "description": "<p>获取商圈信息失败</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "  HTTP/1.1 404 Not Found\n{\n    \"code\": 0,\n    \"msg\": \"商圈不存在\",\n    \"ret\": {},\n    \"alertMsg\": \"商圈不存在\"\n}",
           "type": "json"
         }
       ]
@@ -6245,7 +6423,7 @@
   {
     "type": "GET",
     "url": "/service/service-items",
-    "title": "[GET] ( for pop )",
+    "title": "[GET] /service/service-items ( for pop )",
     "name": "actionServiceItems",
     "group": "service",
     "description": "<p>获得所有服务项目[服务id, 服务编号,服务名,服务描述,服务英文名称]</p> ",

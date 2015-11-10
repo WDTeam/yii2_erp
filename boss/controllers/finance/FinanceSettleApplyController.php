@@ -185,6 +185,10 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
+        $orderDataProvider = new ArrayDataProvider();
+        $cashOrderDataProvider = new ArrayDataProvider();
+        $taskDataProvider = new ArrayDataProvider();
+        $compensateDataProvider = new ArrayDataProvider();
         //获取结算模块保存的订单流水信息
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderBySettleId($financeSettleApplySearch->id);
         //获取结算模块保存的现金订单流水信息
@@ -193,7 +197,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderBySettleId($financeSettleApplySearch->id);
         //获取结算模块保存的赔偿信息
         $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderBySettleId($financeSettleApplySearch->worker_id, null, null);
-        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);
+        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);
     }
     
     
@@ -208,7 +212,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSearchModel->scenario = 'query';
         $isExport = 0;
         if(isset($requestParams['isExport'])){
-            $isExport = 1;
+            $isExport = $requestParams['isExport'];
         }
         if(\Yii::$app->user->identity->isMiniBoxUser()){
             $financeSearchModel->shop_id = Yii::$app->user->identity->getShopIds();
@@ -410,7 +414,6 @@ class FinanceSettleApplyController extends BaseAuthController
         }
         $orderDataProvider = new ArrayDataProvider();
         $cashOrderDataProvider = new ArrayDataProvider();
-        $nonCashOrderDataProvider = new ArrayDataProvider();
         $taskDataProvider = new ArrayDataProvider();
         $compensateDataProvider = new ArrayDataProvider();
         if(!empty($financeSettleApplySearch->worker_tel)){
@@ -443,9 +446,9 @@ class FinanceSettleApplyController extends BaseAuthController
                     $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
                     $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
                     //订单详细数据
-                    $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                    $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
                     //现金订单详细数据
-                    $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                    $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
                     //任务详细数据
                     $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, $finance_settle_apply_starttime,$finance_settle_apply_endtime);
                     //赔偿详细数据
@@ -454,7 +457,7 @@ class FinanceSettleApplyController extends BaseAuthController
             }
         }
         
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);
     }
     
     /**
@@ -542,7 +545,7 @@ class FinanceSettleApplyController extends BaseAuthController
             $workerId = $worker['worker_id'];
             //订单收入明细
             //已对账的订单，且没有未处理完的投诉和赔偿的订单
-            $financeWorkerOrderIncomeArr = $financeWorkerOrderIncomeSearch->getWorkerOrderIncomeArrayByWorkerId($workerId);
+            $financeWorkerOrderIncomeArr = $financeWorkerOrderIncomeSearch->getWorkerOrderIncomeArrayByWorkerId($workerId,$settleStartTime,$settleEndTime);
             //获取订单总收入
             $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId,$settleStartTime,$settleEndTime);
             //获取阿姨的任务奖励信息
@@ -559,11 +562,11 @@ class FinanceSettleApplyController extends BaseAuthController
                         }
                         foreach($financeWorkerNonOrderTaskIncomeArr as $financeWorkerNonOrderTask){
                             $financeWorkerNonOrderTask->finance_settle_apply_id = $financeSettleApplySearch->id;
-                            $financeWorkerNonOrderTask->save();
+                            $saveSuccess = $financeWorkerNonOrderTask->save();
                         }
                         foreach($financeWorkerNonOrderCompensateIncomeArr as $financeWorkerNonOrderCompensateIncome){
                             $financeWorkerNonOrderCompensateIncome->finance_settle_apply_id = $financeSettleApplySearch->id;
-                            $financeWorkerNonOrderCompensateIncome->save();
+                            $saveSuccess = $financeWorkerNonOrderCompensateIncome->save();
                         }
                     }
                 }

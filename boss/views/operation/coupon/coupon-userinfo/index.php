@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
@@ -25,14 +25,28 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
    
 
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php 
+    ActiveForm::begin([
+    'action' => ['indexall'],
+    'method' => 'post'
+    		]);
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            'columns' => [
+            [
+     		'class' => 'yii\grid\CheckboxColumn',
+     		'name'=>'ids'
+			],
 
             //'id',
-            'customer_id',
+    		[
+    		'format' => 'raw',
+    		'label' => '客户名称',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->customer_id ==0 ?'无此人': $dataProvider->customer_id;
+    		},
+    		],
             'customer_tel',
             'coupon_userinfo_id',
             'coupon_userinfo_code',
@@ -53,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['coupon-userinfo/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/coupon/coupon-userinfo/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', '修改'),
                                                   ]);}
 
@@ -69,8 +83,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info', 
 			'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 添加绑定手机号', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                     
-            'showFooter'=>false
+			'after'=>
+Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']),
+
+'showFooter'=>false
         ],
-    ]); Pjax::end(); ?>
+    ]); 
+
+    ActiveForm::end();
+    ?>
 
 </div>

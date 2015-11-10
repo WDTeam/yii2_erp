@@ -2,6 +2,7 @@
 
 namespace boss\models\order;
 
+use core\models\order\OrderStatusDict;
 use Yii;
 use yii\data\ActiveDataProvider;
 use boss\models\worker\Worker;
@@ -42,11 +43,11 @@ class OrderSearchIndex extends Order
     
     public function search($params)
     {
-        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker']);
+        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])->orderBy(['id'=>SORT_DESC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //             'pagination' => [
-//                 'pageSize' => 2,
+////                 'pageSize' => 2,
 //             ],
         ]);
 
@@ -118,6 +119,10 @@ class OrderSearchIndex extends Order
         {
             $statussList = explode('-', $this->statuss);
             if (!empty($statussList)) {
+                if(in_array(OrderStatusDict::ORDER_WORKER_BIND_ORDER,$statussList)){
+                    $statussList[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
+                    $statussList[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
+                }
                 $query->andWhere(['in', 'order_status_dict_id', $statussList]);
             }
         }
@@ -137,6 +142,7 @@ class OrderSearchIndex extends Order
                 $query->andWhere(['in', 'channel_id', $channelList]);
             }
         }
+
         
         return $dataProvider;
     }

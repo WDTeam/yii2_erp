@@ -10,6 +10,7 @@ use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
 use core\models\worker\WorkerTaskLog;
 use core\models\worker\WorkerTaskCondition;
+use core\components\ConsoleHelper;
 class WorkerTaskController extends Controller
 {
     private function getConditionsValues($start_time, $end_time, $worker_id)
@@ -24,30 +25,35 @@ class WorkerTaskController extends Controller
      */
     public function actionIndex()
     {
-//         * 1、循环任务，查询获取昨日完成的任务
+//         * 1、循环任务，查询获取昨日之前结束的任务
 //         * 2、计算时间段内各项条件的数值，保存数值，运算是否达到条件完成。
         $tasks = (array)WorkerTaskLog::find()
         ->select(['worker_task_is_done','worker_task_log_start', 'worker_task_log_end', 'worker_id'])
         ->where('worker_task_is_done is NULL or worker_task_is_done=0')
         ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
         ->all();
+        ConsoleHelper::log('截至昨日已结束但未处理的任务（%s）个', [count($tasks)]);
         foreach ($tasks as $task){
             try{
                 $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
                 $task->setValues($conVals);
-                $task->calculateIsDone();
+                $is_done = $task->calculateIsDone();
+                ConsoleHelper::log('阿姨（%s）的任务（%s）%s',[
+                    $task->worker_id,
+                    $task->worker_task_id,
+                    ($is_done?'完成':'失败')
+                ]);
             }catch(\Exception $e){
                 echo 'has error';
             }
         }
 //         * 3、自动生成阿姨任务记录，有则取，无则建.
         $models = Worker::find()->all();
-        $total = count($models);
-        echo "worker total: {$total}".PHP_EOL;
+        ConsoleHelper::log('阿姨总数（%s）',[count($models)]);
         foreach ($models as $model){
             try{
                 $res =  (array)WorkerTask::autoCreateTaskLog($model->id);
-                echo count($res).PHP_EOL;
+                ConsoleHelper::log('阿姨（%s）分配到（%s）个任务',[$model->id,count($res)]);
             }catch(\Exception $e){
                 echo 'has error';
             }
@@ -58,12 +64,14 @@ class WorkerTaskController extends Controller
         ->where('worker_task_is_done=1')
         ->andWhere('worker_task_is_settlemented is NULL OR worker_task_is_settlemented=0')
         ->all();
-        $total = count($tasks);
-        echo "setSettlemented total: {$total}".PHP_EOL;
+        ConsoleHelper::log('未结算总数（%s）',[count($tasks)]);
         foreach ($tasks as $task){
             try{
-                $task->setSettlemented();
-                echo 'task: '.$task->worker_task_name.' done.'.PHP_EOL;
+                $is_set = $task->setSettlemented();
+                ConsoleHelper::log('阿姨任务（%s）%s结算',[
+                    $task->worker_task_name,
+                    ($is_set?'已':'未')
+                ]);
             }catch(\Exception $e){
                 echo 'has error';
             }

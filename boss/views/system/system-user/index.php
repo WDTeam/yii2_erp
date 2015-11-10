@@ -34,6 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
                }
            ], 
            [
+               'attribute'=>'classify',
+               'value'=>function ($model){
+                    return $model::getClassifes()[$model->classify];
+                }
+           ],
+           [
                'attribute'=>'status',
                'value'=>function ($model){
                    return $model->getStatusLabel();
