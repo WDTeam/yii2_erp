@@ -27,7 +27,7 @@ class OperationPayChannel extends \dbbase\models\operation\OperationPayChannel
 	* @return:
 	**/
 	
-	public static function getorderchannellist($type){
+	public static function getpaychannellist($type){
 		
 		$data = self::find();
 		if($type=='all'){	
