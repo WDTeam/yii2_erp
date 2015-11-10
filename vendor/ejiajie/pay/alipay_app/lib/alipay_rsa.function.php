@@ -15,7 +15,7 @@
  * @param $private_key_path 商户私钥文件路径
  * return 签名结果
  */
-function rsaSign($data, $private_key_path) {
+function app_rsaSign($data, $private_key_path) {
     $priKey = file_get_contents($private_key_path);
     $res = openssl_get_privatekey($priKey);
     openssl_sign($data, $sign, $res);
@@ -32,7 +32,7 @@ function rsaSign($data, $private_key_path) {
  * @param $sign 要校对的的签名结果
  * return 验证结果
  */
-function rsaVerify($data, $ali_public_key_path, $sign)  {
+function app_rsaVerify($data, $ali_public_key_path, $sign)  {
 	$pubKey = file_get_contents($ali_public_key_path);
     $res = openssl_get_publickey($pubKey);
     $result = (bool)openssl_verify($data, base64_decode($sign), $res);
@@ -46,7 +46,7 @@ function rsaVerify($data, $ali_public_key_path, $sign)  {
  * @param $private_key_path 商户私钥文件路径
  * return 解密后内容，明文
  */
-function rsaDecrypt($content, $private_key_path) {
+function app_rsaDecrypt($content, $private_key_path) {
     $priKey = file_get_contents($private_key_path);
     $res = openssl_get_privatekey($priKey);
 	//用base64将内容还原成二进制

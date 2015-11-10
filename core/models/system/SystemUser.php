@@ -200,6 +200,21 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return $res;
     }
     /**
+     * 获取用户所有门店的商圈IDS
+     */
+    public function getShopDistrictIds()
+    {
+        $ids = $this->getShopIds();
+        if(empty($ids)){
+            return [];
+        }
+        $res = (array)Shop::find()
+        ->select('operation_shop_district_id')
+        ->andFilterWhere(['in','id', $ids])
+        ->column();
+        return $res;
+    }
+    /**
      * 判断是不是MINI BOX 用户
      */
     public function isMiniBossUser()

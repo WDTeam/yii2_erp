@@ -33,4 +33,5 @@ return array(
     $vendorDir . '/ejiajie/pay/upacp_app/uppay_class.php',
     $vendorDir . '/ejiajie/pay/zhidahao_h5/zhidahao_class.php',
     $vendorDir . '/ejiajie/pay/alipay_wap/alipay_wap_class.php',
+    $vendorDir . '/ejiajie/pay/alipay_app/alipay_app_class.php',
 );
