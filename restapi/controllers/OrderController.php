@@ -117,25 +117,25 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
-        /**
-          if (empty($args['order_booked_begin_time'])) {
-          return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
-          }
-          $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
+        if (empty($args['order_booked_begin_time'])) {
+            return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
+        }
+        $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
-          if (empty($args['order_booked_end_time'])) {
-          return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
-          }
-          $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
-         */
+        if (empty($args['order_booked_end_time'])) {
+            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
+        }
+        $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
+
+
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-//        if (empty($args['order_booked_count'])) {
-//            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
-//        }
+        if (empty($args['order_booked_count'])) {
+            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+        }
         $attributes['order_pay_type'] = $args['order_pay_type'];
-        #  $attributes['order_booked_count'] = $args['order_booked_count'];
+        $attributes['order_booked_count'] = $args['order_booked_count'];
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -161,9 +161,9 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_pop_group_buy_code'])) {
             $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
         }
-//        if (isset($args['coupon_id'])) {
-//            $attributes['coupon_id'] = $args['coupon_id'];
-//        }
+        if (isset($args['coupon_id'])) {
+            $attributes['coupon_id'] = $args['coupon_id'];
+        }
 
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
@@ -184,62 +184,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
-        $args['times'] = array(
-            "0" => Array(
-                'order_booked_begin_time' => 1447124669,
-                'order_booked_count' => 1,
-                'coupon_id' => 1,
-                "order_booked_end_time" => 1448124669
-            ),
-            "1" => Array(
-                'order_booked_begin_time' => 1447224669,
-                'order_booked_count' => 11,
-                'coupon_id' => 2,
-                "order_booked_end_time" => 1448224669
-            )
-        );
-        if (empty($args['times'])) {
-            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
-        }
-
-        #拼凑数组
-        if ($args['times']) {
-            $array = array();
-            foreach ($args['times'] as $k => $v) {
-                $array[$k]['admin_id'] = isset($attributes['admin_id']) ? $attributes['admin_id'] : "";
-                $array[$k]['order_ip'] = isset($attributes['order_ip']) ? $attributes['order_ip'] : "";
-                $array[$k]['order_is_use_balance'] = isset($attributes['order_is_use_balance']) ? $attributes['order_is_use_balance'] : "";
-                $array[$k]['order_customer_need'] = isset($attributes['order_customer_need']) ? $attributes['order_customer_need'] : "";
-                $array[$k]['order_booked_worker_id'] = isset($attributes['order_booked_worker_id']) ? $attributes['order_booked_worker_id'] : "";
-                $array[$k]['coupon_id'] = isset($v['coupon_id']) ? $v['coupon_id'] : "";
-                $array[$k]['order_customer_memo'] = isset($attributes['order_customer_memo']) ? $attributes['order_customer_memo'] : "";
-                $array[$k]['order_pop_order_money'] = isset($attributes['order_pop_order_money']) ? $attributes['order_pop_order_money'] : "";
-                $array[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
-                $array[$k]['channel_id'] = isset($attributes['channel_id']) ? $attributes['channel_id'] : "";
-                $array[$k]['address_id'] = isset($attributes['address_id']) ? $attributes['address_id'] : "";
-                $array[$k]['order_booked_count'] = isset($v['order_booked_count']) ? $v['order_booked_count'] : "";
-                $array[$k]['order_pop_order_code'] = isset($attributes['order_pop_order_code']) ? $attributes['order_pop_order_code'] : "";
-                $array[$k]['order_pay_type'] = isset($attributes['order_pay_type']) ? $attributes['order_pay_type'] : "";
-                $array[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
-                $array[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
-                $array[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
-                $array[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? $v['order_booked_begin_time'] : "";
-                $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
-            }
-        }
-
-        print_r($array);
-
         $order = new Order();
-        $is_success = array();
-        foreach ($array as $keyk => $valv) {
-            $is_success[] = $order->createNew($valv);
-        }
-//       $array =  array_merge($is_success,$order->errors);
-        print_r($is_success);
-
-        print_r($order->errors);
-        exit;
         $is_success = $order->createNew($attributes);
 
         if ($is_success) {
@@ -1881,6 +1826,11 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
+        
+        if (empty($args['order_batch_code'])) {
+            return $this->send(null, "数据不完整,请输入周期订单号", 0, 200, null, alertMsgEnum::orderGetOrderWorkerNumber);
+        }
+        
         try {
             $orderSearch = new OrderSearch();
             $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
@@ -1895,6 +1845,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order = $val;
                     }
                 }
+                
                 $r_order['sub_order'] = $arr;
                 return $this->send($r_order, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
