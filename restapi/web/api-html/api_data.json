@@ -923,7 +923,7 @@
     "type": "POST",
     "url": "/order/delete-worker-order",
     "title": "[POST]/order/delete-worker-order(100%）",
-    "description": "<p>阿姨删除订单 （郝建设） 该功能暂时没有开发,没有得到核实！[功能介绍：] 删除指定阿姨订单列表 待抢单订单列表</p> ",
+    "description": "<p>阿姨删除订单 （郝建设） [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表 该功能暂时没有开发,没有得到核实！</p> ",
     "name": "actionDeleteWorkerOrder",
     "group": "Order",
     "parameter": {
@@ -1020,6 +1020,13 @@
             "optional": false,
             "field": "order_batch_code",
             "description": "<p>周期订单号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "workerType",
+            "description": "<p>江江获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0;</p> "
           }
         ]
       }
@@ -1028,7 +1035,12 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"操作成功\",\n \"ret\": [\n {\n \"id\": \"8\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"0\",\n \"order_is_parent\": \"0\",\n \"sub_order\": {\n \"1\": {\n \"id\": \"9\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"1\",\n \"order_sys_memo\": \"\"\n },\n \"2\": {\n \"id\": \"10\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_cs_memo\": \"\",\n \"order_sys_memo\": \"\"\n}\n}\n}\n ],\n \"alertMsg\": \"操作成功\"\n }",
+          "content": " HTTP/1.1 200 OK  workerType 为空\n{\n \"code\": 1,\n \"msg\": \"操作成功\",\n \"ret\": [\n {\n \"id\": \"8\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"0\",\n \"order_is_parent\": \"0\",\n \"sub_order\": {\n \"1\": {\n \"id\": \"9\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"1\",\n \"order_sys_memo\": \"\"\n },\n \"2\": {\n \"id\": \"10\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_cs_memo\": \"\",\n \"order_sys_memo\": \"\"\n}\n}\n}\n ],\n \"alertMsg\": \"操作成功\"\n }",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK  workerType=1 有值，提供江江用\n{\n   \"code\": 1,\n   \"msg\": \"操作成功\",\n   \"ret\": {\n       \"worker_money\": \"阿姨支付现金\",\n       \"order_money\":  \"周期订单总价格\",\n       \"order_channel_name\": \"订单渠道名称\",\n       \"order_service_type_name\": \"订单服务类别\",\n       \"order_service_item_name\": \"订单服务项\",\n       \"order_cs_memo\": \"客服备注\",\n       \"order_lat\": \"纬度\",\n       \"order_lng\": \"经度\",\n       \"order_address\": \"详细地址\",\n\t     \"order_batch_code\": \"周期订单号\"\n       \"times\": [\n           {\n               \"order_booked_begin_time\": \"开始时间时间戳\",\n               \"order_booked_end_time\": \"结束时间时间戳\",\n               \"long_time\": \"时长\",\n               \"id\": \"33\",\n               \"order_code\": \"241511106213910\",\n           },\n           {\n               \"order_booked_begin_time\": \"1448334000\",\n               \"order_booked_end_time\": \"1448341200\",\n               \"long_time\": 2,\n               \"id\": \"34\",\n               \"order_code\": \"051511106213998\",\n           },\n       ]\n   },\n   \"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1047,7 +1059,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n  \"ret\":{},\n  \"alertMsg\": \"操作成功\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"用户认证已经过期,请重新登录\"\n  \"ret\":{},\n  \"alertMsg\": \"用户认证已经过期,请重新登录\"\n\n}",
           "type": "json"
         }
       ]
@@ -1174,7 +1186,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": 0/1 # 阿姨是否封号 0正常1封号\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": 0/1  阿姨是否封号 0正常1封号\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -5191,6 +5203,62 @@
   },
   {
     "type": "GET",
+    "url": "/configure/get-service-item",
+    "title": "[GET] /configure/get-service-item （0%）",
+    "description": "<p>根据城市名称和服务类型获取对应的服务品类 (田玉星)</p> ",
+    "name": "actionGetServiceItem",
+    "group": "configure",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "city_name",
+            "description": "<p>城市名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "category_id",
+            "description": "<p>服务类型</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n          {\n              \"good_id\": \"商品ID\",\n              \"goods_name\": \"商品名称\",\n              \"colour\": \"颜色\",\n              \"icon\": \"商品图标\",\n              \"goods_price\":\"商品价格\",\n              \"goods_price_description\":\"商品价格描述\"\n          }\n      ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 0,\n      \"msg\": \"城市名称参数错误\",\n      \"ret\": {},\n      \"alertMsg\": \"获取服务类型详情失败\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ConfigureController.php",
+    "groupTitle": "configure"
+  },
+  {
+    "type": "GET",
     "url": "/configure/start-page",
     "title": "[GET] /configure/start-page  （20%）",
     "description": "<p>阿姨端启动页（赵顺利）</p> ",
@@ -5850,7 +5918,7 @@
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>Number</p> ",
             "optional": false,
             "field": "radius",
             "description": "<p>半径</p> "
@@ -5868,6 +5936,20 @@
             "optional": false,
             "field": "ak",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Number</p> ",
+            "optional": false,
+            "field": "page_size",
+            "description": "<p>每页条数</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Number</p> ",
+            "optional": false,
+            "field": "page_num",
+            "description": "<p>页数  允许为0</p> "
           }
         ]
       }

@@ -78,5 +78,16 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 	}
 	
 	
+	/**
+	 * 订单配置项
+	 * @date: 2015-11-10
+	 * @author: peak pan
+	 * @return:
+	 **/
+	public static  function configorder()
+	{
+		return ['1' => 'e家洁', '2' => 'POP','3'=>'BOSS'];
+	}
+	
 	
 }

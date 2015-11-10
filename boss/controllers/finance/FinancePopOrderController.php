@@ -25,7 +25,7 @@ use dbbase\models\finance\FinanceHeader;
 use boss\models\finance\FinanceRecordLogSearch;
 use boss\models\finance\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
-use core\models\payment\GeneralPaySearch;
+use core\models\payment\PaymentSearch;
 use dbbase\models\finance\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
 use dbbase\models\finance\FinancePayChannel;
@@ -105,8 +105,8 @@ class FinancePopOrderController extends Controller
     	$modelinfo= new FinancePopOrder;
     	
     	if(Yii::$app->request->isPost) {
-    		if(Yii::$app->params['uploadpath']){
-    		//开启七牛上传，文件存储在七牛
+    		if(true){
+    		//开启七牛上传，文件存储在七牛Yii::$app->params['uploadpath']
     			$data = \Yii::$app->request->post();
     			$model->load($data);
     			$file = UploadedFile::getInstance($model, 'finance_uplod_url');
@@ -192,13 +192,11 @@ class FinancePopOrderController extends Controller
     		 
     		 $FinanceRecordLog = new FinanceRecordLogSearch;
     		 
-    		// $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
-    		 //if($customer_info>0){
-    		 	///\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
-    		 	//return $this->redirect(['index']);
-    		// }
-    		 
-    		
+    		 $customer_info = FinanceRecordLog::find()->where(['finance_order_channel_name'=>trim($filenamesitename)])->count();
+    		 if($customer_info>0){
+    		 	\Yii::$app->getSession()->setFlash('default','对不起，此账期已经上传过！');
+    		 	return $this->redirect(['index']);
+    		 }
     		 
     		foreach ($sheetData as $key=>$value){
     			//去除表头
@@ -311,9 +309,10 @@ class FinancePopOrderController extends Controller
 
   		##########################
   		//获取下单渠道
-         $tyu= FinanceOrderChannel::get_order_channel_listes();
+ 
+        $tyu=\core\models\operation\OperationOrderChannel::getorderchannellist('all');
          //获取支付渠道
-         $paydat= FinancePayChannel::get_pay_channel_list();
+        $paydat=\core\models\operation\OperationPayChannel::getpaychannellist('all');
          
          $searchModel = new FinancePopOrderSearch;
          //默认条件
@@ -368,7 +367,7 @@ class FinancePopOrderController extends Controller
     public function actionOrderlist()
     { 
     	//获取下单渠道
-    	$tyu= FinanceOrderChannel::get_order_channel_listes();
+    	$tyu=\core\models\operation\OperationOrderChannel::getorderchannellist('all');
     	$dateinfo=Yii::$app->request->getQueryParams();
     	if($dateinfo['id']){
     	$info=FinanceRecordLogSearch::get_financerecordloginfo($dateinfo['id']);
@@ -408,8 +407,7 @@ class FinancePopOrderController extends Controller
     public function actionGeneralpaylist()
     { 
     	//获取下单渠道
-    	$tyu= FinanceOrderChannel::get_order_channel_listes();
-
+    	$tyu= \core\models\operation\OperationOrderChannel::getorderchannellist('all');
     	//我有三没有开始处理 从订单表里面开始查询
     	
     	
@@ -419,7 +417,7 @@ class FinancePopOrderController extends Controller
     		 
     		if($info->finance_pay_channel_id=='10' && $info->finance_pay_channel_id=='7' &&$info->finance_pay_channel_id=='8' && $info->finance_pay_channel_id=='12' ){
     			//银联充值
-    			$searchModel= new GeneralPaySearch;
+    			$searchModel= new PaymentSearch;
     			$searchModel->load(Yii::$app->request->getQueryParams());
     			$searchModel->finance_record_log_statime=$info->finance_record_log_statime;
     			$searchModel->finance_record_log_endtime=$info->finance_record_log_endtime;
@@ -445,7 +443,7 @@ class FinancePopOrderController extends Controller
     public function actionBad()
     {
     	//获取下单渠道
-    	$tyu= FinanceOrderChannel::get_order_channel_listes();
+    	$tyu= \core\models\operation\OperationOrderChannel::getorderchannellist('all');
     	
     	$searchModel = new FinancePopOrderSearch;
     	$searchModel->load(Yii::$app->request->getQueryParams());
@@ -744,8 +742,7 @@ class FinancePopOrderController extends Controller
     public function actionBillinfo(){
     	
     	//获取下单渠道
-    	$tyu= FinanceOrderChannel::get_order_channel_listes();
-    	
+    	$tyu= \core\models\operation\OperationOrderChannel::getorderchannellist('all');
     	$searchModel = new FinancePopOrderSearch;
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->is_del=0;

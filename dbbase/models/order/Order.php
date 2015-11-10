@@ -104,6 +104,7 @@ class Order extends ActiveRecord
     public $worker_type_id;
     public $order_worker_type_name;
     public $order_worker_assign_type;
+    public $order_worker_assign_time;
     public $shop_id;
     public $order_worker_shop_name;
     public $admin_id;
@@ -160,6 +161,7 @@ class Order extends ActiveRecord
         'worker_type_id',
         'order_worker_type_name',
         'order_worker_assign_type',
+        'order_worker_assign_time',
         'shop_id',
         'order_worker_shop_name',
         'admin_id',
@@ -298,6 +300,7 @@ class Order extends ActiveRecord
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
+            'order_worker_assign_time' => '接单时间',
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
             'admin_id' => '操作人id 1系统 2客户 3阿姨 >3后台管理员',

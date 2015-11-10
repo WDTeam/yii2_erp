@@ -1,8 +1,6 @@
 <?php
 
 namespace core\models\operation;
-use core\models\operation\OperationServiceCardInfo;
-use core\models\operation\OperationServiceCardWithCustomer;
 use core\models\customer\Customer;
 /**
  * This is the model class for table "ejj_operation_service_card_sell_record".
@@ -44,46 +42,63 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
      * @return string
      */
     public function createServiceCardSellRecord($attributes)
-    {
-        //1.读取attributes，写入this对象属性
-        $this->setAttributes($attributes);
+    {   //0.创建一个对象
+        $model=new OperationServiceCardSellRecord;
+        if($attributes['customer_id']==null || $attributes['service_card_info_id']==null){
+            return "error:customer_id or service_card_info_id is null";
+        }
+        //1.读取attributes，写入$model对象属性
+        $model->setAttributes($attributes);
+
         //2.根据service_card_info_id查询服务卡信息
-        $operationServiceCardInfo = OperationServiceCardInfo::getServiceCardInfoById($this->service_card_info_id);
+        $operationServiceCardInfo = OperationServiceCardInfo::getServiceCardInfoById($model->service_card_info_id);
+
         //3.写入服务卡信息
-        $this->setAttributes([
-            'service_card_info_name' => $operationServiceCardInfo->service_card_info_name,//服务卡名
-        ]);
-        //4.判断订单金额是否为NULL，若是，服务卡面值-优惠金额为订单金额
-        if($this->service_card_sell_record_money==null){
+        if($operationServiceCardInfo!=null){
+            //4.判断订单金额是否为NULL，若是，服务卡面值-优惠金额为订单金额(默认订单金额计算规则)
+            if($model->service_card_sell_record_money==null){
                 $service_card_sell_record_money=
-                $operationServiceCardInfo->service_card_info_value-$operationServiceCardInfo->service_card_info_rebate_value;
-            $this->setAttributes([
-                'service_card_sell_record_money' => $service_card_sell_record_money//服务卡名
+                    $operationServiceCardInfo->service_card_info_value-$operationServiceCardInfo->service_card_info_rebate_value;
+
+            }
+            $model->setAttributes([
+                'service_card_sell_record_money' => $service_card_sell_record_money,//订单金额
+                'service_card_info_name' => $operationServiceCardInfo->service_card_info_name,//服务卡名
+            ]);
+
+        }else{
+            $model->setAttributes([
+                'service_card_sell_record_money' => 0,//订单金额
+                'service_card_info_name' => "",//服务卡名
             ]);
         }
 
         //5.根据customer_id，获取用户对象
-        $customer = Customer::getCustomerById($this->customer_id);
+        $customer = Customer::getCustomerById($model->customer_id);
 
         //6.写入用户信息
-        $this->setAttributes([
-            'customer_phone' => $customer->customer_phone,
-        ]);
+        if($customer!=null){
+            $model->setAttributes([
+                'customer_phone' => $customer->customer_phone,
+            ]);
+        }
+
         //7.生成购卡销售订单号
         $service_card_sell_record_code=self::getServiceCardSellRecordCode();
 
         //8.初始化其他字段
-        $this->setAttributes([
+        $model->setAttributes([
             'service_card_sell_record_code'=>$service_card_sell_record_code,
             'is_del' => 0,
             'created_at'=>time(),
             'updated_at'=>time(),
         ]);
+
         //9.保存购卡销售记录
-        if($this->doSave()){
-            return $this->service_card_sell_record_code;//返回购卡订单号
+        if($model->save()){
+           return $model->service_card_sell_record_code;//返回购卡订单号
         }else{
-            return null;//返回NULL，说明保存失败
+            return $model->errors;//返回失败信息
         }
     }
 
@@ -106,31 +121,38 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
      */
     public function backServiceCardSellRecord($attributes)
     {
-        //1.读取attributes，写入this对象属性
-        $this->setAttributes($attributes);
+        //0.基于销售订单号，查询订单信息.（以下操作是为满足现有交易实现方案）。
+        $model=new OperationServiceCardSellRecord;
+        if(!empty($attributes['service_card_sell_record_code'])){
+            $model=OperationServiceCardSellRecord::getServiceCardSellRecordByCode($attributes['service_card_sell_record_code']);
+        }
+        //1.读取attributes，写入model对象属性
+        $model->setAttributes($attributes);
         //2.设置更新时间
-        $this->setAttributes([
+        $model->setAttributes([
             'updated_at'=>time(),
         ]);
-        //3.基于code查询id，目的是以主键id更新记录。
-        //以上操作为满足现有交易流水，业务需确定一个code一条记录。
-        $tempO=$this->getServiceCardSellRecordByCode($this->service_card_sell_record_code);
-        $this->setAttributes([
-            'id' =>$tempO->id,
-        ]);
         //3.保存回写信息
-        if($this->dosave()){
-            //回写成功，生成客户服务关系记录
-               return (new OperationServiceCardWithCustomer)->createServiceCardWithCustomer(
-               $this->id,
-               $this->customer_id,
-               $this->customer_trans_record_pay_money,
-               $this->customer_trans_record_paid_at);
-
-            return true;
+       if($model->save()){
+           //回写成功，生成客户服务关系记录
+          $service_card_with_customer_code=(new OperationServiceCardWithCustomer)->createServiceCardWithCustomer(
+               $model->id,
+               $model->customer_id,
+               $model->customer_trans_record_pay_money,
+               $model->customer_trans_record_paid_at);
+           //在客服服务卡消费表中，初始化一条记录，记录服务卡消费的初始状态
+           //组织服务卡消费记录参数
+           $attrs= [
+            "customer_id"=>$model->customer_id,//用户ID
+            "service_card_with_customer_code"=>$service_card_with_customer_code,//服务卡号
+            "service_card_consume_record_use_money"=>0,//使用金额
+            "customer_trans_record_transaction_id"=>''//服务交易号
+           ];
+           //保存服务卡消费记录，并返回参数
+          // return ((new OperationServiceCardConsumeRecord)->createServiceCardConsumeRecord($attrs));
         }else{
-            return null;//NULL表示数据生成失败
-        }
+            return $model->errors;//返回失败记录
+       }
     }
 
     /**
@@ -138,7 +160,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
      * @return mixed
      */
     private function getServiceCardSellRecordCode(){
-        $code='9999'+time();
+        $code="99999999";
         return $code;
     }
 
@@ -166,7 +188,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
      * @param $service_card_sell_record_code
      * @return bool|string
      */
-    public function getServiceCardSellRecordByCode($service_card_sell_record_code)
+    public static function getServiceCardSellRecordByCode($service_card_sell_record_code)
     {
         $service_card_sell_record = self::findOne(['service_card_sell_record_code'=>$service_card_sell_record_code,
             'is_del'=>0]);

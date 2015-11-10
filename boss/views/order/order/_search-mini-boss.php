@@ -56,7 +56,27 @@ use boss\models\order\Order;
     ?>
     <div class="row">
         <div class="col-sm-2">
-            <?= $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu input_customer_phone'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
+            <div class="form-group field-ordersearchindex-order_worker_assign_type">
+                <label for="ordersearchindex-order_worker_assign_type" class="m_ipone">订单来自:</label>
+                <select name="OrderSearchIndex[order_worker_assign_type]" class="m_ipu" id="ordersearchindex-order_worker_assign_type">
+                    <option value=""></option>
+                    <option value="1">系统分单</option>
+                    <option value="2">阿姨接单</option>
+                </select>
+
+                <div class="help-block"></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group" style="width: auto;">
+                <label class="m_ipone">接单时间:</label>
+                <input name="<?= $search_class_name ?>[assign_from]" type="text" class="Wdate" id="d412"
+                       onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
+                       value="<?= isset($searchParas[$search_class_name]['assign_from']) ? Html::encode($searchParas[$search_class_name]['assign_from']) : '' ?>"/>到
+                <input name="<?= $search_class_name ?>[assign_to]" type="text" class="Wdate" id="d412"
+                       onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
+                       value="<?= isset($searchParas[$search_class_name]['assign_to']) ? Html::encode($searchParas[$search_class_name]['assign_to']) : '' ?>"/>
+            </div>
         </div>
         <div class="col-sm-2">
             <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
@@ -77,36 +97,13 @@ use boss\models\order\Order;
                 ],
             ])->label('门店:', ['class' => 'm_ipone', 'style' => 'line-height:35px']); ?>
         </div>
-        <div class="col-sm-8">
-            <div class="form-group" style="width: auto;">
-                <label class="m_ipone">下单时间:</label>
-                <input name="<?= $search_class_name ?>[created_from]" type="text" class="Wdate" id="d412"
-                       onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
-                       value="<?= isset($searchParas[$search_class_name]['created_from']) ? Html::encode($searchParas[$search_class_name]['created_from']) : '' ?>"/>到
-                <input name="<?= $search_class_name ?>[created_to]" type="text" class="Wdate" id="d412"
-                       onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
-                       value="<?= isset($searchParas[$search_class_name]['created_to']) ? Html::encode($searchParas[$search_class_name]['created_to']) : '' ?>"/>
-            </div>
-        </div>
+
     </div>
     <div class="row">
         <div class="col-sm-2">
             <?= $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-2">
-            <?= $form->field($searchModel, 'district_id')->widget(Select2::classname(), [
-                'name' => 'worker_district',
-                'hideSearch' => true,
-                'data' => Order::getDistrictList(),
-                'options' => ['placeholder' => '选择商圈', 'class' => 'm_ipu'],
-                'pluginOptions' => [
-                    'width' => '65%',
-                    'tags' => true,
-                    'maximumInputLength' => 10
-                ],
-            ])->label('商圈:', ['class' => 'm_ipone', 'style' => 'line-height:35px']); ?>
-        </div>
-        <div class="col-sm-8">
+        <div class="col-sm-4">
             <div class="form-group" style="width: auto;">
                 <label class="m_ipone">服务时间:</label>
                 <input name="<?= $search_class_name ?>[booked_from]" type="text" class="Wdate" id="d412"
@@ -116,11 +113,6 @@ use boss\models\order\Order;
                        onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
                        value="<?= isset($searchParas[$search_class_name]['booked_to']) ? Html::encode($searchParas[$search_class_name]['booked_to']) : '' ?>"/>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-        <?= $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
         </div>
         <div class="col-sm-2">
         <?= $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>

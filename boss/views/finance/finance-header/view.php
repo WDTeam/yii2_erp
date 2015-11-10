@@ -1,20 +1,9 @@
 <?php
 
-use yii\helpers\Html;
 use kartik\detail\DetailView;
-use kartik\datecontrol\DateControl;
-use kartik\date\DatePicker;
-use kartik\grid\GridView;
-use kartik\widgets\ActiveForm;
-use kartik\widgets\Select2; 
-
-/**
- * @var yii\web\View $this
- * @var dbbase\models\FinanceHeader $model
- */
 
 $this->title = $model->finance_header_title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Headers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '表头管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-header-view">
@@ -28,14 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-           // 'id',
             'finance_header_name',
-            //'finance_order_channel_id',
             'finance_order_channel_name',
-            //'finance_pay_channel_id',
             'finance_pay_channel_name',
-            //'create_time:datetime',
-           // 'is_del',
     		[
     		'attribute' => 'finance_header_where',
     		'type' => DetailView::INPUT_WIDGET,

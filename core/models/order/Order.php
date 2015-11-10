@@ -598,6 +598,7 @@ class Order extends OrderModel
         $order->order_worker_type_name = $worker['worker_type_description'];
         $order->shop_id = $worker["shop_id"];
         $order->order_worker_shop_name = $worker["shop_name"];
+        $order->order_worker_assign_time = YII_BEGIN_TIME;
         $order->order_worker_assign_type = $assign_type; //接单方式
         $order->admin_id = $admin_id;
         if ($admin_id > 3) { //大于3属于人工操作
@@ -1111,9 +1112,9 @@ class Order extends OrderModel
         if (isset($status) && is_array($status)) {
             $statusList = $statusAC->where(['in', 'id', $status])->asArray()->all();
         } else {
-            $statusList = $statusAC->asArray()->all();
+            $statusList = $statusAC->where(['not in', 'id', [OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,OrderStatusDict::ORDER_SYS_ASSIGN_DONE]])->asArray()->all();
         }
-        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
+        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_boss') : [];
     }
 
     /*

@@ -48,7 +48,7 @@ class OperationOrderChannelSearch extends OperationOrderChannel
     public function search($params)
     {
         $query = OperationOrderChannel::find();
-
+        $query= $query->orderBy('operation_order_channel_type asc');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

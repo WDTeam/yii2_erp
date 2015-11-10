@@ -4,6 +4,10 @@ namespace boss\controllers\worker;
 
 
 
+use boss\models\operation\OperationCity;
+use boss\models\worker\WorkerExport;
+use Composer\Package\Loader\ValidatingArrayLoader;
+use core\models\worker\WorkerIdentityConfig;
 use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -30,6 +34,7 @@ use core\models\operation\OperationShopDistrict;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerVacationApplication;
 use yii\web\ServerErrorHttpException;
+use yii\web\UploadedFile;
 
 /**
  * WorkerController implements the CRUD actions for Worker model.
@@ -57,10 +62,6 @@ class WorkerController extends BaseAuthController
      */
     public function actionIndex()
     {
-        if(Yii::$app->request->get('getData')==1){
-            $this->actionGetDataFromOldDataBase();
-            $this->redirect(['index']);
-        }
         $searchModel = new WorkerSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
@@ -86,7 +87,7 @@ class WorkerController extends BaseAuthController
             //更新阿姨附属信息
             $workerExtModel->worker_id = $workerModel->id;
             $workerExtModel->save();
-            //更新阿姨商圈信息 ???
+            //更新阿姨商圈信息
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
@@ -236,7 +237,6 @@ class WorkerController extends BaseAuthController
             $workerModel = new Worker;
             $workerModel->load(Yii::$app->request->post());
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
-
         }
     }
 
@@ -629,6 +629,250 @@ class WorkerController extends BaseAuthController
         $workerBlockModel = new WorkerBlockLog();
         $workerBlockModel->load(['WorkerBlockLog'=>$logArr]);
         $workerBlockModel->save();
+    }
+
+    /**
+     * 导入新阿姨从Excel
+     */
+    public function actionExportDataFromExcel(){
+        $model = new WorkerExport();
+        //上传阿姨信息
+        $model->excel = UploadedFile::getInstance($model, 'excel');
+        if ($model->excel) {
+            $path='upload/';
+            $filename=time().'.'.$model->excel->extension;
+            if(!file_exists($path))mkdir($path);
+            if(!$model->excel->saveAs($path.$filename)){
+                \Yii::$app->getSession()->setFlash('default','上传文件错误');
+            }
+            $filePath = $path.$filename;
+            $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            $this->insertWorkerData($sheetData);
+        }
+
+        \Yii::$app->getSession()->setFlash('default','上传成功');
+        $this->redirect(['index']);
+    }
+
+    public function actionExportVacationDataFromExcel(){
+        $model = new WorkerExport();
+        //上传阿姨请假信息
+        $model->excel_vacation = UploadedFile::getInstance($model, 'excel_vacation');
+        if ($model->excel_vacation) {
+            $path='upload/';
+            $filename=time().'.'.$model->excel_vacation->extension;
+            if(!file_exists($path))mkdir($path);
+            if(!$model->excel_vacation->saveAs($path.$filename)){
+                \Yii::$app->getSession()->setFlash('default','上传文件错误');
+            }
+            $filePath = $path.$filename;
+            $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            $this->insertWorkerVacationData($sheetData);
+        }
+
+
+        \Yii::$app->getSession()->setFlash('default','上传成功');
+        $this->redirect(['index']);
+    }
+
+    public function insertWorkerVacationData($workerVacationInfo){
+        $typeList = ['休假'=>2,'事假'=>1];
+        $connectionNew =  \Yii::$app->db;
+        echo '<pre>';
+        foreach ($workerVacationInfo as $key=>$col) {
+            if($key<2){
+                continue;
+            }
+            $workerResult = Worker::find()->where(['worker_phone'=>trim($col['B']),'worker_name'=>trim($col['A'])])->one();
+            if(empty($workerResult)){
+                \Yii::$app->getSession()->setFlash('default',$col['B'].'不存在');
+            }
+            $time = time();
+            $workerVacationArr['worker_id'] = $workerResult['id'];
+            $workerVacationArr['worker_vacation_start_time'] = strtotime($col['C']);
+            $workerVacationArr['worker_vacation_finish_time'] = strtotime($col['D']);
+            $workerVacationArr['worker_vacation_type'] = $typeList[$col['E']];
+            $workerVacationArr['worker_vacation_extend'] = trim($col['F']);
+            $workerVacationArr['worker_vacation_source'] = 0;
+            $workerVacationArr['created_ad'] = $time;
+            if(strtotime(trim($col['C']).' 00:00:00')<=$time && strtotime(trim($col['D']).' 11:59:59')>$time){
+                $workerInfo['worker_is_vacation'] = $workerVacationArr['worker_vacation_type'];
+                $connectionNew->createCommand()->update('{{%worker}}',$workerInfo,['id'=>intval($workerResult['id'])])->execute();
+            }
+            $batchWorkerVacation[] = $workerVacationArr;
+
+        }
+        $workerVacationtColumns = array_keys($workerVacationArr);
+        $connectionNew->createCommand()->batchInsert('{{%worker_vacation}}',$workerVacationtColumns, $batchWorkerVacation)->execute();
+    }
+
+    public function insertWorkerData($workerInfo){
+        ini_set('memory_limit','512M');
+        $operationArea = new OperationArea();
+        $connectionNew =  \Yii::$app->db;
+        $shopArr = Shop::find()->asArray()->all();
+        $shopArr = ArrayHelper::map($shopArr,'name','id');
+//        $identityConfigArr = WorkerIdentityConfig::find()->asArray()->all();
+//        $identityConfigArr = ArrayHelper::map($identityConfigArr,'worker_identity_name','id');
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        $onlineCityList =  ArrayHelper::map($onlineCityList,'city_name','city_id');
+        $districtList = OperationShopDistrict::getCityShopDistrictList();
+        $districtList = ArrayHelper::map($districtList,'operation_shop_district_name','id');
+        $sexList = ['女'=>0,'男'=>1];
+        $typeList = ['自营'=>1,'非自营'=>2];
+        $isHealthList = ['是'=>1,'否'=>0];
+        $isInsuranceList= ['是'=>1,'否'=>0];
+        $blockList= ['是'=>1,'否'=>0];
+        $blacklist = [''=>0,'是'=>1,'否'=>0];
+        $batchWorkerDistrict = [];
+        $workerEduList = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
+        $identityConfigArr = ['全职全日'=>1,'兼职'=>2];
+        $lastWorkerId = Worker::find()->limit(1)->orderBy('id desc')->asArray()->one();
+
+        if(empty($lastWorkerId)){
+            $worker_id = 0;
+        }else{
+            $worker_id = $lastWorkerId['id'];
+        }
+        if($workerInfo){
+            foreach($workerInfo as $key=>$col){
+                if($key<2){
+                    continue;
+                }
+                if($col['L']!='自营'){
+                    continue;
+                }
+                if($col['M']!='全职全日' && $col['M']!='兼职'){
+                    continue;
+                }
+                $worker_id++;
+                $workerArr['id'] = $worker_id;
+                $workerArr['worker_name'] = $col['A'];
+                $workerArr['shop_id'] = isset($shopArr[$col['B']])?$shopArr[$col['B']]:'';
+                $workerArr['worker_phone'] = $col['C'];
+                $workerArr['worker_idcard'] = $col['D'];
+                //$workerArr['worker_photo'] = $col['E'];
+                if(stripos($col['F'],'市')===false){
+                    $onlineCity = $col['F'].'市';
+                    $workerArr['worker_work_city'] = isset($onlineCityList[$onlineCity])?$onlineCityList[$onlineCity]:0;
+                }
+                $workerArr['worker_type'] = $typeList[$col['L']];
+                $workerArr['worker_identity_id'] = $identityConfigArr[$col['M']];
+                $workerArr['worker_is_blacklist'] = $blacklist[$col['AB']];
+                $workerArr['worker_blacklist_time'] = strtotime($col['AC']);
+                $workerArr['worker_blacklist_reason'] = trim($col['AD']);
+                if($col['AM']=='0000-00-00 00:00:00'){
+                    $workerArr['created_ad'] = strtotime($col['AM']);
+                }else{
+                    $workerArr['created_ad'] = '';
+                }
+
+                $workerExtArr['worker_id'] = $worker_id;
+                $workerExtArr['worker_age'] = intval($col['N']);
+                $workerExtArr['worker_sex'] = $sexList[$col['O']];
+                $workerExtArr['worker_edu'] = isset($workerEduList[$col['P']])?$workerEduList[$col['P']]:'';
+                $workerExtArr['worker_is_health'] = intval(['Q']);
+                $workerExtArr['worker_is_insurance'] = intval($col['R']);
+                $workerExtArr['worker_source'] = $col['S'];
+                $workerExtArr['worker_bank_name'] = $col['T'];
+                $workerExtArr['worker_bank_from'] = $col['U'];
+                $workerExtArr['worker_bank_area'] = $col['V'];
+                $workerExtArr['worker_bank_card'] = $col['W'];
+//                if($col['K']){
+//                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$col['H']])->asArray()->one();
+//                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$col['I']])->asArray()->one();
+//                    $areaResult = $operationArea->find()->select('id')->where(['area_name'=>$col['J']])->asArray()->one();
+//                    $workerExtArr['worker_live_province'] = $provinceResult['id'];
+//                    $workerExtArr['worker_live_city'] = $cityResult['id'];
+//                    $workerExtArr['worker_live_area'] = $areaResult['id'];
+//                    $workerExtArr['worker_live_street'] = $col['K'];
+//                }
+                if($col['K']){
+                    $areaArr = explode(':#:',$col['K']);
+                    if(strpos($areaArr[0],'市')!==false){
+                        $areaArr[0] = str_replace('市','',$areaArr[0]);
+                    }
+                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[0]])->asArray()->one();
+                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[1]])->asArray()->one();
+                    $areaResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[2]])->asArray()->one();
+                    $workerExtArr['worker_live_province'] = $provinceResult['id'];
+                    $workerExtArr['worker_live_city'] = $cityResult['id'];
+                    $workerExtArr['worker_live_area'] = $areaResult['id'];
+                    $workerExtArr['worker_live_street'] = $areaArr[3];
+                }else{
+                    $workerExtArr['worker_live_province'] = '';
+                    $workerExtArr['worker_live_city'] = '';
+                    $workerExtArr['worker_live_area'] = '';
+                    $workerExtArr['worker_live_street'] = '';
+                }
+
+
+
+
+                $workerStatArr['worker_id'] = $worker_id;
+                $workerStatArr['worker_stat_order_num'] =  intval($col['AE']);
+                $workerStatArr['worker_stat_order_money'] = intval($col['AH']);
+                $workerStatArr['worker_stat_order_refuse'] = intval($col['AF']);
+                $workerStatArr['worker_stat_order_complaint'] = intval($col['AG']);
+                $workerStatArr['worker_stat_sale_cards'] = intval($col['AI']);
+                $workerStatArr['worker_stat_comment_good'] = intval($col['AJ']);
+                $workerStatArr['worker_stat_comment_normal'] = intval($col['AK']);
+                $workerStatArr['worker_stat_comment_bad'] = intval($col['AL']);
+
+                $workerBlockArr['worker_id'] = $worker_id;
+                $time = time();
+                $workerBlockArr['worker_block_start_time'] = strtotime($col['Y']);
+                $workerBlockArr['worker_block_finish_time'] = strtotime($col['Z']);
+                $workerBlockArr['created_ad'] = time();
+                if($workerBlockArr['worker_block_start_time']<$time && $workerBlockArr['worker_block_finish_time']>=$time){
+                    $workerBlockArr['worker_block_status'] = 1;
+                    $workerArr['worker_is_block'] = 1;
+                }else{
+                    $workerBlockArr['worker_block_status'] = 0;
+                    $workerArr['worker_is_block'] = 0;
+                }
+                $workerBlockArr['worker_block_reason'] = trim($col['AA']);
+
+                $workerAuthArr['worker_id'] = $worker_id;
+
+                $workerDeviceArr['worker_id'] = $worker_id;
+
+                $districtArr = explode(',',$col['G']);
+                if($col['G']){
+                    foreach ((array)$districtArr as $d_val) {
+                        $batchWorkerDistrict[] = [
+                            'worker_id'=>$worker_id,
+                            'operation_shop_district_id'=>$districtList[$d_val],
+                            'create_ad'=>time(),
+                        ];
+                    }
+                }
+                $batchWorker[] = $workerArr;
+                $batchWorkerExt[] = $workerExtArr;
+                $batchWorkerDevice[] = $workerDeviceArr;
+                $batchWorkerStat[] = $workerStatArr;
+                $batchWorkerAuth[] = $workerAuthArr;
+                $batchWorkerBlockArr[] = $workerBlockArr;
+                //Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type'],$workerArr['worker_identity_id']);
+            }
+            $workerColumns = array_keys($workerArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker}}',$workerColumns, $batchWorker)->execute();
+            $workerExtColumns = array_keys($workerExtArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_ext}}',$workerExtColumns, $batchWorkerExt)->execute();
+            $workerDeviceColumns = array_keys($workerDeviceArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_device}}',$workerDeviceColumns, $batchWorkerDevice)->execute();
+            $workerStatColumns = array_keys($workerStatArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_stat}}',$workerStatColumns, $batchWorkerStat)->execute();
+            $workerAuthColumns = array_keys($workerAuthArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_auth}}',$workerAuthColumns, $batchWorkerAuth)->execute();
+            if($batchWorkerDistrict){
+                $connectionNew->createCommand()->batchInsert('{{%worker_district}}',['worker_id','operation_shop_district_id','created_ad'], $batchWorkerDistrict)->execute();
+            }
+            $workerBlockColumns = array_keys($workerBlockArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_block}}',$workerBlockColumns, $batchWorkerBlockArr)->execute();
+        }
     }
 
     /**
