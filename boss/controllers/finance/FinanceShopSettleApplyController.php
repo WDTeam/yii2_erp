@@ -159,7 +159,7 @@ class FinanceShopSettleApplyController extends Controller
         $requestParams = Yii::$app->request->getQueryParams();
         $isExport = 0;
         if(isset($requestParams['isExport'])){
-            $isExport = 1;
+            $isExport = $requestParams['isExport'];
         }
         $searchModel->load($requestParams);
         if(\Yii::$app->user->identity->isMiniBossUser()){
