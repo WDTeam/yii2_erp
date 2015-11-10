@@ -174,7 +174,8 @@ class FinanceRefundController extends BaseAuthController
         $model->save();
 
         if (!$s || $requestModel['edit'] == 'baksite') {
-            \Yii::$app->getSession()->setFlash('default', '充值记录查询无此记录,退款失败！');
+            $msg = !empty($s['info']) ? $s['info'] : '充值记录查询无此记录,退款失败！';
+            \Yii::$app->getSession()->setFlash('default', $msg);
             return $this->redirect(['index', 'id' => $requestModel['id']]);
         } else {
             return $this->redirect(['index', 'id' => $requestModel['id']]);
