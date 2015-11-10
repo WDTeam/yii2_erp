@@ -257,7 +257,7 @@ class Customer extends \dbbase\models\customer\Customer
      * @param $customer_id
      * @param $operate_balance
      * @param $trans_no
-     * @param $operate_type
+     * @param $operate_type -1为余额退换０为充值１为支付
      * @return array
      */
     public static function operateBalance($customer_id, $operate_balance, $trans_no, $operate_type){
@@ -279,20 +279,25 @@ class Customer extends \dbbase\models\customer\Customer
         switch($operate_type){
             case -1:
                 $end_balance = $begin_balance + $operate_balance;
-                $operate_type_name = '增加';
-                $trans_prefix = 'inc';
+                $operate_type_name = '退款';
+                $trans_prefix = '06';
+                break;
+            case 0:
+                $end_balance = $begin_balance + $operate_balance;
+                $operate_type_name = '充值';
+                $trans_prefix = '10';
                 break;
             case 1:
                 $end_balance = $begin_balance - $operate_balance;
-                $operate_type_name = '减少';
-                $trans_prefix = 'dec';
+                $operate_type_name = '支付';
+                $trans_prefix = '08';
                 break;
             default:
                 break;
         }
         
         //generating trans serial
-        $trans_serial = $trans_prefix.time();
+        $trans_serial = $trans_prefix.date('yymmdd', time()).mt_rand(1000, 9999);
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerExtBalance->customer_balance = $end_balance;
@@ -311,6 +316,8 @@ class Customer extends \dbbase\models\customer\Customer
             $customerExtBalanceRecord->created_at = time();
             $customerExtBalanceRecord->updated_at = 0;
             $customerExtBalanceRecord->is_del = 0;
+//            $customerExtBalanceRecord->admin_id = \Yii::$app->user->id;
+//            $customerExtBalanceRecord->admin_name = \Yii::$app->user->identity->username;
             $customerExtBalanceRecord->save();
             $formated_date = date('Y年m月d日', time());
             $msg = "【余额变动】您于".$formated_date.$operate_type_name.$operate_balance."，当前余额".$end_balance."元。下载APP（http://t.cn/8schPc6）可以随时查看账户消费记录，如有疑问请联系客服：4006767636。";

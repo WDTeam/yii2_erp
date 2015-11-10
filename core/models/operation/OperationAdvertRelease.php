@@ -6,6 +6,7 @@ use core\models\operation\OperationPlatformVersion;
 use core\models\operation\OperationAdvertPosition;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "{{%operation_advert_release}}".
@@ -21,8 +22,17 @@ use Yii;
 class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRelease
 {
 
+    /**
+     * 广告状态
+     */
     const ADVERT_ONLINE = 1;
     const ADVERT_OFFLINE = 2;
+
+    /**
+     * API状态码
+     */
+    const MISSING_PARAM = 0;
+    const EMPTY_CONTENT = 1;
 
     public function getAdvertList($city_id, $platform_id = 0, $version_id = 0, $position_id = 0)
     {
@@ -49,20 +59,20 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
      */
     public static function getCityAdvertInfo($city_name, $platform_name, $platform_version_name, $position_name = 'banner')
     {
-        if (!isset($city_name) || $city_name == '' || !isset($platform_name) || $platform_name == '' || !isset($platform_version_name) || $platform_version_name) {
-            return '参数不正确';
+        if (!isset($city_name) || $city_name == '' || !isset($platform_name) || $platform_name == '' || !isset($platform_version_name) || $platform_version_name=="") {
+            return ['code' => self::MISSING_PARAM, 'errmsg' => '参数不正确'];
         }
-
+        //北京市--ios--4.4--banner
         $platform_id = OperationPlatformVersion::getPlatformId($platform_name, $platform_version_name);
         if ($platform_id == false) {
-            return '没有对应数据';
+            return ['code' => self::EMPTY_CONTENT, 'errmsg' => '没有对应数据'];
         }
 
         $position_id = OperationAdvertPosition::getAdvertPositionId($position_name);
         if ($position_id == false) {
-            return '没有对应数据';
+            return ['code' => self::EMPTY_CONTENT, 'errmsg' => '没有对应数据'];
         }
-
+        
         $query = new \yii\db\Query();
         $query = $query->select([
             'oar.advert_release_order',
@@ -85,7 +95,12 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
             'query' => $query,
         ]);
 
-        return $dataProvider->query->all();
+        $result = $dataProvider->query->all();
+        if (isset($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return ['code' => self::EMPTY_CONTENT, 'errmsg' => '没有对应数据'];
+        }
     }
 
     /**

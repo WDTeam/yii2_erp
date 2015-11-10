@@ -14,6 +14,10 @@ class m150928_104616_create_table_payment_customer_trans_record_log extends Migr
         $this->createTable('{{%payment_customer_trans_record_log}}', [
 
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
+            'admin_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'管理员ID:0系统\'' ,
+            'admin_name' => Schema::TYPE_STRING . '(30) DEFAULT \'system\' COMMENT \'管理员名称\'' ,
+
+
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
             'order_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
             'order_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'订单编号\'' ,

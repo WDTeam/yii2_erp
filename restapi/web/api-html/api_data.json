@@ -920,6 +920,77 @@
     "groupTitle": "Order"
   },
   {
+    "type": "POST",
+    "url": "/order/delete-worker-order",
+    "title": "[POST]/order/delete-worker-order(100%）",
+    "description": "<p>阿姨删除订单 （郝建设） 该功能暂时没有开发,没有得到核实！[功能介绍：] 删除指定阿姨订单列表 待抢单订单列表</p> ",
+    "name": "actionDeleteWorkerOrder",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_id/order_code",
+            "description": "<p>周期订单号</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"删除成功\",\n \"ret\": {}\n \"alertMsg\": \"删除成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"认证已经过期,请重新登录，\"\n  \"ret\":{},\n  \"alertMsg\": \"操作成功\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 delete Not Found\n{\n  \"code\": 0,\n  \"msg\": \"删除失败\",\n  \"ret\": {},\n \"alertMeg\": \"删除失败\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
     "type": "GET",
     "url": "/order/get-customer-recursive-order",
     "title": "[GET]/order/get-customer-recursive-order(100%）",
@@ -1066,7 +1137,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "description": "<p>阿姨认证</p> "
           },
           {
             "group": "Parameter",
@@ -1103,7 +1174,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": 0/1 # 阿姨是否封号 0正常1封号\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1456,7 +1527,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "description": "<p>阿姨认证</p> "
           },
           {
             "group": "Parameter",
@@ -5197,9 +5268,9 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>app版本【ios_user4.4】</p> "
           }
         ]
       }
@@ -5676,6 +5747,26 @@
   },
   {
     "type": "GET",
+    "url": "/order/get-order-channel-list",
+    "title": "[GET] /order/get-order-channel-list (100%)",
+    "name": "actionGetOrderChannelList_____",
+    "group": "order",
+    "description": "<p>获得订单渠道配置信息</p> ",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"数据获取成功\",\n    \"ret\":\n    [\n        {\n            \"order_channel_id\": \"8\",           订单渠道id\n            \"order_channel_name\": \"美团上门\",  订单渠道名称\n        },\n        {\n            \"order_channel_id\": \"9\",           订单渠道id\n            \"order_channel_name\": \"点评到家\",  订单渠道名称\n        },\n     ],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "order"
+  },
+  {
+    "type": "GET",
     "url": "/service/all-services",
     "title": "[GET] /service/all-services (100%)",
     "name": "actionAllServices",
@@ -5883,6 +5974,72 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
+    "url": "/service/get-shop-district-info",
+    "title": "[GET] /service/get-shop-district-info（100%）",
+    "description": "<p>根据经纬度获取商圈信息（李勇）</p> ",
+    "group": "service",
+    "name": "actionGetShopDistrictInfo",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取商圈信息成功\",\n     \"ret\": {\n         \"id\": \"1\",\n         \"operation_shop_district_id\": \"商圈id\",\n         \"operation_shop_district_name\": \"商圈名称\",\n         \"operation_city_id\": \"城市编号\",\n         \"operation_city_name\": \"城市名称\",\n         \"operation_area_id\": \"区域id\",\n         \"operation_area_name\": \"区域名称\"\n     },\n     \"alertMsg\": \"获取商圈信息成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "queryNotSupportFound",
+            "description": "<p>获取商圈信息失败</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "  HTTP/1.1 404 Not Found\n{\n    \"code\": 0,\n    \"msg\": \"商圈不存在\",\n    \"ret\": {},\n    \"alertMsg\": \"商圈不存在\"\n}",
           "type": "json"
         }
       ]

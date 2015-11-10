@@ -6,6 +6,7 @@ use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
 use core\models\finance\FinancePayChannel;
+use core\models\payment\Payment;
 
 use dbbase\models\payment\PaymentCustomerTransRecordLog;
 
@@ -53,6 +54,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             //如果支付订单,查询订单数据
             $fields = [
                 'id as order_id',
+                'order_code',
                 'order_batch_code',
                 'channel_id',
                 'order_channel_name',
@@ -117,6 +119,10 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             }
             */
             //组装数据
+            $transRecord['admin_id'] = Yii::$app->user->id;           //管理员ID
+            $transRecord['admin_name'] = Yii::$app->user->identity->username;           //管理员名称
+            $transRecord['order_code'] = $data['order_code'];           //订单编号
+            $transRecord['order_batch_code'] = $data['order_batch_code'];           //周期订单编号
             $transRecord["payment_customer_trans_record_mode"] = 1;      //交易方式:1消费,2=充值,3=退款,4=赔偿
             $transRecord["payment_customer_trans_record_service_card_on"] = $data['card_id'];                   //服务卡号
             $transRecord["payment_customer_trans_record_service_card_pay"] = $data['order_use_card_money'];     //服务卡支付
@@ -280,7 +286,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $transRecord['payment_customer_trans_record_refund_money'] = $money;
 
         //商户订单号
-        $transRecord['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo(2,$order_id);
+        $transRecord['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo('00', $order_id);
 
         //创建记录日志
         try {
@@ -598,7 +604,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         bcscale(2);
 
         //根据订单ID创建交易流水号
-        $data['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo(1,$data['order_id']);
+        $data['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo('90', $data['order_id']);
 
         //TODO::潘高峰
         //优惠券支付
@@ -798,28 +804,17 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     /**
      * 生成商户订单号
      * 年月日+交易类型+随机数+ORDER_ID
-     * 01 正常订单 02 退款 03 赔付
+     * type:01 正常订单 02 退款 03 赔付
+     * channel : 90余额, 91优惠券 ,92服务卡
      * @return bool|string 订单号
      */
-    private static function createOutTradeNo($type=1,$order_id=0)
+    private static function createOutTradeNo($channel='00', $order_id=0)
     {
-        switch($type)
-        {
-            case 1 :
-                $transType = '01';
-                break;
-            case 2 :
-                $transType = '02';
-                break;
-            case 3 :
-                $transType = '03';
-                break;
-        }
         //组装支付订单号
-        $rand = mt_rand(1000,9999);
+        $rand = mt_rand(100,999);
         $date = date("ymd",time());
         //生成商户订单号
-        $trans_record_eo_order_id = $date.$transType.$rand.$order_id;
+        $trans_record_eo_order_id = payment::PAYMENT_CODE.$date.$channel.$rand.$order_id;
         return $trans_record_eo_order_id;
     }
 

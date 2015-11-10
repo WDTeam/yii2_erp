@@ -19,9 +19,9 @@ class OrderManualAssign extends OrderManualAssignModel
      * @param $admin_id 操作人id
      * @return $this|static
      */
-    public static function getWaitCSAssignOrder($admin_id)
+    public static function getWaitAssignOrder($admin_id)
     {
-        $order = parent::getWaitCSAssignOrder($admin_id);
+        $order = parent::getWaitAssignOrder($admin_id);
         return self::_formatOrder($order);
     }
 
@@ -30,11 +30,12 @@ class OrderManualAssign extends OrderManualAssignModel
      * 订单状态为系统指派失败的订单
      * @author lin
      * @param $admin_id 操作人id
+     * @param $district_ids 商圈ids
      * @return $this|static
      */
-    public static function getWaitMiniBossAssignOrder($admin_id)
+    public static function getMiniBossWaitAssignOrder($admin_id,$district_ids)
     {
-        $order = parent::getWaitMiniBossAssignOrder($admin_id);
+        $order = parent::getMiniBossWaitAssignOrder($admin_id,$district_ids);
         return self::_formatOrder($order);
     }
 
@@ -56,6 +57,24 @@ class OrderManualAssign extends OrderManualAssignModel
         }
     }
 
+    /**
+     * 获取小家政可指派阿姨的列表
+     * @param $order_id
+     * @param $shop_ids
+     * @return array
+     */
+    public static function getMiniBossCanAssignWorkerList($order_id,$shop_ids)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $worker_list = parent::getCanAssignWorkerList($order);
+        if($worker_list){
+            $workers = self::_formatWorker($order,$worker_list,$shop_ids);
+            return ['code' => 200, 'data' => $workers];
+        }else {
+            return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
+        }
+    }
+
 
     /**
      * 搜索阿姨
@@ -67,9 +86,29 @@ class OrderManualAssign extends OrderManualAssignModel
     public static function searchAssignWorker($order_id,$worker_name,$phone)
     {
         $order = OrderSearch::getOne($order_id);
-        $worker_list = parent::searchAssignWorker($worker_name, $phone);
+        $worker_list = parent::searchWorker($worker_name, $phone);
         if($worker_list){
             $workers = self::_formatWorker($order, $worker_list);
+            return ['code' => 200, 'data' => $workers];
+        }else{
+            return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
+        }
+    }
+
+    /**
+     * 搜索阿姨
+     * @param $order_id
+     * @param $worker_name
+     * @param $phone
+     * @param $shop_ids
+     * @return array
+     */
+    public static function searchMiniBossAssignWorker($order_id,$worker_name,$phone,$shop_ids)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $worker_list = parent::searchWorker($worker_name, $phone);
+        if($worker_list){
+            $workers = self::_formatWorker($order, $worker_list,$shop_ids);
             return ['code' => 200, 'data' => $workers];
         }else{
             return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
@@ -130,9 +169,10 @@ class OrderManualAssign extends OrderManualAssignModel
      * 可指派的阿姨格式化
      * @param $order
      * @param $worker_list
+     * @param $shop_ids
      * @return array
      */
-    private static function _formatWorker($order,$worker_list){
+    private static function _formatWorker($order,$worker_list,$shop_ids = null){
         //获取常用阿姨
         $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
         $used_worker_ids = [];
@@ -145,13 +185,17 @@ class OrderManualAssign extends OrderManualAssignModel
         $workers = [];
         if (is_array($worker_list)) {
             foreach ($worker_list as $k => $v) {
-                $worker_ids[] = $v['id'];
-                $workers[$v['id']] = $worker_list[$k];
-                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
-                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
-                $workers[$v['id']]['order_booked_time_range'] = [];
-                $workers[$v['id']]['memo'] = [];
-                $workers[$v['id']]['status'] = [];
+                if($shop_ids!=null && !in_array($v['shop_id'],$shop_ids)){
+                   continue;
+                }else {
+                    $worker_ids[] = $v['id'];
+                    $workers[$v['id']] = $worker_list[$k];
+                    $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                    $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
+                    $workers[$v['id']]['order_booked_time_range'] = [];
+                    $workers[$v['id']]['memo'] = [];
+                    $workers[$v['id']]['status'] = [];
+                }
             }
             //获取阿姨当天订单
             $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);

@@ -21,10 +21,10 @@ class FinanceRefundadd extends FinanceRefund
     {
         return [
             [['finance_refund_stype', 'create_time'], 'required'],
-            [['finance_refund_money', 'finance_refund_discount'], 'number'],
+            [['finance_refund_money', 'finance_refund_discount', 'finance_refund_pay_flow_num'], 'number'],
             [['finance_refund_stype', 'finance_refund_pay_create_time', 'finance_pay_channel_id', 'finance_refund_pay_status', 'finance_order_channel_id',  'isstatus', 'create_time', 'is_del'], 'integer'],
             [['finance_refund_reason'], 'string', 'max' => 255],
-            [['finance_pay_channel_title', 'finance_refund_pay_flow_num'], 'string', 'max' => 80],
+            [['finance_pay_channel_title'], 'string', 'max' => 80],
             [['finance_order_channel_title'], 'string', 'max' => 30]
         ];
     }
