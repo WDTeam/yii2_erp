@@ -232,12 +232,12 @@ class OrderController extends \restapi\components\Controller
 
         $order = new Order();
         $is_success = array();
-        $errors = array();
-
         foreach ($array as $keyk => $valv) {
             $is_success[] = $order->createNew($valv);
         }
 //       $array =  array_merge($is_success,$order->errors);
+        print_r($is_success);
+        
         print_r($order->errors);
         exit;
         $is_success = $order->createNew($attributes);
