@@ -80,4 +80,17 @@ class OperationPayChannel extends \dbbase\models\operation\OperationPayChannel
 	
 	
 	
+	/**
+	 * 订单配置项
+	 * @date: 2015-11-10
+	 * @author: peak pan
+	 * @return:
+	 **/
+	public static  function configpay()
+	{
+		return ['1' => '在线支付', '2' => 'e家洁','3'=>'第三方团购'];
+	}
+	
+	
+	
 }
