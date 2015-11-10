@@ -52,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
 					 <div class="m_from">
 						 <?php
-						 $order_worker_assign_type = [1=>'系统分单',2=>'系统分单',3=>'阿姨抢单',4=>'阿姨抢单'];
 						 echo ListView::widget([
 							 'dataProvider' => $dataProvider,
 							 'itemView' => '_item-mini-boss',
