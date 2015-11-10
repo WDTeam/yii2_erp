@@ -212,7 +212,7 @@ class Order extends OrderModel
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
                     $order_model = OrderSearch::getOne($this->id);
                     $order_model->admin_id = $attributes['admin_id'];
-                    if(in_array($this->order_service_type_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+                    if(in_array($this->order_service_item_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
                 }
@@ -845,7 +845,7 @@ class Order extends OrderModel
             'order_lng' => $address['customer_address_longitude']
         ]);
 
-        if(in_array($this->order_service_type_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+        if(in_array($this->order_service_item_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
             $range = date('G:i', $this->order_booked_begin_time) . '-' . date('G:i', $this->order_booked_end_time);
             $ranges = $this->getThisOrderBookedTimeRangeList();
             if (!in_array($range, $ranges)) {
