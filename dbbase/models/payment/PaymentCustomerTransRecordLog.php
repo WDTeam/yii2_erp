@@ -138,12 +138,15 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'order_id', 'order_channel_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode', 'payment_customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay', 'payment_customer_trans_record_service_card_current_balance', 'payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_compensate_money', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance'], 'number'],
-            [['payment_customer_trans_record_service_card_on','payment_customer_trans_record_eo_order_id'], 'string', 'max' => 30],
+            [['order_id','customer_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode_name', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_verify'], 'required'],
+            [['customer_id', 'order_channel_id',  'pay_channel_id', 'payment_customer_trans_record_mode',  'created_at', 'updated_at'], 'integer'],
+            [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay','payment_customer_trans_record_service_card_current_balance','payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_refund_money',  'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance','payment_customer_trans_record_compensate_money'], 'number'],
+            [['payment_customer_trans_record_service_card_on'], 'string', 'max' => 30],
             [['payment_customer_trans_record_transaction_id'], 'string', 'max' => 40],
+            [['order_code','order_batch_code'], 'string', 'max' => 64],
             [['payment_customer_trans_record_remark'], 'string', 'max' => 255],
-            [['payment_customer_trans_record_verify'], 'string', 'max' => 32]
+            [['payment_customer_trans_record_verify'], 'string', 'max' => 320],
+            [['customer_id','order_channel_id','pay_channel_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
         ];
     }
 

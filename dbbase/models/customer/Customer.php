@@ -49,10 +49,10 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'customer_level', 'customer_complaint_times', 'customer_login_time', 'customer_is_vip', 'customer_is_weixin', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_name', 'customer_platform_version', 'customer_app_version', 'customer_mac', 'customer_login_ip'], 'string', 'max' => 16],
+            [['customer_name', 'customer_platform_version', 'customer_app_version', 'customer_login_ip'], 'string', 'max' => 16],
             [['customer_photo', 'customer_email'], 'string', 'max' => 32],
             [['customer_phone'], 'string', 'max' => 11],
-            [['operation_area_name', 'operation_city_name', 'weixin_id'], 'string', 'max' => 255],
+            [['operation_area_name', 'operation_city_name', 'customer_mac', 'weixin_id'], 'string', 'max' => 255],
             [['customer_phone'], 'unique']
         ];
     }

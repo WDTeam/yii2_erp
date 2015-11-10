@@ -36,16 +36,6 @@ class m150921_114940_create_table_finance_worker_order_income extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'结算时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
-//        $this->batchInsert('{{%finance_worker_order_income}}',
-//            ['id','worker_id','order_id','finance_worker_order_income_type','finance_worker_order_income',
-//                'finance_worker_order_complete_time',
-//                'order_booked_count','isSettled',
-//                'finance_worker_order_income_starttime','finance_worker_order_income_endtime',
-//                'finance_settle_apply_id','is_softdel','updated_at','created_at'],
-//            [
-//                [1,111,333,0,50,date('Y-m-01 00:00:00', strtotime('2015-09')),2,0,strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),1,0,time(),time()],
-//            ]);
-
     }
 
     public function down()

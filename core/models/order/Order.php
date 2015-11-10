@@ -832,9 +832,7 @@ class Order extends OrderModel
             'order_address' => (empty($address['operation_province_name'])?'': $address['operation_province_name'].',')
                 . $address['operation_city_name'] . ','
                 . $address['operation_area_name'] . ','
-                . $address['customer_address_detail'] . ','
-                . $address['customer_address_nickname'] . ','
-                . $address['customer_address_phone'] , //地址信息
+                . $address['customer_address_detail'], //地址信息
             'order_lat' => $address['customer_address_latitude'],
             'order_lng' => $address['customer_address_longitude']
         ]);
@@ -1113,9 +1111,9 @@ class Order extends OrderModel
         if (isset($status) && is_array($status)) {
             $statusList = $statusAC->where(['in', 'id', $status])->asArray()->all();
         } else {
-            $statusList = $statusAC->asArray()->all();
+            $statusList = $statusAC->where(['not in', 'id', [OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,OrderStatusDict::ORDER_SYS_ASSIGN_DONE]])->asArray()->all();
         }
-        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
+        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_boss') : [];
     }
 
     /*

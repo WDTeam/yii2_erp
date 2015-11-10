@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use dbbase\models\operation\OperationAdvertPosition as CommonOperationAdvertPosition;
+
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *
@@ -20,7 +20,7 @@ use dbbase\models\operation\OperationAdvertPosition as CommonOperationAdvertPosi
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertPosition extends CommonOperationAdvertPosition
+class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPosition
 {
    
     /**
@@ -42,6 +42,28 @@ class OperationAdvertPosition extends CommonOperationAdvertPosition
 
         if (isset($data) && $data['id'] > 0) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 根据平台名称和平台版本获取平台的编号
+     *
+     * @param   string  $position_name   位置名称
+     * @return  mix  如果有则返回编号，没有则返回false
+     */
+    public static function getAdvertPositionId($position_name)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where([
+                'operation_advert_position_name' => $position_name,
+            ])
+            ->one();
+
+        if (isset($data['id']) && $data['id'] > 0) {
+            return $data['id'];
         } else {
             return false;
         }

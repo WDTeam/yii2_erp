@@ -11,9 +11,19 @@ use yii\data\ActiveDataProvider;
 
 class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopDistrictGoods
 {
-    public static $city_id;
+    /**
+     * 商圈服务项目状态
+     */
     const SHOP_DISTRICT_GOODS_ONLINE = 1;
     const SHOP_DISTRICT_GOODS_OFFLINE = 2;
+
+    /**
+     * API状态码
+     */
+    const MISSING_PARAM = 0;
+    const EMPTY_CONTENT = 1;
+
+    public static $city_id;
 
     /**
      * 上线城市
@@ -459,7 +469,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     public static function getCityCategory($city_name = '', $city_id = '')
     {
         if ($city_id == '' && $city_name == '') {
-            return '参数错误';
+            return ['code' => self::MISSING_PARAM, 'errmsg' => '参数错误'];
         }
 
         if (isset($city_name) && $city_name != '') {
@@ -468,6 +478,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'osdg.operation_category_name',
                 'oc.id',
                 'oc.operation_category_icon',
+                'oc.operation_category_url',
                 'oc.operation_category_price_description',
                 'oc.operation_category_introduction',
             ])
@@ -484,7 +495,12 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'query' => $query,
             ]);
 
-            return $dataProvider->query->all();
+            $result = $dataProvider->query->all();
+            if (isset($result) && count($result) > 0) {
+                return $result;
+            } else {
+                return ['code' => self::EMPTY_CONTENT, 'errmsg' => '参数错误'];
+            }
         }
 
     }

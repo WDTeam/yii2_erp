@@ -4,7 +4,7 @@ use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
-use \core\models\operation\OperationAdvertContent;
+use core\models\operation\OperationAdvertRelease;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
 use \core\models\order\OrderStatusDict;
@@ -118,7 +118,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version app版本【ios_user4.4】
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -201,6 +201,17 @@ class ConfigureController extends \restapi\components\Controller
         if(!isset($param['city_name'])||!intval($param['city_name'])){
             $param['city_name'] = "北京市";
         }
+        if(!isset($param['platform_version'])||!$param['platform_version']){
+            return $this->send(null, 'app版本参数错误',0,200,null,alertMsgEnum::getUserInitFailed);
+        }
+        //判断来源版
+        $platform_name = "ios";
+        $platform_version_name = "4.0";
+        if(isset($param['platform_version'])&&$param['platform_version']){
+            $platform = explode("_",$param['platform_version']);
+            $platform_name = $platform[0];
+            $platform_version_name = $platform[1];
+        }
         //判断token是否有效
         $isEffect="0";
         if(isset($param['access_token'])&&$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
@@ -210,6 +221,8 @@ class ConfigureController extends \restapi\components\Controller
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
             $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
+            //获取banner图
+            $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'],$platform_name,$platform_version_name);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
@@ -229,7 +242,16 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
             $serviceCategoryList[$key]['colour'] = 'ffffff';
             $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
-            
+        }
+        
+        //整理焦点图
+        $pic_list = array();
+        if(!isset($bannerList['code'])&&!empty($bannerList)){
+            foreach($bannerList as $key=>$val){
+                $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+                $pic_list[$key]["link"] = $val['operation_advert_url'];
+                $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+            }
         }
         //页首链接
         $header_link = [
