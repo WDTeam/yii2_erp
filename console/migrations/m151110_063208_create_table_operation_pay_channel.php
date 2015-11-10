@@ -21,6 +21,17 @@ class m151110_063208_create_table_operation_pay_channel extends Migration
             'create_time'=>  Schema::TYPE_INTEGER.'(10) DEFAULT NULL COMMENT \'增加时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(1) DEFAULT 0 COMMENT \'0 正常 1 删除\'',
             ], $tableOptions);
+
+		$this->execute("INSERT INTO {{%operation_pay_channel}} VALUES ('7', '支付宝支付', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('8', '百度钱包支付', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('10', '微信支付', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('12', '银联支付', '1', '1', '1', 'admin', '0', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('13', '财付通支付', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('1', '服务卡支付', '2', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('20', '余额支付', '2', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('2', '现金支付', '2', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('9', '第三方团购预收', '3', '1', '1', 'admin', '1447148814', '0');"
+        );
     }
     
     public function down()

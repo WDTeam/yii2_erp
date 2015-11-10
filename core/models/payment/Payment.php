@@ -1438,7 +1438,7 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 4:
                 //退款
-                PaymentCustomerTransRecord::refundRecord($attribute['order_id'], 'order_refund',1,$attribute['payment_data']);
+                PaymentCustomerTransRecord::refundRecord($attribute['order_id'], 'order_refund',1);
                 break;
         }
         //支付充值
@@ -1452,27 +1452,20 @@ class Payment extends \dbbase\models\payment\Payment
      */
     public static function orderRefund($order_id, $customer_id)
     {
+        $model = new Payment();
         //获取订单信息
         $orderInfo = OrderSearch::getOrderInfo($order_id);
         $orderInfo = current($orderInfo);
-        //执行自有退款
-        if( empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] < 0 )
-        {
 
-            if( !empty($orderInfo['order_use_acc_balance']) && $orderInfo['order_use_acc_balance'] > 0 )
-            {
-                //余额支付退款
-                //Customer::incBalance($customer_id,$orderInfo['order_use_acc_balance']);
-                self::paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4]);
-            }
-            elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
-            {
-                //服务卡支付退款
-                //TODO::调用服务卡退款
-                //self::paymentTransRecord(['order_id'=>$order_id]);
-            }
+        //在交易记录验证是否已经退款过
+        $transRecord = new paymentCustomerTransRecord();
+        $transRecordData = $transRecord->find()->where(['order_id'=>$order_id, 'customer_id'=>$customer_id, 'payment_customer_trans_record_mode'=>3])->one();
+        if( !empty($transRecordData) )
+        {
+            return ['status'=>0,'info'=>'已经退款过','data'=>''];
         }
-        elseif( !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
+
+        if( $orderInfo['order_pay_type'] == 2 && !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
         {
             $connection  = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
@@ -1492,7 +1485,7 @@ class Payment extends \dbbase\models\payment\Payment
                 }
 
                 //线上退款,创建一条线上退款记录,状态未确认
-                $model = new Payment();
+
                 $model->scenario = 'refund';
                 $model->setAttributes([
                     'customer_id' => $customer_id,
@@ -1528,6 +1521,22 @@ class Payment extends \dbbase\models\payment\Payment
                 return ['status'=>0,'info'=>'数据异常状态','data'=>''];
             }
         }
+        else
+        {
+            //执行自有退款
+            if( !empty($orderInfo['order_use_acc_balance']) && $orderInfo['order_use_acc_balance'] > 0 )
+            {
+                //余额支付退款
+                $model->paymentTransRecord(['customer_id'=>$customer_id, 'order_id'=>$order_id,'payment_type'=>4]);
+            }
+            elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
+            {
+                //服务卡支付退款
+                //TODO::调用服务卡退款
+                //self::paymentTransRecord(['order_id'=>$order_id]);
+            }
+        }
+
         return ['status'=>0,'info'=>'未找到订单数据','data'=>''];
     }
 
