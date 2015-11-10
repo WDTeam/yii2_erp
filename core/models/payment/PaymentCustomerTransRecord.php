@@ -6,7 +6,7 @@ use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
 use core\models\finance\FinancePayChannel;
-use core\models\payment\Payment;
+use core\models\operation\OperationPayChannel;
 
 use dbbase\models\payment\PaymentCustomerTransRecordLog;
 
@@ -250,7 +250,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //支付渠道
         $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : 20;   //	支付渠道
-        $transRecord['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($transRecord['pay_channel_id']); //	支付渠道名称
+        $transRecord['payment_customer_trans_record_pay_channel'] = OperationPayChannel::get_post_name($transRecord['pay_channel_id']); //	支付渠道名称
 
         //交易方式
         $transRecord["payment_customer_trans_record_mode"] = 3;      //交易方式:1消费,2=充值,3=退款,4=赔偿
@@ -603,7 +603,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         //支付渠道
         $data['pay_channel_id'] = 20;   //支付渠道
-        $data['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($data['pay_channel_id']); //	支付渠道名称
+        $data['payment_customer_trans_record_pay_channel'] = OperationPayChannel::get_post_name($data['pay_channel_id']); //	支付渠道名称
 
         //保留两位小数
         bcscale(2);

@@ -2,7 +2,7 @@
 
 namespace core\models\payment;
 
-use core\models\finance\FinancePayChannel;
+use core\models\operation\OperationPayChannel;
 use core\models\operation\OperationServiceCardSellRecord;
 use core\models\order\Order;
 use core\models\order\OrderOtherDict;
@@ -184,7 +184,7 @@ class Payment extends \dbbase\models\payment\Payment
 
         //获取渠道ID和名称
         $data['payment_channel_id'] = self::getParamsToPayChannel($data['payment_source']);
-        $data['payment_channel_name'] = FinancePayChannel::getPayChannelByName($data['payment_channel_id']);
+        $data['payment_channel_name'] = OperationPayChannel::get_post_name($data['payment_channel_id']);
 
         //使用场景
         $model->scenario = $scenario;
