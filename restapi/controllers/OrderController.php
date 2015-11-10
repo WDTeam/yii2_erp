@@ -184,20 +184,20 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
-//        $args['times'] = array(
-//            "0" => Array(
-//                'order_booked_begin_time' => 1447124669,
-//                'order_booked_count' => 1,
-//                'coupon_id' => 1,
-//                "order_booked_end_time" => 1448124669
-//            ),
-//            "1" => Array(
-//                'order_booked_begin_time' => 1447224669,
-//                'order_booked_count' => 11,
-//                'coupon_id' => 2,
-//                "order_booked_end_time" => 1448224669
-//            )
-//        );
+        $args['times'] = array(
+            "0" => Array(
+                'order_booked_begin_time' => 1447124669,
+                'order_booked_count' => 1,
+                'coupon_id' => 1,
+                "order_booked_end_time" => 1448124669
+            ),
+            "1" => Array(
+                'order_booked_begin_time' => 1447224669,
+                'order_booked_count' => 11,
+                'coupon_id' => 2,
+                "order_booked_end_time" => 1448224669
+            )
+        );
         if (empty($args['times'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
@@ -237,7 +237,7 @@ class OrderController extends \restapi\components\Controller
         }
 //       $array =  array_merge($is_success,$order->errors);
         print_r($is_success);
-        
+
         print_r($order->errors);
         exit;
         $is_success = $order->createNew($attributes);
@@ -1473,11 +1473,7 @@ class OrderController extends \restapi\components\Controller
      *          "workerData": "指定阿姨订单数",
      *          "orderData": "待抢单订单数",
      *          "workerServiceCount": "待服务订单数",
-     *          "worker_is_block": 
-     *            {
-     *            ##暂时还没有统一
-     *            //"阿姨状态 0正常1封号",
-     *            }
+     *          "worker_is_block": 0/1 # 阿姨是否封号 0正常1封号
      *      },
      *      "alertMsg": "操作成功"
      * }
@@ -1593,9 +1589,10 @@ class OrderController extends \restapi\components\Controller
                     #待服务订单数
                     $ret['orderData'] = $workerCountTwo;
                     #阿姨状态
-                    $ret['worker_is_block'] = [
-                        $worker->worker_is_block
-                    ];
+//                    $ret['worker_is_block'] = [
+//                        $worker->worker_is_block
+//                    ]; 状态有后台传递
+                    $ret['worker_is_block'] = $worker->worker_is_block;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
