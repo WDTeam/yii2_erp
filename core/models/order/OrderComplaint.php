@@ -157,6 +157,15 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
     public function appModel($arr){
     	if(!empty($arr) && is_array($arr)){
     		$arr['complaint_channel'] = '1';
+    		$code = $arr['order_code']; $new_order_code = "";
+    		if(!empty($code)){
+    			$num = strlen($code);
+    			$order_code = substr($code,2,$num-2);
+    			$new_order_code = "04".$order_code;
+    		}
+    		$arr['order_code_number'] = strval($code);
+    		$arr['complaint_code_number'] = strval($new_order_code);
+    		unset($arr['order_code']);
     		$narr = array('OrderComplaint'=>$arr);
     		if($this->load($narr) && $this->save()){
     			return true;

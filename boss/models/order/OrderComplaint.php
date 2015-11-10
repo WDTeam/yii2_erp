@@ -11,6 +11,8 @@ use boss\models\order\OrderComplaintHandle;
  *
  * @property integer $id
  * @property integer $order_id
+ * @property string $order_code_number
+ * @property string $complaint_code_number
  * @property integer $complaint_type
  * @property integer $complaint_status
  * @property integer $complaint_channel
@@ -32,9 +34,17 @@ class OrderComplaint extends \core\models\order\OrderComplaint
 	 */
     public function order_Complaint($params){
     	$arr = array(); $flag = false;$narr = array();
+    	$code = $params['order_code'];$new_order_code = "";
+    	if(!empty($code)){
+    		$num = strlen($code);
+    		$order_code = substr($code,2,$num-2);
+    		$new_order_code = "04".$order_code;
+    	}
+    	$arr['OrderComplaint']['order_code_number'] = strval($code);
+    	$arr['OrderComplaint']['complaint_code_number'] = strval($new_order_code);
     	$arr['OrderComplaint']['order_id'] = $params['order_id'];
-    	$arr['OrderComplaint']['complaint_content'] = $params['complaint_detail'];
-    	$arr['OrderComplaint']['complaint_phone'] = $params['cumstomer_phone'];
+    	$arr['OrderComplaint']['complaint_content'] = strval($params['complaint_detail']);
+    	$arr['OrderComplaint']['complaint_phone'] = strval($params['cumstomer_phone']);
     	$arr['OrderComplaint']['complaint_status'] = '1';
     	$arr['OrderComplaint']['complaint_type'] = '1';
     	$arr['OrderComplaint']['created_at'] = time();
@@ -45,7 +55,7 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     	foreach ($params['data'] as $key=>$val){
     		$arr['OrderComplaint']['complaint_assortment'] = $val['type'];
     		$arr['OrderComplaint']['complaint_section'] = $val['department'];
-    		$arr['OrderComplaint']['complaint_level'] = $val['level'];
+    		$arr['OrderComplaint']['complaint_level'] = strval($val['level']);
 		 $narr[] = $arr;	
     	}
     	return $narr;
@@ -56,6 +66,8 @@ class OrderComplaint extends \core\models\order\OrderComplaint
      * @return boolean
      */
     public function backInsertOrderComplaint($arr){
+    	var_dump($this->load($arr) && $this->save());
+    	print_r($this->errors);exit();
   			$flag = false;
     		if($this->load($arr) && $this->save()){
     			$flag = true;
