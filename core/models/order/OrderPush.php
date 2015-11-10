@@ -102,6 +102,8 @@ class OrderPush extends Order
                 if (isset($result->isOK)) {
                     OrderWorkerRelation::jpushPushSuccess($order_id, $v['id'], 1);
                     $jpush_flag = true;
+                }else{
+                    OrderWorkerRelation::jpushPushFailure($order_id, $v['id'], 1);
                 }
             }
         }
