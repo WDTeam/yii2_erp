@@ -217,9 +217,9 @@ class OrderController extends \restapi\components\Controller
         $order = new Order();
 
         $is_success = $order->createNew($attributes);
-
+        
         if ($is_success) {
-            return $this->send($is_success, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
+            return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
             return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
@@ -1802,7 +1802,7 @@ class OrderController extends \restapi\components\Controller
                 if ($setWorker && is_null($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
+                    return $this->send($setWorker["errors"], "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
             } catch (Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
