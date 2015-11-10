@@ -198,6 +198,10 @@ class OrderController extends \restapi\components\Controller
             )
         );
 
+        if (empty($args['times'])) {
+            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
+        }
+
         #拼凑数组
         if ($args['times']) {
             $array = array();
