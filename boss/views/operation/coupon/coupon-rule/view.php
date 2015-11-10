@@ -9,16 +9,12 @@ use kartik\datecontrol\DateControl;
  * @var dbbase\models\operation\coupon\CouponRule $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Coupon Rules'), 'url' => ['index']];
+$this->title = $model->couponrule_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '优惠券管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coupon-rule-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
+  
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,

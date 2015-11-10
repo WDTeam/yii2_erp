@@ -3,7 +3,6 @@
 namespace core\models\finance;
 
 use Yii;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 use core\models\worker\Worker;
@@ -120,6 +119,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'worker_type_id' => $this->worker_type_id,
             'worker_identity_id' => $this->worker_identity_id,
             'shop_id' => $this->shop_id,
+            'shop_manager_id' => $this->shop_manager_id,
             'finance_settle_apply_man_hour' => $this->finance_settle_apply_man_hour,
             'finance_settle_apply_order_money' => $this->finance_settle_apply_order_money,
             'finance_settle_apply_order_cash_money' => $this->finance_settle_apply_order_cash_money,
@@ -136,6 +136,22 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                 ->andFilterWhere(['like', 'worker_identity_name', $this->worker_identity_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
+        $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
+        return $dataProvider;
+    }
+    
+    public function searchCanSettledWorker($params)
+    {
+        $query = FinanceSettleApplySearch::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $query->andFilterWhere([
+            'shop_id' => $this->shop_id,
+            'worker_type_id'=>FinanceSettleApplySearch::NON_SELF_OPERATION
+        ]);
+        $query->andFilterWhere(['>=', 'finance_settle_apply_status',self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED]);
         $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
         return $dataProvider;
     }

@@ -9,6 +9,7 @@ use boss\components\BaseAuthController;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 
 /**
  * ShopController implements the CRUD actions for Shop model.
@@ -26,6 +27,18 @@ class ShopController extends BaseAuthController
             ],
         ];
     }
+    /**
+     * 判断当前用户能不能操作
+     * @param unknown $id
+     * @throws BadRequestHttpException
+     */
+    public function can($id)
+    {
+        $ids = \Yii::$app->user->identity->getShopIds();
+        if(\Yii::$app->user->identity->isMiniBossUser() && !in_array($id, $ids)){
+            throw new BadRequestHttpException('没有访问权限', 403);
+        }
+    }
 
     /**
      * Lists all Shop models.
@@ -34,8 +47,13 @@ class ShopController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new ShopSearch;
-//         $searchModel->audit_status = 0;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        $query = Yii::$app->request->getQueryParams();
+        if(\Yii::$app->user->identity->isMiniBossUser()){
+            $query['ids'] = \Yii::$app->user->identity->getShopIds();
+            $query['ids'] = empty($query['ids'])?[0]:$query['ids'];
+        }
+        $dataProvider = $searchModel->search($query);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -50,6 +68,7 @@ class ShopController extends BaseAuthController
      */
     public function actionView($id)
     {
+        $this->can($id);
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -86,6 +105,8 @@ class ShopController extends BaseAuthController
      */
     public function actionUpdate($id)
     {
+        $this->can($id);
+        
         $model = $this->findModel($id);
 
         if($model->load(Yii::$app->request->post())){
@@ -106,6 +127,7 @@ class ShopController extends BaseAuthController
      */
     public function actionDelete($id)
     {
+        $this->can($id);
         $this->findModel($id)->softDelete();
 
         return $this->redirect(['index']);
@@ -145,6 +167,7 @@ class ShopController extends BaseAuthController
      */
     public function actionJoinBlacklist($id)
     {
+        $this->can($id);
         $model = $this->findModel($id);
         if(\Yii::$app->request->isPost){
             exit;
@@ -163,6 +186,7 @@ class ShopController extends BaseAuthController
      */
     public function actionRemoveBlacklist($id)
     {
+        $this->can($id);
         $cause = Yii::$app->request->get('cause','');
         $this->findModel($id)->removeBlacklist($cause);
         \Yii::$app->session->setFlash('default', '取消成功');
@@ -174,6 +198,7 @@ class ShopController extends BaseAuthController
      */
     public function actionSetAuditStatus($id) 
     {
+        $this->can($id);
         $model = Shop::findOne(['id'=>$id]);
         $model->load(\Yii::$app->request->post());
         if($model->save()){

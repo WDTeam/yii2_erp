@@ -34,10 +34,17 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'password_hash',
 //             'password_reset_token',
             'email:email',
+            'mobile',
             [
                 'attribute'=>'password',
                 'value'=>'******',
                 'type'=>DetailView::INPUT_PASSWORD
+            ],
+            [
+                'attribute'=>'classify',
+                'value'=>$model->getClassifyLabel(),
+                'type'=>DetailView::INPUT_RADIO_LIST,
+                'items'=>SystemUser::getClassifes(),
             ],
             [
                 'attribute'=>'roles',

@@ -221,10 +221,10 @@ class Order extends ActiveRecord
             'updated_at' => '修改时间',
             'isdel' => '是否已删除',
             'order_ip' => '下单IP',
-            'order_service_type_id' => '订单服务类别ID',
-            'order_service_type_name' => '订单服务类别',
-            'order_service_item_id' => '订单服务项ID',
-            'order_service_item_name' => '订单服务项',
+            'order_service_type_id' => '服务类别',
+            'order_service_type_name' => '服务类别',
+            'order_service_item_id' => '服务项目',
+            'order_service_item_name' => '服务项目',
             'order_src_id' => '订单来源，订单入口id',
             'order_src_name' => '订单来源，订单入口名称',
             'channel_id' => '订单渠道ID',
@@ -355,6 +355,10 @@ class Order extends ActiveRecord
         return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id'])->from(OrderExtWorker::tableName().' AS orderExtWorker');
     }
 
+    public function getOrderStatusHistory()
+    {
+        return $this->hasMany(OrderStatusHistory::className(),['order_id'=>'id']);
+    }
 
     /**
      * 保存订单

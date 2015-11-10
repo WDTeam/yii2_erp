@@ -42,7 +42,7 @@ class PaymentSearch extends Payment
     public function search($params)
     {
         $query = Payment::find();
-
+        $query->orderBy('id DESC');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

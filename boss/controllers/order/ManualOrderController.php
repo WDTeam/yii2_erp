@@ -32,7 +32,7 @@ class ManualOrderController extends BaseAuthController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+       return $this->render('index');
     }
 
 

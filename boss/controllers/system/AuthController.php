@@ -167,6 +167,7 @@ class AuthController extends BaseAuthController
      */
     public function actionInit()
     {
+        
         $string = $this->renderPartial('default_config');
         $lines = explode(PHP_EOL, $string);
         $datas = [];
@@ -178,6 +179,7 @@ class AuthController extends BaseAuthController
         }
         
         $auth = Yii::$app->authManager;
+        $role = $auth->getRole('super_admin');
         foreach ($datas as $data)
         {
             $permission = $data[1];
@@ -190,8 +192,11 @@ class AuthController extends BaseAuthController
                 $item = $auth->createPermission($permission);
                 $item->description = $data[0];
                 $auth->add($item);
+                $auth->addChild($role, $item);
             }
-            echo '"'.$permission.'"<br/>';
+//             echo '"'.$permission.'"<br/>';
         }
+        //处理生成rbac目录下的权限
+//         \boss\rbac\UpdateOwnerShopManagerRule::add();
     }
 }

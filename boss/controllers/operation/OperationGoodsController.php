@@ -187,7 +187,6 @@ class OperationGoodsController extends Controller
     public function actionCreate()
     {
         $OperationSpec = OperationSpec::getSpecList();
-
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
 
@@ -215,8 +214,18 @@ class OperationGoodsController extends Controller
                 return $this->redirect(['/operation/operation-category']);
             }
         } else {
+            $OperationCategory = [];
+
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
-            foreach((array)$OperationCategorydata as $key => $value){ $OperationCategory[$value['id']] = $value['operation_category_name']; }
+            foreach ((array)$OperationCategorydata as $key => $value) { 
+                $OperationCategory[$value['id']] = $value['operation_category_name'];
+            }
+
+            if (empty($OperationCategory)) {
+                \Yii::$app->getSession()->setFlash('default','还没有服务品类，请先创建服务品类！');
+                return $this->redirect(['/operation/operation-category']);
+            }
+
             return $this->render('create', [
                 'model' => $model,
                 'OperationCategory' => $OperationCategory,
@@ -251,6 +260,7 @@ class OperationGoodsController extends Controller
         $OperationSpec = OperationSpec::getSpecList();
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
+
         if(!empty($model->operation_tags)){
             $model->operation_tags = implode(';', unserialize($model->operation_tags));
         }
@@ -273,7 +283,11 @@ class OperationGoodsController extends Controller
             
             $model->updated_at = time();
             
-            if($model->save()){
+            if ($model->save()) {
+
+                //关联修改上线商品表冗余的商品名称
+                $goodsInfo = OperationShopDistrictGoods::updateGoodsName($id, $post['OperationGoods']['operation_goods_name']);
+
                 return $this->redirect(['/operation/operation-category']);
             }
         } else {
@@ -297,9 +311,19 @@ class OperationGoodsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $result = OperationShopDistrictGoods::getShopDistrictGoods($id);
+        if ($result) {
+            \Yii::$app->getSession()->setFlash('default','项目有商圈已经上线，不能删除！');
+            return $this->redirect(['/operation/operation-category']);
+        } else {
 
-        return $this->redirect(['index']);
+            //关联删除服务项目对应的商圈
+            OperationShopDistrictGoods::delShopDistrict($id);
+            $this->findModel($id)->delete();
+        }
+
+        //return $this->redirect(['index']);
+        return $this->redirect(['/operation/operation-category']);
     }
 
     /**

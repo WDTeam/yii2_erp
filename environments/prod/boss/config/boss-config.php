@@ -1,6 +1,6 @@
 <?php
 
-$config =  [
+$config = [
     'id' => 'app-boss',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'boss\controllers',
@@ -10,8 +10,8 @@ $config =  [
 //            'class' => 'funson86\blog\Module',
 //            'controllerNamespace' => 'funson86\blog\controllers\boss'
 //        ],
-        'dynagrid'=> [
-            'class'=>'\kartik\dynagrid\Module',
+        'dynagrid' => [
+            'class' => '\kartik\dynagrid\Module',
         ],
         'gridview' => [
             'class' => 'kartik\grid\Module',
@@ -31,7 +31,7 @@ $config =  [
             'showScriptName' => false,
             //'enableStrictParsing' => true,
             'rules' => [
-                ''=>'system/site/index',
+                '' => 'system/site/index',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -55,22 +55,4 @@ $config =  [
         ],
     ],
 ];
-
-if (!YII_ENV_TEST) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = 'yii\debug\Module';
-
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii']['class'] = 'yii\gii\Module';
-    //Add this into backend/config/main-local.php
-    $config['modules']['gii']['generators'] = [
-        'kartikgii-crud' => ['class' => 'warrence\kartikgii\crud\Generator'],
-    ];
-}
-function dump($_data){
-    echo '<pre>';
-    print_r($_data);
-    echo '</pre>';
-}
 return $config;

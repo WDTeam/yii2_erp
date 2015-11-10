@@ -55,6 +55,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     'content'=> function($model,$key,$index){return $model->getSettleApplyStatusDes($model->finance_settle_apply_status);} ],     
                 ['attribute'=>'comment','content'=>function($model,$key,$index){return $model->comment == null?'':$model->comment;}],
                 ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
+                [
+                'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-view', 'FinanceSettleApplySearch[id]' => $model->id],[]), [
+                            'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
+                        ]);
+                    },
+                    ],
+                ],
             ],
             'responsive'=>true,
             'hover'=>true,
@@ -64,7 +75,6 @@ $this->params['breadcrumbs'][] = $this->title;
              'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before' =>$this->render('_query_links', ['model' => $searchModel]),
             'after'=>false,
             'showFooter'=>false
         ],

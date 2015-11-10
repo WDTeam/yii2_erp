@@ -5,6 +5,7 @@ namespace boss\controllers\operation;
 use boss\components\BaseAuthController;
 use boss\models\operation\OperationShopDistrict;
 use boss\models\operation\OperationShopDistrictCoordinate;
+use boss\models\operation\OperationShopDistrictGoods;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationArea;
 
@@ -61,6 +62,7 @@ class OperationShopDistrictController extends BaseAuthController
         $city_name = $this->city_name;
 
         $model = new OperationShopDistrict();
+        $districtModel = new OperationShopDistrictGoods();
 
         $dataProvider = new ActiveDataProvider([
             'query' => OperationShopDistrict::find()->where([
@@ -68,8 +70,9 @@ class OperationShopDistrictController extends BaseAuthController
             ]),
         ]);
 
+        //批量上传
     	if(Yii::$app->request->isPost) {
-    		if(Yii::$app->params['uploadpath']){
+    		if (Yii::$app->params['uploadpath']) {
     			$data = \Yii::$app->request->post();
     			$model->load($data);
     			$file = UploadedFile::getInstance($model, 'district_upload_url');
@@ -87,46 +90,7 @@ class OperationShopDistrictController extends BaseAuthController
                     \Yii::$app->getSession()->setFlash('default','上传文件数据格式不正确！');
                     return $this->redirect(['index']);
                 }
-
-                foreach ($district_arr as $keys => $values) {
-
-                    foreach ($values['district'] as $k => $v) {
-
-                        //插入商圈名称信息
-                        $model = new OperationShopDistrict();
-
-                        $model->operation_shop_district_name = $v['operation_shop_district_name'];
-                        $model->operation_city_id = $city_id;
-                        $model->operation_city_name = $city_name;
-                        $model->operation_area_id = $values['operation_area_id'];
-                        $model->operation_area_name = $values['operation_area_name'];
-
-                        $model->insert();
-                        $insert_id = $model->id;
-
-                        //插入商圈经纬度信息
-                        if (isset($v['l_n_t'])) {
-                            $len = count($v['l_n_t']);
-                            for ($i = 0; $i < $len; $i ++) {
-
-                                $coordinateModel = new OperationShopDistrictCoordinate();
-
-                                $coordinateModel->operation_shop_district_id = $insert_id;
-                                $coordinateModel->operation_shop_district_name = $v['operation_shop_district_name'];
-                                $coordinateModel->operation_city_id = $city_id;
-                                $coordinateModel->operation_city_name = $city_name;
-                                $coordinateModel->operation_area_id = $values['operation_area_id'];
-                                $coordinateModel->operation_area_name = $values['operation_area_name'];
-                                $coordinateModel->operation_shop_district_coordinate_start_longitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_start_longitude'];
-                                $coordinateModel->operation_shop_district_coordinate_start_latitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_start_latitude'];
-                                $coordinateModel->operation_shop_district_coordinate_end_longitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_end_longitude'];
-                                $coordinateModel->operation_shop_district_coordinate_end_latitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_end_latitude'];
-
-                                $coordinateModel->insert();
-                            }
-                        }
-                    }
-                }
+                OperationShopDistrict::saveBatchDistrictData($city_id, $city_name, $district_arr);
     		}
     	}
 
@@ -135,6 +99,7 @@ class OperationShopDistrictController extends BaseAuthController
             'city_name' => $city_name,
             'city_id' => $city_id,
             'dataProvider' => $dataProvider,
+            'districtModel' => $districtModel,
         ]);
     }
 
@@ -339,9 +304,15 @@ class OperationShopDistrictController extends BaseAuthController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (($model = OperationShopDistrict::findOne($id)) !== null) {
+            OperationShopDistrictCoordinate::delCoordinateInfo($id);
+            OperationShopDistrictGoods::delShopDistrictGoods($id);
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        } else {
+            return $this->redirect(['index']);
+        }
     }
 
     /**

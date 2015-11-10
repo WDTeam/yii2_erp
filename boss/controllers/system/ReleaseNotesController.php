@@ -13,7 +13,7 @@ use boss\components\BaseAuthController;
  *
  * @author weibeinan
  */
-class ReleaseHistoryController extends BaseAuthController{
+class ReleaseNotesController extends BaseAuthController{
     //put your code here
     public function actionIndex()
     {

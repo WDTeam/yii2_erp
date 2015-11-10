@@ -15,9 +15,16 @@ class alertMsgEnum
     //客户端提示信息文案
     const __default = '查询成功';
     //赵顺利
+    //发短消息
+    //登陆成功
+    const sendVSuccess = '登陆成功';
+    //用户名或验证码错误
+    const sendVFail = '用户名或验证码错误';
     //用户发送验证码
     const sendUserCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     const sendUserCodeFailed = '验证码已发失败';
+    const sendUserCodeOverFive = '验证码发送超过5次';
+    const sendUserCodeSixty = '验证码发送频率过高（60s）';
     //用户登录
     const userLoginSuccess = '用户登录成功';
     const userLoginFailed = '用户认证已经过期,请重新登录';
@@ -56,7 +63,7 @@ class alertMsgEnum
     const allServicesSuccess = '获取城市上线服务成功';
     const allServicesFailed = '获取城市上线服务失败';
     //用户端首页初始化
-    const getUserInitSuccess = '';
+    const getUserInitSuccess = '获取用户端初始化信息成功';
     const getUserInitFailed = '获取用户端初始化信息失败';
     //阿姨端首页初始化
     const getWorkerInitSuccess = '获取阿姨端初始化信息成功';
@@ -153,6 +160,8 @@ class alertMsgEnum
     const workerLoginIsDimission = '阿姨已离职';
     //阿姨已删除
     const workerLoginIsDel = '阿姨已删除';
+    //阿姨未审核或审核未通过
+    const workerLoginUnable = '阿姨未审核或审核未通过';
     //优惠码
     //优惠码或手机号不能为空
     const exchangeCouponDataDefect = '优惠码或手机号不能为空';
@@ -160,6 +169,20 @@ class alertMsgEnum
     const exchangeCouponSuccess = '兑换成功';
     //兑换优惠券失败
     const exchangeCouponFail = '兑换失败';
+    //此手机号未被注册,请您先注册登录后再兑换优惠券
+    const exchangeCouponNoCustomer = '此手机号未被注册,请您先注册登录后再兑换优惠券';
+    //优惠码已经被领取或使用
+    const exchangeCouponIsUsed = '优惠码已经被领取或使用';
+    //优惠券不存在
+    const exchangeCouponNotExist = '优惠券不存在';
+    //优惠券不可用
+    const exchangeCouponUnuse = '优惠券不可用';
+    //优惠券兑换时间已过期
+    const exchangeCouponIsOver = '优惠券兑换时间已过期';
+    //优惠券已删除
+    const exchangeCouponFailIsdel = '优惠券已删除';
+    //优惠券已禁用
+    const exchangeCouponDisable = '优惠券已禁用';
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';
@@ -184,6 +207,13 @@ class alertMsgEnum
     //用户优惠券数量
     //获取用户优惠券数量成功
     const getCouponCountSuccess = '获取用户优惠券数量成功';
+    //获取用户优惠券数量失败
+    const getCouponCountFail = '获取用户优惠券数量失败';
+    //获取用户优惠券总额
+    //获取用户优惠券总额成功
+    const getCustomerCouponTotalSuccess = '获取用户优惠券总额成功';
+    //获取用户优惠券总额失败
+    const getCustomerCouponTotalFail = '获取用户优惠券总额失败';
     //单次服务排班表
     //请填写服务地址或服务时长
     const singleServiceTimeDataDefect = '请填写服务地址或服务时长';
@@ -242,6 +272,8 @@ class alertMsgEnum
     const taskFailFail = '您没有任务哦';
     //操作成功
     const taskFailSuccess = '操作成功';
+        //操作失败
+    const GetOrderOneFail = '操作失败';
     //查看任务的详情
     //您没有已完成任务哦
     const checkTaskFail = '查看任务失败';

@@ -8,6 +8,8 @@ var address_list = new Object();
 var goods_list = new Object();
 var district_id = 0;
 
+var progress = '<div class="progress"> <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div> </div>';
+
 $("#order-order_customer_phone").keyup(function(e){
     var phone = $(this).val();
     var reg = /^1[3-9][0-9]{9}$/;
@@ -100,7 +102,7 @@ $(document).on("click",".cancel_address_btn",function(){
             + v.customer_address_nickname + ' '
             + v.customer_address_phone + '</label>' +
             '<label class="col-sm-4" style="color: #FF0000;">' +
-            (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
+            (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
             '</label>' +
             '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
         );
@@ -151,7 +153,7 @@ $(document).on("click",".save_address_btn",function(){
                     + v.customer_address_nickname + ' '
                     + v.customer_address_phone + '</label>' +
                     '<label class="col-sm-4" style="color: #FF0000;">' +
-                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
+                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
                     '</label>' +
                     '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
                 );
@@ -169,12 +171,15 @@ $(document).on('change','#order-coupon_id',function(){
 
 function getTimeRange()
 {
-    $("#order-orderbookedtimerange").html('');
+    $("#order-orderbookedtimerange").html(progress);
+    setTimeout(function(){$("#order-orderbookedtimerange .progress-bar").css("width","100%");},100);
+
     $.ajax({
         type: "GET",
         url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val(),
         dataType: "json",
         success: function (data) {
+            $("#order-orderbookedtimerange").html('');
             for(var key in data) {
                 var val = data[key];
                 for (var k in val.timeline) {
@@ -246,17 +251,15 @@ function getGoods(){
             break;
         }
     }
-    $("#order_service_item_progress").show();
-    $("#order_service_item_progress .progress-bar").css("width","100%");
+    $("#order-order_service_item_id").html(progress);
+    setTimeout(function(){$("#order-order_service_item_id .progress-bar").css("width","100%");},100);
     $.ajax({
         type: "GET",
         url: "/order/order/get-goods/?lng=" + lng + "&lat=" + lat,
         dataType: "json",
         success: function (data) {
-            $("#order_service_item_progress").hide();
-            $("#order_service_item_progress .progress-bar").css("width","1%");
+            $("#order-order_service_item_id").html('');
             if(data.code==200){
-                $("#order-order_service_item_id").html('');
                 district_id = data.district_id;
                 for(var k in data.data){
                     var v = data.data[k];
@@ -267,7 +270,7 @@ function getGoods(){
                     );
                 }
             }else{
-                alert(data.msg);
+                $("#order-order_service_item_id").html('<p style="font-size: 14px;" class="form-control-static">'+data.msg+'</p>');
             }
         }
     });
@@ -323,15 +326,13 @@ function getCustomerInfo(){
     var phone = $("#order-order_customer_phone").val();
     var reg = /^1[3-9][0-9]{9}$/;
     if(reg.test(phone) && (customer.customer_phone==undefined || phone!=customer.customer_phone)) {
-        $("#order-address_id").html('');
-        $("#order_address_progress").show();
-        $("#order_address_progress .progress-bar").css("width","1%");
+        $("#order-address_id").html(progress);
         $.ajax({
             type: "GET",
             url: "/order/order/customer/?phone=" + phone,
             dataType: "json",
             success: function (data) {
-                $("#order_address_progress .progress-bar").css("width","100%");
+                $("#order-address_id .progress-bar").css("width","100%");
                 customer=data;
                 if (customer.id) {
                     $("#order-customer_id").val(customer.id);
@@ -341,7 +342,7 @@ function getCustomerInfo(){
                         url: "/order/order/customer-address/?id=" + customer.id,
                         dataType: "json",
                         success: function (address) {
-                            $("#order_address_progress").hide();
+                            $("#order-address_id").html('');
                             if (address.length==0) {
                                 $("#add_address_btn").click();
                             } else {
@@ -358,7 +359,7 @@ function getCustomerInfo(){
                                         + v.customer_address_nickname + ' '
                                         + v.customer_address_phone + '</label>' +
                                         '<label class="col-sm-4" style="color: #FF0000;">' +
-                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '') +
+                                        (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
                                         '</label>' +
                                         '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
                                         '</div>'

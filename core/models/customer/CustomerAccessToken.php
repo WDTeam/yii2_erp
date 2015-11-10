@@ -22,11 +22,16 @@ use core\models\finance\FinanceOrderChannel;
  */
 class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 {
-    public static function generateAccessToken($phone, $code, $channal_id=1){
+    /**
+     * generating access token for rest api users, phone and code must be provieded,
+     * if customer is no exist, customer will created but channal_id must be provided
+     * @param $phone
+     * @param $code
+     * @param int $channal_id
+     * @return bool|string
+     */
+    public static function generateAccessToken($phone, $code, $channal_id=0){
         $check_code = CustomerCode::checkCode($phone, $code);
-        
-        //var_dump($check_code);
-        //exit();
         if ($check_code == false) {
             return $check_code;
         }
@@ -36,12 +41,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             //没有客户则创建
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
-//                $customer = new Customer;
-//                $customer->customer_phone = $phone;
-//                $customer->created_at = time();
-//                $customer->updated_at = 0;
-//                $customer->is_del = 0;
-//                $customer->save();
                 $hasAdded = Customer::addCustomer($phone, $channal_id);
             }
 
@@ -68,13 +67,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $customerAccessToken->updated_at = 0;
             $customerAccessToken->is_del = 0;
             $customerAccessToken->validate();
-            // if ($customerAccessToken->hasErrors()) {
-            //     var_dump($customerAccessToken->getErrors());
-            // }
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
-
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
@@ -82,7 +77,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     }
 
     /**
-     * 检测access_token是否有效
+     * check access token
+     * @param $access_token
+     * @return bool
      */
     public static function checkAccessToken($access_token){
         $customerAccessToken = self::find()->where(['customer_access_token'=>$access_token, 'is_del'=>0])->one();
@@ -96,7 +93,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     }
 
     /**
-     * 根据access_token获取客户信息
+     * get customer infomation by access token
+     * @param $access_token
+     * @return array|bool|\dbbase\models\customer\Customer|null
      */
     public static function getCustomer($access_token){
         $able = self::checkAccessToken($access_token);
@@ -107,10 +106,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         if ($customerAccessToken == NULL) {
             return false;
         }
-        // $customerCode = CustomerCode::findOne($customerAccessToken->customer_code_id);
-        // if ($customerCode == NULL) {
-        //     return false;
-        // }
         $customer = Customer::find()->where(['customer_phone'=>$customerAccessToken->customer_phone])->one();
         unset($customer["is_del"]);
         return $customer == NULL ? false : $customer;
@@ -118,7 +113,11 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     
     /****************************access token for pop************************************/
     /**
-     * 验证POP调用BOSS系统的签名
+     * check sign for pop
+     * @param $phone
+     * @param $sign
+     * @param $channal_id
+     * @return bool
      */
     public static function checkSign($phone, $sign, $channal_id){
 
@@ -133,9 +132,13 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     }
 
     /**
-     * 为POP客户下发access_token
+     * generating access token for pop users
+     * @param $phone
+     * @param $sign
+     * @param int $channal_id
+     * @return array
      */
-    public static function generateAccessTokenForPop($phone, $sign, $channal_id=1){
+    public static function generateAccessTokenForPop($phone, $sign, $channal_id=0){
         $check_sign = self::checkSign($phone, $sign, $channal_id);
         if (!$check_sign) {
             return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'验证签名失败'];
@@ -150,12 +153,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             //没有客户则创建
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
-//                $customer = new Customer;
-//                $customer->customer_phone = $phone;
-//                $customer->created_at = time();
-//                $customer->updated_at = 0;
-//                $customer->is_del = 0;
-//                $customer->save();
                 $hasAdded = Customer::addCustomer($phone, $channal_id);
             }
 
@@ -196,6 +193,10 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     /******************************access token for weixin*******************************/
     /**
      * create weixin customer while weixin id is availible
+     * @param $phone
+     * @param $code
+     * @param $weixin_id
+     * @return array
      */
     public static function createWeixinCustomer($phone, $code, $weixin_id){
         $access_token = self::generateAccessToken($phone, $code);
@@ -215,9 +216,12 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         $customer->save();
         return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'access_token'=>$access_token, 'customer'=>$customer];
     }
-    
+
     /**
-     * check sign for weixin 
+     * check sign for weixin
+     * @param $weixin_id
+     * @param $sign
+     * @return array
      */
     public static function checkSignForWeixin($weixin_id, $sign){
         $key = 'weixin_to_boss';
@@ -227,9 +231,12 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         }
         return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>''];
     }
-    
+
     /**
      * generate access token for weixin customer
+     * @param $weixin_id
+     * @param $sign
+     * @return array
      */
     public static function generateAccessTokenForWeixin($weixin_id, $sign){
         $check_sign = self::checkSignForWeixin($weixin_id, $sign);
@@ -283,9 +290,11 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             return ['response'=>'error', 'errcode'=>'4', 'errmsg'=>'generate access token failed'];
         }
     }
-    
+
     /**
      * get customer by weixin_id
+     * @param $weixin_id
+     * @return array
      */
     public static function getCustomerByWeixinId($weixin_id){
         $customer = Customer::find()->where(['weixin_id'=>$weixin_id])->asArray()->one();

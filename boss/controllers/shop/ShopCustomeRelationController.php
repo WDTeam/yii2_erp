@@ -3,13 +3,14 @@
 namespace boss\controllers\shop;
 
 use Yii;
-use dbbase\models\shop\ShopCustomeRelation;
+use core\models\shop\ShopCustomeRelation;
 use boss\models\shop\ShopCustomeRelationSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
+use yii\web\ForbiddenHttpException;
 /**
  * ShopCustomeRelationController implements the CRUD actions for ShopCustomeRelation model.
  */
@@ -55,17 +56,17 @@ class ShopCustomeRelationController extends BaseAuthController
         	$dateinfo=Yii::$app->request->post();
         	
         	
-        	if(!isset($dateinfo['ShopCustomeRelation']['shopid'])){
+        	if(empty($dateinfo['ShopCustomeRelation']['shopid'])){
         		//父级id
         		$model->baseid= 0;
-        		$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOP;
+        		$stype= ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER;
         	}else{
         		//门店选择家政公司  会根据家政公司选择父id
         		if(!isset($dateinfo['ShopCustomeRelation']['shop_manager_id'])){
         			\Yii::$app->getSession()->setFlash('default','请选择家政公司！');
         			return $this->redirect(['index']);
         		}else{
-        			$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOPMANAGER;
+        			$stype = ShopCustomeRelationSearch::TYPE_STYPE_SHOP;
         			$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
         		}
         		$model->baseid= $resinfo['id'];
@@ -73,7 +74,7 @@ class ShopCustomeRelationController extends BaseAuthController
         	
         	$model->stype= $stype;
         	$model->save();
-        return $this->redirect(['view', 'id' => $model->id]);
+        return $this->redirect(['index']);
         
         
         
@@ -89,6 +90,10 @@ class ShopCustomeRelationController extends BaseAuthController
      */
     public function actionCreate()
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
         $model = new ShopCustomeRelation;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -110,6 +115,10 @@ class ShopCustomeRelationController extends BaseAuthController
    **/ 
     public function actionAddCreate()
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
     	$model = new ShopCustomeRelation;
     
     	if ($model->load(Yii::$app->request->post())) {
@@ -118,30 +127,30 @@ class ShopCustomeRelationController extends BaseAuthController
     	
     		$model->system_user_id= $dateinfo['ShopCustomeRelation']['system_user_id'];
     		
-    		if(!isset($dateinfo['ShopCustomeRelation']['shopid'])){
+    		if(empty($dateinfo['ShopCustomeRelation']['shopid'])){
     		//父级id	
     			$model->baseid= 0;
-    			$stype=1;
+    			$stype= ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER;
     		}else{
     		//门店选择家政公司  会根据家政公司选择父id
     		if(!isset($dateinfo['ShopCustomeRelation']['shop_manager_id'])){
     			\Yii::$app->getSession()->setFlash('default','请选择家政公司！');
     			return $this->redirect(['index']);
     		}else{
-    		$stype=2;
-    		$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
-    		}
-    			$model->baseid= $resinfo['id'];
-    		}
-    		$model->shopid= $dateinfo['ShopCustomeRelation']['shopid'];
-    		$model->shop_manager_id= $dateinfo['ShopCustomeRelation']['shop_manager_id'];
-    		$model->stype= $stype;
-    		$model->is_del= 0;
-    		 $model->save();
-    		return $this->redirect(['index']);
-
-    	} else {
-    		return $this->render('create', [
+        		$stype= ShopCustomeRelation::TYPE_STYPE_SHOP;
+        		$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
+        		}
+        			$model->baseid= $resinfo['id'];
+        		}
+        		$model->shopid= $dateinfo['ShopCustomeRelation']['shopid'];
+        		$model->shop_manager_id= $dateinfo['ShopCustomeRelation']['shop_manager_id'];
+        		$model->stype= $stype;
+        		$model->is_del= 0;
+        		 $model->save();
+        		return $this->redirect(['index']);
+    
+        	} else {
+        		return $this->render('create', [
     				'model' => $model,
     				]);
     	}
@@ -161,6 +170,10 @@ class ShopCustomeRelationController extends BaseAuthController
      */
     public function actionUpdate($id)
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -180,6 +193,10 @@ class ShopCustomeRelationController extends BaseAuthController
      */
     public function actionDelete($id)
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

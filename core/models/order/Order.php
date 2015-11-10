@@ -12,7 +12,7 @@ namespace core\models\order;
 /** core */
 use core\models\finance\FinanceRefundadd;
 
-use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponRule;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;
@@ -129,6 +129,7 @@ class Order extends OrderModel
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
      *  int $order_booked_begin_time 预约开始时间 必填
+     *  int $order_booked_count 预约时长 必填
      *  int $order_booked_end_time 预约结束时间 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
@@ -152,14 +153,14 @@ class Order extends OrderModel
         $attributes_keys = [
             'order_ip','order_service_item_id','order_src_id','channel_id',
             'order_booked_begin_time','order_booked_end_time','address_id',
-            'customer_id','admin_id','order_pay_type',
+            'customer_id','admin_id','order_pay_type','order_booked_count',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
             'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_cs_memo','order_flag_sys_assign'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id',
             'order_booked_begin_time','order_booked_end_time','address_id',
-            'customer_id','admin_id','order_pay_type'
+            'customer_id','admin_id','order_pay_type','order_booked_count'
         ];
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         foreach($attributes as $k=>$v){
@@ -168,7 +169,7 @@ class Order extends OrderModel
             }
         }
         foreach($attributes_required as $v){
-            if(!isset($attributes[$v])){
+            if(empty($attributes[$v])){
                 $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
                 return false;
             }
@@ -179,7 +180,28 @@ class Order extends OrderModel
         }
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
-        if ($this->_create($attributes)) {
+
+        $customer = Customer::getCustomerById($attributes['customer_id']);
+        if(!empty($customer)) {
+            $attributes['order_customer_phone'] = $customer->customer_phone;
+            $attributes['customer_is_vip'] = $customer->customer_is_vip;
+        }else{
+            $this->addError('customer_id', '没有获取到用户信息！');
+            return false;
+        }
+        $customer_balance = 0;
+        //如果客户选择使用余额则去获取客户余额
+        if(!empty($attributes['order_is_use_balance'])) {
+            try {
+                $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
+                $customer_balance = $customer['customer_balance'];
+            } catch (Exception $e) {
+                $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
+                return false;
+            }
+        }
+
+        if ($this->_create($attributes,null,$customer_balance)) {
             //交易记录1,现金支付,3第三支付,无需线上支付
             if( $this->order_pay_money == 0 ){
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
@@ -241,6 +263,7 @@ class Order extends OrderModel
      * @param $booked_list [
      *      [
      *          int $order_booked_begin_time 预约开始时间 必填
+     *          int $order_booked_code 预约时长 必填
      *          int $order_booked_end_time 预约结束时间 必填
      *          int $coupon_id 优惠券id
      *      ]
@@ -267,7 +290,7 @@ class Order extends OrderModel
         }
         foreach($attributes_required as $v){
             if(!isset($attributes[$v])){
-                ['status' => false, 'errors' => $v.'为必填项！'];
+                return ['status' => false, 'errors' => $v.'为必填项！'];
             }
         }
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
@@ -284,16 +307,36 @@ class Order extends OrderModel
             $attributes['order_is_parent'] = 0; //批量订单为普通订单
         }
 
+        $customer = Customer::getCustomerById($attributes['customer_id']);
+        if(!empty($customer)) {
+            $attributes['order_customer_phone'] = $customer->customer_phone;
+            $attributes['customer_is_vip'] = $customer->customer_is_vip;
+        }else{
+            return ['status' => false, 'errors' => '没有获取到用户信息！'];
+        }
+
+        $customer_balance = 0;
+        //如果客户选择使用余额则去获取客户余额
+        if(!empty($attributes['order_is_use_balance'])) {
+            try {
+                $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
+                $customer_balance = $customer['customer_balance'];
+            } catch (Exception $e) {
+                return ['status' => false, 'errors' => '创建时获客户余额信息失败！'];
+            }
+        }
+
         //在线支付初始化
         $orderExtPay = 0;
         foreach ($booked_list as $v) {
             $order = new Order();
             $booked = [
                 'order_booked_begin_time'=>$v['order_booked_begin_time'],
+                'order_booked_count'=>$v['order_booked_count'],
                 'order_booked_end_time'=>$v['order_booked_end_time'],
                 'coupon_id'=>isset($v['coupon_id'])?$v['order_booked_end_time']:0
             ];
-            if (!$order->_create($attributes + $booked, $transact)) {
+            if (!$order->_create($attributes + $booked, $transact,$customer_balance)) {
                 $transact->rollBack();
 
                 return ['status' => false, 'errors' => $order->errors];
@@ -521,11 +564,10 @@ class Order extends OrderModel
             }
 
             if($result) {
-                //TODO 如果是第三方订单则同步状态过去
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //更新阿姨接单数量 第二个参数是阿姨的接单次数
                 $transact->commit();
-                OrderMsg::assignDone($order); //指派成功发送通知
+                OrderMsg::assignDone($order->id); //指派成功发送通知
             }else{
                 $transact->rollBack();
                 foreach($orderids as $orderid) {
@@ -697,12 +739,6 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            //如果是第三方订单则同步状态到第三方
-            if($order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP){
-                if(!OrderPop::cancelToPop($order)) { //第三方同步失败则直接取消失败
-                    return false;
-                }
-            }
             $transact = static::getDb()->beginTransaction();
             $result = OrderStatus::_cancel($order,[],$transact);
             if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT
@@ -750,25 +786,17 @@ class Order extends OrderModel
      * 创建订单
      * @param $attributes
      * @param $transact
+     * @param $customer_balance 客户余额
      * @return bool
      */
-    private function _create($attributes, $transact = null)
+    private function _create($attributes, $transact = null,&$customer_balance)
     {
         $this->setAttributes($attributes);
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_code = OrderTool::createOrderCode(); //创建订单号
 
-        $customer = Customer::getCustomerById($this->customer_id);
-        if(!empty($customer)) {
-            $this->setAttributes([
-                'order_customer_phone' => $customer->customer_phone,
-                'customer_is_vip' => $customer->customer_is_vip,
-            ]);
-        }else{
-            $this->addError('customer_id', '没有获取到用户信息！');
-            return false;
-        }
+
 
         try {
             $address = CustomerAddress::getAddress($this->address_id);
@@ -796,7 +824,6 @@ class Order extends OrderModel
             'order_service_item_name' => $goods['operation_shop_district_goods_name'], //商品名称
             'order_service_type_id' => $goods['operation_category_id'], //品类ID
             'order_service_type_name' => $goods['operation_category_name'], //品类名称
-            'order_booked_count' => floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600), //TODO 精品保洁另算时长
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价
@@ -812,6 +839,12 @@ class Order extends OrderModel
             'order_lng' => $address['customer_address_longitude']
         ]);
 
+        $range = date('G:i',$this->order_booked_begin_time).'-'.date('G:i',$this->order_booked_end_time);
+        $ranges = $this->getThisOrderBookedTimeRangeList();
+        if(!in_array($range,$ranges)){
+            $this->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
+            return false;
+        }
 
         if ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP) { //第三方预付
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
@@ -828,17 +861,12 @@ class Order extends OrderModel
                 }
             }
             if ($this->order_is_use_balance == 1) {
-                try {
-                    $customer = Customer::getCustomerInfo($this->order_customer_phone);
-                } catch (Exception $e) {
-                    $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
-                    return false;
-                }
-                if ($customer['customer_balance'] < $this->order_pay_money) { //用户余额小于需支付金额
-                    $this->order_use_acc_balance = $customer['customer_balance']; //使用余额为用户余额
+                if ($customer_balance < $this->order_pay_money) { //用户余额小于需支付金额
+                    $this->order_use_acc_balance = $customer_balance; //使用余额为用户余额
                 } else {
                     $this->order_use_acc_balance = $this->order_pay_money; //使用余额为需支付金额
                 }
+                $customer_balance -= $this->order_use_acc_balance; //用户余额减去使用余额
                 $this->order_pay_money -= $this->order_use_acc_balance;
             }
         }
@@ -1003,7 +1031,7 @@ class Order extends OrderModel
     {
         $shop_district_info = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($shop_district_info)) {
-            return ['code' => 502, 'msg' => '获取商品信息失败：没有匹配的商圈'];
+            return ['code' => 502, 'msg' => '该地址没有商圈，获取服务项目失败！'];
         } else {
             if ($goods_id == 0) {
                 $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
@@ -1011,7 +1039,7 @@ class Order extends OrderModel
                 $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id'],$goods_id);
             }
             if (empty($goods)) {
-                return ['code' => 501, 'msg' => '获取商品信息失败：没有匹配的商品'];
+                return ['code' => 501, 'msg' => '没有匹配到服务项目！'];
             } else if($goods_id == 0){
                 return ['code' => 200, 'data' => $goods, 'district_id' => $shop_district_info['operation_shop_district_id']];
             } else {
@@ -1028,7 +1056,11 @@ class Order extends OrderModel
      */
     public static function getCouponById($id)
     {
-        return Coupon::getCouponBasicInfoById($id);
+        $result = CouponRule::getCouponBasicInfoById($id);
+        if(isset($result['is_status']) && $result['is_status']==1){
+            return $result['data'];
+        }
+        return false;
     }
 
     /**
@@ -1060,26 +1092,16 @@ class Order extends OrderModel
 
     /**
      * 获取已上线商圈列表
-     * @date: 2015-10-26
-     * @author: peak pan
-     * @return:
-     * */
+     * @date 2015-10-26
+     * @author peak pan
+     * @return array
+      */
     public static function getDistrictList()
     {
         $districtList = OperationShopDistrict::getCityShopDistrictList();
         return $districtList ? ArrayHelper::map($districtList, 'id', 'operation_shop_district_name') : [];
     }
 
-    /**
-     * 核实用户订单唯一性
-     * @param   $customer_id   int 用户id
-     * @param   $order_id       int  订单id
-     * @return  int
-     */
-    public static function validationOrderCustomer($customer_id, $order_id)
-    {
-        return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
-    }
 
     /*
      * 获取订单状态列表
@@ -1132,6 +1154,46 @@ class Order extends OrderModel
     public function getOrderBookedTimeArrange()
     {
         return date('H:i', $this->order_booked_begin_time) . '-' . date('H:i', $this->order_booked_end_time);
+    }
+
+    /**
+     * 根据本订单获取可选下单时间列表
+     * @return array
+     */
+    public function getThisOrderBookedTimeRangeList()
+    {
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1);
+        $order_booked_time_range = [];
+        foreach($time_range[0]['timeline'] as $range){
+            if($range['enable']) {
+                $order_booked_time_range[$range['time']] = $range['time'];
+            }
+        }
+        return $order_booked_time_range;
+    }
+
+    /**
+     * 获取可下单时间列表
+     * @param int $district_id
+     * @param int $range
+     * @param int $date
+     * @param int $days
+     * @return array
+     */
+    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
+    {
+        if($district_id>0) {
+            $date = strtotime($date);
+            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
+        }
+        $order_booked_time_range = [];
+        for ($i = 8; $i <= 18; $i++) {
+            $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $hour2 = str_pad($i + intval($range), 2, '0', STR_PAD_LEFT);
+            $minute = ($range - intval($range) == 0) ? '00' : '30';
+            $order_booked_time_range["{$hour}:00-{$hour2}:{$minute}"] = "{$hour}:00-{$hour2}:{$minute}";
+        }
+        return $order_booked_time_range;
     }
 
 }

@@ -33,7 +33,7 @@ class m150918_195337_create_table_customer extends Migration
             'customer_is_vip'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL COMMENT \'身份\'',
             
             'customer_is_weixin'=>Schema::TYPE_SMALLINT.'(4) DEFAULT 0 COMMENT \'是否微信客户\'',
-            'weixin_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'微信id\'',
+            'weixin_id'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'微信id\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'更新时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL COMMENT \'加入黑名单\'',

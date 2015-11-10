@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'operation_goods_name',
-            'operation_category_id',
+            //'operation_category_id',
 //            'operation_category_ids',
             'operation_category_name',
             'operation_goods_introduction:ntext',

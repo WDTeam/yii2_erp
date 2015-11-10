@@ -25,37 +25,30 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'payment_customer_trans_record_mode_name',
                 'label'=>'交易方式',
-                'options' => ['width'=>70]
             ],
             [
                 'attribute' => 'payment_customer_trans_record_transaction_id',
                 'label'=>'交易流水号',
-                'options' => ['width'=>200]
             ],
             [
                 'attribute' => 'payment_customer_trans_record_eo_order_id',
                 'label'=>'商户订单号',
-                'options' => ['width'=>120]
             ],
             [
                 'attribute' => 'customer_id',
                 'label'=>'用户ID',
-                'options' => ['width'=>60]
             ],
             [
                 'attribute' => 'order_id',
                 'label'=>'E家洁订单号',
-                'options' => ['width'=>80]
             ],
             [
                 'attribute' => 'payment_customer_trans_record_order_channel',
                 'label'=>'订单渠道',
-                'options' => ['width'=>120]
             ],
             [
                 'attribute' => 'payment_customer_trans_record_pay_channel',
                 'label'=>'支付渠道',
-                'options' => ['width'=>120]
             ],
             [
                 'attribute' => 'payment_customer_trans_record_order_total_money',
@@ -78,6 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options'=>[ 'style'=>'background:#CCFFFF'],
             ],
             [
+                'attribute' => 'payment_customer_trans_record_coupon_transaction_id',
+                'label'=>'B3:优惠券流水号',
+                'options'=>[ 'style'=>'background:#CCFFFF'],
+            ],
+            [
                 'attribute' => 'payment_customer_trans_record_cash',
                 'label'=>'C:现金支付',
                 'options'=>[ 'style'=>'background:#FFCCCC'],
@@ -97,18 +95,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'F:用户余额支付',
                 'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
-
             [
-                'attribute' => 'payment_customer_trans_record_current_balance',
+                'attribute' => 'payment_customer_trans_record_befor_balance',
                 'label'=>'F1:支付前用户余额',
                 'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
             [
-                'attribute' => 'payment_customer_trans_record_befor_balance',
+                'attribute' => 'payment_customer_trans_record_current_balance',
                 'label'=>'F2:支付后用户余额',
                 'options'=>[ 'style'=>'background:#FFCCCC'],
             ],
-
+            [
+                'attribute' => 'payment_customer_trans_record_balance_transaction_id',
+                'label'=>'F3:余额流水号',
+                'options'=>[ 'style'=>'background:#FFCCCC'],
+            ],
             [
                 'attribute' => 'payment_customer_trans_record_service_card_pay',
                 'label'=>'G:服务卡支付',
@@ -127,6 +128,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'payment_customer_trans_record_service_card_befor_balance',
                 'label'=>'G3:支付后服务卡余额',
+                'options'=>[ 'style'=>'background:#FF9999'],
+            ],
+            [
+                'attribute' => 'payment_customer_trans_record_service_card_transaction_id',
+                'label'=>'G4:服务卡流水号',
                 'options'=>[ 'style'=>'background:#FF9999'],
             ],
             [

@@ -4,7 +4,7 @@ return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'gii'],
-    
+
     'controllerNamespace' => 'console\controllers',
     'components' => [
         'log' => [

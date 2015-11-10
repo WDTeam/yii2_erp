@@ -26,6 +26,8 @@ use Yii;
  * @property string $customer_login_ip
  * @property integer $customer_login_time
  * @property integer $customer_is_vip
+ * @property integer $customer_is_weixin
+ * @property string $weixin_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $is_del
@@ -46,11 +48,11 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'customer_level', 'customer_complaint_times', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'customer_level', 'customer_complaint_times', 'customer_login_time', 'customer_is_vip', 'customer_is_weixin', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_name', 'customer_platform_version', 'customer_app_version', 'customer_mac', 'customer_login_ip'], 'string', 'max' => 16],
             [['customer_photo', 'customer_email'], 'string', 'max' => 32],
             [['customer_phone'], 'string', 'max' => 11],
-            [['operation_area_name', 'operation_city_name'], 'string', 'max' => 255],
+            [['operation_area_name', 'operation_city_name', 'weixin_id'], 'string', 'max' => 255],
             [['customer_phone'], 'unique']
         ];
     }
@@ -80,6 +82,8 @@ class Customer extends \yii\db\ActiveRecord
             'customer_login_ip' => Yii::t('dbbase', '登陆ip'),
             'customer_login_time' => Yii::t('dbbase', '登陆时间'),
             'customer_is_vip' => Yii::t('dbbase', '身份'),
+            'customer_is_weixin' => Yii::t('dbbase', '是否微信客户'),
+            'weixin_id' => Yii::t('dbbase', '微信id'),
             'created_at' => Yii::t('dbbase', '创建时间'),
             'updated_at' => Yii::t('dbbase', '更新时间'),
             'is_del' => Yii::t('dbbase', '加入黑名单'),

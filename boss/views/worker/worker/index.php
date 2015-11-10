@@ -23,7 +23,229 @@ use boss\models\worker\WorkerIdentityConfig;
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][1] = $this->title;
 $params = Yii::$app->request->getQueryParams();
-if(isset($params['WorkerSearch']['worker_vacation_application_approve_status'])){
+if(\Yii::$app->user->identity->isMiniBossUser()){
+    $columns =[
+        [
+            'class'=>'kartik\grid\CheckboxColumn',
+            'headerOptions'=>['class'=>'kartik-sheet-style'],
+        ],
+        [
+            'format' => 'raw',
+            'label' => '阿姨姓名',
+            'value' => function ($dataProvider) {
+                if($dataProvider->id){
+                    return Html::a($dataProvider->worker_name, Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->id]), [
+                        'title' => '查看',
+                        'style' => 'margin-right:5%',
+                        'data-pjax'=>0,
+                        'target' => '_blank',
+                    ]);
+                }
+            }
+        ],
+
+        'worker_phone',
+        'worker_idcard',
+        [
+            'format' => 'raw',
+            'label' => '阿姨类型',
+            'value' => function ($dataProvider) {
+                return Worker::getWorkerTypeShow($dataProvider->worker_type);
+            },
+            'width' => "100px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '阿姨身份',
+            'value' => function ($dataProvider) {
+                if($dataProvider->id){
+                    return WorkerIdentityConfig::getWorkerIdentityShow($dataProvider->worker_identity_id);
+                }
+            },
+            'width' => "70px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '所属商圈',
+            'value' => function($dataProvider){
+                return Worker::getWorkerDistrictShow($dataProvider->id);
+            },
+            'width' => "8%",
+        ],
+        /******* 选中其他状态显示列 ********/
+        [
+            'format' => 'raw',
+            'label' => '状态',
+            'hidden' => Worker::columnsIsHidden('other'),
+            'value' => function($dataProvider){
+                return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
+            },
+            'width' => "100px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '阿姨入职时间',
+            'hidden' => Worker::columnsIsHidden('other'),
+            'value' => function ($dataProvider) {
+                return date('Y-m-d H:i', $dataProvider->created_ad);
+            },
+            'width' => "120px",
+        ],
+        /******* 选中其他状态显示列 ********/
+        /****** 选中黑名单显示列 ******/
+        [
+            'format' => 'raw',
+            'hidden' => Worker::columnsIsHidden('blacklist'),
+            'label' => '状态',
+            'value' => function ($dataProvider) {
+                return '黑名单';
+            },
+            'width' => "120px",
+        ],
+        [
+            'format' => 'raw',
+            'hidden' => Worker::columnsIsHidden('blacklist'),
+            'label' => '列入黑名单时间',
+            'value' => function ($dataProvider) {
+                return date('Y-m-d H:i', $dataProvider->worker_blacklist_time);
+            },
+            'width' => "120px",
+        ],
+        [
+            'format' => 'raw',
+            'hidden' => Worker::columnsIsHidden('blacklist'),
+            'label' => '黑名单原因',
+            'value' => function ($dataProvider) {
+                return $dataProvider->worker_blacklist_reason;
+            },
+            'width' => "120px",
+        ],
+        /****** 选中黑名单显示列 ******/
+        /****** 选中离职显示列 ******/
+        [
+            'format' => 'raw',
+            'hidden' => Worker::columnsIsHidden('dimission'),
+            'label' => '状态',
+            'value' => function ($dataProvider) {
+                return '离职';
+            },
+            'width' => "120px",
+        ],
+        [
+            'format' => 'raw',
+            'hidden' => Worker::columnsIsHidden('dimission'),
+            'label' => '离职时间',
+            'value' => function ($dataProvider) {
+                return date('Y-m-d H:i', $dataProvider->worker_dimission_time);
+            },
+            'width' => "120px",
+        ],
+        [
+            'format' => 'raw',
+            'hidden' => Worker::columnsIsHidden('dimission'),
+            'label' => '离职原因',
+            'value' => function ($dataProvider) {
+                return $dataProvider->worker_dimission_reason;
+            },
+            'width' => "120px",
+        ],
+        /****** 选中离职显示列 ******/
+        [
+            'format' => 'raw',
+            'label' => '订单总数',
+            'value' => function ($dataProvider) {
+                return Html::a($dataProvider->workerStatRelation->worker_stat_order_num, Yii::$app->urlManager->createUrl(['order/order/?OrderSearch[order_worker_phone]='.$dataProvider->worker_phone, 'id' => $dataProvider->id]), [
+                    'title' =>'阿姨订单',
+                    'style' => 'margin-right:5%',
+                    'data-pjax'=>'0',
+                    'target' => '_blank',
+                ]);
+
+            },
+            'width' => "120px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '投诉数',
+            'value' => function ($dataProvider) {
+                return Html::a($dataProvider->workerStatRelation->worker_stat_order_complaint, Yii::$app->urlManager->createUrl(['order/order-complaint/index/','OrderComplaintSearch[order_worker_phone]'=>$dataProvider->worker_phone]), [
+                    'title' =>'阿姨投诉',
+                    'style' => 'margin-right:5%',
+                    'data-pjax'=>'0',
+                    'target' => '_blank',
+                ]);
+            },
+            'width' => "120px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '好评数',
+            'value' => function ($dataProvider) {
+                return Html::a($dataProvider->workerStatRelation->worker_stat_order_complaint, Yii::$app->urlManager->createUrl(['customer/customer-comment/','CustomerCommentSearch[customer_comment_level]'=>1, 'CustomerCommentSearch[worker_id]' => $dataProvider->id]), [
+                    'title' =>'阿姨好评',
+                    'style' => 'margin-right:5%',
+                    'data-pjax'=>'0',
+                    'target' => '_blank',
+                ]);
+            },
+            'width' => "120px",
+        ],
+        [
+            'class' => 'kartik\grid\ActionColumn',
+            'header' => '操作',
+            'width' => "20%",
+            'template' =>'{order}{view} {auth} {vacation} {block} {delete}',
+            'contentOptions'=>[
+                'style'=>'font-size: 12px;padding-right:2px',
+            ],
+
+            'buttons' => [
+                'order' => function ($url, $model) {
+                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearch[order_worker_phone]='.$model->worker_phone, 'id' => $model->id]), [
+                        'title' =>'订单',
+                        'style' => 'margin-right:5%',
+                        'data-pjax'=>'0',
+                        'target' => '_blank',
+                    ]);
+                },
+                'view' => function ($url, $model) {
+                    return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
+                        'title' =>'查看',
+                        'style' => 'margin-right:5%'
+                    ]);
+                },
+                'delete' => function ($url, $model) {
+                    return Html::a('<span class="btn btn-primary">删除</span>', Yii::$app->urlManager->createUrl(['worker/worker/delete', 'id' => $model->id]), [
+                        'title' =>'删除',
+                        'style' => 'margin-right:5%'
+                    ]);
+                },
+                'auth' => function ($url, $model) {
+                    return Html::a('<span class="btn btn-primary">管理</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
+                        'title' =>'管理',
+                        'style' => 'margin-right:5%'
+                    ]);
+                },
+//                    'vacation' => function ($url, $model) {
+//                        return Html::a('<span class="fa fa-fw fa-history"></span>',
+//                            [
+//                                '/worker/create-vacation',
+//                                'workerIds' => $model->id
+//                            ]
+//                            ,
+//                            [
+//                                'title' => Yii::t('yii', '请假信息录入'),
+//                                'data-toggle' => 'modal',
+//                                'data-target' => '#vacationModal',
+//                                'class'=>'vacation',
+//                                'data-id'=>$model->id,
+//                                'style' => 'margin-right:3px'
+//                            ]);
+//                    },
+            ],
+        ]
+    ];
+}elseif(isset($params['WorkerSearch']['worker_vacation_application_approve_status'])){
     $vacationBtn = '';
     $columns =[
         [

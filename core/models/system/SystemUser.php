@@ -12,6 +12,18 @@ class SystemUser extends \dbbase\models\system\SystemUser
     private $_statusLabel;
     private $_roleLabel;
     
+    const CLASSIFY_SYSTEM = 0;
+    const CLASSIFY_BOSS = 1;
+    const CLASSIFY_MINIBOSS = 2;
+    public static function getClassifes()
+    {
+        return [
+            self::CLASSIFY_SYSTEM=>'系统保留',
+            self::CLASSIFY_BOSS=>'BOSS 用户',
+            self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
+        ];
+    }
+    
     /**
      * @inheritdoc
      */
@@ -22,6 +34,18 @@ class SystemUser extends \dbbase\models\system\SystemUser
             $this->_statusLabel = $statuses[$this->status];
         }
         return $this->_statusLabel;
+    }
+    /**
+     * 显示分类名
+     */
+    public function getClassifyLabel()
+    {
+        $classifys = self::getClassifes();
+        if(isset($classifys[$this->classify])){
+            return $classifys[$this->classify];
+        }else{
+            return '';
+        }
     }
     
     
@@ -63,7 +87,6 @@ class SystemUser extends \dbbase\models\system\SystemUser
     {
         return ArrayHelper::map(\Yii::$app->authManager->getRoles(), 'name', 'description');
     }
-    
     public function getRoleLabel()
     {
         if ($this->_roleLabel === null) {
@@ -141,6 +164,9 @@ class SystemUser extends \dbbase\models\system\SystemUser
     public function getShopManagerList()
     {
         $ids = $this->getShopManagerIds();
+        if(empty($ids)){
+            return [];
+        }
         $res = (array)ShopManager::find()
         ->andFilterWhere(['in','id', $ids])
         ->all();
@@ -165,10 +191,20 @@ class SystemUser extends \dbbase\models\system\SystemUser
     public function getShopList()
     {
         $ids = $this->getShopIds();
+        if(empty($ids)){
+            return [];
+        }
         $res = (array)Shop::find()
         ->andFilterWhere(['in','id', $ids])
         ->all();
         return $res;
+    }
+    /**
+     * 判断是不是MINI BOX 用户
+     */
+    public function isMiniBossUser()
+    {
+        return $this->classify==self::CLASSIFY_MINIBOSS;
     }
     
     /**
@@ -205,6 +241,8 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return array_merge(
             $labels,
             [
+                'classify'=>'用户类别',
+                'mobile'=>'手机号',
                 'password' => \Yii::t('app', '密码'),
                 'repassword' => \Yii::t('app', '确认密码')
             ]

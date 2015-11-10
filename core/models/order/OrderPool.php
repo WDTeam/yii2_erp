@@ -36,7 +36,7 @@ class OrderPool extends Model
             'booked_count' => $order->order_booked_count,
             'address' => $order->order_address,
             'need' => $order->orderExtCustomer->order_customer_need,
-            'money' => $order->orderExtPay->order_pay_type==1?$order->order_money:'0.00',
+            'money' => $order->order_money,
             'is_booked_worker' => ($order->order_booked_worker_id==$worker_id)?"true":"false",
             'order_time' => [$order->order_booked_begin_time.'-'.$order->order_booked_end_time]
         ];
@@ -44,6 +44,7 @@ class OrderPool extends Model
             $child_list = OrderSearch::getChildOrder($order_id);
             foreach($child_list as $child){
                 $redis_order['order_time'][] = $child->order_booked_begin_time.'-'.$child->order_booked_end_time;
+                $redis_order['money'] += $child->order_money;
             }
         }
         if($order->order_booked_worker_id==$worker_id){

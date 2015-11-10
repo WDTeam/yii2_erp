@@ -21,6 +21,7 @@ class m150919_083917_create_table_worker_ext extends Migration
             'worker_is_insurance' => Schema::TYPE_BOOLEAN . '(1) DEFAULT 0 COMMENT \'阿姨是否上保险 0否，1是\'',
             'worker_height' => Schema::TYPE_SMALLINT. '(4) DEFAULT NULL COMMENT \'阿姨身高(cm)\'',
             'worker_source' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨来源\'',
+            'worker_hometown' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨籍贯\'',
             'worker_bank_name' => Schema::TYPE_STRING . '(10) DEFAULT NULL COMMENT \'开户银行\'',
             'worker_bank_from' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'银行卡开户网点\'',
             'worker_bank_area' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'银行开户地\'',

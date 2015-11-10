@@ -7,8 +7,7 @@ use Yii;
 use \core\models\customer\Customer;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
-use \core\models\operation\coupon\CouponCustomer;
-use \core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponUserinfo;
 use \core\models\payment\PaymentCustomerTransRecord;
 use \core\models\order\Order;
 use \core\models\customer\CustomerComment;
@@ -1380,8 +1379,8 @@ class UserController extends \restapi\components\Controller
         }
 
         $ret = [
-            "user" => $date['access_token'],
-            "access_token" => $date['customer']
+            "user" => $date['customer'],
+            "access_token" => $date['access_token']
         ];
         return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
     }
@@ -1539,12 +1538,12 @@ class UserController extends \restapi\components\Controller
          * @param int $customer_id 用户id
          */
         try {
-            $CouponCount = CouponCustomer::CouponCount($customer_id);
+            $CouponCount = CouponUserinfo::CouponCount($customer_id);
         } catch (\Exception $e) {
             #return $this->send($e, "获取用户优惠券数系统错误", 1024, 200, null, alertMsgEnum::bossError);
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
-        $result["coupon"] = $CouponCount;
+        $result["coupon"] = $CouponCount['data'];
         if (!empty($result)) {
             return $this->send($result, "获取个人中心信息成功", 1, 200, null, alertMsgEnum::getMoneyScoreCouponSuccess);
         } else {

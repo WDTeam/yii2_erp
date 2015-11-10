@@ -14,6 +14,8 @@ use kartik\helpers\Html;
 use yii\helpers\Json;
 use yii\base\Widget;
 use yii\web\UploadedFile;
+use yii\web\HttpException;
+use yii\web\BadRequestHttpException;
 
 /**
  * ShopManagerController implements the CRUD actions for ShopManager model.
@@ -31,6 +33,18 @@ class ShopManagerController extends BaseAuthController
             ],
         ];
     }
+    /**
+     * 判断当前用户能不能操作
+     * @param unknown $id
+     * @throws BadRequestHttpException
+     */
+    public function can($id)
+    {
+        $ids = \Yii::$app->user->identity->getShopManagerIds();
+        if(\Yii::$app->user->identity->isMiniBossUser() && !in_array($id, $ids)){
+            throw new BadRequestHttpException('没有访问权限', 403);
+        }
+    }
 
     /**
      * Lists all ShopManager models.
@@ -39,8 +53,12 @@ class ShopManagerController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new ShopManagerSearch;
-//         $searchModel->audit_status = 0;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $query = Yii::$app->request->getQueryParams();
+        if(\Yii::$app->user->identity->isMiniBossUser()){
+            $query['ids'] = \Yii::$app->user->identity->getShopManagerIds();
+            $query['ids'] = empty($query['ids'])?[0]:$query['ids'];
+        }
+        $dataProvider = $searchModel->search($query);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -55,13 +73,13 @@ class ShopManagerController extends BaseAuthController
      */
     public function actionView($id)
     {
+        $this->can($id);
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -102,6 +120,7 @@ class ShopManagerController extends BaseAuthController
      */
     public function actionUpdate($id)
     {
+        $this->can($id);
         $model = $this->findModel($id);
 
         if (\Yii::$app->request->post()) {
@@ -131,6 +150,8 @@ class ShopManagerController extends BaseAuthController
      */
     public function actionDelete($id)
     {
+        $this->can($id);
+        
         $this->findModel($id)->softDelete();
 
         return $this->redirect(['index']);
@@ -172,6 +193,8 @@ class ShopManagerController extends BaseAuthController
      */
     public function actionJoinBlacklist($id)
     {
+        $this->can($id);
+        
         $model = $this->findModel($id);
         if(\Yii::$app->request->isPost){
             $cause = Yii::$app->request->post('cause','');
@@ -189,6 +212,8 @@ class ShopManagerController extends BaseAuthController
      */
     public function actionRemoveBlacklist($id)
     {
+        $this->can($id);
+        
         $cause = Yii::$app->request->get('cause','');
         $this->findModel($id)->removeBlacklist($cause);
         \Yii::$app->session->setFlash('default', '取消成功');

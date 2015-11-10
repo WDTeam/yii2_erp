@@ -15,7 +15,7 @@ use kartik\widgets\ActiveForm;
             <h3 class="panel-title"><?= $this->title?></h3>
         </div>
         <div class="panel-body">
-        <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
+        <?php $form = ActiveForm::begin(['action' => ['finance/finance-compensate/create'],'method'=>'post','type'=>ActiveForm::TYPE_HORIZONTAL]); 
         ?>
             <?= $form->field($model, 'finance_compensate_oa_code'); ?>
             <?= $form->field($model, 'finance_compensate_money'); ?>
@@ -35,6 +35,8 @@ use kartik\widgets\ActiveForm;
                     }
                 ?>
             </div>
+            <input type="hidden" name="FinanceCompensate[finance_complaint_id]" value="<?= $model->finance_complaint_id;?>"/>
+            <input type="hidden" name="id" value="<?= $model->id;?>"/>
             <?= $form->field($model, 'finance_compensate_total_money'); ?>
             <?= $form->field($model, 'finance_compensate_insurance_money'); ?>
             <?= $form->field($model, 'finance_compensate_company_money'); ?>
@@ -42,51 +44,6 @@ use kartik\widgets\ActiveForm;
             <?= $form->field($model, 'finance_compensate_reason'); ?>
         </div>
     </div>
-    <div class="panel panel-info">
-    <div class="panel-heading">
-            <label class="panel-title">投诉信息</label>
-        </div>
-        <div class="panel-body">
-            <div class='col-md-2'>
-                投诉Id
-            </div>
-            <div class='col-md-2'>
-                订单Id
-            </div>
-            <div class='col-md-2'>
-                投诉对象
-            </div>
-            <div class='col-md-2'>
-                投诉对象电话
-            </div>
-            <div class='col-md-2'>
-                投诉类型
-            </div>
-            <div class='col-md-2'>
-                投诉详情
-            </div>
-        </div>
-        <div class="panel-body">
-            <div class='col-md-2'>
-                <?php echo Html::a('<u>1234</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => 1])],['data-pjax'=>'0','target' => '_blank',]) ?>
-            </div>
-            <div class='col-md-2'>
-                <?php echo Html::a('<u>5678</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => 1])],['data-pjax'=>'0','target' => '_blank',]) ?>
-            </div>
-            <div class='col-md-2'>
-                陈阿姨
-            </div>
-            <div class='col-md-2'>
-                13810068888
-            </div>
-            <div class='col-md-2'>
-               物品损坏
-            </div>
-            <div class='col-md-2'>
-                拖地的时候把木质地板拖坏了
-            </div>
-        </div>
-
         <div class="panel-footer">
             <div class="form-group">
                 <div class="col-sm-offset-0 col-sm-12">

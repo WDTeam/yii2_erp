@@ -109,7 +109,6 @@ class Payment extends \dbbase\models\payment\Payment
                         $order_use_acc_balance += $val['order_use_acc_balance'];    //使用余额
                         $card_id = $val['card_id'];    //服务卡号
                         $order_use_card_money += $val['order_use_card_money'];    //使用服务卡
-
                     }
                 }
                 else
@@ -139,14 +138,6 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 3: //3充值订单
                 //TODO::获取服务卡金额
-//                /**
-//                 *      customer_id,用户ID
-//                 *      server_card_info_id,卡信息ID
-//                 *      service_card_sell_record_status，购卡订单状态
-//                 *      service_card_sell_record_channel_id,购卡渠道ID
-//                 *      service_card_sell_record_channel_name,购卡渠道名称
-//                 *      service_card_sell_record_money,购卡订单金额 】
-//                 */
 //                OperationServiceCardSellRecord->createServiceCardSellRecord($customer_id, $order_id, 0, 1, 'APP客户端', 1000);
                 $payment_mode = 2;//充值
                 break;
@@ -810,9 +801,6 @@ class Payment extends \dbbase\models\payment\Payment
     {
         //POST数据
         if(!empty($data['debug'])){
-            //{"payment_type":"1","subject":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed8","trade_no":"2015110457346343","buyer_email":"weibeinan2008@163.com","gmt_create":"2015-11-04 18:15:36","notify_type":"trade_status_sync","quantity":"1","out_trade_no":"1511040155118","seller_id":"2088801136967007","notify_time":"2015-11-04 18:39:23","body":"e\u5bb6\u6d01\u5728\u7ebf\u652f\u4ed80.02\u5143","trade_status":"TRADE_SUCCESS","is_total_fee_adjust":"N","total_fee":"0.02","gmt_payment":"2015-11-04 18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
-            //15:57:08","price":"0.02","buyer_id":"2088802381237501","notify_id":"2983afc3b92e376e84923e4c75e0f3574s","use_coupon":"N","sign_type":"RSA","sign":"ZlCICZ\/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE\/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc="}
-            //18:15:36","seller_email":"47632990@qq.com","price":"0.02","buyer_id":"2088412778636439","notify_id":"e57d71ea1dc40bbf294a7df8d47171834e","use_coupon":"N","sign_type":"RSA","sign":"fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="}
 
             $_POST = [
                 "payment_type"=> "1",
@@ -839,6 +827,31 @@ class Payment extends \dbbase\models\payment\Payment
                 "sign"=> "fE6og70Ie7xUqwiFoJFImHu8n8Hxv7x1sDcWOo132jN23TUH4BhNhX14OvYKk0VJ71GpmFuPS7jhT3SCrtaK24l5OHxueDzJUfcVkDOdA0UOi5A1W8P3Mv8bAIKEP6kGhjWB8ittnGSLmkdDAZMIQmaUz0eoIR4NL8uhU3qv9Bk="
             ];
 
+            $_POST = [
+                "payment_type"=> "1",
+                "subject"=> "e家洁在线支付",
+                "trade_no"=> "2015110900001000440071876428",
+                "buyer_email"=> "xihuange@126.com",
+                "gmt_create"=> "2015-11-09 00:59:27",
+                "notify_type"=> "trade_status_sync",
+                "quantity"=> "1",
+                "out_trade_no"=> "1511090135473",
+                "seller_id"=> "2088801136967007",
+                "notify_time"=> "2015-11-09 01:13:02",
+                "body"=> "e家洁在线支付0.02元",
+                "trade_status"=> "TRADE_SUCCESS",
+                "is_total_fee_adjust"=> "N",
+                "total_fee"=> "0.02",
+                "gmt_payment"=> "2015-11-09 00:59:28",
+                "seller_email"=> "47632990@qq.com",
+                "price"=> "0.02",
+                "buyer_id"=> "2088102035089446",
+                "notify_id"=> "aade9f6f4bddbbfde2e9243e88a3101c4g",
+                "use_coupon"=> "N",
+                "sign_type"=> "RSA",
+                "sign"=> "iAqB1XSFY7mlpuK9zjwW3zXSro+2HWKWG2h638ukP5lvAMa8+qZ/Fqqe6PQ7q0ktX7BPSgvGpaBAwhE/kK25hcaMniZRPyg/mBvmzuS+W2LXd8Zgj47R9hzWNKqX3RBaXtdnwbH06UXiG8wcUoxJSFPRCiLL2AozDw71Ya+aiZU="
+            ];
+
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -849,7 +862,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_price' => $post['total_fee'],   //支付金额
             'payment_log_shop_name' => $post['subject'],   //商品名称
             'payment_log_eo_order_id' => $post['out_trade_no'],   //订单ID
-            'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
+            'payment_log_transaction_id' => $post['trade_no'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
             'pay_channel_id' => 7,  //支付渠道,支付宝
@@ -871,7 +884,7 @@ class Payment extends \dbbase\models\payment\Payment
             //验证签名
             $class = new \alipay_wap_class();
             $verify_result = $class->callback();
-            if($_GET['debug'])
+            if(!empty($_GET['debug']))
             {
                 $verify_result = true;
             }
@@ -980,7 +993,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_state'],   //支付状态
             'payment_log_status' => $post['trade_state'],   //支付状态
-            'pay_channel_id' => 11,  //支付渠道ID
+            'pay_channel_id' => 13,  //财付通
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -1080,7 +1093,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['bfb_order_no'],   //交易流水号
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
-            'pay_channel_id' => 8,  //支付渠道ID
+            'pay_channel_id' => 8,  //百度钱包
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -1197,7 +1210,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
             'payment_log_status_bool' => $post['return_code'],   //支付状态
             'payment_log_status' => $post['return_code'],   //支付状态
-            'pay_channel_id' => 10,  //支付渠道ID
+            'pay_channel_id' => 10,  //微信后台
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -1291,7 +1304,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['order_id'],   //交易流水号
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
-            'pay_channel_id' => 8,  //支付渠道ID
+            'pay_channel_id' => 8,  //百度钱包
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -1409,7 +1422,7 @@ class Payment extends \dbbase\models\payment\Payment
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] === $attribute['payment_actual_money'] )
                 {
-                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_id'],$attribute['payment_transaction_id']);
+                    Order::isPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_name'],$attribute['payment_transaction_id']);
                 }
                 else
                 {
@@ -1423,7 +1436,7 @@ class Payment extends \dbbase\models\payment\Payment
                 //验证支付金额是否一致
                 if( $attribute['payment_money'] === $attribute['payment_actual_money'] )
                 {
-                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_id_name'],$attribute['payment_transaction_id']);
+                    Order::isBatchPaymentOnline($attribute['order_id'],$attribute['payment_channel_id'],$attribute['payment_channel_name'],$attribute['payment_transaction_id']);
                 }
                 else
                 {
@@ -1498,14 +1511,17 @@ class Payment extends \dbbase\models\payment\Payment
                     'order_id' => $order_id,
                     'payment_money' => $orderInfo['order_pay_money'],   //订单支付金额
                     'payment_actual_money' => $paymentInfo['payment_actual_money'],     //实际支付金额
+                    'payment_source' => $paymentInfo['payment_source'],
                     'payment_channel_id' => $paymentInfo['payment_channel_id'],
                     'payment_channel_name' => $paymentInfo['payment_channel_name'],
                     'payment_mode' => 3,    //退款
                     'payment_status' => 1,  //退款成功状态
+                    'payment_transaction_id'=>0,
                     'payment_memo' => '',
                     'payment_type' => 4,    //退款类型
                     'admin_id' => Yii::$app->user->id,
                     'payment_admin_name' => Yii::$app->user->identity->username,
+                    'payment_eo_order_id'=>$model->createOutTradeNo(2,$order_id),
                     'payment_verify' => $model->sign(),
                 ]);
 

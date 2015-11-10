@@ -6,9 +6,13 @@ use boss\assets\AppAsset;
 AppAsset::addCss($this, 'css/shop/bootstrap.min.css');
 AppAsset::addCss($this, 'css/shop/index.css');
 $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
+
+$shops = Yii::$app->user->identity->getShopList();
+$shop = $shops[0];
 ?>
  <div class="container">
-        <div class="row header">某-某家政公司</div>
+        <?php if(isset($shop)){?>
+        <div class="row header"><?php echo $shop->name;?></div>
         <div class="row bar">
             <div class="order-num border-margin">
                 <span>200</span><br/><span>已接单</span>
@@ -26,6 +30,7 @@ $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
                 <span>200</span><br/><span>已接单</span>
             </div>
         </div>
+        <?php }?>
         <div class="row content">
             <div class="col-md-5 content-margin">
                 <div class="row content-bar">
@@ -35,10 +40,10 @@ $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
                     <div class="col-md-12">
                         <div class="row text-left-padding">
                             <div></div>
-                            <span>负责人：</span><span>王积极</span>
+                            <span>负责人：</span><span><?php echo \Yii::$app->user->identity->username;?></span>
                         </div>
                         <div class="row text-left-padding">
-                            <span>联系电话：</span><span>12395895895</span>
+                            <span>联系电话：</span><span><?php echo \Yii::$app->user->identity->mobile;?></span>
                         </div>
                         <div class="row text-left-padding">
                             <span>办公地址：</span><span>光华路soho</span>

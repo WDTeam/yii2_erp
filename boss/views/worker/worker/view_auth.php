@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $workerModel = Worker::findOne($worker_id);
 $worker = Worker::find()->select('worker_name,worker_auth_status')->where(['id'=>$worker_id])->one();
 
+
 if($worker->worker_auth_status==0){
     $btnState = ['disabled'=>'disabled'];
     if($workerAuthModel->worker_auth_status==0){

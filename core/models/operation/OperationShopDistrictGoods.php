@@ -12,6 +12,8 @@ use yii\data\ActiveDataProvider;
 class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopDistrictGoods
 {
     public static $city_id;
+    const SHOP_DISTRICT_GOODS_ONLINE = 1;
+    const SHOP_DISTRICT_GOODS_OFFLINE = 2;
 
     /**
      * 上线城市
@@ -247,7 +249,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_market_price'][$value];  //市场价格
             $shop_district_goods_data[$i][] = $goodsinfo['operation_tags'];  //个性标签
             $shop_district_goods_data[$i][] = empty($goodsinfo['operation_goods_img']) ? '' : $goodsinfo['operation_goods_img'];  //商品图片
-            $shop_district_goods_data[$i][] = 1;  //商品状态（1:上架 2:下架）
+            $shop_district_goods_data[$i][] = self::SHOP_DISTRICT_GOODS_ONLINE;  //商品状态（1:上架 2:下架）
             $shop_district_goods_data[$i][] = time(); //创建时间
             $shop_district_goods_data[$i][] = time(); //更新时间
             $i++;
@@ -321,7 +323,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_market_price'][$value];  //市场价格
             $shop_district_goods_data[$i][] = $goodsinfo['operation_tags'];  //个性标签
             $shop_district_goods_data[$i][] = empty($goodsinfo['operation_goods_img']) ? '' : $goodsinfo['operation_goods_img'];  //商品图片
-            $shop_district_goods_data[$i][] = 1;  //商品状态（1:上架 2:下架）
+            $shop_district_goods_data[$i][] = self::SHOP_DISTRICT_GOODS_ONLINE;  //商品状态（1:上架 2:下架）
             $shop_district_goods_data[$i][] = time(); //创建时间
             $shop_district_goods_data[$i][] = time(); //更新时间
             /**查看该商品是否存在**/
@@ -346,10 +348,26 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         if(empty($city_id) || empty($shop_district) || empty($goods_id)){
             return '';
         }else{
-            return self::find()->select(['operation_goods_id','operation_category_id', 'operation_category_name','operation_shop_district_goods_name', 'operation_shop_district_goods_introduction', 'operation_shop_district_goods_price',
-                'operation_shop_district_goods_lowest_consume_num', 'operation_shop_district_goods_lowest_consume', 'operation_shop_district_goods_market_price', 'created_at'])
+            return self::find()
+                ->select([
+                    'operation_goods_id',
+                    'operation_category_id',
+                    'operation_category_name',
+                    'operation_shop_district_goods_name',
+                    'operation_shop_district_goods_introduction',
+                    'operation_shop_district_goods_price',
+                    'operation_shop_district_goods_lowest_consume_num',
+                    'operation_shop_district_goods_lowest_consume',
+                    'operation_shop_district_goods_market_price',
+                    'created_at'
+                ])
                 ->asArray()
-                ->where(['operation_city_id' => $city_id, 'operation_shop_district_id' => $shop_district, 'operation_goods_id' => $goods_id, 'operation_shop_district_goods_status' => 1])
+                ->where([
+                    'operation_city_id' => $city_id,
+                    'operation_shop_district_id' => $shop_district,
+                    'operation_goods_id' => $goods_id,
+                    'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
+                ])
                 ->One();
         }
     }
@@ -358,7 +376,26 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         if(empty($city_id) || empty($shop_district)){
             return '';
         }else{
-            return self::find()->select(['operation_goods_id', 'operation_shop_district_goods_name','operation_category_id', 'operation_category_name', 'operation_shop_district_goods_introduction', 'operation_shop_district_goods_price', 'operation_shop_district_goods_lowest_consume_num', 'operation_shop_district_goods_lowest_consume', 'operation_shop_district_goods_market_price', 'created_at'])->asArray()->where(['operation_city_id' => $city_id, 'operation_shop_district_id' => $shop_district, 'operation_shop_district_goods_status' => 1])->All();
+            return self::find()
+                ->select([
+                    'operation_goods_id',
+                    'operation_shop_district_goods_name',
+                    'operation_category_id',
+                    'operation_category_name',
+                    'operation_shop_district_goods_introduction',
+                    'operation_shop_district_goods_price',
+                    'operation_shop_district_goods_lowest_consume_num',
+                    'operation_shop_district_goods_lowest_consume',
+                    'operation_shop_district_goods_market_price',
+                    'created_at'
+                ])
+                ->asArray()
+                ->where([
+                    'operation_city_id' => $city_id,
+                    'operation_shop_district_id' => $shop_district,
+                    'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
+                ])
+                ->All();
         }
     }
 
@@ -377,7 +414,14 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     }
     
     public static function getCityShopDistrictGoodsListArray($city_id = ''){
-        return self::find()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id')->asArray()->all();
+        return self::find()
+            ->where([
+                'operation_city_id' => $city_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
+            ])
+            ->groupBy('operation_goods_id')
+            ->asArray()
+            ->all();
     }
 
     /*
@@ -386,7 +430,6 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     public static function setCityShopDistrictGoodsStatus($goodsid, $cityid){
         Yii::$app->db->createCommand()->update(self::tableName(), ['operation_shop_district_goods_status' => 2], ['operation_goods_id' => $goodsid, 'operation_city_id' => $cityid])->execute();
     }
-
 
     /**
      * 删除城市下边商品
@@ -407,35 +450,36 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     
     
     /**
-     * 根据城市获取已上线的服务类型数据
+     * 根据城市获取已上线的服务品类数据
      *
-     * @param  inter  $city_id     城市编号
+     * @param  inter  $city_id     城市编号,暂无
      * @param  string $city_name   城市名称
      * @return array
      */
-    public static function getCityCategory($city_id = '', $city_name = '')
+    public static function getCityCategory($city_name = '', $city_id = '')
     {
         if ($city_id == '' && $city_name == '') {
             return '参数错误';
         }
 
-        if (isset($city_id) && $city_id != '') {
+        if (isset($city_name) && $city_name != '') {
             $query = new \yii\db\Query();
             $query = $query->select([
                 'osdg.operation_category_name',
                 'oc.id',
                 'oc.operation_category_icon',
                 'oc.operation_category_price_description',
+                'oc.operation_category_introduction',
             ])
-            //->distinct()
             ->from('{{%operation_shop_district_goods}} as osdg')
             ->leftJoin('{{%operation_category}} as oc','osdg.operation_category_id = oc.id')
             ->groupBy('osdg.operation_category_name')
             ->andFilterWhere([
-                'operation_city_id' => $city_id,
-                //'operation_city_name' => $city_name,
-                'operation_shop_district_goods_status' => 1,
+                //'operation_city_id' => $city_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ]);
+
+            $query->andFilterWhere(['like', 'osdg.operation_city_name', $city_name]);
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);
@@ -445,8 +489,31 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
     }
     
-    public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id){
-        $data = self::find()->asArray()->where(['operation_city_id' => $city_id, 'operation_goods_id' => $goods_id, 'operation_shop_district_goods_status' => 1])->all();
+    public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id)
+    {
+        $data = self::find()
+            ->asArray()
+            ->where([
+                'operation_city_id' => $city_id,
+                'operation_goods_id' => $goods_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
+            ])
+            ->all();
+        return count($data);
+    }
+
+    /**
+     * 判断城市下是否有上线的服务项目
+     */
+    public static function getCityGoodsOnlineNum($city_id)
+    {
+        $data = self::find()
+            ->asArray()
+            ->where([
+                'operation_city_id' => $city_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
+            ])
+            ->all();
         return count($data);
     }
 
@@ -475,7 +542,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             ->leftJoin('{{%operation_goods}} as goods','sdgoods.operation_goods_id = goods.id')
             ->andFilterWhere([
                 'operation_city_name' => $city_name,
-                'operation_shop_district_goods_status' => 1,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -509,7 +576,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             ->andFilterWhere([
                 'operation_city_name' => $city_name,
                 'sdgoods.operation_category_id' => $category_id,
-                'operation_shop_district_goods_status' => 1,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -519,9 +586,12 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
     public static function getGoodsCategoryInfo($city_id,$shop_district_id,$category_name)
     {
-        return self::find()->where(['operation_city_id'=>$city_id,
-            'operation_category_name'=>$category_name,'operation_shop_district_id'=>$shop_district_id,
-        'operation_shop_district_goods_status'=>'1']);
+        return self::find()->where([
+            'operation_city_id' => $city_id,
+            'operation_category_name' => $category_name,
+            'operation_shop_district_id' => $shop_district_id,
+            'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
+        ]);
     }
 
     /**
@@ -545,11 +615,108 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             ->where([
                 'operation_goods_id' => $operation_goods_id,
                 'operation_city_id' => $city_id,
-                'operation_shop_district_goods_status' => '1',
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
             ])
             ->asArray()
             ->all();
 
         return $result;
+    }
+
+    /**
+     * 查找商圈是否存在;有,则代表上线
+     *
+     * @param inter $district_id    商圈id
+     */
+    public static function getShopDistrict($district_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where([
+                'operation_shop_district_id' => $district_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
+            ])
+            ->asarray()
+            ->one();
+
+        if (isset($data['id']) && $data['id'] > 0) {
+            return $data['id'];
+        } else {
+            return 0;
+        }
+
+    }
+
+    /**
+     * 删除商圈关联删除商圈下边服务项目
+     *
+     * @param inter $operation_shop_district_id    商圈id
+     */
+    public static function delShopDistrictGoods($operation_shop_district_id)
+    {
+        self::deleteAll(['operation_shop_district_id' => $operation_shop_district_id]);
+    }
+
+    /**
+     * 删除服务项目关联删除服务项目对应的商圈
+     *
+     * @param inter $goods_id    商圈id
+     */
+    public static function delShopDistrict($operation_goods_id)
+    {
+        self::deleteAll([
+            'operation_goods_id' => $operation_goods_id,
+            'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_OFFLINE,
+        ]);
+    }
+
+    /**
+     * 判断服务项目是否在商圈上线
+     *
+     * @param  inter $goods_id 服务项目编号
+     * @return bool  $result   判断结果
+     */
+    public static function getShopDistrictGoods($operation_goods_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where([
+                'operation_goods_id' => $operation_goods_id,
+                'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
+            ])
+            ->asarray()
+            ->one();
+
+        if (isset($data['id']) && $data['id'] > 0) {
+            return $data['id'];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 更新冗余的服务项目名称
+     *
+     * @param inter   $operation_goods_id                  服务项目编号
+     * @param string  $operation_shop_district_goods_name  服务项目名称
+     */
+    public static function updateGoodsName($operation_goods_id, $operation_shop_district_goods_name)
+    {
+        self::updateAll(['operation_shop_district_goods_name' => $operation_shop_district_goods_name], 'operation_goods_id= ' . $operation_goods_id);
+    }
+
+    /**
+     * 在城市下线下点击下线时修改服务项目状态
+     *
+     * @param inter   $operation_goods_id                   服务项目编号
+     * @param inter   $operation_city_id                    点击的城市编号
+     * @param inter   $operation_shop_district_goods_status 要修改的状态
+     */
+    public static function updateShopDistrictGoodsStatus($operation_goods_id, $operation_city_id, $operation_shop_district_goods_status)
+    {
+        self::updateAll(
+            ['operation_shop_district_goods_status' => $operation_shop_district_goods_status],
+            ['operation_goods_id' => $operation_goods_id, 'operation_city_id' => $operation_city_id]
+        );
     }
 }

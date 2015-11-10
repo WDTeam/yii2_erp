@@ -14,7 +14,7 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                     <th>省份</th>
                     <th>城市</th>
                     <th>服务品类</th>
-                    <th>服务商品</th>
+                    <th>服务项目</th>
                     <th>已开通商圈数</th>
                     <th>操作</th>
                 </tr>
@@ -42,7 +42,18 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                                     'action' => 'editGoods'
                                 ]
                                 )?>"
-                                class="btn btn-success btn-sm">编辑
+                                class="btn btn-success btn-sm col-sm-3">编辑
+                            </a>
+
+                            <a href="<?= Yii::$app->urlManager->createUrl(
+                                [
+                                    '/operation/operation-city/offline-city',
+                                    'city_id' => $value['city_id'],
+                                    'goods_id'=> $v['operation_goods_id'],
+                                    'action' => 'offline'
+                                ]
+                                )?>"
+                                class="btn btn-success btn-sm col-sm-3">下线
                             </a>
 
                             <br>

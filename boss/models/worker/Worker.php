@@ -3,6 +3,7 @@
 namespace boss\models\worker;
 
 use Yii;
+use yii\base\ErrorException;
 use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "{{%worker}}".
@@ -40,17 +41,68 @@ use yii\helpers\ArrayHelper;
  */
 class Worker extends \core\models\worker\Worker
 {
-
+    public $worker_district;
     /**
      * @inheritdoc
      */
-//    public function rules()
-//    {
-//        $rules = [
-//            [['worker_district'], 'required'],
-//        ];
-//        return array_merge(parent::rules(),$rules);
-//    }
+    public function rules()
+    {
+        $rules = [
+            [['worker_district','worker_photo'], 'required','on'=>['create','update']], //只有在后台保存和更新阿姨信息时验证
+        ];
+        return array_merge(parent::rules(),$rules);
+    }
+
+
+    /**
+     * 通过id 获取worker model
+     * @param integer $id
+     * @param integer $hasExt 是否关联阿姨附属表Model
+     * @return model
+     * @throws NotFoundHttpException if not found
+     */
+    public static function findModel($id,$hasExt=false)
+    {
+        if($hasExt==true){
+            $model= Worker::find()->joinWith('workerExtRelation')->where(['id'=>$id,'isdel'=>0])->one();
+        }else{
+            $model= Worker::find()->where(['id'=>$id,'isdel'=>0])->one();
+        }
+        if ($model!== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+    public static function findAllModel($filterCondition=[],$isAuth=false){
+        if(!is_array($filterCondition)){
+            throw new ErrorException('请传递数组参数');
+        }
+        $defaultCondition['isdel'] = 0;
+        if($isAuth!==false && \Yii::$app->user->identity->isMiniBossUser()){
+            $shopIds=Yii::$app->user->identity->getShopIds();
+            $defaultCondition['shop_id'] = $shopIds;
+        }
+        $condition = array_merge($defaultCondition,$filterCondition);
+        $model = self::findAll($condition);
+        return $model;
+    }
+
+    public static function findAllQuery($filterCondition=[],$isAuth=true){
+        if(!is_array($filterCondition)){
+            throw new ErrorException('请传递数组参数');
+        }
+        $defaultCondition['isdel'] = 0;
+        if($isAuth==true && \Yii::$app->user->identity->isMiniBossUser()){
+            $shopIds=Yii::$app->user->identity->getShopIds();
+            $defaultCondition['shop_id'] = $shopIds;
+        }
+        $condition = array_merge($defaultCondition,$filterCondition);
+        $query = self::find()->where($condition);
+        return $query;
+    }
 
     /**
     * 获取阿姨首页按钮css样式class
@@ -119,60 +171,61 @@ class Worker extends \core\models\worker\Worker
      * 统计被列入黑名单的阿姨的数量
      */
     public static function CountBlockWorker(){
-        return self::find()->where(['worker_is_block'=>1,'isdel'=>0])->count();
+        return self::findAllQuery(['worker_is_block'=>1],true)->count();
     }
 
     /*
      * 统计被封号的阿姨的数量
      */
     public static function CountBlackListWorker(){
-        return self::find()->where(['worker_is_blacklist'=>1,'isdel'=>0])->count();
+        return self::findAllQuery(['worker_is_blacklist'=>1],true)->count();
     }
 
     /*
      * 统计各个审核状态的阿姨数量
      */
     public static function CountDimissionWorker(){
-        return self::find()->where(['worker_is_dimission'=>1])->count();
+        return self::findAllQuery(['worker_is_dimission'=>1])->count();
     }
 
     /*
      * 统计请假的阿姨数量的数量
      */
     public static function CountVacationWorker(){
-        return self::find()->where(['worker_is_vacation'=>1,'isdel'=>0])->count();
+        return self::findAllQuery(['worker_is_vacation'=>1])->count();
     }
 
     /*
      * 统计各个身份的阿姨数量
      */
     public static function CountWorkerIdentity($workerIdentityId){
-        return self::find()->where(['worker_identity_id'=>$workerIdentityId,'isdel'=>0])->count();
+        return self::findAllQuery(['worker_identity_id'=>$workerIdentityId])->count();
     }
 
     /*
      * 统计各个审核状态的阿姨数量
      */
     public static function CountWorkerStatus($workerStatus){
-        return self::find()->where(['worker_auth_status'=>$workerStatus,'isdel'=>0])->count();
+        return self::findAllQuery(['worker_auth_status'=>$workerStatus])->count();
     }
 
     public static function CountWorker(){
-        return self::find()->where(['isdel'=>0])->count();
+        return self::findAllQuery()->count();
     }
 
     /**
      * 设置worker_district属性
      */
-    public function getworker_district(){
-        $workerDistrictArr = self::getWorkerDistrict($this->id);
-        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
-    }
+//    public function getworker_district(){
+//        $workerDistrictArr = self::getWorkerDistrict($this->id);
+//        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
+//    }
     /**
      * 设置worker_district属性
      */
-    public function setworker_district(){
+//    public function setworker_district(){
+//        return 1;
+//    }
 
-    }
 
 }

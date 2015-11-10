@@ -9,7 +9,7 @@ use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
 use dbbase\models\Worker;
 use dbbase\models\customer\CustomerFeedback;
-use dbbase\models\customer\CustomerExtBalanceLog;
+use dbbase\models\customer\CustomerExtBalanceRecord;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
@@ -23,10 +23,13 @@ use core\models\finance\FinanceOrderChannel;
 class Customer extends \dbbase\models\customer\Customer
 {
 
-	/**
-	 * add customer while customer is not exist by phone
-	 */
-	public static function addCustomer($phone, $channal_id){
+    /**
+     * add customer while customer is not exist by phone
+     * @param $phone
+     * @param $channal_id
+     * @return bool
+     */
+    public static function addCustomer($phone, $channal_id){
 		$customer = self::find()->where(['customer_phone'=>$phone])->one();
 		if($customer != NULL){
 			return false;
@@ -43,25 +46,25 @@ class Customer extends \dbbase\models\customer\Customer
 				$customer->is_del = 0;
 				$customer->save();
 			
-				//customer balance
-				$customerExtBalance = new CustomerExtBalance;
-				$customerExtBalance->customer_id = $customer->id;
-				$customerExtBalance->customer_phone = $phone;
-				$customerExtBalance->customer_balance = 0;
-				$customerExtBalance->created_at = time();
-				$customerExtBalance->updated_at = 0;
-				$customerExtBalance->is_del = 0;
-				$customerExtBalance->save();
+//				customer balance
+//				$customerExtBalance = new CustomerExtBalance;
+//				$customerExtBalance->customer_id = $customer->id;
+//				$customerExtBalance->customer_phone = $phone;
+//				$customerExtBalance->customer_balance = 0;
+//				$customerExtBalance->created_at = time();
+//				$customerExtBalance->updated_at = 0;
+//				$customerExtBalance->is_del = 0;
+//				$customerExtBalance->save();
 
 				//customer score
-				$customerExtScore = new CustomerExtScore;
-				$customerExtScore->customer_id = $customer->id;
-				$customerExtScore->customer_phone = $phone;
-				$customerExtScore->customer_score = 0;
-				$customerExtScore->created_at = time();
-				$customerExtScore->updated_at = 0;
-				$customerExtScore->is_del = 0;
-				$customerExtScore->save();
+//				$customerExtScore = new CustomerExtScore;
+//				$customerExtScore->customer_id = $customer->id;
+//				$customerExtScore->customer_phone = $phone;
+//				$customerExtScore->customer_score = 0;
+//				$customerExtScore->created_at = time();
+//				$customerExtScore->updated_at = 0;
+//				$customerExtScore->is_del = 0;
+//				$customerExtScore->save();
 
 				self::addSrcByChannalId($phone, $channal_id);
 				
@@ -74,9 +77,11 @@ class Customer extends \dbbase\models\customer\Customer
 			}
 		}
 	}
-    
+
     /**
-     * 根据customer_id获取顾客信息
+     * get customer information by customer id
+     * @param $customer_id
+     * @return bool|null|static
      */
     public static function getCustomerById($customer_id)
     {
@@ -84,9 +89,11 @@ class Customer extends \dbbase\models\customer\Customer
 
         return $customer != NULL ? $customer : false;
     }
-    
+
     /**
-     * 根据手机号获取顾客基本信息
+     * get customer basic information of which customer phone and customer balance contain by phone
+     * @param $phone
+     * @return array|bool
      */
     public static function getCustomerInfo($phone)
     {
@@ -114,16 +121,20 @@ class Customer extends \dbbase\models\customer\Customer
 /*********************************phone and id***********************************************/
 
     /**
-     * 获取客户的手机号
+     * get customer phone by id
+     * @param $customer_id
+     * @return string
      */
     public static function getCustomerPhoneById($customer_id)
     {
         $customer = self::find()->select(['customer_phone'])->where(['id'=>$customer_id])->one();
         return $customer->customer_phone;
     }
-    
+
     /**
      * get customer id by phone
+     * @param $customer_phone
+     * @return int
      */
     public static function getCustomerIdByPhone($customer_phone){
         $customer = self::find()->select(['id'])->where(['customer_phone'=>$customer_phone])->one();
@@ -132,17 +143,20 @@ class Customer extends \dbbase\models\customer\Customer
 
     
 	/******************************************basic**********************************************/
-	/**
-	 * get customer vip typoes
-	 */
-	public static function getVipTypes(){
+    /**
+     * get customer vip types
+     * @return array
+     */
+    public static function getVipTypes(){
 		return [0=>'非会员', 1=>'会员'];
 	}
 
-	/**
-     *	get customer vip
-	 */
-	public static function getVipTypeName($vip_type){
+    /**
+     * get vip type name by type
+     * @param $vip_type
+     * @return string
+     */
+    public static function getVipTypeName($vip_type){
 		$vip_type_name = '';
 		switch ($vip_type)
 		{
@@ -160,10 +174,13 @@ class Customer extends \dbbase\models\customer\Customer
 		return $vip_type_name;
 	}
 
-	/**
-     *	get vip info by phone
-	 */
-	public static function getVipInfoByPhone($phone){
+    /**
+     * get customer vip information by phone
+     * @param $phone
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public static function getVipInfoByPhone($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer)) throw new NotFoundHttpException;
 		
@@ -174,10 +191,12 @@ class Customer extends \dbbase\models\customer\Customer
 	}
 
 	/*******************************************balance******************************************/
-	/**
-	 * get balance by phone
-	 */
-	public static function getBalance($phone){
+    /**
+     * get customer balance by phone
+     * @param $phone
+     * @return array
+     */
+    public static function getBalance($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer)){
 			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
@@ -185,13 +204,15 @@ class Customer extends \dbbase\models\customer\Customer
 
 		$customer_ext_balance = CustomerExtBalance::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer_ext_balance)) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+			return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>0];
 		}
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customer_ext_balance['customer_balance']];
 	}
 
-	/**
-     * 获取客户余额
+    /**
+     * get customer balance by customer id
+     * @param $customer_id
+     * @return array
      */
     public static function getBalanceById($customer_id){
         $customer = Customer::findOne($customer_id);
@@ -200,109 +221,109 @@ class Customer extends \dbbase\models\customer\Customer
 		}
         $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerExtBalance == NULL) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+			return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>0];
 		}
         return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance['customer_balance']];
     }
 
     /**
-     * 客户账户余额转入
+     * add balance data, default 0 while balance is not provided
+     * @param $customer_id
+     * @param int $customer_balance
+     * @return array
      */
-    static public function incBalance($customer_id, $cash)
-    {
-        // $customer_id = \Yii::$app->request->get('customer_id');
-        // $cash = \Yii::$app->request->get('cash');
-        // \Yii::$app->response->format = Response::FORMAT_JSON;
-        $customer = Customer::findOne($customer_id);
-        if ($customer == NULL) {
-			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
-		}
-        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerExtBalance == NULL) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
-		}
-        $balance = $customerExtBalance->customer_balance;
-        $customerExtBalance->customer_balance = bcadd($balance, $cash, 2);
-        if(!$customerExtBalance->validate()){
-			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
-		}
+    public static function addBalance($customer_id, $customer_balance = 0){
+        $customer_phone = self::getCustomerPhoneById($customer_id);
+        if($customer_phone == NULL){
+            return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'该客户不存在'];
+        }
+        $customerExtBalance = new CustomerExtBalance;
+        $customerExtBalance->customer_id = $customer_id;
+        $customerExtBalance->customer_phone = $customer_phone;
+        $customerExtBalance->customer_balance = $customer_balance;
+        $customerExtBalance->created_at = time();
         
+        $customerExtBalance->updated_at = 0;
+        $customerExtBalance->is_del = 0;
+        if(!$customerExtBalance->validate()){
+            return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'插入数据失败'];
+        }
         $customerExtBalance->save();
-        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
+        return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'id'=>$customerExtBalance->id];
     }
 
     /**
-     * 客户账户余额转出
-     */
-    static public function decBalance($customer_id, $cash)
-    {
-        $customer = Customer::findOne($customer_id);
-        if ($customer == NULL) {
-			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
-		}
-        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerExtBalance == NULL) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
-		}
-        $balance = $customerExtBalance->customer_balance;
-        $customerExtBalance->customer_balance = bcsub($balance, $cash, 2);
-        if(!$customerExtBalance->validate()){
-			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
-		}
-        
-        $customerExtBalance->save();
-        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
-    }
-    /**
      * change customer's balance, customer 's last balnce and current balance is availible
+     * @param $customer_id
+     * @param $operate_balance
+     * @param $trans_no
+     * @param $operate_type
+     * @return array
      */
-    public static function operateBalance($customer_id, $end_balance){
+    public static function operateBalance($customer_id, $operate_balance, $trans_no, $operate_type){
         $customer = self::findOne($customer_id);
         if($customer === NULL){
             return ['respone'=>'error', 'errcode'=>1, 'errmsg'=>'客户不存在'];
         }
-        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer->id])->one();
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if($customerExtBalance === NULL){
-            return ['respone'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+            $res = Customer::addBalance($customer_id, 0);
+            if($res['response'] == 'error'){
+                return $res;
+            }
+            $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one(); 
         }
         $begin_balance = $customerExtBalance->customer_balance;
-        $diff = $end_balance - $begin_balance;
-        $operate_balance = abs($diff);
-        $operate_type = 0;
-        $operate_type_name = '';
-        if($diff > 0){
-            $operate_type = 1;
-            $operate_type_name = '充值';
-        }else if($diff == 0){
-//            $operate_type = 0;
-//            $operate_type_name = '没变';
-            return ['respone'=>'error', 'errcode'=>3, 'errmsg'=>'余额不变，错误操作余额'];
-        }else{
-            $operate_type = -1;
-            $operate_type_name = '扣款';
+        
+        $trans_prefix = '';
+        switch($operate_type){
+            case -1:
+                $end_balance = $begin_balance + $operate_balance;
+                $operate_type_name = '增加';
+                $trans_prefix = 'inc';
+                break;
+            case 1:
+                $end_balance = $begin_balance - $operate_balance;
+                $operate_type_name = '减少';
+                $trans_prefix = 'dec';
+                break;
+            default:
+                break;
         }
+        
+        //generating trans serial
+        $trans_serial = $trans_prefix.time();
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerExtBalance->customer_balance = $end_balance;
             $customerExtBalance->updated_at = time();
             $customerExtBalance->save();
-            $customerExtBalanceLog = new CustomerExtBalanceLog;
-            $customerExtBalanceLog->customer_id = $customer->id;
-            $customerExtBalanceLog->customer_phone = $customer->customer_phone;
-            $customerExtBalanceLog->customer_ext_balance_begin_balance = $begin_balance;
-            $customerExtBalanceLog->customer_ext_balance_end_balance = $end_balance;
-            $customerExtBalanceLog->customer_ext_balance_operate_balance = $operate_balance;
-            $customerExtBalanceLog->customer_ext_balance_operate_type = $operate_type;
-            $customerExtBalanceLog->customer_ext_balance_operate_type_name = $operate_type_name;
-            $customerExtBalanceLog->created_at = time();
-            $customerExtBalanceLog->updated_at = 0;
-            $customerExtBalanceLog->is_del = 0;
-            $customerExtBalanceLog->save();
-            $transaction->commit();
+            $customerExtBalanceRecord = new CustomerExtBalanceRecord;
+            $customerExtBalanceRecord->customer_id = $customer->id;
+            $customerExtBalanceRecord->customer_phone = $customer->customer_phone;
+            $customerExtBalanceRecord->customer_ext_balance_begin_balance = $begin_balance;
+            $customerExtBalanceRecord->customer_ext_balance_end_balance = $end_balance;
+            $customerExtBalanceRecord->customer_ext_balance_operate_balance = $operate_balance;
+            $customerExtBalanceRecord->customer_ext_balance_operate_type = $operate_type;
+            $customerExtBalanceRecord->customer_ext_balance_operate_type_name = $operate_type_name;
+            $customerExtBalanceRecord->customer_ext_balance_trans_no = $trans_no;
+            $customerExtBalanceRecord->customer_ext_balance_trans_serial = $trans_serial;
+            $customerExtBalanceRecord->created_at = time();
+            $customerExtBalanceRecord->updated_at = 0;
+            $customerExtBalanceRecord->is_del = 0;
+            $customerExtBalanceRecord->save();
             $formated_date = date('Y年m月d日', time());
             $msg = "【余额变动】您于".$formated_date.$operate_type_name.$operate_balance."，当前余额".$end_balance."元。下载APP（http://t.cn/8schPc6）可以随时查看账户消费记录，如有疑问请联系客服：4006767636。";
             $string = Yii::$app->sms->send($customer->customer_phone, $msg, 1);
-            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+            $transaction->commit();
+            
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 
+                    'customer_id'=>$customerExtBalanceRecord->customer_id, 
+                    'begin_balance'=>$customerExtBalanceRecord->customer_ext_balance_begin_balance, 
+                    'end_balance'=>$customerExtBalanceRecord->customer_ext_balance_end_balance, 
+                    'operate_balance'=>$customerExtBalanceRecord->customer_ext_balance_operate_balance,
+                    'trans_no'=>$customerExtBalanceRecord->customer_ext_balance_trans_no,
+                    'trans_serial'=>$customerExtBalanceRecord->customer_ext_balance_trans_serial,];
         }catch(\Exception $e){
             $transaction->rollback();
             return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'操作余额失败'];
@@ -311,10 +332,12 @@ class Customer extends \dbbase\models\customer\Customer
     
 
 	/******************************************score**********************************************/
-	/**
+    /**
      * get score by phone
-	 */
-	public static function getScore($phone){
+     * @param $phone
+     * @return array
+     */
+    public static function getScore($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer)) {
 			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
@@ -327,10 +350,12 @@ class Customer extends \dbbase\models\customer\Customer
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
 	}
 
-	/**
+    /**
      * get score by id
-	 */
-	public static function getScoreById($customer_id){
+     * @param $customer_id
+     * @return array
+     */
+    public static function getScoreById($customer_id){
 		$customer = self::findOne($customer_id);
 		if(empty($customer)) {
 			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
@@ -344,38 +369,50 @@ class Customer extends \dbbase\models\customer\Customer
 	}
 
 	/*******************************************src**********************************************/
-	/**
+    /**
      * get all customer srcs
-	 */
-	public static function getAllSrcs(){
+     * @return array|\dbbase\models\customer\CustomerExtSrc[]
+     */
+    public static function getAllSrcs(){
 		$all_srcs = CustomerExtSrc::find()->asArray()->all();
 		return $all_srcs;
 	}
 
-	/**
-	 * get customer srcs
-	 */
-	public static function getSrcs($customer_phone){
+    /**
+     * get customer srcs
+     * @param $customer_phone
+     * @return array|\dbbase\models\customer\CustomerExtSrc[]
+     */
+    public static function getSrcs($customer_phone){
 		$srcs = CustomerExtSrc::find()->where(['customer_phone'=>$customer_phone])->asArray()->all();
 		return $srcs;
 	}
 
-	/**
- 	 * get customer first src
+    /**
+     * get customer first src
+     * @param $customer_phone
+     * @return array|CustomerExtSrc|null
      */
-	public static function getFirstSrc($customer_phone){
+    public static function getFirstSrc($customer_phone){
 		$srcs = CustomerExtSrc::find()->where(['customer_phone'=>$customer_phone])->orderBy('created_at asc')->asArray()->one();
 		return $srcs;
 	}
 
-	/**
+    /**
      * add customer src by channal_id
-	 */
-	public static function addSrcByChannalId($customer_phone, $channal_id){
+     * @param $customer_phone
+     * @param $channal_id
+     * @return bool
+     */
+    public static function addSrcByChannalId($customer_phone, $channal_id){
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
 //		$channal_name = funcname($channal_id);
+        $channal_info = FinanceOrderChannel::get_order_channel_info($channal_id);
+        if($channal_info == '未知'){
+            return false;
+        }
 		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
 	
 		$customerExtSrc = new CustomerExtSrc;
@@ -398,10 +435,13 @@ class Customer extends \dbbase\models\customer\Customer
 		return false;
 	}
 
-	/**
+    /**
      * add csutomer src by channal_name
-	 */
-	public static function addSrcByChannalName($customer_phone, $channal_name){
+     * @param $customer_phone
+     * @param $channal_name
+     * @return bool
+     */
+    public static function addSrcByChannalName($customer_phone, $channal_name){
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
@@ -429,10 +469,13 @@ class Customer extends \dbbase\models\customer\Customer
 	}
 
 	/*************************************address*******************************************************/
-	/**
-	 * get current address
-	 */
-	public static function getCurrentAddress($phone){
+    /**
+     * get current address
+     * @param $phone
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public static function getCurrentAddress($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer)) throw new NotFoundHttpException;
 		
@@ -450,9 +493,11 @@ class Customer extends \dbbase\models\customer\Customer
 				.$customer['customer_address_phone'],
 		];
 	}
-    
+
     /**
-     * 获取顾客地址集
+     * get current address
+     * @param $customer_id
+     * @return bool
      */
     public static function getCustomerAddresses($customer_id){
         $customer = self::findOne($customer_id);
@@ -461,7 +506,13 @@ class Customer extends \dbbase\models\customer\Customer
     }
 
     /**
-     * 新增顾客服务地址
+     * add customer address
+     * @param $customer_id
+     * @param $general_region_id
+     * @param $detail
+     * @param $nickname
+     * @param $phone
+     * @throws \Exception
      */
     public function addCustomerAddress($customer_id, $general_region_id, $detail, $nickname, $phone){
         
@@ -500,7 +551,13 @@ class Customer extends \dbbase\models\customer\Customer
     }
 
     /**
-     * 修改顾客服务地址
+     * update customer address
+     * @param $customer_id
+     * @param $general_region_id
+     * @param $detail
+     * @param $nickname
+     * @param $phone
+     * @throws \Exception
      */
     public function updateCustomerAddress($customer_id, $general_region_id, $detail, $nickname, $phone){
         
@@ -541,10 +598,12 @@ class Customer extends \dbbase\models\customer\Customer
 
 
 	/*************************************worker*******************************************************/
-	/**
-     * get customer's worker list 
-	 */
-	public static function getWorkersById($customer_id){
+    /**
+     * get customer's worker list
+     * @param $customer_id
+     * @return array
+     */
+    public static function getWorkersById($customer_id){
 		$customer = self::findOne($customer_id);
 		if($customer === NULL) {
 			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
@@ -561,10 +620,12 @@ class Customer extends \dbbase\models\customer\Customer
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'customer_workers'=>$customer_workers];
 	}
 
-	/**
+    /**
      * get customer's worker list by phone
-	 */
-	public static function getWorkersByPhone($customer_phone){
+     * @param $customer_phone
+     * @return array
+     */
+    public static function getWorkersByPhone($customer_phone){
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->one();
 		if($customer === NULL) {
 			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
@@ -576,10 +637,14 @@ class Customer extends \dbbase\models\customer\Customer
 			])->asArray()->all();
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'customer_workers'=>$customer_workers];
 	}
-	/**
+
+    /**
      * get current worker
-	 */
-	public static function getCurrentWorker($phone){
+     * @param $phone
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
+    public static function getCurrentWorker($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer)) throw new NotFoundHttpException;
 
@@ -595,9 +660,11 @@ class Customer extends \dbbase\models\customer\Customer
 		if(empty($worker)) throw new NotFoundHttpException;
 		return $worker;
 	}
-    
+
     /**
-     * 根据客户id获取常用阿姨列表
+     * get customer 's worker list
+     * @param $customer_id
+     * @return bool
      */
     public function getCustomerWorkers($customer_id)
     {
@@ -617,6 +684,10 @@ class Customer extends \dbbase\models\customer\Customer
     // }
 
 
+    /**
+     * @param $id
+     * @return array
+     */
     public static function getCustomerUsedWorkers($id)
     {
         $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
@@ -634,8 +705,11 @@ class Customer extends \dbbase\models\customer\Customer
     }
 
 	/**********************************block*************************************************************/
+
     /**
      * customer is block
+     * @param $customer_id
+     * @return array
      */
     public static function isBlock($customer_id){
         $customer = Customer::find()->select(['is_del'])->where(['id'=>$customer_id])->asArray()->one();
@@ -644,9 +718,11 @@ class Customer extends \dbbase\models\customer\Customer
         }
         return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_block'=>$customer['is_del']];
     }
-    
+
     /**
      * customer is block by phone
+     * @param $customer_phone
+     * @return array
      */
     public static function isBlockByPhone($customer_phone){
         $customer = Customer::find()->select(['is_del'])->where(['customer_phone'=>$customer_phone])->asArray()->one();
@@ -659,6 +735,9 @@ class Customer extends \dbbase\models\customer\Customer
 /***********************************customer feedback************************************************/
     /**
      * submit feedback of customer
+     * @param $customer_id
+     * @param $feedback_content
+     * @return array
      */
     public static function addFeedback($customer_id, $feedback_content){
         $customer_phone = self::getCustomerPhoneById($customer_id);
@@ -677,8 +756,9 @@ class Customer extends \dbbase\models\customer\Customer
     }
 	
 	/**********************************count*************************************************************/
-	/**
-     * 统计所有客户的数量
+    /**
+     * count all customers
+     * @return int|string
      */
     public static function countAllCustomer(){
         $count = self::find()->count();
@@ -686,7 +766,8 @@ class Customer extends \dbbase\models\customer\Customer
     }
 
     /**
-     * 统计不包括黑名单的客户数量
+     * count customers not in black-block
+     * @return int|string
      */
     public static function countCustomer(){
         $count = self::find()->where(['is_del'=>0])->count();
@@ -694,12 +775,18 @@ class Customer extends \dbbase\models\customer\Customer
     }
 
     /**
-     * 统计黑名单客户数量
+     * count black-block workers
+     * @return int|string
      */
     public static function countBlockCustomer(){
         $count = self::find()->where(['is_del'=>1])->count();
         return $count;
     }
+    
+    /**************************************define relations*********************************/
+//    public function getOrderCount(){
+//        return self->hasOne();
+//    }
 
 
 	/**
@@ -728,10 +815,11 @@ class Customer extends \dbbase\models\customer\Customer
 
 
 	/******************************other******************************************************************/
-	/**
-	 * get online city list
- 	 */
-	public static function cityList(){
+    /**
+     * get city list
+     * @return array
+     */
+    public static function cityList(){
         $onlineCityList = OperationCity::getCityOnlineInfoList();
         $cityList = $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
 		return $cityList;

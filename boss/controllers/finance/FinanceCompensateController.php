@@ -121,17 +121,30 @@ class FinanceCompensateController extends Controller
     {
         $model = new FinanceCompensateSearch;
         $postParams = null;
+        $id = null;
         if(Yii::$app->request->post() != null){
             $postParams = Yii::$app->request->post();
+            if(isset($postParams['id'])){
+                $id = $postParams['id'];
+            }
         }
         $getParams = null;
         if(Yii::$app->request->get() != null){
             $getParams = Yii::$app->request->get();
+            if(isset($getParams['id'])){
+                $id = $getParams['id'];
+            }
         }
-        $id = null;
-        if(isset($getParams['id'])){
-            $id = $getParams['id'];
+        $isNewRecord = true;
+        if(!empty($id)){
+            $model = $this->findModel($id);
+            $isNewRecord = $model->isNewRecord;
         }
+        $order_complaint_id = null;
+        if(isset($getParams['order_complaint_id'])){
+            $order_complaint_id = $getParams['order_complaint_id'];
+        }
+        $model->finance_complaint_id = $order_complaint_id;
         if ($model->load($postParams)) {
             $model->created_at = time();
             if(!empty($postParams) && isset($postParams['finance_compensate_coupon'])){
@@ -154,7 +167,11 @@ class FinanceCompensateController extends Controller
                  }
             }
             $model->save();
-            return $this->redirect(['/order/order-complaint/']);
+            if($isNewRecord){
+                return $this->redirect(['/order/order-complaint/']);
+            }else{
+                return $this->redirect(['index']);
+            }
         } else {
             if(!empty($id)){
                  $model = $this->findModel($id);
@@ -176,7 +193,7 @@ class FinanceCompensateController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['/finance/finance-compensate/index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

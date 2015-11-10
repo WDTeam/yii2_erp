@@ -120,7 +120,7 @@ use kartik\daterange\DateRangePicker;
         <td class="success">21:00</td>
         <td class="success">22:00</td>
         <th>
-            <input type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+            <input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="...">
         </th>
     </tr>
     <tr>
@@ -140,7 +140,7 @@ use kartik\daterange\DateRangePicker;
         <td class="success">20:00</td>
         <td class="success">21:00</td>
         <td class="success">22:00</td>
-        <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
+        <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="3">周三</th>
@@ -159,7 +159,7 @@ use kartik\daterange\DateRangePicker;
         <td class="success">20:00</td>
         <td class="success">21:00</td>
         <td class="success">22:00</td>
-        <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
+        <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="4">周四</th>
@@ -178,7 +178,7 @@ use kartik\daterange\DateRangePicker;
         <td class="success">20:00</td>
         <td class="success">21:00</td>
         <td class="success">22:00</td>
-        <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
+        <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="5">周五</th>
@@ -197,7 +197,7 @@ use kartik\daterange\DateRangePicker;
         <td  class="success">20:00</td>
         <td  class="success">21:00</td>
         <td  class="success">22:00</td>
-        <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
+        <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="6">周六</th>
@@ -216,7 +216,7 @@ use kartik\daterange\DateRangePicker;
         <td  class="success">20:00</td>
         <td  class="success">21:00</td>
         <td  class="success">22:00</td>
-        <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
+        <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="7">周日</th>
@@ -235,7 +235,7 @@ use kartik\daterange\DateRangePicker;
         <td  class="success">20:00</td>
         <td  class="success">21:00</td>
         <td  class="success">22:00</td>
-        <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
+        <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     </tbody>
     </table>

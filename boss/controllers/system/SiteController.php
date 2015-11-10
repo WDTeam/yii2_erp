@@ -29,10 +29,8 @@ class SiteController extends Controller
         if(\Yii::$app->user->isGuest){
             $this->redirect(array('login'));
         }
-        
-        $test = Yii::$app->user->identity->getShopManagerList();
-        
-        if(1==1){
+
+        if(\Yii::$app->user->identity->isMiniBossUser()){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');
@@ -55,11 +53,11 @@ class SiteController extends Controller
     	
     	
     	return $this->render('indexshop', [
-    			'date' => $date,
-    			]);
-    	
-    	
-    		return $this->render('indexshop');
+			'date' => $date,
+		]);
+	
+	
+		return $this->render('indexshop');
     		
     }
     

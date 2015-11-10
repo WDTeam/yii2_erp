@@ -13,10 +13,25 @@ use core\models\auth\AuthSearch;
 use yii\filters\VerbFilter;
 use boss\components\BaseAuthController;
 use yii\helpers\ArrayHelper;
+use core\models\auth\AuthItemChild;
+use boss\components\RbacHelper;
+use yii\web\ForbiddenHttpException;
 
 class RoleController extends BaseAuthController
 {
-
+    
+    public function beforeAction($action)
+    {
+        $name = $this->id.'/'.$action->id;
+        $auth = Yii::$app->authManager;
+        $perm = $auth->getPermission($name);
+        if(\Yii::$app->user->can($name) || \Yii::$app->user->can($this->id.'/index')){
+            return true;
+        }else{
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+    }
+    
     public function actionIndex()
     {
         $searchModel = new AuthSearch();
@@ -30,56 +45,61 @@ class RoleController extends BaseAuthController
 
     public function actionCreate()
     {
+        $auth = \Yii::$app->authManager;
         $model = new Auth();
         if ($model->load(Yii::$app->request->post())) {
-            $permissions = $this->preparePermissions(Yii::$app->request->post());
-            if($model->createRole($permissions)) {
-                Yii::$app->session->setFlash('success', " '$model->name' " . Yii::t('app', 'successfully saved'));
-                return $this->redirect(['view', 'id' => $model->name]);
-            }
-            else
+            $role = $auth->createRole($model->name);
+            $role->description = $model->description;
+            $auth->add($role);
+            foreach ($model->permissions as $name)
             {
-                $permissions = $this->getPermissions();
-                $model->_permissions = Yii::$app->request->post()['Auth']['_permissions'];
-                return $this->render('create', [
-                        'model' => $model,
-                        'permissions' => $permissions
-                    ]
-                );
+                $permission = $auth->getPermission($name);
+                $auth->addChild($role, $permission);
             }
-        } else {
-            $permissions = $this->getPermissions();
-            return $this->render('create', [
-                    'model' => $model,
-                    'permissions' => $permissions
-                ]
-            );
+            RbacHelper::updateConfigVersion();
+            return $this->redirect(['index']);
         }
+        $permissions = $auth->getPermissions();
+        $permissions = ArrayHelper::map($permissions, 'name', 'description');
+        return $this->render('create', [
+            'model' => $model,
+            'permissions' => $permissions
+        ]);
     }
 
     public function actionUpdate($id)
     {
-        $name = $id;
-        if($name == 'admin') {
-            Yii::$app->session->setFlash('success', Yii::t('app', 'The Administrator has all permissions'));
-            return $this->redirect(['view', 'id' => $name]);
-        }
-        $model = $this->findModel($name);
+        $auth = \Yii::$app->authManager;
+        $model = $this->findModel($id);
+        $role = $auth->getRole($id);
+
         if ($model->load(Yii::$app->request->post())) {
-            $permissions = $this->preparePermissions(Yii::$app->request->post());
-            if($model->updateRole($name, $permissions)) {
-                Yii::$app->session->setFlash('success', " '$model->name' " . Yii::t('app', 'successfully updated'));
-                return $this->redirect(['view', 'id' => $name]);
+            $role->description = $model->description;
+            $auth->update($id, $role);
+            
+            $perms = (array)$auth->getPermissionsByRole($id);
+            foreach ($perms as $perm){
+                $auth->removeChild($role, $perm);
             }
-        } else {
-            $permissions = $this->getPermissions();
-            $model->loadRolePermissions($name);
-            return $this->render('update', [
-                    'model' => $model,
-                    'permissions' => $permissions,
-                ]
-            );
+            
+            foreach ($model->permissions as $name)
+            {
+                $permission = $auth->getPermission($name);
+                $auth->addChild($role, $permission);
+            }
+            RbacHelper::updateConfigVersion();
+            return $this->refresh();
         }
+        $model->permissions = AuthItemChild::find()
+        ->select(['child'])
+        ->where(['parent'=>$id])
+        ->column();
+        $permissions = $auth->getPermissions();
+        $permissions = ArrayHelper::map($permissions, 'name', 'description');
+        return $this->render('update', [
+            'model' => $model,
+            'permissions' => $permissions
+        ]);
     }
 
     public function actionDelete($id)
@@ -109,7 +129,6 @@ class RoleController extends BaseAuthController
     {
         $name = $id;
         $model = $this->findModel($name);
-        $model->loadRolePermissions($name);
         $permissions = $this->getPermissions();
         return $this->render('view', [
             'model' => $model,
@@ -131,19 +150,5 @@ class RoleController extends BaseAuthController
             }
         }
         throw new HttpException(404);
-    }
-
-    protected function getPermissions() {
-        $models = Auth::find()->where(['type' => Auth::TYPE_PERMISSION])->all();
-        $permissions = [];
-        foreach($models as $model) {
-            $permissions[$model->name] = Yii::t('auth',$model->description);
-        }
-        return $permissions;
-    }
-
-    protected function preparePermissions($post) {
-        return (isset($post['Auth']['_permissions']) &&
-            is_array($post['Auth']['_permissions'])) ? $post['Auth']['_permissions'] : [];
     }
 }

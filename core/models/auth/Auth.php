@@ -19,15 +19,9 @@ use Yii;
  * @property AuthRule $ruleName
  * @property AuthItemChild[] $authItemChildren
  */
-class Auth extends \yii\db\ActiveRecord
+class Auth extends \core\models\auth\AuthItem
 {
-    /**
-     * Auth type
-     */
-    const TYPE_ROLE = 1;
-    const TYPE_PERMISSION = 2;
-
-    public $_permissions = [];
+    
 
     /**
      * @inheritdoc
@@ -49,6 +43,7 @@ class Auth extends \yii\db\ActiveRecord
             ['name', 'validatePermission'],
 
             ['description', 'string', 'min' => 1, 'max' => 400],
+            ['permissions', 'safe'],
         ];
     }
 
@@ -74,95 +69,5 @@ class Auth extends \yii\db\ActiveRecord
                 $this->addError('name', Yii::t('auth', 'This name already exists.'));
             }
         }
-    }
-
-    public function createPermission()
-    {
-        if ($this->validate()) {
-            $auth = Yii::$app->getAuthManager();
-            $permission = $auth->createPermission($this->name);
-            $permission->description = $this->description;
-            $auth->add($permission);
-
-            $admin = $auth->getRole('admin');
-            return $auth->addChild($admin, $permission);
-        }
-        return false;
-    }
-
-    public function updatePermission($name)
-    {
-        if ($this->validate()) {
-            $auth = Yii::$app->getAuthManager();
-            $permission = $auth->getPermission($name);
-            $permission->description = $this->description;
-            return $auth->update($name, $permission);
-        }
-        return false;
-    }
-
-    public function createRole($permissions)
-    {
-        if ($this->validate()) {
-            $auth = Yii::$app->getAuthManager();
-            $role = $auth->createRole($this->name);
-            $role->description = $this->description;;
-            if ($auth->add($role)) {
-                foreach ($permissions as $permission) {
-                    $obj = $auth->getPermission($permission);
-                    $auth->addChild($role, $obj);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function updateRole($name, $permissions)
-    {
-        if ($this->validate()) {
-            $auth = Yii::$app->getAuthManager();
-            $role = $auth->getRole($name);
-            $role->description = $this->description;
-            // save role
-            if ($auth->update($name, $role)) {
-                // remove old permissions
-                $oldPermissions = $auth->getPermissionsByRole($name);
-                foreach($oldPermissions as $permission) {
-                    $auth->removeChild($role, $permission);
-                }
-
-                // add new permissions
-                foreach ($permissions as $permission) {
-                    $obj = $auth->getPermission($permission);
-                    $auth->addChild($role, $obj);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function loadRolePermissions($name) {
-        $models = Yii::$app->authManager->getPermissionsByRole($name);
-        foreach($models as $model) {
-            $this->_permissions[] = $model->name;
-        }
-    }
-
-    public static function hasUsersByRole($name) {
-        $tablePrefix = Yii::$app->getDb()->tablePrefix;
-        return Auth::find()
-        ->where(['name' => $name])
-        ->leftJoin("{$tablePrefix}auth_assignment", ['item_name' => $name])
-        ->count();
-    }
-
-    public static function hasRolesByPermission($name) {
-        $tablePrefix = Yii::$app->getDb()->tablePrefix;
-        return Auth::find()
-                ->where(['name' => $name])
-                ->leftJoin("{$tablePrefix}auth_item_child", ['child' => $name])
-                ->count();
     }
 }

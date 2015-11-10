@@ -594,11 +594,13 @@ class Worker extends \dbbase\models\worker\Worker
                     $timeline = self::compareTimeLine($cycle[$d]['timeline'],$data['timeline']);
                     $cycle[$d] = [
                         'week' => $week,
+                        'date' => date('Y-m-d',strtotime('+'.(7+$d).'day')), //根据需求,周期date字段显示周期表中第一周的日期
                         'timeline'=> $timeline
                     ];
                 }else{
                     $cycle[$d] = [
                         'week' => $week,
+                        'date' => date('Y-m-d',strtotime('+'.(7+$d).'day')), //根据需求,周期date字段显示周期表中第一周的日期
                         'timeline'=> $data['timeline']
                     ];
                 }

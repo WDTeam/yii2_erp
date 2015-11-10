@@ -42,6 +42,17 @@ $this->params['review_section']=$searchModel->review_section;
                     'content'=> function($model,$key,$index){return $model->getShopSettleApplyStatusDes($model->finance_shop_settle_apply_status);} ],   
                 ['attribute'=>'comment','content'=>function($model,$key,$index){return $model->comment == null?'':$model->comment;}],
                 ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y-m-d H:i:s',$model->created_at),'#');}],
+                [
+                'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {agree} {disagree}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
+                            'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
+                        ]);
+                    },
+                ],
+            ],
             ],
             'responsive'=>true,
             'hover'=>true,
@@ -50,7 +61,6 @@ $this->params['review_section']=$searchModel->review_section;
            'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before' =>$this->render('_query_links', ['model' => $searchModel]),
             'after'=>false,
             'showFooter' => false
         ],

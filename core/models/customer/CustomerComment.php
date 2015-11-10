@@ -18,7 +18,7 @@ use Yii;
 use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
 use core\models\comment\CustomerCommentLevel;
-//use core\models\order\OrderComplaint;
+use core\models\order\OrderComplaint;
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -41,12 +41,9 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
      * */
     public static function getCustomerCommentworkerlist($worker_id, $customer_comment_level, $newpage, $countpage = 40)
     {
-        if ($newpage == 0 && $newpage == '' && $newpage == null) {
-            $newpage = 1;
-        } else {
-            $newpage = $newpage * $countpage;
-        }
-        $comment_list = self::find()->andWhere(['worker_id' => $worker_id, 'customer_comment_level' => $customer_comment_level])->limit($newpage, $countpage)->asArray()->all();
+        $current_page = intval($newpage)>0?intval($newpage):1;
+        $newpage = ($current_page - 1) * $countpage;
+        $comment_list = self::find()->where(['worker_id' => $worker_id, 'customer_comment_level' => $customer_comment_level])->offset($newpage)->limit($countpage)->asArray()->all();
         return $comment_list;
     }
 
@@ -115,7 +112,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
     	$array['customer_comment_tag_names']='系统确定满意';
     	$array['customer_comment_anonymous']=1;
     	$array['adminid']=1;
-    	$this->addUserSuggest($array);
+    	self::addUserSuggest($array);
     }
     
     /**
