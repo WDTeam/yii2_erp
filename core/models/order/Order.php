@@ -598,6 +598,7 @@ class Order extends OrderModel
         $order->order_worker_type_name = $worker['worker_type_description'];
         $order->shop_id = $worker["shop_id"];
         $order->order_worker_shop_name = $worker["shop_name"];
+        $order->order_worker_assign_time = YII_BEGIN_TIME;
         $order->order_worker_assign_type = $assign_type; //接单方式
         $order->admin_id = $admin_id;
         if ($admin_id > 3) { //大于3属于人工操作
