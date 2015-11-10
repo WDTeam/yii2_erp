@@ -5,18 +5,18 @@ namespace boss\models\operation;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use core\models\operation\OperationCity;
+use boss\models\operation\OperationCity;
 
 /**
- * OperationCitySearch represents the model behind the search form about `dbbase\models\OperationCity`.
+ * OperationCitySearch represents the model behind the search form about `boss\models\operation\OperationCity`.
  */
 class OperationCitySearch extends OperationCity
 {
     public function rules()
     {
         return [
-            [['id', 'city_is_online', 'created_at', 'updated_at'], 'integer'],
-            [['city_name'], 'safe'],
+            [['id', 'province_id', 'city_id', 'operation_city_is_online', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
+            [['province_name', 'city_name'], 'safe'],
         ];
     }
 
@@ -28,27 +28,29 @@ class OperationCitySearch extends OperationCity
 
     public function search($params)
     {
-        if(!empty($params)){
-            $query = OperationCity::find()->where(['like',$params['fields'], $params['keyword']]);
-        }else{
-            $query = OperationCity::find();
-        }
+        $query = OperationCity::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        
+
+        if (!($this->load($params) && $this->validate())) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'province_id' => $this->province_id,
+            'city_id' => $this->city_id,
+            'operation_city_is_online' => $this->operation_city_is_online,
+            'is_softdel' => $this->is_softdel,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'province_name', $this->province_name])
+            ->andFilterWhere(['like', 'city_name', $this->city_name]);
+
         return $dataProvider;
-//        if (!($this->load($params) && $this->validate())) {
-//            return $dataProvider;
-//        }
-
-//        $query->andFilterWhere([
-//            $params['fields'] => $params['keyword'],
-//        ]);
-
-//        $query->andFilterWhere(['like', 'city_name', $this->city_name]);
-
-//        return $dataProvider;
     }
 }
