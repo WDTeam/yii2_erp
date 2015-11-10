@@ -200,32 +200,38 @@ class OrderController extends \restapi\components\Controller
 
         #拼凑数组
         if ($args['times']) {
+            $array = array();
             foreach ($args['times'] as $k => $v) {
-                $args[$k]['admin_id'] = isset($attributes['admin_id']) ? $attributes['admin_id'] : "";
-                $args[$k]['order_ip'] = isset($attributes['order_ip']) ? $attributes['order_ip'] : "";
-                $args[$k]['order_is_use_balance'] = isset($attributes['order_is_use_balance']) ? $attributes['order_is_use_balance'] : "";
-                $args[$k]['order_customer_need'] = isset($attributes['order_customer_need']) ? $attributes['order_customer_need'] : "";
-                $args[$k]['order_booked_worker_id'] = isset($attributes['order_booked_worker_id']) ? $attributes['order_booked_worker_id'] : "";
-                $args[$k]['coupon_id'] = isset($attributes['coupon_id']) ? $attributes['coupon_id'] : "";
-                $args[$k]['order_customer_memo'] = isset($attributes['order_customer_memo']) ? $attributes['order_customer_memo'] : "";
-                $args[$k]['order_pop_order_money'] = isset($attributes['order_pop_order_money']) ? $attributes['order_pop_order_money'] : "";
-                $args[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
-                $args[$k]['channel_id'] = isset($attributes['channel_id']) ? $attributes['channel_id'] : "";
-                $args[$k]['address_id'] = isset($attributes['address_id']) ? $attributes['address_id'] : "";
-                $args[$k]['order_booked_count'] = isset($attributes['order_booked_count']) ? $attributes['order_booked_count'] : "";
-                $args[$k]['order_pop_order_code'] = isset($attributes['order_pop_order_code']) ? $attributes['order_pop_order_code'] : "";
-                $args[$k]['order_pay_type'] = isset($attributes['order_pay_type']) ? $attributes['order_pay_type'] : "";
-                $args[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
-                $args[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
-                $args[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
-                $args[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? $v['order_booked_begin_time'] : "";
-                $args[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
+                $array[$k]['admin_id'] = isset($attributes['admin_id']) ? $attributes['admin_id'] : "";
+                $array[$k]['order_ip'] = isset($attributes['order_ip']) ? $attributes['order_ip'] : "";
+                $array[$k]['order_is_use_balance'] = isset($attributes['order_is_use_balance']) ? $attributes['order_is_use_balance'] : "";
+                $array[$k]['order_customer_need'] = isset($attributes['order_customer_need']) ? $attributes['order_customer_need'] : "";
+                $array[$k]['order_booked_worker_id'] = isset($attributes['order_booked_worker_id']) ? $attributes['order_booked_worker_id'] : "";
+                $array[$k]['coupon_id'] = isset($attributes['coupon_id']) ? $attributes['coupon_id'] : "";
+                $array[$k]['order_customer_memo'] = isset($attributes['order_customer_memo']) ? $attributes['order_customer_memo'] : "";
+                $array[$k]['order_pop_order_money'] = isset($attributes['order_pop_order_money']) ? $attributes['order_pop_order_money'] : "";
+                $array[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
+                $array[$k]['channel_id'] = isset($attributes['channel_id']) ? $attributes['channel_id'] : "";
+                $array[$k]['address_id'] = isset($attributes['address_id']) ? $attributes['address_id'] : "";
+                $array[$k]['order_booked_count'] = isset($attributes['order_booked_count']) ? $attributes['order_booked_count'] : "";
+                $array[$k]['order_pop_order_code'] = isset($attributes['order_pop_order_code']) ? $attributes['order_pop_order_code'] : "";
+                $array[$k]['order_pay_type'] = isset($attributes['order_pay_type']) ? $attributes['order_pay_type'] : "";
+                $array[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
+                $array[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
+                $array[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
+                $array[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? $v['order_booked_begin_time'] : "";
+                $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
             }
         }
 
-        print_r($args);
-        exit;
         $order = new Order();
+        $is_success = array();
+        foreach ($array as $keyk => $valv) {
+            $is_success[] = $order->createNew($valv);
+        }
+        print_r($is_success);
+        exit;
+
         $is_success = $order->createNew($attributes);
         $order->errors;
         if ($is_success) {
