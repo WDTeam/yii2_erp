@@ -913,11 +913,11 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiParam {String} query 查询关键字
      * @apiParam {String} location 经纬度
-     * @apiParam {String} radius 半径
+     * @apiParam {Number} radius 半径
      * @apiParam {String} output 输出方式
      * @apiParam {String} ak
-     * @apiParam {String} page_size 每页条数
-     * @apiParam {String} page_num 页数
+     * @apiParam {Number} page_size 每页条数
+     * @apiParam {Number} page_num 页数  允许为0
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/service/baidu-map
      *
      * @apiSuccessExample Success-Response:
@@ -943,7 +943,7 @@ class ServiceController extends \restapi\components\Controller
 
         $path = "http://api.map.baidu.com/place/v2/search";
         if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius'])
-            || empty($params['output']) || empty($params['ak'])|| empty($params['page_size']) || empty($params['page_num']))
+            || empty($params['output']) || empty($params['ak'])|| empty($params['page_size']) || is_null($params['page_num']))
         {
             return $this->send(null, '参数不完成', '0', '403',null,alertMsgEnum::baiduMapFailed);
         }
