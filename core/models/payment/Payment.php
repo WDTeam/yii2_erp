@@ -17,6 +17,7 @@ use yii\base\Exception;
 class Payment extends \dbbase\models\payment\Payment
 {
 
+    const PAYMENT_CODE = '01';
     /**
      * @inheritdoc
      */
@@ -330,27 +331,16 @@ class Payment extends \dbbase\models\payment\Payment
      * 01 正常订单 02 退款 03 赔付
      * @return bool|string 订单号
      */
-    public function createOutTradeNo($type=1, $channel='00', $order_id=0)
+    public function createOutTradeNo($channel='00', $order_id=0)
     {
         $id = empty($this->id) ?  $order_id : $this->id;
         if( empty($id) ) return false;
-        switch($type)
-        {
-            case 1 :
-                $transType = '01';
-                break;
-            case 2 :
-                $transType = '02';
-                break;
-            case 3 :
-                $transType = '03';
-                break;
-        }
+
         //组装支付订单号
-        $rand = mt_rand(1000,9999);
+        $rand = mt_rand(100,999);
         $date = date("ymd",time());
         //生成商户订单号
-        $payment_eo_order_id = $date.$transType.$channel.$rand.$id;
+        $payment_eo_order_id = self::PAYMENT_CODE.$date.$channel.$rand.$id;
         //查询当前ID的数据是否存在
         $model = Payment::findOne($id);
         $model->setAttribute('payment_eo_order_id',$payment_eo_order_id);
@@ -395,7 +385,7 @@ class Payment extends \dbbase\models\payment\Payment
     {
         $param = [
             "body"	=> $this->body(),
-            "out_trade_no"	=> $this->createOutTradeNo(1,'01'),
+            "out_trade_no"	=> $this->createOutTradeNo('01'),
             "payment_money"	=> $this->toMoney($this->payment_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
@@ -415,7 +405,7 @@ class Payment extends \dbbase\models\payment\Payment
     {
         $param = [
             "body"	=> $this->body(),
-            "out_trade_no"	=> $this->createOutTradeNo(1,'02'),
+            "out_trade_no"	=> $this->createOutTradeNo('02'),
             "payment_money"	=> $this->toMoney($this->payment_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
@@ -436,7 +426,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function bfbApp($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'03'),
+            'out_trade_no'=>$this->createOutTradeNo('03'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'payment_money'=>$this->toMoney($this->payment_money,100,'*',0),
@@ -454,7 +444,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function upApp($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'04'),
+            'out_trade_no'=>$this->createOutTradeNo('04'),
             'subject'=>$this->subject(),
             'payment_money'=>$this->toMoney($this->payment_money,100,'*',0),
             'notify_url'=>$this->notifyUrl('up-app'),
@@ -470,7 +460,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function alipayApp($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'05'),
+            'out_trade_no'=>$this->createOutTradeNo('05'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'payment_money'=>$this->payment_money,
@@ -492,7 +482,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function alipayWeb($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'06'),
+            'out_trade_no'=>$this->createOutTradeNo('06'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'total_fee'=>$this->payment_money,
@@ -511,7 +501,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function zhidahaoH5($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'07'),
+            'out_trade_no'=>$this->createOutTradeNo('07'),
             'goods_name'=>$data['goods_name'],
             'payment_money'=>$this->toMoney($this->payment_money,100,'*',0),
             'detail' => $data['detail'],
@@ -545,7 +535,7 @@ class Payment extends \dbbase\models\payment\Payment
     {
         $param = [
             "body"	=> $this->body(),
-            "out_trade_no"	=> $this->createOutTradeNo(1,'22'),
+            "out_trade_no"	=> $this->createOutTradeNo('22'),
             "payment_money"	=> $this->toMoney($this->payment_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
@@ -564,7 +554,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function alipayWap($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'24'),
+            'out_trade_no'=>$this->createOutTradeNo('24'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'total_fee'=>$this->payment_money,
@@ -1372,7 +1362,7 @@ class Payment extends \dbbase\models\payment\Payment
      */
     public function getPaymentId($out_trade_no)
     {
-        return substr($out_trade_no,14);
+        return substr($out_trade_no,13);
     }
 
     /**
@@ -1519,7 +1509,7 @@ class Payment extends \dbbase\models\payment\Payment
                     'payment_type' => 4,    //退款类型
                     'admin_id' => Yii::$app->user->id,
                     'payment_admin_name' => Yii::$app->user->identity->username,
-                    'payment_eo_order_id'=>$model->createOutTradeNo(2,'00',$order_id),
+                    'payment_eo_order_id'=>$model->createOutTradeNo('00',$order_id),
                     'payment_verify' => $model->sign(),
                 ]);
 
