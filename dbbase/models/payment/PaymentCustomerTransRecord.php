@@ -106,6 +106,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             '1'=>[
 
                 'customer_id',  //用户ID
+                'admin_id',  //管理员ID
+                'admin_name',  //管理员姓名
 
                 //订单相关
                 'order_id', //订单ID
@@ -153,6 +155,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //2=现金 cardPay
             '2'=>[
                 'customer_id',  //用户ID
+                'admin_id',  //管理员ID
+                'admin_name',  //管理员姓名
 
                 //订单相关
                 'order_id', //订单ID
@@ -199,6 +203,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //3=预付费 perPay
             '3'=>[
                 'customer_id',  //用户ID
+                'admin_id',  //管理员ID
+                'admin_name',  //管理员姓名
 
                 //订单相关
                 'order_id', //订单ID
@@ -319,6 +325,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //8=余额（在线支付）onlineBalancePay
             '8'=>[
                 'customer_id',  //用户ID
+                'admin_id',  //管理员ID
+                'admin_name',  //管理员姓名
 
                 //订单相关
                 'order_id', //订单ID
@@ -363,6 +371,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //9=退款（订单）：把订单金额原路退回 refundSourc
             '9'=>[
                 'customer_id',  //用户ID
+                'admin_id',  //管理员ID
+                'admin_name',  //管理员姓名
 
                 //订单相关
                 'order_id', //订单ID
@@ -407,8 +417,9 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             ],
             //1=在线支付（在线）onlinePay
             '10'=>[
-
                 'customer_id',  //用户ID
+                'admin_id',  //管理员ID
+                'admin_name',  //管理员姓名
 
                 //订单相关
                 'order_id', //订单ID
