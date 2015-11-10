@@ -297,7 +297,7 @@ class Customer extends \dbbase\models\customer\Customer
         }
         
         //generating trans serial
-        $trans_serial = $trans_prefix.date('yymmdd', time()).mt_rand(1000, 9999);
+        $trans_serial = $trans_prefix.date('yymmdd', time()).mt_rand(10000000, 99999999);
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerExtBalance->customer_balance = $end_balance;
