@@ -1473,7 +1473,7 @@ class OrderController extends \restapi\components\Controller
      *          "workerData": "指定阿姨订单数",
      *          "orderData": "待抢单订单数",
      *          "workerServiceCount": "待服务订单数",
-     *          "worker_is_block": 0/1 # 阿姨是否封号 0正常1封号
+     *          "worker_is_block": 0/1  阿姨是否封号 0正常1封号
      *      },
      *      "alertMsg": "操作成功"
      * }
