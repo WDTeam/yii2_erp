@@ -97,7 +97,7 @@ $form = ActiveForm::begin([
                         //隐藏的规格信息
                         echo '<input type="hidden" name="'. $key .'['. $v['id'] .'][operation_spec_strategy_unit]" value="'. $v['operation_spec_strategy_unit'] .'" />';
 
-                        echo '<div class="boxx">服务项目：<span>'. $v['operation_category_name'] .'</span></div>';
+                        echo '<div class="boxx">服务项目：<span>'. $v['operation_goods_name'] .'</span></div>';
                         echo '<div class="boxx">销售价格：<input type="text" name="'. $key .'['. $v['id'] .'][operation_goods_price]">元/' . $v['operation_spec_strategy_unit'] . '</div>';
     
                         echo '<div class="boxx">市场价格：<input type="text" name="'. $key .'['. $v['id'] .'][operation_goods_market_price]">元/' . $v['operation_spec_strategy_unit'] . '</div>';
