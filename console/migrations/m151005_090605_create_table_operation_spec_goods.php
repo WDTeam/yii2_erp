@@ -39,9 +39,6 @@ class m151005_090605_create_table_operation_spec_goods extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'', 
         ], $tableOptions);
 
-       $this->execute(
-           "INSERT INTO {{%operation_spec_goods}} (`id`, `operation_goods_id`, `operation_goods_name`, `operation_spec_goods_no`, `operation_spec_id`, `operation_spec_name`, `operation_spec_value`, `operation_spec_goods_lowest_consume_number`, `operation_spec_goods_sell_price`, `operation_spec_goods_market_price`, `operation_spec_goods_cost_price`, `operation_spec_goods_settlement_price`, `operation_spec_goods_commission_mode`, `operation_spec_goods_commission`, `created_at`, `updated_at`, `operation_spec_strategy_unit`) VALUES (49, 1, 'Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机', '14442474251', 3, 'iphone', '16G合约机', 9, 92.0000, 91.0000, 93.0000, 94.0000, 1, 90.0000, 1444248319, 1444248319, '台'),	(50, 1, 'Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机', '14442474252', 3, 'iphone', '32G非合约机', 8, 82.0000, 81.0000, 83.0000, 84.0000, 1, 80.0000, 1444248319, 1444248319, '台'),	(51, 1, 'Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机', '14442474253', 3, 'iphone', '64合约机', 7, 72.0000, 71.0000, 73.0000, 74.0000, 2, 70.0000, 1444248319, 1444248319, '台'), (52, 1, 'Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机', '14442474254', 3, 'iphone', '128G合约机', 6, 62.0000, 61.0000, 63.0000, 64.0000, 2, 60.0000, 1444248319, 1444248319, '台');"
-       );
     }
 
     public function down()
