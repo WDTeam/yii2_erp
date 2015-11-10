@@ -50,8 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $b= Html::a('<i class="glyphicon" ></i>全部 '.$all_count, ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
     Html::a('<i class="glyphicon" ></i>封号'.$block_count, ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
-    Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
-    Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+    Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'CustomerSort'=>['field'=>'created_at', 'order'=>'asc']], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
+    Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'CustomerSort'=>['field'=>'created_at', 'order'=>'asc']], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
     ?>
     <?php 
@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterRowOptions'=>['class'=>'kartik-sheet-style'],
         'toolbar' =>
             [
-                'content'=>
+                'content'=>''
                     // Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px','data-toggle'=>'modal',
                     //     'data-target'=>'#multi-add-to-block-modal',]),
                     // Html::a('<i class="glyphicon">批量加入黑名单</i>', ['customer/multi-add-to-block'], [
@@ -79,9 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     // Html::a('<i class="glyphicon">批量移除黑名单</i>', ['customer/multi-remove-from-block'], [
                     //     'class' => 'btn btn-default multi-remove-from-block',
                     // ]),
-                    Html::a('<i class="glyphicon">data</i>', ['customer/customer/data'], [
-                        'class' => 'btn btn-default',
-                    ]),
+//                    Html::a('<i class="glyphicon">data</i>', ['customer/customer/data'], [
+//                        'class' => 'btn btn-default',
+//                    ]),
             ],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
