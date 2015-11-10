@@ -162,7 +162,7 @@ class FinanceShopSettleApplyController extends Controller
             $isExport = 1;
         }
         $searchModel->load($requestParams);
-        if(\Yii::$app->user->identity->isMiniBoxUser()){
+        if(\Yii::$app->user->identity->isMiniBossUser()){
             $searchModel->shop_id = Yii::$app->user->identity->getShopIds();
             $searchModel->shop_manager_id = Yii::$app->user->identity->getShopManagerIds();
         }

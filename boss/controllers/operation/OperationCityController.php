@@ -603,6 +603,25 @@ class OperationCityController extends BaseAuthController
         }
     }
 
+    /**
+     * 下线城市下的服务项目
+     */
+    public function actionOfflineCity($city_id, $goods_id)
+    {
+        if (!isset($city_id) || $city_id == '' || !isset($goods_id) || $goods_id == '') {
+            return $this->redirect(['opencity']);
+        }
+
+        $operation_shop_district_goods_status = 2;
+        OperationShopDistrictGoods::updateShopDistrictGoodsStatus($goods_id, $city_id, $operation_shop_district_goods_status);
+ 
+        $district_nums = OperationShopDistrictGoods::getCityGoodsOnlineNum($city_id);
+        if ($district_nums == 0) {
+            OperationCity::setOperationCityIsOffline($city_id);
+        }
+        return $this->redirect(['opencity']);
+    }
+
     private function delSettingCityCaches(){
         $cache = Yii::$app->cache;
         /** 删除缓存中的城市相关信息 **/

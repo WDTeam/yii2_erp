@@ -2,34 +2,64 @@
  * Created by Administrator on 2015/10/10.
  */
 window.onbeforeunload = onbeforeunload_handler;
-window.work_status = 1; //1休息 2空闲 3忙碌
+window.work_status = 1; //1休息 2空闲 3忙碌 4小休
 window.order_data = new Object();
 window.continue_work_count_down = 10;
 window.count_down_flag = true; //倒计时结束后标记false代表已经处理订单
 var refuse_worker_id = 0;
-$(document).on("click",'#start_work,#continue_work',function(){
+
+$(document).on("click",'#start_work',function(){
     window.work_status = 2;
     $('#work_status').text('空闲');
     $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');
     getWaitManualAssignOrder();
+    //触发统计派单员时间事件
+    $('#startId').click();
+});
+
+$(document).on("click",'#continue_work',function(){
+
+    var before_work_status = window.work_status;
+    window.work_status = 2;
+    $('#work_status').text('空闲');
+    $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');
+    getWaitManualAssignOrder();
+    //触发统计派单员时间事件
+    if(before_work_status == 4){
+        $('#restAcceptId').click();
+    }else {
+        $('#acceptId').click();
+    }
 });
 
 
+
+
 $(document).on("click",'#pause_work',function(){
-    window.work_status = 1;
-    $('#work_status').text('休息');
+    window.work_status = 4;
+    $('#work_status').text('小休');
     $("#work_console").html(
         '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
         '<button id="continue_work" class="btn btn-warning" type="button">继续</button>'
     );
+    //触发统计派单员时间事件
+    $('#restId').click();
 });
 
 $(document).on("click",'#stop_work',function(){
+    var before_work_status = window.work_status;
     window.work_status = 1;
     $('#work_status').text('休息');
     $("#work_console").html(
         '<button id="start_work" class="btn btn-warning" type="button">开工啦</button>'
     );
+    if(before_work_status == 4){
+        $('#restEndId').click();
+    }else {
+        $('#endId').click();
+    }
+
+
 });
 
 
@@ -58,6 +88,8 @@ $(document).on("click",'.worker_assign',function(){
                     );
                     $("#order_assign").hide();
                     $("#work_console").show();
+                    //触发统计派单员时间事件
+                    $('#dispatchedId').click();
                 }else{
                     alert('指派失败！');
                 }
@@ -167,7 +199,8 @@ function canNotAssign(){
             );
             $("#order_assign").hide();
             $("#work_console").show();
-
+            //触发统计派单员时间事件
+            $('#nonDispatchId').click();
         }
     });
 }
@@ -201,6 +234,8 @@ function getWaitManualAssignOrder(){
                 showOrder();
                 $("#work_console").hide();
                 $("#order_assign").show();
+                //触发统计派单员时间事件
+                $('#waitId').click();
             }else{
                 setTimeout(getWaitManualAssignOrder,3000);
             }
@@ -245,15 +280,16 @@ function onbeforeunload_handler(){
     return "确认退出？";
 }
 function timer(){
-    if( window.work_status == 3) {
+    if( window.work_status == 3) { //忙碌
         var now = new Date();
         var time = parseInt(now.getTime()/1000);
         $("#create_to_current_time").text(sec2time(time-window.order_data.order.created_at));
         $("#current_to_begin_service_time").text(sec2time(window.order_data.order.order_booked_begin_time-time));
         var count_down = window.order_data.ext_flag.order_flag_lock_time*1+window.order_data.operation_long_time*1-time;
-        $("#count_down").text(sec2time(count_down));
         if(count_down<=0 && window.count_down_flag){
             canNotAssign();
+        }else {
+            $("#count_down").text(sec2time(count_down));
         }
         if($("#work_console").css('display')=='block'){
             window.continue_work_count_down--;

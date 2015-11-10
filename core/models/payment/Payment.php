@@ -109,7 +109,6 @@ class Payment extends \dbbase\models\payment\Payment
                         $order_use_acc_balance += $val['order_use_acc_balance'];    //使用余额
                         $card_id = $val['card_id'];    //服务卡号
                         $order_use_card_money += $val['order_use_card_money'];    //使用服务卡
-
                     }
                 }
                 else
@@ -139,14 +138,6 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 3: //3充值订单
                 //TODO::获取服务卡金额
-//                /**
-//                 *      customer_id,用户ID
-//                 *      server_card_info_id,卡信息ID
-//                 *      service_card_sell_record_status，购卡订单状态
-//                 *      service_card_sell_record_channel_id,购卡渠道ID
-//                 *      service_card_sell_record_channel_name,购卡渠道名称
-//                 *      service_card_sell_record_money,购卡订单金额 】
-//                 */
 //                OperationServiceCardSellRecord->createServiceCardSellRecord($customer_id, $order_id, 0, 1, 'APP客户端', 1000);
                 $payment_mode = 2;//充值
                 break;
@@ -893,7 +884,7 @@ class Payment extends \dbbase\models\payment\Payment
             //验证签名
             $class = new \alipay_wap_class();
             $verify_result = $class->callback();
-            if($_GET['debug'])
+            if(!empty($_GET['debug']))
             {
                 $verify_result = true;
             }

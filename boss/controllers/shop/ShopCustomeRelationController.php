@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
+use yii\web\ForbiddenHttpException;
 /**
  * ShopCustomeRelationController implements the CRUD actions for ShopCustomeRelation model.
  */
@@ -89,6 +90,10 @@ class ShopCustomeRelationController extends BaseAuthController
      */
     public function actionCreate()
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
         $model = new ShopCustomeRelation;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -110,6 +115,10 @@ class ShopCustomeRelationController extends BaseAuthController
    **/ 
     public function actionAddCreate()
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
     	$model = new ShopCustomeRelation;
     
     	if ($model->load(Yii::$app->request->post())) {
@@ -161,6 +170,10 @@ class ShopCustomeRelationController extends BaseAuthController
      */
     public function actionUpdate($id)
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -180,6 +193,10 @@ class ShopCustomeRelationController extends BaseAuthController
      */
     public function actionDelete($id)
     {
+        if(!\Yii::$app->user->can($this->id.'/index')){
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
+        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

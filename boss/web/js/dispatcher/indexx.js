@@ -14,8 +14,6 @@ var r;
 var ss =parseInt(15*60);
 var mm;
 var rr;
-var downtime;
-var downtime15;
 //start.......................
 $(document).ready(function(){
    //初始化界面控件
@@ -311,10 +309,6 @@ function acceptWork(){
 }
 //单击无法指派
 function nonDispatchWork(){
-   //10秒倒计时
-   downtime=setInterval("rundown();", 1000);
-   //初始化15分钟倒计时
-   stopCount15();
    //初始化按钮
    $('#dispatchId').hide();
    $('#startId').hide();
@@ -327,10 +321,6 @@ function nonDispatchWork(){
 function dispatchWork(){
    //调用后台，更新指派成功数量===============================
    saveParams();
-   //10秒倒计时
-   downtime=setInterval("rundown();", 1000);
-   //初始化15分钟倒计时
-   stopCount15();
    //派单成功加1
    updateCount(2);
    //初始化按钮
@@ -356,8 +346,6 @@ function waitWork() {
    //初始化计时参数
    d=0;t=0;c=0;c1=0;c2=0;r=0;
 
-   //15分钟倒计时
-   downtime15=setInterval("rundown15();", 1000);
    //更新应派单数
    updateCount(1);
    //初始化按钮
@@ -484,48 +472,6 @@ function agvChange(){
 function stopCount() {
    clearTimeout(t)
 }
-//10秒倒计时
-function rundown(){
- var s = document.getElementById("rundownId");
- if(s.innerHTML == 0){
-    stopCount10();
-    //进入接活状态
-    acceptWork();
-    return false;
- }
- s.innerHTML = s.innerHTML * 1 - 1;
-}
-//停止10秒倒计时
-function stopCount10() {
-   clearTimeout(downtime);
-   $('#rundownId').text(10);
-}
-//15分钟倒计时
-function rundown15(){
-   var s = document.getElementById("rundown15Id");
-   var sN = document.getElementById("rundown15Name");
-   if(s.innerHTML == 0){
-      stopCount15();
-      //超时，指派失败，记录失败原因===================
 
-      return false;
-   }
-   maxtimeee=s.innerHTML;
-   if(maxtimeee>=0) {
-      minutess = Math.floor(maxtimeee / 60);
-      secondss = Math.floor(maxtimeee % 60);
-      dd = "" + parseInt(secondss) + "秒";
-      if (minutess > 0) {
-         dd = "" + parseInt(minutess) + "分" + dd;
-      }
-      sN.innerHTML=dd;
-   }
-   s.innerHTML = s.innerHTML * 1 - 1;
-}
-//停止15分钟倒计时
-function stopCount15() {
-   clearTimeout(downtime15);
-   document.getElementById("rundown15Name").innerHTML="15分0秒";
-   $('#rundown15Id').text(15*60);
-}
+
 

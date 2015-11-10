@@ -124,34 +124,12 @@ class OrderDispatcherKpi extends \dbbase\models\order\OrderDispatcherKpi{
     public function updateDisatcherKpi($attributes){
         //0.定义参数，判断是否已有记录
         $model=new OrderDispatcherKpi;
-        $id= $attributes['id'];
-        if($id!=null and $id!=""){
-            $model=OrderDispatcherKpi::findOne(['id'=>$id]);
+        if(!empty($attributes['id'])){
+            $model=OrderDispatcherKpi::findOne(['id'=>$attributes['id']]);
         }
-
         //1.读取attributes，写入model
         $model->setAttributes($attributes);
 
-        //2.创建记录时，初始化
-        if($model->id==null){
-            $model->setAttributes([
-                'is_del' => 0,
-                'created_at'=>time(),
-            ]);
-        }
-
-        //3.设置更新时间
-        $model->setAttributes([
-            'updated_at'=>time(),
-        ]);
-
-        //4.读取客服信息
-        $systemUser=(new SystemUserSearch())->findOne(['id'=>$model->system_user_id]);
-        if($systemUser!=null){
-            $model->setAttributes([
-                'system_user_name' => $systemUser->username,
-            ]);
-        }
 
         //5.创建或更新记录
         if($model->save()){

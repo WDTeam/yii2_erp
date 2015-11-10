@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="operation-spec-index">
 
 
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
     'modelClass' => 'Operation Spec',
@@ -40,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $OperationSpecModel::hanldeSpecValues($dataProvider->operation_spec_values);
                 },
             ],
+            'operation_spec_strategy_unit',
             'created_at:date',
             //'updated_at', 
 

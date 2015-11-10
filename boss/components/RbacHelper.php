@@ -10,25 +10,25 @@ class RbacHelper extends Component
 {
     const CACHE_MENU = 'boss-menus';
     const CACHE_TOP_MENU = 'boss-top-menus';
-    public static $permissions = [];
-    protected static function setPermissions()
-    {
-        if(empty(self::$permissions)){
-            $auth = \Yii::$app->authManager;
-            $permissions = $auth->getPermissions();
-            self::$permissions = ArrayHelper::map($permissions, 'name', 'description');
-        }
-    }
+    const CONFIG_VERSION = 'boss-rbac-config-version';
+
     /**
      * 处理左菜单
      * @param array $menus
      */
     public static function menu($menus)
     {
-        self::setPermissions();
-        $menus = self::recursiveInitMenu($menus);
-        \Yii::$app->cache->set(self::CACHE_MENU, $menus, 3600*24);
-        return $menus;
+        $_menus = self::getMenus();
+        $cver = \Yii::$app->cache->get(self::CONFIG_VERSION);
+        $sver = \Yii::$app->session->get(self::CONFIG_VERSION);
+        if(empty($_menus) || $cver!=$sver){
+            $menus = self::recursiveInitMenu($menus);
+            $cver = \Yii::$app->cache->get(self::CONFIG_VERSION);
+            \Yii::$app->session->set(self::CONFIG_VERSION, $cver);
+            \Yii::$app->session->set(self::CACHE_MENU, $menus);
+            return $menus;
+        }
+        return $_menus;
     }
     /**
      * 处理顶部菜单
@@ -36,10 +36,13 @@ class RbacHelper extends Component
      */
     public static function topMenu($menus)
     {
-        self::setPermissions();
-        $menus = self::recursiveInitMenu($menus);
-        \Yii::$app->cache->set(self::CACHE_TOP_MENU, $menus, 3600*24);
-        return $menus;
+        $_menus = self::getTopMenus();
+        if(empty($_menus)){
+            $menus = self::recursiveInitMenu($menus);
+            \Yii::$app->session->set(self::CACHE_TOP_MENU, $menus);
+            return $menus;
+        }
+        return $_menus;
     }
     /**
      * 递归初始化菜单
@@ -64,7 +67,6 @@ class RbacHelper extends Component
                     $auth->addChild($admin, $permission);
                 }
                 $menu['visible'] = \Yii::$app->user->can($name);
-                unset(self::$permissions[$name]);
             }
             if(isset($menu['items'])){
                 $menu['items'] = self::recursiveInitMenu($menu['items']);
@@ -80,10 +82,18 @@ class RbacHelper extends Component
      */
     public static function getMenus()
     {
-        return \Yii::$app->cache->get(self::CACHE_MENU);
+        return \Yii::$app->session->get(self::CACHE_MENU);
     }
     public static function getTopMenus()
     {
-        return \Yii::$app->cache->get(self::CACHE_TOP_MENU);
+        return \Yii::$app->session->get(self::CACHE_TOP_MENU);
+    }
+    /**
+     * 权限修改时调用此方法
+     */
+    public static function updateConfigVersion()
+    {
+        $key = time();
+        \Yii::$app->cache->set(self::CONFIG_VERSION, $key);
     }
 }

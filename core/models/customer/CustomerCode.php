@@ -19,7 +19,9 @@ use \core\models\customer\Customer;
 class CustomerCode extends \dbbase\models\customer\CustomerCode
 {
     /**
-     * 生成验证码并发送
+     * generate code and send to cutomer's phone
+     * @param $phone
+     * @return bool
      */
     public static function generateAndSend($phone){
         $transaction = \Yii::$app->db->beginTransaction();
@@ -66,7 +68,10 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
     }
 
     /**
-     * 检测验证码是否有效
+     * check customer's code is useful while phone and code is provided
+     * @param $phone
+     * @param $code
+     * @return bool
      */
     public static function checkCode($phone, $code){
         $customerCode = self::find()->where(['customer_phone'=>$phone, 'customer_code'=>$code, 'is_del'=>0])->one();
@@ -82,7 +87,8 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
     
 /********************************code config******************************************************/
     /**
-     * define code config
+     * set code config, contain code send expiration and code sended max num per day
+     * @return array
      */
     public static function codeConfig(){
         return [
@@ -90,7 +96,13 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
             'code_num_per_day'=>100,
         ];
     }
-    
+
+
+    /**
+     * get config value while config key is provided
+     * @param $config_name
+     * @return string
+     */
     public static function getCodeConfig($config_name){
         $configs = self::codeConfig();
         foreach($configs as $config_key => $config_val){
@@ -100,9 +112,11 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
         }
         return 'not_set';
     }
-    
+
     /**
      * whether customer last code has been send to expiration
+     * @param $phone
+     * @return array
      */
     public static function isLastCodeExpirated($phone){
         $customer_code = self::find()->where(['customer_phone'=>$phone, 'is_del'=>0])->orderBy('created_at desc')->asArray()->one();
@@ -115,9 +129,11 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
             return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_last_code_expirated'=>false];
         }
     }
-    
+
     /**
-     * whether customer code num has been sended to max defined 
+     * whether customer code num has been sended to max defined
+     * @param $phone
+     * @return array
      */
     public static function isSendOver($phone){
         $code_num_per_day = self::getCodeConfig('code_num_per_day');

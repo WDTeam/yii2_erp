@@ -45,7 +45,7 @@ use boss\components\RbacHelper;
 
 			<div class="panel-body">
 			<?php 
-			$menus = RbacHelper::getMenus();
+			$menus = (array)RbacHelper::getMenus();
 			echo $this->render('form_permissions', [
 			    'menus'=>$menus,
 			    'model'=>$model,
@@ -53,7 +53,7 @@ use boss\components\RbacHelper;
 			?>
 			<hr/>
 			<?php 
-			$menus = RbacHelper::getTopMenus();
+			$menus = (array)RbacHelper::getTopMenus();
 			echo $this->render('form_permissions', [
 			    'menus'=>$menus,
 			    'model'=>$model,
@@ -61,9 +61,9 @@ use boss\components\RbacHelper;
 			?>
 			
             <?php 
-                echo $form->field($model, 'permissions')->checkboxList(RbacHelper::$permissions, [
-                    'id'=>'item_orther',
-                ])->label('其它');
+//                 echo $form->field($model, 'permissions')->checkboxList(RbacHelper::$permissions, [
+//                     'id'=>'item_orther',
+//                 ])->label('其它');
             ?>
             </div>
 		</div>

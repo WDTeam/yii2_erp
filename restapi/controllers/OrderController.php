@@ -1306,9 +1306,9 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionHidenOrder
      * @apiGroup Order
      *
-     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} access_token  用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {int} order_id 订单号
+     * @apiParam {int}  order_id 订单号
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      *
      * @apiSuccessExample Success-Response:
@@ -1408,7 +1408,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数 (郝建设)
-     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} access_token      阿姨认证
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
      * @apiParam {String} [page]              页面  #leveltype =2 时要传递
@@ -1652,10 +1652,6 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-        #判断服务时长不能为空
-        if (empty($param['order_booked_count'])) {
-            return $this->send(null, "服务时长不能为空", 0, 200, NULL, alertMsgEnum::orderIsUseBalanceFaile);
-        }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -1673,7 +1669,6 @@ class OrderController extends \restapi\components\Controller
                 "order_booked_worker_id" => $param['order_booked_worker_id'],
                 "order_customer_need" => $param['order_customer_need'],
                 "order_customer_memo" => $param['order_customer_memo'],
-                "order_booked_count" => $param['order_booked_count'],
                 "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
@@ -1696,13 +1691,13 @@ class OrderController extends \restapi\components\Controller
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
 
                 if ($createOrder['status'] == 1) {
-                    if (!empty($createOrder)) {
-                        return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
-                    } else {
-                        return $this->send(null, "添加失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
-                    }
+                    return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                 } else {
-                    return $this->send(null, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    $err = array();
+                    foreach ($createOrder['errors'] as $key => $val) {
+                        $err[$key] = $val[0];
+                    }
+                    return $this->send($err, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
@@ -1713,15 +1708,15 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (90%)
+     * @api {PUT} /order/set-worker-order [PUT]/order/set-worker-order (100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
-     * @apiDescription 阿姨抢单提交 （郝建设 未测试）
+     * @apiDescription 阿姨抢单提交 （郝建设 ）
      *
-     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} access_token        阿姨认证
      * @apiParam {String} [platform_version]  平台版本号
-     * @apiParam {int}    order_id          订单号
+     * @apiParam {int}    order_id            订单号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1764,7 +1759,7 @@ class OrderController extends \restapi\components\Controller
                 if ($setWorker && is_null($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, $setWorker["errors"]);
+                    return $this->send(null, "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
             } catch (Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
@@ -1939,10 +1934,10 @@ class OrderController extends \restapi\components\Controller
                 $ret["orderData"] = $order;
                 return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::userLoginFailed);
+                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);
             }
         } catch (Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrdersFaile);
         }
     }
 
@@ -1957,6 +1952,60 @@ class OrderController extends \restapi\components\Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         return OrderPush::push($id);
+    }
+
+    /**
+     * @api {POST} /order/delete-worker-order [POST]/order/delete-worker-order(100%）
+     * 该功能暂时没有开发,没有得到核实！
+     * [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表
+     * 
+     * @apiDescription 阿姨删除订单 （郝建设）
+     * @apiName actionDeleteWorkerOrder
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token     阿姨认证
+     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} order_id/order_code 周期订单号
+     * 
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *    {
+     *     "code": 1,
+     *     "msg": "删除成功",
+     *     "ret": {}
+     *     "alertMsg": "删除成功"
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": 401,
+     *       "msg": "认证已经过期,请重新登录，"
+     *       "ret":{},
+     *       "alertMsg": "操作成功"
+     *     }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 delete Not Found
+     *     {
+     *       "code": 0,
+     *       "msg": "删除失败",
+     *       "ret": {},
+     *      "alertMeg": "删除失败"
+     *      }
+     */
+    public function actionDeleteWorkerOrder()
+    {
+        $param = Yii::$app->request->post();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
     }
 
 }
