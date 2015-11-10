@@ -1,4 +1,5 @@
 var operating_order_id = 0;
+var operating_order_code = 0;
 var complaint_customer_phone = '';
 
 $(document).ready(function($){
@@ -62,7 +63,8 @@ $(document).ready(function($){
 	$(".m_quxiao").click(function(){
 		$(".xuanzhong").attr("checked","checked");
 		operating_order_id = $(this).parents('tr').find('input.order_id').val();
-	});	
+		operating_order_code = $(this).parents('tr').find('input.order_code').val();
+	});
 	$(".submitq").click(function(){
 		var cancelType = $(":radio[name='radio_cancelType']:checked").val();
 		var cancelDetailType = $(":radio[name='radio_cancelDetailType']:checked").val();
@@ -76,7 +78,7 @@ $(document).ready(function($){
 		$.ajax({
             type: "POST",
             url:  "/order/order/cancel-order",
-            data: {order_id: operating_order_id, cancel_type: cancelType, cancel_note: cancelNote},
+            data: {order_id: operating_order_id,order_code:operating_order_code, cancel_type: cancelType, cancel_note: cancelNote},
             dataType:"json",
             success: function (msg) {
                 if(msg){
@@ -98,6 +100,7 @@ $(document).ready(function($){
 	$(".m_response").click(function(){
 		$(".xuanzhong").attr("checked","checked");
 		operating_order_id = $(this).parents('tr').find('input.order_id').val();
+		operating_order_code = $(this).parents('tr').find('input.order_code').val();
 
         //把上次添加的记录清除，重新添加
         $(".response_record").children("div").empty();
@@ -110,6 +113,7 @@ $(document).ready(function($){
             url:  "/order/order-response/get-order-response-times",
             data: {
                 order_id: operating_order_id,
+                order_code: operating_order_code,
             },
             dataType:"json",
             success: function (msg) {
@@ -155,6 +159,7 @@ $(document).ready(function($){
             url:  "/order/order-response/get-order-response",
             data: {
                 order_id: operating_order_id,
+                order_code: operating_order_code,
             },
             dataType:"json",
             success: function (msg) {
@@ -246,6 +251,7 @@ $(document).ready(function($){
                 order_response_or_not: responseornot_id,
                 order_response_result: responseresult_id,
                 order_id: operating_order_id,
+                order_code: operating_order_code,
             },
             dataType:"json",
             success: function (msg) {
@@ -267,6 +273,7 @@ $(document).ready(function($){
 	$(".m_tousu").click(function(){
 		$(".xuanzhong").attr("checked","checked");
 		operating_order_id = $(this).parents('tr').find('input.order_id').val();
+		operating_order_code = $(this).parents('tr').find('input.order_code').val();
 		complaint_customer_phone = $(this).parents('tr').find('input.customer_phone').val();
 	});
 	$(".jsRadio label").click(function(){
@@ -355,6 +362,7 @@ $(document).ready(function($){
 		
         var complaints = {
             	order_id: operating_order_id,
+            	order_code: operating_order_code,
             	complaint_detail: $('#complaint_detail').val(),
             	cumstomer_phone: complaint_customer_phone,
             	data: complaint_items
