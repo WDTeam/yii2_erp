@@ -61,29 +61,8 @@ class OrderController extends \restapi\components\Controller
      *  "code": "1",
      *  "msg": "创建订单成功",
      *  "ret": {
-     *          "order_service_type_id": "服务类型商品id", 
-     *          "order_src_id": "2",
-     *          "order_booked_begin_time": "1445251619",
-     *          "order_booked_end_time": "1445255219",
-     *          "address_id": "1",
-     *          "channel_id": "20",
-     *          "order_ip": "::1",
-     *          "order_parent_id": 0,
-     *          "order_is_parent": 0,
-     *          "order_unit_money": "20.0000",
-     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
-     *          "order_booked_count": 60,
-     *          "order_money": 20,
-     *          "order_address": "地址,姓名,电话",
-     *          "order_code": "订单号",
-     *          "order_src_name": "IOS",
-     *          "order_channel_name": "后台下单",
-     *          "checking_id": 0,
-     *          "isdel": 0,
-     *          "created_at": 1445320069,  订单创建时间
-     *          "updated_at": 1445320069,  订单修改时间
-     *          "id": 8
-     *      },
+     *    "id":8
+     *   }
      *  "alertMsg": "创建订单成功,请重新登录"
      *  }
      *
@@ -94,7 +73,6 @@ class OrderController extends \restapi\components\Controller
      *        "msg": "用户无效,请先登录",
      *        "ret": {},
      *        "alertMsg": "用户认证已经过期,请重新登录"
-     *
      *     }
      *
      */
@@ -217,7 +195,7 @@ class OrderController extends \restapi\components\Controller
         $order = new Order();
 
         $is_success = $order->createNew($attributes);
-        
+
         if ($is_success) {
             return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
@@ -2143,6 +2121,21 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionGetOrderChannelList()
     {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //pop访问时可以不用输入access_token（用本身的验证加密方法）
+        $apiPopKey = Yii::$app->params["apiPopKey"];
+        $apiSecretKey= Yii::$app->params["apiSecretKey"];
+        $sign=  isset($param["sign"])?$param["sign"]:"";
+        $nonce =  isset($param["nonce"])?$param["nonce"]:"";
+        $arrParams = array();
+        $arrParams["sign"]=$sign; 
+        $arrParams["nonce"]=$nonce; 
+        $arrParams["api_key"]=$apiPopKey; 
+        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+        $bolCheck = $objSign->checkSignature($arrParams);
+        if(!$bolCheck){
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+        }
         $orderChannels = FinanceOrderChannel::get_order_channel_list();
         $gDate = [];
         if (!empty($orderChannels)) {
