@@ -1111,9 +1111,9 @@ class Order extends OrderModel
         if (isset($status) && is_array($status)) {
             $statusList = $statusAC->where(['in', 'id', $status])->asArray()->all();
         } else {
-            $statusList = $statusAC->asArray()->all();
+            $statusList = $statusAC->where(['not in', 'id', [OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,OrderStatusDict::ORDER_SYS_ASSIGN_DONE]])->asArray()->all();
         }
-        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
+        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_boss') : [];
     }
 
     /*

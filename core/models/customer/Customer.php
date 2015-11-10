@@ -352,7 +352,8 @@ class Customer extends \dbbase\models\customer\Customer
 
 		$customer_ext_score = CustomerExtScore::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer_ext_score)) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+//            return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+			return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>0];
 		}
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
 	}
@@ -370,7 +371,8 @@ class Customer extends \dbbase\models\customer\Customer
 
 		$customer_ext_score = CustomerExtScore::find()->where(['customer_id'=>$customer_id])->asArray()->one();
 		if(empty($customer_ext_score)) {
-			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+//			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+            return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>0];
 		}
 		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
 	}
@@ -415,12 +417,9 @@ class Customer extends \dbbase\models\customer\Customer
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
-//		$channal_name = funcname($channal_id);
-        $channal_info = FinanceOrderChannel::get_order_channel_info($channal_id);
-        if($channal_info == '未知'){
-            return false;
-        }
-		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
+//		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
+        $channal_name = \core\models\operation\OperationOrderChannel::get_post_name($channal_id);
+        if($channal_name == '未知') return false;
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];
@@ -452,8 +451,9 @@ class Customer extends \dbbase\models\customer\Customer
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
-//		$channal_id = funcname($channal_name);
-        $channal_id = FinanceOrderChannel::getOrderChannelByid($channal_name);
+//      $channal_id = FinanceOrderChannel::getOrderChannelByid($channal_name);
+        $channal_id = \core\models\operation\OperationOrderChannel::get_post_id($channal_name);
+        if(empty($channal_id)) return false;
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];

@@ -180,6 +180,8 @@ class alertMsgEnum
     const exchangeCouponFailIsdel = '优惠券已删除';
     //优惠券已禁用
     const exchangeCouponDisable = '优惠券已禁用';
+    //输入的优惠码有误
+    const exchangeCouponErrorCoupon = '输入的优惠码有误';
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';

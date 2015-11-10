@@ -478,6 +478,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                 'osdg.operation_category_name',
                 'oc.id',
                 'oc.operation_category_icon',
+                'oc.operation_category_url',
                 'oc.operation_category_price_description',
                 'oc.operation_category_introduction',
             ])

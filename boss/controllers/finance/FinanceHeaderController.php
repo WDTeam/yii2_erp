@@ -51,12 +51,10 @@ class FinanceHeaderController extends BaseAuthController
     {
     	
     	//获取下单渠道
-    	$tyu= FinanceOrderChannel::get_order_channel_listes();
+    	$tyu= \core\models\operation\OperationOrderChannel::getorderchannellist('all');
     	//获取支付渠道
-    	$ordesite= FinancePayChannel::get_pay_channel_list();
+    	$ordesite=\core\models\operation\OperationPayChannel::getpaychannellist('all');
     
-    	
-    	
         $searchModel = new FinanceHeaderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         $dataProvider->query->orderBy(['id'=>SORT_DESC]);
@@ -76,19 +74,6 @@ class FinanceHeaderController extends BaseAuthController
      */
     public function actionView($id)
     {
-       /*  $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())) {
-			if($model->finance_header_where_es && $model->finance_header_where=='function_way' ){
-				$model->finance_header_where=$model->finance_header_where_es;
-			}
-			if($model->save()){
-				return $this->redirect(['view', 'id' => $model->id]);
-			} else {
-        		return $this->render('view', ['model' => $model]);
-			}
-        }  */
-    	
-    	
     	$model = $this->findModel($id);
     	if ($model->load(Yii::$app->request->post()) && $model->save()) {
     			return $this->redirect(['index', 'id' => $model->id]);
@@ -180,9 +165,9 @@ class FinanceHeaderController extends BaseAuthController
        	return $this->redirect(['index']);
        }else{
        //获取下单渠道
-    	$tyu= FinanceOrderChannel::get_order_channel_listes();
+    	$tyu= \core\models\operation\OperationOrderChannel::getorderchannellist('all');
     	//获取支付渠道
-    	$ordesite= FinancePayChannel::get_pay_channel_list(); 
+    	$ordesite= \core\models\operation\OperationPayChannel::getpaychannellist('all');
        	return $this->render('create', [
        			'model' => $model,'ordeinfo' => $ordesite,'payinfo' => $tyu,
        			]);

@@ -6,7 +6,7 @@ use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
 use core\models\finance\FinancePayChannel;
-use core\models\payment\Payment;
+use core\models\operation\OperationPayChannel;
 
 use dbbase\models\payment\PaymentCustomerTransRecordLog;
 
@@ -237,15 +237,20 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //公用部分
         $transRecord['customer_id'] = $orderInfo['customer_id'];     //用户ID
+        $transRecord['admin_id'] = Yii::$app->user->id;
+        $transRecord['admin_name'] = Yii::$app->user->identity->username;
+
         $transRecord['order_id'] = $order_id;           //订单ID
+        $transRecord['order_code'] = $orderInfo['order_code'];
+        $transRecord['order_batch_code'] = $orderInfo['order_batch_code'];
 
         //订单渠道
         $transRecord['order_channel_id'] = $orderInfo['channel_id'];   //订单渠道
         $transRecord['payment_customer_trans_record_order_channel'] = $orderInfo['order_channel_name']; //	订单渠道名称
 
         //支付渠道
-        $transRecord['pay_channel_id'] = $payment_data['payment_channel_id'] ? $payment_data['payment_channel_id'] : 20;   //	支付渠道
-        $transRecord['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($payment_data['payment_channel_id']); //	支付渠道名称
+        $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : 20;   //	支付渠道
+        $transRecord['payment_customer_trans_record_pay_channel'] = OperationPayChannel::get_post_name($transRecord['pay_channel_id']); //	支付渠道名称
 
         //交易方式
         $transRecord["payment_customer_trans_record_mode"] = 3;      //交易方式:1消费,2=充值,3=退款,4=赔偿
@@ -342,8 +347,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 $str .= $value;
             }
         }
-        //1jiajie.com120147795047791消费E家洁5050250
-        //1jiajie.com12014779  47791消费E家洁5050250
+        //1jiajie.com      1205620inc144715045249754977115111000658563退款2E家洁2会员充值渠道2
+        //1jiajie.comsystem1205620inc144715045249754977115111000658563退款2E家洁2会员充值渠道2
         //return $str;
         return md5(md5($str).'1jiajie.com');
     }
@@ -598,7 +603,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         //支付渠道
         $data['pay_channel_id'] = 20;   //支付渠道
-        $data['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($data['pay_channel_id']); //	支付渠道名称
+        $data['payment_customer_trans_record_pay_channel'] = OperationPayChannel::get_post_name($data['pay_channel_id']); //	支付渠道名称
 
         //保留两位小数
         bcscale(2);

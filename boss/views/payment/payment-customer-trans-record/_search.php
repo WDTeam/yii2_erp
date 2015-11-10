@@ -35,23 +35,46 @@ use yii\helpers\Url;
         <div class="col-md-2">
 
             <?php
-            $name = FinanceOrderChannel::getOrderChannelByName($model->order_channel_id);
+            if( !empty($model->order_channel_id) )
+            {
+                $name = $model->getOrderChannelName($model->order_channel_id);
+            }
+            else
+            {
+                $name = '请选择渠道';
+            }
             echo $form->field($model, 'order_channel_id')->widget(Select2::classname(),[
                 'initValueText' => $name, // set the initial display text
-                'attribute'=>'order_channel_id',
+                'attribute'=>'payment_customer_trans_record_order_channel',
                 'model'=>$model,
-                'options' => ['placeholder' => '请选择数据来源 ...'],
+                'options' => ['placeholder' => '请选择渠道 ...'],
+                'data' => $model::getOrderChannelList(),
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 0,
-                    'ajax' => [
-                        'url' => Url::to(['payment/payment/order-channel']),
-                        'dataType' => 'json',
-                        //'data' => new JsExpression('function(params) { return console.log(params);{q:params.term}; }')
-                    ],
-                    //'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                    //'templateResult' => new JsExpression('function(model) { return model.finance_order_channel_name; }'),
-                    //'templateSelection' => new JsExpression('function (model) { return model.finance_order_channel_name; }')
+                ]
+            ]);?>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <?php
+            if( !empty($model->payment_channel_id) )
+            {
+                $name = $model->getPayChannelName($model->pay_channel_id);
+            }
+            else
+            {
+                $name = '请选择支付渠道';
+            }
+            echo $form->field($model, 'pay_channel_id')->widget(Select2::classname(),[
+                'initValueText' => $name, // set the initial display text
+                'attribute'=>'payment_customer_trans_record_pay_channel',
+                'model'=>$model,
+                'options' => ['placeholder' => '请选择支付方式 ...'],
+                'data' => $model::getPayChannelList(),
+                'pluginOptions' => [
+                    'allowClear' => true,
                 ]
             ]);?>
 

@@ -73,9 +73,9 @@ class CouponRuleController extends Controller
            if($dateinfo['CouponRule']['couponrule_classify']==1 && $dateinfo['CouponRule']['couponrule_code_num'] >0){
         		//一码一用
            	$unm=$dateinfo['CouponRule']['couponrule_code_num'];//一码一用数量
-           	$name=$dateinfo['CouponRule']['couponrule_Prefix'];//一码一用前缀
+           	$name=strtolower($dateinfo['CouponRule']['couponrule_Prefix']);//一码一用前缀
            	
-          // 	if(\Yii::$app->redis->EXISTS($name)=='0'){
+           	if(\Yii::$app->redis->EXISTS($name)=='0'){
                /***
                 * 判断rdeis里面是否有此key值 （虽然数据库做了唯一，但是为了异常，这里再次判断）
            		* $rt=\Yii::$app->redis->SCARD($name);//一共有多少的数量
@@ -86,25 +86,19 @@ class CouponRuleController extends Controller
            				\Yii::$app->redis->SADD($name,trim($datainfo));
            			}
            			
-           	/* }elseif(\Yii::$app->redis->EXISTS($name)=='1') {
+           	 }elseif(\Yii::$app->redis->EXISTS($name)=='1') {
            	//	判断rdeis里面是否有此key值 ，如果有，跳转回去
            		\Yii::$app->getSession()->setFlash('default','对不起,此前缀的优惠券库中存在！');
            		return $this->redirect(['index']);	
-           	} */
+           	}
 		    }
-		    
-	
- 
 		    $Couponrule=CouponRuleSearch::couponconfig();
+		    
 		    $model->couponrule_category_name=$Couponrule[2][$dateinfo['CouponRule']['couponrule_category']];
 		    $model->couponrule_type_name=$Couponrule[3][$dateinfo['CouponRule']['couponrule_type']];
-		    
-		    
 		    $model->couponrule_service_type_name='服务类别名称1';
 		    $model->couponrule_commodity_name='商品优惠券名称1';
-		   
 		    
-		   
 		    $model->couponrule_city_id=  $dateinfo['CouponRule']['city_id'];$model->couponrule_city_name=\core\models\operation\OperationArea::getAreaname($dateinfo['CouponRule']['city_id']);
 		    $model->couponrule_promote_type_name=$Couponrule[6][$dateinfo['CouponRule']['couponrule_promote_type']];
 		    $model->couponrule_customer_type=implode(',',$dateinfo['CouponRule']['couponrule_customer_type']);

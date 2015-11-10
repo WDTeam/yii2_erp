@@ -2,6 +2,7 @@
 
 namespace boss\models\order;
 
+use core\models\order\OrderStatusDict;
 use Yii;
 use yii\data\ActiveDataProvider;
 use boss\models\worker\Worker;
@@ -118,6 +119,10 @@ class OrderSearchIndex extends Order
         {
             $statussList = explode('-', $this->statuss);
             if (!empty($statussList)) {
+                if(in_array(OrderStatusDict::ORDER_WORKER_BIND_ORDER,$statussList)){
+                    $statussList[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
+                    $statussList[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
+                }
                 $query->andWhere(['in', 'order_status_dict_id', $statussList]);
             }
         }

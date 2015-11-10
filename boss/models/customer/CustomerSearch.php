@@ -5,8 +5,8 @@ namespace boss\models\customer;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\customer\Customer;
 
+use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 
 /**
@@ -35,7 +35,12 @@ class CustomerSearch extends Customer
 
     public function search($params)
     {
-		$query = Customer::find()->orderBy('created_at desc');
+        $sort_str = 'created_at desc';
+//        if(!empty($_REQUEST['CustomerSort'])){
+//            $sort_str = $_REQUEST['CustomerSort']['field'].' '.$_REQUEST['CustomerSort']['order'];
+//        }
+//		$query = (new \yii\db\Query())->select(['c.* as *', 'count(oec.*) as count'])->from(['c' => //'{{%customer}}'])->leftJoin(['oec' => '{{%order_ext_customer}}'], 'oec.customer_id = c.id')-//>orderBy($sort_str);
+        $query = Customer::find()->orderBy($sort_str);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
