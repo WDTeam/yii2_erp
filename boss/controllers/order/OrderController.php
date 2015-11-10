@@ -291,7 +291,15 @@ class OrderController extends BaseAuthController
         if ($q != null) {
             $condition = 'name LIKE "%' . $q . '%"';
         }
-        $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
+        $is_mini_boss = Yii::$app->user->identity->isMiniBossUser();
+        if($is_mini_boss){
+            $shopResult = Shop::find()
+                ->where($condition)
+                ->andWhere(['id'=>Yii::$app->user->identity->getShopIds])
+                ->select('id, name AS text')->asArray()->all();
+        }else{
+            $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
+        }
         $out['results'] = array_values($shopResult);
         //$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
         return $out;

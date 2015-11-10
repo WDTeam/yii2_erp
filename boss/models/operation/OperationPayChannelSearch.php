@@ -42,7 +42,7 @@ class OperationPayChannelSearch extends OperationPayChannel
     public function search($params)
     {
         $query = OperationPayChannel::find();
-
+        $query= $query->orderBy('operation_pay_channel_type asc');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

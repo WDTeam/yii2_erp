@@ -338,21 +338,6 @@ echo Menu::widget([
                     ],
                     'items' => [
                         [
-                            'label' => '优惠券规则管理',
-                            'url' => [
-                                'operation/coupon/coupon/index'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
-                        [
-                            'label' => '优惠券用户管理',
-                            'url' => [
-                                'operation/coupon/coupon/create'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
-                        
-                        [
                             'label' => '规则管理',
                             'url' => [
                                 'operation/coupon/coupon-rule/index'

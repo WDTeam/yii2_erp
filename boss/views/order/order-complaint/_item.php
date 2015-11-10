@@ -18,7 +18,8 @@ $odercmodel = new OrderComplaint();
 			                        <th class="m_colo">订单状态</th>
 			                    </tr>
 			                    <tr>
-			                    	<td>订单编号：<?= Html::encode($model->order->order_code); ?><br/>
+			                    	<td>订单编号：<?= Html::encode($model->order_code_number); ?><br/>
+			                    		投诉编号：<?= Html::encode($model->complaint_code_number); ?><br/>
 										客户手机：<?= Html::encode($model->complaint_phone); ?><br/>
 										投诉渠道：<?= Html::encode($odercmodel->channel($model->complaint_channel)); ?><br/>
 										投诉部门：<?= Html::encode($odercmodel->section($model->complaint_section)); ?><br/>

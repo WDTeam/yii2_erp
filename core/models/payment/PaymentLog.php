@@ -46,9 +46,8 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
         }catch(Exception $e){
             $param->data['pay_channel_name'] = '未找到渠道';
         }
-
-        //写入数据库日志
-        $this->doSave($param);
+        //写入mongo数据库日志
+        $this->mogonInsert($param->data);
     }
 
     /**
@@ -60,13 +59,13 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
     public function writeTextLog($param)
     {
         //创建目录
-        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/boss_log/'.date('Ym',time()).'/';
+        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/boss_log/pay/'.date('Ym',time()).'/';
         is_dir($path) || mkdir($path,0777,true);
 
         //文件名称
         $filename = !empty($param->data['filename']) ? $param->data['filename'] : date('Y-m-d',time()).'.log';
         //写入数据
-        $fullFileName = $path.$filename;
+        $fullFileName = rtrim($path,'/').'/'.$filename;
         file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
     }
 

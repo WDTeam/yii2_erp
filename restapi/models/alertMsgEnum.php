@@ -63,6 +63,9 @@ class alertMsgEnum
     //用户端首页初始化
     const getUserInitSuccess = '获取用户端初始化信息成功';
     const getUserInitFailed = '获取用户端初始化信息失败';
+    //获取服务类型Item
+    const getServiceItemSuccess = '获取服务类型详情成功';
+    const getServiceItemFailed = '获取服务类型详情失败';
     //阿姨端首页初始化
     const getWorkerInitSuccess = '获取阿姨端初始化信息成功';
     const getWorkerInitFailed = '获取阿姨端初始化信息失败';
@@ -180,6 +183,8 @@ class alertMsgEnum
     const exchangeCouponFailIsdel = '优惠券已删除';
     //优惠券已禁用
     const exchangeCouponDisable = '优惠券已禁用';
+    //输入的优惠码有误
+    const exchangeCouponErrorCoupon = '输入的优惠码有误';
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';

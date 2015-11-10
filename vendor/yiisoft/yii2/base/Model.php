@@ -337,7 +337,6 @@ class Model extends Component implements IteratorAggregate, ArrayAccess, Arrayab
         if (!$this->beforeValidate()) {
             return false;
         }
-
         $scenarios = $this->scenarios();
         $scenario = $this->getScenario();
         if (!isset($scenarios[$scenario])) {
@@ -352,7 +351,6 @@ class Model extends Component implements IteratorAggregate, ArrayAccess, Arrayab
             $validator->validateAttributes($this, $attributeNames);
         }
         $this->afterValidate();
-
         return !$this->hasErrors();
     }
 

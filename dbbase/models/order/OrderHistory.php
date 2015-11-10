@@ -88,6 +88,7 @@ use dbbase\models\ActiveRecord;
  * @property string $worker_type_id
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
+ * @property integer $order_worker_assign_time
  * @property string $shop_id
  * @property string $order_worker_shop_name
  * @property string $checking_id
@@ -119,7 +120,7 @@ class OrderHistory extends ActiveRecord
                 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_change_booked_worker','order_flag_is_checked','order_cancel_cause_id',
                 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time',
                 'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
-                'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
+                'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type','order_worker_assign_time', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money', 'order_booked_count','order_lat','order_lng'], 'number'],
@@ -218,6 +219,7 @@ class OrderHistory extends ActiveRecord
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
+            'order_worker_assign_time' => '接单时间',
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
             'checking_id' => '对账id',
