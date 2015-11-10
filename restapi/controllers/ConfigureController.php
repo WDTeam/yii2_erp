@@ -318,7 +318,7 @@ class ConfigureController extends \restapi\components\Controller
      /**
      * @api {GET} /configure/get-service-item [GET] /configure/get-service-item （0%）
      * @apiDescription 根据城市名称和服务类型获取对应的服务品类 (田玉星)
-     * @apiName actionWorkerCheckUpdate
+     * @apiName actionGetServiceItem
      * @apiGroup configure
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} category_id 服务类型
