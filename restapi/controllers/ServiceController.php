@@ -969,19 +969,13 @@ class ServiceController extends \restapi\components\Controller
      *       "code": 1,
      *       "msg": "获取商圈信息成功",
      *       "ret": {
-     *           "page": "第几页",
-     *           "pageNum": "每页显示多少条",
-     *           "data": [
-     *               {
-     *                   "id": "阿姨表自增id",
-     *                   "worker_name": "阿姨姓名",
-     *                   "worker_photo": "阿姨手机",
-     *                   "worker_star": "阿姨星级",
-     *                   "updated_at": "最后更新时间",
-     *                   "worker_server_num": "阿姨服务次数",
-     *                   "worker_comment_score": "阿姨评论评分"
-     *               }
-     *           ]
+     *           "id": "1",
+     *           "operation_shop_district_id": "商圈id",
+     *           "operation_shop_district_name": "商圈名称",
+     *           "operation_city_id": "城市编号",
+     *           "operation_city_name": "城市名称",
+     *           "operation_area_id": "区域id",
+     *           "operation_area_name": "区域名称"
      *       },
      *       "alertMsg": "获取商圈信息成功"
      *   }
@@ -990,12 +984,12 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
-     *       {
-     *           "code": 0,
-     *           "msg": "获取商圈信息失败",
-     *           "ret": {},
-     *           "alertMsg": "获取商圈信息失败"
-     *       }
+     *   {
+     *       "code": 0,
+     *       "msg": "商圈不存在",
+     *       "ret": {},
+     *       "alertMsg": "商圈不存在"
+     *   }
      */
      public function actionGetShopDistrictInfo()
     {
