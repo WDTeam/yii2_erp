@@ -6,6 +6,7 @@ use core\models\operation\OperationPlatformVersion;
 use core\models\operation\OperationAdvertPosition;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "{{%operation_advert_release}}".
@@ -61,7 +62,7 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
         if (!isset($city_name) || $city_name == '' || !isset($platform_name) || $platform_name == '' || !isset($platform_version_name) || $platform_version_name=="") {
             return ['code' => self::MISSING_PARAM, 'errmsg' => '参数不正确'];
         }
-
+        //北京市--ios--4.4--banner
         $platform_id = OperationPlatformVersion::getPlatformId($platform_name, $platform_version_name);
         if ($platform_id == false) {
             return ['code' => self::EMPTY_CONTENT, 'errmsg' => '没有对应数据'];
@@ -71,7 +72,7 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
         if ($position_id == false) {
             return ['code' => self::EMPTY_CONTENT, 'errmsg' => '没有对应数据'];
         }
-
+        
         $query = new \yii\db\Query();
         $query = $query->select([
             'oar.advert_release_order',

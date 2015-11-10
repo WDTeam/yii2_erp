@@ -34,8 +34,8 @@ class OperationPlatformVersion extends \dbbase\models\operation\OperationPlatfor
             ])
             ->one();
 
-        if (isset($data['id']) && $data['id'] > 0) {
-            return $data['id'];
+        if (isset($data['operation_platform_id']) && $data['operation_platform_id'] > 0) {
+            return $data['operation_platform_id'];
         } else {
             return false;
         }

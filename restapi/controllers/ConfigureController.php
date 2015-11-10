@@ -250,6 +250,7 @@ class ConfigureController extends \restapi\components\Controller
                 $pic_list["url_title"] = $val['operation_advert_content_name'];
             }
         }
+        print_R($pic_list);die;
         //页首链接
         $header_link = [
             'comment_link' => [
@@ -264,23 +265,23 @@ class ConfigureController extends \restapi\components\Controller
             ],
         ];
         //获取首页轮播图
-        $pic_list = [
-            [
-                "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-                "link" => "http://wap.1jiajie.com/trainAuntie1.html",
-                "url_title" => "标准服务"
-            ],
-            [
-                "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-                "link" => "http://wap.1jiajie.com/pledge.html",
-                "url_title" => "服务承诺"
-            ],
-            [
-                "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-                "link" => "",
-                "url_title" => ""
-            ]
-        ];
+//        $pic_list = [
+//            [
+//                "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+//                "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+//                "url_title" => "标准服务"
+//            ],
+//            [
+//                "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+//                "link" => "http://wap.1jiajie.com/pledge.html",
+//                "url_title" => "服务承诺"
+//            ],
+//            [
+//                "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+//                "link" => "",
+//                "url_title" => ""
+//            ]
+//        ];
         //服务分类
         $home_order_server = [
             [
