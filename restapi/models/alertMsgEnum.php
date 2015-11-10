@@ -63,6 +63,9 @@ class alertMsgEnum
     //用户端首页初始化
     const getUserInitSuccess = '获取用户端初始化信息成功';
     const getUserInitFailed = '获取用户端初始化信息失败';
+    //获取服务类型Item
+    const getServiceItemSuccess = '获取服务类型详情成功';
+    const getServiceItemFailed = '获取服务类型详情失败';
     //阿姨端首页初始化
     const getWorkerInitSuccess = '获取阿姨端初始化信息成功';
     const getWorkerInitFailed = '获取阿姨端初始化信息失败';

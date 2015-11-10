@@ -198,7 +198,7 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-        if(!isset($param['city_name'])||!intval($param['city_name'])){
+        if(!isset($param['city_name'])||!$param['city_name']){
             $param['city_name'] = "北京市";
         }
         if(!isset($param['platform_version'])||!$param['platform_version']){
@@ -315,7 +315,72 @@ class ConfigureController extends \restapi\components\Controller
         ];
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
     }
-
+     /**
+     * @api {GET} /configure/get-service-item [GET] /configure/get-service-item （0%）
+     * @apiDescription 根据城市名称和服务类型获取对应的服务品类 (田玉星)
+     * @apiName actionWorkerCheckUpdate
+     * @apiGroup configure
+     * @apiParam {String} city_name 城市名称
+     * @apiParam {String} category_id 服务类型
+     * @apiParam {String} [platform_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *      "code": 1,
+     *      "msg": "获取数据成功",
+     *      "alertMsg": "获取服务类型详情成功",
+     *       "ret": [
+     *           {
+     *               "good_id": "商品ID",
+     *               "goods_name": "商品名称",
+     *               "colour": "颜色",
+     *               "icon": "商品图标",
+     *               "goods_price":"商品价格",
+     *               "goods_price_description":"商品价格描述"
+     *           }
+     *       ]
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "code": 0,
+     *       "msg": "城市名称参数错误",
+     *       "ret": {},
+     *       "alertMsg": "获取服务类型详情失败"
+     *   }
+     *
+     */
+    public function  actionGetServiceItem(){
+        $param = Yii::$app->request->get();
+        if(!isset($param['city_name'])||!$param['city_name']){
+             return $this->send(null, '城市名称参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
+        }
+        if(!isset($param['category_id'])||!$param['category_id']){
+            return $this->send(null, '服务类型参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
+        }
+        try{
+            $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'],intval($param['category_id']));
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
+        }
+        $itemlist = array();
+        if($itemInfo){
+            foreach($itemInfo as $key=>$val){
+                $itemlist[$key]['good_id'] = $val['goods_id'];
+                $itemlist[$key]['goods_name'] = $val['operation_goods_name'];
+                $itemlist[$key]['colour'] = "dfffrf";
+                $itemlist[$key]['icon'] = $val['operation_goods_pc_ico'];
+                $itemlist[$key]['goods_price'] = $val['operation_goods_price'];
+                $itemlist[$key]['goods_price_description'] = $val['operation_goods_price_description'];
+            }
+        }
+        return $this->send($itemlist, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
+    }
+    
+    
+    
     /**
      * @api {GET} /configure/worker-check-update [GET] /configure/worker-check-update （0%）
      * @apiDescription 检查阿姨端版本更新 (赵顺利)
