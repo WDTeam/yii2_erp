@@ -94,6 +94,7 @@ class Order extends ActiveRecord
     public $card_id;
     public $order_use_card_money;
     public $coupon_id;
+    public $order_coupon_code;
     public $order_use_coupon_money;
     public $promotion_id;
     public $order_use_promotion_money;
@@ -151,6 +152,7 @@ class Order extends ActiveRecord
         'card_id',
         'order_use_card_money',
         'coupon_id',
+        'order_coupon_code',
         'order_use_coupon_money',
         'promotion_id',
         'order_use_promotion_money',
@@ -290,6 +292,7 @@ class Order extends ActiveRecord
             'card_id' => '服务卡ID',
             'order_use_card_money' => '使用服务卡金额',
             'coupon_id' => '优惠券ID',
+            'order_coupon_code' => '优惠码',
             'order_use_coupon_money' => '使用优惠卷金额',
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',

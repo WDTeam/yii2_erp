@@ -17,6 +17,7 @@ use dbbase\models\ActiveRecord;
  * @property string $card_id
  * @property string $order_use_card_money
  * @property string $coupon_id
+ * @property string $order_coupon_code
  * @property string $order_use_coupon_money
  * @property string $promotion_id
  * @property string $order_use_promotion_money
@@ -48,7 +49,7 @@ class OrderExtPay extends ActiveRecord
             [['order_pay_type'],'required'],
             [['order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'created_at', 'updated_at'], 'integer'],
             [['order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
-            [['order_pay_channel_name'], 'string', 'max' => 128],
+            [['order_pay_channel_name','order_coupon_code'], 'string', 'max' => 128],
             [['order_pay_flow_num'], 'string', 'max' => 255]
         ];
     }
@@ -69,6 +70,7 @@ class OrderExtPay extends ActiveRecord
             'card_id' => '服务卡ID',
             'order_use_card_money' => '使用服务卡金额',
             'coupon_id' => '优惠券ID',
+            'order_coupon_code' => '优惠码',
             'order_use_coupon_money' => '使用优惠卷金额',
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',
