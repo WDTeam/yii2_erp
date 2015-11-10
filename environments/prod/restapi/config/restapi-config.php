@@ -87,5 +87,6 @@ $config = [
         ],
     ]
 ];
-
+$config['params']['apiPopKey'] = 'pop-to-boss';
+$config['params']['apiSecretKey'] = 'pop-to-boss';
 return $config;
