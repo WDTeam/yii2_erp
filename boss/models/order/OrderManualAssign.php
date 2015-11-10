@@ -67,7 +67,7 @@ class OrderManualAssign extends OrderManualAssignModel
     public static function searchAssignWorker($order_id,$worker_name,$phone)
     {
         $order = OrderSearch::getOne($order_id);
-        $worker_list = parent::searchAssignWorker($worker_name, $phone);
+        $worker_list = parent::searchWorker($worker_name, $phone);
         if($worker_list){
             $workers = self::_formatWorker($order, $worker_list);
             return ['code' => 200, 'data' => $workers];

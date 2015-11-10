@@ -159,7 +159,7 @@ class OrderManualAssign extends Model
      * @param $phone
      * @return array
      */
-    public static function searchAssignWorker($worker_name,$phone)
+    public static function searchWorker($worker_name,$phone)
     {
         try {
             return Worker::searchWorker($worker_name, $phone);
