@@ -2121,6 +2121,21 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionGetOrderChannelList()
     {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //pop访问时可以不用输入access_token（用本身的验证加密方法）
+        $apiPopKey = Yii::$app->params["apiPopKey"];
+        $apiSecretKey= Yii::$app->params["apiSecretKey"];
+        $sign=  isset($param["sign"])?$param["sign"]:"";
+        $nonce =  isset($param["nonce"])?$param["nonce"]:"";
+        $arrParams = array();
+        $arrParams["sign"]=$sign; 
+        $arrParams["nonce"]=$nonce; 
+        $arrParams["api_key"]=$apiPopKey; 
+        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+        $bolCheck = $objSign->checkSignature($arrParams);
+        if(!$bolCheck){
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+        }
         $orderChannels = FinanceOrderChannel::get_order_channel_list();
         $gDate = [];
         if (!empty($orderChannels)) {
