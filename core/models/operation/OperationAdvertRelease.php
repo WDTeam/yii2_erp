@@ -58,7 +58,7 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
      */
     public static function getCityAdvertInfo($city_name, $platform_name, $platform_version_name, $position_name = 'banner')
     {
-        if (!isset($city_name) || $city_name == '' || !isset($platform_name) || $platform_name == '' || !isset($platform_version_name) || $platform_version_name) {
+        if (!isset($city_name) || $city_name == '' || !isset($platform_name) || $platform_name == '' || !isset($platform_version_name) || $platform_version_name=="") {
             return ['code' => self::MISSING_PARAM, 'errmsg' => '参数不正确'];
         }
 

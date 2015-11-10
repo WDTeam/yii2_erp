@@ -242,14 +242,12 @@ class ConfigureController extends \restapi\components\Controller
         }
         
         //整理焦点图
-                print_R($bannerList);die;
-
         $pic_list = array();
-        if(!isset($bannerList['code'])||!empty($bannerList)){
+        if(!isset($bannerList['code'])&&!empty($bannerList)){
             foreach($bannerList as $key=>$val){
-                $pic_list["img_path"] = "http://webapi2.1jiajie.com/app/images/ios_banner_1.png";
-                $pic_list["link"] = "http://wap.1jiajie.com/trainAuntie1.html";
-                $pic_list["url_title"] = "标准服务";
+                $pic_list["img_path"] = $val['operation_advert_picture_text'];
+                $pic_list["link"] = $val['operation_advert_url'];
+                $pic_list["url_title"] = $val['operation_advert_content_name'];
             }
         }
         //页首链接
