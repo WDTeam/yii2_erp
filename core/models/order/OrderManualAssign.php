@@ -7,6 +7,7 @@
  */
 namespace core\models\order;
 
+use core\models\worker\Worker;
 use Yii;
 use yii\base\Model;
 
@@ -20,7 +21,7 @@ class OrderManualAssign extends Model
      * @param $admin_id 操作人id
      * @return $this|static
      */
-    public static function getWaitCSAssignOrder($admin_id)
+    public static function getWaitAssignOrder($admin_id)
     {
         $result_order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
             ['>', 'order_booked_begin_time', time()] //服务开始时间大于当前时间
@@ -78,7 +79,7 @@ class OrderManualAssign extends Model
      * @param $district_ids 商圈id
      * @return $this|static
      */
-    public static function getWaitMiniBossAssignOrder($admin_id,$district_ids)
+    public static function getMiniBossWaitAssignOrder($admin_id,$district_ids)
     {
 
         $result_order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
