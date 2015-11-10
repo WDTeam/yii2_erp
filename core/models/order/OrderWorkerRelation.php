@@ -85,6 +85,20 @@ class OrderWorkerRelation extends OrderWorkerRelationModel
     }
 
     /**
+     * 极光推送失败
+     * @param $order_id
+     * @param $worker_id
+     * @param $admin_id
+     * @return bool
+     */
+    public static function jpushPushFailure($order_id,$worker_id,$admin_id)
+    {
+        $status = OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS;
+        $memo = 'JPUSH推送失败';
+        return self::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,$admin_id);
+    }
+
+    /**
      * 添加订单和阿姨的关系信息
      * @param $order_id
      * @param $worker_id
