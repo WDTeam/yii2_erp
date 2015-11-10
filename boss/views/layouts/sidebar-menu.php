@@ -285,6 +285,36 @@ echo Menu::widget([
                         
                     ]
                 ],
+    		[
+    		'label' => '渠道管理',
+    		'url' => [
+    		'#'
+    				],
+    				'icon' => 'fa fa-angle-right',
+    				'options' => [
+    				'class' => 'treeview '
+    						],
+    						'items' => [
+    						[
+    						'label' => '订单渠道管理',
+    						'url' => [
+    						'operation/operation-order-channel'
+    								],
+    								'icon' => 'fa fa-angle-right'
+    										],
+				    		[
+				    		'label' => '支付渠道管理',
+				    		'url' => [
+				    		'operation/operation-pay-channel'
+				    				],
+				    				'icon' => 'fa fa-angle-right'
+				    						],
+    		
+    		
+    	
+    																						]
+    																						],
+    		
                 [
                     'label' => 'CMS管理',
                     'url' => [

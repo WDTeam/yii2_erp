@@ -7,15 +7,12 @@ use kartik\date\DatePicker;
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 use boss\components\AreaCascade;
 
-//use core\models\operation\OperationShopDistrictGoods;
 
-	
 
 $configdate=CouponRuleSearch::couponconfig();
 $model->couponrule_classify=1;
 $model->couponrule_category=1;
 $model->couponrule_type=1;
-
 $model->is_disabled=1;
 $model->couponrule_city_limit=1;
 $model->couponrule_customer_type=1;
@@ -30,11 +27,8 @@ $model->couponrule_promote_type=1;
 
 <div class="coupon-rule-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]);  ?>
     
-    
-    		?>
-    		
     		<div class="panel-body">
     		<?
     		echo Form::widget([
@@ -89,21 +83,15 @@ $model->couponrule_promote_type=1;
     		'prompt' => '商品类型',
     		],
     		],
-    		
-
+    	
     		'couponrule_city_limit'=>[
     		'type'=> Form::INPUT_RADIO_LIST,
     		'items'=>$configdate[4],'options'=>[]],
-    		
-    	]
-]);
-?>	
-
-
-
-
-<?php
-echo AreaCascade::widget([
+	    	]
+			]);
+			?>	
+    <?php
+     echo AreaCascade::widget([
 		'model' => $model,
 		'options' => ['class' => 'form-control'],
 		'label' =>'选择城市',
@@ -111,87 +99,66 @@ echo AreaCascade::widget([
 		]);
         ?>
 
-   
-        
-        
-        
-
-    		<!-- 'couponrule_city_id'=>[
-    		'type' => Form::INPUT_DROPDOWN_LIST,
-    		'items' => ['1'=>'北京','2'=>'天津'],
-    		'options' => [
-    		'prompt' => '请选择地区',
-    		],
-    		], -->
-
-<?
-    		echo Form::widget([
+			<? echo Form::widget([
     		 		'model' => $model,
     		 		'form' => $form,
     		 		'columns' => 1,
     		 		'attributes' => [
-
-
-    		'couponrule_customer_type'=>[
-    		'type'=> Form::INPUT_CHECKBOX_LIST,
-    		'items'=>$configdate[5],'options'=>[]],
-
-			'couponrule_promote_type'=>[
-			'type'=> Form::INPUT_RADIO_LIST,
-			'items'=>$configdate[6],'options'=>[]],
-    		]
-    		]);
-    ?>
+		    		'couponrule_customer_type'=>[
+		    		'type'=> Form::INPUT_CHECKBOX_LIST,
+		    		'items'=>$configdate[5],'options'=>[]],
+					'couponrule_promote_type'=>[
+					'type'=> Form::INPUT_RADIO_LIST,
+					'items'=>$configdate[6],'options'=>[]],
+		    		]
+		    		]);
+   			 ?>
     	 
-    	<?= $form->field($model, 'couponrule_get_start_time')->widget(DatePicker::classname(), 		[
-    		'name' => 'couponrule_get_start_time',
-    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-    		'pluginOptions' => [
-    		'autoclose' => true,
-    		'format' => 'yyyy-mm-dd'
-    		]
-            ]);  ?>
+		    		<?= $form->field($model, 'couponrule_get_start_time')->widget(DatePicker::classname(), 		[
+		    		'name' => 'couponrule_get_start_time',
+		    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+		    		'pluginOptions' => [
+		    		'autoclose' => true,
+		    		'format' => 'yyyy-mm-dd'
+		    		]
+		            ]);  
+		    		?>
     	
-    	
-    	<?= $form->field($model, 'couponrule_get_end_time')->widget(DatePicker::classname(), 		[
-    		'name' => 'couponrule_get_start_time',
-    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-    		'pluginOptions' => [
-    		'autoclose' => true,
-    		'format' => 'yyyy-mm-dd'
-    		]
-            ]);  ?>
-    			  
-    	
-    	<?= $form->field($model, 'couponrule_use_start_time')->widget(DatePicker::classname(), 		[
-    		'name' => 'couponrule_get_start_time',
-    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-    		'pluginOptions' => [
-    		'autoclose' => true,
-    		'format' => 'yyyy-mm-dd'
-    		]
-            ]);  ?>
-    		     
-    		 
-    	<?= $form->field($model, 'couponrule_use_end_time')->widget(DatePicker::classname(), 		[
-    		'name' => 'couponrule_get_start_time',
-    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-    		'pluginOptions' => [
-    		'autoclose' => true,
-    		'format' => 'yyyy-mm-dd'
-    		]
-            ]);  ?>
+			    	<?= $form->field($model, 'couponrule_get_end_time')->widget(DatePicker::classname(), 		[
+			    		'name' => 'couponrule_get_start_time',
+			    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+			    		'pluginOptions' => [
+			    		'autoclose' => true,
+			    		'format' => 'yyyy-mm-dd'
+			    		]
+			            ]);  
+			    	?>
+			    	<?= $form->field($model, 'couponrule_use_start_time')->widget(DatePicker::classname(), 		[
+			    		'name' => 'couponrule_get_start_time',
+			    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+			    		'pluginOptions' => [
+			    		'autoclose' => true,
+			    		'format' => 'yyyy-mm-dd'
+			    		]
+			            ]);  
+			    	?>
+			    	<?= $form->field($model, 'couponrule_use_end_time')->widget(DatePicker::classname(), 		[
+			    		'name' => 'couponrule_get_start_time',
+			    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+			    		'pluginOptions' => [
+			    		'autoclose' => true,
+			    		'format' => 'yyyy-mm-dd'
+			    		]
+			            ]);  
+			    	?>
     		     		 
-    		 
-    <?		 
-    		 echo Form::widget([
+    			    <?   echo Form::widget([
     		 		'model' => $model,
     		 		'form' => $form,
     		 		'columns' => 1,
     		 		'attributes' => [
 'couponrule_use_end_days'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'领取后过期天数...']], 
 'couponrule_order_min_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'满减或每减时订单最小金额...', 'maxlength'=>8]], 
-
     ]
     ]);		 
     		 
