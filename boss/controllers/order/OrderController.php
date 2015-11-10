@@ -5,11 +5,11 @@ namespace boss\controllers\order;
 use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
 use boss\models\order\Order;
+use boss\models\order\OrderManualAssign;
 
 use core\models\customer\CustomerAddress;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderDispatcherKpi;
-use core\models\order\OrderManualAssign;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use core\models\customer\Customer;
@@ -19,7 +19,6 @@ use core\models\system\SystemUser;
 
 use dbbase\models\order\OrderOtherDict;
 use dbbase\models\order\OrderStatusDict;
-use dbbase\models\order\OrderExtPay;
 
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
@@ -38,6 +37,10 @@ class OrderController extends BaseAuthController
 //        return Order::serviceStart(2);
     }
 
+    /**
+     * 取消订单
+     * @return bool
+     */
     public function actionCancelOrder()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -57,6 +60,10 @@ class OrderController extends BaseAuthController
         return $result;
     }
 
+    /**
+     * 根据手机号获取客户信息
+     * @return array|bool
+     */
     public function actionCustomer()
     {
         $phone = Yii::$app->request->get('phone');
@@ -71,6 +78,11 @@ class OrderController extends BaseAuthController
 
     }
 
+    /**
+     * 获取客户地址
+     * @param $id
+     * @return array
+     */
     public function actionCustomerAddress($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -84,12 +96,21 @@ class OrderController extends BaseAuthController
         return $address;
     }
 
+    /**
+     * 获取常用阿姨
+     * @param $id
+     * @return array
+     */
     public function actionCustomerUsedWorkers($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Customer::getCustomerUsedWorkers($id);
     }
 
+    /**
+     * 根据手机号查询阿姨
+     * @return array
+     */
     public function actionWorker()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -97,6 +118,10 @@ class OrderController extends BaseAuthController
         return Order::getWorkerInfoByPhone($phone);
     }
 
+    /**
+     * 获取服务项目
+     * @return array
+     */
     public function actionGetGoods()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -105,6 +130,10 @@ class OrderController extends BaseAuthController
         return Order::getGoods($longitude, $latitude);
     }
 
+    /**
+     * 根据省份获取城市
+     * @return array
+     */
     public function actionGetCity()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -112,6 +141,10 @@ class OrderController extends BaseAuthController
         return Order::getOnlineCityList($province_id);
     }
 
+    /**
+     * 根据城市获取区县
+     * @return array
+     */
     public function actionGetCounty()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -119,6 +152,10 @@ class OrderController extends BaseAuthController
         return Order::getCountyList($city_id);
     }
 
+    /**
+     * 获取可下单时间
+     * @return array
+     */
     public function actionGetTimeRangeList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -144,6 +181,11 @@ class OrderController extends BaseAuthController
         return false;
     }
 
+    /**
+     * 获取服务卡信息
+     * @param $id
+     * @return string
+     */
     public function actionCards($id)
     {
         return '[
@@ -174,45 +216,10 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $is_mini_boss = \Yii::$app->user->identity->isMiniBossUser();
-        $order = OrderManualAssign::getWaitManualAssignOrder(Yii::$app->user->id, $is_mini_boss);
-        if ($order) {
-            $week = ['日', '一', '二', '三', '四', '五', '六'];
-            $booked_time_range = date("Y-m-d  （周", $order->order_booked_begin_time) . $week[date('w', $order->order_booked_begin_time)] . date('）  H:i-', $order->order_booked_begin_time) . date('H:i', $order->order_booked_end_time);
-            $ext_pay = $order->orderExtPay;
-            if ($order->order_is_parent > 0) {
-                $orders = OrderSearch::getChildOrder($order->id);
-                foreach ($orders as $child) {
-                    $order->order_money += $child->order_money;
-                    if ($ext_pay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE) {
-                        $ext_pay->order_pay_money += $child->orderExtPay->order_pay_money;
-                        $ext_pay->order_use_acc_balance += $child->orderExtPay->order_use_acc_balance;
-                        $ext_pay->order_use_card_money += $child->orderExtPay->order_use_card_money;
-                        $ext_pay->order_use_coupon_money += $child->orderExtPay->order_use_coupon_money;
-                        $ext_pay->order_use_promotion_money += $child->orderExtPay->order_use_promotion_money;
-                    }
-                    $booked_time_range .= '<br/>' . date("Y-m-d  （周", $child->order_booked_begin_time) . $week[date('w', $child->order_booked_begin_time)] . date('）  H:i-', $child->order_booked_begin_time) . date('H:i', $child->order_booked_end_time);
-                }
-            }
-            $workers = [];
-            if ($order->order_booked_worker_id > 0) {
-                $worker_list = Worker::getWorkerStatInfo($order->order_booked_worker_id);
-                if (!empty($worker_list)) {
-                    $workers = Order::assignWorkerFormat($order, [$worker_list]);
-                }
-            }
-            return
-                [
-                    'order' => $order,
-                    'ext_pay' => $ext_pay,
-                    'ext_pop' => $order->orderExtPop,
-                    'ext_customer' => $order->orderExtCustomer,
-                    'ext_flag' => $order->orderExtFlag,
-                    'operation_long_time' => Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME'],
-                    'booked_time_range' => $booked_time_range,
-                    'booked_workers' => $workers
-                ];
-        } else {
-            return false;
+        if($is_mini_boss) {
+            return OrderManualAssign::getWaitMiniBossAssignOrder(Yii::$app->user->id);
+        }else {
+            return OrderManualAssign::getWaitCSAssignOrder(Yii::$app->user->id);
         }
     }
 
@@ -224,25 +231,7 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id = Yii::$app->request->get('order_id');
-        $order = Order::findOne($order_id);
-        $district_id = $order->district_id;
-        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
-        try {
-            if ($order->order_is_parent == 1) {
-                $childs = OrderSearch::getChildOrder($order_id);
-                $times = [['orderBookBeginTime' => $order->order_booked_begin_time, 'orderBookEndTime' => $order->order_booked_end_time]];
-                foreach ($childs as $child) {
-                    $times[] = ['orderBookBeginTime' => $child->order_booked_begin_time, 'orderBookEndTime' => $child->order_booked_end_time];
-                }
-                $worker_list = array_merge(Worker::getDistrictCycleFreeWorker($district_id, 1, $times), Worker::getDistrictCycleFreeWorker($district_id, 2, $times));
-            } else {
-                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
-            }
-        } catch (Exception $e) {
-            return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
-        }
-        $workers = Order::assignWorkerFormat($order, $worker_list);
-        return ['code' => 200, 'data' => $workers];
+        return OrderManualAssign::getCanAssignWorkerList($order_id);
 
     }
 
@@ -256,17 +245,7 @@ class OrderController extends BaseAuthController
         $order_id = Yii::$app->request->get('order_id');
         $phone = Yii::$app->request->get('phone');
         $worker_name = Yii::$app->request->get('worker_name');
-        $order = Order::findOne($order_id);
-        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
-        try {
-            $worker_list = Worker::searchWorker($worker_name, $phone);
-        } catch (Exception $e) {
-            return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
-        }
-        $workers = Order::assignWorkerFormat($order, $worker_list);
-        return ['code' => 200, 'data' => $workers];
-
-
+        return OrderManualAssign::searchAssignWorker($order_id,$worker_name,$phone);
     }
 
     /**
