@@ -7,7 +7,9 @@
  */
 namespace boss\models\order;
 
+use core\models\customer\Customer;
 use core\models\order\OrderManualAssign as OrderManualAssignModel;
+use core\models\order\OrderWorkerRelation;
 use Yii;
 
 class OrderManualAssign extends OrderManualAssignModel
