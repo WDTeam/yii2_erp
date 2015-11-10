@@ -15,7 +15,11 @@ class m150928_104616_create_table_payment_customer_trans_record_log extends Migr
 
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
-            'order_id' => Schema::TYPE_STRING . '(30) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'订单编号\'' ,
+            'order_batch_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'周期订单编号\'' ,
+
+
             'order_channel_id' => Schema::TYPE_SMALLINT . '(6) unsigned DEFAULT 0 NOT NULL COMMENT \'订单渠道\'' ,
             'payment_customer_trans_record_order_channel'  => Schema::TYPE_STRING . '(30) COMMENT \'订单渠道名称\'',
             'pay_channel_id'  => Schema::TYPE_SMALLINT . '(6) unsigned NOT NULL COMMENT \'支付渠道\'',
