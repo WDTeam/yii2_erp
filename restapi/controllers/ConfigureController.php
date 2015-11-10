@@ -210,7 +210,7 @@ class ConfigureController extends \restapi\components\Controller
         if(isset($param['platform_version'])&&$param['platform_version']){
             $platform = explode("_",$param['platform_version']);
             $platform_name = $platform[0];
-            $platform_version_name = ltrim($platform[1],"user");
+            $platform_version_name = $platform[1];
         }
         //判断token是否有效
         $isEffect="0";
