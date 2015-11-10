@@ -119,8 +119,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             }
             */
             //组装数据
-            $transRecord['admin_id'] = Yii::$app->user->id;           //管理员ID
-            $transRecord['admin_name'] = Yii::$app->user->identity->username;           //管理员名称
+            $transRecord['admin_id'] = !empty(Yii::$app->user->id) ? Yii::$app->user->id : '0';             //管理员ID
+            $transRecord['admin_name'] = !empty(Yii::$app->user->identity->username) ? Yii::$app->user->identity->username : 'system';           //管理员名称
             $transRecord['order_code'] = $data['order_code'];           //订单编号
             $transRecord['order_batch_code'] = $data['order_batch_code'];           //周期订单编号
             $transRecord["payment_customer_trans_record_mode"] = 1;      //交易方式:1消费,2=充值,3=退款,4=赔偿
