@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
+    		'buttons1'=>'{update}',
             'hover'=>true,
             'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
             'panel'=>[
@@ -26,14 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'operation_order_channel_name',
-			[
+    		[
 			'format' => 'raw',
 			'label' => '订单渠道类别',
 			'attribute'=>'operation_order_channel_type',
 			'type'=> DetailView::INPUT_RADIO_LIST,
 			'items'=>OperationOrderChannelSearch::configorder(),
 			],
-            'operation_order_channel_type',
+    		
             'operation_order_channel_rate',
         ],
         'deleteOptions'=>[
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+       'enableEditMode'=>true,
     ]) ?>
 
 </div>
