@@ -24,7 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'operation_pay_channel_name',
     		[
     		'format' => 'raw',
     		'label' => '订单渠道类别',
@@ -34,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		},
     		'width' => "100px",
     		],
+    		'operation_pay_channel_name',
             'operation_pay_channel_rate',
             'system_user_name', 
             'create_time:datetime', 
