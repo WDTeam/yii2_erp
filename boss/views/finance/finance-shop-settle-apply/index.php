@@ -3,7 +3,7 @@
 
 use kartik\grid\GridView;
 
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 use core\models\finance\FinanceShopSettleApplySearch;
 
 use yii\widgets\Pjax;
@@ -12,14 +12,14 @@ use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var core\models\finance\FinanceSettleApplySearch $searchModel
+ * @var core\models\finance\FinanceWorkerSettleApplySearch $searchModel
  */
 
 $this->title = Yii::t('finance', '门店结算');
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['review_section']=$searchModel->review_section;
 //是否需要进行财务打款确认
-$isFinacePayedConfirm = ($searchModel->finance_shop_settle_apply_status == FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED);
+$isFinacePayedConfirm = ($searchModel->finance_shop_settle_apply_status == FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED);
 $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
 ?>
 <form id ="financeSettleApplyForm">
@@ -45,7 +45,7 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
                 'finance_shop_settle_apply_fee_per_order', 
                 'finance_shop_settle_apply_fee',
                 ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
-                ['attribute'=>'comment','hidden'=>$searchModel->finance_shop_settle_apply_status != FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED],
+                ['attribute'=>'comment','hidden'=>$searchModel->finance_shop_settle_apply_status != FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED],
                 [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',
