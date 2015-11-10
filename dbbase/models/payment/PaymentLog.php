@@ -5,6 +5,7 @@ namespace dbbase\models\payment;
 use dbbase\models\finance\FinancePayChannel;
 
 use Yii;
+use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%payment_log}}".
@@ -52,6 +53,24 @@ class PaymentLog extends \yii\db\ActiveRecord
     {
         $this->attributes = $param->data;
         $this->save(false);
+    }
+
+    /**
+     * 插入mogon
+     * @param $data
+     */
+    public function mogonInsert($data)
+    {
+        try{
+            $mongo = \Yii::$app->mongodb;
+            $collection = $mongo->getCollection('payment_log');
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['create_time'] = time();
+            print_r($data);exit;
+            return $collection->insert($data);
+        }catch(Exception $e){
+
+        }
     }
 
 
