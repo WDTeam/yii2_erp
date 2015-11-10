@@ -2,7 +2,7 @@
 
 namespace boss\models\payment;
 
-use core\models\finance\FinancePayChannel;
+use core\models\operation\OperationPayChannel;
 
 use Yii;
 use yii\base\ErrorException;
@@ -32,7 +32,7 @@ class Payment extends \core\models\payment\Payment
      */
     public function getPayChannelName($id)
     {
-        return FinancePayChannel::getPayChannelByName($id);
+        return OperationPayChannel::get_post_name($id);
     }
 
     /**
@@ -41,7 +41,7 @@ class Payment extends \core\models\payment\Payment
      */
     public static function getPayChannelList()
     {
-        return FinancePayChannel::get_pay_channel_list();
+        return OperationPayChannel::getpaychannellist('all');
     }
 
     /**

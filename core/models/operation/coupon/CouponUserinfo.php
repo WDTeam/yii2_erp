@@ -68,6 +68,19 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		}
 		
 		
+		//从redis查询优惠码是否存在
+		$couponislock=\Yii::$app->redis->SISMEMBER($coupon,$code);//查询优惠券还剩多少();
+		if($couponislock=='0'){
+			$array=[
+			'is_status'=>4020,
+			'msg'=>'输入的优惠码有误',
+			'data'=>false,
+			];
+			return $array;
+		}
+		
+		
+		
 		
 		 $code_able = self::checkCouponIsclok($code);
 		 

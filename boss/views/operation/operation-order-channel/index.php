@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-    		'operation_order_channel_name',
     		[
     		'format' => 'raw',
     		'label' => '订单渠道类别',
@@ -25,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		},
     		'width' => "100px",
     		],
+    		'operation_order_channel_name',
             'operation_order_channel_rate',
             'system_user_name', 
             'create_time:datetime',  

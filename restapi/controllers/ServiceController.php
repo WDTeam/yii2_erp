@@ -12,6 +12,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\OperationSelectedService;
 use \core\models\customer\CustomerAddress;
 use \restapi\models\alertMsgEnum;
+use \restapi\models\EjjEncryption;
 
 
 class ServiceController extends \restapi\components\Controller
@@ -620,8 +621,27 @@ class ServiceController extends \restapi\components\Controller
     function actionSingleServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //pop访问时可以不用输入access_token（用本身的验证加密方法）
+        $apiPopKey = Yii::$app->params["apiPopKey"];
+        $apiSecretKey= Yii::$app->params["apiSecretKey"];
+        $sign=  isset($param["sign"])?$param["sign"]:"";
+        $nonce =  isset($param["nonce"])?$param["nonce"]:"";
+        $arrParams = array();
+        $arrParams["sign"]=$sign; 
+        $arrParams["nonce"]=$nonce; 
+        $arrParams["api_key"]=$apiPopKey; 
+        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+        $bolCheck = $objSign->checkSignature($arrParams);
+//        var_dump($bolCheck);die;
+         //生成加密
+//        $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
+//        $arrParams = $objSign->signature($arrParams);
+//        var_dump($arrParams);die;
+        
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+            if(!$bolCheck){
+                return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+            }
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
             return $this->send(null, "请填写服务地址或服务时长", 0, 403,null,alertMsgEnum::singleServiceTimeDataDefect);

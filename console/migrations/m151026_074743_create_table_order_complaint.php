@@ -15,6 +15,8 @@ class m151026_074743_create_table_order_complaint extends Migration
     	$this->createTable('{{%order_complaint}}',[
     			'id'=>  Schema::TYPE_BIGPK.' NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
     			'order_id'=>   Schema::TYPE_BIGINT.' NOT NULL COMMENT \'订单id\'',
+    			'order_code_number' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'订单流水号\'',
+    			'complaint_code_number' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'投诉流水号\'',
     			'complaint_type'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉类型\'',
     			'complaint_status'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉状态\'',
     			'complaint_channel'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉渠道\'',

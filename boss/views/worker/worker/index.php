@@ -257,14 +257,13 @@ if(\Yii::$app->user->identity->isMiniBossUser()){
             'label' => '阿姨姓名',
             'value' => function ($dataProvider) {
                 if($dataProvider->id) {
-                    return Html::a('<span class="btn btn-primary">'.$dataProvider->worker->worker_name.'</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->worker->id]), [
+                    return Html::a($dataProvider->worker->worker_name, Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $dataProvider->worker->id]), [
                         'title' => '查看',
-                        'style' => 'margin-right:5%'
+                        'style' => 'margin-right:5%',
+                        'data-pjax'=>0,
+                        'target'=>'_blank'
                     ]);
                 }
-//                if($dataProvider->id){
-//                    return '<a href="" pjax-data=0'>$dataProvider->worker->worker_name.'</a>';
-//                }
             },
         ],
         [
@@ -654,10 +653,8 @@ if(\Yii::$app->user->identity->isMiniBossUser()){
                         'class' => 'btn btn-default',
                         'title' => Yii::t('kvgrid', 'Reset Grid')
                     ]),
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
-                        'class' => 'btn btn-default',
-                        'title' => Yii::t('kvgrid', 'Reset Grid')
-                    ]),
+                    $this->render('modal/_export_data'),
+                    $this->render('modal/_export_vacation_data'),
             ],
         'columns' => $columns,
         'responsive' => true,

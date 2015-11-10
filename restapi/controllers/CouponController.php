@@ -92,6 +92,9 @@ class CouponController extends \restapi\components\Controller
         }elseif($exchange_coupon["is_status"]==4018){
             //数据库写入失败
             return $this->send(null, "数据库写入失败", 0,403,null,alertMsgEnum::exchangeCouponFail);
+        }elseif($exchange_coupon["is_status"]==4020){
+            //输入的优惠码有误
+            return $this->send(null, "输入的优惠码有误", 0,403,null,alertMsgEnum::exchangeCouponErrorCoupon);
         }elseif($exchange_coupon["is_status"]==1){
             //兑换成功
             return $this->send($exchange_coupon, "兑换成功", 1,200,null,alertMsgEnum::exchangeCouponSuccess);
