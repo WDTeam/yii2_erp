@@ -267,11 +267,12 @@ class OrderController extends BaseAuthController
     {
         $searchParas = Yii::$app->request->getQueryParams();
         $searchModel = new OrderSearchIndex();
-        $dataProvider = $searchModel->search($searchParas);
         $is_mini_boss = Yii::$app->user->identity->isMiniBossUser();
         if($is_mini_boss){
+            $dataProvider = $searchModel->search($searchParas);
             return $this->render('index-mini-boss', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel, 'searchParas' => $searchParas,]);
         }else{
+            $dataProvider = $searchModel->search($searchParas);
             return $this->render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel, 'searchParas' => $searchParas,]);
         }
     }
@@ -295,7 +296,7 @@ class OrderController extends BaseAuthController
         if($is_mini_boss){
             $shopResult = Shop::find()
                 ->where($condition)
-                ->andWhere(['id'=>Yii::$app->user->identity->getShopIds])
+                ->andWhere(['id'=>Yii::$app->user->identity->shopIds])
                 ->select('id, name AS text')->asArray()->all();
         }else{
             $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();

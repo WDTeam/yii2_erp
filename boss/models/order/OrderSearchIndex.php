@@ -45,7 +45,11 @@ class OrderSearchIndex extends Order
     
     public function search($params)
     {
-        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])->orderBy(['id'=>SORT_DESC]);
+        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])
+            ->orderBy(['id'=>SORT_DESC]);
+        if(!empty(Yii::$app->user->identity->shopIds)){
+            $query->where(['orderExtWorker.shop_id'=>Yii::$app->user->identity->shopIds]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //             'pagination' => [
@@ -79,7 +83,7 @@ class OrderSearchIndex extends Order
             'order_pop_order_code' => $this->order_pop_order_code,
             'order_customer_phone' => $this->order_customer_phone,
             //'order_worker_phone' => $this->order_worker_phone,
-            'shop_id' => $this->shop_id,
+            'orderExtWorker.shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
             'order_status_dict_id' => $this->order_status_dict_id,
@@ -155,5 +159,5 @@ class OrderSearchIndex extends Order
         
         return $dataProvider;
     }
-    
+
 }

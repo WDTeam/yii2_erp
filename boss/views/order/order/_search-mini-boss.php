@@ -79,8 +79,9 @@ use boss\models\order\Order;
             </div>
         </div>
         <div class="col-sm-2">
-            <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
-                'initValueText' => '门店:', // set the initial display text
+            <?php
+            echo $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
+                'initValueText' => [0=>'门店:'], // set the initial display text
                 'options' => ['placeholder' => '选择门店', 'class' => 'm_ipu'],
                 'pluginOptions' => [
                     'width' => '65%',
@@ -95,7 +96,8 @@ use boss\models\order\Order;
                     'templateResult' => new JsExpression('function(city) { return city.text; }'),
                     'templateSelection' => new JsExpression('function (city) { return city.text; }'),
                 ],
-            ])->label('门店:', ['class' => 'm_ipone', 'style' => 'line-height:35px']); ?>
+            ])->label('门店:', ['class' => 'm_ipone', 'style' => 'line-height:35px']);
+            ?>
         </div>
 
     </div>
