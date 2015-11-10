@@ -15,6 +15,7 @@ use \core\models\order\OrderStatus;
 use \core\models\finance\FinanceOrderChannel;
 use \core\models\order\OrderStatusHistory;
 use restapi\models\alertMsgEnum;
+use \restapi\models\EjjEncryption;
 use yii\web\Response;
 use Yii;
 
@@ -316,8 +317,30 @@ class OrderController extends \restapi\components\Controller
         $args = Yii::$app->request->get();
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
+        //pop访问时可以不用输入access_token（用本身的验证加密方法）
+        $apiPopKey = Yii::$app->params["apiPopKey"];
+        $apiSecretKey= Yii::$app->params["apiSecretKey"];
+        $sign=  isset($args["sign"])?$args["sign"]:"";
+        $nonce =  isset($args["nonce"])?$args["nonce"]:"";
+        $arrParams = array();
+        $arrParams["sign"]=$sign; 
+        $arrParams["nonce"]=$nonce; 
+        $arrParams["api_key"]=$apiPopKey; 
+        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+        $bolCheck = $objSign->checkSignature($arrParams);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+            if(!$bolCheck){
+                return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+            }
+        }
+         if($bolCheck){
+            if(isset($args['user_id'])){
+                $user_id=$args['user_id'];
+            }else{
+                return $this->send(null, "pop访问时必须输入user_id", 401, 200, null, alertMsgEnum::userLoginFailed);
+            }
+        }else{
+           $user_id=$user->id;
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -344,7 +367,7 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["oc.customer_id"] = $user->id;
+        $args["oc.customer_id"] = $user_id;
         $args['order_parent_id'] = 0;
         if ($limit <= 0) {
             $limit = 1;
