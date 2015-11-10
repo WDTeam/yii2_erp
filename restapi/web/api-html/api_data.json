@@ -510,7 +510,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"服务类型商品id\", \n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"地址,姓名,电话\",\n         \"order_code\": \"订单号\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,  订单创建时间\n         \"updated_at\": 1445320069,  订单修改时间\n         \"id\": 8\n     },\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":8\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
           "type": "json"
         }
       ]
@@ -524,7 +524,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -5239,7 +5239,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n          {\n              \"good_id\": \"商品ID\",\n              \"goods_name\": \"商品名称\",\n              \"colour\": \"颜色\",\n              \"icon\": \"商品图标\",\n              \"goods_price\":\"商品价格\",\n              \"goods_price_description\":\"商品价格描述\"\n          }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"good_id\": \"商品ID\",\n                    \"goods_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"goods_price\": \"商品价格\",\n                    \"goods_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
           "type": "json"
         }
       ]
