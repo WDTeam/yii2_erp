@@ -2066,10 +2066,8 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {POST} /order/delete-worker-order [POST]/order/delete-worker-order(100%）
-     * 该功能暂时没有开发,没有得到核实！
-     * [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表
      * 
-     * @apiDescription 阿姨删除订单 （郝建设）
+     * @apiDescription 阿姨删除订单 （郝建设） [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表 该功能暂时没有开发,没有得到核实！
      * @apiName actionDeleteWorkerOrder
      * @apiGroup Order
      *
