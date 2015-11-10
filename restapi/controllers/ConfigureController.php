@@ -118,7 +118,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version app版本【ios_user4.4】
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -201,11 +201,14 @@ class ConfigureController extends \restapi\components\Controller
         if(!isset($param['city_name'])||!intval($param['city_name'])){
             $param['city_name'] = "北京市";
         }
+        if(!isset($param['platform_version'])||!$param['platform_version']){
+            return $this->send(null, 'app版本参数错误',0,200,null,alertMsgEnum::getUserInitFailed);
+        }
         //判断来源版
         $platform_name = "ios";
         $platform_version_name = "4.0";
-        if(isset($param['app_version'])&&$param['app_version']){
-            $platform = explode("_",$param['app_version']);
+        if(isset($param['platform_version'])&&$param['platform_version']){
+            $platform = explode("_",$param['platform_version']);
             $platform_name = $platform[0];
             $platform_version_name = $platform[1];
         }
