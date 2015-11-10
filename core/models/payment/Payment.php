@@ -816,30 +816,29 @@ class Payment extends \dbbase\models\payment\Payment
             ];
 
             $_POST = [
-                "payment_type"=> "1",
-                "subject"=> "e家洁在线支付",
-                "trade_no"=> "2015110900001000440071876428",
-                "buyer_email"=> "xihuange@126.com",
-                "gmt_create"=> "2015-11-09 00:59:27",
-                "notify_type"=> "trade_status_sync",
-                "quantity"=> "1",
-                "out_trade_no"=> "1511090135473",
-                "seller_id"=> "2088801136967007",
-                "notify_time"=> "2015-11-09 01:13:02",
-                "body"=> "e家洁在线支付0.02元",
-                "trade_status"=> "TRADE_SUCCESS",
-                "is_total_fee_adjust"=> "N",
-                "total_fee"=> "0.02",
-                "gmt_payment"=> "2015-11-09 00:59:28",
-                "seller_email"=> "47632990@qq.com",
-                "price"=> "0.02",
-                "buyer_id"=> "2088102035089446",
-                "notify_id"=> "aade9f6f4bddbbfde2e9243e88a3101c4g",
-                "use_coupon"=> "N",
-                "sign_type"=> "RSA",
-                "sign"=> "iAqB1XSFY7mlpuK9zjwW3zXSro+2HWKWG2h638ukP5lvAMa8+qZ/Fqqe6PQ7q0ktX7BPSgvGpaBAwhE/kK25hcaMniZRPyg/mBvmzuS+W2LXd8Zgj47R9hzWNKqX3RBaXtdnwbH06UXiG8wcUoxJSFPRCiLL2AozDw71Ya+aiZU="
-            ];
-
+                "payment_type" => "1",
+                "subject" => "e家洁在线支付",
+                "trade_no" => "2015111113610216",
+                "buyer_email" => "lsqpy@163.com",
+                "gmt_create" => "2015-11-11 01:48:23",
+                "notify_type" => "trade_status_sync",
+                "quantity" => "1",
+                "out_trade_no" => "01151111248892",
+                "seller_id" => "2088801136967007",
+                "notify_time" => "2015-11-11 01:48:24",
+                "body" => "e家洁在线支付0.02元",
+                "trade_status" => "TRADE_SUCCESS",
+                "is_total_fee_adjust" => "N",
+                "total_fee" => "0.02",
+                "gmt_payment" => "2015-11-11 01:48:24",
+                "seller_email" => "47632990@qq.com",
+                "price" => "0.02",
+                "buyer_id" => "2088002074138164",
+                "notify_id" => "7244a8092277558114920607f2b1ab662w",
+                "use_coupon" => "N",
+                "sign_type" => "RSA",
+                "sign" => "KRfYhMMmYf5t2eE0lsLZylhFLNI1WiE8w+NkLyktUS/tq/PTbdGbfXIcshGnMCQERrfVIerXqmh7+0v5XyHISs9nl4m/7v1TyyTy/ACOlUVoBeidZve5GRRb1kaERIBDuWCtETAPliTzO8YqIE2FheQJdiHWvIXAxVHN1Lo1X9A="
+             ];
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
