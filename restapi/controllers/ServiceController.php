@@ -951,6 +951,78 @@ class ServiceController extends \restapi\components\Controller
         return $this->send(json_decode($date), '操作成功', '0', '200',null,alertMsgEnum::baiduMapSuccess);
 
     }
+    
+    /**
+     * @api {GET} /service/get-shop-district-info [GET] /service/get-shop-district-info（100%）
+     * 
+     * @apiDescription 根据经纬度获取商圈信息（李勇）
+     * @apiGroup service
+     * @apiName actionGetShopDistrictInfo
+     *
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *   {
+     *       "code": 1,
+     *       "msg": "获取商圈信息成功",
+     *       "ret": {
+     *           "page": "第几页",
+     *           "pageNum": "每页显示多少条",
+     *           "data": [
+     *               {
+     *                   "id": "阿姨表自增id",
+     *                   "worker_name": "阿姨姓名",
+     *                   "worker_photo": "阿姨手机",
+     *                   "worker_star": "阿姨星级",
+     *                   "updated_at": "最后更新时间",
+     *                   "worker_server_num": "阿姨服务次数",
+     *                   "worker_comment_score": "阿姨评论评分"
+     *               }
+     *           ]
+     *       },
+     *       "alertMsg": "获取商圈信息成功"
+     *   }
+     *
+     * @apiError queryNotSupportFound 获取商圈信息失败
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *       {
+     *           "code": 0,
+     *           "msg": "获取商圈信息失败",
+     *           "ret": {},
+     *           "alertMsg": "获取商圈信息失败"
+     *       }
+     */
+     public function actionGetShopDistrictInfo()
+    {
+       $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+        }
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude']){
+            return $this->send(null, "请填写服务地址", 0, 403,null,alertMsgEnum::serverWorkerListNoAddress);
+        }
+        $longitude = $param['longitude'];
+        $latitude = $param['latitude'];
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        $customer_id = $customer->id;
+        //根据经纬度获取商圈id
+        try{
+            $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200,null,alertMsgEnum::bossError);
+        }
+        if (empty($ShopDistrictInfo)) {
+            return $this->send(null, "商圈不存在", 0, 403,null,alertMsgEnum::getShopDistrictInfoFail);
+        } else {
+           return $this->send($ShopDistrictInfo, "获取商圈信息成功",1, 200,null,alertMsgEnum::getShopDistrictInfoSuccess);
+        }
+    }
+    
 }
 
 ?>
