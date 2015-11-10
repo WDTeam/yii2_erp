@@ -4,7 +4,7 @@ use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
-use \core\models\operation\OperationAdvertContent;
+use core\models\operation\OperationAdvertRelease;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
 use \core\models\order\OrderStatusDict;
@@ -201,6 +201,14 @@ class ConfigureController extends \restapi\components\Controller
         if(!isset($param['city_name'])||!intval($param['city_name'])){
             $param['city_name'] = "北京市";
         }
+        //判断来源版
+        $platform_name = "ios";
+        $platform_version_name = "4.4";
+        if(isset($param['app_version'])&&$param['app_version']){
+            $platform = explode("_",$param['app_version']);
+            $platform_name = $platform[0];
+            $platform_version_name = $platform[1];
+        }
         //判断token是否有效
         $isEffect="0";
         if(isset($param['access_token'])&&$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
@@ -210,9 +218,12 @@ class ConfigureController extends \restapi\components\Controller
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
             $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
+            //获取banner图
+            $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'],$platform_name,$platform_version_name);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
+        print_R($bannerList);
         //整理开通的城市
         $onlineCityList = array();
         foreach($onlineCitys as $key=>$val){
