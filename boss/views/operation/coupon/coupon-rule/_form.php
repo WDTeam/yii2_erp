@@ -30,7 +30,7 @@ $model->couponrule_promote_type=1;
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]);  ?>
     
     		<div class="panel-body">
-    		<?
+    		<?php
     		echo Form::widget([
     		 		'model' => $model,
     		 		'form' => $form,
@@ -57,7 +57,7 @@ $model->couponrule_promote_type=1;
     		</div>	
     		
     		
-    		<?
+    		<?php
     		echo Form::widget([
     		 		'model' => $model,
     		 		'form' => $form,

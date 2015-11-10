@@ -281,40 +281,10 @@ echo Menu::widget([
                                 'operation/operation-city/opencity'
                             ],
                             'icon' => 'fa fa-angle-right'
-                        ]
-                        
-                    ]
-                ],
-    		[
-    		'label' => '渠道管理',
-    		'url' => [
-    		'#'
-    				],
-    				'icon' => 'fa fa-angle-right',
-    				'options' => [
-    				'class' => 'treeview '
-    						],
-    						'items' => [
-    						[
-    						'label' => '订单渠道管理',
-    						'url' => [
-    						'operation/operation-order-channel'
-    								],
-    								'icon' => 'fa fa-angle-right'
-    										],
-				    		[
-				    		'label' => '支付渠道管理',
-				    		'url' => [
-				    		'operation/operation-pay-channel'
-				    				],
-				    				'icon' => 'fa fa-angle-right'
-				    						],
+                        ],
     		
-    		
-    	
-    																						]
-    																						],
-    		
+    		]
+    		],
                 [
                     'label' => 'CMS管理',
                     'url' => [
@@ -413,6 +383,38 @@ echo Menu::widget([
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
+
+    		
+    		 [
+    		'label' => '渠道管理',
+    		'url' => [
+    		'#'
+    				],
+    				'icon' => 'fa fa-angle-right',
+    				'options' => [
+    				'class' => 'treeview '
+    						],
+    						'items' => [
+    						[
+    						'label' => '订单渠道管理',
+    						'url' => [
+    						'operation/operation-order-channel'
+    								],
+    								'icon' => 'fa fa-angle-right'
+    										],
+    										[
+    										'label' => '支付渠道管理',
+    										'url' => [
+    										'operation/operation-pay-channel'
+    												],
+    												'icon' => 'fa fa-angle-right'
+    														]
+    														]
+    														], 
+    		
+    		
+    		
+    		
                 [
                     'label' => '服务卡管理',
                     'url' => [
@@ -445,7 +447,7 @@ echo Menu::widget([
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
-                            'label' => '服务卡消费记录',
+                            'label' => '服务卡消费记录222',
                             'url' => [
                                 'operation/operation-service-card-consume-record/index'
                             ],
@@ -453,9 +455,14 @@ echo Menu::widget([
                         ]
                     ]
                     
-                ]
-            ]
+                ],
+    		
+    		
+        ]
         ],
+    		
+    		
+    		
         [
             'label' => '财务管理',
             'url' => [
