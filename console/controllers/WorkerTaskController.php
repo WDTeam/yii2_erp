@@ -53,9 +53,20 @@ class WorkerTaskController extends Controller
         foreach ($models as $model){
             try{
                 $res =  (array)WorkerTask::autoCreateTaskLog($model->id);
-                ConsoleHelper::log('阿姨（%s）分配到（%s）个任务',[$model->id,count($res)]);
+                foreach ($res as $_model){
+                    if(!empty($_model->errors)){
+                        foreach ($_model->errors as $key=>$errors){
+                            foreach ($errors as $error){
+                                ConsoleHelper::log('%s:%s',[$key, $error]);
+                            }
+                        }
+                        ConsoleHelper::log('阿姨（%s）分配任务"%s" 失败',[$model->id, $_model->worker_task_name]);
+                    }else{
+                        ConsoleHelper::log('阿姨（%s）分配任务"%s" 成功',[$model->id,$_model->worker_task_name]);
+                    }
+                }
             }catch(\Exception $e){
-                echo 'has error';
+                ConsoleHelper::log('自动生成阿姨任务记录失败');
             }
             
         }
