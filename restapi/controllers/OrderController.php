@@ -116,8 +116,8 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
+        
         /**
-
           if (empty($args['order_booked_begin_time'])) {
           return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
           }
@@ -128,6 +128,8 @@ class OrderController extends \restapi\components\Controller
           }
           $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
          */
+        
+        
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
@@ -161,9 +163,10 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_pop_group_buy_code'])) {
             $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
         }
-        if (isset($args['coupon_id'])) {
-            $attributes['coupon_id'] = $args['coupon_id'];
-        }
+//        if (isset($args['coupon_id'])) {
+//            $attributes['coupon_id'] = $args['coupon_id'];
+//        }
+        
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
         }
@@ -186,14 +189,17 @@ class OrderController extends \restapi\components\Controller
         $args['times'] = array(
             "0" => Array(
                 'order_booked_begin_time' => 1447124669,
+                'coupon_id' => 1,
                 "order_booked_end_time" => 1448124669
             ),
             "1" => Array(
                 'order_booked_begin_time' => 1447224669,
+                'coupon_id' => 2,
                 "order_booked_end_time" => 1448224669
             ),
             "2" => Array(
                 'order_booked_begin_time' => 1447324669,
+                'coupon_id' => 3,
                 "order_booked_end_time" => 1448324669
             )
         );
@@ -211,7 +217,7 @@ class OrderController extends \restapi\components\Controller
                 $array[$k]['order_is_use_balance'] = isset($attributes['order_is_use_balance']) ? $attributes['order_is_use_balance'] : "";
                 $array[$k]['order_customer_need'] = isset($attributes['order_customer_need']) ? $attributes['order_customer_need'] : "";
                 $array[$k]['order_booked_worker_id'] = isset($attributes['order_booked_worker_id']) ? $attributes['order_booked_worker_id'] : "";
-                $array[$k]['coupon_id'] = isset($attributes['coupon_id']) ? $attributes['coupon_id'] : "";
+                $array[$k]['coupon_id'] = isset($v['coupon_id']) ? $v['coupon_id'] : "";
                 $array[$k]['order_customer_memo'] = isset($attributes['order_customer_memo']) ? $attributes['order_customer_memo'] : "";
                 $array[$k]['order_pop_order_money'] = isset($attributes['order_pop_order_money']) ? $attributes['order_pop_order_money'] : "";
                 $array[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
@@ -227,28 +233,26 @@ class OrderController extends \restapi\components\Controller
                 $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
             }
         }
+         print_r($array);
 
         $order = new Order();
         $is_success = array();
+        $errors = array();
+
         foreach ($array as $keyk => $valv) {
             $is_success[] = $order->createNew($valv);
         }
-        print_r($is_success);
+//       $array =  array_merge($is_success,$order->errors);
+        print_r($order->errors);
         exit;
-
         $is_success = $order->createNew($attributes);
-        $order->errors;
+
         if ($is_success) {
             return $this->send($order, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
         } else {
             return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }
-
-//    
-//    public function actionArrayCreateOrder(){
-//        
-//    }
 
     /**
      * @api {GET} /order/orders [GET] /order/orders (100%)
