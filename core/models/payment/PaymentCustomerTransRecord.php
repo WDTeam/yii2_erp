@@ -69,6 +69,19 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'order_pop_order_money'
             ];
             $dataArray = OrderSearch::getOrderInfo($order_id,$fields,$orderStatus);
+            $data = current($dataArray);
+
+            //周期订单
+            if(count($dataArray) > 1)
+            {
+                foreach( $dataArray as $data )
+                {
+                    self::analysisRecord($data['order_id'],$data['channel_id'],'order_pay',1,$payment_data);
+                }
+                return true;
+            }
+
+            /*
             //判断是普通订单还是周期订单
             if(count($dataArray) > 1)
             {
@@ -102,6 +115,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             {
                 $data = current($dataArray);
             }
+            */
             //组装数据
             $transRecord["payment_customer_trans_record_mode"] = 1;      //交易方式:1消费,2=充值,3=退款,4=赔偿
             $transRecord["payment_customer_trans_record_service_card_on"] = $data['card_id'];                   //服务卡号
@@ -583,7 +597,6 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //保留两位小数
         bcscale(2);
 
-
         //根据订单ID创建交易流水号
         $data['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo(1,$data['order_id']);
 
@@ -599,7 +612,6 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['data']['transaction_id'];   //优惠券交易流水号
         }
 
-
         //获取扣除余额后的详细信息
         $customerBalanceInfo = Customer::operateBalance($data['customer_id'], $data['payment_customer_trans_record_online_balance_pay'], $data['payment_customer_trans_record_eo_order_id'], 1);
         if($customerBalanceInfo['response'] != 'success' && $data['customer_id'] != $customerBalanceInfo['customer_id'])
@@ -614,7 +626,6 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $data["payment_customer_trans_record_current_balance"] = $customerBalanceInfo['end_balance'];
         //余额交易流水号
         $data["payment_customer_trans_record_balance_transaction_id"] = $customerBalanceInfo['trans_serial'];
-
 
         //TODO::张仁钊
         //如果使用服务卡支付

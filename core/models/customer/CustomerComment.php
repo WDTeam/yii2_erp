@@ -18,7 +18,7 @@ use Yii;
 use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
 use core\models\comment\CustomerCommentLevel;
-//use core\models\order\OrderComplaint;
+use core\models\order\OrderComplaint;
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment

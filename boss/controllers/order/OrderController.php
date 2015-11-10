@@ -9,6 +9,7 @@ use boss\models\order\Order;
 use core\models\customer\CustomerAddress;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderDispatcherKpi;
+use core\models\order\OrderManualAssign;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use core\models\customer\Customer;
@@ -173,7 +174,7 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $is_mini_boss = \Yii::$app->user->identity->isMiniBossUser();
-        $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id, $is_mini_boss);
+        $order = OrderManualAssign::getWaitManualAssignOrder(Yii::$app->user->id, $is_mini_boss);
         if ($order) {
             $week = ['日', '一', '二', '三', '四', '五', '六'];
             $booked_time_range = date("Y-m-d  （周", $order->order_booked_begin_time) . $week[date('w', $order->order_booked_begin_time)] . date('）  H:i-', $order->order_booked_begin_time) . date('H:i', $order->order_booked_end_time);
@@ -362,8 +363,8 @@ class OrderController extends BaseAuthController
             'order_src_id' => 1,
             'channel_id' => 20,
             'address_id' => 1,
-            'customer_id' => 2,
-            'order_customer_phone' => '13141484602',
+            'customer_id' => 1,
+            'order_customer_phone' => '18001305711',
             'admin_id' => Yii::$app->user->id,
             'order_pay_type' => 1,
             'order_is_use_balance' => 1,
@@ -375,15 +376,18 @@ class OrderController extends BaseAuthController
         $booked_list = [
             [
                 'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00')) + 86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400,
+                'order_booked_count' => 2,
             ],
             [
                 'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00')) + 86400 + 86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400,
+                'order_booked_count' => 2,
             ],
             [
                 'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400 + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 12:30:00')) + 86400 + 86400 + 86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400 + 86400,
+                'order_booked_count' => 2,
             ],
         ];
         return Order::createNewBatch($attributes, $booked_list);

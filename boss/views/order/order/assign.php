@@ -13,9 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-index">
     <div class="panel panel-info">
-        <div class="panel-heading"><h3 class="panel-title">当前状态：<span id="work_status" class="badge badge-warning">休息</span></h3></div>
+        <div class="panel-heading"><h3 class="panel-title">当前状态：<span id="work_status" class="badge badge-warning" style="background-color: #f39c12;border-color: #e08e0b;color:#ffffff;">休息</span></h3></div>
         <div class="panel-body">
-            <table class="table table-bordered">
+            <table id="dispatcher_kpi" class="table table-bordered">
                 <tr><th>日期</th><th>空闲时间</th><th>忙碌时间</th><th>小休时间</th><th>待人工指派</th><th>应指派</th><th>已指派</th><th>指派成功率</th></tr>
                 <tr>
                     <th>近七日平均</th>
@@ -174,5 +174,12 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<?php $this->registerJsFile('/js/manual_order.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]); ?>
-<?php $this->registerJsFile('/js/dispatcher/index.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]); ?>
+<?php
+$this->registerJsFile('/js/manual_order.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]);
+$this->registerJsFile('/js/dispatcher/index.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]);
+$this->registerCss('
+    #dispatcher_kpi td,#dispatcher_kpi th{
+        font-size:14px;
+    }
+');
+?>
