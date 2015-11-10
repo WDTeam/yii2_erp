@@ -27,7 +27,7 @@ class m150918_195337_create_table_customer extends Migration
             'customer_complaint_times'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'投诉\'',
             'customer_platform_version'=> Schema::TYPE_STRING.'(16) DEFAULT NULL COMMENT \'操作系统版本号\'',
             'customer_app_version'=> Schema::TYPE_STRING.'(16) DEFAULT NULL COMMENT \'app版本号\'',
-            'customer_mac'=> Schema::TYPE_STRING.'(16) DEFAULT NULL COMMENT \'mac地址\'',
+            'customer_mac'=> Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'mac地址\'',
             'customer_login_ip'=> Schema::TYPE_STRING.'(16) DEFAULT NULL COMMENT \'登陆ip\'',
             'customer_login_time'=>  Schema::TYPE_INTEGER.'(11) DEFAULT NULL COMMENT \'登陆时间\'',
             'customer_is_vip'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL COMMENT \'身份\'',

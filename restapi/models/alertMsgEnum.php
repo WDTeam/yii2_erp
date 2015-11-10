@@ -239,6 +239,11 @@ class alertMsgEnum
     const serverWorkerListSuccess = '获取周期服务可用阿姨列表成功';
     //商圈不存在
     const serverWorkerListDistrictNotExist = '商圈不存在';
+    //根据经纬度获取商圈信息
+    //商圈不存在
+    const getShopDistrictInfoFail = '商圈不存在';
+    //获取商圈信息成功
+    const getShopDistrictInfoSuccess = '获取商圈信息成功';
     //选择周期服务的第一次服务日期列表
     //请选择服务时长或阿姨
     const firstServiceTimeNoWorker = '请选择服务时长或阿姨';

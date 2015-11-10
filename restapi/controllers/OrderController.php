@@ -133,11 +133,11 @@ class OrderController extends \restapi\components\Controller
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        if (empty($args['order_booked_count'])) {
-            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
-        }
+//        if (empty($args['order_booked_count'])) {
+//            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+//        }
         $attributes['order_pay_type'] = $args['order_pay_type'];
-        $attributes['order_booked_count'] = $args['order_booked_count'];
+      #  $attributes['order_booked_count'] = $args['order_booked_count'];
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -186,24 +186,20 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
-        $args['times'] = array(
-            "0" => Array(
-                'order_booked_begin_time' => 1447124669,
-                'coupon_id' => 1,
-                "order_booked_end_time" => 1448124669
-            ),
-            "1" => Array(
-                'order_booked_begin_time' => 1447224669,
-                'coupon_id' => 2,
-                "order_booked_end_time" => 1448224669
-            ),
-            "2" => Array(
-                'order_booked_begin_time' => 1447324669,
-                'coupon_id' => 3,
-                "order_booked_end_time" => 1448324669
-            )
-        );
-
+//        $args['times'] = array(
+//            "0" => Array(
+//                'order_booked_begin_time' => 1447124669,
+//                'order_booked_count' => 1,
+//                'coupon_id' => 1,
+//                "order_booked_end_time" => 1448124669
+//            ),
+//            "1" => Array(
+//                'order_booked_begin_time' => 1447224669,
+//                'order_booked_count' => 11,
+//                'coupon_id' => 2,
+//                "order_booked_end_time" => 1448224669
+//            )
+//        );
         if (empty($args['times'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
@@ -223,7 +219,7 @@ class OrderController extends \restapi\components\Controller
                 $array[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
                 $array[$k]['channel_id'] = isset($attributes['channel_id']) ? $attributes['channel_id'] : "";
                 $array[$k]['address_id'] = isset($attributes['address_id']) ? $attributes['address_id'] : "";
-                $array[$k]['order_booked_count'] = isset($attributes['order_booked_count']) ? $attributes['order_booked_count'] : "";
+                $array[$k]['order_booked_count'] = isset($v['order_booked_count']) ? $v['order_booked_count'] : "";
                 $array[$k]['order_pop_order_code'] = isset($attributes['order_pop_order_code']) ? $attributes['order_pop_order_code'] : "";
                 $array[$k]['order_pay_type'] = isset($attributes['order_pay_type']) ? $attributes['order_pay_type'] : "";
                 $array[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
@@ -233,7 +229,8 @@ class OrderController extends \restapi\components\Controller
                 $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
             }
         }
-         print_r($array);
+        
+       print_r($array);
 
         $order = new Order();
         $is_success = array();
