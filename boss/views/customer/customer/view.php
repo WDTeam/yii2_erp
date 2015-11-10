@@ -22,9 +22,9 @@ use core\models\customer\CustomerExtScore;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerBlockLog;
 
-use core\models\operation\coupon\Coupon;
-use core\models\operation\coupon\CouponCustomer;
-use core\models\operation\coupon\CouponCode;
+//use core\models\operation\coupon\Coupon;
+//use core\models\operation\coupon\CouponCustomer;
+//use core\models\operation\coupon\CouponCode;
 
 /**
  * @var yii\web\View $this
