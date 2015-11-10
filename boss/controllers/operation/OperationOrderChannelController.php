@@ -32,13 +32,6 @@ class OperationOrderChannelController extends BaseAuthController
      */
     public function actionIndex()
     {
-    	//根据参数 获取支付渠道    1 在线支付  2  e家姐   3 第三方 all全部
-    	
-    	$date=\core\models\operation\OperationPayChannel::getorderchannellist(3);
-    	
-    	var_dump($date);exit;
-    	
-    	
         $searchModel = new OperationOrderChannelSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
