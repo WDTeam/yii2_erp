@@ -116,7 +116,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
-        
+
         /**
           if (empty($args['order_booked_begin_time'])) {
           return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
@@ -128,8 +128,6 @@ class OrderController extends \restapi\components\Controller
           }
           $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
          */
-        
-        
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
@@ -137,7 +135,7 @@ class OrderController extends \restapi\components\Controller
 //            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
 //        }
         $attributes['order_pay_type'] = $args['order_pay_type'];
-      #  $attributes['order_booked_count'] = $args['order_booked_count'];
+        #  $attributes['order_booked_count'] = $args['order_booked_count'];
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -166,7 +164,7 @@ class OrderController extends \restapi\components\Controller
 //        if (isset($args['coupon_id'])) {
 //            $attributes['coupon_id'] = $args['coupon_id'];
 //        }
-        
+
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
         }
@@ -229,17 +227,17 @@ class OrderController extends \restapi\components\Controller
                 $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? $v['order_booked_end_time'] : "";
             }
         }
-        
-       print_r($array);
+
+        print_r($array);
 
         $order = new Order();
         $is_success = array();
-        $errors = array();
-
         foreach ($array as $keyk => $valv) {
             $is_success[] = $order->createNew($valv);
         }
 //       $array =  array_merge($is_success,$order->errors);
+        print_r($is_success);
+        
         print_r($order->errors);
         exit;
         $is_success = $order->createNew($attributes);
