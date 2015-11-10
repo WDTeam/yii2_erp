@@ -75,9 +75,10 @@ class OrderManualAssign extends Model
      * 订单状态为系统指派失败的订单
      * @author lin
      * @param $admin_id 操作人id
+     * @param $district_ids 商圈id
      * @return $this|static
      */
-    public static function getWaitMiniBossAssignOrder($admin_id)
+    public static function getWaitMiniBossAssignOrder($admin_id,$district_ids)
     {
 
         $result_order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
@@ -92,7 +93,8 @@ class OrderManualAssign extends Model
                 'and',
                 ['>', 'order_booked_begin_time', time()], //服务开始时间大于当前时间
                 ['orderExtFlag.order_flag_send' => [0, 1]], //0可指派 1客服指派不了 2小家政指派不了
-                ['order_parent_id' => 0]
+                ['order_parent_id' => 0],
+                ['district_id' => $district_ids]
             ])->andWhere([
                 'or',
                 ['orderExtFlag.order_flag_lock' => 0],

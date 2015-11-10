@@ -30,11 +30,12 @@ class OrderManualAssign extends OrderManualAssignModel
      * 订单状态为系统指派失败的订单
      * @author lin
      * @param $admin_id 操作人id
+     * @param $district_ids 商圈ids
      * @return $this|static
      */
-    public static function getWaitMiniBossAssignOrder($admin_id)
+    public static function getWaitMiniBossAssignOrder($admin_id,$district_ids)
     {
-        $order = parent::getWaitMiniBossAssignOrder($admin_id);
+        $order = parent::getWaitMiniBossAssignOrder($admin_id,$district_ids);
         return self::_formatOrder($order);
     }
 

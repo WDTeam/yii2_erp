@@ -217,7 +217,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $is_mini_boss = \Yii::$app->user->identity->isMiniBossUser();
         if($is_mini_boss) {
-            return OrderManualAssign::getWaitMiniBossAssignOrder(Yii::$app->user->id);
+            return OrderManualAssign::getWaitMiniBossAssignOrder(Yii::$app->user->id,Yii::$app->user->identity->getShopDistrictIds);
         }else {
             return OrderManualAssign::getWaitCSAssignOrder(Yii::$app->user->id);
         }
