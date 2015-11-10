@@ -15,6 +15,8 @@ class OrderSearchIndex extends Order
 {
     public $created_from;
     public $created_to;
+    public $assign_from;
+    public $assign_to;
     public $booked_from;
     public $booked_to;
     
@@ -81,6 +83,7 @@ class OrderSearchIndex extends Order
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
             'order_status_dict_id' => $this->order_status_dict_id,
+            'order_worker_assign_type' => $this->order_worker_assign_type==1?[1,2]:[3,4],
         ]);
         
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
@@ -97,6 +100,12 @@ class OrderSearchIndex extends Order
         if (!empty($this->created_to))
             $query->andFilterWhere(['<=', Order::tableName().'.created_at', strtotime($this->created_to)]);
         
+        if (!empty($this->assign_from))
+            $query->andFilterWhere(['>=', Order::tableName().'.order_worker_assign_time', strtotime($this->assign_from)]);
+
+        if (!empty($this->assign_to))
+            $query->andFilterWhere(['<=', Order::tableName().'.order_worker_assign_time', strtotime($this->assign_to)]);
+
         if (!empty($this->booked_from))
             $query->andFilterWhere(['>=', 'order_booked_begin_time', strtotime($this->booked_from)]);
         

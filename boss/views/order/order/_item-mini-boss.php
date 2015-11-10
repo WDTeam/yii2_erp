@@ -45,7 +45,7 @@ use boss\models\order\Order;
             <td><?= $model->order_is_parent==1?'周期':'单次'; ?></td>
             <td><?= Html::encode($model->orderExtPay->orderPayTypeName); ?></td>
             <td><?= $order_worker_assign_type[$model->orderExtWorker->order_worker_assign_type]; ?></td>
-            <td><?php  //$model->orderExtWorker->order_worker_assign_time; ?></td>
+            <td><?= !empty($model->orderExtWorker->order_worker_assign_time)?date('Y-m-d',$model->orderExtWorker->order_worker_assign_time):'无'; ?></td>
             <td><?= $model->orderExtStatus->order_status_boss; ?></td>
             <td><?= $model->orderExtWorker->order_worker_name; ?></td>
             <td><?= $model->order_money; ?></td>

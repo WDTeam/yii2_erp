@@ -70,12 +70,12 @@ use boss\models\order\Order;
         <div class="col-sm-4">
             <div class="form-group" style="width: auto;">
                 <label class="m_ipone">接单时间:</label>
-                <input name="<?= $search_class_name ?>[created_from]" type="text" class="Wdate" id="d412"
+                <input name="<?= $search_class_name ?>[assign_from]" type="text" class="Wdate" id="d412"
                        onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
-                       value="<?= isset($searchParas[$search_class_name]['created_from']) ? Html::encode($searchParas[$search_class_name]['created_from']) : '' ?>"/>到
-                <input name="<?= $search_class_name ?>[created_to]" type="text" class="Wdate" id="d412"
+                       value="<?= isset($searchParas[$search_class_name]['assign_from']) ? Html::encode($searchParas[$search_class_name]['assign_from']) : '' ?>"/>到
+                <input name="<?= $search_class_name ?>[assign_to]" type="text" class="Wdate" id="d412"
                        onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})"
-                       value="<?= isset($searchParas[$search_class_name]['created_to']) ? Html::encode($searchParas[$search_class_name]['created_to']) : '' ?>"/>
+                       value="<?= isset($searchParas[$search_class_name]['assign_to']) ? Html::encode($searchParas[$search_class_name]['assign_to']) : '' ?>"/>
             </div>
         </div>
         <div class="col-sm-2">

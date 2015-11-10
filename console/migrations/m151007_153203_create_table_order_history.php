@@ -110,6 +110,7 @@ class m151007_153203_create_table_order_history extends Migration
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人所属门店id\'',
             'order_worker_shop_name' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'工人所属门店名称\'',
             'order_worker_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'阿姨备注\'',
+            'order_worker_assign_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'接单时间\'',
 
 //===========================对账信息
             'checking_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'对账id\'',
