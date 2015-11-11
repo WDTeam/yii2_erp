@@ -169,4 +169,10 @@ class OrderComplaintController extends BaseAuthController
     	$model = new OrderComplaint();
     	 return $model->level($num);
     }
+    public function actionTest(){
+    	$data =array ( 'order_id' => 1, 'complaint_type' => 1, 'complaint_status' => 1, 'complaint_channel' => 1, 'complaint_phone' => '13689898989', 'complaint_section' => 1, 'complaint_assortment' => 0, 'complaint_level' => '0', 'complaint_content' => '评论内容', 'complaint_time' => 1447225657, 'updated_at' => 1447225657, 'created_at' => 1447225657, 'is_softdel' => 0, 'order_code' => '123445', );
+    	$model = new OrderComplaint();
+    	$result = $model->appModel($data);
+    	var_dump($result);
+    }
 }

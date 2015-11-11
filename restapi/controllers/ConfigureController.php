@@ -239,7 +239,7 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
             $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
             $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
-            $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
+            $serviceCategoryList[$key]['category_url'] = $val['operation_category_url'];
             $serviceCategoryList[$key]['colour'] = 'FFCC00';
             $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
         }
@@ -257,13 +257,13 @@ class ConfigureController extends \restapi\components\Controller
         $header_link = [
             'comment_link' => [
                 'title' => '意见反馈',
-                'url' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
-                'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                'url' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
             ],
             'phone_link' => [
                 'title' => '18210922324',
                 'url' => '',
-                'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png',
+                'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_Tel.png',
             ],
         ];
         //获取首页轮播图
@@ -289,16 +289,16 @@ class ConfigureController extends \restapi\components\Controller
             [
                 'title' => '单次保洁',
                 'introduction' => '新用户第1小时免费',
-                'icon' => 'http://dev.m2.1jiajie.com/statics/images/dancibaojie.png',
-                'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/1',
+                'icon' => 'http://test.m2.1jiajie.com/statics/images/dancibaojie.png',
+                'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/1',
                 'bg_colour' => 'ffb518',
                 'font_colour' => 'ffffff',
             ],
             [
                 'title' => '周期保洁',
                 'introduction' => '一次下单 清洁无忧',
-                'icon' => 'http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png',
-                'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/2',
+                'icon' => 'http://test.m2.1jiajie.com/statics/images/zhouqibaojie.png',
+                'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/2',
                 'bg_colour' => 'ff8a44',
                 'font_colour' => 'ffffff',
             ]
