@@ -80,7 +80,7 @@ return [
     'MAX_REQUEST' => 1000,
 
     // 定时器 单位秒
-    'TIMER_INTERVAL' => 60,
+    'TIMER_INTERVAL' => 6,
 
     // 全职阿姨 0-5分钟
     'FULLTIME_WORKER_TIMEOUT' => 5,
