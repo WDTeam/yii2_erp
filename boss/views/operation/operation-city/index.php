@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\components\SearchBox;
 
 /**
  * @var yii\web\View $this
