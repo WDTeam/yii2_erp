@@ -360,6 +360,9 @@ class alertMsgEnum
     const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
     //数据不完整,请输入周期订单号
     const orderGetOrderWorkerNumber = "数据不完整,请输入周期订单号";
+    
+     //数据不完整,请输入周期订单号
+    const orderGetOrderNumber = "数据不完整,请输入周期订单号";
     //添加常用地址
     //常用地址添加成功
     const addAddressSuccess = '常用地址添加成功';

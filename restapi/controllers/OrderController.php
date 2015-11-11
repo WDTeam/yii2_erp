@@ -1881,14 +1881,21 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+        if (empty($param['access_token']) || !WorkerAccessToken::getWorker($param['access_token'])) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
+
+        #订单号不能为空
+        if (empty($param['order_id'])) {
+            return $this->send(null, "数据不完整,请输入订单号", 0, 200, null, alertMsgEnum::orderGetOrderNumber);
+        }
+
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
             try {
+
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
 
                 if ($setWorker && is_null($setWorker["errors"])) {
@@ -2029,9 +2036,6 @@ class OrderController extends \restapi\components\Controller
                     }
                     $r_order['sub_order'] = $arr;
                 } else {
-                    # $str = '[{"id":"33","order_code":"241511106213910","order_batch_code":"Z841511106213940","order_parent_id":"0","order_is_parent":"1","created_at":"1447146939","updated_at":"1447146939","isdel":"0","ver":"1","version":"1","order_ip":"58.135.77.208","order_service_type_id":"1","order_service_type_name":"专业保洁","order_service_item_id":"1","order_service_item_name":"家庭保洁","order_src_id":"1","order_src_name":"BOSS","channel_id":"20","order_channel_name":"E家洁","order_unit_money":"0.01","order_money":"0.02","order_booked_count":"2.0","order_booked_begin_time":"1447729200","order_booked_end_time":"1447736400","city_id":"110100","district_id":"1","address_id":"916","order_address":"北京市,西城区,北京市北京市西城区西华门大街39号西苑门999,空,18311474301","order_lat":"39.921386340298","order_lng":"116.39630151955","order_booked_worker_id":"5","checking_id":"0","order_cs_memo":"","order_sys_memo":"","order_cancel_cause_id":"0","order_cancel_cause_detail":"","order_cancel_cause_memo":"","order_id":"33","order_before_status_dict_id":"1","order_before_status_name":"已创建","order_status_dict_id":"1","order_status_name":"已创建","order_status_boss":"初始化","order_status_customer":"待支付","order_status_worker":"","customer_id":"2","order_customer_phone":"18311474301","order_customer_is_vip":"0","order_customer_need":"","order_customer_memo":"","comment_id":"0","invoice_id":"0","order_customer_hidden":"0","order_pay_type":"2","pay_channel_id":"0","order_pay_channel_name":"","order_pay_flow_num":"","order_pay_money":"0.02","order_use_acc_balance":"0.00","card_id":"0","order_use_card_money":"0.00","coupon_id":"0","order_use_coupon_money":"0.00","promotion_id":"0","order_use_promotion_money":"0.00"},{"id":"34","order_code":"051511106213998","order_batch_code":"Z841511106213940","order_parent_id":"33","order_is_parent":"0","created_at":"1447146939","updated_at":"1447146939","isdel":"0","ver":"1","version":"1","order_ip":"58.135.77.208","order_service_type_id":"1","order_service_type_name":"专业保洁","order_service_item_id":"1","order_service_item_name":"家庭保洁","order_src_id":"1","order_src_name":"BOSS","channel_id":"20","order_channel_name":"E家洁","order_unit_money":"0.01","order_money":"0.02","order_booked_count":"2.0","order_booked_begin_time":"1448334000","order_booked_end_time":"1448341200","city_id":"110100","district_id":"1","address_id":"916","order_address":"北京市,西城区,北京市北京市西城区西华门大街39号西苑门999,空,18311474301","order_lat":"39.921386340298","order_lng":"116.39630151955","order_booked_worker_id":"5","checking_id":"0","order_cs_memo":"","order_sys_memo":"","order_cancel_cause_id":"0","order_cancel_cause_detail":"","order_cancel_cause_memo":"","order_id":"34","order_before_status_dict_id":"1","order_before_status_name":"已创建","order_status_dict_id":"1","order_status_name":"已创建","order_status_boss":"初始化","order_status_customer":"待支付","order_status_worker":"","customer_id":"2","order_customer_phone":"18311474301","order_customer_is_vip":"0","order_customer_need":"","order_customer_memo":"","comment_id":"0","invoice_id":"0","order_customer_hidden":"0","order_pay_type":"2","pay_channel_id":"0","order_pay_channel_name":"","order_pay_flow_num":"","order_pay_money":"0.02","order_use_acc_balance":"0.00","card_id":"0","order_use_card_money":"0.00","coupon_id":"0","order_use_coupon_money":"0.00","promotion_id":"0","order_use_promotion_money":"0.00"},{"id":"35","order_code":"921511106213910","order_batch_code":"Z841511106213940","order_parent_id":"33","order_is_parent":"0","created_at":"1447146939","updated_at":"1447146939","isdel":"0","ver":"1","version":"1","order_ip":"58.135.77.208","order_service_type_id":"1","order_service_type_name":"专业保洁","order_service_item_id":"1","order_service_item_name":"家庭保洁","order_src_id":"1","order_src_name":"BOSS","channel_id":"20","order_channel_name":"E家洁","order_unit_money":"0.01","order_money":"0.02","order_booked_count":"2.0","order_booked_begin_time":"1448938800","order_booked_end_time":"1448946000","city_id":"110100","district_id":"1","address_id":"916","order_address":"北京市,西城区,北京市北京市西城区西华门大街39号西苑门999,空,18311474301","order_lat":"39.921386340298","order_lng":"116.39630151955","order_booked_worker_id":"5","checking_id":"0","order_cs_memo":"","order_sys_memo":"","order_cancel_cause_id":"0","order_cancel_cause_detail":"","order_cancel_cause_memo":"","order_id":"35","order_before_status_dict_id":"1","order_before_status_name":"已创建","order_status_dict_id":"1","order_status_name":"已创建","order_status_boss":"初始化","order_status_customer":"待支付","order_status_worker":"","customer_id":"2","order_customer_phone":"18311474301","order_customer_is_vip":"0","order_customer_need":"","order_customer_memo":"","comment_id":"0","invoice_id":"0","order_customer_hidden":"0","order_pay_type":"2","pay_channel_id":"0","order_pay_channel_name":"","order_pay_flow_num":"","order_pay_money":"0.02","order_use_acc_balance":"0.00","card_id":"0","order_use_card_money":"0.00","coupon_id":"0","order_use_coupon_money":"0.00","promotion_id":"0","order_use_promotion_money":"0.00"},{"id":"36","order_code":"301511106213977","order_batch_code":"Z841511106213940","order_parent_id":"33","order_is_parent":"0","created_at":"1447146939","updated_at":"1447146939","isdel":"0","ver":"1","version":"1","order_ip":"58.135.77.208","order_service_type_id":"1","order_service_type_name":"专业保洁","order_service_item_id":"1","order_service_item_name":"家庭保洁","order_src_id":"1","order_src_name":"BOSS","channel_id":"20","order_channel_name":"E家洁","order_unit_money":"0.01","order_money":"0.02","order_booked_count":"2.0","order_booked_begin_time":"1449543600","order_booked_end_time":"1449550800","city_id":"110100","district_id":"1","address_id":"916","order_address":"北京市,西城区,北京市北京市西城区西华门大街39号西苑门999,空,18311474301","order_lat":"39.921386340298","order_lng":"116.39630151955","order_booked_worker_id":"5","checking_id":"0","order_cs_memo":"","order_sys_memo":"","order_cancel_cause_id":"0","order_cancel_cause_detail":"","order_cancel_cause_memo":"","order_id":"36","order_before_status_dict_id":"1","order_before_status_name":"已创建","order_status_dict_id":"1","order_status_name":"已创建","order_status_boss":"初始化","order_status_customer":"待支付","order_status_worker":"","customer_id":"2","order_customer_phone":"18311474301","order_customer_is_vip":"0","order_customer_need":"","order_customer_memo":"","comment_id":"0","invoice_id":"0","order_customer_hidden":"0","order_pay_type":"2","pay_channel_id":"0","order_pay_channel_name":"","order_pay_flow_num":"","order_pay_money":"0.02","order_use_acc_balance":"0.00","card_id":"0","order_use_card_money":"0.00","coupon_id":"0","order_use_coupon_money":"0.00","promotion_id":"0","order_use_promotion_money":"0.00"}]';
-                    #$arrayOrder = json_decode($str, true);
-
                     foreach ($order as $k => $v) {
                         if ($v['order_pay_type'] == 1) {
                             @$r_order['worker_money'] += $v['order_money'];
@@ -2163,59 +2167,6 @@ class OrderController extends \restapi\components\Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return OrderPush::push($id);
     }
-
-    /**
-     * @api {POST} /order/delete-worker-order [POST]/order/delete-worker-order(100%）
-     * 
-     * @apiDescription 阿姨删除订单 （郝建设） [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表 该功能暂时没有开发,没有得到核实！
-     * @apiName actionDeleteWorkerOrder
-     * @apiGroup Order
-     *
-     * @apiParam {String} access_token     阿姨认证
-     * @apiParam {String} [app_version]    访问源(android_4.2.2)
-     * @apiParam {String} order_id/order_code 周期订单号
-     * 
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *    {
-     *     "code": 1,
-     *     "msg": "删除成功",
-     *     "ret": {}
-     *     "alertMsg": "删除成功"
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": 401,
-     *       "msg": "认证已经过期,请重新登录，"
-     *       "ret":{},
-     *       "alertMsg": "操作成功"
-     *     }
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 delete Not Found
-     *     {
-     *       "code": 0,
-     *       "msg": "删除失败",
-     *       "ret": {},
-     *      "alertMeg": "删除失败"
-     *      }
-     */
-    public function actionDeleteWorkerOrder()
-    {
-        $param = Yii::$app->request->post();
-
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
-        }
-
-        if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
-        }
-    }
-
     /**
      * @api {GET} /order/get-order-channel-list [GET] /order/get-order-channel-list (100%)
      * @apiName actionGetOrderChannelList（郝建设）
