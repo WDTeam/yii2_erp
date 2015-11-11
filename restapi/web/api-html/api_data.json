@@ -510,7 +510,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":8\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   8\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
           "type": "json"
         }
       ]
@@ -948,7 +948,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "channel_id",
-            "description": "<p>订单来源【值待定】</p> "
+            "description": "<p>订单来源【1Android(版本号) 2.ios（版本号）3.Pcweb 4.H5 】</p> "
           },
           {
             "group": "Parameter",
@@ -988,77 +988,6 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "POST",
-    "url": "/order/delete-worker-order",
-    "title": "[POST]/order/delete-worker-order(100%）",
-    "description": "<p>阿姨删除订单 （郝建设） [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表 该功能暂时没有开发,没有得到核实！</p> ",
-    "name": "actionDeleteWorkerOrder",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id/order_code",
-            "description": "<p>周期订单号</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"删除成功\",\n \"ret\": {}\n \"alertMsg\": \"删除成功\"\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": 401,\n  \"msg\": \"认证已经过期,请重新登录，\"\n  \"ret\":{},\n  \"alertMsg\": \"操作成功\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 delete Not Found\n{\n  \"code\": 0,\n  \"msg\": \"删除失败\",\n  \"ret\": {},\n \"alertMeg\": \"删除失败\"\n }",
           "type": "json"
         }
       ]
@@ -3973,6 +3902,13 @@
           },
           {
             "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_code",
+            "description": "<p>'订单号'</p> "
+          },
+          {
+            "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
@@ -4142,7 +4078,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": {\n          \"id\": \"编号\",\n          \"worker_id\": \"阿姨ID\",\n          \"worker_task_id\": \"任务ID\",\n          \"worker_task_cycle_number\": \"任务周期序号\",\n          \"worker_task_name\": \"任务名称\",\n          \"worker_task_log_start\": 任务本周期开始时间,\n          \"worker_task_log_end\": \"任务本周期结束时间\",\n          \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n          \"worker_task_done_time\": \"任务完成时间\",\n          \"worker_task_reward_type\": \"任务奖励类型\",\n          \"worker_task_reward_value\": \"任务奖励值\",\n          \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n          \"created_at\": \"创建时间\",\n          \"updated_at\": \"更新时间\",\n          \"values\": [\n              {\n                  \"worker_tasklog_condition\": \"条件索引\",\n                  \"worker_tasklog_value\": \"条件完成值\",\n                  \"name\": \"主动接单\",\n                  \"judge\": \">=\",\n                  \"value\": \"条件值\"\n              }\n           ],\n          \"worker_task_description\": \"任务描述\",\n          \"order_list\": [\n                  {\n                      \"order_code\": \"订单号\",\n                      \"created_at\": \"创建时间\",\n                      \"order_booked_count\": \"预约服务数量（时长）\"\n                  },\n                  {\n                      \"order_code\": \"订单号\",\n                      \"created_at\": \"创建时间\",\n                      \"order_booked_count\": \"预约服务数量（时长）\"\n                  }\n           ]\n       },\n      \"alertMsg\": \"操作成功\"\n   }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": {\n          \"id\": \"编号\",\n          \"worker_id\": \"阿姨ID\",\n          \"worker_task_id\": \"任务ID\",\n          \"worker_task_cycle_number\": \"任务周期序号\",\n          \"worker_task_name\": \"任务名称\",\n          \"worker_task_log_start\": 任务本周期开始时间,\n          \"worker_task_log_end\": \"任务本周期结束时间\",\n          \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n          \"worker_task_done_time\": \"任务完成时间\",\n          \"worker_task_reward_type\": \"任务奖励类型\",\n          \"worker_task_reward_value\": \"任务奖励值\",\n          \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n          \"created_at\": \"创建时间\",\n          \"updated_at\": \"更新时间\",\n          \"values\": [\n                      {\n                          \"id\": \"任务条件id\",\n                          \"judge\": \">=\",\n                          \"value\": \"条件值\",\n                          \"name\": \"条件name\",\n                          \"worker_tasklog_condition\": \"条件索引\",\n                          \"worker_tasklog_value\": \"条件完成值\"\n                      }\n           ],\n          \"worker_task_description\": \"任务描述\",\n          \"order_list\": [\n                  {\n                      \"order_code\": \"订单号\",\n                      \"created_at\": \"创建时间\",\n                      \"order_booked_count\": \"预约服务数量（时长）\"\n                  },\n                  {\n                      \"order_code\": \"订单号\",\n                      \"created_at\": \"创建时间\",\n                      \"order_booked_count\": \"预约服务数量（时长）\"\n                  }\n           ]\n       },\n      \"alertMsg\": \"操作成功\"\n   }",
           "type": "json"
         }
       ]
@@ -4904,7 +4840,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_doing\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"worker_task_description\": \"任务描述\"\n          },\n          \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_doing\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                      {\n                          \"id\": \"任务条件id\",\n                          \"judge\": \">=\",\n                          \"value\": \"条件值\",\n                          \"name\": \"条件name\",\n                          \"worker_tasklog_condition\": \"条件索引\",\n                          \"worker_tasklog_value\": \"条件完成值\"\n                      }\n               ],\n              \"worker_task_description\": \"任务描述\"\n          },\n          \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -4967,7 +4903,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_done\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          },\n         \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n         \"task_done\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                      {\n                          \"id\": \"任务条件id\",\n                          \"judge\": \">=\",\n                          \"value\": \"条件值\",\n                          \"name\": \"条件name\",\n                          \"worker_tasklog_condition\": \"条件索引\",\n                          \"worker_tasklog_value\": \"条件完成值\"\n                      }\n               ],\n              \"worker_task_description\": \"任务描述\"\n          },\n         \"url\": \"右上角任务说明链接（后台没有返回空）\"\n      ]，\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
@@ -5030,7 +4966,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          \"task_fail\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                  {\n                      \"worker_tasklog_condition\": \"条件索引\",\n                      \"worker_tasklog_value\": \"条件值\"\n                  }\n              ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"url\": \"右上角任务说明链接（后台没有返回空）\"\n     \"alertMsg\": \"操作成功\"\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          \"task_fail\":{ \n              \"id\": \"编号\",\n              \"worker_id\": \"阿姨ID\",\n              \"worker_task_id\": \"任务ID\",\n              \"worker_task_cycle_number\": \"任务周期序号\",\n              \"worker_task_name\": \"任务名称\",\n              \"worker_task_log_start\": 任务本周期开始时间,\n              \"worker_task_log_end\": \"任务本周期结束时间\",\n              \"worker_task_is_done\": \"任务是否完成,0未处理，1完成，-1结束且未完成\",\n              \"worker_task_done_time\": \"任务完成时间\",\n              \"worker_task_reward_type\": \"任务奖励类型\",\n              \"worker_task_reward_value\": \"任务奖励值\",\n              \"worker_task_is_settlemented\": \"是否已结算0未结算，1已结算\",\n              \"created_at\": \"创建时间\",\n              \"updated_at\": \"更新时间\",\n              \"values\": [\n                      {\n                          \"id\": \"任务条件id\",\n                          \"judge\": \">=\",\n                          \"value\": \"条件值\",\n                          \"name\": \"条件name\",\n                          \"worker_tasklog_condition\": \"条件索引\",\n                          \"worker_tasklog_value\": \"条件完成值\"\n                      }\n               ],\n              \"worker_task_description\": \"任务描述\"\n          }\n      ]，\n     \"url\": \"右上角任务说明链接（后台没有返回空）\"\n     \"alertMsg\": \"操作成功\"\n  }",
           "type": "json"
         }
       ]
