@@ -192,11 +192,11 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	*  2、未过期的按截止日期由近至远，日期相同的，按面值由大到小排
 	**/
 	
-	public static function GetCustomerCouponList($customer_id,$city_id,$service_type_id){
+	public static function GetCustomerCouponList($customer_tel,$city_id,$service_type_id){
 		$now_time=time();
 		$couponCustomer = self::find()
-		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
-		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$service_type_id"], 'couponrule_type=0']] )
+		->select(['id','customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
+		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$service_type_id"], 'couponrule_type=0']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
@@ -227,20 +227,20 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @return $couponCustomer 用户优惠券列表
 	**/
 	
-	public static function GetCustomerDueCouponList($customer_id,$city_id){
+	public static function GetCustomerDueCouponList($customer_tel,$city_id){
 		$now_time= date("Y-m-d",time());
 		$last_month = strtotime("$now_time -30 days");
 		$newtime=time();
 		$couponCustomer1 = self::find()
-		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
-		->where(['and',"couponrule_use_end_time>$newtime",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
+		->select(['id','customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
+		->where(['and',"couponrule_use_end_time>$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
 		
 		$couponCustomer2 = self::find()
 		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
-		->where(['and',"couponrule_use_end_time>$last_month","couponrule_use_end_time<$newtime",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
+		->where(['and',"couponrule_use_end_time>$last_month","couponrule_use_end_time<$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
 		->orderBy(['coupon_userinfo_price'=>SORT_DESC,'couponrule_use_end_time'=>SORT_ASC,])
 		->asArray()
 		->all();
@@ -261,11 +261,11 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @author: peak pan
 	* @return:
 	**/
-	public static function GetCustomerCouponTotal($customer_id,$city_id){
+	public static function GetCustomerCouponTotal($customer_tel,$city_id){
 	$now_time=time();
 	$couponCustomer = self::find()
 	->select('sum(coupon_userinfo_price) as suminfo')
-	->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_id=$customer_id", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0'], 'couponrule_type=0']] )
+	->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0'], 'couponrule_type=0']] )
 	->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 	->asArray()
 	->one();
@@ -299,13 +299,13 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @return $couponCustomer 用户优惠券列表
 	**/
 	
-	public static function GetAllCustomerCouponList_bak($customer_id){
+	public static function GetAllCustomerCouponList_bak($customer_tel){
 		
 		$couponCustomer = (new \yii\db\Query())
 		->select('*')
 		->from(['cc'=>'{{%coupon_userinfo}}'])
 		->leftJoin(['c'=>'{{%coupon_rule}}'], 'c.id = cc.coupon_userinfo_id')
-		->where(['cc.customer_id'=>$customer_id])
+		->where(['cc.customer_tel'=>$customer_tel])
 		->andWhere(['cc.is_del'=>0])
 		->orderBy(['{{%coupon_rule}}.couponrule_use_end_time'=>SORT_ASC,'{{%coupon_userinfo}}.coupon_userinfo_price'=>SORT_DESC])
 		->all();
@@ -323,10 +323,10 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @return  array 用户优惠码
 	**/
 	
-	public static function CouponCount($customer_id)
+	public static function CouponCount($customer_tel)
 	{
 		$now_time=time();
-		$count=self::find()->where(['and','is_del=0',"customer_id=$customer_id",'is_used=0',"couponrule_use_end_time>$now_time"] )->count();
+		$count=self::find()->where(['and','is_del=0',"customer_tel=$customer_tel",'is_used=0',"couponrule_use_end_time>$now_time"] )->count();
 		if(empty($count)){
 			$countinfo=0;
 		}else{
@@ -357,9 +357,9 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	* @return ture已绑定 false未绑定
 	**/
 
- private  function checkCouponIsUsed($code,$customer_id)
+ private  function checkCouponIsUsed($code,$customer_tel)
 	{
-		$couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code,'customer_id'=>$customer_id])->one();
+		$couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code,'customer_tel'=>$customer_tel])->one();
 		if(empty($couponCustomer)){
 			return false;
 		}else{

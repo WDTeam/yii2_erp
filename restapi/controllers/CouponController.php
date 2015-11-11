@@ -164,7 +164,7 @@ class CouponController extends \restapi\components\Controller
         $service_type_id = $param['service_type_id'];
         //获取该用户该城市的优惠券列表
         try{
-            $coupons=CouponUserinfo::GetCustomerCouponList($checkResult['customer_id'],$city_id,$service_type_id);
+            $coupons=CouponUserinfo::GetCustomerCouponList($checkResult['customer_phone'],$city_id,$service_type_id);
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
@@ -232,7 +232,7 @@ class CouponController extends \restapi\components\Controller
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠券列表
         try{
-            $coupons=CouponUserinfo::GetCustomerDueCouponList($checkResult['customer_id'],$city_id);
+            $coupons=CouponUserinfo::GetCustomerDueCouponList($checkResult['customer_phone'],$city_id);
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
@@ -289,7 +289,7 @@ class CouponController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'],401, 403,null,alertMsgEnum::customerLoginFailed);
         }
         try{
-            $CouponCount=CouponUserinfo::CouponCount($checkResult['customer_id']);
+            $CouponCount=CouponUserinfo::CouponCount($checkResult['customer_phone']);
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
@@ -349,7 +349,7 @@ class CouponController extends \restapi\components\Controller
         }
         $city_id = $param['city_id'];
         try{
-            $CouponTotal=CouponUserinfo::GetCustomerCouponTotal($checkResult['customer_id'],$city_id);
+            $CouponTotal=CouponUserinfo::GetCustomerCouponTotal($checkResult['customer_phone'],$city_id);
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
