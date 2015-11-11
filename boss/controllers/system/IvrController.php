@@ -37,7 +37,7 @@ class IvrController extends Controller
                 OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
                 return json_encode(['code'=>0]);
             }
-        }elseif(isset($data['postType']) && $data['postType']==1 && isset($data['press']) && $data['press']!=2){
+        }elseif(isset($data['postType']) && $data['postType']==2){
             OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
             return json_encode(['code'=>0]);
         }
