@@ -8,11 +8,11 @@ namespace core\models\operation;
  *
  * @property string $id
  * @property string $service_card_info_name
- * @property integer $service_card_info_card_type
- * @property integer $service_card_info_card_level
- * @property string $service_card_info_par_value
- * @property string $service_card_info_reb_value
- * @property integer $service_card_info_use_scope
+ * @property integer $service_card_info_type
+ * @property integer $service_card_info_level
+ * @property string $service_card_info_value
+ * @property string $service_card_info_rebate_value
+ * @property integer $service_card_info_scope
  * @property integer $service_card_info_valid_days
  * @property integer $created_at
  * @property integer $updated_at

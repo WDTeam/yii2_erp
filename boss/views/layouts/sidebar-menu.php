@@ -432,7 +432,7 @@ echo Menu::widget([
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
-                            'label' => '服务卡消费记录222',
+                            'label' => '服务卡消费记录',
                             'url' => [
                                 'operation/operation-service-card-consume-record/index'
                             ],

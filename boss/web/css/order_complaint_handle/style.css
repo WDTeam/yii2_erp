@@ -38,7 +38,7 @@
 	}
 
 	.btn {
-	    margin-left: 65px;
+	    margin-left: 115px;
 	    background: #f6a202;
 	    text-align: center;
 	    height: 32px;
@@ -54,3 +54,10 @@
 		width: 100px;
 		height: 20px;
 	}
+
+	ul {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    padding: 0 !important;
+    color: #333 !important;
+}

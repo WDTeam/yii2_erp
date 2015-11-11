@@ -29,4 +29,18 @@ class OperationServiceCardInfo extends \yii\db\ActiveRecord
         return '{{%operation_service_card_info}}';
     }
 
+    /**
+     * @inheritdoc
+     * @introducntion ÎóÉ¾·ñÔòsetAttr·½·¨´íÎó
+     */
+    public function rules()
+    {
+        return [
+            [['service_card_info_name','service_card_info_type', 'service_card_info_level', 'service_card_info_scope', 'service_card_info_valid_days','service_card_info_value','service_card_info_rebate_value'], 'required'],
+            [['service_card_info_type', 'service_card_info_level', 'service_card_info_scope', 'service_card_info_valid_days', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['service_card_info_value', 'service_card_info_rebate_value'], 'number'],
+            [['service_card_info_name'], 'string', 'max' => 64]
+        ];
+    }
+
 }

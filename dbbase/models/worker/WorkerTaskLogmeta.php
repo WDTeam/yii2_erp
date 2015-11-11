@@ -30,7 +30,8 @@ class WorkerTaskLogmeta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_task_id', 'worker_tasklog_id', 'worker_id', 'worker_tasklog_condition', 'worker_tasklog_value'], 'integer']
+            [['worker_task_id', 'worker_tasklog_id', 'worker_id', 'worker_tasklog_condition'], 'integer'],
+            [['worker_tasklog_value'], 'number']
         ];
     }
 

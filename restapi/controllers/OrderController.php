@@ -245,7 +245,11 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         //验证用户登录情况
-        $user = CustomerAccessToken::getCustomer($args['access_token']);
+         try{
+            $user = CustomerAccessToken::getCustomer($args['access_token']);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200,null,alertMsgEnum::userLoginFailed);
+        }
         if (!$user) return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         //填写服务项目
         if (empty($args['order_service_item_id'])) {
@@ -267,7 +271,11 @@ class OrderController extends \restapi\components\Controller
         if(!isset($args['address'])||!$args['address']){
             return $this->send(null, "数据不完整,请输入常用地址", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
+        try{
+            $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200,null,alertMsgEnum::orderAddressIdFaile);
+        }
         if (!empty($model)) {
             $attributes['address_id'] = $model->id;
         } else {
@@ -290,9 +298,10 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_customer_memo'] = "";//客户备注
         $attributes['order_is_use_balance'] = 0;//客户选择使用余额则去获取客户余额
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
-        $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
+        
         //创建订单
         try{
+            $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
             $order = new Order();
             $is_success = $order->createNew($attributes);
             if ($is_success) {

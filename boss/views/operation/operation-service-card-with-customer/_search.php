@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 		 <?= $form->field($model, 'service_card_with_customer_code') ?>
 		</div>
 		<div class="col-md-2">
-		 <?= $form->field($model, 'server_card_info_id') ?>
+		 <?= $form->field($model, 'service_card_info_id') ?>
 		</div>
 		<div class="col-md-2">
 		 <?= $form->field($model, 'customer_id') ?>
@@ -45,15 +45,15 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'service_card_sell_record_code') ?>
 
-    <?php // echo $form->field($model, 'server_card_info_id') ?>
+    <?php // echo $form->field($model, 'service_card_info_id') ?>
 
     <?php // echo $form->field($model, 'service_card_with_customer_code') ?>
 
-    <?php // echo $form->field($model, 'server_card_info_name') ?>
+    <?php // echo $form->field($model, 'service_card_info_name') ?>
 
     <?php // echo $form->field($model, 'customer_trans_record_pay_money') ?>
 
-    <?php // echo $form->field($model, 'server_card_info_value') ?>
+    <?php // echo $form->field($model, 'service_card_info_value') ?>
 
     <?php // echo $form->field($model, 'service_card_info_rebate_value') ?>
 
@@ -63,7 +63,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'customer_phone') ?>
 
-    <?php // echo $form->field($model, 'server_card_info_scope') ?>
+    <?php // echo $form->field($model, 'service_card_info_scope') ?>
 
     <?php // echo $form->field($model, 'service_card_with_customer_buy_at') ?>
 

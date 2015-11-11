@@ -339,8 +339,8 @@ class ConfigureController extends \restapi\components\Controller
      *                     "order_service_item_id": "商品ID",
      *                     "order_service_item_name": "商品名称",
      *                     "icon": "商品图标",
-     *                     "order_service_item_price": "商品价格",
-     *                     "order_service_item_price_description": "商品价格描述"
+     *                     "service_item_price": "商品价格",
+     *                     "service_item_price_description": "商品价格描述"
      *                 }
      *       ]
      * }
@@ -375,8 +375,8 @@ class ConfigureController extends \restapi\components\Controller
                 $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
                 $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
                 $itemlist[$key]['icon'] = '';//$val['operation_goods_pc_ico'];
-                $itemlist[$key]['order_service_item_price'] = $val['operation_goods_price'];
-                $itemlist[$key]['order_service_item_price_description'] = $val['operation_goods_price_description'];
+                $itemlist[$key]['service_item_price'] = $val['operation_goods_price'];
+                $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
             }
         }
         $ret = [
