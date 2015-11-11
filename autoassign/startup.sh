@@ -12,7 +12,7 @@ if [ $count -lt 1 ]; then
 ps -eaf |grep "autoassign-server" | grep -v "grep"| awk '{print $2}'|xargs kill -9
 sleep 2
 ulimit -c unlimited
-php /code/ejj-homeclean-boss/autoassign/autoassign-server.php
+php ./autoassign-server.php
 echo "restart";
 echo $(date +%Y-%m-%d_%H:%M:%S) >./restart.log
 fi
