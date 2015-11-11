@@ -2167,59 +2167,6 @@ class OrderController extends \restapi\components\Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return OrderPush::push($id);
     }
-
-    /**
-     * @api {POST} /order/delete-worker-order [POST]/order/delete-worker-order(100%）
-     * 
-     * @apiDescription 阿姨删除订单 （郝建设） [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表 该功能暂时没有开发,没有得到核实！
-     * @apiName actionDeleteWorkerOrder
-     * @apiGroup Order
-     *
-     * @apiParam {String} access_token     阿姨认证
-     * @apiParam {String} [app_version]    访问源(android_4.2.2)
-     * @apiParam {String} order_id/order_code 周期订单号
-     * 
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *    {
-     *     "code": 1,
-     *     "msg": "删除成功",
-     *     "ret": {}
-     *     "alertMsg": "删除成功"
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": 401,
-     *       "msg": "认证已经过期,请重新登录，"
-     *       "ret":{},
-     *       "alertMsg": "操作成功"
-     *     }
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 delete Not Found
-     *     {
-     *       "code": 0,
-     *       "msg": "删除失败",
-     *       "ret": {},
-     *      "alertMeg": "删除失败"
-     *      }
-     */
-    public function actionDeleteWorkerOrder()
-    {
-        $param = Yii::$app->request->post();
-
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
-        }
-
-        if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
-            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
-        }
-    }
-
     /**
      * @api {GET} /order/get-order-channel-list [GET] /order/get-order-channel-list (100%)
      * @apiName actionGetOrderChannelList（郝建设）
