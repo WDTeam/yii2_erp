@@ -23,11 +23,11 @@ use kartik\datecontrol\DateControl;
 
 'service_card_sell_record_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 购卡销售记录id...', 'maxlength'=>20]], 
 
-'server_card_info_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡信息id...', 'maxlength'=>20]], 
+'service_card_info_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡信息id...', 'maxlength'=>20]], 
 
 'customer_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 持卡人id...']], 
 
-'server_card_info_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
+'service_card_info_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
 
 'service_card_with_customer_buy_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 购买日期...']], 
 
@@ -45,7 +45,7 @@ use kartik\datecontrol\DateControl;
 
 'customer_trans_record_pay_money'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 实收金额...', 'maxlength'=>8]], 
 
-'server_card_info_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡面金额...', 'maxlength'=>8]], 
+'service_card_info_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡面金额...', 'maxlength'=>8]], 
 
 'service_card_info_rebate_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 优惠金额...', 'maxlength'=>8]], 
 
@@ -55,7 +55,7 @@ use kartik\datecontrol\DateControl;
 
 'service_card_with_customer_code'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡号...', 'maxlength'=>64]], 
 
-'server_card_info_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡卡名...', 'maxlength'=>64]], 
+'service_card_info_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡卡名...', 'maxlength'=>64]], 
 
 'customer_phone'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 持卡人手机号...', 'maxlength'=>11]], 
 
