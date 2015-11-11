@@ -1,7 +1,7 @@
 /**
  * Created by linhongyou on 2015/9/25.
  */
-window.coupons = new Array();
+var coupon = new Object();
 window.cards = new Array();
 var customer = new Object();
 var address_list = new Object();
@@ -100,6 +100,8 @@ $(document).on("change",".city_form",function(){
     getCounty(city_id,address_id,0);
 });
 
+$(document).on("blur","#order-order_coupon_code",checkCoupon);
+
 $(document).on("click",".cancel_address_btn",function(){
     var address_id = $(this).parents('.radio').attr('id').split('_')[1];
     if(address_id>0) {
@@ -176,12 +178,6 @@ $(document).on("click",".save_address_btn",function(){
     });
 });
 
-$(document).on('change','#order-coupon_id',function(){
-    if($(this).val()!=''){
-        var order_pay_money = $("#order-order_money").val()-window.coupons[$(this).val()];
-        $(".order_pay_money").text(order_pay_money.toFixed(2));
-    }
-});
 
 function getTimeRange()
 {
@@ -308,6 +304,28 @@ function getCards(){
             }
         });
     }
+}
+
+function checkCoupon(){
+    var service_item_id = $("#order-order_service_item_id input:checked").val();
+    var service_type_id = goods_list[service_item_id].operation_category_id;
+    var address_id = $("#order-address_id input:checked").val();
+    var city_id = address_list[address_id].operation_city_id;
+    $.ajax({
+        type: "GET",
+        url: "/order/order/check-coupon-code/?coupon_code=" + $("#order-order_coupon_code").val()+"&customer_phone="+$("#order-order_customer_phone").val()+"&service_item_id="+service_item_id+"&service_type_id="+service_type_id+"&city_id="+city_id,
+        dataType: "json",
+        success: function (data) {
+            if (!data) {
+                alert('该优惠码与此次服务不匹配！');
+            }else{
+                coupon = data
+                $("#order-coupon_id").val(coupon.id);
+                var order_pay_money = $("#order-order_money").val()-coupon.coupon_userinfo_price;
+                $(".order_pay_money").text(order_pay_money.toFixed(2));
+            }
+        }
+    });
 }
 
 function getCustomerInfo(){

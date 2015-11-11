@@ -118,6 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList)->label('支付方式'); ?>
                     <div style="display: none;" id="order_coupon_code">
                         <?= $form->field($model, 'order_coupon_code')->textInput(['maxlength' => true]) ?>
+                        <input type="hidden" value="" id="order-coupon_id" name="Order[coupon_id]">
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>

@@ -170,16 +170,15 @@ class OrderController extends BaseAuthController
      * 根据服务品类获取优惠券
      * @return array
      */
-    public function actionCoupons()
+    public function actionCheckCouponCode()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $id = Yii::$app->request->get('id');
-        $cate_id = Yii::$app->request->get('cate_id');
-        $result = CouponRule::getAbleCouponByCateId($id, $cate_id);
-        if (isset($result['is_status']) && $result['is_status'] == 1) {
-            return $result['data'];
-        }
-        return false;
+        $coupon_code = Yii::$app->request->get('coupon_code');
+        $customer_tel = Yii::$app->request->get('customer_phone');
+        $service_type_id = Yii::$app->request->get('service_type_id');
+        $service_item_id = Yii::$app->request->get('service_item_id');
+        $city_id = Yii::$app->request->get('city_id');
+        return CouponRule::get_is_coupon_status($coupon_code,$customer_tel,$service_type_id,$service_item_id,$city_id);
     }
 
     /**
