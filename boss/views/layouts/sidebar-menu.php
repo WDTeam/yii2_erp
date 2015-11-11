@@ -470,13 +470,6 @@ echo Menu::widget([
                     ],
                     'items' => [
                         [
-                            'label' => '渠道管理',
-                            'url' => [
-                                'finance/finance-pay-channel/index'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
-                        [
                             'label' => '配置对账表头',
                             'url' => [
                                 'finance/finance-header/index'
