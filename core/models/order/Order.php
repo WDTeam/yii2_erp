@@ -854,46 +854,42 @@ class Order extends OrderModel
             }
         }
 
-        if(!empty($this->pay_channel_id) && in_array($this->pay_channel_id,[self::ORDER_PAY_CHANNEL_POP,self::ORDER_PAY_CHANNEL_CASH])) {
-            $pay_channel_name = $this->getPayChannelName($this->pay_channel_id);
-            if(empty($pay_channel_name)){
-                $this->addError('order_pay_channel_name', '获取支付渠道信息失败！');
-                return false;
-            }
-            $pay_channel_type = $this->getPayChannelType($this->pay_channel_id);
-            if(empty($pay_channel_type)){
-                $this->addError('order_pay_channel_type_name', '获取支付渠道分类信息失败！');
-                return false;
-            }
+        $channel_name = $this->getOrderChannelName($this->channel_id);
+        if(empty($channel_name)){
+            $this->addError('order_channel_name', '获取渠道信息失败！');
+            return false;
+        }
+        $channel_type = $this->getOrderChannelType($this->channel_id);
+        if(empty($channel_type)){
+            $this->addError('order_channel_type_name', '获取渠道分类信息失败！');
+            return false;
+        }
+
+        if(in_array($channel_type['id'],[2,3]) && $this->channel_id!=20){ //第三方
+            $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
+            $this->order_pay_money -= $this->order_money;
             $this->setAttributes([
-                'order_pay_channel_name' => $pay_channel_name,
-                'order_pay_channel_type_name' => $pay_channel_type['name'],
-                'order_pay_channel_type_id' => $pay_channel_type['id'],
+                'order_pay_channel_id' => self::ORDER_PAY_CHANNEL_POP,
+                'order_pay_channel_name' => '第三方团购预收',
+                'order_pay_channel_type_name' => '第三方团购',
+                'order_pay_channel_type_id' => 3,
             ]);
-            if ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_POP) { //TODO 第三方预付
-                $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
-                $this->order_pay_money -= $this->order_money;
-                $this->setAttributes([
-                    'order_pay_channel_name' => '第三方团购预收',
-                    'order_pay_channel_type_name' => '第三方团购',
-                    'order_pay_channel_type_id' => 3,
-                ]);
-            } elseif ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {//TODO 现金支付
-                $this->setAttributes([
-                    'order_pay_channel_name' => '现金支付',
-                    'order_pay_channel_type_name' => 'e家洁',
-                    'order_pay_channel_type_id' => 2,
-                ]);
-                if (!empty($this->coupon_id)) {//是否使用了优惠券
-                    $coupon = self::getCouponById($this->coupon_id);
-                    if (!empty($coupon)) {
-                        $this->order_use_coupon_money = $coupon['coupon_price'];
-                        $this->order_coupon_code = $coupon['coupon_code'];
-                        $this->order_pay_money -= $this->order_use_coupon_money;
-                    } else {
-                        $this->addError('coupon_id', '获取优惠券信息失败！');
-                        return false;
-                    }
+        }else if(!empty($this->pay_channel_id) && $this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {
+            $this->setAttributes([
+                'order_pay_channel_id' => self::ORDER_PAY_CHANNEL_CASH,
+                'order_pay_channel_name' => '现金支付',
+                'order_pay_channel_type_name' => 'e家洁',
+                'order_pay_channel_type_id' => 2,
+            ]);
+            if (!empty($this->coupon_id)) {//是否使用了优惠券
+                $coupon = self::getCouponById($this->coupon_id);
+                if (!empty($coupon)) {
+                    $this->order_use_coupon_money = $coupon['coupon_price'];
+                    $this->order_coupon_code = $coupon['coupon_code'];
+                    $this->order_pay_money -= $this->order_use_coupon_money;
+                } else {
+                    $this->addError('coupon_id', '获取优惠券信息失败！');
+                    return false;
                 }
             }
         }else{//如果不传支付渠道就是线上支付
@@ -936,16 +932,7 @@ class Order extends OrderModel
 
         }
 
-        $channel_name = $this->getOrderChannelName($this->channel_id);
-        if(empty($channel_name)){
-            $this->addError('order_channel_name', '获取渠道信息失败！');
-            return false;
-        }
-        $channel_type = $this->getOrderChannelType($this->channel_id);
-        if(empty($channel_type)){
-            $this->addError('order_channel_type_name', '获取渠道分类信息失败！');
-            return false;
-        }
+
 
         $this->setAttributes([
             //创建订单时服务卡是初始状态

@@ -43,7 +43,6 @@ class OrderExtPay extends ActiveRecord
     public function rules()
     {
         return [
-            [['pay_channel_id'],'required'],
             [[ 'pay_channel_id','pay_channel_type_id', 'card_id', 'coupon_id', 'promotion_id', 'created_at', 'updated_at'], 'integer'],
             [['order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
             [['order_pay_channel_name','order_pay_channel_type_name','order_coupon_code'], 'string', 'max' => 128],

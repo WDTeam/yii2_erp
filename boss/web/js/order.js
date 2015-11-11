@@ -52,9 +52,15 @@ $(document).on("change","#order-order_booked_count input",function(){
 $(document).on('click','.day',function(){getTimeRange();});
 
 
-$('#order-order_pay_type input').change(function(){
-        $('[id^=order_pay_type]').hide();
-        $('#order_pay_type_'+$('#order-order_pay_type input:checked').val()).show();
+$('#order-channel_id input').change(function(){
+        $('[id^=order_pay_channel_]').hide();
+        if($(this).val()==20){
+            $('#order_pay_channel_1').show();
+            $('#order_pay_type_1').show();
+        }else{
+            $('#order_pay_channel_2').show();
+            $('#order_pay_type_2').show();
+        }
 });
 
 $(document).on("click","#add_address_btn",function(){

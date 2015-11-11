@@ -131,14 +131,10 @@ class Order extends OrderModel
 
     public function getEjjPayChannelList()
     {
-        return OperationPayChannel::getpaychannellist(2);
+        $list = OperationPayChannel::getpaychannellist(2);
+        unset($list[1]);
+        return $list;
     }
-
-    public function getPopPayChannelList()
-    {
-        return OperationPayChannel::getpaychannellist(3);
-    }
-
 
 
     public function createNew($post)
