@@ -36,11 +36,6 @@ class CouponUserinfoController extends Controller
      */
     public function actionIndex()
     {
-    	
-    	
-    	//var_dump( \core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('1','010','1')); exit;
-    	
-    	
         $searchModel = new CouponUserinfoSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

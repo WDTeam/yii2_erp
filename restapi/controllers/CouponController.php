@@ -110,6 +110,7 @@ class CouponController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {Strimg} service_type_id 服务类别id
+     * @apiParam {Strimg} good_type_id 商品类别id
      * @apiParam {String} city_id  城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -147,7 +148,6 @@ class CouponController extends \restapi\components\Controller
      */
     public function actionCoupons()
     {
-
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
@@ -160,11 +160,16 @@ class CouponController extends \restapi\components\Controller
         if ( !isset($param['service_type_id']) || !$param['service_type_id']) {
             return $this->send(null, "请选择服务类别id", 0, 403,null,alertMsgEnum::couponsCityNoService);
         }
+        $param['good_type_id']=1;    
+        if ( !isset($param['good_type_id']) || !$param['good_type_id']) {
+            return $this->send(null, "请选择商品类别id", 0, 403,null,alertMsgEnum::couponsCityNoGood);
+        }
         $city_id = $param['city_id'];
         $service_type_id = $param['service_type_id'];
+        $good_type_id = $param['good_type_id'];
         //获取该用户该城市的优惠券列表
         try{
-            $coupons=CouponUserinfo::GetCustomerCouponList($checkResult['customer_phone'],$city_id,$service_type_id);
+            $coupons=CouponUserinfo::GetCustomerCouponList($checkResult['customer_phone'],$city_id,$service_type_id,$good_type_id);
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }

@@ -1704,9 +1704,9 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "服务类型不能为空", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         #判断订单来源
-        if (empty($param['order_src_id'])) {
-            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
-        }
+//        if (empty($param['order_src_id'])) {
+//            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
+//        }
         #判断下单渠道不能为空
         if (empty($param['channel_id'])) {
             return $this->send(null, "下单渠道不能为空", 0, 200, null, alertMsgEnum::orderChannelFaile);
@@ -1733,7 +1733,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-
+            
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
@@ -1746,7 +1746,8 @@ class OrderController extends \restapi\components\Controller
             "admin_id" => Order::ADMIN_CUSTOMER,
             "pay_channel_id" =>$param['pay_channel_id'],
             "order_is_use_balance" => $param['order_is_use_balance'],
-            "order_booked_worker_id" => $param['order_booked_worker_id'],
+                //order_booked_worker_id edit by tianyuxing
+            "order_booked_worker_id" => isset($param['order_booked_worker_id'])?intval($param['order_booked_worker_id']):0,
             "order_customer_need" => $param['order_customer_need'],
             "order_customer_memo" => $param['order_customer_memo'],
             "order_flag_change_booked_worker" => $param['accept_other_aunt']

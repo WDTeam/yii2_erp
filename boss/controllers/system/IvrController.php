@@ -15,17 +15,17 @@ class IvrController extends Controller
     public function actionCallback()
     {
         $data = \Yii::$app->ivr->cb_data;
-        \Yii::getLogger()->log("ivr 回调日志", Logger::LEVEL_INFO);
+        \Yii::getLogger()->log("ivr 回调日志", Logger::LEVEL_ERROR);
         $data['orderId'];
         $data['press'];
         $data['telephone'];
-        \Yii::getLogger()->log("ivr 回调日志,orderId=".$data['orderId'], Logger::LEVEL_INFO);
+        \Yii::getLogger()->log("ivr 回调日志,orderId=".$data['orderId'], Logger::LEVEL_ERROR);
         if(isset($data['press'])){
-            \Yii::getLogger()->log("ivr 回调日志,press=".$data['press'], Logger::LEVEL_INFO);
+            \Yii::getLogger()->log("ivr 回调日志,press=".$data['press'], Logger::LEVEL_ERROR);
         }
-        \Yii::getLogger()->log("ivr 回调日志,telephone=".$data['telephone'], Logger::LEVEL_INFO);
+        \Yii::getLogger()->log("ivr 回调日志,telephone=".$data['telephone'], Logger::LEVEL_ERROR);
         if(isset($data['postType'])){
-            \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_INFO);
+            \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_ERROR);
         }
         $order_id = intval(str_replace('pushToWorker_','',$data['orderId']));
         if(isset($data['postType']) && $data['postType']==1 && isset($data['press']) && $data['press']==1){
