@@ -153,6 +153,18 @@ class JPush extends Component
      */
     public function callback($params)
     {
-        
+        try{
+            $mongo = \Yii::$app->mongodb;
+            $collection = $mongo->getCollection('jpush_callback_log');
+            $data = $params;
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['create_time'] = time();
+            $data['_SERVER'] = $_SERVER;
+            $res = $collection->insert($data);
+            return $res;
+        }catch(\Exception $e){
+            \Yii::error($e, 'event\jpush_callback');
+            return false;
+        }
     }
 }

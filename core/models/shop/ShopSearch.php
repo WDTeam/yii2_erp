@@ -30,6 +30,9 @@ class ShopSearch extends Shop
     {
         $query = Shop::find();
         $query->where('isdel is NULL OR isdel=0');
+        if(isset($params['ids'])){
+            $query->andFilterWhere(['in', 'id', $params['ids']]);
+        }
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
