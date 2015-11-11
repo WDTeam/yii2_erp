@@ -33,7 +33,7 @@ class WorkerTaskController extends Controller
         ->where('worker_task_is_done is NULL or worker_task_is_done=0')
 //         ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
         ->all();
-        ConsoleHelper::log('截至昨日已结束但未处理的任务（%s）个', [count($tasks)]);
+        ConsoleHelper::log('所有未完成的任务（%s）个', [count($tasks)]);
         foreach ($tasks as $task){
             try{
                 $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
