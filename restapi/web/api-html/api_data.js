@@ -921,6 +921,83 @@ define({ "api": [
   },
   {
     "type": "POST",
+    "url": "/order/create-value-add-order",
+    "title": "[POST] /order/create-value-add-order(100%)",
+    "description": "<p>创建增值服务订单 (田玉星)</p> ",
+    "name": "actionCreateValueAddOrder",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_service_item_id",
+            "description": "<p>服务项目id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_src_id",
+            "description": "<p>订单来源id 【2:IOS 3:Android 5:H5】</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_booked_begin_time",
+            "description": "<p>服务开始时间 时间戳  如 '1443695400'</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "address",
+            "description": "<p>服务地址</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "city_name",
+            "description": "<p>城市名称</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":8\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "POST",
     "url": "/order/delete-worker-order",
     "title": "[POST]/order/delete-worker-order(100%）",
     "description": "<p>阿姨删除订单 （郝建设） [功能介绍：] 删除指定阿姨订单列表 待抢单订单列表 该功能暂时没有开发,没有得到核实！</p> ",
@@ -1310,115 +1387,6 @@ define({ "api": [
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"查询订单状态记录成功\"\n  \"ret\": {\n      \"orders\": {\n          \"order_booked_begin_time\": \"预约开始时间\",\n          \"order_booked_end_time\": \"预约结束时间\",\n          \"order_address\": \"服务地址\",\n          \"order_booked_worker_id\": \"服务阿姨ID\",\n          \"order_booked_worker_name\": \"服务阿姨姓名\",\n          \"order_status_customer\":\"订单当前状态\",\n          \"order_service_type_name\":\"订单服务类别\",\n          \"order_code\": \"订单号\",\n          \"order_money\": \"订单金额\",\n          \"order_channel_name\": \"下单渠道\",\n          \"order_pay_type\": \"支付方式\",\n          \"order_pay_channel_name\": \"支付渠道名称\",\n          \"order_pay_money\": \"订单支付金额\",\n          \"order_use_acc_balance\": \"使用余额\",\n          \"order_use_card_money\": \"使用服务卡金额\",\n          \"order_use_coupon_money\": \"使用优惠卷金额\",\n          \"order_use_promotion_money\": \"使用促销金额\"\n      },\n      \"status_history\": [\n          {\n              \"created_at\": \"状态更新时间\",\n              \"order_status_customer\": \"当前状态\"\n          },\n          {\n              \"created_at\": \"状态更新时间\",\n              \"order_status_customer\": \"当前状态\"\n          }\n      ]\n  }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "GET",
-    "url": "/order/orders",
-    "title": "[GET] /order/orders (100%)",
-    "description": "<p>查询用户订单 (谢奕)</p> ",
-    "name": "actionOrders",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户令牌</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "id",
-            "description": "<p>订单id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "page",
-            "description": "<p>第几页</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "limit",
-            "description": "<p>每页包含订单数</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "channels",
-            "description": "<p>渠道号按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_status",
-            "description": "<p>订单状态按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "is_asc",
-            "description": "<p>排序方式</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "from",
-            "description": "<p>开始时间 如 *'1443695400'</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "to",
-            "description": "<p>结束时间 如 *'1443695400'</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "orderList",
-            "description": "<p>该状态订单.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n     \"limit\": \"1\",\n      \"page_total\": 4,\n      \"offset\": 0,\n      \"orders\": [\n       {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n          \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_pay_type\": \"支付方式\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n          }\n   ]\n },\n\"alertMsg\": \"操作成功\"\n }",
           "type": "json"
         }
       ]
@@ -2082,6 +2050,115 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
+    "url": "/order/orders",
+    "title": "[GET] /order/orders (100%)",
+    "description": "<p>查询用户订单 (谢奕)</p> ",
+    "name": "actionOrders",
+    "group": "Orders",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "id",
+            "description": "<p>订单id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "page",
+            "description": "<p>第几页</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>每页包含订单数</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "channels",
+            "description": "<p>渠道号按'.'分隔</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "order_status",
+            "description": "<p>订单状态按'.'分隔</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "is_asc",
+            "description": "<p>排序方式</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "from",
+            "description": "<p>开始时间 如 *'1443695400'</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "to",
+            "description": "<p>结束时间 如 *'1443695400'</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object[]</p> ",
+            "optional": false,
+            "field": "orderList",
+            "description": "<p>该状态订单.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n     \"limit\": \"1\",\n      \"page_total\": 4,\n      \"offset\": 0,\n      \"orders\": [\n       {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n          \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_pay_type\": \"支付方式\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n          }\n   ]\n },\n\"alertMsg\": \"操作成功\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Orders"
   },
   {
     "type": "get",
@@ -5239,7 +5316,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"good_id\": \"商品ID\",\n                    \"goods_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"goods_price\": \"商品价格\",\n                    \"goods_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"order_service_item_price\": \"商品价格\",\n                    \"order_service_item_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
           "type": "json"
         }
       ]

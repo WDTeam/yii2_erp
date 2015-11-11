@@ -4,6 +4,7 @@ namespace boss\controllers\operation;
 
 use boss\components\BaseAuthController;
 use boss\models\operation\OperationAdvertPosition;
+use boss\models\operation\OperationAdvertPositionSearch;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
 
@@ -35,15 +36,15 @@ class OperationAdvertPositionController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $post = Yii::$app->request->post();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => (!empty($post) && $post['fields'] != '0') ? OperationAdvertPosition::find()->where([$post['fields'] => $post['keyword']]): OperationAdvertPosition::find(),
-        ]);
+        $searchModel = new OperationAdvertPositionSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'post' => $post,
+            'searchModel' => $searchModel,
         ]);
+
     }
     
 //    public function actionCityAdvertPosition(){

@@ -240,7 +240,7 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
             $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
             $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
-            $serviceCategoryList[$key]['colour'] = 'ffffff';
+            $serviceCategoryList[$key]['colour'] = 'FFCC00';
             $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
         }
         
@@ -336,11 +336,11 @@ class ConfigureController extends \restapi\components\Controller
      *             "item_list": [
      *                 {
      *                     "category_id": "分类ID",
-     *                     "good_id": "商品ID",
-     *                     "goods_name": "商品名称",
+     *                     "order_service_item_id": "商品ID",
+     *                     "order_service_item_name": "商品名称",
      *                     "icon": "商品图标",
-     *                     "goods_price": "商品价格",
-     *                     "goods_price_description": "商品价格描述"
+     *                     "order_service_item_price": "商品价格",
+     *                     "order_service_item_price_description": "商品价格描述"
      *                 }
      *       ]
      * }
@@ -372,11 +372,11 @@ class ConfigureController extends \restapi\components\Controller
         if($itemInfo){
             foreach($itemInfo as $key=>$val){
                 $itemlist[$key]['category_id'] = $val['operation_category_id'];
-                $itemlist[$key]['good_id'] = $val['goods_id'];
-                $itemlist[$key]['goods_name'] = $val['operation_goods_name'];
+                $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
+                $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
                 $itemlist[$key]['icon'] = '';//$val['operation_goods_pc_ico'];
-                $itemlist[$key]['goods_price'] = $val['operation_goods_price'];
-                $itemlist[$key]['goods_price_description'] = $val['operation_goods_price_description'];
+                $itemlist[$key]['order_service_item_price'] = $val['operation_goods_price'];
+                $itemlist[$key]['order_service_item_price_description'] = $val['operation_goods_price_description'];
             }
         }
         $ret = [

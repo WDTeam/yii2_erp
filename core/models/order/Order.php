@@ -186,6 +186,10 @@ class Order extends OrderModel
         if(!empty($customer)) {
             $attributes['order_customer_phone'] = $customer->customer_phone;
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
+            if(OrderSearch::customerWaitPayOrderCount($customer->customer_phone)>0){
+                $this->addError('customer_id', '存在待支付订单，请先支付再下单！');
+                return false;
+            }
         }else{
             $this->addError('customer_id', '没有获取到用户信息！');
             return false;
@@ -208,7 +212,7 @@ class Order extends OrderModel
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
                     $order_model = OrderSearch::getOne($this->id);
                     $order_model->admin_id = $attributes['admin_id'];
-                    if(in_array($this->order_service_type_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+                    if(in_array($this->order_service_item_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
                 }
@@ -531,11 +535,11 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $orderids = [];
         //阿姨服务时间是否冲突
-        $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
+        $conflict = OrderSearch::workerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
         if($order->order_is_parent==1){ //如果是周期订单
             $child_list = OrderSearch::getChildOrder($order_id);
             foreach($child_list as $child){
-                $conflict += OrderSearch::WorkerOrderExistsConflict($worker['id'], $child->order_booked_begin_time, $child->order_booked_end_time);
+                $conflict += OrderSearch::workerOrderExistsConflict($worker['id'], $child->order_booked_begin_time, $child->order_booked_end_time);
             }
         }
         if ($order->orderExtFlag->order_flag_lock > 0 && $order->orderExtFlag->order_flag_lock != $admin_id && time() - $order->orderExtFlag->order_flag_lock_time < Order::MANUAL_ASSIGN_lONG_TIME) {
@@ -601,7 +605,7 @@ class Order extends OrderModel
         $order->order_worker_type_name = $worker['worker_type_description'];
         $order->shop_id = $worker["shop_id"];
         $order->order_worker_shop_name = $worker["shop_name"];
-        $order->order_worker_assign_time = YII_BEGIN_TIME;
+        $order->order_worker_assign_time = time();
         $order->order_worker_assign_type = $assign_type; //接单方式
         $order->admin_id = $admin_id;
         if ($admin_id > 3) { //大于3属于人工操作
@@ -841,7 +845,7 @@ class Order extends OrderModel
             'order_lng' => $address['customer_address_longitude']
         ]);
 
-        if(in_array($this->order_service_type_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+        if(in_array($this->order_service_item_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
             $range = date('G:i', $this->order_booked_begin_time) . '-' . date('G:i', $this->order_booked_end_time);
             $ranges = $this->getThisOrderBookedTimeRangeList();
             if (!in_array($range, $ranges)) {

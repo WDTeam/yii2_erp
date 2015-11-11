@@ -119,8 +119,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             }
             */
             //组装数据
-            $transRecord['admin_id'] = Yii::$app->user->id;           //管理员ID
-            $transRecord['admin_name'] = Yii::$app->user->identity->username;           //管理员名称
+            $transRecord['admin_id'] = !empty(Yii::$app->user->id) ? Yii::$app->user->id : '0';             //管理员ID
+            $transRecord['admin_name'] = !empty(Yii::$app->user->identity->username) ? Yii::$app->user->identity->username : 'system';           //管理员名称
             $transRecord['order_code'] = $data['order_code'];           //订单编号
             $transRecord['order_batch_code'] = $data['order_batch_code'];           //周期订单编号
             $transRecord["payment_customer_trans_record_mode"] = 1;      //交易方式:1消费,2=充值,3=退款,4=赔偿
@@ -616,8 +616,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
         {
             //获取优惠券信息
-            $customer_phone = Customer::getCustomerPhoneById($data['customer_id']);
-            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'],$customer_phone, $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
             $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID
             $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['data']['coupon_userinfo_code'];   //优惠券CODE
             $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['data']['coupon_userinfo_price'];   //优惠券金额
@@ -756,8 +755,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
         {
             //获取优惠券信息
-            $customer_phone = Customer::getCustomerPhoneById($data['customer_id']);
-            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'],$customer_phone, $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_id'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
             $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['coupon_userinfo_id'];   //优惠券ID
             $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['coupon_userinfo_code'];   //优惠券CODE
             $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['coupon_userinfo_price'];   //优惠券金额

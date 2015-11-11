@@ -93,7 +93,7 @@ class OrderWorkerRelation extends OrderWorkerRelationModel
      */
     public static function jpushPushFailure($order_id,$worker_id,$admin_id)
     {
-        $status = OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS;
+        $status = OrderOtherDict::NAME_JPUSH_PUSH_FAILURE;
         $memo = 'JPUSH推送失败';
         return self::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,$admin_id);
     }

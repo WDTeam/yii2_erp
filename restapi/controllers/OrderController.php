@@ -202,13 +202,114 @@ class OrderController extends \restapi\components\Controller
             return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }
-
+    
+    /**
+     * @api {POST} /order/create-value-add-order [POST] /order/create-value-add-order(100%)
+     * @apiDescription  创建增值服务订单 (田玉星)
+     *
+     * @apiName actionCreateValueAddOrder
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} order_service_item_id 服务项目id
+     * @apiParam {String} order_src_id 订单来源id 【2:IOS 3:Android 5:H5】
+     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 '1443695400'
+     * @apiParam {String} address 服务地址
+     * @apiParam {String} city_name 城市名称
+     *
+     * @apiSuccessExample Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *  "code": "1",
+     *  "msg": "创建订单成功",
+     *  "ret": {
+     *    "id":8
+     *   }
+     *  "alertMsg": "创建订单成功"
+     *  }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": 401,
+     *        "msg": "用户无效,请先登录",
+     *        "ret": {},
+     *        "alertMsg": "用户认证已经过期,请重新登录"
+     *     }
+     *
+     */
+    public function  actionCreateValueAddOrder(){
+        $args = Yii::$app->request->post() or $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $attributes = [];
+        if(!isset($args['access_token'])||!$args['access_token']){
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+        //验证用户登录情况
+        $user = CustomerAccessToken::getCustomer($args['access_token']);
+        if (!$user) return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        //填写服务项目
+        if (empty($args['order_service_item_id'])) {
+            return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
+        }
+        //订单来源
+        if (empty($args['order_src_id'])) {
+            return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
+        }
+        //服务开始时间/阿姨上门时间
+        if (!isset($args['order_booked_begin_time'])||!$args['order_booked_begin_time']) {
+            return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
+        }
+        //所在城市
+        if(!isset($args['city_name'])||!$args['city_name']){
+            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        }
+        //所在地址
+        if(!isset($args['address'])||!$args['address']){
+            return $this->send(null, "数据不完整,请输入常用地址", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        }
+        $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
+        if (!empty($model)) {
+            $attributes['address_id'] = $model->id;
+        } else {
+            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        }
+        $attributes['customer_id'] = $user->id;//登录用户ID
+        $attributes['order_service_item_id'] = $args['order_service_item_id'];//服务品类ID
+        $attributes['order_src_id'] = $args['order_src_id'];//订单来源ID
+        $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
+        $attributes['channel_id'] = 20;//家洁
+        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'];//服务结束时间
+        $attributes['order_pay_type'] = 1;//现金支付
+        $attributes['order_booked_count'] = 1;//服务时长
+        $attributes['order_pop_order_code'] = "0";//第三方订单编号
+        $attributes['order_pop_order_money'] = 0;//第三方订单金额
+        $attributes['order_pop_group_buy_code'] = "0";//
+        $attributes['coupon_id'] = 0;
+        $attributes['order_booked_worker_id'] = 0;
+        $attributes['order_customer_need'] = "";//客户需求
+        $attributes['order_customer_memo'] = "";//客户备注
+        $attributes['order_is_use_balance'] = 0;//客户选择使用余额则去获取客户余额
+        $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
+        $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
+        //创建订单
+        try{
+            $order = new Order();
+            $is_success = $order->createNew($attributes);
+            if ($is_success) {
+                return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
+            } else {
+                return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
+            }
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::orderCreateFaile);
+        }
+    }
     /**
      * @api {GET} /order/orders [GET] /order/orders (100%)
      * @apiDescription 查询用户订单 (谢奕)
      *
      * @apiName actionOrders
-     * @apiGroup Order
+     * @apiGroup Orders
      *
      * @apiParam {String} access_token 用户令牌
      * @apiParam {String} [id] 订单id

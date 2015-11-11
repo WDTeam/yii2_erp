@@ -16,7 +16,7 @@
 require_once("alipay_core.function.php");
 require_once("alipay_rsa.function.php");
 
-class AlipayNotify {
+class app_AlipayNotify {
     /**
      * HTTPS形式消息验证地址
      */
