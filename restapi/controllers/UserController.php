@@ -800,14 +800,21 @@ class UserController extends \restapi\components\Controller
         if (empty($param['customer_comment_tag_ids'])) {
             $param['customer_comment_tag_ids'] = 0;
         }
+        $param['customer_comment_phone'] = isset($param['customer_comment_phone'])?$param['customer_comment_phone']:"";
+        $param['worker_tel'] = isset($param['worker_tel'])?$param['worker_tel']:"";
+        $param['customer_comment_content'] = isset($param['customer_comment_content'])?$param['customer_comment_content']:"";
+        $param['customer_comment_level_name'] = isset($param['customer_comment_level_name'])?$param['customer_comment_level_name']:"";
+        $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids'])?$param['customer_comment_tag_ids']:"";
+        $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names'])?$param['customer_comment_tag_names']:"";
         try {
             $customer = CustomerAccessToken::getCustomer($param['access_token']);
+            
             if (!empty($customer) && !empty($customer->id)) {
 
                 $param['customer_id'] = $customer->id;
-
+                
                 $model = CustomerComment::addUserSuggest($param);
-
+                
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {

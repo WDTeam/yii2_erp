@@ -2034,6 +2034,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_address'] = $v['order_address'];
                         $r_order["order_batch_code"] = $v['order_batch_code'];
                         $r_order['times'][$k]["order_booked_begin_time"] = $v['order_booked_begin_time'];
+                        $r_order['times'][$k]["order_pay_type"] = $v['order_pay_type'];
                         $r_order['times'][$k]["order_booked_end_time"] = $v['order_booked_end_time'];
                         $r_order['times'][$k]["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['times'][$k]["id"] = $v['id'];
