@@ -61,7 +61,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'order_money',
                 'customer_id',
                 'order_customer_phone',
-                'order_pay_type',
+                'pay_channel_id',
                 'order_pay_money',
                 'order_use_acc_balance',
                 'card_id',
@@ -133,7 +133,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             $transRecord["payment_customer_trans_record_online_balance_pay"] = $data['order_use_acc_balance'];    //余额支付
             $transRecord["payment_customer_trans_record_order_total_money"] = $data['order_money'];               //订单总额
             $transRecord["payment_customer_trans_record_pre_pay"] = $data['order_pop_order_money'];    //预付费
-            $transRecord['payment_customer_trans_record_cash'] = ($data['order_pay_type'] == 1) ? $data['order_money'] : 0;   //现金支付
+            $transRecord['payment_customer_trans_record_cash'] = ($data['pay_channel_id'] == 2) ? $data['order_money'] : 0;   //现金支付
             $transRecord['payment_customer_trans_record_online_pay'] = !empty($payment_data['payment_actual_money']) ? $payment_data['payment_actual_money'] : $data['order_pay_money'];    //在线支付
             $transRecord['order_channel_id'] = $data['channel_id'];   //订单渠道
             $transRecord['payment_customer_trans_record_order_channel'] = $data['order_channel_name'];   //订单渠道名称
