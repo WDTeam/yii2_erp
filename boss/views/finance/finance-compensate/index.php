@@ -23,9 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-             'finance_compensate_oa_code',
-            'finance_complaint_id',
-            'order_id',
+            'finance_compensate_code',
+            'finance_compensate_oa_code',
+            'finance_complaint_code',
+            'order_code',
             'finance_compensate_reason:ntext', 
             'finance_compensate_money', 
             'finance_compensate_coupon_money', 
