@@ -7,7 +7,7 @@ use core\models\worker\Worker;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerVacationApplication;
 use core\models\worker\WorkerTaskLog;
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 use core\models\order\OrderSearch;
 use core\models\order\OrderComplaint;
 
@@ -496,7 +496,7 @@ class WorkerController extends \restapi\components\Controller
         $workerID = $checkResult['workerInfo']['worker_id'];
         //获取数据
         try{
-            $service = FinanceSettleApplySearch::getWorkerIncomeSummaryInfoByWorkerId($workerID);
+            $service = FinanceWorkerSettleApplySearch::getWorkerIncomeSummaryInfoByWorkerId($workerID);
             $workerInfo = Worker::getWorkerStatInfo($workerID);
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerServiceInfoFailed);
@@ -577,7 +577,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         try{
-            $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerID,$per_page,$page_num);
+            $billList = FinanceWorkerSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerID,$per_page,$page_num);
          }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillListFailed);
         }
@@ -655,7 +655,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         try{
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
+            $billList = FinanceWorkerSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
@@ -733,7 +733,7 @@ class WorkerController extends \restapi\components\Controller
         }
         try{
             //获取任务奖励列表
-            $taskRewardret = FinanceSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
+            $taskRewardret = FinanceWorkerSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
          }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerTaskRewardListFailed);
         }
@@ -803,7 +803,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         
         try{
-            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));//获取任务奖励列表
+            $punishList = FinanceWorkerSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));//获取任务奖励列表
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerPunishListFailed);
         }
@@ -870,7 +870,7 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null,'账单唯一标识错误！', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         try{
-            if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
+            if(FinanceWorkerSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
                 return $this->send(null,'账单确定成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
             }
          }catch (\Exception $e) {
