@@ -108,7 +108,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
      * @param $attributes
      * 【 service_card_sell_record_code,服务卡订单号
      *    customer_id,用户ID
-     *    server_card_info_id,卡信息ID
+     *   service_card_info_id,卡信息ID
      *    service_card_sell_record_status，购卡订单状态
      *    customer_trans_record_pay_mode，支付方式
      *    pay_channel_id，支付渠道ID
@@ -132,24 +132,27 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
         $model->setAttributes([
             'updated_at'=>time(),
         ]);
+
         //3.保存回写信息
        if($model->save()){
            //回写成功，生成客户服务关系记录
-          $service_card_with_customer_code=(new OperationServiceCardWithCustomer)->createServiceCardWithCustomer(
-               $model->id,
-               $model->customer_id,
-               $model->customer_trans_record_pay_money,
-               $model->customer_trans_record_paid_at);
+           $attr_w=[
+               "service_card_sell_record_id"=>$model->id,
+               "customer_id"=>$model->customer_id,
+               "customer_trans_record_pay_money"=>$model->customer_trans_record_pay_money,
+               "service_card_with_customer_buy_at"=>$model->customer_trans_record_paid_at
+           ];
+          $service_card_with_customer_code=(new OperationServiceCardWithCustomer)->createServiceCardWithCustomer($attr_w);
            //在客服服务卡消费表中，初始化一条记录，记录服务卡消费的初始状态
            //组织服务卡消费记录参数
            $attrs= [
-            "customer_id"=>$model->customer_id,//用户ID
+           "customer_id"=>$model->customer_id,//用户ID
             "service_card_with_customer_code"=>$service_card_with_customer_code,//服务卡号
-            "service_card_consume_record_use_money"=>0,//使用金额
-            "customer_trans_record_transaction_id"=>''//服务交易号
+           "service_card_consume_record_use_money"=>0,//使用金额
+           "customer_trans_record_transaction_id"=>'0'//服务交易号
            ];
            //保存服务卡消费记录，并返回参数
-          // return ((new OperationServiceCardConsumeRecord)->createServiceCardConsumeRecord($attrs));
+          return ((new OperationServiceCardConsumeRecord)->createServiceCardConsumeRecord($attrs));
         }else{
             return $model->errors;//返回失败记录
        }
