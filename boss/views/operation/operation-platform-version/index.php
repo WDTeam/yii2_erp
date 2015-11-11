@@ -12,8 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-platform-version-index">
 
-    <!--<h1><?php //= Html::encode($this->title) ?></h1>-->
-
     <p>
         <?= Html::a(Yii::t('app' ,'Create').Yii::t('app' ,'Version'), ['create', 'platform_id' =>$platform_id ], ['class' => 'btn btn-success']) ?>
     </p>
@@ -26,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn'
             ],
 
-//            'id',
-//            'operation_platform_id',
             'operation_platform_name',
             'operation_platform_version_name',
             'created_at:datetime',
