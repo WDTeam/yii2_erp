@@ -1195,7 +1195,7 @@ class Order extends OrderModel
      */
     public function getThisOrderBookedTimeRangeList()
     {
-        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1);
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1, $this->orderExtWorker->worker_id);
         $order_booked_time_range = [];
         foreach($time_range[0]['timeline'] as $range){
             if($range['enable']) {
@@ -1213,11 +1213,11 @@ class Order extends OrderModel
      * @param int $days
      * @return array
      */
-    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
+    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1,$worker_id='')
     {
         if($district_id>0) {
             $date = strtotime($date);
-            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
+            return Worker::getWorkerTimeLine($district_id, $range, $date, $days,$worker_id);
         }
         $order_booked_time_range = [];
         for ($i = 8; $i <= 18; $i++) {

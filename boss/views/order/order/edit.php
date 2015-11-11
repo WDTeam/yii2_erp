@@ -108,11 +108,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6 right-text"><?= Html::encode($model->order_service_type_name) ?></div>
                 </div>
             </div>
+
+            <!-- 服务信息START -->
            <div class="panel-heading service-info-view">
                 <h3 class="panel-title">服务信息</h3>
-                <!--div class="pull-right" style="margin-top: -26px;">
+                <div class="pull-right" style="margin-top: -26px;">
                      <button class="btn btn-warning btn-edit-service-info" type="button">修改</button>
-                </div-->
+                </div>
             </div>
             <div class="panel-body service-info-view">
                 <div class="form-group">
@@ -124,10 +126,32 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6 right-text service_time_html"><?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?></div>
                 </div>
             </div>
+            <!-- 服务信息修改END -->
+
+
+
+
+            <!-- 服务信息修改START -->
+
             <div class="panel-heading service-info-edit">
                 <h3 class="panel-title">服务信息</h3>
             </div>
             <div class="panel-body service-info-edit">
+
+                <div class="form-group field-order-order_booked_count">
+                    <?php
+                    //默认不指派阿姨
+                    $workerList = [0=>'无'];
+                    //判断是否已经指定阿姨
+                    if( !empty($model->orderExtWorker->worker_id) ) {
+                        $workerList = array_merge($workerList,[$model->orderExtWorker->worker_id=>$model->orderExtWorker->order_worker_name]);
+                    }
+                    //显示指定阿姨
+                    echo $form->field($model->orderExtWorker, 'worker_id')->inline()
+                        ->radioList($workerList)
+                        ->label('指派阿姨');
+                    ?>
+                </div>
 
                 <?php
                     $model->orderBookedDate = date("Y-m-d",$model->order_booked_begin_time);
@@ -151,17 +175,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             <input type="radio" value="<?=$model->order_booked_count;?>" checked="checked" name="Order[order_booked_count]">
                         </div>
                     </div>
-
                 </div>
+
                 <?php
                     //如果已经指派阿姨,获取指定阿姨的排班表,否则获取全部阿姨的排班表
-                    if(!empty($model->worker_id)){
+                    $model->orderBookedTimeRange = date('G:i',$model->order_booked_begin_time).'-'.date('G:i',$model->order_booked_end_time);
+                    echo $form->field($model, 'orderBookedTimeRange')->inline()
+                        ->radioList($model->thisOrderBookedTimeRangeList)
+                        ->label('服务时间');
+
+                    if(!empty($model->orderExtWorker->worker_id)){
 
                     }else{
-                        $model->orderBookedTimeRange = date('G:i',$model->order_booked_begin_time).'-'.date('G:i',$model->order_booked_end_time);
-                        echo $form->field($model, 'orderBookedTimeRange')->inline()
-                            ->radioList($model->thisOrderBookedTimeRangeList)
-                            ->label('服务时间');
+
                     }
                 ?>
                 <div class="form-group">
@@ -172,6 +198,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
             </div>
+            <!-- 服务信息修改END -->
+
+
+           <!-- 客户需求START -->
            <div class="panel-heading customer-info-view">
                 <h3 class="panel-title">客户需求</h3>
                 <div class="pull-right" style="margin-top: -26px;">
@@ -196,6 +226,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6 right-text"><?= $model->orderExtFlag->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
                 </div>
             </div>
+            <!-- 客户需求END -->
+
+
+            <!-- 客户需求修改START -->
             <div class="panel-heading customer-info-edit">
                 <h3 class="panel-title">客户需求</h3>
             </div>
@@ -218,7 +252,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <button class="btn btn-warning btn-cancel-customer-info" type="button">取消更改</button>
                     </div>
                 </div>
-            </div>                       
+            </div>
+            <!-- 客户需求修改END -->
         </div>
             <?= $form->field($model, 'id')->hiddenInput()->label('') ?>
             <?= $form->field($model, 'customer_id')->hiddenInput()->label('') ?>
