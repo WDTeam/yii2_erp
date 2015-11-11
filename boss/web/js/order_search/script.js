@@ -78,7 +78,7 @@ $(document).ready(function($){
 		$.ajax({
             type: "POST",
             url:  "/order/order/cancel-order",
-            data: {order_id: operating_order_id,order_code:operating_order_code, cancel_type: cancelType, cancel_note: cancelNote},
+            data: {order_id: operating_order_id,order_code:operating_order_code, cancel_type: cancelDetailType, cancel_note: cancelNote},
             dataType:"json",
             success: function (msg) {
                 if(msg){

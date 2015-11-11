@@ -181,31 +181,24 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="radioLi">
 						<strong>* 取消原因 </strong>
 						<div class="fl jsRadio">
-							<label class="mr10"><input type="radio" name="radio_cancelType" value="2" class="xuanzhong"/>用户原因</label>
-							<label class="mr10"><input type="radio" name="radio_cancelType" value="1"/>公司原因</label>
+							<?php foreach($cancelCause as $k=>$v):?>
+							<label class="mr10"><input type="radio" name="radio_cancelType" value="<?=$k;?>"/><?=$v;?></label>
+							<?php endforeach;?>
 						</div>
 					</li>
 					<li>
 						<strong>具体原因 </strong>
 						
 						<div class="fl js_radio_tab">
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2" class="xuanzhong"/>空号错号</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>无人接听</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>用户未预定服务</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>重复订单</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>时间调整</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>用户不需要</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>其他</label>
+							<?php foreach($cancelCustomerCause as $k=>$v):?>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="<?=$k;?>" /><?=$v;?></label>
+							<?php endforeach;?>
 						</div>
 						
 						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>用户所在地超范围</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>无服务阿姨</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>无人联系客户</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>爽约（阿姨未接到通知）</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>爽约（阿姨主动爽约）</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>服务体验差</label>
-							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>其他</label>
+							<?php foreach($cancelCompanyCause as $k=>$v):?>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="<?=$k;?>"/><?=$v;?></label>
+							<?php endforeach;?>
 						</div>
 						
 					</li>
