@@ -103,7 +103,6 @@ $config['modules']['gii'] = [
         \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
     },
 ];
-//pop调用api时Secret Key
 $config['params']['apiPopKey'] = 'pop-to-boss';
 $config['params']['apiSecretKey'] = 'pop-to-boss';
 return $config;
