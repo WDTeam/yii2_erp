@@ -1080,25 +1080,6 @@ class Order extends OrderModel
         return ['id'=>1,'name'=>'BOSS'];
     }
 
-    /**
-     * 获取支付渠道
-     * @param int $channel_id
-     * @return array|bool
-     */
-    public function getPayChannelName($channel_id = 0)
-    {
-        return OperationPayChannel::get_post_name($channel_id);
-    }
-
-    /**
-     * 获取支付渠道分类 TODO 高峰提供接口
-     * @param int $channel_id
-     * @return array
-     */
-    public function getPayChannelType($channel_id = 0)
-    {
-        return ['id'=>1,'name'=>'BOSS'];
-    }
 
     /**
      * 根据经纬度获取商品信息
