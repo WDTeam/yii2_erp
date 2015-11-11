@@ -874,7 +874,17 @@ class Order extends OrderModel
             if ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_POP) { //TODO 第三方预付
                 $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
                 $this->order_pay_money -= $this->order_money;
+                $this->setAttributes([
+                    'order_pay_channel_name' => '第三方团购预收',
+                    'order_pay_channel_type_name' => '第三方团购',
+                    'order_pay_channel_type_id' => 3,
+                ]);
             } elseif ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {//TODO 现金支付
+                $this->setAttributes([
+                    'order_pay_channel_name' => '现金支付',
+                    'order_pay_channel_type_name' => 'e家洁',
+                    'order_pay_channel_type_id' => 2,
+                ]);
                 if (!empty($this->coupon_id)) {//是否使用了优惠券
                     $coupon = self::getCouponById($this->coupon_id);
                     if (!empty($coupon)) {
@@ -920,7 +930,7 @@ class Order extends OrderModel
                 $this->setAttributes([
                     'order_pay_channel_id' => 20,
                     'order_pay_channel_name' => '余额支付',
-                    'order_pay_channel_type_name' => 'E家洁支付',
+                    'order_pay_channel_type_name' => 'e家洁',
                     'order_pay_channel_type_id' => 2,
                 ]);
             }
