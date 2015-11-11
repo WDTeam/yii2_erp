@@ -39,8 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 
 //城市
-//$city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
-$operation_city_name = '-';
+$operation_city_name = Customer::getCityNameById($model->id);
+if(empty($operation_city_name)) {
+    $operation_city_name = '-';
+}
 
 $customer_ext_srcs = Customer::getSrcs($model->customer_phone);
 $platform_name_str = '';
@@ -306,9 +308,8 @@ echo DetailView::widget([
     'enableEditMode'=>false,
 ]); 
 
-//listCustomerCoupon($phone);
 //$couponCustomerProvider = new ActiveDataProvider([
-//	'query' => \core\models\operation\coupon\CouponCustomer::find()->where(['customer_id'=>$model->id])
+//	'query' => \core\models\operation\coupon\CouponRule::getcustomerlist_l($model->customer_phone),
 //]);
 //if((int)($couponCustomerProvider->query->count()) > 0){
 //	echo GridView::widget([
@@ -319,8 +320,8 @@ echo DetailView::widget([
 //		        'format' => 'raw',
 //		        'label' => '类别',
 //		        'value' => function($couponCustomerProvider){
-//					$coupon = Coupon::find($couponCustomerProvider->coupon_id);
-//					return $coupon->coupon_type_name;
+//                    $couponrule_type = $couponCustomerProvider['couponrule_type'];
+//					return $couponrule_type;
 //				},
 //		        'width' => "80px",
 //		    ],
@@ -328,7 +329,8 @@ echo DetailView::widget([
 //		        'format' => 'raw',
 //		        'label' => '金额',
 //		        'value' => function($couponCustomerProvider){
-//					return $couponCustomerProvider->coupon_price;
+//                    $couponrule_price = $couponCustomerProvider['couponrule_price'];
+//                    return $couponrule_price;
 //				},
 //		        'width' => "80px",
 //		    ],
@@ -336,7 +338,8 @@ echo DetailView::widget([
 //		        'format' => 'raw',
 //		        'label' => '到期日',
 //		        'value' => function($couponCustomerProvider){
-//					return date('Y-m-d H:i:s', $couponCustomerProvider->expirate_at);
+//                    $couponrule_use_end_time = $couponCustomerProvider['couponrule_use_end_time'];
+//                    return $couponrule_use_end_time;
 //				},
 //		        'width' => "80px",
 //		    ],

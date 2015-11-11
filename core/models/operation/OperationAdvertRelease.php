@@ -156,4 +156,16 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
 
         return $result;
     }
+
+    /**
+     * 联动删除已发布广告信息
+     *
+     * @param inter   $advert_content_id     广告内容编号
+     */
+    public static function updateAdvertReleaseStatus($advert_content_id)
+    {
+        self::deleteAll([
+            'advert_content_id' => $advert_content_id,
+        ]);
+    }
 }

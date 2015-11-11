@@ -8,6 +8,7 @@ use boss\models\operation\OperationAdvertPositionSearch;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
 use boss\models\operation\OperationAdvertContent;
+use boss\models\operation\OperationAdvertRelease;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -182,6 +183,16 @@ class OperationAdvertPositionController extends BaseAuthController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        //联动删除
+        //获取所有的内容编号，根据内容编号删除已发布的广告
+        $result = OperationAdvertContent::getAdvertContentFromPosition($id);
+        if ($result != false) {
+            foreach ($result as $key => $value) {
+                OperationAdvertRelease::updateAdvertReleaseStatus($value['id']);
+            }
+        }
+        OperationAdvertContent::updateAdvertContentStatusFromPosition($id);
 
         return $this->redirect(['index']);
     }
