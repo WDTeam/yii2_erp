@@ -101,10 +101,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class=" col-sm-3"></label>
                     <h4 class="col-sm-2">
-                        单价：<span id="order_unit_money" style="font-size: 25px;color: #f7b434;" >0.00</span>
+                        单价：<span id="order_unit_money" style="font-size: 25px;color: #f6a202;" >0.00</span>
                     </h4>
                     <h4 class="col-sm-2">
-                        总价：<span class="order_money" style="font-size: 25px;color: #f7b434;">0.00</span>
+                        总价：<span class="order_money" style="font-size: 25px;color: #f6a202;">0.00</span>
                     </h4>
                 </div>
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
                         <div class="col-sm-2">
-                            <span class="order_pay_money" style="font-size: 20px;color: #f7b434;">0.00</span>
+                            <span class="order_pay_money" style="font-size: 20px;color: #f6a202;">0.00</span>
                         </div>
                     </div>
                 </div>

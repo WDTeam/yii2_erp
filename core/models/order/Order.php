@@ -722,8 +722,8 @@ class Order extends OrderModel
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
             $transact = static::getDb()->beginTransaction();
             $result = OrderStatus::_cancel($order,[],$transact);
-            if ($result && in_array($order->orderExtPay->order_pay_channel_type_id,[1,2])
-                && $order->orderExtPay->order_pay_channel_id != 20
+            if ($result && in_array($order->orderExtPay->pay_channel_type_id,[1,2])
+                && $order->orderExtPay->pay_channel_id != 20
                 && $current_status != OrderStatusDict::ORDER_INIT
                 || $current_status == OrderStatusDict::ORDER_INIT && $cause_id==OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE ) {
                 //调高峰的退款接口
