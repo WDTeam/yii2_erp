@@ -8,7 +8,8 @@ use dbbase\models\ActiveRecord;
  * This is the model class for table "{{%order_ext_pay}}".
  *
  * @property string $order_id
- * @property integer $order_pay_type
+ * @property string $pay_channel_type_id
+ * @property string $order_pay_channel_type_name
  * @property string $pay_channel_id
  * @property string $order_pay_channel_name
  * @property string $order_pay_flow_num
@@ -28,10 +29,6 @@ use dbbase\models\ActiveRecord;
  */
 class OrderExtPay extends ActiveRecord
 {
-    const ORDER_PAY_TYPE_OFF_LINE = 1;
-    const ORDER_PAY_TYPE_ON_LINE = 2;
-    const ORDER_PAY_TYPE_POP = 3;
-
     /**
      * @inheritdoc
      */
@@ -46,10 +43,10 @@ class OrderExtPay extends ActiveRecord
     public function rules()
     {
         return [
-            [['order_pay_type'],'required'],
-            [['order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'created_at', 'updated_at'], 'integer'],
+            [['pay_channel_id'],'required'],
+            [[ 'pay_channel_id','pay_channel_type_id', 'card_id', 'coupon_id', 'promotion_id', 'created_at', 'updated_at'], 'integer'],
             [['order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
-            [['order_pay_channel_name','order_coupon_code'], 'string', 'max' => 128],
+            [['order_pay_channel_name','order_pay_channel_type_name','order_coupon_code'], 'string', 'max' => 128],
             [['order_pay_flow_num'], 'string', 'max' => 255]
         ];
     }
@@ -61,7 +58,8 @@ class OrderExtPay extends ActiveRecord
     {
         return [
             'order_id' => '订单id',
-            'order_pay_type' => '支付方式 0未支付 1现金支付 2线上支付 3第三方预付 ',
+            'pay_channel_type_id' => '支付渠道分类id',
+            'order_pay_channel_type_name' => '支付渠道分类名称',
             'pay_channel_id' => '支付渠道id',
             'order_pay_channel_name' => '支付渠道名称',
             'order_pay_flow_num' => '支付流水号',
@@ -77,21 +75,6 @@ class OrderExtPay extends ActiveRecord
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];
-    }
-
-    public function orderPayTypeLabels()
-    {
-        return [
-          self::ORDER_PAY_TYPE_OFF_LINE => '现金支付',
-          self::ORDER_PAY_TYPE_ON_LINE => '线上支付',
-          self::ORDER_PAY_TYPE_POP => '第三方预付'
-        ];
-    }
-
-    public function getOrderPayTypeName()
-    {
-        $names = $this->orderPayTypeLabels();
-        return isset($names[$this->order_pay_type])?$names[$this->order_pay_type]:'未支付';
     }
 
     /**

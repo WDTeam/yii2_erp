@@ -13,11 +13,13 @@ namespace core\models\order;
 use core\models\finance\FinanceRefundadd;
 
 use core\models\operation\coupon\CouponRule;
+use core\models\operation\OperationPayChannel;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\operation\OperationCategory;
+use core\models\operation\OperationOrderChannel;
 
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
@@ -63,8 +65,8 @@ use yii\helpers\ArrayHelper;
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
- * @property integer $order_src_id
- * @property string $order_src_name
+ * @property integer $order_channel_type_id
+ * @property string $order_channel_type_name
  * @property integer $channel_id
  * @property string $order_channel_name
  * @property string $order_unit_money
@@ -89,7 +91,8 @@ use yii\helpers\ArrayHelper;
  * @property string $comment_id
  * @property string $invoice_id
  * @property integer $order_customer_hidden
- * @property integer $order_pay_type
+ * @property string $pay_channel_type_id
+ * @property string $order_pay_channel_type_name
  * @property string $pay_channel_id
  * @property string $order_pay_channel_name
  * @property string $order_pay_flow_num
@@ -127,7 +130,6 @@ class Order extends OrderModel
      * @param $attributes [
      *  string $order_ip 下单IP地址 必填
      *  integer $order_service_item_id 服务项id 必填
-     *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
      *  int $order_booked_begin_time 预约开始时间 必填
      *  int $order_booked_count 预约时长 必填
@@ -135,7 +137,7 @@ class Order extends OrderModel
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
-     *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     *  int $pay_channel_id 支付渠道类别id
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
@@ -152,16 +154,16 @@ class Order extends OrderModel
     public function createNew($attributes)
     {
         $attributes_keys = [
-            'order_ip','order_service_item_id','order_src_id','channel_id',
+            'order_ip','order_service_item_id','channel_id',
             'order_booked_begin_time','order_booked_end_time','address_id',
-            'customer_id','admin_id','order_pay_type','order_booked_count',
+            'customer_id','admin_id','pay_channel_id','order_booked_count',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
             'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_cs_memo','order_flag_sys_assign'
         ];
         $attributes_required = [
-            'order_ip','order_service_item_id','order_src_id','channel_id',
+            'order_ip','order_service_item_id','channel_id',
             'order_booked_begin_time','order_booked_end_time','address_id',
-            'customer_id','admin_id','order_pay_type','order_booked_count'
+            'customer_id','admin_id','order_booked_count'
         ];
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
         foreach($attributes as $k=>$v){
@@ -175,10 +177,7 @@ class Order extends OrderModel
                 return false;
             }
         }
-        if(!in_array($attributes['order_pay_type'],[OrderExtPay::ORDER_PAY_TYPE_ON_LINE,OrderExtPay::ORDER_PAY_TYPE_OFF_LINE,OrderExtPay::ORDER_PAY_TYPE_POP])){
-            $this->addError('order_pay_type','支付方式错误！');
-            return false;
-        }
+
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
 
@@ -227,7 +226,6 @@ class Order extends OrderModel
       (
       [order_ip] => 127.0.0.1
       [order_service_type_id] => 11
-      [order_src_id] => 1
       [channel_id] => 1
       [address_id] => 1
       [customer_id] => 3
@@ -253,12 +251,11 @@ class Order extends OrderModel
      *  @param $attributes [
      *  string $order_ip 下单IP地址 必填
      *  integer $order_service_item_id 服务类型 商品id 必填
-     *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id  1系统 2客户 3阿姨 必填
-     *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     *  int $pay_channel_id 支付渠道分类 必填
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_customer_need 客户需求
@@ -281,14 +278,14 @@ class Order extends OrderModel
     {
 
         $attributes_keys = [
-            'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id',
-            'customer_id','admin_id','order_pay_type',
+            'order_ip','order_service_item_id','channel_id', 'address_id',
+            'customer_id','admin_id','pay_channel_id',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
             'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo',
             'order_flag_sys_assign','order_cs_memo','order_flag_change_booked_worker'
         ];
         $attributes_required = [
-            'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'
+            'order_ip','order_service_item_id','channel_id', 'address_id', 'customer_id','admin_id'
         ];
         foreach($attributes as $k=>$v){
             if(!in_array($k,$attributes_keys)){
@@ -566,7 +563,7 @@ class Order extends OrderModel
                 }
             }
 
-            if($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
+            if($result && $order->order_channel_type_id == OrderSrc::order_channel_type_POP){
                 $result = OrderPop::assignDoneToPop($order); //第三方同步失败则取消失败
             }
 
@@ -642,7 +639,7 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = 1;
         $result = OrderStatus::_serviceDone($order,[],$transact);
-        if($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
+        if($result && $order->order_channel_type_id == OrderSrc::order_channel_type_POP){
             $result = OrderPop::serviceDoneToPop($order); //第三方同步失败则取消失败
         }
         if($result) {
@@ -761,7 +758,7 @@ class Order extends OrderModel
                 ]) && $result){
                     $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
-            }elseif($result && $order->order_src_id == OrderSrc::ORDER_SRC_POP){
+            }elseif($result && $order->order_channel_type_id == OrderSrc::order_channel_type_POP){
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if($result){
@@ -835,6 +832,7 @@ class Order extends OrderModel
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价
+            'order_pay_money'=> $this->order_unit_money * $this->order_booked_count, //订单总价
             'city_id' => $address['operation_city_id'],
             'district_id' => $goods['district_id'],
             'order_address' => (empty($address['operation_province_name'])?'': $address['operation_province_name'].',')
@@ -854,17 +852,46 @@ class Order extends OrderModel
             }
         }
 
-        if ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP) { //第三方预付
-            $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
-        } elseif ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE) {//线上支付
-            $this->order_pay_money = $this->order_money; //支付金额
+        if(!empty($this->pay_channel_id)) {
+            $pay_channel_name = $this->getPayChannelName($this->pay_channel_id);
+            if(empty($pay_channel_name)){
+                $this->addError('order_pay_channel_name', '获取支付渠道信息失败！');
+                return false;
+            }
+            $pay_channel_type = $this->getPayChannelType($this->pay_channel_id);
+            if(empty($pay_channel_type)){
+                $this->addError('order_pay_channel_type_name', '获取支付渠道分类信息失败！');
+                return false;
+            }
+            $this->setAttributes([
+                'order_pay_channel_name' => $pay_channel_name,
+                'order_pay_channel_type_name' => $pay_channel_type['name'],
+                'order_pay_channel_type_id' => $pay_channel_type['id'],
+            ]);
+            if ($this->pay_channel_id == 9) { //TODO 第三方预付
+                $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
+                $this->order_pay_money -= $this->order_money;
+            } elseif ($this->pay_channel_id == 2) {//TODO 现金支付
+                if (!empty($this->coupon_id)) {//是否使用了优惠券
+                    $coupon = self::getCouponById($this->coupon_id);
+                    if (!empty($coupon)) {
+                        $this->order_use_coupon_money = $coupon['coupon_price'];
+                        $this->order_coupon_code = $coupon['coupon_code'];
+                        $this->order_pay_money -= $this->order_use_coupon_money;
+                    } else {
+                        $this->addError('coupon_id', '获取优惠券信息失败！');
+                        return false;
+                    }
+                }
+            }
+        }else{//如果不传支付渠道就是线上支付
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);
-                if(!empty($coupon)) {
+                if (!empty($coupon)) {
                     $this->order_use_coupon_money = $coupon['coupon_price'];
                     $this->order_coupon_code = $coupon['coupon_code'];
                     $this->order_pay_money -= $this->order_use_coupon_money;
-                }else{
+                } else {
                     $this->addError('coupon_id', '获取优惠券信息失败！');
                     return false;
                 }
@@ -878,8 +905,35 @@ class Order extends OrderModel
                 $customer_balance -= $this->order_use_acc_balance; //用户余额减去使用余额
                 $this->order_pay_money -= $this->order_use_acc_balance;
             }
+
+            if($this->order_pay_money>0){//TODO 硬编码在线支付
+                $this->setAttributes([
+                    'order_pay_channel_id' => 0,
+                    'order_pay_channel_name' => '',
+                    'order_pay_channel_type_name' => '在线支付',
+                    'order_pay_channel_type_id' => 1,
+                ]);
+            }else{//TODO 硬编码E家洁支付
+                $this->setAttributes([
+                    'order_pay_channel_id' => 20,
+                    'order_pay_channel_name' => '余额支付',
+                    'order_pay_channel_type_name' => 'E家洁支付',
+                    'order_pay_channel_type_id' => 2,
+                ]);
+            }
+
         }
 
+        $channel_name = $this->getOrderChannelName($this->channel_id);
+        if(empty($channel_name)){
+            $this->addError('order_channel_name', '获取渠道信息失败！');
+            return false;
+        }
+        $channel_type = $this->getOrderChannelType($this->channel_id);
+        if(empty($channel_type)){
+            $this->addError('order_channel_type_name', '获取渠道分类信息失败！');
+            return false;
+        }
 
         $this->setAttributes([
             //创建订单时服务卡是初始状态
@@ -895,8 +949,9 @@ class Order extends OrderModel
             'order_status_customer' => $status_to->order_status_customer,
             'order_status_worker' => $status_to->order_status_worker,
 
-            'order_src_name' => $this->getOrderSrcName($this->order_src_id),
-            'order_channel_name' => $this->getOrderChannelList($this->channel_id),
+            'order_channel_type_id' => $channel_type['id'],
+            'order_channel_type_name' => $channel_type['name'],
+            'order_channel_name' => $channel_name,
             'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
             'order_flag_urgent' => 0, //加急 数字越大约紧急
             'order_flag_exception' => 0, //异常标识
@@ -909,8 +964,6 @@ class Order extends OrderModel
             'order_pop_pay_money' => 0, //第三方结算金额
             'shop_id' => 0,
             'order_worker_type_name' => '',
-            'pay_channel_id' => 0, //支付渠道id
-            'order_pay_channel_name' => '', //支付渠道
             'order_pay_flow_num' => '', //支付流水号
             'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
             'checking_id' => 0,
@@ -1008,25 +1061,43 @@ class Order extends OrderModel
 
 
     /**
-     * 获取订单来源名称
-     * @param $id
-     * @return string
-     */
-    public function getOrderSrcName($id)
-    {
-        return OrderSrc::findOne($id)->order_src_name;
-    }
-
-    /**
      * 获取订单渠道
      * @param int $channel_id
      * @return array|bool
      */
-    public function getOrderChannelList($channel_id = 0)
+    public function getOrderChannelName($channel_id = 0)
     {
-        $list = FinanceOrderChannel::get_order_channel_list();
-        $channel = ArrayHelper::map($list, 'id', 'finance_order_channel_name');
-        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
+        return OperationOrderChannel::get_post_name($channel_id);
+    }
+
+    /**
+     * 获取渠道分类 TODO 高峰提供接口
+     * @param int $channel_id
+     * @return array
+     */
+    public function getOrderChannelType($channel_id = 0)
+    {
+        return ['id'=>1,'name'=>'BOSS'];
+    }
+
+    /**
+     * 获取支付渠道
+     * @param int $channel_id
+     * @return array|bool
+     */
+    public function getPayChannelName($channel_id = 0)
+    {
+        return OperationPayChannel::get_post_name($channel_id);
+    }
+
+    /**
+     * 获取支付渠道分类 TODO 高峰提供接口
+     * @param int $channel_id
+     * @return array
+     */
+    public function getPayChannelType($channel_id = 0)
+    {
+        return ['id'=>1,'name'=>'BOSS'];
     }
 
     /**

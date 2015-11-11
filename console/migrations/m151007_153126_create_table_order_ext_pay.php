@@ -17,7 +17,8 @@ class m151007_153126_create_table_order_ext_pay extends Migration
             'order_id'=> Schema::TYPE_BIGPK .' NOT NULL COMMENT \'订单id\'',
 
             //============================支付信息
-            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'支付方式 0未支付 1现金支付 2线上支付 3第三方预付 \'', //如果是线上支付 支付成功之后再改状态
+            'pay_channel_type_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'支付渠道分类id\'',
+            'order_pay_channel_type_name' => Schema::TYPE_STRING.'(128)  DEFAULT \'\' COMMENT \'支付渠道分类名称\'',
             'pay_channel_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'支付渠道id\'',
             'order_pay_channel_name' => Schema::TYPE_STRING.'(128)  DEFAULT \'\' COMMENT \'支付渠道名称\'',
             'order_pay_flow_num' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'支付流水号\'',
