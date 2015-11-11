@@ -36,7 +36,7 @@ class PaymentLog extends \yii\mongodb\ActiveRecord
     public function attributes()
     {
         return [
-            '_id','id','payment_log_price', 'payment_log_status_bool', 'pay_channel_id', 'created_at', 'updated_at','payment_log_json_aggregation',
+            '_id','id','payment_log_price', 'payment_log_status_bool', 'pay_channel_id', 'created_at', 'create_time','payment_log_json_aggregation',
              'payment_log_shop_name','payment_log_eo_order_id', 'payment_log_status','payment_log_transaction_id','pay_channel_name'
         ];
     }
@@ -75,7 +75,7 @@ class PaymentLog extends \yii\mongodb\ActiveRecord
             'pay_channel_name' => Yii::t('PaymentLog', '支付渠道名称'),
             'payment_log_json_aggregation' => Yii::t('PaymentLog', '记录数据集合'),
             'created_at' => Yii::t('PaymentLog', '创建时间'),
-            'updated_at' => Yii::t('PaymentLog', '更新时间'),
+            'create_time' => Yii::t('PaymentLog', '创建时间'),
         ];
     }
 }

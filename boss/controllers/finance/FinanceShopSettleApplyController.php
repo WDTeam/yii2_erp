@@ -149,6 +149,15 @@ class FinanceShopSettleApplyController extends Controller
         ]);
     }
     
+    public function actionShowWorkerOrderList($workerSettleApplyId){
+       $searchModel = new FinanceShopSettleApplySearch;
+       $financeWorkerOrderIncomeDataProvider = $searchModel->getWorkerOrderDataProviderBySettleId($workerSettleApplyId);
+        return $this->render('showWorkerOrderList', [
+            'financeWorkerOrderIncomeDataProvider' => $financeWorkerOrderIncomeDataProvider,
+            'model' => $searchModel,
+        ]);
+    }
+    
     /**
      * 门店人工结算完成
      * @return type

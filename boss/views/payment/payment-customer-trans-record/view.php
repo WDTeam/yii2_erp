@@ -58,8 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_customer_trans_record_transaction_id',
             'payment_customer_trans_record_remark',
             'payment_customer_trans_record_verify',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'created_at',
+                'value' => date("Y-m-d H:i:s",$model->created_at),
+            ],
+            [
+                'attribute' => 'updated_at',
+                'value' => date("Y-m-d H:i:s",$model->updated_at),
+            ],
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
@@ -68,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>false,
     ]) ?>
 
 </div>

@@ -21,21 +21,23 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL,'readonly'=>true,]); 
         ?>
             <?= $form->field($model, 'finance_compensate_oa_code'); ?>
-            <?= $form->field($model, 'finance_compensate_money'); ?>
-            <div class="form-group compensateCouponList">
-                <label class="control-label col-md-2" for="financecompensate-finance_compensate_coupon"> 优惠券</label>
+            <?php 
+//                echo $form->field($model, 'finance_compensate_money'); 
+            ?>
+<!--            <div class="form-group compensateCouponList">
+                <label class="control-label col-md-2" for="financecompensate-finance_compensate_coupon"> 优惠券</label>-->
                 <?php 
-                    $finance_compensate_coupon =  $model->finance_compensate_coupon;
-                    $finance_compensate_coupon_money =  $model->finance_compensate_coupon_money;
-                    $finance_compensate_coupon_arr = explode(";", $finance_compensate_coupon);
-                    $finance_compensate_coupon_money_arr = explode(";", $finance_compensate_coupon_money);
-                    $i = 0;
-                    foreach($finance_compensate_coupon_arr as $key => $value){
-                        echo '<div class="col-md-10"><input type="text" class="form-control" value = "'.$value.'"style="width:500px;height:35px;"   name="finance_compensate_coupon[]" id = "finance_compensate_coupon" readonly>&nbsp;&nbsp;<label style="color: #F00;" class = "coupon_money">金额：'.$finance_compensate_coupon_money_arr[$i].'</label></div>';
-                        $i++;
-                    }
+//                    $finance_compensate_coupon =  $model->finance_compensate_coupon;
+//                    $finance_compensate_coupon_money =  $model->finance_compensate_coupon_money;
+//                    $finance_compensate_coupon_arr = explode(";", $finance_compensate_coupon);
+//                    $finance_compensate_coupon_money_arr = explode(";", $finance_compensate_coupon_money);
+//                    $i = 0;
+//                    foreach($finance_compensate_coupon_arr as $key => $value){
+//                        echo '<div class="col-md-10"><input type="text" class="form-control" value = "'.$value.'"style="width:500px;height:35px;"   name="finance_compensate_coupon[]" id = "finance_compensate_coupon" readonly>&nbsp;&nbsp;<label style="color: #F00;" class = "coupon_money">金额：'.$finance_compensate_coupon_money_arr[$i].'</label></div>';
+//                        $i++;
+//                    }
                 ?>
-            </div>
+            <!--</div>-->
             <?= $form->field($model, 'finance_compensate_total_money'); ?>
             <?= $form->field($model, 'finance_compensate_insurance_money'); ?>
             <?= $form->field($model, 'finance_compensate_company_money'); ?>

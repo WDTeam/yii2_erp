@@ -3,6 +3,8 @@
 namespace boss\controllers\finance;
 
 use core\models\finance\FinanceCompensate as FinanceCompensateSearch;
+use core\models\order\OrderComplaint;
+use core\models\customer\Customer;
 
 use Yii;
 use yii\web\Controller;
@@ -14,7 +16,6 @@ use yii\web\NotFoundHttpException;
  */
 class FinanceCompensateController extends Controller
 {
-   
     
     public function behaviors()
     {
@@ -147,25 +148,39 @@ class FinanceCompensateController extends Controller
         $model->finance_complaint_id = $order_complaint_id;
         if ($model->load($postParams)) {
             $model->created_at = time();
-            if(!empty($postParams) && isset($postParams['finance_compensate_coupon'])){
-                $finance_compensate_coupon_arr = $postParams['finance_compensate_coupon'];
-                $finance_compensate_coupon_money_arr = [];
-                $finance_compensate_coupon = null;
-                $finance_compensate_coupon_money = null;
-                foreach($finance_compensate_coupon_arr as $key=>$value){
-                    if(empty($value)){
-                        unset($finance_compensate_coupon_arr[$key]);
-                        continue;
-                    }
-                    $finance_compensate_coupon_money_arr[] = 50;
-                }
-                 if(count($finance_compensate_coupon_arr)> 0){
-                     $finance_compensate_coupon = implode(";", $finance_compensate_coupon_arr);
-                     $finance_compensate_coupon_money = implode(";", $finance_compensate_coupon_money_arr);
-                     $model->finance_compensate_coupon = $finance_compensate_coupon;
-                     $model->finance_compensate_coupon_money = $finance_compensate_coupon_money;
-                 }
-            }
+            $model->finance_compensate_code = FinanceCompensateSearch::getCompensateApplyCode();
+            $model->finance_compensate_money = $model->finance_compensate_total_money;
+            $order_complaint = OrderComplaint::findOne($order_complaint_id);
+            $model->order_id = $order_complaint->order_id;
+            $model->order_code = $order_complaint->order_code_number;
+            $model->finance_complaint_code = $order_complaint->complaint_code_number;
+            $orderWorkerInfo = $order_complaint->order->orderExtWorker;
+            $model->worker_id = $orderWorkerInfo->worker_id;
+            $model->worker_tel = $orderWorkerInfo->order_worker_phone;
+            $model->worker_name = $orderWorkerInfo->order_worker_name;
+            $orderCustomerInfo = $order_complaint->order->orderExtCustomer;
+            $model->customer_id = $orderCustomerInfo->customer_id;
+            $customer = Customer::getCustomerById($orderCustomerInfo->customer_id);
+            $model->customer_name = $customer->customer_name;
+//            if(!empty($postParams) && isset($postParams['finance_compensate_coupon'])){
+//                $finance_compensate_coupon_arr = $postParams['finance_compensate_coupon'];
+//                $finance_compensate_coupon_money_arr = [];
+//                $finance_compensate_coupon = null;
+//                $finance_compensate_coupon_money = null;
+//                foreach($finance_compensate_coupon_arr as $key=>$value){
+//                    if(empty($value)){
+//                        unset($finance_compensate_coupon_arr[$key]);
+//                        continue;
+//                    }
+//                    $finance_compensate_coupon_money_arr[] = 50;
+//                }
+//                 if(count($finance_compensate_coupon_arr)> 0){
+//                     $finance_compensate_coupon = implode(";", $finance_compensate_coupon_arr);
+//                     $finance_compensate_coupon_money = implode(";", $finance_compensate_coupon_money_arr);
+//                     $model->finance_compensate_coupon = $finance_compensate_coupon;
+//                     $model->finance_compensate_coupon_money = $finance_compensate_coupon_money;
+//                 }
+//            }
             $model->save();
             if($isNewRecord){
                 return $this->redirect(['/order/order-complaint/']);
@@ -230,4 +245,5 @@ class FinanceCompensateController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+   
 }
