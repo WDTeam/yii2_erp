@@ -130,7 +130,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_tel',
             'worker_type_name',
             'worker_identity_name', 
-            'finance_worker_settle_apply_order_count', 
+            ['attribute'=>'finance_worker_settle_apply_order_count',
+              'header' => Yii::t('app', '总单量'),
+               'content'=>function($model,$key,$index)
+                      {return  Html::a('<u>'.$model->finance_worker_settle_apply_order_count.'</u>',[Yii::$app->urlManager->createUrl(['finance/finance-shop-settle-apply/show-worker-order-list','workerSettleApplyId' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}
+           ],
              [
                 'header' => Yii::t('app', '服务费'),
                 'attribute' => 'finance_worker_settle_apply_order_count',

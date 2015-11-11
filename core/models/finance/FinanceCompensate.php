@@ -18,6 +18,8 @@ class FinanceCompensate extends FinanceCompensateModel
     
     const FINANCE_COMPENSATE_REVIEW_FAILED = -1;//不通过
     
+    const COMPENSATE_CODE_PREFIX = '04';//赔偿编号的前缀
+    
     private $financeCompensateStatusArr = [self::FINANCE_COMPENSATE_REVIEW_INIT=>'提出申请，待财务打款确认',
         self::FINANCE_COMPENSATE_REVIEW_PASSED=>'财务已打款确认',
         self::FINANCE_COMPENSATE_REVIEW_FAILED=>'财务不通过',
@@ -98,5 +100,11 @@ class FinanceCompensate extends FinanceCompensateModel
             'finance_compensate_endtime' => Yii::t('app', '赔偿申请结束时间'),
         ];
         return array_merge($addAttributeLabels,$parentAttributeLabels);
+    }
+    
+     
+    public static function getCompensateApplyCode(){
+        $dateStr = date("y").date("m").date("d");
+        return self::COMPENSATE_CODE_PREFIX.$dateStr.time();
     }
 }

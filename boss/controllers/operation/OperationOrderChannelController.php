@@ -33,8 +33,7 @@ class OperationOrderChannelController extends BaseAuthController
     public function actionIndex()
     {
     	
-    	
-    	 $ert=['access_token'=> '4c6b908a940b42696dadc9279bb66fd5',
+    	/*  $ert=['access_token'=> '4c6b908a940b42696dadc9279bb66fd5',
     	'order_id' => 1,
     	'worker_id' => 1,
     	'worker_tel' =>'13256568989',
@@ -52,15 +51,9 @@ class OperationOrderChannelController extends BaseAuthController
     	'customer_id' => 7,
     	'order_code' =>'123445',
 		];
-    	 
-    	 
     	$rty=\core\models\customer\CustomerComment::addUserSuggest($ert);
-    	
-    	var_dump($rty);exit;
+    	var_dump($rty);exit;  */
     	 
-    	
-    	
-    	
         $searchModel = new OperationOrderChannelSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

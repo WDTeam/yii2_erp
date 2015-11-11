@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 /**
@@ -10,27 +10,18 @@ use yii\widgets\Pjax;
  * @var boss\models\PaymentLogSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'General Pay Logs');
+$this->title = Yii::t('app', '支付记录列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payment-log-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'General Pay Log',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php Pjax::begin();
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'payment_log_price',
             'payment_log_shop_name',
@@ -45,29 +36,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['payment-log/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['payment-log/view', 'id' => $model->id, 'edit' => 't']), [
+                            'title' => Yii::t('yii', 'Edit'),
+                        ]);
+                    }
 
                 ],
             ],
         ],
-        'responsive'=>true,
-        'hover'=>true,
-        'condensed'=>true,
-        'floatHeader'=>true,
-
-
+        'responsive' => true,
+        'hover' => true,
+        'condensed' => true,
+        'floatHeader' => true,
+        'toolbar' => '',
 
 
         'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
-            'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
-            'showFooter'=>false
+            'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
+            'type' => 'info',
+            'showFooter' => false
         ],
-    ]); Pjax::end(); ?>
+    ]);
+    Pjax::end(); ?>
 
 </div>

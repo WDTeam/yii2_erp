@@ -102,6 +102,12 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
         return $shopSettleApplyArray;
     }
     
+    public function getWorkerOrderDataProviderBySettleId($settle_id){
+        $financeWorkerOrderIncomeArr = FinanceWorkerOrderIncomeSearch::find()->where(['finance_worker_settle_apply_id'=>$settle_id])->asArray()->all();
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $financeWorkerOrderIncomeArr,]);
+        return $dataProvider;
+    }
+    
     public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();

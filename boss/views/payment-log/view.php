@@ -6,11 +6,11 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var dbbase\models\PaymentLog $model
+ * @var boss\models\payment\PaymentLog $model
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'General Pay Logs'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Payment Logs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payment-log-view">
@@ -32,22 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'payment_log_price',
             'payment_log_shop_name',
-            'payment_log_status_bool',
             'payment_log_eo_order_id',
             'payment_log_transaction_id',
-            [
-                'attribute' => 'payment_log_status',
-                'value' => !empty($model->payment_log_status) ? '成功' : '失败',
-            ],
+            'payment_log_status_bool',
+            'payment_log_status',
             'pay_channel_id',
             'pay_channel_name',
-            'payment_log_json_aggregation',
+            'payment_log_json_aggregation:ntext',
             'created_at',
-            [
-                'attribute' => 'create_time',
-                'value' => date("Y-m-d H:i:s",$model->create_time),
-            ],
-
+            'updated_at',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

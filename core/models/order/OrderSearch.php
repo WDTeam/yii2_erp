@@ -5,7 +5,6 @@ namespace core\models\order;
 use dbbase\models\order\OrderExtCustomer;
 use core\models\customer\Customer;
 
-use dbbase\models\order\OrderStatusDict;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -22,11 +21,11 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['order_code', 'order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id'], 'integer'],
+            [['order_code', 'order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_channel_type_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_channel_name'], 'string', 'max' => 64],
             [['order_customer_phone', 'order_worker_phone'], 'match', 'pattern' => '/^\d{11}$/i', 'message' => '请填写正确的电话号码或格式！(11位数字)'],
-            [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
+            [['order_service_type_name', 'order_channel_type_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo'], 'string', 'max' => 255],
             [['order_status_dict_id'], 'safe'],
         ];
@@ -580,7 +579,7 @@ class OrderSearch extends Order
                 'worker_id' => $this->worker_id,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
-                'order_src_id' => $this->order_src_id,
+                'order_channel_type_id' => $this->order_channel_type_id,
                 'order_unit_money' => $this->order_unit_money,
                 'order_money' => $this->order_money,
                 'order_booked_count' => $this->order_booked_count,
@@ -662,7 +661,7 @@ class OrderSearch extends Order
                 'worker_id' => $this->worker_id,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
-                'order_src_id' => $this->order_src_id,
+                'order_channel_type_id' => $this->order_channel_type_id,
                 'order_unit_money' => $this->order_unit_money,
                 'order_money' => $this->order_money,
                 'order_booked_count' => $this->order_booked_count,
@@ -717,7 +716,7 @@ class OrderSearch extends Order
             'isdel' => $this->isdel,
             'order_ip' => $this->order_ip,
             'order_service_type_id' => $this->order_service_type_id,
-            'order_src_id' => $this->order_src_id,
+            'order_channel_type_id' => $this->order_channel_type_id,
             'channel_id' => $this->channel_id,
             'order_unit_money' => $this->order_unit_money,
             'order_money' => $this->order_money,
@@ -759,7 +758,7 @@ class OrderSearch extends Order
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
             ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
-            ->andFilterWhere(['like', 'order_src_name', $this->order_src_name])
+            ->andFilterWhere(['like', 'order_channel_type_name', $this->order_channel_type_name])
             ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
             ->andFilterWhere(['like', 'order_address', $this->order_address])
             ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
@@ -802,7 +801,7 @@ class OrderSearch extends Order
             'isdel' => $this->isdel,
             'order_ip' => $this->order_ip,
             'order_service_type_id' => $this->order_service_type_id,
-            'order_src_id' => $this->order_src_id,
+            'order_channel_type_id' => $this->order_channel_type_id,
             'channel_id' => $this->channel_id,
             'order_unit_money' => $this->order_unit_money,
             'order_money' => $this->order_money,
@@ -819,7 +818,7 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
             ->andFilterWhere(['between', 'ejj_order.created_at', $this->created_at, $this->finance_record_log_endtime])
             ->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
-            ->andFilterWhere(['like', 'order_src_name', $this->order_src_name])
+            ->andFilterWhere(['like', 'order_channel_type_name', $this->order_channel_type_name])
             ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
             ->andFilterWhere(['like', 'order_address', $this->order_address])
             ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
