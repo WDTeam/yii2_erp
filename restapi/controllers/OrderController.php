@@ -12,7 +12,7 @@ use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\order\OrderStatus;
-use \core\models\finance\FinanceOrderChannel;
+use \core\models\operation\OperationOrderChannel;
 use \core\models\order\OrderStatusHistory;
 use restapi\models\alertMsgEnum;
 use \restapi\models\EjjEncryption;
@@ -2196,32 +2196,33 @@ class OrderController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //pop访问时可以不用输入access_token（用本身的验证加密方法）
-        $apiPopKey = Yii::$app->params["apiPopKey"];
-        $apiSecretKey = Yii::$app->params["apiSecretKey"];
+        @$apiPopKey = Yii::$app->params["apiPopKey"];
+        @$apiSecretKey = Yii::$app->params["apiSecretKey"];
         $sign = isset($param["sign"]) ? $param["sign"] : "";
         $nonce = isset($param["nonce"]) ? $param["nonce"] : "";
         $arrParams = array();
         $arrParams["sign"] = $sign;
         $arrParams["nonce"] = $nonce;
         $arrParams["api_key"] = $apiPopKey;
-        $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
-        $bolCheck = $objSign->checkSignature($arrParams);
+        try{
+            $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        }
+        try{
+            $bolCheck = $objSign->checkSignature($arrParams);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        }
         if (!$bolCheck) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::customerLoginFailed);
         }
-        $orderChannels = FinanceOrderChannel::get_order_channel_list();
-        $gDate = [];
-        if (!empty($orderChannels)) {
-            foreach ($orderChannels as $gItem) {
-                $gobject = [
-                    'order_channel_id' => $gItem['id'],
-                    'order_channel_name' => $gItem['finance_order_channel_name'],
-                ];
-                $gDate[] = $gobject;
-            }
+        try{
+            $orderChannels = OperationOrderChannel::getorderchannellist("all");
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
-
-        return $this->send($gDate, "数据获取成功", 1, 200, null, alertMsgEnum::getGoodsesSuccess);
+        return $this->send($orderChannels, "数据获取成功", 1, 200, null, alertMsgEnum::getGoodsesSuccess);
     }
 
 }
