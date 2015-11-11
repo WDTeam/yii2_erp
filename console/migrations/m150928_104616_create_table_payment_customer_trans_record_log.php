@@ -73,8 +73,6 @@ class m150928_104616_create_table_payment_customer_trans_record_log extends Migr
             'created_at'  => Schema::TYPE_INTEGER . '(10) COMMENT \'创建时间\'',
             'updated_at'  => Schema::TYPE_INTEGER . '(10) COMMENT \'更新时间\'',
 
-
-
         ], $tableOptions);
 
         $this->createIndex('customer_id','{{%payment_customer_trans_record_log}}','customer_id');
