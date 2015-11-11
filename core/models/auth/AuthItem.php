@@ -27,6 +27,40 @@ class AuthItem extends \yii\db\ActiveRecord
     const TYPE_ROLE = 1;
     const TYPE_PERMISSION = 2;
     
+    /**
+     * 系统固定角色
+     */
+    const SYSTEM_ROLE_SUPER_ADMIN = 'system_group_super_admin';
+    const SYSTEM_ROLE_ADMIN = 'system_group_admin';
+    const SYSTEM_ROLE_SHOP_MANAGER = 'system_group_shop_manger';
+    const SYSTEM_ROLE_MINIBOSS = 'system_group_miniboss';
+    
+    public static function addDefaultRoles()
+    {
+        $roles = [
+            self::SYSTEM_ROLE_SUPER_ADMIN=>'超级管理员',
+            self::SYSTEM_ROLE_ADMIN=>'普通管理员',
+            self::SYSTEM_ROLE_SHOP_MANAGER=>'小家政老板',
+            self::SYSTEM_ROLE_MINIBOSS=>'MiNiBoss组',
+        ];
+        $auth = \Yii::$app->authManager;
+        foreach ($roles as $name=>$description){
+            $role = $auth->getRole($name);
+            if(empty($role)){
+                $role = $auth->createRole($name);
+                $role->description = $description;
+                $auth->add($role);
+            }
+        }
+        $super = $auth->getRole(self::SYSTEM_ROLE_SUPER_ADMIN);
+        $admin = $auth->getRole(self::SYSTEM_ROLE_ADMIN);
+        var_dump($admin->name);
+        $has = $auth->hasChild($super, $admin);
+        if(empty($has)){
+            $auth->addChild($super, $admin);
+        }
+    }
+    
     public $permissions = [];
     /**
      * @inheritdoc
@@ -102,11 +136,10 @@ class AuthItem extends \yii\db\ActiveRecord
         $name = $this->name;
         $description = $this->description;
         $des = [
-            'super_admin'=>$description.'（拥有所有权限）',
-            'ordinary_admin'=>$description.'（后台常规管理）',
-            'group_shop_manager'=>$description.'（只能管理自己的家政）',
-            'group_shop'=>$description.'（只能管理自己的门店）',
-            'group_mini_box'=>$description.'（用于区分用户是不是minibox，如果是，则只能管理自己的数据）',
+            self::SYSTEM_ROLE_SUPER_ADMIN=>$description.'（拥有所有权限）',
+            self::SYSTEM_ROLE_ADMIN=>$description.'（除权限外的后台管理）',
+            self::SYSTEM_ROLE_SHOP_MANAGER=>$description.'（只能管理自己的家政门店）',
+            self::SYSTEM_ROLE_MINIBOSS=>$description.'（只能管理自己的数据）',
         ];
         if(isset($des[$name])){
             return $des[$name];

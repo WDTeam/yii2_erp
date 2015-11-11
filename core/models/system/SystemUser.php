@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use core\models\shop\ShopCustomeRelation;
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
+use core\models\auth\AuthItem;
 class SystemUser extends \dbbase\models\system\SystemUser
 {
     public $repassword;
@@ -215,11 +216,11 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return $res;
     }
     /**
-     * 判断是不是MINI BOX 用户
+     * 非管理员
      */
     public function isMiniBossUser()
     {
-        return $this->classify==self::CLASSIFY_MINIBOSS;
+        return !\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN);
     }
     
     /**
