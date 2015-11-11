@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['attribute'=>'created_at','value'=>date('Y-m-d H:i:s',$model->created_at)],
                 'order_ip',
                 'order_service_type_name',
-                'order_src_name',
                 'order_channel_name',
                 'order_unit_money',
                 'order_money',

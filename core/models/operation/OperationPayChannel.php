@@ -86,9 +86,12 @@ class OperationPayChannel extends \dbbase\models\operation\OperationPayChannel
 	 * @author: peak pan
 	 * @return:
 	 **/
-	public static  function configpay()
+	public static  function configpay($id)
 	{
-		return ['1' => '在线支付', '2' => 'e家洁','3'=>'第三方团购'];
+		$configdate=['1' => '在线支付', '2' => 'e家洁','3'=>'第三方团购'];
+		$data = self::findOne($id);
+		$array=[$data['operation_pay_channel_type'],$configdate[$data['operation_pay_channel_type']]];
+		return $array;	
 	}
 	
 	

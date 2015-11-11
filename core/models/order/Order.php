@@ -881,6 +881,7 @@ class Order extends OrderModel
                 'order_pay_channel_type_name' => 'e家洁',
                 'order_pay_channel_type_id' => 2,
             ]);
+            $this->order_pay_money -= $this->order_money;
 //            if (!empty($this->coupon_id)) {//是否使用了优惠券
 //                $coupon = self::getCouponById($this->coupon_id);
 //                if (!empty($coupon)) {
@@ -1079,25 +1080,6 @@ class Order extends OrderModel
         return ['id'=>1,'name'=>'BOSS'];
     }
 
-    /**
-     * 获取支付渠道
-     * @param int $channel_id
-     * @return array|bool
-     */
-    public function getPayChannelName($channel_id = 0)
-    {
-        return OperationPayChannel::get_post_name($channel_id);
-    }
-
-    /**
-     * 获取支付渠道分类 TODO 高峰提供接口
-     * @param int $channel_id
-     * @return array
-     */
-    public function getPayChannelType($channel_id = 0)
-    {
-        return ['id'=>1,'name'=>'BOSS'];
-    }
 
     /**
      * 根据经纬度获取商品信息

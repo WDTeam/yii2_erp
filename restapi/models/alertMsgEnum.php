@@ -188,8 +188,10 @@ class alertMsgEnum
     //可用优惠券列表
     //请选择城市
     const couponsCityNoChoice = '请选择城市';
-    //请选择城市
+    //请选择服务类别
     const couponsCityNoService = '请选择服务类别';
+    //请选择商品类别id
+    const couponsCityNoGood = '请选择商品类别id';
     //获取优惠券列表成功
     const couponsSuccess = '获取优惠券列表成功';
     //优惠券列表为空
