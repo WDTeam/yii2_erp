@@ -43,7 +43,7 @@ class WorkerTaskController extends Controller
                     $task->worker_task_id,
                     json_encode($conVals),
                 ]);
-                if($task->worker_task_log_end<=strtotime("-1 day")){
+                if($task->worker_task_log_end<=time()){
                     $is_done = $task->calculateIsDone();
                     ConsoleHelper::log('阿姨（%s）的任务（%s）%s',[
                         $task->worker_id,
