@@ -1416,20 +1416,45 @@ class WorkerController extends \restapi\components\Controller
     /**
      * @api {GET} /worker/set-worker-callback [GET] /worker/set-worker-callback(100%)
      * 
-     * @apiDescription  回调阿姨
+     * @apiDescription  极光推送,记录阿姨回调信息
      * @apiName actionSetWorkerCallback
      * @apiGroup Worker
      *
-     * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam  {Object} [data] 
+     * @apiParam  {Object} [data]  数据对象
      * @apiSuccessExample {json} Success-Response:
+     * 
+     * 
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": 1,
+     *       "alertMeg": "操作成功",
+     *       "ret": {
+     *          "worker":1
+     *        },
+     *       "msg": "操作成功"
+     *     }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 worker Not Found
+     *     {
+     *       "code": 0,
+     *       "msg": "操作删除失败",
+     *       "ret": {},
+     *      "alertMeg": "操作删除失败"
+     *      }
      */
     public function actionSetWorkerCallback()
     {
+        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
 
-        $callback = \Yii::$app->jpush->callback($data);
-        
-        
+        $callback = \Yii::$app->jpush->callback($param);
+        if ($callback) {
+            $ret=array("worker"=>1);
+            return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
+        } else {
+            return $this->send(null, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);
+        }
     }
 
 }
