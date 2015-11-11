@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'roles',
                 'value'=>implode(',', $model->getRolesLabel()),
-                'type'=>DetailView::INPUT_CHECKBOX_LIST,
+                'type'=>DetailView::INPUT_RADIO_LIST,
                 'items'=>SystemUser::getArrayRole(),
             ],
             [

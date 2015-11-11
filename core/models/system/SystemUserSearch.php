@@ -16,7 +16,7 @@ class SystemUserSearch extends SystemUser
     {
         return [
             [['id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'role'], 'safe'],
+            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email',], 'safe'],
         ];
     }
 
@@ -38,19 +38,16 @@ class SystemUserSearch extends SystemUser
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
-
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'role', $this->role]);
+            ->andFilterWhere(['or',
+                ['like', 'username', $this->username],
+                ['like', 'email', $this->username],
+                ['like', 'mobile', $this->username]
+            ]);
 
         return $dataProvider;
     }
