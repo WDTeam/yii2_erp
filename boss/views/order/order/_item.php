@@ -40,6 +40,7 @@ use boss\models\order\Order;
         </tr>
         <tr>
             <input type="hidden" class="order_id" value="<?= Html::encode($model->id) ?>"/>
+            <input type="hidden" class="order_code" value="<?= Html::encode($model->order_code) ?>"/>
             <input type="hidden" class="customer_phone"
                    value="<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>"/>
             <td style="width: 28%;">

@@ -31,7 +31,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
     {
         if ($this->_statusLabel === null) {
             $statuses = self::getArrayStatus();
-            $this->_statusLabel = $statuses[$this->status];
+            $this->_statusLabel = empty($statuses[$this->status])?'无效':$statuses[$this->status];
         }
         return $this->_statusLabel;
     }

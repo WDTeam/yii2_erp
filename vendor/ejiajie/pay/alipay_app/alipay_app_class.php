@@ -41,7 +41,7 @@ class alipay_app_class{
 
     public function callback(){
         require_once("alipay.config.php");
-        $alipayNotify = new AlipayNotify($alipay_config);
+        $alipayNotify = new app_AlipayNotify($alipay_config);
         $verify_result = $alipayNotify->verifyNotify();
         if($verify_result){
             if($_POST['trade_status'] == 'TRADE_FINISHED' || $_POST['trade_status'] == 'TRADE_SUCCESS'){

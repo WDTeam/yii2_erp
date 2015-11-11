@@ -85,8 +85,14 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
         $param->data['payment_customer_trans_record_verify'] = self::sign($param->data);
 
         //写入数据库日志
-        $this->attributes = $param->data;
-        $this->insert(false);
+        try{
+            $mongo = \Yii::$app->mongodb;
+            $collection = $mongo->getCollection('trans_record_log');
+            $data = $param->data;
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['create_time'] = time();
+            return $collection->insert($data);
+        }catch(Exception $e){}
     }
 
     /**
@@ -98,7 +104,7 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
     public function writeTextLog($param)
     {
         //创建目录
-        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/log/pay/'.date('Ym',time());
+        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/boss_log/trans_record/'.date('Ym',time());
         is_dir($path) || mkdir($path,0777,true);
 
         //文件名称

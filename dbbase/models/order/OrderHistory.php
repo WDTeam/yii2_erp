@@ -78,6 +78,7 @@ use dbbase\models\ActiveRecord;
  * @property string $card_id
  * @property string $order_use_card_money
  * @property string $coupon_id
+ * @property string $order_coupon_code
  * @property string $order_use_coupon_money
  * @property string $promotion_id
  * @property string $order_use_promotion_money
@@ -88,6 +89,7 @@ use dbbase\models\ActiveRecord;
  * @property string $worker_type_id
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
+ * @property integer $order_worker_assign_time
  * @property string $shop_id
  * @property string $order_worker_shop_name
  * @property string $checking_id
@@ -119,14 +121,14 @@ class OrderHistory extends ActiveRecord
                 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_flag_change_booked_worker','order_flag_is_checked','order_cancel_cause_id',
                 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time',
                 'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
-                'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
+                'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type','order_worker_assign_time', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money', 'order_booked_count','order_lat','order_lng'], 'number'],
             [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name','order_status_boss','order_status_customer','order_status_worker', 'order_service_type_name', 'order_service_item_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo',
-                'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
+                'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo','order_code'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
         ];
     }
@@ -208,6 +210,7 @@ class OrderHistory extends ActiveRecord
             'card_id' => '服务卡ID',
             'order_use_card_money' => '使用服务卡金额',
             'coupon_id' => '优惠券ID',
+            'order_coupon_code' => '优惠码',
             'order_use_coupon_money' => '使用优惠卷金额',
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',
@@ -218,6 +221,7 @@ class OrderHistory extends ActiveRecord
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
+            'order_worker_assign_time' => '接单时间',
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
             'checking_id' => '对账id',

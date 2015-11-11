@@ -26,6 +26,7 @@ class m151007_153201_create_table_order_ext_worker extends Migration
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人所属门店id\'',
             'order_worker_shop_name' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'工人所属门店名称\'',
             'order_worker_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'阿姨备注\'',
+            'order_worker_assign_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'接单时间\'',
 
             'created_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',

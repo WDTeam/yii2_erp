@@ -94,6 +94,7 @@ class Order extends ActiveRecord
     public $card_id;
     public $order_use_card_money;
     public $coupon_id;
+    public $order_coupon_code;
     public $order_use_coupon_money;
     public $promotion_id;
     public $order_use_promotion_money;
@@ -104,6 +105,7 @@ class Order extends ActiveRecord
     public $worker_type_id;
     public $order_worker_type_name;
     public $order_worker_assign_type;
+    public $order_worker_assign_time;
     public $shop_id;
     public $order_worker_shop_name;
     public $admin_id;
@@ -150,6 +152,7 @@ class Order extends ActiveRecord
         'card_id',
         'order_use_card_money',
         'coupon_id',
+        'order_coupon_code',
         'order_use_coupon_money',
         'promotion_id',
         'order_use_promotion_money',
@@ -160,6 +163,7 @@ class Order extends ActiveRecord
         'worker_type_id',
         'order_worker_type_name',
         'order_worker_assign_type',
+        'order_worker_assign_time',
         'shop_id',
         'order_worker_shop_name',
         'admin_id',
@@ -288,6 +292,7 @@ class Order extends ActiveRecord
             'card_id' => '服务卡ID',
             'order_use_card_money' => '使用服务卡金额',
             'coupon_id' => '优惠券ID',
+            'order_coupon_code' => '优惠码',
             'order_use_coupon_money' => '使用优惠卷金额',
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',
@@ -298,6 +303,7 @@ class Order extends ActiveRecord
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
+            'order_worker_assign_time' => '接单时间',
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
             'admin_id' => '操作人id 1系统 2客户 3阿姨 >3后台管理员',
