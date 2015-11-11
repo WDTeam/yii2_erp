@@ -84,9 +84,13 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 	 * @author: peak pan
 	 * @return:
 	 **/
-	public static  function configorder()
+	public static  function configorder($id)
 	{
-		return ['1' => 'e家洁', '2' => 'POP','3'=>'BOSS'];
+		$configdate=['1' => 'e家洁', '2' => 'POP','3'=>'BOSS'];
+		$data = self::findOne($id);
+		$array=[$data['operation_order_channel_type'],$configdate[$data['operation_order_channel_type']]];
+		return $array;
+		
 	}
 	
 	
