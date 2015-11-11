@@ -1450,7 +1450,7 @@ class UserController extends \restapi\components\Controller
             try {
                 $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
                 if ($feedback["response"] == 'success') {
-                    return $this->send('{}', "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
+                    return $this->send(null, "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
                 } else {
                     return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
                 }
@@ -1523,7 +1523,6 @@ class UserController extends \restapi\components\Controller
         try {
             $userBalance = Customer::getBalanceById($customer_id);
         } catch (\Exception $e) {
-            # return $this->send($e, "获取用户余额系统错误", 1024, 200, null, alertMsgEnum::bossError);
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         if ($userBalance['response'] == 'success') {
@@ -1552,7 +1551,6 @@ class UserController extends \restapi\components\Controller
         try {
             $CouponCount = CouponUserinfo::CouponCount($customer_id);
         } catch (\Exception $e) {
-            #return $this->send($e, "获取用户优惠券数系统错误", 1024, 200, null, alertMsgEnum::bossError);
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         $result["coupon"] = $CouponCount['data'];
