@@ -52,6 +52,8 @@ class OperationOrderChannelController extends BaseAuthController
     	'customer_id' => 7,
     	'order_code' =>'123445',
 		];
+    	 
+    	 
     	$rty=\core\models\customer\CustomerComment::addUserSuggest($ert);
     	
     	var_dump($rty);exit;
