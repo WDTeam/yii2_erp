@@ -51,7 +51,11 @@ class OperationArea extends CommonOperationArea
     **/
     public static function getAreaid($name){
     	
-    	$data = self::find()->select(['id'])->where(['and','area_name='.$name,'parent_id!=0'])->asArray()->one();
+    	$data = self::find()->select(['id'])
+    	->where(['and','parent_id!=0'])
+    	->andFilterWhere(['like', 'area_name',$name])
+    	->asArray()
+    	->one();
     	return $data['id'];
     }
     

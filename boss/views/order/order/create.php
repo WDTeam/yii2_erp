@@ -106,9 +106,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h4 class="col-sm-2">
                         总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">0.00</span>
                     </h4>
-                    <h4 class="col-sm-5">
-                        账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
-                    </h4>
                 </div>
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
@@ -116,11 +113,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList)->label('订单渠道'); ?>
                 <div id="order_pay_channel_1" >
                     <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList)->label('支付方式'); ?>
-                    <?= $form->field($model, 'order_coupon_code')->textInput(['maxlength' => true]) ?>
+                    <div style="display: none;" id="order_coupon_code">
+                        <?= $form->field($model, 'order_coupon_code')->textInput(['maxlength' => true]) ?>
+                        <input type="hidden" value="" id="order-coupon_id" name="Order[coupon_id]">
+                    </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
                         <div class="col-sm-2">
-                            <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">00.00</span>
+                            <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">0.00</span>
                         </div>
                     </div>
                 </div>

@@ -170,16 +170,15 @@ class OrderController extends BaseAuthController
      * 根据服务品类获取优惠券
      * @return array
      */
-    public function actionCoupons()
+    public function actionCheckCouponCode()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $id = Yii::$app->request->get('id');
-        $cate_id = Yii::$app->request->get('cate_id');
-        $result = CouponRule::getAbleCouponByCateId($id, $cate_id);
-        if (isset($result['is_status']) && $result['is_status'] == 1) {
-            return $result['data'];
-        }
-        return false;
+        $coupon_code = Yii::$app->request->get('coupon_code');
+        $customer_tel = Yii::$app->request->get('customer_phone');
+        $service_type_id = Yii::$app->request->get('service_type_id');
+        $service_item_id = Yii::$app->request->get('service_item_id');
+        $city_id = Yii::$app->request->get('city_id');
+        return CouponRule::get_is_coupon_status($coupon_code,$customer_tel,$service_type_id,$service_item_id,$city_id);
     }
 
     /**
@@ -342,9 +341,11 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['view', 'id' => $model->order_code]);
             }
         } else {//init
-            $model->order_booked_count = 2; //服务时长初始值2小时
+            $model->order_booked_count = '2.0'; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
             $model->order_flag_sys_assign = 1;//是否系统指派
+            $model->channel_id = 20;//订单渠道
+            $model->pay_channel_id = 2;//支付渠道
         }
         return $this->render('create', [
             'model' => $model,

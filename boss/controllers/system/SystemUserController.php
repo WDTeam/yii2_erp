@@ -140,27 +140,44 @@ class SystemUserController extends BaseAuthController
         }
     }
     /**
-     * 绑定门店
+     * 绑定小家政
      */
-    public function actionBindShop($id)
+    public function actionBindShopManager($id)
     {
         $model = $this->findModel($id);
-        
+        if ($model->load(Yii::$app->request->post()) && $model->saveShopManagerIds()) {
+            return $this->refresh();
+        }
         $shop_managers = ShopManager::find()
         ->select(['id','name'])
         ->where('isdel=0 or isdel is null')
         ->asArray()->all();
         $shop_managers = ArrayHelper::map($shop_managers, 'id', 'name');
         
+        return $this->render('bind_shop_manager',[
+            'model'=>$model,
+            'shop_managers'=>$shop_managers,
+        ]);
+    }
+    /**
+     * 绑定门店
+     */
+    public function actionBindShop($id)
+    {
+        $model = $this->findModel($id);
+        
+        if ($model->load(Yii::$app->request->post()) && $model->saveShopIds()) {
+            return $this->refresh();
+        }
+
         $shops = Shop::find()
         ->select(['id','name'])
         ->where('isdel=0 or isdel is null')
         ->asArray()->all();
         $shops = ArrayHelper::map($shops, 'id', 'name');
-        
+    
         return $this->render('bind_shop',[
             'model'=>$model,
-            'shop_managers'=>$shop_managers,
             'shops'=>$shops,
         ]);
     }

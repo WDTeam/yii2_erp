@@ -1,7 +1,7 @@
 /**
  * Created by linhongyou on 2015/9/25.
  */
-window.coupons = new Array();
+var coupon = new Object();
 window.cards = new Array();
 var customer = new Object();
 var address_list = new Object();
@@ -22,7 +22,7 @@ $("#order-order_customer_phone").blur(getCustomerInfo);
 
 
 $("#order_create_form").submit(function(){
-    if($("#order-order_pay_type input:checked").val()==2 && parseFloat(customer.customer_balance)-parseFloat($(".order_pay_money").text()) < 0){
+    if($("#order-pay_channel_id input:checked").val()==20 && parseFloat(customer.customer_balance)-parseFloat($(".order_pay_money").text()) < 0){
         alert("用户余额不足以支付此次订单！");
         return false;
     }
@@ -35,7 +35,6 @@ $(document).on("change","#order-order_service_item_id input",function(){
     $("#order_unit_money").text(unit_price.toFixed(2));
     $("#order-order_unit_money").val(unit_price.toFixed(2));
     setOrderMoney();
-    getCoupons();
 });
 
 
@@ -60,6 +59,13 @@ $('#order-channel_id input').change(function(){
         }else{
             $('#order_pay_channel_2').show();
             $('#order_pay_type_2').show();
+        }
+});
+$('#order-pay_channel_id input').change(function(){
+        if($(this).val()==20){
+            $('#order_coupon_code').show();
+        }else{
+            $('#order_coupon_code').hide();
         }
 });
 
@@ -93,6 +99,8 @@ $(document).on("change",".city_form",function(){
     var address_id = $(this).parents('.radio').attr('id').split('_')[1];
     getCounty(city_id,address_id,0);
 });
+
+$(document).on("blur","#order-order_coupon_code",checkCoupon);
 
 $(document).on("click",".cancel_address_btn",function(){
     var address_id = $(this).parents('.radio').attr('id').split('_')[1];
@@ -170,12 +178,6 @@ $(document).on("click",".save_address_btn",function(){
     });
 });
 
-$(document).on('change','#order-coupon_id',function(){
-    if($(this).val()!=''){
-        var order_pay_money = $("#order-order_money").val()-window.coupons[$(this).val()];
-        $(".order_pay_money").text(order_pay_money.toFixed(2));
-    }
-});
 
 function getTimeRange()
 {
@@ -242,10 +244,6 @@ function setOrderMoney(){
     $("#order-order_money").val(money.toFixed(2));
     $(".order_money").text(money.toFixed(2));
     $(".order_pay_money").text(money.toFixed(2));
-    if($("#order-coupon_id").val()!=''){
-        var order_pay_money = $("#order-order_money").val()-window.coupons[$("#order-coupon_id").val()];
-        $(".order_pay_money").text(order_pay_money.toFixed(2));
-    }
 }
 
 function getGoods(){
@@ -286,28 +284,6 @@ function getGoods(){
 
 }
 
-function getCoupons(){
-    if(customer.id != undefined) {
-        var goods = goods_list[$("#order-order_service_item_id input:checked").val()];
-        $.ajax({
-            type: "GET",
-            url: "/order/order/coupons/?id=" + customer.id+"&cate_id="+goods.operation_category_id,
-            dataType: "json",
-            success: function (coupons) {
-                if (coupons.length > 0) {
-                    $("#order-coupon_id").html('<option value="">请选择优惠券</option>');
-                    for (var k in coupons) {
-                        var v = coupons[k];
-                        window.coupons[v.id] = v.coupon_price;
-                        $("#order-coupon_id").append(
-                            '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
-                        );
-                    }
-                }
-            }
-        });
-    }
-}
 function getCards(){
     if(customer.id != undefined) {
         $.ajax({
@@ -330,6 +306,30 @@ function getCards(){
     }
 }
 
+function checkCoupon(){
+    if($("#order-order_service_item_id input:checked").length>0) {
+        var service_item_id = $("#order-order_service_item_id input:checked").val();
+        var service_type_id = goods_list[service_item_id].operation_category_id;
+        var address_id = $("#order-address_id input:checked").val();
+        var city_id = address_list[address_id].operation_city_id;
+        $.ajax({
+            type: "GET",
+            url: "/order/order/check-coupon-code/?coupon_code=" + $("#order-order_coupon_code").val() + "&customer_phone=" + $("#order-order_customer_phone").val() + "&service_item_id=" + service_item_id + "&service_type_id=" + service_type_id + "&city_id=" + city_id,
+            dataType: "json",
+            success: function (data) {
+                if (!data) {
+                    alert('该优惠码与此次服务不匹配！');
+                } else {
+                    coupon = data
+                    $("#order-coupon_id").val(coupon.id);
+                    var order_pay_money = $("#order-order_money").val() - coupon.coupon_userinfo_price;
+                    $(".order_pay_money").text(order_pay_money.toFixed(2));
+                }
+            }
+        });
+    }
+}
+
 function getCustomerInfo(){
     var phone = $("#order-order_customer_phone").val();
     var reg = /^1[3-9][0-9]{9}$/;
@@ -344,7 +344,6 @@ function getCustomerInfo(){
                 customer=data;
                 if (customer.id) {
                     $("#order-customer_id").val(customer.id);
-                    $("#customer_balance").text(customer.customer_balance);
                     $.ajax({
                         type: "GET",
                         url: "/order/order/customer-address/?id=" + customer.id,

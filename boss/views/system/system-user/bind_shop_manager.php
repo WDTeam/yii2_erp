@@ -6,7 +6,7 @@ use yii\base\Widget;
 use kartik\builder\Form;
 use kartik\form\ActiveForm;
 
-$this->title = Yii::t('app', '给用户绑定门店');
+$this->title = Yii::t('app', '给用户绑定小家政');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'System Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,12 +21,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <label>选择门店:</label>
                 <?php echo Select2::widget([
                     'model'=>$model,
-                    'attribute'=>'shopIds',
-                    'data'=>$shops,
+                    'attribute'=>'shopManagerIds',
+                    'data'=>$shop_managers,
                     'hideSearch'=>false,
                     'options'=>[
                         'multiple'=>true,
-                        'placeholder'=>'请选择门店……'
+                        'placeholder'=>'请选择小家政……'
                     ],
                 ]);?>
             </div>

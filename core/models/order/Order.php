@@ -881,17 +881,17 @@ class Order extends OrderModel
                 'order_pay_channel_type_name' => 'e家洁',
                 'order_pay_channel_type_id' => 2,
             ]);
-            if (!empty($this->coupon_id)) {//是否使用了优惠券
-                $coupon = self::getCouponById($this->coupon_id);
-                if (!empty($coupon)) {
-                    $this->order_use_coupon_money = $coupon['coupon_price'];
-                    $this->order_coupon_code = $coupon['coupon_code'];
-                    $this->order_pay_money -= $this->order_use_coupon_money;
-                } else {
-                    $this->addError('coupon_id', '获取优惠券信息失败！');
-                    return false;
-                }
-            }
+//            if (!empty($this->coupon_id)) {//是否使用了优惠券
+//                $coupon = self::getCouponById($this->coupon_id);
+//                if (!empty($coupon)) {
+//                    $this->order_use_coupon_money = $coupon['coupon_price'];
+//                    $this->order_coupon_code = $coupon['coupon_code'];
+//                    $this->order_pay_money -= $this->order_use_coupon_money;
+//                } else {
+//                    $this->addError('coupon_id', '获取优惠券信息失败！');
+//                    return false;
+//                }
+//            }
         }else{//如果不传支付渠道就是线上支付
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);
