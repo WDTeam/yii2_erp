@@ -51,14 +51,14 @@ use core\models\finance\FinanceWorkerSettleApplySearch;
     </div>
     <div class='col-md-2'>
         <?php 
-            if(!\Yii::$app->user->identity->isMiniBossUser()){
+            if(!\Yii::$app->user->identity->isNotAdmin()){
                 echo  $form->field($model, 'worker_type_id')->dropDownList([FinanceWorkerSettleApplySearch::SELF_OPERATION=>'自营',FinanceWorkerSettleApplySearch::NON_SELF_OPERATION=>'小家政']);
             }
         ?>
     </div>
     <div class='col-md-2'>
         <?php 
-            if(!\Yii::$app->user->identity->isMiniBossUser()){
+            if(!\Yii::$app->user->identity->isNotAdmin()){
                 echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceWorkerSettleApplySearch::FULLTIME=>'全职',FinanceWorkerSettleApplySearch::PARTTIME=>'兼职',FinanceWorkerSettleApplySearch::PARKTIME=>'高峰',FinanceWorkerSettleApplySearch::INTERVALTIME=>'时段']);
             }
         ?>

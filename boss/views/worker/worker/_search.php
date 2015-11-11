@@ -25,7 +25,7 @@ use kartik\date\DatePicker;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-    <?php if(!\Yii::$app->user->identity->isMiniBossUser()){ ?>
+    <?php if(!\Yii::$app->user->identity->isNotAdmin()){ ?>
     <div class='col-md-2'>
         <?php echo $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
             'name' => 'worker_work_city',

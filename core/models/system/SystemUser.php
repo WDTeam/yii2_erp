@@ -218,7 +218,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
     /**
      * 非管理员
      */
-    public function isMiniBossUser()
+    public function isNotAdmin()
     {
         return !\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN);
     }
