@@ -19,6 +19,8 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
             'admin_name' => Schema::TYPE_STRING . '(30) DEFAULT \'system\' COMMENT \'管理员名称\'' ,
 
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
+            'customer_phone' => Schema::TYPE_STRING . '(11) NOT NULL COMMENT \'用户电话\'' ,
+
             'order_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
             'order_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'订单编号\'' ,
             'order_batch_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 NOT NULL COMMENT \'周期订单编号\'' ,
@@ -50,9 +52,10 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
             'payment_customer_trans_record_service_card_current_balance'  => Schema::TYPE_DECIMAL . '(8,2) DEFAULT 0 COMMENT \'服务卡当前余额\'',
             'payment_customer_trans_record_service_card_befor_balance'  => Schema::TYPE_DECIMAL . '(8,2) DEFAULT 0 COMMENT \'服务卡之前余额\'',
 
+            'payment_customer_trans_record_refund_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'退款金额\'',
+            'payment_customer_trans_record_refund_transaction_id'  => Schema::TYPE_STRING . '(40) DEFAULT 0 COMMENT \'退款流水号\'',
 
             'payment_customer_trans_record_compensate_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 COMMENT \'补偿金额\'',
-            'payment_customer_trans_record_refund_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'退款金额\'',
             'payment_customer_trans_record_order_total_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 COMMENT \'订单总额\'',
             'payment_customer_trans_record_total_money'  => Schema::TYPE_DECIMAL . '(9,2) unsigned  DEFAULT 0 COMMENT \'交易总额\'',
             'payment_customer_trans_record_current_balance'  => Schema::TYPE_DECIMAL . '(8,2) DEFAULT 0 COMMENT \'当前余额\'',
@@ -72,6 +75,7 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
         ], $tableOptions);
 
         $this->createIndex('customer_id','{{%payment_customer_trans_record}}','customer_id');
+        $this->createIndex('customer_phone','{{%payment_customer_trans_record}}','customer_phone');
         $this->createIndex('order_id','{{%payment_customer_trans_record}}','order_id');
         $this->createIndex('order_channel_id','{{%payment_customer_trans_record}}','order_channel_id');
         $this->createIndex('payment_customer_trans_record_mode','{{%payment_customer_trans_record}}','payment_customer_trans_record_mode');
