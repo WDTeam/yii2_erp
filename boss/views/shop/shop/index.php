@@ -101,7 +101,7 @@ $columns[] = 'complain_coutn';
 $columns[] = 'level';
 $columns[] = [
     'class' => 'yii\grid\ActionColumn',
-    'template'=>Yii::$app->user->identity->isMiniBossUser()?
+    'template'=>Yii::$app->user->identity->isNotAdmin()?
         '{update} {add-worker}':
         '{update} {delete} {joinblacklist} {add-worker}',
     'buttons' => [
@@ -153,7 +153,7 @@ $columns[] = [
 <div class="shop-index">
 
     <?php  
-    if(!Yii::$app->user->identity->isMiNiBossUser()){
+    if(!Yii::$app->user->identity->isNotAdmin()){
         echo $this->render('_search', ['model' => $searchModel]);
     }
     ?>

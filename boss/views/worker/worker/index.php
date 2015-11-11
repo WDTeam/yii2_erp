@@ -23,7 +23,7 @@ use boss\models\worker\WorkerIdentityConfig;
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][1] = $this->title;
 $params = Yii::$app->request->getQueryParams();
-if(\Yii::$app->user->identity->isMiniBossUser()){
+if(\Yii::$app->user->identity->isNotAdmin()){
     $columns =[
         [
             'class'=>'kartik\grid\CheckboxColumn',

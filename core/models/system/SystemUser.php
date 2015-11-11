@@ -6,23 +6,24 @@ use yii\helpers\ArrayHelper;
 use core\models\shop\ShopCustomeRelation;
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
+use core\models\auth\AuthItem;
 class SystemUser extends \dbbase\models\system\SystemUser
 {
     public $repassword;
     private $_statusLabel;
     private $_roleLabel;
     
-    const CLASSIFY_SYSTEM = 0;
-    const CLASSIFY_BOSS = 1;
-    const CLASSIFY_MINIBOSS = 2;
-    public static function getClassifes()
-    {
-        return [
-            self::CLASSIFY_SYSTEM=>'系统保留',
-            self::CLASSIFY_BOSS=>'BOSS 用户',
-            self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
-        ];
-    }
+//     const CLASSIFY_SYSTEM = 0;
+//     const CLASSIFY_BOSS = 1;
+//     const CLASSIFY_MINIBOSS = 2;
+//     public static function getClassifes()
+//     {
+//         return [
+//             self::CLASSIFY_SYSTEM=>'系统保留',
+//             self::CLASSIFY_BOSS=>'BOSS 用户',
+//             self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
+//         ];
+//     }
     
     /**
      * @inheritdoc
@@ -215,11 +216,11 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return $res;
     }
     /**
-     * 判断是不是MINI BOX 用户
+     * 非管理员
      */
-    public function isMiniBossUser()
+    public function isNotAdmin()
     {
-        return $this->classify==self::CLASSIFY_MINIBOSS;
+        return !\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN);
     }
     
     /**

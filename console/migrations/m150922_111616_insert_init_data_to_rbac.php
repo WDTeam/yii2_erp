@@ -19,19 +19,9 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
          * 添加角色
          */
         $this->insert('{{%auth_item}}', [
-            'name'=>'super_admin',
+            'name'=>'system_group_super_admin',
             'type'=>1,
             'description'=>'超级管理员',
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name'=>'ordinary_admin',
-            'type'=>1,
-            'description'=>'普通管理员',
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name'=>'group_shop_manager',
-            'type'=>1,
-            'description'=>'MINI BOX 组',
         ]);
         
         /**
@@ -45,20 +35,8 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
          * 给用户分配角色
          */
         $this->insert('{{%auth_assignment}}', [
-            'item_name'=>'super_admin',
+            'item_name'=>'system_group_super_admin',
             'user_id'=>1,
-        ]);
-        $this->insert('{{%auth_assignment}}', [
-            'item_name'=>'super_admin',
-            'user_id'=>2,
-        ]);
-        $this->insert('{{%auth_assignment}}', [
-            'item_name'=>'super_admin',
-            'user_id'=>3,
-        ]);
-        $this->insert('{{%auth_assignment}}', [
-            'item_name'=>'super_admin',
-            'user_id'=>4,
         ]);
     }
 

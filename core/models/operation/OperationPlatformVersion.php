@@ -40,5 +40,16 @@ class OperationPlatformVersion extends \dbbase\models\operation\OperationPlatfor
             return false;
         }
     }
+
+    /**
+     * 更新冗余的平台名称
+     *
+     * @param inter   $operation_platform_id     平台编号
+     * @param string  $operation_platform_name   平台名称
+     */
+    public static function updatePlatformName($operation_platform_id, $operation_platform_name)
+    {
+        self::updateAll(['operation_platform_name' => $operation_platform_name], 'operation_platform_id= ' . $operation_platform_id);
+    }
     
 }

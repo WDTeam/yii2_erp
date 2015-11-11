@@ -4,6 +4,9 @@ namespace boss\controllers\operation;
 
 use boss\components\BaseAuthController;
 use boss\models\operation\OperationPlatform;
+use boss\models\operation\OperationPlatformVersion;
+use boss\models\operation\OperationAdvertContent;
+use boss\models\operation\OperationAdvertPosition;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -84,10 +87,18 @@ class OperationPlatformController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $post = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load($post)) {
             $model->updated_at = time();
             $model->save();
+
+            //更新冗余的平台名称,平台名称冗余在三个表:版本,内容,位置
+            OperationPlatformVersion::updatePlatformName($id, $post['OperationPlatform']['operation_platform_name']);
+            OperationAdvertContent::updatePlatformName($id, $post['OperationPlatform']['operation_platform_name']);
+            OperationAdvertPosition::updatePlatformName($id, $post['OperationPlatform']['operation_platform_name']);
+
+
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [

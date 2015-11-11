@@ -149,7 +149,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         if (count($array) > 0) {
         	$dateinfo=OrderComplaint::ComplaintTypes();
         	$dateinfo_key=$dateinfo[1];
-            $transaction = \Yii::$app->db->beginTransaction();
+            //$transaction = \Yii::$app->db->beginTransaction();
             try {
                 $customerComment = new CustomerComment;
                 $customerComment->order_id = $array['order_id'];
@@ -160,7 +160,6 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->province_id = $array['province_id'];
                 $customerComment->city_id = $array['city_id'];
                 $customerComment->county_id = $array['county_id'];
-                
                 $customerComment->customer_comment_phone = $array['customer_comment_phone'];
                 $customerComment->customer_comment_content = $array['customer_comment_content'];
                 $customerComment->customer_comment_level = $array['customer_comment_level'];
@@ -172,18 +171,11 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->updated_at = time();
                 $customerComment->is_del = 1;
                 $customerComment->save();
-                // var_dump($customerComment->errors);
-              
-                
-                
+
                 //增加使用次数
                $arraydate= explode(',',$array['customer_comment_tag_ids']);
-               
-              
+
                 foreach ($arraydate as $ted){
-                    
-                   
-                    
                 	$dateinfo=CustomerCommentTag::findOne($ted);
                        
                        // var_dump($dateinfo);exit;
@@ -191,13 +183,12 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                        $dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
                 	$dateinfo->save();     
                         }
-     
                 	unset($dateinfo);
                 }
-
 				//通知订单 ，改变订单状态
 		if(!isset($array['adminid'])){$array['adminid']=0;}
-                Order::customerAcceptDone($array['order_id'],$array['adminid']); 
+		
+             //  Order::customerAcceptDone($array['order_id'],$array['adminid']); 
                 
                 if ($array['customer_comment_level'] == '3') {
                     //如果是差评 通知投诉接口
@@ -207,23 +198,25 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                     $data['complaint_channel'] = 1;
                     $data['complaint_phone'] = $array['customer_comment_phone'];
                     $data['complaint_section'] = 1;
-                    $data['complaint_assortment'] =array_search($array['customer_comment_level_name'],$dateinfo_key);
-                    $data['complaint_level'] = 0;
+                    $is_type=array_search($array['customer_comment_level_name'],$dateinfo_key);
+                    $data['complaint_assortment'] =$is_type?$is_type:0;
+                    $data['complaint_level'] ='0';
                     $data['complaint_content'] = $array['customer_comment_content'];
                     $data['complaint_time'] = time();
                     $data['updated_at'] = time();
                     $data['created_at'] = time();
-                    $data['is_softdel'] = 1;
+                    $data['is_softdel'] = 0;
                     //流水号
-                    $data['order_code'] ='06'.time();
+                    $data['order_code'] =$array['order_code'];
                     //提交给投诉接口
                     $OrderComplaintinfo=new OrderComplaint;
-                    $OrderComplaintinfo->appModel($data);
+                   $rtyyuui= $OrderComplaintinfo->appModel($data);
                 }
-                $transaction->commit();
+               // $transaction->commit();
+               
                 return true; 
             } catch (\Exception $e) {
-                $transaction->rollback();
+               // $transaction->rollback();
                 return false;
             }
         } else {

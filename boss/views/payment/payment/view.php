@@ -32,8 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'customer_id',
             'order_id',
-            'order_code',
-            'order_batch_code',
+
             'payment_money',
             'payment_actual_money',
             'payment_source',

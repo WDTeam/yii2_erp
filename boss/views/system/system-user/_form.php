@@ -43,10 +43,10 @@ use core\models\system\SystemUser;
             'email'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 电子邮箱...', 'maxlength'=>255]], 
             'mobile'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 手机号...', 'maxlength'=>11]],
             
-            'classify'=>[
-                'type'=> Form::INPUT_RADIO_LIST,
-                'items'=>SystemUser::getClassifes(),
-            ],
+//             'classify'=>[
+//                 'type'=> Form::INPUT_RADIO_LIST,
+//                 'items'=>SystemUser::getClassifes(),
+//             ],
             
             'roles'=>[
                 'type'=> Form::INPUT_CHECKBOX_LIST,

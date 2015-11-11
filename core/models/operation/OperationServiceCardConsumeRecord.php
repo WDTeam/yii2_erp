@@ -2,7 +2,6 @@
 
 namespace core\models\operation;
 
-use OperationServiceCardWithCustomer;
 
 /**
  * This is the model class for table "ejj_operation_service_card_consume_record".
@@ -40,12 +39,13 @@ class OperationServiceCardConsumeRecord extends \dbbase\models\operation\Operati
      *      service_card_consume_record_use_money，使用金额 】
      * @return bool
      */
+
     public function createServiceCardConsumeRecord($attributes)
     {
         //1.创建对象，查询消费记录
-        $model=new OperationServiceCardConsumeRecord;
+        $model=new OperationServiceCardConsumeRecord();
         if($attributes["service_card_with_customer_code"]){
-            $model=OperationServiceCardWithCustomer::getServiceCardWithCustomerByCode();
+            $model_cwc=OperationServiceCardWithCustomer::getServiceCardWithCustomerByCode($attributes["service_card_with_customer_code"]);
         }else{
             return "error:service_card_with_customer_code is null";
         }
@@ -53,41 +53,33 @@ class OperationServiceCardConsumeRecord extends \dbbase\models\operation\Operati
         //2.读取attributes，并写入$model对象属性
         $model->setAttributes($attributes);
 
-        //3.写入使用前金额
-        $model->setAttributes([
-            'service_card_consume_record_front_money' => $model->service_card_with_customer_balance,
-        ]);
+        //3.计算使用后金额
+        $service_card_consume_record_behind_money = $model_cwc->service_card_with_customer_balance - $model->service_card_consume_record_use_money;
 
-        //4.计算使用后金额
-        $service_card_consume_record_behind_money = $model->service_card_with_customer_balance - $model->service_card_consume_record_use_money;
-
-        //5.写入使用后金额
-        $model->setAttributes([
-            'service_card_consume_record_behind_money' => $service_card_consume_record_behind_money,
-        ]);
-
-        //6.设置其他字段
+        //4.设置其他字段
         $model->setAttributes([
             'isdel' => 0,//逻辑删除
+            'service_card_consume_record_front_money' => $model_cwc->service_card_with_customer_balance,
+            'service_card_consume_record_behind_money' => $service_card_consume_record_behind_money,
+            'service_card_with_customer_id' => $model_cwc->id,
         ]);
 
-        //7.服务卡消费记录保存成功，更新客户服务卡余额
+        //5.服务卡消费记录保存成功，更新客户服务卡余额
         if($model->save()){
-             (new OperationServiceCardWithCustomer)->updateServiceCardWithCustomerBalanceById($model->service_card_with_customer_id,$model->service_card_consume_record_behind_money);
+             (new OperationServiceCardWithCustomer)->updateServiceCardWithCustomerBalanceById($model_cwc->id,$model->service_card_consume_record_behind_money);
         }else{
             return $model->errors;
         }
         //8.回写消费记录信息
         $attr_back=[
             "id"=>$model->primaryKey,
-            "service_card_consume_record_front_money"=>$model->service_card_with_customer_balance,
+            "service_card_consume_record_front_money"=>$model_cwc->service_card_with_customer_balance,
             "service_card_consume_record_behind_money"=>$service_card_consume_record_behind_money,
             "service_card_consume_record_use_money"=>$model->service_card_consume_record_use_money,
             "service_card_with_customer_code"=>$model->service_card_with_customer_code,
             "customer_id"=>$model->customer_id,
             "customer_trans_record_transaction_id"=>$model->customer_trans_record_transaction_id,
         ];
-
         return $attr_back;
     }
 

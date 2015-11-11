@@ -40,12 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'******',
                 'type'=>DetailView::INPUT_PASSWORD
             ],
-            [
-                'attribute'=>'classify',
-                'value'=>$model->getClassifyLabel(),
-                'type'=>DetailView::INPUT_RADIO_LIST,
-                'items'=>SystemUser::getClassifes(),
-            ],
+//             [
+//                 'attribute'=>'classify',
+//                 'value'=>$model->getClassifyLabel(),
+//                 'type'=>DetailView::INPUT_RADIO_LIST,
+//                 'items'=>SystemUser::getClassifes(),
+//             ],
             [
                 'attribute'=>'roles',
                 'value'=>implode(',', $model->getRolesLabel()),

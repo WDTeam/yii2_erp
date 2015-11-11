@@ -16,9 +16,14 @@ use yii\helpers\ArrayHelper;
 use core\models\auth\AuthItemChild;
 use boss\components\RbacHelper;
 use yii\web\ForbiddenHttpException;
+use core\models\auth\AuthItem;
+use yii\helpers\Url;
 
 class RoleController extends BaseAuthController
 {
+    public function init(){
+        AuthItem::addDefaultRoles();
+    }
     
     public function beforeAction($action)
     {
@@ -34,6 +39,7 @@ class RoleController extends BaseAuthController
     
     public function actionIndex()
     {
+        Url::remember();
         $searchModel = new AuthSearch();
         $searchModel->type = Auth::TYPE_ROLE;
         $dataProvider = $searchModel->search(Yii::$app->request->get(), Auth::TYPE_ROLE);
@@ -105,24 +111,18 @@ class RoleController extends BaseAuthController
     public function actionDelete($id)
     {
         $name = $id;
-        if ($name) {
-            if(Auth::hasUsersByRole($name)) {
-                $auth = Yii::$app->getAuthManager();
-                $role = $auth->getRole($name);
+        $auth = Yii::$app->getAuthManager();
+        $role = $auth->getRole($name);
 
-                // clear asset permissions
-                $permissions = $auth->getPermissionsByRole($name);
-                foreach($permissions as $permission) {
-                    $auth->removeChild($role, $permission);
-                }
-                if($auth->remove($role)) {
-                    Yii::$app->session->setFlash('success', " '$name' " . Yii::t('app', 'successfully removed'));
-                }
-            } else {
-                Yii::$app->session->setFlash('warning', " '$name' " . Yii::t('app', 'still used'));
-            }
+        // clear asset permissions
+        $permissions = $auth->getPermissionsByRole($name);
+        foreach($permissions as $permission) {
+            $auth->removeChild($role, $permission);
         }
-        return $this->redirect(['index']);
+        if($auth->remove($role)) {
+            Yii::$app->session->setFlash('success', " '$name' " . Yii::t('app', 'successfully removed'));
+        }
+        return $this->goBack();
     }
 
     public function actionView($id)

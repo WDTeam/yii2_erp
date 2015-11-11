@@ -13,9 +13,12 @@ class m150921_083138_create_table_finance_compensate extends Migration
         }
         $this->createTable('{{%finance_compensate}}', [
             'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'主键id\'' ,
+            'finance_compensate_code' => Schema::TYPE_STRING .'(32) COMMENT \'赔偿编号\'' ,
             'finance_compensate_oa_code' => Schema::TYPE_STRING . '(40)  COMMENT \'OA批号\'' ,
             'finance_complaint_id' => Schema::TYPE_INTEGER.'(10) DEFAULT NULL COMMENT \'投诉Id\'' , 
+            'finance_complaint_code' => Schema::TYPE_STRING.'(32) DEFAULT NULL COMMENT \'投诉编号\'' , 
             'order_id' => Schema::TYPE_INTEGER.'(10)  DEFAULT NULL COMMENT \'订单Id\'' , 
+            'order_code' => Schema::TYPE_STRING.'(32)  DEFAULT NULL COMMENT \'订单编号\'' ,
             'worker_id' => Schema::TYPE_INTEGER.'(10)  DEFAULT NULL COMMENT \'阿姨Id\'' ,  
             'worker_tel' => Schema::TYPE_STRING.'(11)  DEFAULT NULL COMMENT \'阿姨电话\'' ,  
             'worker_name' => Schema::TYPE_STRING.'(20)  DEFAULT NULL COMMENT \'阿姨姓名\'' , 

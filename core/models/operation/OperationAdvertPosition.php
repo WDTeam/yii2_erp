@@ -68,4 +68,26 @@ class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPo
             return false;
         }
     }
+
+    /**
+     * 更新冗余的平台名称
+     *
+     * @param inter   $operation_platform_id     平台编号
+     * @param string  $operation_platform_name   平台名称
+     */
+    public static function updatePlatformName($operation_platform_id, $operation_platform_name)
+    {
+        self::updateAll(['operation_platform_name' => $operation_platform_name], 'operation_platform_id= ' . $operation_platform_id);
+    }
+
+    /**
+     * 更新冗余的平台版本
+     *
+     * @param inter   $operation_platform_version_id     平台版本编号
+     * @param string  $operation_platform_version_name   平台版本名称
+     */
+    public static function updatePlatformVersion($operation_platform_version_id, $operation_platform_version_name)
+    {
+        self::updateAll(['operation_platform_version_name' => $operation_platform_version_name], 'operation_platform_version_id= ' . $operation_platform_version_id);
+    }
 }

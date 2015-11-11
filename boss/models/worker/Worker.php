@@ -81,7 +81,7 @@ class Worker extends \core\models\worker\Worker
             throw new ErrorException('请传递数组参数');
         }
         $defaultCondition['isdel'] = 0;
-        if($isAuth!==false && \Yii::$app->user->identity->isMiniBossUser()){
+        if($isAuth!==false && \Yii::$app->user->identity->isNotAdmin()){
             $shopIds=Yii::$app->user->identity->getShopIds();
             $defaultCondition['shop_id'] = $shopIds;
         }
@@ -95,7 +95,7 @@ class Worker extends \core\models\worker\Worker
             throw new ErrorException('请传递数组参数');
         }
         $defaultCondition['isdel'] = 0;
-        if($isAuth==true && \Yii::$app->user->identity->isMiniBossUser()){
+        if($isAuth==true && \Yii::$app->user->identity->isNotAdmin()){
             $shopIds=Yii::$app->user->identity->getShopIds();
             $defaultCondition['shop_id'] = $shopIds;
         }

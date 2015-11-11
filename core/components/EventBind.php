@@ -98,6 +98,7 @@ class EventBind extends Component implements BootstrapInterface
                     $collection = $mongo->getCollection('jpush_log');
                     $data['created_at'] = date('Y-m-d H:i:s');
                     $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
                     $res = $collection->insert($data);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event\jpush');
@@ -117,6 +118,7 @@ class EventBind extends Component implements BootstrapInterface
                     $collection = $mongo->getCollection('sms_log');
                     $data['created_at'] = date('Y-m-d H:i:s');
                     $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
                     $res = $collection->insert($data);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event\sms');
@@ -137,6 +139,7 @@ class EventBind extends Component implements BootstrapInterface
                     $collection = $mongo->getCollection('ivr_send_log');
                     $data['created_at'] = date('Y-m-d H:i:s');
                     $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
                     $res = $collection->insert($data);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event\ivrsend');
@@ -151,11 +154,12 @@ class EventBind extends Component implements BootstrapInterface
             Ivr::EVENT_CALLBACK,
             function ($event) {
                 try{
-                    $cbdata = (array)$event->sender->cb_data;
+                    $data = (array)$event->sender->cb_data;
                     $mongo = \Yii::$app->mongodb;
                     $collection = $mongo->getCollection('ivr_callback_log');
                     $data['created_at'] = date('Y-m-d H:i:s');
                     $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
                     $res = $collection->insert($data);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event\ivrcallback');

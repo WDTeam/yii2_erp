@@ -218,6 +218,112 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	
 	
 	
+	/**
+	* 根据优惠码+客户id+服务项id 获取优惠码是否可用 
+	* 林洪优使用
+	* @date: 2015-11-11
+	* @author: peak pan
+	* @return:如果可用则返回 优惠码金额 优惠码id 否则返回 false
+	**/
+	
+	
+	public static function get_is_coupon_status($coupon_code,$customer_tel,$couponrule_service_type_id,$city_id){
+		$now_time=time();
+		$coupon = CouponUserinfo::find()
+		->select(['id,coupon_userinfo_price'])
+		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$couponrule_service_type_id"], 'couponrule_type=0']] )
+		->asArray()
+		->one();
+	
+		if(empty($coupon)){
+			return false;
+		}else{
+			return $coupon;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* 根据客户id获取全部优惠券接口
+	* 刘道强使用
+	* couponrule_type   实收金额优惠券类型1为全网优惠券2为类别优惠券3为商品优惠券
+	* couponrule_service_type_id  服务类别id
+	* couponrule_commodity_id    如果是商品优惠券id  
+	* @date: 2015-11-11
+	* @author: peak pan
+	* @return: 返回二维数组，包括优惠券服务品类，优惠券金额优惠券过期时间  （全部包含使用和不使用的）
+	**/
+	
+	public static function getcustomerlist_l($customer_tel){
+		$now_time=time();
+		$couponCustomer = self::find()		
+		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
+		->where(['and',"customer_tel=$customer_tel"] )
+		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
+		->asArray()
+		->all();
+		if(empty($couponCustomer)){
+			$array=[
+			'is_status'=>4019,
+			'msg'=>'暂无数据',
+			'data'=>'',
+			];
+			return $array;
+		}else{
+			$array=[
+			'is_status'=>1,
+			'msg'=>'查询成功',
+			'data'=>$couponCustomer,
+			];
+			return $array;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
     /**
     * 根据客户的uid 开始使用优惠券     （ 应该是领取优惠券吗）

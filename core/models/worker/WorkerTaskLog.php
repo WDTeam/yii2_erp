@@ -59,7 +59,7 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
         if($this->worker_task_is_done==1){
             return true;
         }
-        $task = WorkerTask::findOne(['id'=>$this->worker_task_id]);
+        $task = WorkerTask::findOne($this->worker_task_id);
         $is_done = $task->calculateValuesIsDone($this->getConditionsValues());
         if($is_done){
             $this->worker_task_is_done = 1;
@@ -76,6 +76,7 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
      */
     public function setValues($metas)
     {
+        $data = [];
         foreach ($metas as $condition=>$value){
             $_meta = WorkerTaskLogmeta::find()->where([
                 'worker_task_id'=>$this->worker_task_id,
@@ -91,12 +92,12 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
                     'worker_id'=>$this->worker_id,
                     'worker_tasklog_condition'=>$condition,
                 ]);
-            }else{
-                $_meta->worker_tasklog_value = $value;
-                $_meta->save();
             }
+            $_meta->worker_tasklog_value = $value;
+            $_meta->save();
+            $data[] = $_meta;
         }
-        return true;
+        return $data;
     }
     /**
      * 任务描述
@@ -120,15 +121,26 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
         $data['worker_task_description'] = $model->getWorker_task_description();
         $worker_task = WorkerTask::findOne($this->worker_task_id);
         $cons= $worker_task->getConditions();
-        foreach($data['values'] as $k1=>$v1){
-            foreach($cons as $k2=>$v2){
-                if($v1["worker_tasklog_condition"]==$v2['id']){
-                    $data['values']["$k1"]['name']=$v2["name"];
-                    $data['values']["$k1"]['judge']=$v2["judge"];
-                    $data['values']["$k1"]['value']=$v2["value"];
+        $_values = [];
+        foreach ($cons as $key=>$con){
+            foreach ($data['values'] as $value){
+                if($con['id']==$value['worker_tasklog_condition']){
+                    $_values[] = array_merge($con, $value);
                 }
             }
         }
+        $data['values'] = $_values;
+//        foreach($data['values'] as $k1=>$v1){
+//            foreach($cons as $k2=>$v2){
+//                if($v1["worker_tasklog_condition"]==$v2['id']){
+//                    $data['values']["$k1"]['name']=$v2["name"];
+//                    $data['values']["$k1"]['judge']=$v2["judge"];
+//                    $data['values']["$k1"]['value']=$v2["value"];
+//                }else{
+////                    unset($data['values']["$k1"]);
+//                }
+//            }
+//        }
         
         return $data;
     }
