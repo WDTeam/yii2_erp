@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use PHPExcel;
 use PHPExcel_IOFactory;
+
+use	dbbase\models\operation\CouponUserinfoceshi;
 /**
  * CouponRuleController implements the CRUD actions for CouponRule model.
  */
@@ -33,6 +35,51 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
+    	
+    	
+    	
+    	/* $coupon_userinfoceshi=	new CouponUserinfoceshi; 
+    	$coupondata=$coupon_userinfoceshi->find()->where(['coupon_userinfo_id' =>1])->asArray()->limit(10)->all();
+		//首先替换地区
+    	foreach ($coupondata as $key=>$dainfo){
+    		
+    		$cityid=\core\models\operation\OperationArea::getAreaid($dainfo['city_name']);
+    		$coupon_userinfoceshi->id=$dainfo['id'];
+    		$coupon_userinfoceshi->city_id=$cityid;
+    		$coupon_userinfoceshi->save();
+    		echo $key;
+    	}
+    	
+    	var_dump('ok');exit; */
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

@@ -132,7 +132,30 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj->coupon_userinfo_price =$Couponruledate['couponrule_price'];//优惠券价值
 		$couponCustomerobj->coupon_userinfo_gettime = time();
 		$couponCustomerobj->coupon_userinfo_usetime = 0;//使用
-		$couponCustomerobj->couponrule_use_end_time =$Couponruledate['couponrule_use_end_time'];//
+		
+		if($Couponruledate['couponrule_use_end_days'] >0){
+			$end_time=time()+$Couponruledate['couponrule_use_end_days']*86400;
+		}else{
+			$end_time=$Couponruledate['couponrule_use_end_time'];
+		}
+		$couponCustomerobj->couponrule_use_end_time=$end_time;  //结束时间
+		$couponCustomerobj->couponrule_use_start_time=$Couponruledate['couponrule_use_start_time'];
+		$couponCustomerobj->couponrule_classify=$Couponruledate['couponrule_classify'];
+		$couponCustomerobj->couponrule_category=$Couponruledate['couponrule_category'];
+		$couponCustomerobj->couponrule_type=$Couponruledate['couponrule_type'];
+		$couponCustomerobj->couponrule_service_type_id=$Couponruledate['couponrule_service_type_id'];
+		$couponCustomerobj->couponrule_commodity_id=$Couponruledate['couponrule_commodity_id'];
+		$couponCustomerobj->couponrule_city_limit=$Couponruledate['couponrule_city_limit'];
+		$couponCustomerobj->couponrule_city_id=$Couponruledate['couponrule_city_id'];
+		$couponCustomerobj->couponrule_customer_type=$Couponruledate['couponrule_customer_type'];
+		$couponCustomerobj->couponrule_use_end_days=$Couponruledate['couponrule_use_end_days'];
+		$couponCustomerobj->couponrule_promote_type=$Couponruledate['couponrule_promote_type'];
+		$couponCustomerobj->couponrule_order_min_price=$Couponruledate['couponrule_order_min_price'];
+		$couponCustomerobj->couponrule_price=$Couponruledate['couponrule_price'];
+		$couponCustomerobj->is_disabled=$Couponruledate['is_disabled'];
+
+
+		
 		$couponCustomerobj->order_code ='0';
 		$couponCustomerobj->system_user_id = $customer->id;
 		$couponCustomerobj->system_user_name = '用户自对';
@@ -150,7 +173,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if($couponCustomerobj){
 			$date=[
-			'id'=>$Couponruledate['id'],
+			'id'=>$couponCustomerobj->id,
 			'couponrule_price'=>$Couponruledate['couponrule_price'],
 			'couponrule_name'=>$Couponruledate['couponrule_name'],
 			'couponrule_use_start_time'=>$Couponruledate['couponrule_use_start_time'],

@@ -126,7 +126,9 @@ class Order extends OrderModel
      */
     public function getOrderChannelList()
     {
-        return OperationOrderChannel::getorderchannellist(3); //boss 使用的渠道列表
+        $list = OperationOrderChannel::getorderchannellist(3); //boss 使用的渠道列表
+        unset($list[20]);
+        return ['20'=>'后台下单']+$list;
     }
 
     public function getEjjPayChannelList()
