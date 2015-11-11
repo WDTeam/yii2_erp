@@ -35,12 +35,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_log_status_bool',
             'payment_log_eo_order_id',
             'payment_log_transaction_id',
-            'payment_log_status',
+            [
+                'attribute' => 'payment_log_status',
+                'value' => !empty($model->payment_log_status) ? '成功' : '失败',
+            ],
             'pay_channel_id',
             'pay_channel_name',
-            'payment_log_json_aggregation:ntext',
+            'payment_log_json_aggregation',
             'created_at',
-            'updated_at',
+            [
+                'attribute' => 'create_time',
+                'value' => date("Y-m-d H:i:s",$model->create_time),
+            ],
 
         ],
         'deleteOptions'=>[
