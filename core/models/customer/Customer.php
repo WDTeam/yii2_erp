@@ -480,15 +480,15 @@ class Customer extends \dbbase\models\customer\Customer
      * @param $customer_id
      * @return mixed
      */
-    public static function getCityNameById($customer_id){
-        $customer_address = CustomerAddress::find()->select(['operation_city_name'])
-            ->where(['customer_id'=>$customer_id])
-            ->orderBy('created_at asc')
-            ->asArray()
-            ->one();
-        $operation_city_name = empty($customer_address['operation_city_name']) ? '' : $customer_address['operation_city_name'];
-        return $operation_city_name;
-    }
+//    public static function getCityNameById($customer_id){
+//        $customer_address = CustomerAddress::find()->select(['operation_city_name'])
+//            ->where(['customer_id'=>$customer_id])
+//            ->orderBy('created_at asc')
+//            ->asArray()
+//            ->one();
+//        $operation_city_name = empty($customer_address['operation_city_name']) ? '' : $customer_address['operation_city_name'];
+//        return $operation_city_name;
+//    }
 
 	/*************************************address*******************************************************/
     /**
@@ -845,5 +845,20 @@ class Customer extends \dbbase\models\customer\Customer
         $onlineCityList = OperationCity::getCityOnlineInfoList();
         $cityList = $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
 		return $cityList;
+    }
+
+    /**
+     * get city name by city id
+     * @param $city_id
+     * @return bool
+     */
+    public static function getCityName($city_id){
+        $city_list = self::cityList();
+        foreach($city_list as $key => $value){
+            if($key == $city_id){
+                return $value;
+            }
+        }
+        return false;
     }
 }

@@ -36,13 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="customer-view">
-<?php 
-
-//城市
-$operation_city_name = Customer::getCityNameById($model->id);
-if(empty($operation_city_name)) {
-    $operation_city_name = '-';
-}
+<?php
 
 $customer_ext_srcs = Customer::getSrcs($model->customer_phone);
 $platform_name_str = '';
@@ -149,7 +143,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'城市',
             'format'=>'raw',
-            'value'=>$operation_city_name,
+            'value'=>$model->operation_city_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
