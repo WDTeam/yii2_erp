@@ -148,7 +148,6 @@ class CouponController extends \restapi\components\Controller
      */
     public function actionCoupons()
     {
-        $param['good_type_id']=1;    
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
@@ -161,6 +160,7 @@ class CouponController extends \restapi\components\Controller
         if ( !isset($param['service_type_id']) || !$param['service_type_id']) {
             return $this->send(null, "请选择服务类别id", 0, 403,null,alertMsgEnum::couponsCityNoService);
         }
+        $param['good_type_id']=1;    
         if ( !isset($param['good_type_id']) || !$param['good_type_id']) {
             return $this->send(null, "请选择商品类别id", 0, 403,null,alertMsgEnum::couponsCityNoGood);
         }
