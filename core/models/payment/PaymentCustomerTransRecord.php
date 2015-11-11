@@ -60,7 +60,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'order_channel_name',
                 'order_money',
                 'customer_id',
-                'customer_phone',
+                'order_customer_phone',
                 'order_pay_type',
                 'order_pay_money',
                 'order_use_acc_balance',
@@ -159,7 +159,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //公用部分
         $transRecord['customer_id'] = $data['customer_id'];     //用户ID
-        $transRecord['customer_phone'] = $data['customer_phone'];     //用户手机号码
+        $transRecord['customer_phone'] = $data['order_customer_phone'];     //用户手机号码
         $transRecord['order_id'] = $data['order_id'];           //订单ID
         $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : 0;   //	支付渠道
         $transRecord['payment_customer_trans_record_pay_channel'] = !empty($payment_data['payment_channel_name']) ? $payment_data['payment_channel_name'] : 0;; //	支付渠道名称
@@ -239,7 +239,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //公用部分
         $transRecord['customer_id'] = $orderInfo['customer_id'];     //用户ID
-        $transRecord['customer_phone'] = $orderInfo['customer_phone'];     //用户手机号码
+        $transRecord['customer_phone'] = $orderInfo['order_customer_phone'];     //用户手机号码
 
         $transRecord['admin_id'] = Yii::$app->user->id;
         $transRecord['admin_name'] = Yii::$app->user->identity->username;
