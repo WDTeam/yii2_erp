@@ -326,6 +326,7 @@ function checkCoupon(){
                     var order_pay_money = $("#order-order_money").val() - coupon.coupon_userinfo_price;
                     $(".order_pay_money").text(order_pay_money.toFixed(2));
                     $('.field-order-order_coupon_code').removeClass('has-error');
+                    $('.field-order-order_coupon_code').addClass('has-success');
                     $('#order-order_coupon_code').next('.help-block-error').text('');
                 }
             }
