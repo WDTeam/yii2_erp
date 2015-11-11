@@ -41,9 +41,9 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
      */
     public static function addAddress($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
         $customer_address = self::getAddressOne($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone);
-        
-        if(!empty($customer_address)){
 
+        //address for custoemr is unique
+        if(!empty($customer_address)){
             return $customer_address;
         }
         
@@ -110,6 +110,16 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 	  			$operation_latitude = '';
 			}
 
+            //if the address is the first address for customer, than customer 's city name is getted by
+            $address_list = self::listAddress($customer_id);
+            if(!$address_list){
+                $customer = Customer::getCustomerById($customer_id);
+                $customer->operation_city_id = $operation_city_id;
+                $customer->operation_city_name = $operation_city_name;
+                $customer->updated_at = time();
+                $customer->save();
+            }
+
             $customerAddress->operation_province_id = $operation_province_id;
             $customerAddress->operation_city_id = $operation_city_id;
             $customerAddress->operation_area_id = $operation_area_id;
@@ -131,12 +141,7 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
             $customerAddress->created_at = time();
             $customerAddress->updated_at = 0;
             $customerAddress->is_del = 0;
-			//var_dump($customerAddress);
-			//exit();
-//            $customerAddress->validate();
-//			if($customerAddress->hasErrors()){
-//				var_dump($customerAddress->getErrors());
-//			}
+
             $customerAddress->save();
             $transaction->commit();
             return $customerAddress;
@@ -234,6 +239,18 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
             $operation_longitude = $address_decode['result']['location']['lng'];
             $operation_latitude = $address_decode['result']['location']['lat'];
 
+            //update customer 's city name while updating address
+            $customer_id = $customerAddress['customer_id'];
+            $id = $customerAddress['id'];
+            if(self::isFirstAddress($customer_id, $id)){
+                $customer = Customer::getCustomerById($customer_id);
+                $customer->operation_city_id = $operation_city_id;
+                $customer->operation_city_name = $operation_city_name;
+                $customer->updated_at = time();
+                $customer->save();
+            }
+
+            //update address
             $customerAddress->operation_province_id = $operation_province_id;
             $customerAddress->operation_city_id = $operation_city_id;
             $customerAddress->operation_area_id = $operation_area_id;
@@ -358,6 +375,22 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
         ])->asArray()->one();
         //var_dump($customer_address);
         return $customer_address;
+    }
+
+    /**
+     * is first address
+     * @param $customer_id
+     * @param $id
+     * @return bool
+     */
+    public static function isFirstAddress($customer_id, $id){
+        $address = self::find()
+            ->select(['id'])
+            ->where(['customer_id'=>$customer_id])
+            ->orderBy('created_at asc')
+            ->asArray()
+            ->one();
+        return $id == $address['id'];
     }
 }
 

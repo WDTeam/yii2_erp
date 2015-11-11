@@ -113,36 +113,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
 
-                <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList); ?>
+                <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList)->label('订单渠道'); ?>
                 <div id="order_pay_channel_1" >
-                    <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList); ?>
-                </div>
-                <div id="order_pay_channel_2" style="display:none;">
-                    <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->popPayChannelList); ?>
-                </div>
-
-                <div id="order_pay_type_1" >
+                    <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList)->label('支付方式'); ?>
+                    <?= $form->field($model, 'order_coupon_code')->textInput(['maxlength' => true]) ?>
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
                         <div class="col-sm-2">
-                            <span class="order_money" style="font-size: 20px;color: #ff0000;">00.00</span>
+                            <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">00.00</span>
                         </div>
                     </div>
                 </div>
-                <div id="order_pay_type_2" style="display:none;">
-                <?= $form->field($model, 'coupon_id')->dropDownList([""=>"请选择优惠券"],['maxlength' => true]) ?>
-                <div class="form-group">
-                    <label class="control-label col-sm-3">需支付</label>
-                    <div class="col-sm-2">
-                        <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">00.00</span>
-                    </div>
+                <div id="order_pay_channel_2" style="display:none;">
+                    <?= $form->field($model, 'order_pop_group_buy_code')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'order_pop_order_code')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'order_pop_order_money')->textInput(['maxlength' => true]) ?>
                 </div>
-                </div>
-                <div id="order_pay_type_3" style="display:none;">
-                <?= $form->field($model, 'order_pop_group_buy_code')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pop_order_code')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pop_order_money')->textInput(['maxlength' => true]) ?>
-                </div>
+
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">客户需求</h3>
