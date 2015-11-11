@@ -212,28 +212,11 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
-     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
-     * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
-     * @apiParam {String} order_customer_phone 用户手机号
-     * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
-     * @apiParam {String} order_booked_count 服务时长
-     * @apiParam {String} address_id 订单地址id
-     * @apiParam {String} channel_id 下单渠道
-     * @apiParam {String} [address] 订单地址
-     * @apiParam {String} [city]城市
-     * @apiParam {String} [order_pop_order_code] 第三方订单号
-     * @apiParam {String} [order_pop_group_buy_code] 第三方团购号
-     * @apiParam {Integer} [order_pop_order_money] 第三方订单金额,预付金额
-     * @apiParam {String} [coupon_id] 优惠劵id
-     * @apiParam {String} [order_booked_worker_id] 指定阿姨id
-     * @apiParam {Number} [order_customer_need] 客户需求
-     * @apiParam {String} [order_customer_memo] 客户备注
-     * @apiParam {Integer} [order_is_use_balance] 是否使用余额 1 使用 0 不适用 默认1
+     * @apiParam {String} order_src_id 订单来源id 【2:IOS 3:Android 5:H5】
+     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 '1443695400'
+     * @apiParam {String} address 服务地址
+     * @apiParam {String} city_name 城市名称
      *
-     *
-     * @apiSuccess {Object} order 成功订单对象.
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -242,7 +225,7 @@ class OrderController extends \restapi\components\Controller
      *  "ret": {
      *    "id":8
      *   }
-     *  "alertMsg": "创建订单成功,请重新登录"
+     *  "alertMsg": "创建订单成功"
      *  }
      *
      * @apiErrorExample Error-Response:
@@ -261,90 +244,72 @@ class OrderController extends \restapi\components\Controller
         if(!isset($args['access_token'])||!$args['access_token']){
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
-        $user = CustomerAccessToken::getCustomer($token);
-        if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
-        }
-        $attributes['customer_id'] = $user->id;
+        //验证用户登录情况
+        $user = CustomerAccessToken::getCustomer($args['access_token']);
+        if (!$user) return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        //填写服务项目
         if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
-        $attributes['order_service_item_id'] = $args['order_service_item_id'];
-        
+        //订单来源
         if (empty($args['order_src_id'])) {
             return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
         }
-         $attributes['order_src_id'] = $args['order_src_id'];
-
-
-        if (empty($args['order_booked_begin_time'])) {
+        //服务开始时间/阿姨上门时间
+        if (!isset($args['order_booked_begin_time'])||!$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
-        $attributes['order_booked_begin_time'] = strtotime($args['order_booked_begin_time']);
-        $attributes['order_booked_end_time'] = 0;
-
-        if (empty($args['order_pay_type'])) {
-            return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+        //所在城市
+        if(!isset($args['city_name'])||!$args['city_name']){
+            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        if (empty($args['order_booked_count'])) {
-            return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+        //所在地址
+        if(!isset($args['address'])||!$args['address']){
+            return $this->send(null, "数据不完整,请输入常用地址", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        $attributes['order_pay_type'] = 1;//现金支付
-        $attributes['order_booked_count'] = 0;//服务时长
-
-        if (isset($args['address_id'])) {
-            $attributes['address_id'] = $args['address_id'];
-        } elseif (isset($args['address']) && isset($args['city'])) {
-            //add address into customer and return customer id
-            $address = $args['address'];
-            $city = $args['city'];
-            $model = CustomerAddress::addAddressForPop($user->id, $args['order_customer_phone'], $city, $address);
-            if (!empty($model)) {
-                $attributes['address_id'] = $model->id;
-            } else {
-                return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-            }
+        $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
+        if (!empty($model)) {
+            $attributes['address_id'] = $model->id;
         } else {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        if (isset($args['order_pop_order_code'])) {
-            $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
-        }
-        if (isset($args['order_pop_order_money'])) {
-            $attributes['order_pop_order_money'] = $args['order_pop_order_money'];
-        }
-        if (isset($args['order_pop_group_buy_code'])) {
-            $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
-        }
-        if (isset($args['coupon_id'])) {
-            $attributes['coupon_id'] = $args['coupon_id'];
-        }
-
-        if (isset($args['channel_id'])) {
-            $attributes['channel_id'] = $args['channel_id'];
-        }
-        if (isset($args['order_booked_worker_id'])) {
-            $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
-        }
-        if (isset($args['order_customer_need'])) {
-            $attributes['order_customer_need'] = $args['order_customer_need'];
-        }
-        if (isset($args['order_customer_memo'])) {
-            $attributes['order_customer_memo'] = $args['order_customer_memo'];
-        }
-        $attributes['order_is_use_balance'] = 1;
-        if (isset($args['order_is_use_balance'])) {
-            $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
-        }
+        $attributes['customer_id'] = $user->id;//登录用户ID
+        $attributes['order_service_item_id'] = $args['order_service_item_id'];//服务品类ID
+        $attributes['order_src_id'] = $args['order_src_id'];//订单来源ID
+        $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
+        $attributes['channel_id'] = 20;//家洁
+        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'];//服务结束时间
+        $attributes['order_pay_type'] = 1;//现金支付
+        $attributes['order_booked_count'] = 1;//服务时长
+        $attributes['order_pop_order_code'] = "0";//第三方订单编号
+        $attributes['order_pop_order_money'] = 0;//第三方订单金额
+        $attributes['order_pop_group_buy_code'] = "0";//
+        $attributes['coupon_id'] = 0;
+        $attributes['order_booked_worker_id'] = 0;
+        $attributes['order_customer_need'] = "";//客户需求
+        $attributes['order_customer_memo'] = "";//客户备注
+        $attributes['order_is_use_balance'] = 0;//客户选择使用余额则去获取客户余额
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
+        //创建订单
+        try{
+            $order = new Order();
+            $is_success = $order->createNew($attributes);
+            if ($is_success) {
+                return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
+            } else {
+                return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
+            }
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::orderCreateFaile);
+        }
     }
     /**
      * @api {GET} /order/orders [GET] /order/orders (100%)
      * @apiDescription 查询用户订单 (谢奕)
      *
      * @apiName actionOrders
-     * @apiGroup Order
+     * @apiGroup Orders
      *
      * @apiParam {String} access_token 用户令牌
      * @apiParam {String} [id] 订单id

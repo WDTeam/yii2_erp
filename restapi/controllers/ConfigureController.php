@@ -336,11 +336,11 @@ class ConfigureController extends \restapi\components\Controller
      *             "item_list": [
      *                 {
      *                     "category_id": "分类ID",
-     *                     "service_item_id": "商品ID",
-     *                     "service_item_name": "商品名称",
+     *                     "order_service_item_id": "商品ID",
+     *                     "order_service_item_name": "商品名称",
      *                     "icon": "商品图标",
-     *                     "service_item_price": "商品价格",
-     *                     "service_item_price_description": "商品价格描述"
+     *                     "order_service_item_price": "商品价格",
+     *                     "order_service_item_price_description": "商品价格描述"
      *                 }
      *       ]
      * }
