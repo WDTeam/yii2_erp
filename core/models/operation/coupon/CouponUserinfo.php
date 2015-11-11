@@ -215,11 +215,14 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	*  2、未过期的按截止日期由近至远，日期相同的，按面值由大到小排
 	**/
 	
-	public static function GetCustomerCouponList($customer_tel,$city_id,$service_type_id){
+	public static function GetCustomerCouponList($customer_tel,$city_id,$service_type_id,$couponrule_commodity_id){
 		$now_time=time();
 		$couponCustomer = self::find()
 		->select(['id','customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
-		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$service_type_id"], 'couponrule_type=0']] )
+		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", 
+				['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1'],
+				['or',['and','couponrule_type=2',"couponrule_service_type_id=$service_type_id"],
+					  ['and','couponrule_type=3',"couponrule_commodity_id=$couponrule_commodity_id"], 'couponrule_type=1']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
