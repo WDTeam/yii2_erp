@@ -342,7 +342,6 @@ function getCustomerInfo(){
                 customer=data;
                 if (customer.id) {
                     $("#order-customer_id").val(customer.id);
-                    $("#customer_balance").text(customer.customer_balance);
                     $.ajax({
                         type: "GET",
                         url: "/order/order/customer-address/?id=" + customer.id,

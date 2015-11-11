@@ -106,9 +106,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h4 class="col-sm-2">
                         总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">0.00</span>
                     </h4>
-                    <h4 class="col-sm-5">
-                        账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
-                    </h4>
                 </div>
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
