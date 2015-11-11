@@ -8,9 +8,12 @@ use Yii;
  * This is the model class for table "{{%finance_compensate}}".
  *
  * @property integer $id
+ * @property string $finance_compensate_code
  * @property string $finance_compensate_oa_code
  * @property integer $finance_complaint_id
+ * @property string $finance_complaint_code
  * @property integer $order_id
+ * @property string $order_code
  * @property integer $worker_id
  * @property integer $customer_id
  * @property string $finance_compensate_coupon 
@@ -61,9 +64,12 @@ class FinanceCompensate extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键id'),
+            'finance_compensate_code' => Yii::t('app', '赔偿编号'),
             'finance_compensate_oa_code' => Yii::t('app', 'OA批号'),
-            'finance_complaint_id' => Yii::t('app', '投诉编号'),
-            'order_id' => Yii::t('app', '订单编号'),
+            'finance_complaint_id' => Yii::t('app', '投诉id'),
+            'finance_complaint_code' => Yii::t('app', '投诉编号'),
+            'order_id' => Yii::t('app', '订单id'),
+            'order_code' => Yii::t('app', '订单编号'),
             'worker_id' => Yii::t('app', '阿姨Id'),
             'worker_tel' => Yii::t('app', '阿姨电话'),
             'worker_name' => Yii::t('app', '阿姨姓名'),

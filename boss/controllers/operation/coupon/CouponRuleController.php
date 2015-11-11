@@ -92,10 +92,15 @@ class CouponRuleController extends Controller
            		return $this->redirect(['index']);	
            	}
 		    }
-		    $Couponrule=CouponRuleSearch::couponconfig();
-		    
+		    $Couponrule=CouponRuleSearch::couponconfig(); 
 		    $model->couponrule_category_name=$Couponrule[2][$dateinfo['CouponRule']['couponrule_category']];
 		    $model->couponrule_type_name=$Couponrule[3][$dateinfo['CouponRule']['couponrule_type']];
+		    if($dateinfo['CouponRule']['couponrule_classify']=='2'){
+		    $model->couponrule_price_sum=$dateinfo['CouponRule']['couponrule_price']*$dateinfo['CouponRule']['couponrule_code_max_customer_num'];
+		    }else{
+		    $model->couponrule_price_sum=$dateinfo['CouponRule']['couponrule_price']*$dateinfo['CouponRule']['couponrule_code_num']; 
+		    }
+		    
 		    $model->couponrule_service_type_name='服务类别名称1';
 		    $model->couponrule_commodity_name='商品优惠券名称1';
 		    

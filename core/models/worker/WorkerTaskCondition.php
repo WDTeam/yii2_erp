@@ -40,6 +40,7 @@ class WorkerTaskCondition extends Model
         $data[1] = (int)\Yii::$app->db->createCommand($sql)->queryScalar();
         //拒绝订单
         $sql = "";
+        $data[2] = 0;
         //服务老用户,先算总数，
         $sql = "SELECT COUNT(1) as ct FROM {{%order_ext_worker}} AS a
         LEFT JOIN {{%order_history}} AS b

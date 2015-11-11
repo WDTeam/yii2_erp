@@ -5,12 +5,12 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\finance\FinanceSettleApplyLog;
+use dbbase\models\finance\FinanceSettleApplyApprovalLog;
 
 /**
  * FinanceSettleApplyLogSearch represents the model behind the search form about `dbbase\models\finance\FinanceSettleApplyLog`.
  */
-class FinanceSettleApplyLogSearch extends FinanceSettleApplyLog
+class FinanceSettleApplyApprovalLogSearch extends FinanceSettleApplyApprovalLog
 {
     public function rules()
     {

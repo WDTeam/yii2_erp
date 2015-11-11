@@ -5,6 +5,7 @@ namespace boss\controllers\operation;
 use boss\components\BaseAuthController;
 use boss\components\UploadFile;
 use boss\models\operation\OperationAdvertContent;
+use boss\models\operation\OperationAdvertContentSearch;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
 use boss\models\operation\OperationCity;
@@ -42,12 +43,13 @@ class OperationAdvertContentController extends BaseAuthController
         foreach((array)$platforms as $key => $platform){
             $platforms[$key]['version_list'] = OperationPlatformVersion::find()->asArray()->where(['operation_platform_id' => $platform['id']])->all();
         }
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationAdvertContent::find(),
-        ]);
+
+        $searchModel = new OperationAdvertContentSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
             'platforms' => $platforms
         ]);
     }
@@ -159,29 +161,32 @@ class OperationAdvertContentController extends BaseAuthController
     {
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
+
         if ($model->load($post)) {
-            if(!empty($post['old_operation_advert_picture_text'])){
+            if (!empty($post['old_operation_advert_picture_text'])) {
                 $old_operation_advert_picture_text = $post['old_operation_advert_picture_text'];
                 unset($post['old_operation_advert_picture_text']);
             }
-            if(!empty($_FILES['operation_advert_picture_text']['tmp_name'])){
+            if (!empty($_FILES['operation_advert_picture_text']['tmp_name'])) {
                 $path = UploadFile::widget(['fileInputName' => 'operation_advert_picture_text']);
-            }else{
+            } else {
                 $path = $old_operation_advert_picture_text;
             }
             $post['OperationAdvertContent']['operation_advert_picture_text'] = $path;
+
             $model->load($post);
+
             $position = OperationAdvertPosition::find()->asArray()->where(['id' => $post['OperationAdvertContent']['position_id']])->one();
+
             $model->position_name = $position['operation_advert_position_name'];
             $model->position_id = $position['id'];
             $model->platform_id = $position['operation_platform_id'];
             $model->platform_name = $position['operation_platform_name'];
             $model->platform_version_id = $position['operation_platform_version_id'];
             $model->platform_version_name = $position['operation_platform_version_name'];
-            $model->operation_advert_start_time = strtotime($model->operation_advert_start_time);
-            $model->operation_advert_end_time =  strtotime($model->operation_advert_end_time);
             $model->updated_at = time();
             $model->save();
+
             return $this->redirect(['index']);
         } else {
             $ps = OperationAdvertPosition::find()->all();

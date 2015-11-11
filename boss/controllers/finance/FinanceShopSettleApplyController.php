@@ -4,7 +4,7 @@ namespace boss\controllers\finance;
 
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 use core\models\finance\FinanceShopSettleApplySearch;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
 
@@ -39,20 +39,39 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new FinanceShopSettleApplySearch;
-        $requestParams = Yii::$app->request->getQueryParams();
-        $searchModel->review_section = $requestParams['review_section'];
-        if($searchModel->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
-            $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
-        }elseif($searchModel->review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
-            $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
-        }
-        $searchModel->load($requestParams);
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $searchModel = $this->initModel(FinanceShopSettleApplySearch::BUSINESS_REVIEW);
+        $dataProvider = $searchModel->search(null);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+    
+    /**
+     * 门店结算列表--财务审核
+     * @return mixed
+     */
+    public function actionFinanceCheckIndex()
+    {
+       $searchModel = $this->initModel(FinanceShopSettleApplySearch::FINANCE_REVIEW);
+       $dataProvider = $searchModel->search(null);
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    private function initModel($review_section){
+         $searchModel = new FinanceShopSettleApplySearch;
+        $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel->review_section = $review_section;
+        if($searchModel->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
+            $searchModel->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
+        }elseif($searchModel->review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
+            $searchModel->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
+        }
+        $searchModel->load($requestParams);
+        return $searchModel;
     }
     
     public function actionReviewFailedReason(){
@@ -82,18 +101,18 @@ class FinanceShopSettleApplyController extends Controller
         }
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
-                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
+                $model->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
             }else{
-                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED;
+                $model->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED;
             }
         }elseif($review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
             if($is_ok == 1){
-                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+                $model->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
                 if($isFinacePayedConfirm == true){
-                    $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED;
+                    $model->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED;
                 }
             }else{
-                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
+                $model->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
             }
         }
         $model->save();
@@ -120,7 +139,7 @@ class FinanceShopSettleApplyController extends Controller
             $searchModel->shop_manager_name = $shopManagerModel->name;
         }
         $searchModel->getShopSettleInfo($searchModel->shop_id);
-        $financeSettleApplySearchModel = new FinanceSettleApplySearch;
+        $financeSettleApplySearchModel = new FinanceWorkerSettleApplySearch;
         $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
         $financeSettleApplyDataProvider = $financeSettleApplySearchModel->searchCanSettledWorker($requestParams);
         return $this->render('shopManualSettlementIndex', [
@@ -140,8 +159,8 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->load($requestParams);
         if(!empty($searchModel->shop_id)){
-            $settle_apply_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
-            $settle_apply_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
+            $settle_apply_starttime = FinanceWorkerSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
+            $settle_apply_endtime = FinanceWorkerSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
             $this->saveAndGenerateSettleData([['shop_id'=>$searchModel->shop_id,'shop_manager_id'=>$searchModel->shop_manager_id],], $settle_apply_starttime, $settle_apply_endtime);
         }
         return $this->redirect('index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
@@ -242,13 +261,13 @@ class FinanceShopSettleApplyController extends Controller
     public function actionView($id)
     {
         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
-        $orderIncomeSearchModel->finance_settle_apply_id = $id;
+        $orderIncomeSearchModel->finance_worker_settle_apply_id = $id;
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel = $searchModel->find()->where(['id'=>$id])->one();
         $shopModel = Shop::findById($searchModel->shop_id);
-        $financeSettleApplySearchModel = new FinanceSettleApplySearch;
+        $financeSettleApplySearchModel = new FinanceWorkerSettleApplySearch;
         $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
-        $financeSettleApplySearchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+        $financeSettleApplySearchModel->finance_worker_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
         $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search(null);
         return $this->render('view', [
              'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,
@@ -344,15 +363,16 @@ class FinanceShopSettleApplyController extends Controller
             $searchModel = new FinanceShopSettleApplySearch;
             $shopModel = Shop::findById($shop['shop_id']);
             $shopManagerModel = ShopManager::findById($shop['shop_manager_id']);
+            $searchModel->finance_shop_settle_apply_code = FinanceWorkerSettleApplySearch::getSettleApplyCode();
             $searchModel->shop_name = $shopModel->name;
             $searchModel->shop_manager_name = $shopManagerModel->name;
             $searchModel->shop_id = $shop['shop_id'];
             $searchModel->shop_manager_id = $shop['shop_manager_id'];
             $searchModel->getShopSettleInfo($shop['shop_id']);
             $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
-            $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
-            $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
-            $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
+            $searchModel->finance_shop_settle_apply_status = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->finance_shop_settle_apply_cycle = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
+            $searchModel->finance_shop_settle_apply_cycle_des = FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
             $searchModel->finance_shop_settle_apply_starttime = $settleStartTime;
             $searchModel->finance_shop_settle_apply_endtime = $settleEndTime;
             $searchModel->created_at = time();

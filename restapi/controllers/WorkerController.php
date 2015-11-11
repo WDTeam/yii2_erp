@@ -7,7 +7,7 @@ use core\models\worker\Worker;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerVacationApplication;
 use core\models\worker\WorkerTaskLog;
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 use core\models\order\OrderSearch;
 use core\models\order\OrderComplaint;
 
@@ -496,7 +496,7 @@ class WorkerController extends \restapi\components\Controller
         $workerID = $checkResult['workerInfo']['worker_id'];
         //获取数据
         try{
-            $service = FinanceSettleApplySearch::getWorkerIncomeSummaryInfoByWorkerId($workerID);
+            $service = FinanceWorkerSettleApplySearch::getWorkerIncomeSummaryInfoByWorkerId($workerID);
             $workerInfo = Worker::getWorkerStatInfo($workerID);
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerServiceInfoFailed);
@@ -577,7 +577,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         try{
-            $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerID,$per_page,$page_num);
+            $billList = FinanceWorkerSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerID,$per_page,$page_num);
          }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillListFailed);
         }
@@ -655,7 +655,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         try{
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
+            $billList = FinanceWorkerSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
@@ -733,7 +733,7 @@ class WorkerController extends \restapi\components\Controller
         }
         try{
             //获取任务奖励列表
-            $taskRewardret = FinanceSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
+            $taskRewardret = FinanceWorkerSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
          }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerTaskRewardListFailed);
         }
@@ -803,7 +803,7 @@ class WorkerController extends \restapi\components\Controller
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         
         try{
-            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));//获取任务奖励列表
+            $punishList = FinanceWorkerSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));//获取任务奖励列表
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerPunishListFailed);
         }
@@ -870,7 +870,7 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null,'账单唯一标识错误！', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         try{
-            if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
+            if(FinanceWorkerSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
                 return $this->send(null,'账单确定成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
             }
          }catch (\Exception $e) {
@@ -1049,6 +1049,16 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_is_settlemented": "是否已结算0未结算，1已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
+     *               "values": [
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
+     *                ],
      *               "worker_task_description": "任务描述"
      *           },
      *           "url": "右上角任务说明链接（后台没有返回空）"
@@ -1129,11 +1139,15 @@ class WorkerController extends \restapi\components\Controller
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "values": [
-     *                   {
-     *                       "worker_tasklog_condition": "条件索引",
-     *                       "worker_tasklog_value": "条件值"
-     *                   }
-     *               ],
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
+     *                ],
      *               "worker_task_description": "任务描述"
      *           },
      *          "url": "右上角任务说明链接（后台没有返回空）"
@@ -1219,11 +1233,15 @@ class WorkerController extends \restapi\components\Controller
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "values": [
-     *                   {
-     *                       "worker_tasklog_condition": "条件索引",
-     *                       "worker_tasklog_value": "条件值"
-     *                   }
-     *               ],
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
+     *                ],
      *               "worker_task_description": "任务描述"
      *           }
      *       ]，
@@ -1308,13 +1326,14 @@ class WorkerController extends \restapi\components\Controller
      *           "created_at": "创建时间",
      *           "updated_at": "更新时间",
      *           "values": [
-     *               {
-     *                   "worker_tasklog_condition": "条件索引",
-     *                   "worker_tasklog_value": "条件完成值",
-     *                   "name": "主动接单",
-     *                   "judge": ">=",
-     *                   "value": "条件值"
-     *               }
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
      *            ],
      *           "worker_task_description": "任务描述",
      *           "order_list": [
@@ -1358,7 +1377,12 @@ class WorkerController extends \restapi\components\Controller
         $id = $param['id'];
         //获取任务的详情
         try{
-            $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
+            $worker_task_log=WorkerTaskLog::findOne(['id'=>$id]);
+            if($worker_task_log!=null){
+                $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
+            }else{
+                return $this->send(null, "查看任务失败", 0,403,null,alertMsgEnum::checkTaskFail);
+            }
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
