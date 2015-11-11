@@ -9,39 +9,44 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
+<?php
 
-<div class="system-user-search">
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use boss\components\AreaCascade;
+use kartik\widgets\Select2;
+use yii\base\Widget;
+use yii\helpers\Url;
+use core\models\shop\Shop;
+use kartik\widgets\Affix;
+use yii\web\JsExpression;
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
+/**
+ * @var yii\web\View $this
+ * @var core\models\shop\ShopSearch $model
+ * @var yii\widgets\ActiveForm $form
+ */
+?>
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'username') ?>
-
-    <?= $form->field($model, 'auth_key') ?>
-
-    <?= $form->field($model, 'password_hash') ?>
-
-    <?= $form->field($model, 'password_reset_token') ?>
-
-    <?php // echo $form->field($model, 'email') ?>
-
-    <?php // echo $form->field($model, 'role') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+<div class="system-user-search panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 用户搜索</h3>
     </div>
+    <div class="panel-body row">
+        <?php $form = ActiveForm::begin([
+            'action' => ['index'],
+            'method' => 'get',
+        ]); ?>
 
-    <?php ActiveForm::end(); ?>
+        <div class="col-md-3">
+        <?= $form->field($model, 'username')->label('用户名、邮箱、手机号等') ?>
+        </div>
 
+        <div class="col-md-2" style="margin-top:22px;">
+            <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        </div>
+    
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>

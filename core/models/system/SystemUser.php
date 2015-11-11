@@ -7,6 +7,7 @@ use core\models\shop\ShopCustomeRelation;
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
 use core\models\auth\AuthItem;
+use yii\base\Object;
 class SystemUser extends \dbbase\models\system\SystemUser
 {
     public $repassword;
@@ -24,7 +25,57 @@ class SystemUser extends \dbbase\models\system\SystemUser
 //             self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
 //         ];
 //     }
-    
+    /**
+     * 保存SHOP IDS
+     */
+    public function saveShopIds()
+    {
+        ShopCustomeRelation::deleteAll([
+            'stype'=>ShopCustomeRelation::TYPE_STYPE_SHOP,
+            'system_user_id'=>$this->id,
+        ]);
+        $shops = Shop::find()->select(['id', 'shop_manager_id'])
+        ->andFilterWhere(['in', 'id', $this->_shop_ids])
+        ->asArray()->all();
+        $shop_manager_ids = ArrayHelper::map($shops, 'id', 'shop_manager_id');
+        $shop_ids = (array)$this->_shop_ids;
+        foreach ($shop_ids as $shop_id){
+            $model = new ShopCustomeRelation();
+            $model->system_user_id = $this->id;
+            $model->shopid = $shop_id;
+            if(isset($shop_manager_ids[$shop_id])){
+                $model->shop_manager_id = $shop_manager_ids[$shop_id];
+            }
+            $model->stype = ShopCustomeRelation::TYPE_STYPE_SHOP;
+            $model->save();
+            if($model->getErrors()){
+                var_dump($model->errors);exit;
+            }
+        }
+        return true;
+    }
+    /**
+     * 保存ShopManager IDS
+     */
+    public function saveShopManagerIds()
+    {
+        ShopCustomeRelation::deleteAll([
+            'stype'=>ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER,
+            'system_user_id'=>$this->id,
+        ]);
+        $shop_manager_ids = (array)$this->_shop_manager_ids;
+        foreach ($shop_manager_ids as $shop_manager_id){
+            $model = new ShopCustomeRelation();
+            $model->system_user_id = $this->id;
+            $model->shop_manager_id = $shop_manager_id;
+            $model->stype = ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER;
+            $model->save();
+            if($model->getErrors()){
+                var_dump($model->errors);exit;
+            }
+        }
+        return true;
+    }
     /**
      * @inheritdoc
      */
@@ -119,7 +170,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
             ['repassword', 'compare', 'compareAttribute' => 'password'],
             //['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-    
+            [['shopIds', 'shopManagerIds'], 'safe'],
             // Status
             ['roles', 'validateRole'],
         ];
@@ -159,6 +210,11 @@ class SystemUser extends \dbbase\models\system\SystemUser
             'is_del'=>0
         ])->column();
     }
+    private $_shop_manager_ids;
+    public function setShopManagerIds($ids)
+    {
+        $this->_shop_manager_ids = $ids;
+    }
     /**
      * 获取用户对应的家政公司列表
      */
@@ -185,6 +241,11 @@ class SystemUser extends \dbbase\models\system\SystemUser
             'stype'=>ShopCustomeRelation::TYPE_STYPE_SHOP,
             'is_del'=>0
         ])->column();
+    }
+    private $_shop_ids;
+    public function setShopIds($ids)
+    {
+        $this->_shop_ids = $ids;
     }
     /**
      * 获取用户对应的门店列表
