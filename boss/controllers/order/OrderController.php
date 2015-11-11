@@ -161,7 +161,8 @@ class OrderController extends BaseAuthController
         $order_booked_count = Yii::$app->request->get('order_booked_count');
         $district_id = Yii::$app->request->get('district_id');
         $date = Yii::$app->request->get('date');
-        return Order::getOrderBookedTimeRangeList($district_id, $order_booked_count, $date);
+        $worker_id = Yii::$app->request->get('worker_id','');
+        return Order::getOrderBookedTimeRangeList($district_id, $order_booked_count, $date,1,$worker_id);
     }
 
     /**

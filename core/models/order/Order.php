@@ -1006,11 +1006,12 @@ class Order extends OrderModel
             $attr['order_booked_begin_time'] = strtotime($attributes['order_booked_begin_time'].' '.$time[0].':00');
             $attr['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($attributes['order_booked_begin_time'].'00:00:00 +1 days')):$attributes['order_booked_begin_time'].' '.$time[1].':00');
             //判断订单已经指定阿姨,检测阿姨时间段是否可用
-//            if( !empty($this->orderExtWorker->worker_id) ){
-//                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($this->district_id,$this->orderExtWorker->worker_id,$attr['order_booked_begin_time'],$attr['order_booked_end_time']);
-//                if(empty($checkWorkerTime))
-//                    return false;
-//            }
+            if( !empty($this->orderExtWorker->worker_id) ){
+                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($this->district_id,$this->orderExtWorker->worker_id,$attr['order_booked_begin_time'],$attr['order_booked_end_time']);
+                if(empty($checkWorkerTime)){
+                    return false;
+                }
+            }
 
             //设置参数
             $this->setAttributes([
@@ -1028,7 +1029,13 @@ class Order extends OrderModel
         ]);
 
         //3:修改订单信息
-        return $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+        $status = $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+        if($status)
+        {
+            //var_dump($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
+            //更新阿姨排班表
+            return Worker::operateWorkerOrderInfoToRedis($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
+        }
     }
 
 
