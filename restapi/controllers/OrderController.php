@@ -1881,14 +1881,21 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+        if (empty($param['access_token']) || !WorkerAccessToken::getWorker($param['access_token'])) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
+
+        #订单号不能为空
+        if (empty($param['order_id'])) {
+            return $this->send(null, "数据不完整,请输入订单号", 0, 200, null, alertMsgEnum::orderGetOrderNumber);
+        }
+
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
             try {
+
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
 
                 if ($setWorker && is_null($setWorker["errors"])) {
