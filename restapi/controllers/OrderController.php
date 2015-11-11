@@ -212,7 +212,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} order_src_id 订单来源id 【2:IOS 3:Android 5:H5】
+     * @apiParam {String} channel_id 订单来源【值待定】
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 '1443695400'
      * @apiParam {String} address 服务地址
      * @apiParam {String} city_name 城市名称
