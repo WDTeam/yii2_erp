@@ -223,31 +223,6 @@ class Order extends OrderModel
         return false;
     }
 
-    /*
-      Array
-      (
-      [order_ip] => 127.0.0.1
-      [order_service_type_id] => 11
-      [channel_id] => 1
-      [address_id] => 1
-      [customer_id] => 3
-      [order_customer_phone] => 13683118946
-      [admin_id] => 0
-      [order_pay_type] => 1
-      [order_is_use_balance] => 1
-      [order_booked_worker_id] => 1
-      [order_customer_need] => 1
-      [order_customer_memo] => 1
-      )
-      Array
-      (
-      [order_booked_begin_time] => 1420855800
-      [order_booked_end_time] => 1420942200
-      [coupon_id] => 1
-      )
-
-     *      */
-
     /**
      * 周期订单
      *  @param $attributes [
@@ -381,7 +356,6 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->setAttributes([
-            'order_pay_type' => OrderExtPay::ORDER_PAY_TYPE_ON_LINE,
             'admin_id' => Order::ADMIN_CUSTOMER,
             'pay_channel_id' => $pay_channel_id,
             'order_pay_channel_name' => $order_pay_channel_name,
@@ -748,7 +722,9 @@ class Order extends OrderModel
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
             $transact = static::getDb()->beginTransaction();
             $result = OrderStatus::_cancel($order,[],$transact);
-            if ($result && $order->orderExtPay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status != OrderStatusDict::ORDER_INIT
+            if ($result && in_array($order->orderExtPay->order_pay_channel_type_id,[1,2])
+                && $order->orderExtPay->order_pay_channel_id != 20
+                && $current_status != OrderStatusDict::ORDER_INIT
                 || $current_status == OrderStatusDict::ORDER_INIT && $cause_id==OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE ) {
                 //调高峰的退款接口
                 $finance_refund_add = new FinanceRefundadd();
@@ -869,17 +845,17 @@ class Order extends OrderModel
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
             $this->order_pay_money -= $this->order_money;
             $this->setAttributes([
-                'order_pay_channel_id' => self::ORDER_PAY_CHANNEL_POP,
+                'pay_channel_id' => self::ORDER_PAY_CHANNEL_POP,
                 'order_pay_channel_name' => '第三方团购预收',
                 'order_pay_channel_type_name' => '第三方团购',
-                'order_pay_channel_type_id' => 3,
+                'pay_channel_type_id' => 3,
             ]);
         }else if(!empty($this->pay_channel_id) && $this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {
             $this->setAttributes([
-                'order_pay_channel_id' => self::ORDER_PAY_CHANNEL_CASH,
+                'pay_channel_id' => self::ORDER_PAY_CHANNEL_CASH,
                 'order_pay_channel_name' => '现金支付',
                 'order_pay_channel_type_name' => 'e家洁',
-                'order_pay_channel_type_id' => 2,
+                'pay_channel_type_id' => 2,
             ]);
             $this->order_pay_money -= $this->order_money;
 //            if (!empty($this->coupon_id)) {//是否使用了优惠券
@@ -917,17 +893,17 @@ class Order extends OrderModel
 
             if($this->order_pay_money>0){//TODO 硬编码在线支付
                 $this->setAttributes([
-                    'order_pay_channel_id' => 0,
+                    'pay_channel_id' => 0,
                     'order_pay_channel_name' => '',
                     'order_pay_channel_type_name' => '在线支付',
-                    'order_pay_channel_type_id' => 1,
+                    'pay_channel_type_id' => 1,
                 ]);
             }else{//TODO 硬编码E家洁支付
                 $this->setAttributes([
-                    'order_pay_channel_id' => 20,
+                    'pay_channel_id' => 20,
                     'order_pay_channel_name' => '余额支付',
                     'order_pay_channel_type_name' => 'e家洁',
-                    'order_pay_channel_type_id' => 2,
+                    'pay_channel_type_id' => 2,
                 ]);
             }
 

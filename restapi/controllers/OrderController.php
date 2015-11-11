@@ -240,19 +240,19 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
         //所在地址
-        if (!isset($args['address']) || !$args['address']) {
-            return $this->send(null, "数据不完整,请输入常用地址", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        if (!isset($args['address_id']) ||!intval($args['address_id'])) {
+            return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        try {
-            $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
-        } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderAddressIdFaile);
-        }
-        if (!empty($model)) {
-            $attributes['address_id'] = $model->id;
-        } else {
-            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-        }
+//        try {
+//            $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
+//        } catch (\Exception $e) {
+//            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderAddressIdFaile);
+//        }
+//        if (!empty($model)) {
+            $attributes['address_id'] = intval($args['address_id']);
+//        } else {
+//            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+//        }
         $attributes['customer_id'] = $user->id; //登录用户ID
         $attributes['order_service_item_id'] = intval($args['order_service_item_id']); //服务品类ID
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
@@ -1265,7 +1265,7 @@ class OrderController extends \restapi\components\Controller
             'order_code' => $orderInfo['order_code'],
             'order_money' => $orderInfo['order_money'],
             'order_channel_name' => $orderInfo['order_channel_name'],
-            'order_pay_type' => $orderInfo['order_pay_type'],
+            'order_pay_type' => $orderInfo['pay_channel_id'],
             'order_pay_channel_name' => $orderInfo['order_pay_channel_name'],
             'order_pay_money' => $orderInfo['order_pay_money'],
             'order_use_acc_balance' => $orderInfo['order_use_acc_balance'],
