@@ -11,8 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-platform-index">
 
-    <!--<h1><?php //= Html::encode($this->title) ?></h1>-->
-
     <p>
         <?= Html::a(Yii::t('app', 'Create').Yii::t('app', 'Platform'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -25,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn'
             ],
 
-//            'id',
             'operation_platform_name',
             [
                 'attribute' => 'created_at',
@@ -46,35 +43,58 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform/view','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                            '<span class="btn btn-primary glyphicon glyphicon-eye-open"> 查看</span>',
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform/view',
+                                'id' => $model->id
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'View'),
+                            ]
                         );
                     },
                     'update' => function ($url, $model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform/update','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
+                            '<span class="btn btn-primary glyphicon glyphicon-pencil"> 编辑</span>',
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform/update',
+                                'id' => $model->id
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'Update'),
+                            ]
                         );
                     },
                     'delete' => function ($url, $model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform/delete','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                            '<span class="btn btn-primary glyphicon glyphicon-trash"> 删除</span>',
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform/delete',
+                                'id' => $model->id
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'data-pjax'=>"0",
+                                'data-method'=>"post",
+                                'data-confirm'=>"您确定要删除此项吗？",
+                                'aria-label'=>Yii::t('yii', 'Delete')
+                            ]
                         );
                     },
                     'listbtn' => function ($url, $model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-list"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform-version','platform_id' => $model->id]), 
-                            ['title' => Yii::t('yii', '平台版本'), 'class' => 'btn btn-warning btn-sm',]
+                            '<span class="btn btn-primary glyphicon glyphicon-list"> 查看版本列表</span>',
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform-version',
+                                'platform_id' => $model->id
+                            ]), 
+                            [
+                            'title' => Yii::t('yii', '平台版本'),
+                            ]
                         );
                     },
                 ],
             ],
         ],
     ]); ?>
-
 </div>

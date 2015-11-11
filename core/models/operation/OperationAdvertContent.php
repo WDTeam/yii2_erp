@@ -3,7 +3,6 @@
 namespace core\models\operation;
 
 use Yii;
-use dbbase\models\operation\OperationAdvertContent as CommonOperationAdvertContent;
 
 /**
  * This is the model class for table "{{%operation_advert_content}}".
@@ -21,7 +20,7 @@ use dbbase\models\operation\OperationAdvertContent as CommonOperationAdvertConte
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertContent extends CommonOperationAdvertContent
+class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertContent
 {
     
     /** 
@@ -62,9 +61,60 @@ class OperationAdvertContent extends CommonOperationAdvertContent
     }
 
     /**
-     * 根据城市和平台等获取广告信息
+     * 更新冗余的平台名称
+     *
+     * @param inter   $operation_platform_id     平台编号
+     * @param string  $operation_platform_name   平台名称
      */
-    public static function getAdvert()
+    public static function updatePlatformName($operation_platform_id, $operation_platform_name)
     {
+        self::updateAll(['platform_name' => $operation_platform_name], 'platform_id= ' . $operation_platform_id);
     }
+
+    /**
+     * 更新冗余的平台版本
+     *
+     * @param inter   $operation_platform_version_id     平台版本编号
+     * @param string  $operation_platform_version_name   平台版本名称
+     */
+    public static function updatePlatformVersion($operation_platform_version_id, $operation_platform_version_name)
+    {
+        self::updateAll(['platform_version_name' => $operation_platform_version_name], 'platform_version_id= ' . $operation_platform_version_id);
+    }
+
+    /**
+     * 更新冗余的广告位置名称(暂没有使用)
+     *
+     * @param inter   $position_id     广告位置编号
+     * @param string  $position_name   广告位置名称
+     */
+    public static function updateAdvertPositionName($position_id, $position_name)
+    {
+        self::updateAll(['position_name' => $position_name], 'position_id= ' . $position_id);
+    }
+
+    /**
+     * 更新冗余的广告位置名称,平台信息
+     *
+     * @param inter   $position_id             广告位置编号
+     * @param string  $position_name           广告位置名称
+     * @param string  $platform_id             平台编号
+     * @param string  $platform_version_id     平台版本编号
+     * @param string  $platform_name           平台名称
+     * @param string  $platform_version_name   平台版本名称
+     */
+    public static function updateAdvertPlatformInfo($position_id, $position_name, $platform_id, $platform_version_id, $platform_name, $platform_version_name)
+    {
+        self::updateAll(
+            [
+                'position_name'         => $position_name,
+                'platform_id'           => $platform_id,
+                'platform_version_id'   => $platform_version_id,
+                'platform_name'         => $platform_name,
+                'platform_version_name' => $platform_version_name,
+            ],
+            'position_id= ' . $position_id
+        );
+    }
+
 }

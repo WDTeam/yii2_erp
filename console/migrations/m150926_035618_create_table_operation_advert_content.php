@@ -16,8 +16,8 @@ class m150926_035618_create_table_operation_advert_content extends Migration
         $this->createTable('{{%operation_advert_content}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
             'operation_advert_content_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'广告名称\'',
-            'position_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'城市编号\'',
-            'position_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'城市名称\'',
+            'position_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'位置编号\'',
+            'position_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'位置名称\'',
             'platform_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'平台编号\'',
             'platform_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'平台名称\'',
             'platform_version_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'版本编号\'',
