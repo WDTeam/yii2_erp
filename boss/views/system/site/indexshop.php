@@ -8,7 +8,7 @@ AppAsset::addCss($this, 'css/shop/index.css');
 $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
 
 $shops = Yii::$app->user->identity->getShopList();
-$shop = $shops[0];
+// $shop = $shops[0];
 ?>
  <div class="container">
         <?php if(isset($shop)){?>

@@ -475,6 +475,21 @@ class Customer extends \dbbase\models\customer\Customer
 		return false;
 	}
 
+    /*************************************customer city*************************************************/
+    /**
+     * @param $customer_id
+     * @return mixed
+     */
+    public static function getCityNameById($customer_id){
+        $customer_address = CustomerAddress::find()->select(['operation_city_name'])
+            ->where(['customer_id'=>$customer_id])
+            ->orderBy('created_at asc')
+            ->asArray()
+            ->one();
+        $operation_city_name = empty($customer_address['operation_city_name']) ? '' : $customer_address['operation_city_name'];
+        return $operation_city_name;
+    }
+
 	/*************************************address*******************************************************/
     /**
      * get current address

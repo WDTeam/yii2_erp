@@ -301,6 +301,7 @@ class alertMsgEnum
     //创建订单
     const orderServiceItemIdFaile = "请输入服务项目ID";
     const orderSrcIdFaile = "订单来源不明确";
+    const orderChannleIDFaile = "下单渠道不明确";
     const orderBookedBeginTimeFaile = "数据不完整,请输入初始时间";
     const orderBookedEndTimeFaile = "数据不完整,请输入完成时间";
     const orderPayTypeFaile = "数据不完整,请输入支付方式";

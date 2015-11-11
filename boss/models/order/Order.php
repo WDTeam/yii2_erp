@@ -9,6 +9,8 @@
 namespace boss\models\order;
 
 use core\models\customer\Customer;
+use core\models\operation\OperationOrderChannel;
+use core\models\operation\OperationPayChannel;
 use core\models\order\OrderSrc;
 use core\models\order\OrderWorkerRelation;
 use dbbase\models\finance\FinanceOrderChannel;
@@ -120,14 +122,21 @@ class Order extends OrderModel
 
     /**
      * 获取订单渠道
-     * @param int $channel_id
      * @return array|bool
      */
-    public function getOrderChannelList($channel_id = 0)
+    public function getOrderChannelList()
     {
-        $list = FinanceOrderChannel::get_order_channel_list_info();
-        $channel = ArrayHelper::map($list, 'id', 'finance_order_channel_name');
-        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
+        return OperationOrderChannel::getorderchannellist(3); //boss 使用的渠道列表
+    }
+
+    public function getEjjPayChannelList()
+    {
+        return OperationPayChannel::getpaychannellist(2);
+    }
+
+    public function getPopPayChannelList()
+    {
+        return OperationPayChannel::getpaychannellist(3);
     }
 
 
@@ -136,9 +145,8 @@ class Order extends OrderModel
     {
         $post['Order']['admin_id'] = Yii::$app->user->id;
         $post['Order']['order_ip'] = Yii::$app->request->userIP;
-        $post['Order']['order_src_id'] = OrderSrc::ORDER_SRC_BOSS; //下单方式BOSS
-        $post['Order']['order_is_use_balance'] =  $post['Order']['order_pay_type']==2?1:0; //是否使用余额
-        $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
+        $post['Order']['order_is_use_balance'] = 1; //使用余额
+        $post['Order']['channel_id'] = $post['Order']['channel_id']; //订单渠道
         $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
         //预约时间处理
         if(empty($post['Order']['orderBookedTimeRange'])){

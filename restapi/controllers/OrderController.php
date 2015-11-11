@@ -220,15 +220,16 @@ class OrderController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
         }
-        if (!$user)
+        if (!$user){
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
         //填写服务项目
-        if (empty($args['order_service_item_id'])) {
+        if (!isset($args['order_service_item_id'])||!intval($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
-        //订单来源
-        if (empty($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
+        //下单渠道
+        if (!isset($args['channel_id'])||!intval($args['channel_id'])) {
+            return $this->send(null, "请输入下单渠道", 0, 200, null, alertMsgEnum::orderChannleIDFaile);
         }
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
@@ -253,21 +254,20 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
         $attributes['customer_id'] = $user->id; //登录用户ID
-        $attributes['order_service_item_id'] = $args['order_service_item_id']; //服务品类ID
-        $attributes['order_src_id'] = $args['order_src_id']; //订单来源ID
+        $attributes['order_service_item_id'] = intval($args['order_service_item_id']); //服务品类ID
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
-        $attributes['channel_id'] = 20; //家洁
-        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time']; //服务结束时间
-        $attributes['order_pay_type'] = 1; //现金支付
-        $attributes['order_booked_count'] = 1; //服务时长
-        $attributes['order_pop_order_code'] = "0"; //第三方订单编号
-        $attributes['order_pop_order_money'] = 0; //第三方订单金额
-        $attributes['order_pop_group_buy_code'] = "0"; //
-        $attributes['coupon_id'] = 0;
-        $attributes['order_booked_worker_id'] = 0;
-        $attributes['order_customer_need'] = ""; //客户需求
-        $attributes['order_customer_memo'] = ""; //客户备注
-        $attributes['order_is_use_balance'] = 0; //客户选择使用余额则去获取客户余额
+        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time']+10800; //服务结束时间
+        $attributes['order_booked_count'] = 3; //服务时长
+        $attributes['channel_id'] = intval($args['channel_id']); //家洁
+        $attributes['order_pay_type'] = 2; //现金支付
+//        $attributes['order_pop_order_code'] = "0"; //第三方订单编号
+//        $attributes['order_pop_order_money'] = 0; //第三方订单金额
+//        $attributes['order_pop_group_buy_code'] = "0"; //
+       // $attributes['coupon_id'] = 0;
+        //$attributes['order_booked_worker_id'] = 0;
+       // $attributes['order_customer_need'] = ""; //客户需求
+      //  $attributes['order_customer_memo'] = ""; //客户备注
+       // $attributes['order_is_use_balance'] = 0; //客户选择使用余额则去获取客户余额
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
 
         //创建订单
@@ -369,30 +369,8 @@ class OrderController extends \restapi\components\Controller
         $args = Yii::$app->request->get();
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
-        //pop访问时可以不用输入access_token（用本身的验证加密方法）
-        $apiPopKey = Yii::$app->params["apiPopKey"];
-        $apiSecretKey = Yii::$app->params["apiSecretKey"];
-        $sign = isset($args["sign"]) ? $args["sign"] : "";
-        $nonce = isset($args["nonce"]) ? $args["nonce"] : "";
-        $arrParams = array();
-        $arrParams["sign"] = $sign;
-        $arrParams["nonce"] = $nonce;
-        $arrParams["api_key"] = $apiPopKey;
-        $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
-        $bolCheck = $objSign->checkSignature($arrParams);
         if (empty($user)) {
-            if (!$bolCheck) {
-                return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
-            }
-        }
-        if ($bolCheck) {
-            if (isset($args['user_id'])) {
-                $user_id = $args['user_id'];
-            } else {
-                return $this->send(null, "pop访问时必须输入user_id", 401, 200, null, alertMsgEnum::userLoginFailed);
-            }
-        } else {
-            $user_id = $user->id;
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $orderStatus = null;
         if (isset($args['order_status'])) {
@@ -419,7 +397,7 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["oc.customer_id"] = $user_id;
+        $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
         if ($limit <= 0) {
             $limit = 1;
