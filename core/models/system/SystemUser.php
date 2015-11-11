@@ -223,6 +223,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return !\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN);
     }
     
+    
     /**
     * 通过用户id返回用名称
     * @date: 2015-11-2

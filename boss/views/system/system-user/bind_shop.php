@@ -14,16 +14,32 @@ $this->params['breadcrumbs'][] = $this->title;
             <h3 class="panel-title"><?php echo $model->username;?></h3>
         </div>
         <div class="panel-body">
-            <?php echo Select2::widget([
-                'model'=>$model,
-                'attribute'=>'roles',
-                'data'=>$shop_managers,
-                'hideSearch'=>false,
-                'options'=>[
-                    'multiple'=>true,
-                    'placeholder'=>'请选择小家政……'
-                ],
-            ]);?>
+            <div class="form-group field-shopmanager-name">
+                <label>选择家政:</label>
+                <?php echo Select2::widget([
+                    'model'=>$model,
+                    'attribute'=>'roles',
+                    'data'=>$shop_managers,
+                    'hideSearch'=>false,
+                    'options'=>[
+                        'multiple'=>true,
+                        'placeholder'=>'请选择小家政……'
+                    ],
+                ]);?>
+            </div>
+            <div class="form-group field-shopmanager-name">
+                <label>选择门店:</label>
+                <?php echo Select2::widget([
+                    'model'=>$model,
+                    'attribute'=>'shopIds',
+                    'data'=>$shops,
+                    'hideSearch'=>false,
+                    'options'=>[
+                        'multiple'=>true,
+                        'placeholder'=>'请选择门店……'
+                    ],
+                ]);?>
+            </div>
         </div>
     </div>
     

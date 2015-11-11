@@ -51,7 +51,7 @@ class ShopController extends BaseAuthController
         $query = Yii::$app->request->getQueryParams();
         if(\Yii::$app->user->identity->isNotAdmin()){
             $query['ids'] = \Yii::$app->user->identity->getShopIds();
-            $query['ids'] = empty($query['ids'])?[0]:$query['ids'];
+            $query['ids'] = empty($query['ids'])?[0]:$query['ids']; 
         }
         $dataProvider = $searchModel->search($query);
 

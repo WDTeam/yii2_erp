@@ -12,6 +12,7 @@ use boss\components\RbacHelper;
 use yii\web\ForbiddenHttpException;
 use core\models\shop\ShopManager;
 use yii\helpers\ArrayHelper;
+use core\models\shop\Shop;
 
 /**
  * SystemUserController implements the CRUD actions for SystemUser model.
@@ -144,14 +145,23 @@ class SystemUserController extends BaseAuthController
     public function actionBindShop($id)
     {
         $model = $this->findModel($id);
+        
         $shop_managers = ShopManager::find()
         ->select(['id','name'])
         ->where('isdel=0 or isdel is null')
         ->asArray()->all();
         $shop_managers = ArrayHelper::map($shop_managers, 'id', 'name');
+        
+        $shops = Shop::find()
+        ->select(['id','name'])
+        ->where('isdel=0 or isdel is null')
+        ->asArray()->all();
+        $shops = ArrayHelper::map($shops, 'id', 'name');
+        
         return $this->render('bind_shop',[
             'model'=>$model,
             'shop_managers'=>$shop_managers,
+            'shops'=>$shops,
         ]);
     }
 }
