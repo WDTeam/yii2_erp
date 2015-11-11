@@ -49,7 +49,7 @@ use core\models\system\SystemUser;
 //             ],
             
             'roles'=>[
-                'type'=> Form::INPUT_CHECKBOX_LIST,
+                'type'=> Form::INPUT_RADIO_LIST,
                 'items'=>SystemUser::getArrayRole(),
                 'options'=>['placeholder'=>'Enter 角色...', 'maxlength'=>64]
                 
