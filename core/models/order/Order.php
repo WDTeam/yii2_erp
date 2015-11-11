@@ -128,6 +128,7 @@ class Order extends OrderModel
 
     const ORDER_PAY_CHANNEL_CASH = 2;
     const ORDER_PAY_CHANNEL_POP = 9;
+    const ORDER_PAY_CHANNEL_TYPE_POP = 2;
     /**
      * 创建新订单
      * @param $attributes [
@@ -736,7 +737,7 @@ class Order extends OrderModel
                 ]) && $result){
                     $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
-            }elseif($result && $order->order_channel_type_id == OrderSrc::order_channel_type_POP){
+            }elseif($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP){
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if($result){
