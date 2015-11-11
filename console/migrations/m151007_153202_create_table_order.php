@@ -32,8 +32,8 @@ class m151007_153202_create_table_order extends Migration
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
             'order_service_item_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务项ID\'',
             'order_service_item_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务项\'',
-            'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',
-            'order_src_name' => Schema::TYPE_STRING . '(128)  DEFAULT \'\' COMMENT \'订单来源，订单入口名称\'',
+            'order_channel_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单渠道分类id\'',
+            'order_channel_type_name' => Schema::TYPE_STRING . '(128)  DEFAULT \'\' COMMENT \'订单渠道分类名称\'',
             'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'订单渠道ID\'',
             'order_channel_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'订单渠道名称\'',
 //===============================服务信息

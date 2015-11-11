@@ -21,8 +21,8 @@ use dbbase\models\ActiveRecord;
  * @property string $order_service_type_name
  * @property integer $order_service_item_id
  * @property string $order_service_item_name
- * @property integer $order_src_id
- * @property string $order_src_name
+ * @property integer $order_channel_type_id
+ * @property string $order_channel_type_name
  * @property string $channel_id
  * @property string $order_channel_name
  * @property string $order_unit_money
@@ -85,7 +85,8 @@ class Order extends ActiveRecord
     public $comment_id;
     public $invoice_id;
     public $order_customer_hidden;
-    public $order_pay_type;
+    public $pay_channel_type_id;
+    public $order_pay_channel_type_name;
     public $pay_channel_id;
     public $order_pay_channel_name;
     public $order_pay_flow_num;
@@ -143,7 +144,8 @@ class Order extends ActiveRecord
         'comment_id',
         'invoice_id',
         'order_customer_hidden',
-        'order_pay_type',
+        'pay_channel_type_id',
+        'order_pay_channel_type_name',
         'pay_channel_id',
         'order_pay_channel_name',
         'order_pay_flow_num',
@@ -195,15 +197,15 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['admin_id','order_service_type_id','order_service_item_id','order_src_id','order_booked_begin_time','address_id','order_unit_money','order_code', 'order_booked_count','order_money'],'required'],
+            [['admin_id','order_service_type_id','order_service_item_id','order_channel_type_id','order_booked_begin_time','address_id','order_unit_money','order_code', 'order_booked_count','order_money'],'required'],
 
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id',
-                'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'order_cancel_cause_id',
+                'order_channel_type_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'order_cancel_cause_id',
                 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
 
             [['order_unit_money',  'order_booked_count','order_money','order_lat','order_lng'], 'number'],
             [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
-            [['order_service_type_name','order_service_item_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
+            [['order_service_type_name','order_service_item_name', 'order_ip','order_channel_type_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo','order_sys_memo','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
             [$this->attributesExt,'safe']
@@ -229,8 +231,8 @@ class Order extends ActiveRecord
             'order_service_type_name' => '服务类别',
             'order_service_item_id' => '服务项目',
             'order_service_item_name' => '服务项目',
-            'order_src_id' => '订单来源，订单入口id',
-            'order_src_name' => '订单来源，订单入口名称',
+            'order_channel_type_id' => '订单来源，订单入口id',
+            'order_channel_type_name' => '订单来源，订单入口名称',
             'channel_id' => '订单渠道ID',
             'order_channel_name' => '订单渠道名称',
             'order_unit_money' => '订单单位价格',
@@ -283,7 +285,8 @@ class Order extends ActiveRecord
             'comment_id' => '评价id',
             'invoice_id' => '发票id',
             'order_customer_hidden' => '客户端是否已删除',
-            'order_pay_type' => '支付方式 0未支付 1现金支付 2线上支付 3第三方预付 ',
+            'pay_channel_type_id' => '支付渠道分类id',
+            'order_pay_channel_type_name' => '支付渠道分类名称',
             'pay_channel_id' => '支付渠道id',
             'order_pay_channel_name' => '支付渠道名称',
             'order_pay_flow_num' => '支付流水号',
@@ -442,8 +445,8 @@ class Order extends ActiveRecord
                 'order_service_type_name' => $this->order_service_type_name,
                 'order_service_item_id' => $this->order_service_item_id,
                 'order_service_item_name' => $this->order_service_item_name,
-                'order_src_id' => $this->order_src_id,
-                'order_src_name' => $this->order_src_name,
+                'order_channel_type_id' => $this->order_channel_type_id,
+                'order_channel_type_name' => $this->order_channel_type_name,
                 'channel_id' => $this->channel_id,
                 'order_channel_name' => $this->order_channel_name,
                 'order_unit_money' => $this->order_unit_money,
