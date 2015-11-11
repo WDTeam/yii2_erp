@@ -227,10 +227,10 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	**/
 	
 	
-	public static function get_is_coupon_status($coupon_code,$customer_tel,$couponrule_service_type_id,$city_id){
+	public static function get_is_coupon_status($coupon_code,$customer_tel,$couponrule_service_type_id,$couponrule_commodity_id,$city_id){
 		$now_time=time();
 		$coupon = CouponUserinfo::find()
-		->select(['id,coupon_userinfo_price'])
+		->select('id,coupon_userinfo_price')
 		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0',"couponrule_service_type_id=$couponrule_service_type_id"], 'couponrule_type=0']] )
 		->asArray()
 		->one();

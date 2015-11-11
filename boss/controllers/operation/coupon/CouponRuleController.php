@@ -36,42 +36,21 @@ class CouponRuleController extends Controller
     public function actionIndex()
     {
     	
+    	/*   $coupon_userinfoceshi=	new CouponUserinfoceshi; 
+    	$coupondata=$coupon_userinfoceshi->find()->where(['and','coupon_userinfo_id=1','city_id is null'])->asArray()->limit(500)->all();
     	
-    	
-    	/* $coupon_userinfoceshi=	new CouponUserinfoceshi; 
-    	$coupondata=$coupon_userinfoceshi->find()->where(['coupon_userinfo_id' =>1])->asArray()->limit(10)->all();
+    	//var_dump($coupondata);exit;
 		//首先替换地区
-    	foreach ($coupondata as $key=>$dainfo){
-    		
+    	 foreach ($coupondata as $key=>$dainfo){
     		$cityid=\core\models\operation\OperationArea::getAreaid($dainfo['city_name']);
-    		$coupon_userinfoceshi->id=$dainfo['id'];
-    		$coupon_userinfoceshi->city_id=$cityid;
-    		$coupon_userinfoceshi->save();
+    		$ceshieng =$coupon_userinfoceshi->findOne($dainfo['id']);
+    		$ceshieng->city_id=$cityid;
+    		$ceshieng->save();
     		echo $key;
-    	}
+    		unset($ceshieng); 
+    	} 
     	
-    	var_dump('ok');exit; */
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
+    	var_dump('ok');exit;   */
     	
     	
     	
