@@ -117,4 +117,96 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
         );
     }
 
+    /**
+     * 根据平台编号联动删除广告内容信息
+     *
+     * @param inter   $platform_id     平台编号
+     */
+    public static function updateAdvertContentStatus($platform_id)
+    {
+        self::deleteAll([
+            'platform_id' => $platform_id,
+        ]);
+    }
+
+    /**
+     * 根据平台编号获取一个平台对应的所有的广告内容
+     *
+     * @param inter   $platform_id     平台编号
+     */
+    public static function getAdvertContent($platform_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where(['platform_id' => $platform_id])
+            ->asArray()
+            ->All();
+        if (isset($data) && count($data) > 0) {
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 根据版本编号联动删除广告内容信息
+     *
+     * @param inter   $platform_version_id     版本编号
+     */
+    public static function updateAdvertContentStatusFromVersion($platform_version_id)
+    {
+        self::deleteAll([
+            'platform_version_id' => $platform_version_id,
+        ]);
+    }
+
+    /**
+     * 根据版本编号获取一个平台对应的所有的广告内容
+     *
+     * @param inter   $platform_version_id     版本编号
+     */
+    public static function getAdvertContentFromVersion($platform_version_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where(['platform_version_id' => $platform_version_id])
+            ->asArray()
+            ->All();
+        if (isset($data) && count($data) > 0) {
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 根据广告位置编号联动删除广告内容信息
+     *
+     * @param inter   $position_id     广告位置编号
+     */
+    public static function updateAdvertContentStatusFromPosition($position_id)
+    {
+        self::deleteAll([
+            'position_id' => $position_id,
+        ]);
+    }
+
+    /**
+     * 根据广告位置编号获取一个平台对应的所有的广告内容
+     *
+     * @param inter   $position_id     广告位置编号
+     */
+    public static function getAdvertContentFromPosition($position_id)
+    {
+        $data = self::find()
+            ->select(['id'])
+            ->where(['position_id' => $position_id])
+            ->asArray()
+            ->All();
+        if (isset($data) && count($data) > 0) {
+            return $data;
+        } else {
+            return false;
+        }
+    }
 }

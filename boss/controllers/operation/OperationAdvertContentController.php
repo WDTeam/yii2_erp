@@ -10,6 +10,7 @@ use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationAdvertPosition;
+use boss\models\operation\OperationAdvertRelease;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -211,6 +212,8 @@ class OperationAdvertContentController extends BaseAuthController
     {
         $this->findModel($id)->delete();
 
+        //联动删除
+        OperationAdvertRelease::updateAdvertReleaseStatus($id);
         return $this->redirect(['index']);
     }
 

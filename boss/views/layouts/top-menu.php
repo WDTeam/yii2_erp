@@ -21,9 +21,9 @@ $menuItemsMain = RbacHelper::topMenu([
         'active' => false,
         'items' => [
             [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '管理系统用户'),
+                'label' => '<i class="fa fa-file-text"></i> ' . Yii::t('app', '管理系统授权项'),
                 'url' => [
-                    'system/system-user/index'
+                    'system/auth/index'
                 ]
             ],
             [
@@ -33,17 +33,18 @@ $menuItemsMain = RbacHelper::topMenu([
                 ]
             ],
             [
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '管理系统用户'),
+                'url' => [
+                    'system/system-user/index'
+                ]
+            ],            
+            [
                 'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置用户与门店关系'),
                 'url' => [
                     'shop/shop-custome-relation/index'
                 ]
             ],
-            [
-                'label' => '<i class="fa fa-file-text"></i> ' . Yii::t('app', '管理系统授权项'),
-                'url' => [
-                    'system/auth/index'
-                ]
-            ],
+
         ]
     ]
 ]);
