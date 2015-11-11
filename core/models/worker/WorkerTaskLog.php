@@ -121,15 +121,26 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
         $data['worker_task_description'] = $model->getWorker_task_description();
         $worker_task = WorkerTask::findOne($this->worker_task_id);
         $cons= $worker_task->getConditions();
-        foreach($data['values'] as $k1=>$v1){
-            foreach($cons as $k2=>$v2){
-                if($v1["worker_tasklog_condition"]==$v2['id']){
-                    $data['values']["$k1"]['name']=$v2["name"];
-                    $data['values']["$k1"]['judge']=$v2["judge"];
-                    $data['values']["$k1"]['value']=$v2["value"];
+        $_values = [];
+        foreach ($cons as $key=>$con){
+            foreach ($data['values'] as $value){
+                if($con['id']==$value['worker_tasklog_condition']){
+                    $_values[] = array_merge($con, $value);
                 }
             }
         }
+        $data['values'] = $_values;
+//        foreach($data['values'] as $k1=>$v1){
+//            foreach($cons as $k2=>$v2){
+//                if($v1["worker_tasklog_condition"]==$v2['id']){
+//                    $data['values']["$k1"]['name']=$v2["name"];
+//                    $data['values']["$k1"]['judge']=$v2["judge"];
+//                    $data['values']["$k1"]['value']=$v2["value"];
+//                }else{
+////                    unset($data['values']["$k1"]);
+//                }
+//            }
+//        }
         
         return $data;
     }

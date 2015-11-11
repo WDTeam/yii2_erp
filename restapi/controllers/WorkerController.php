@@ -1049,6 +1049,16 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_is_settlemented": "是否已结算0未结算，1已结算",
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
+     *               "values": [
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
+     *                ],
      *               "worker_task_description": "任务描述"
      *           },
      *           "url": "右上角任务说明链接（后台没有返回空）"
@@ -1129,11 +1139,15 @@ class WorkerController extends \restapi\components\Controller
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "values": [
-     *                   {
-     *                       "worker_tasklog_condition": "条件索引",
-     *                       "worker_tasklog_value": "条件值"
-     *                   }
-     *               ],
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
+     *                ],
      *               "worker_task_description": "任务描述"
      *           },
      *          "url": "右上角任务说明链接（后台没有返回空）"
@@ -1219,11 +1233,15 @@ class WorkerController extends \restapi\components\Controller
      *               "created_at": "创建时间",
      *               "updated_at": "更新时间",
      *               "values": [
-     *                   {
-     *                       "worker_tasklog_condition": "条件索引",
-     *                       "worker_tasklog_value": "条件值"
-     *                   }
-     *               ],
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
+     *                ],
      *               "worker_task_description": "任务描述"
      *           }
      *       ]，
@@ -1308,13 +1326,14 @@ class WorkerController extends \restapi\components\Controller
      *           "created_at": "创建时间",
      *           "updated_at": "更新时间",
      *           "values": [
-     *               {
-     *                   "worker_tasklog_condition": "条件索引",
-     *                   "worker_tasklog_value": "条件完成值",
-     *                   "name": "主动接单",
-     *                   "judge": ">=",
-     *                   "value": "条件值"
-     *               }
+     *                       {
+     *                           "id": "任务条件id",
+     *                           "judge": ">=",
+     *                           "value": "条件值",
+     *                           "name": "条件name",
+     *                           "worker_tasklog_condition": "条件索引",
+     *                           "worker_tasklog_value": "条件完成值"
+     *                       }
      *            ],
      *           "worker_task_description": "任务描述",
      *           "order_list": [
@@ -1358,7 +1377,12 @@ class WorkerController extends \restapi\components\Controller
         $id = $param['id'];
         //获取任务的详情
         try{
-            $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
+            $worker_task_log=WorkerTaskLog::findOne(['id'=>$id]);
+            if($worker_task_log!=null){
+                $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
+            }else{
+                return $this->send(null, "查看任务失败", 0,403,null,alertMsgEnum::checkTaskFail);
+            }
         }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
         }
