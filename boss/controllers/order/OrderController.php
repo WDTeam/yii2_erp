@@ -342,9 +342,11 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['view', 'id' => $model->order_code]);
             }
         } else {//init
-            $model->order_booked_count = 2; //服务时长初始值2小时
+            $model->order_booked_count = '2.0'; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
             $model->order_flag_sys_assign = 1;//是否系统指派
+            $model->channel_id = 20;//订单渠道
+            $model->pay_channel_id = 2;//支付渠道
         }
         return $this->render('create', [
             'model' => $model,

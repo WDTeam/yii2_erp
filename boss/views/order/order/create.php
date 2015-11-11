@@ -116,11 +116,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList)->label('订单渠道'); ?>
                 <div id="order_pay_channel_1" >
                     <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList)->label('支付方式'); ?>
-                    <?= $form->field($model, 'order_coupon_code')->textInput(['maxlength' => true]) ?>
+                    <div style="display: none;" id="order_coupon_code">
+                        <?= $form->field($model, 'order_coupon_code')->textInput(['maxlength' => true]) ?>
+                    </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
                         <div class="col-sm-2">
-                            <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">00.00</span>
+                            <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">0.00</span>
                         </div>
                     </div>
                 </div>

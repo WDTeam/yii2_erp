@@ -22,7 +22,7 @@ $("#order-order_customer_phone").blur(getCustomerInfo);
 
 
 $("#order_create_form").submit(function(){
-    if($("#order-order_pay_type input:checked").val()==2 && parseFloat(customer.customer_balance)-parseFloat($(".order_pay_money").text()) < 0){
+    if($("#order-pay_channel_id input:checked").val()==20 && parseFloat(customer.customer_balance)-parseFloat($(".order_pay_money").text()) < 0){
         alert("用户余额不足以支付此次订单！");
         return false;
     }
@@ -35,7 +35,6 @@ $(document).on("change","#order-order_service_item_id input",function(){
     $("#order_unit_money").text(unit_price.toFixed(2));
     $("#order-order_unit_money").val(unit_price.toFixed(2));
     setOrderMoney();
-    getCoupons();
 });
 
 
@@ -60,6 +59,13 @@ $('#order-channel_id input').change(function(){
         }else{
             $('#order_pay_channel_2').show();
             $('#order_pay_type_2').show();
+        }
+});
+$('#order-pay_channel_id input').change(function(){
+        if($(this).val()==20){
+            $('#order_coupon_code').show();
+        }else{
+            $('#order_coupon_code').hide();
         }
 });
 
@@ -242,10 +248,6 @@ function setOrderMoney(){
     $("#order-order_money").val(money.toFixed(2));
     $(".order_money").text(money.toFixed(2));
     $(".order_pay_money").text(money.toFixed(2));
-    if($("#order-coupon_id").val()!=''){
-        var order_pay_money = $("#order-order_money").val()-window.coupons[$("#order-coupon_id").val()];
-        $(".order_pay_money").text(order_pay_money.toFixed(2));
-    }
 }
 
 function getGoods(){
@@ -286,28 +288,6 @@ function getGoods(){
 
 }
 
-function getCoupons(){
-    if(customer.id != undefined) {
-        var goods = goods_list[$("#order-order_service_item_id input:checked").val()];
-        $.ajax({
-            type: "GET",
-            url: "/order/order/coupons/?id=" + customer.id+"&cate_id="+goods.operation_category_id,
-            dataType: "json",
-            success: function (coupons) {
-                if (coupons.length > 0) {
-                    $("#order-coupon_id").html('<option value="">请选择优惠券</option>');
-                    for (var k in coupons) {
-                        var v = coupons[k];
-                        window.coupons[v.id] = v.coupon_price;
-                        $("#order-coupon_id").append(
-                            '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
-                        );
-                    }
-                }
-            }
-        });
-    }
-}
 function getCards(){
     if(customer.id != undefined) {
         $.ajax({
