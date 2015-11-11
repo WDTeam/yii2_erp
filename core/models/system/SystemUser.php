@@ -12,17 +12,17 @@ class SystemUser extends \dbbase\models\system\SystemUser
     private $_statusLabel;
     private $_roleLabel;
     
-    const CLASSIFY_SYSTEM = 0;
-    const CLASSIFY_BOSS = 1;
-    const CLASSIFY_MINIBOSS = 2;
-    public static function getClassifes()
-    {
-        return [
-            self::CLASSIFY_SYSTEM=>'系统保留',
-            self::CLASSIFY_BOSS=>'BOSS 用户',
-            self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
-        ];
-    }
+//     const CLASSIFY_SYSTEM = 0;
+//     const CLASSIFY_BOSS = 1;
+//     const CLASSIFY_MINIBOSS = 2;
+//     public static function getClassifes()
+//     {
+//         return [
+//             self::CLASSIFY_SYSTEM=>'系统保留',
+//             self::CLASSIFY_BOSS=>'BOSS 用户',
+//             self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
+//         ];
+//     }
     
     /**
      * @inheritdoc

@@ -33,12 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
                    return implode(',', $model->getRolesLabel());
                }
            ], 
-           [
-               'attribute'=>'classify',
-               'value'=>function ($model){
-                    return $model::getClassifes()[$model->classify];
-                }
-           ],
+//            [
+//                'attribute'=>'classify',
+//                'value'=>function ($model){
+//                     return $model::getClassifes()[$model->classify];
+//                 }
+//            ],
            [
                'attribute'=>'status',
                'value'=>function ($model){
