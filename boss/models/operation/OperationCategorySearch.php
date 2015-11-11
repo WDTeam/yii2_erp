@@ -12,11 +12,13 @@ use core\models\operation\OperationCategory;
  */
 class OperationCategorySearch extends OperationCategory
 {
+    public $operation_goods_name;
+
     public function rules()
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['operation_category_name'], 'string'],
+            [['operation_category_name', 'operation_goods_name'], 'string'],
         ];
     }
 
@@ -28,7 +30,7 @@ class OperationCategorySearch extends OperationCategory
         return [
             'id' => Yii::t('app', '编号'),
             'operation_category_name' => Yii::t('app', '品类名称'),
-            'operation_goods_name'=>Yii::t('app','商品名称'),
+            'operation_goods_name'=>Yii::t('app','项目名称'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
         ];
@@ -67,7 +69,8 @@ class OperationCategorySearch extends OperationCategory
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'category.operation_category_name', $this->operation_category_name]);
+        $query->andFilterWhere(['like', 'category.operation_category_name', $this->operation_category_name])
+            ->andFilterWhere(['like', 'goods.operation_goods_name', $this->operation_goods_name]);
 
         return $dataProvider;
     }
