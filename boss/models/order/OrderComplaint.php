@@ -69,7 +69,7 @@ class OrderComplaint extends \core\models\order\OrderComplaint
   			$flag = false;
     		if($this->load($arr) && $this->save()){
     			$flag = true;
-    		};
+    		}
     	return $flag;
     }
     /**
