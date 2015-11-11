@@ -241,7 +241,7 @@ class ConfigureController extends \restapi\components\Controller
                     $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
                     $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
                     $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
-                    $serviceCategoryList[$key]['category_url'] = $val['operation_category_url'];
+                    $serviceCategoryList[$key]['category_url'] = $val['operation_category_url']?$val['operation_category_url']:"";
                     $serviceCategoryList[$key]['colour'] = 'FFCC00';
                     $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
                 }
