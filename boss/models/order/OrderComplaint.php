@@ -66,8 +66,6 @@ class OrderComplaint extends \core\models\order\OrderComplaint
      * @return boolean
      */
     public function backInsertOrderComplaint($arr){
-    	var_dump($this->load($arr) && $this->save());
-    	print_r($this->errors);exit();
   			$flag = false;
     		if($this->load($arr) && $this->save()){
     			$flag = true;
