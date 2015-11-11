@@ -52,16 +52,16 @@ class m150923_034111_create_table_shopmanager extends Migration
         $this->createIndex('shop_province_id', '{{%shop_manager}}', 'province_id');
         $this->createIndex('shop_city_id', '{{%shop_manager}}', 'city_id');
         
-        $this->insert('{{%shop_manager}}', [
-            'id'=>1,
-            'name'=>'E家洁',
-            'province_id'=>110000,
-            'city_id'=>110100,
-            'county_id'=>110105,
-            'street'=>'光华SOHO 2单元708',
-            'principal'=>'云涛',
-            'tel'=>'123456',
-        ]);
+        // $this->insert('{{%shop_manager}}', [
+        //     'id'=>1,
+        //     'name'=>'E家洁',
+        //     'province_id'=>110000,
+        //     'city_id'=>110100,
+        //     'county_id'=>110105,
+        //     'street'=>'光华SOHO 2单元708',
+        //     'principal'=>'云涛',
+        //     'tel'=>'123456',
+        // ]);
     }
 
     public function down()
