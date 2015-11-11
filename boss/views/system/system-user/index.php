@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{view} {update} {delete} {add_shop}',
+                'template'=>'{view} {update} {delete} {bind_shop_manager} {bind_shop}',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', [
@@ -59,8 +59,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'title' => Yii::t('yii', 'Edit'),
                         ]);
                     },
-                    'add_shop'=>function($url, $model){
+                    'bind_shop'=>function($url, $model){
                         return Html::a('绑定门店',['bind-shop', 'id'=>$model->id]);
+                    },
+                    'bind_shop_manager'=>function($url, $model){
+                        return Html::a('绑定小家政',['bind-shop-manager', 'id'=>$model->id]);
                     },
                 ],
             ],

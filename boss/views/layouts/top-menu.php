@@ -37,14 +37,7 @@ $menuItemsMain = RbacHelper::topMenu([
                 'url' => [
                     'system/system-user/index'
                 ]
-            ],            
-            [
-                'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置用户与门店关系'),
-                'url' => [
-                    'shop/shop-custome-relation/index'
-                ]
             ],
-
         ]
     ]
 ]);
