@@ -307,7 +307,7 @@ function getCards(){
 }
 
 function checkCoupon(){
-    if($("#order-order_service_item_id input:checked").length>0) {
+    if($("#order-order_service_item_id input:checked").length>0 && $("#order-order_coupon_code").val().length>0) {
         var service_item_id = $("#order-order_service_item_id input:checked").val();
         var service_type_id = goods_list[service_item_id].operation_category_id;
         var address_id = $("#order-address_id input:checked").val();
@@ -318,15 +318,21 @@ function checkCoupon(){
             dataType: "json",
             success: function (data) {
                 if (!data) {
-                    alert('该优惠码与此次服务不匹配！');
+                    $('#order-order_coupon_code').next('.help-block-error').text('该优惠码与此次服务不匹配！');
+                    $('#field-order-order_coupon_code').addClass('has-error');
                 } else {
                     coupon = data
                     $("#order-coupon_id").val(coupon.id);
                     var order_pay_money = $("#order-order_money").val() - coupon.coupon_userinfo_price;
                     $(".order_pay_money").text(order_pay_money.toFixed(2));
+                    $('#field-order-order_coupon_code').removeClass('has-error');
+                    $('#order-order_coupon_code').next('.help-block-error').text('');
                 }
             }
         });
+    }else{
+        $('#field-order-order_coupon_code').removeClass('has-error');
+        $('#order-order_coupon_code').next('.help-block-error').text('');
     }
 }
 
