@@ -14,5 +14,18 @@ use Yii;
  */
 class OperationPlatform extends \dbbase\models\operation\OperationPlatform
 {
-   
+    /**
+     * 删除标志
+     */
+    const IS_SOFTDEL = 1;
+
+    /**
+     * 删除平台信息
+     *
+     * @param inter   $operation_platform_id     平台编号
+     */
+    public static function updatePlatformStatus($operation_platform_id)
+    {
+        self::updateAll(['is_softdel' => self::IS_SOFTDEL], 'id= ' . $operation_platform_id);
+    }
 }

@@ -90,4 +90,28 @@ class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPo
     {
         self::updateAll(['operation_platform_version_name' => $operation_platform_version_name], 'operation_platform_version_id= ' . $operation_platform_version_id);
     }
+
+    /**
+     * 根据平台编号联动删除广告位置信息
+     *
+     * @param inter   $operation_platform_id     平台编号
+     */
+    public static function updateAdvertPositionStatus($operation_platform_id)
+    {
+        self::deleteAll([
+            'operation_platform_id' => $operation_platform_id,
+        ]);
+    }
+
+    /**
+     * 根据版本编号联动删除广告位置信息
+     *
+     * @param inter   $operation_platform_version_id     版本编号
+     */
+    public static function updateAdvertPositionStatusFromVersion($operation_platform_version_id)
+    {
+        self::deleteAll([
+            'operation_platform_version_id' => $operation_platform_version_id,
+        ]);
+    }
 }
