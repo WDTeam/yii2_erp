@@ -1733,7 +1733,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-
+            
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
@@ -1746,7 +1746,8 @@ class OrderController extends \restapi\components\Controller
             "admin_id" => Order::ADMIN_CUSTOMER,
             "pay_channel_id" =>$param['pay_channel_id'],
             "order_is_use_balance" => $param['order_is_use_balance'],
-            "order_booked_worker_id" => $param['order_booked_worker_id'],
+                //order_booked_worker_id edit by tianyuxing
+            "order_booked_worker_id" => isset($param['order_booked_worker_id'])?intval($param['order_booked_worker_id']):0,
             "order_customer_need" => $param['order_customer_need'],
             "order_customer_memo" => $param['order_customer_memo'],
             "order_flag_change_booked_worker" => $param['accept_other_aunt']
