@@ -2046,6 +2046,8 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_channel_name'] = $v['order_channel_name'];
                         $r_order['order_service_type_name'] = $v['order_service_type_name'];
                         $r_order['order_service_item_name'] = $v['order_service_item_name'];
+                        $r_order['order_pay_type'] = $v['order_pay_type'];
+                        $r_order["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['order_cs_memo'] = $v['order_cs_memo'];
                         $r_order['order_lat'] = $v['order_lat'];
                         $r_order['order_lng'] = $v['order_lng'];

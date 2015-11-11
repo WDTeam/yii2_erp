@@ -723,6 +723,7 @@ class UserController extends \restapi\components\Controller
      * @apiName actionUserSuggest
      * @apiGroup User
      * @apiParam {int} order_id       '订单ID'
+     * @apiParam {int} order_code       '订单号'
      * @apiParam {String} access_token 用户认证
      * @apiParam {int}  worker_id      '阿姨id'
      * @apiParam {String} worker_tel  '阿姨电话'
@@ -771,7 +772,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
-        if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
+        if (empty($param['order_id']) || empty($param['customer_comment_phone']) || empty($param['order_code'])) {
             return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
 
@@ -806,6 +807,9 @@ class UserController extends \restapi\components\Controller
         $param['customer_comment_level_name'] = isset($param['customer_comment_level_name'])?$param['customer_comment_level_name']:"";
         $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids'])?$param['customer_comment_tag_ids']:"";
         $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names'])?$param['customer_comment_tag_names']:"";
+        
+        $param['order_code'] = isset($param['order_code'])?$param['order_code']:"";
+        
         try {
             $customer = CustomerAccessToken::getCustomer($param['access_token']);
             
