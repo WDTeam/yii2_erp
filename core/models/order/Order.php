@@ -140,7 +140,7 @@ class Order extends OrderModel
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
-     *  int $pay_channel_id 支付渠道类别id
+     *  int $pay_channel_id 支付渠道id
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
