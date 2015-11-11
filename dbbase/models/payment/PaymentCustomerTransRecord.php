@@ -75,7 +75,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id','customer_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode_name', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_verify'], 'required'],
+            [['order_id','customer_id','customer_phone', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode_name', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_verify'], 'required'],
             [['customer_id', 'order_channel_id',  'pay_channel_id', 'payment_customer_trans_record_mode',  'created_at', 'updated_at'], 'integer'],
             [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay','payment_customer_trans_record_service_card_current_balance','payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_refund_money',  'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance','payment_customer_trans_record_compensate_money'], 'number'],
             [['payment_customer_trans_record_service_card_on'], 'string', 'max' => 30],
@@ -106,6 +106,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             '1'=>[
 
                 'customer_id',  //用户ID
+                'customer_phone', //用户手机号码
+
                 'admin_id',  //管理员ID
                 'admin_name',  //管理员姓名
 
@@ -155,6 +157,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //2=现金 cardPay
             '2'=>[
                 'customer_id',  //用户ID
+                'customer_phone', //用户手机号码
+
                 'admin_id',  //管理员ID
                 'admin_name',  //管理员姓名
 
@@ -203,6 +207,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //3=预付费 perPay
             '3'=>[
                 'customer_id',  //用户ID
+                'customer_phone', //用户手机号码
+
                 'admin_id',  //管理员ID
                 'admin_name',  //管理员姓名
 
@@ -325,6 +331,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //8=余额（在线支付）onlineBalancePay
             '8'=>[
                 'customer_id',  //用户ID
+                'customer_phone', //用户手机号码
+
                 'admin_id',  //管理员ID
                 'admin_name',  //管理员姓名
 
@@ -371,6 +379,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //9=退款（订单）：把订单金额原路退回 refundSourc
             '9'=>[
                 'customer_id',  //用户ID
+                'customer_phone', //用户手机号码
+
                 'admin_id',  //管理员ID
                 'admin_name',  //管理员姓名
 
@@ -418,6 +428,8 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             //1=在线支付（在线）onlinePay
             '10'=>[
                 'customer_id',  //用户ID
+                'customer_phone', //用户手机号码
+
                 'admin_id',  //管理员ID
                 'admin_name',  //管理员姓名
 
