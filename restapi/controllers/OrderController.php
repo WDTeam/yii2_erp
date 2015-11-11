@@ -1896,7 +1896,7 @@ class OrderController extends \restapi\components\Controller
                 } else {
                     return $this->send($setWorker["errors"], "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
             }
         } else {
@@ -2142,7 +2142,7 @@ class OrderController extends \restapi\components\Controller
                 $ret["orderData"] = $order;
                 return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send($ret, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);
+                return $this->send(null, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);
             }
         } catch (Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrdersFaile);
