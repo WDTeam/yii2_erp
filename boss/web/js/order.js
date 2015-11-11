@@ -307,25 +307,27 @@ function getCards(){
 }
 
 function checkCoupon(){
-    var service_item_id = $("#order-order_service_item_id input:checked").val();
-    var service_type_id = goods_list[service_item_id].operation_category_id;
-    var address_id = $("#order-address_id input:checked").val();
-    var city_id = address_list[address_id].operation_city_id;
-    $.ajax({
-        type: "GET",
-        url: "/order/order/check-coupon-code/?coupon_code=" + $("#order-order_coupon_code").val()+"&customer_phone="+$("#order-order_customer_phone").val()+"&service_item_id="+service_item_id+"&service_type_id="+service_type_id+"&city_id="+city_id,
-        dataType: "json",
-        success: function (data) {
-            if (!data) {
-                alert('该优惠码与此次服务不匹配！');
-            }else{
-                coupon = data
-                $("#order-coupon_id").val(coupon.id);
-                var order_pay_money = $("#order-order_money").val()-coupon.coupon_userinfo_price;
-                $(".order_pay_money").text(order_pay_money.toFixed(2));
+    if($("#order-order_service_item_id input:checked").length>0) {
+        var service_item_id = $("#order-order_service_item_id input:checked").val();
+        var service_type_id = goods_list[service_item_id].operation_category_id;
+        var address_id = $("#order-address_id input:checked").val();
+        var city_id = address_list[address_id].operation_city_id;
+        $.ajax({
+            type: "GET",
+            url: "/order/order/check-coupon-code/?coupon_code=" + $("#order-order_coupon_code").val() + "&customer_phone=" + $("#order-order_customer_phone").val() + "&service_item_id=" + service_item_id + "&service_type_id=" + service_type_id + "&city_id=" + city_id,
+            dataType: "json",
+            success: function (data) {
+                if (!data) {
+                    alert('该优惠码与此次服务不匹配！');
+                } else {
+                    coupon = data
+                    $("#order-coupon_id").val(coupon.id);
+                    var order_pay_money = $("#order-order_money").val() - coupon.coupon_userinfo_price;
+                    $(".order_pay_money").text(order_pay_money.toFixed(2));
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 function getCustomerInfo(){
