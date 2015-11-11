@@ -1704,9 +1704,9 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "服务类型不能为空", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         #判断订单来源
-        if (empty($param['order_src_id'])) {
-            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
-        }
+//        if (empty($param['order_src_id'])) {
+//            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
+//        }
         #判断下单渠道不能为空
         if (empty($param['channel_id'])) {
             return $this->send(null, "下单渠道不能为空", 0, 200, null, alertMsgEnum::orderChannelFaile);
