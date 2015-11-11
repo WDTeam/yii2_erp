@@ -7,6 +7,7 @@ use boss\models\operation\OperationPlatformVersion;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationAdvertContent;
 use boss\models\operation\OperationAdvertPosition;
+use boss\models\operation\OperationAdvertRelease;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -141,6 +142,18 @@ class OperationPlatformVersionController extends BaseAuthController
     public function actionDelete($id, $platform_id)
     {
         $this->findModel($id)->delete();
+
+        //联动删除
+        OperationAdvertPosition::updateAdvertPositionStatusFromVersion($id);
+
+        //获取所有的内容编号，根据内容编号删除已发布的广告
+        $result = OperationAdvertContent::getAdvertContentFromVersion($id);
+        if ($result != false) {
+            foreach ($result as $key => $value) {
+                OperationAdvertRelease::updateAdvertReleaseStatus($value['id']);
+            }
+        }
+        OperationAdvertContent::updateAdvertContentStatusFromVersion($id);
 
         return $this->redirect(['index', 'platform_id' => $platform_id]);
     }

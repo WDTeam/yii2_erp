@@ -67,22 +67,44 @@ $this->params['breadcrumbs'][] = $this->title;
                             'view' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-eye-open"></span>', 
-                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/view','id' => $model->id]),
-                                    ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                                    Yii::$app->urlManager->createUrl([
+                                        '/operation/operation-advert-content/view',
+                                        'id' => $model->id
+                                    ]),
+                                    [
+                                        'title' => Yii::t('yii', 'View'),
+                                        'class' => 'btn btn-success btn-sm'
+                                    ]
                                 );
                             },
                             'update' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-pencil"></span>', 
-                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/update','id' => $model->id]),
-                                    ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
+                                    Yii::$app->urlManager->createUrl([
+                                        '/operation/operation-advert-content/update',
+                                        'id' => $model->id]
+                                    ),
+                                    [
+                                        'title' => Yii::t('yii', 'Update'),
+                                        'class' => 'btn btn-info btn-sm'
+                                    ]
                                 );
                             },
                             'delete' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-trash"></span>', 
-                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/delete','id' => $model->id]),
-                                    ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                                    Yii::$app->urlManager->createUrl([
+                                        '/operation/operation-advert-content/delete',
+                                        'id' => $model->id
+                                    ]),
+                                    [
+                                        'title' => Yii::t('yii', 'Delete'),
+                                        'class' => 'btn btn-danger btn-sm',
+                                        'data-pjax'=>"0",
+                                        'data-method'=>"post",
+                                        'data-confirm'=>"如果删除广告内容，将删除此内容对应的所有广告，您确定要删除此项吗？",
+                                        'aria-label'=>Yii::t('yii', 'Delete')
+                                    ]
                                 );
                             },
                         ],
