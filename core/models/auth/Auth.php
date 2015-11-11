@@ -47,16 +47,6 @@ class Auth extends \core\models\auth\AuthItem
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
-        ];
-    }
 
     public function validatePermission()
     {

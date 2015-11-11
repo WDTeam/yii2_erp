@@ -97,9 +97,9 @@ class AuthItem extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => '名称',
+            'name' => '唯一标识（创建后不可修改）',
             'type' => '类型',
-            'description' => '描述',
+            'description' => '名称',
             'rule_name' => '规则',
             'data' => '数据',
             'created_at' => 'Created At',
