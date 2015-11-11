@@ -103,13 +103,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button class="btn btn-default" id="nonDispatchId" name="nonDispatchId">无法指派</button><span style="padding:2px;">
            </div> <nobr>
         </div>
-        <div class="col-md-3"><nobr>
-           <button class="btn btn-default" id="endId" name="endId">收工啦</button><span style="padding:2px;">
-           <button class="btn btn-default" id="restEndId" name="restEndId">收工啦</button><span style="padding:2px;">
-           <button class="btn btn-default" id="restId" name="restId">小休</button><span style="padding:2px;">
-            <button class="btn btn-default" id="acceptId" name="acceptId">我要接活(<span id="rundownId" style="color:red">10</span>秒)</button><span style="padding:2px;">
-          <button class="btn btn-default" id="restAcceptId" name="restAcceptId">我要接活</button>
-        <nobr></div>
+        <div class="col-md-3">
+            <nobr>
+           <button  class="btn btn-default" id="endId" name="endId">收工啦</button><span style="padding:2px;">
+           <button  class="btn btn-default" id="restEndId" name="restEndId">收工啦</button><span style="padding:2px;">
+           <button  class="btn btn-default" id="restId" name="restId">小休</button><span style="padding:2px;">
+           <button class="btn btn-default" id="acceptId" name="acceptId">我要接活(<span id="rundownId" style="color:red">10</span>秒)</button><span style="padding:2px;">
+           <button   class="btn btn-default" id="restAcceptId" name="restAcceptId">我要接活</button>
+            <nobr>
+        </div>
     </div>
     <hr/>
 </div>

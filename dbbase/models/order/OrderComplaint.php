@@ -9,6 +9,8 @@ use dbbase\models\ActiveRecord;
  *
  * @property integer $id
  * @property integer $order_id
+ * @property string $order_code_number
+ * @property string $complaint_code_number
  * @property integer $complaint_type
  * @property integer $complaint_status
  * @property integer $complaint_channel
@@ -47,7 +49,8 @@ class OrderComplaint extends ActiveRecord
             [['order_id', 'complaint_type', 'complaint_status', 'complaint_channel', 'complaint_section', 'complaint_assortment', 'complaint_time', 'created_at', 'updated_at', 'is_softdel'], 'integer'],
             [['complaint_content'], 'string'],
             [['complaint_level'], 'string', 'max' => 2],
-            [['complaint_phone'], 'string', 'max' => 16]
+            [['complaint_phone'], 'string', 'max' => 16],
+        	[['complaint_code_number','order_code_number'], 'string', 'max' => 64]
         ];
     }
 

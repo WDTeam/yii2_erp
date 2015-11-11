@@ -33,13 +33,15 @@ class OperationServiceCardConsumeRecord extends \yii\db\ActiveRecord
         return '{{%operation_service_card_consume_record}}';
     }
     /**
-     * 保存服务卡消费记录
-     * @return bool
+     * @inheritdoc
      */
-    public function doSave(){
-        if ($this->save()) {
-            return true;
-         }
-        return false;
+    public function rules()
+    {
+        return [
+            [['customer_id', 'customer_trans_record_transaction_id', 'order_id', 'service_card_with_customer_id', 'service_card_consume_record_consume_type', 'service_card_consume_record_business_type', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['service_card_consume_record_front_money', 'service_card_consume_record_behind_money', 'service_card_consume_record_use_money'], 'number'],
+            [['order_code'], 'string', 'max' => 20],
+            [['service_card_with_customer_code'], 'string', 'max' => 64]
+        ];
     }
 }

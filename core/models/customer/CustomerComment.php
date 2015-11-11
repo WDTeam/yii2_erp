@@ -214,6 +214,8 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                     $data['updated_at'] = time();
                     $data['created_at'] = time();
                     $data['is_softdel'] = 1;
+                    //流水号
+                    $data['order_code'] ='06'.time();
                     //提交给投诉接口
                     $OrderComplaintinfo=new OrderComplaint;
                     $OrderComplaintinfo->appModel($data);

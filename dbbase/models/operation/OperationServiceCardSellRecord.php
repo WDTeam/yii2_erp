@@ -10,7 +10,7 @@ namespace dbbase\models\operation;
  * @property string $service_card_sell_record_code
  * @property string $customer_id
  * @property integer $customer_phone
- * @property string $service_card_info_card_id
+ * @property string $service_card_info_id
  * @property string $service_card_info_name
  * @property string $service_card_sell_record_money
  * @property integer $service_card_sell_record_channel_id
@@ -50,18 +50,7 @@ class OperationServiceCardSellRecord extends \yii\db\ActiveRecord
         return '{{%operation_service_card_sell_record}}';
     }
 
-    /**
-     * 保存服务卡销售记录
-     * @return bool
-     */
-    public function doSave(){
-        if ($this->save()) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
+       /**
      * @introduction 基于购卡订单号更记录
      */
     public function updateByCode($code){

@@ -4,7 +4,7 @@ use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
-use \core\models\operation\OperationAdvertContent;
+use core\models\operation\OperationAdvertRelease;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
 use \core\models\order\OrderStatusDict;
@@ -118,7 +118,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version app版本【ios_user4.4】
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -198,8 +198,19 @@ class ConfigureController extends \restapi\components\Controller
     public function actionUserInit()
     {
         $param = Yii::$app->request->get();
-        if(!isset($param['city_name'])||!intval($param['city_name'])){
+        if(!isset($param['city_name'])||!$param['city_name']){
             $param['city_name'] = "北京市";
+        }
+        if(!isset($param['platform_version'])||!$param['platform_version']){
+            return $this->send(null, 'app版本参数错误',0,200,null,alertMsgEnum::getUserInitFailed);
+        }
+        //判断来源版
+        $platform_name = "ios";
+        $platform_version_name = "4.0";
+        if(isset($param['platform_version'])&&$param['platform_version']){
+            $platform = explode("_",$param['platform_version']);
+            $platform_name = $platform[0];
+            $platform_version_name = $platform[1];
         }
         //判断token是否有效
         $isEffect="0";
@@ -210,6 +221,8 @@ class ConfigureController extends \restapi\components\Controller
         try{
             $onlineCitys = OperationCity::getOnlineCitys();
             $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
+            //获取banner图
+            $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'],$platform_name,$platform_version_name);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
         }
@@ -227,9 +240,18 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
             $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
             $serviceCategoryList[$key]['category_url'] = 'http://www.baidu.com';
-            $serviceCategoryList[$key]['colour'] = 'ffffff';
+            $serviceCategoryList[$key]['colour'] = 'FFCC00';
             $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
-            
+        }
+        
+        //整理焦点图
+        $pic_list = array();
+        if(!isset($bannerList['code'])&&!empty($bannerList)){
+            foreach($bannerList as $key=>$val){
+                $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+                $pic_list[$key]["link"] = $val['operation_advert_url'];
+                $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+            }
         }
         //页首链接
         $header_link = [
@@ -293,7 +315,80 @@ class ConfigureController extends \restapi\components\Controller
         ];
         return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
     }
-
+     /**
+     * @api {GET} /configure/get-service-item [GET] /configure/get-service-item （0%）
+     * @apiDescription 根据城市名称和服务类型获取对应的服务品类 (田玉星)
+     * @apiName actionGetServiceItem
+     * @apiGroup configure
+     * @apiParam {String} city_name 城市名称
+     * @apiParam {String} category_id 服务类型
+     * @apiParam {String} [platform_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *      "code": 1,
+     *      "msg": "获取数据成功",
+     *      "alertMsg": "获取服务类型详情成功",
+     *       "ret": [
+     *             "colour": "dfffrf",
+     *             "category_ico": "",
+     *             "item_list": [
+     *                 {
+     *                     "category_id": "分类ID",
+     *                     "order_service_item_id": "商品ID",
+     *                     "order_service_item_name": "商品名称",
+     *                     "icon": "商品图标",
+     *                     "service_item_price": "商品价格",
+     *                     "service_item_price_description": "商品价格描述"
+     *                 }
+     *       ]
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "code": 0,
+     *       "msg": "城市名称参数错误",
+     *       "ret": {},
+     *       "alertMsg": "获取服务类型详情失败"
+     *   }
+     *
+     */
+    public function  actionGetServiceItem(){
+        $param = Yii::$app->request->get();
+        if(!isset($param['city_name'])||!$param['city_name']){
+             return $this->send(null, '城市名称参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
+        }
+        if(!isset($param['category_id'])||!$param['category_id']){
+            return $this->send(null, '服务类型参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
+        }
+        try{
+            $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'],intval($param['category_id']));
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
+        }
+        $itemlist = array();
+        if($itemInfo){
+            foreach($itemInfo as $key=>$val){
+                $itemlist[$key]['category_id'] = $val['operation_category_id'];
+                $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
+                $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
+                $itemlist[$key]['icon'] = '';//$val['operation_goods_pc_ico'];
+                $itemlist[$key]['service_item_price'] = $val['operation_goods_price'];
+                $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
+            }
+        }
+        $ret = [
+            'colour'=>'dfffrf',
+            'category_ico'=>"",
+            'item_list' =>$itemlist
+        ];
+        return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
+    }
+    
+    
+    
     /**
      * @api {GET} /configure/worker-check-update [GET] /configure/worker-check-update （0%）
      * @apiDescription 检查阿姨端版本更新 (赵顺利)

@@ -2,7 +2,7 @@
 
 namespace core\models\payment;
 
-use core\models\finance\FinancePayChannel;
+use core\models\operation\OperationPayChannel;
 use core\models\operation\OperationServiceCardSellRecord;
 use core\models\order\Order;
 use core\models\order\OrderOtherDict;
@@ -17,6 +17,7 @@ use yii\base\Exception;
 class Payment extends \dbbase\models\payment\Payment
 {
 
+    const PAYMENT_CODE = '01';
     /**
      * @inheritdoc
      */
@@ -183,7 +184,7 @@ class Payment extends \dbbase\models\payment\Payment
 
         //获取渠道ID和名称
         $data['payment_channel_id'] = self::getParamsToPayChannel($data['payment_source']);
-        $data['payment_channel_name'] = FinancePayChannel::getPayChannelByName($data['payment_channel_id']);
+        $data['payment_channel_name'] = OperationPayChannel::get_post_name($data['payment_channel_id']);
 
         //使用场景
         $model->scenario = $scenario;
@@ -330,27 +331,16 @@ class Payment extends \dbbase\models\payment\Payment
      * 01 正常订单 02 退款 03 赔付
      * @return bool|string 订单号
      */
-    public function createOutTradeNo($type=1, $channel='00', $order_id=0)
+    public function createOutTradeNo($channel='00', $order_id=0)
     {
         $id = empty($this->id) ?  $order_id : $this->id;
         if( empty($id) ) return false;
-        switch($type)
-        {
-            case 1 :
-                $transType = '01';
-                break;
-            case 2 :
-                $transType = '02';
-                break;
-            case 3 :
-                $transType = '03';
-                break;
-        }
+
         //组装支付订单号
-        $rand = mt_rand(1000,9999);
+        $rand = mt_rand(100,999);
         $date = date("ymd",time());
         //生成商户订单号
-        $payment_eo_order_id = $date.$transType.$channel.$rand.$id;
+        $payment_eo_order_id = self::PAYMENT_CODE.$date.$channel.$rand.$id;
         //查询当前ID的数据是否存在
         $model = Payment::findOne($id);
         $model->setAttribute('payment_eo_order_id',$payment_eo_order_id);
@@ -395,7 +385,7 @@ class Payment extends \dbbase\models\payment\Payment
     {
         $param = [
             "body"	=> $this->body(),
-            "out_trade_no"	=> $this->createOutTradeNo(1,'01'),
+            "out_trade_no"	=> $this->createOutTradeNo('01'),
             "payment_money"	=> $this->toMoney($this->payment_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
@@ -415,7 +405,7 @@ class Payment extends \dbbase\models\payment\Payment
     {
         $param = [
             "body"	=> $this->body(),
-            "out_trade_no"	=> $this->createOutTradeNo(1,'02'),
+            "out_trade_no"	=> $this->createOutTradeNo('02'),
             "payment_money"	=> $this->toMoney($this->payment_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
@@ -436,7 +426,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function bfbApp($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'03'),
+            'out_trade_no'=>$this->createOutTradeNo('03'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'payment_money'=>$this->toMoney($this->payment_money,100,'*',0),
@@ -454,7 +444,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function upApp($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'04'),
+            'out_trade_no'=>$this->createOutTradeNo('04'),
             'subject'=>$this->subject(),
             'payment_money'=>$this->toMoney($this->payment_money,100,'*',0),
             'notify_url'=>$this->notifyUrl('up-app'),
@@ -470,7 +460,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function alipayApp($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'05'),
+            'out_trade_no'=>$this->createOutTradeNo('05'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'payment_money'=>$this->payment_money,
@@ -492,7 +482,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function alipayWeb($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'06'),
+            'out_trade_no'=>$this->createOutTradeNo('06'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'total_fee'=>$this->payment_money,
@@ -511,7 +501,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function zhidahaoH5($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'07'),
+            'out_trade_no'=>$this->createOutTradeNo('07'),
             'goods_name'=>$data['goods_name'],
             'payment_money'=>$this->toMoney($this->payment_money,100,'*',0),
             'detail' => $data['detail'],
@@ -545,7 +535,7 @@ class Payment extends \dbbase\models\payment\Payment
     {
         $param = [
             "body"	=> $this->body(),
-            "out_trade_no"	=> $this->createOutTradeNo(1,'22'),
+            "out_trade_no"	=> $this->createOutTradeNo('22'),
             "payment_money"	=> $this->toMoney($this->payment_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
@@ -564,7 +554,7 @@ class Payment extends \dbbase\models\payment\Payment
     private function alipayWap($data)
     {
         $param = [
-            'out_trade_no'=>$this->createOutTradeNo(1,'24'),
+            'out_trade_no'=>$this->createOutTradeNo('24'),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'total_fee'=>$this->payment_money,
@@ -725,7 +715,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 6,  //支付渠道ID
+            'pay_channel_id' => 7,  //支付渠道ID
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -826,30 +816,29 @@ class Payment extends \dbbase\models\payment\Payment
             ];
 
             $_POST = [
-                "payment_type"=> "1",
-                "subject"=> "e家洁在线支付",
-                "trade_no"=> "2015110900001000440071876428",
-                "buyer_email"=> "xihuange@126.com",
-                "gmt_create"=> "2015-11-09 00:59:27",
-                "notify_type"=> "trade_status_sync",
-                "quantity"=> "1",
-                "out_trade_no"=> "1511090135473",
-                "seller_id"=> "2088801136967007",
-                "notify_time"=> "2015-11-09 01:13:02",
-                "body"=> "e家洁在线支付0.02元",
-                "trade_status"=> "TRADE_SUCCESS",
-                "is_total_fee_adjust"=> "N",
-                "total_fee"=> "0.02",
-                "gmt_payment"=> "2015-11-09 00:59:28",
-                "seller_email"=> "47632990@qq.com",
-                "price"=> "0.02",
-                "buyer_id"=> "2088102035089446",
-                "notify_id"=> "aade9f6f4bddbbfde2e9243e88a3101c4g",
-                "use_coupon"=> "N",
-                "sign_type"=> "RSA",
-                "sign"=> "iAqB1XSFY7mlpuK9zjwW3zXSro+2HWKWG2h638ukP5lvAMa8+qZ/Fqqe6PQ7q0ktX7BPSgvGpaBAwhE/kK25hcaMniZRPyg/mBvmzuS+W2LXd8Zgj47R9hzWNKqX3RBaXtdnwbH06UXiG8wcUoxJSFPRCiLL2AozDw71Ya+aiZU="
-            ];
-
+                "payment_type" => "1",
+                "subject" => "e家洁在线支付",
+                "trade_no" => "2015111113610216",
+                "buyer_email" => "lsqpy@163.com",
+                "gmt_create" => "2015-11-11 01:48:23",
+                "notify_type" => "trade_status_sync",
+                "quantity" => "1",
+                "out_trade_no" => "01151111248892",
+                "seller_id" => "2088801136967007",
+                "notify_time" => "2015-11-11 01:48:24",
+                "body" => "e家洁在线支付0.02元",
+                "trade_status" => "TRADE_SUCCESS",
+                "is_total_fee_adjust" => "N",
+                "total_fee" => "0.02",
+                "gmt_payment" => "2015-11-11 01:48:24",
+                "seller_email" => "47632990@qq.com",
+                "price" => "0.02",
+                "buyer_id" => "2088002074138164",
+                "notify_id" => "7244a8092277558114920607f2b1ab662w",
+                "use_coupon" => "N",
+                "sign_type" => "RSA",
+                "sign" => "KRfYhMMmYf5t2eE0lsLZylhFLNI1WiE8w+NkLyktUS/tq/PTbdGbfXIcshGnMCQERrfVIerXqmh7+0v5XyHISs9nl4m/7v1TyyTy/ACOlUVoBeidZve5GRRb1kaERIBDuWCtETAPliTzO8YqIE2FheQJdiHWvIXAxVHN1Lo1X9A="
+             ];
             $post = $_POST;
         }else{
             $post = yii::$app->request->post();
@@ -1372,7 +1361,7 @@ class Payment extends \dbbase\models\payment\Payment
      */
     public function getPaymentId($out_trade_no)
     {
-        return substr($out_trade_no,14);
+        return substr($out_trade_no,13);
     }
 
     /**
@@ -1448,7 +1437,7 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 4:
                 //退款
-                PaymentCustomerTransRecord::refundRecord($attribute['order_id'], 'order_refund',1,$attribute['payment_data']);
+                PaymentCustomerTransRecord::refundRecord($attribute['order_id'], 'order_refund',1);
                 break;
         }
         //支付充值
@@ -1462,27 +1451,20 @@ class Payment extends \dbbase\models\payment\Payment
      */
     public static function orderRefund($order_id, $customer_id)
     {
+        $model = new Payment();
         //获取订单信息
         $orderInfo = OrderSearch::getOrderInfo($order_id);
         $orderInfo = current($orderInfo);
-        //执行自有退款
-        if( empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] < 0 )
-        {
 
-            if( !empty($orderInfo['order_use_acc_balance']) && $orderInfo['order_use_acc_balance'] > 0 )
-            {
-                //余额支付退款
-                //Customer::incBalance($customer_id,$orderInfo['order_use_acc_balance']);
-                self::paymentTransRecord(['order_id'=>$order_id,'payment_type'=>4]);
-            }
-            elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
-            {
-                //服务卡支付退款
-                //TODO::调用服务卡退款
-                //self::paymentTransRecord(['order_id'=>$order_id]);
-            }
+        //在交易记录验证是否已经退款过
+        $transRecord = new paymentCustomerTransRecord();
+        $transRecordData = $transRecord->find()->where(['order_id'=>$order_id, 'customer_id'=>$customer_id, 'payment_customer_trans_record_mode'=>3])->one();
+        if( !empty($transRecordData) )
+        {
+            return ['status'=>0,'info'=>'已经退款过','data'=>''];
         }
-        elseif( !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
+
+        if( $orderInfo['order_pay_type'] == 2 && !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
         {
             $connection  = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
@@ -1502,7 +1484,7 @@ class Payment extends \dbbase\models\payment\Payment
                 }
 
                 //线上退款,创建一条线上退款记录,状态未确认
-                $model = new Payment();
+
                 $model->scenario = 'refund';
                 $model->setAttributes([
                     'customer_id' => $customer_id,
@@ -1519,7 +1501,7 @@ class Payment extends \dbbase\models\payment\Payment
                     'payment_type' => 4,    //退款类型
                     'admin_id' => Yii::$app->user->id,
                     'payment_admin_name' => Yii::$app->user->identity->username,
-                    'payment_eo_order_id'=>$model->createOutTradeNo(2,'00',$order_id),
+                    'payment_eo_order_id'=>$model->createOutTradeNo('00',$order_id),
                     'payment_verify' => $model->sign(),
                 ]);
 
@@ -1538,6 +1520,22 @@ class Payment extends \dbbase\models\payment\Payment
                 return ['status'=>0,'info'=>'数据异常状态','data'=>''];
             }
         }
+        else
+        {
+            //执行自有退款
+            if( !empty($orderInfo['order_use_acc_balance']) && $orderInfo['order_use_acc_balance'] > 0 )
+            {
+                //余额支付退款
+                $model->paymentTransRecord(['customer_id'=>$customer_id, 'order_id'=>$order_id,'payment_type'=>4]);
+            }
+            elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
+            {
+                //服务卡支付退款
+                //TODO::调用服务卡退款
+                //self::paymentTransRecord(['order_id'=>$order_id]);
+            }
+        }
+
         return ['status'=>0,'info'=>'未找到订单数据','data'=>''];
     }
 

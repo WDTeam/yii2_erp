@@ -12,6 +12,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\OperationSelectedService;
 use \core\models\customer\CustomerAddress;
 use \restapi\models\alertMsgEnum;
+use \restapi\models\EjjEncryption;
 
 
 class ServiceController extends \restapi\components\Controller
@@ -119,6 +120,21 @@ class ServiceController extends \restapi\components\Controller
      */
     public function actionServiceItems()
     {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //pop访问时可以不用输入access_token（用本身的验证加密方法）
+        $apiPopKey = Yii::$app->params["apiPopKey"];
+        $apiSecretKey= Yii::$app->params["apiSecretKey"];
+        $sign=  isset($param["sign"])?$param["sign"]:"";
+        $nonce =  isset($param["nonce"])?$param["nonce"]:"";
+        $arrParams = array();
+        $arrParams["sign"]=$sign; 
+        $arrParams["nonce"]=$nonce; 
+        $arrParams["api_key"]=$apiPopKey; 
+        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+        $bolCheck = $objSign->checkSignature($arrParams);
+        if(!$bolCheck){
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+        }
         $categories = OperationCategory::getAllCategory();
         $gDate = [];
         if (!empty($categories)) {
@@ -620,8 +636,27 @@ class ServiceController extends \restapi\components\Controller
     function actionSingleServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //pop访问时可以不用输入access_token（用本身的验证加密方法）
+        $apiPopKey = Yii::$app->params["apiPopKey"];
+        $apiSecretKey= Yii::$app->params["apiSecretKey"];
+        $sign=  isset($param["sign"])?$param["sign"]:"";
+        $nonce =  isset($param["nonce"])?$param["nonce"]:"";
+        $arrParams = array();
+        $arrParams["sign"]=$sign; 
+        $arrParams["nonce"]=$nonce; 
+        $arrParams["api_key"]=$apiPopKey; 
+        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+        $bolCheck = $objSign->checkSignature($arrParams);
+//        var_dump($bolCheck);die;
+         //生成加密
+//        $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
+//        $arrParams = $objSign->signature($arrParams);
+//        var_dump($arrParams);die;
+        
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+            if(!$bolCheck){
+                return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+            }
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
             return $this->send(null, "请填写服务地址或服务时长", 0, 403,null,alertMsgEnum::singleServiceTimeDataDefect);
@@ -913,9 +948,11 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiParam {String} query 查询关键字
      * @apiParam {String} location 经纬度
-     * @apiParam {String} radius 半径
+     * @apiParam {Number} radius 半径
      * @apiParam {String} output 输出方式
      * @apiParam {String} ak
+     * @apiParam {Number} page_size 每页条数
+     * @apiParam {Number} page_num 页数  允许为0
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/service/baidu-map
      *
      * @apiSuccessExample Success-Response:
@@ -940,17 +977,86 @@ class ServiceController extends \restapi\components\Controller
         $params = Yii::$app->request->get();
 
         $path = "http://api.map.baidu.com/place/v2/search";
-        if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius']) || empty($params['output']) || empty($params['ak'])) {
+        if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius'])
+            || empty($params['output']) || empty($params['ak'])|| empty($params['page_size']) || is_null($params['page_num']))
+        {
             return $this->send(null, '参数不完成', '0', '403',null,alertMsgEnum::baiduMapFailed);
         }
         $url = "http://api.map.baidu.com/place/v2/search?query=" . $params['query'] . '&location=' . $params['location'] .
-            '&radius=' . $params['radius'] . '&output=' . $params['output'] . '&ak=' . $params['ak'];
+            '&radius=' . $params['radius'] . '&output=' . $params['output'] . '&ak=' . $params['ak']
+            . '&page_size=' . $params['page_size'] . '&page_num=' . $params['page_num'];
 
         $date = file_get_contents($url);
 
         return $this->send(json_decode($date), '操作成功', '0', '200',null,alertMsgEnum::baiduMapSuccess);
 
     }
+    
+    /**
+     * @api {GET} /service/get-shop-district-info [GET] /service/get-shop-district-info（100%）
+     * 
+     * @apiDescription 根据经纬度获取商圈信息（李勇）
+     * @apiGroup service
+     * @apiName actionGetShopDistrictInfo
+     *
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *   {
+     *       "code": 1,
+     *       "msg": "获取商圈信息成功",
+     *       "ret": {
+     *           "id": "1",
+     *           "operation_shop_district_id": "商圈id",
+     *           "operation_shop_district_name": "商圈名称",
+     *           "operation_city_id": "城市编号",
+     *           "operation_city_name": "城市名称",
+     *           "operation_area_id": "区域id",
+     *           "operation_area_name": "区域名称"
+     *       },
+     *       "alertMsg": "获取商圈信息成功"
+     *   }
+     *
+     * @apiError queryNotSupportFound 获取商圈信息失败
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *   {
+     *       "code": 0,
+     *       "msg": "商圈不存在",
+     *       "ret": {},
+     *       "alertMsg": "商圈不存在"
+     *   }
+     */
+     public function actionGetShopDistrictInfo()
+    {
+       $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
+        }
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude']){
+            return $this->send(null, "请填写服务地址", 0, 403,null,alertMsgEnum::serverWorkerListNoAddress);
+        }
+        $longitude = $param['longitude'];
+        $latitude = $param['latitude'];
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        $customer_id = $customer->id;
+        //根据经纬度获取商圈id
+        try{
+            $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200,null,alertMsgEnum::bossError);
+        }
+        if (empty($ShopDistrictInfo)) {
+            return $this->send(null, "商圈不存在", 0, 403,null,alertMsgEnum::getShopDistrictInfoFail);
+        } else {
+           return $this->send($ShopDistrictInfo, "获取商圈信息成功",1, 200,null,alertMsgEnum::getShopDistrictInfoSuccess);
+        }
+    }
+    
 }
 
 ?>

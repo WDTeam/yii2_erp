@@ -5,6 +5,7 @@ namespace core\models\order;
 use dbbase\models\order\OrderExtCustomer;
 use core\models\customer\Customer;
 
+use dbbase\models\order\OrderStatusDict;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -296,7 +297,7 @@ class OrderSearch extends Order
      * @param $booked_end_time
      * @return int
      */
-    public static function WorkerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
+    public static function workerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
         $count = Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
             ->andWhere(
@@ -320,6 +321,21 @@ class OrderSearch extends Order
 
             )->count();
         return $count;
+    }
+
+    /**
+     * 获取客户待支付订单数量
+     * @param $customer_phone
+     * @return int|string
+     */
+    public static function customerWaitPayOrderCount($customer_phone)
+    {
+        return Order::find()->joinWith(['orderExtCustomer','orderExtStatus'])
+            ->where([
+                'order_customer_phone'=>$customer_phone,
+                'order_status_dict_id'=>OrderStatusDict::ORDER_INIT,
+                'order_service_item_name'=>Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS']
+        ])->count();
     }
 
     /**

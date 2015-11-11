@@ -129,7 +129,7 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-       if($checkResult['workerInfo']['worker_identity_id']!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
+       if($checkResult['workerInfo']['worker_identity_id']==2) return $this->send(null, "兼职阿姨不可以请假", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         //判断数据完整
         if(!isset($param['leave_type']) || !$param['leave_type']|| !in_array($param['leave_type'], array(1, 2))){
             return $this->send(null, "请假类型不正确", 0, 403,null,alertMsgEnum::workerApplyLeaveTypeFailed);

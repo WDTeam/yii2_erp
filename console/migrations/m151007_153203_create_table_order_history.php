@@ -39,7 +39,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_urgent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'加急\'',
             'order_flag_exception' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'异常 1无经纬度\'',
             'order_flag_sys_assign' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 1 COMMENT \'是否需要系统指派 1是 0否\'',
-            'order_flag_lock' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否锁定 1锁定 0未锁定\'',
+            'order_flag_lock' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'是否锁定 0未锁定\'',
             'order_flag_lock_time' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'加锁时间\'',
             'order_flag_worker_sms' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了短信\'',
             'order_flag_worker_jpush' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了极光推送\'',
@@ -96,6 +96,7 @@ class m151007_153203_create_table_order_history extends Migration
             'card_id' => Schema::TYPE_INTEGER . '(11) unsigned  DEFAULT 0 COMMENT \'服务卡ID\'',
             'order_use_card_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用服务卡金额\'',
             'coupon_id' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'优惠券ID\'',
+            'order_coupon_code' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'优惠码\'',
             'order_use_coupon_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用优惠卷金额\'',
             'promotion_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'促销id\'',
             'order_use_promotion_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用促销金额\'',
@@ -110,6 +111,7 @@ class m151007_153203_create_table_order_history extends Migration
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人所属门店id\'',
             'order_worker_shop_name' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'工人所属门店名称\'',
             'order_worker_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'阿姨备注\'',
+            'order_worker_assign_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'接单时间\'',
 
 //===========================对账信息
             'checking_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'对账id\'',

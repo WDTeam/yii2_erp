@@ -2,6 +2,7 @@
 
 namespace boss\models\order;
 
+use core\models\order\OrderStatusDict;
 use Yii;
 use yii\data\ActiveDataProvider;
 use boss\models\worker\Worker;
@@ -14,6 +15,8 @@ class OrderSearchIndex extends Order
 {
     public $created_from;
     public $created_to;
+    public $assign_from;
+    public $assign_to;
     public $booked_from;
     public $booked_to;
     
@@ -42,7 +45,11 @@ class OrderSearchIndex extends Order
     
     public function search($params)
     {
-        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])->orderBy(['id'=>SORT_DESC]);
+        $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])
+            ->orderBy(['id'=>SORT_DESC]);
+        if(!empty(Yii::$app->user->identity->shopIds)){
+            $query->where(['orderExtWorker.shop_id'=>Yii::$app->user->identity->shopIds]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //             'pagination' => [
@@ -76,10 +83,11 @@ class OrderSearchIndex extends Order
             'order_pop_order_code' => $this->order_pop_order_code,
             'order_customer_phone' => $this->order_customer_phone,
             //'order_worker_phone' => $this->order_worker_phone,
-            'shop_id' => $this->shop_id,
+            'orderExtWorker.shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
             'order_status_dict_id' => $this->order_status_dict_id,
+            'order_worker_assign_type' => $this->order_worker_assign_type==1?[1,2]:[3,4],
         ]);
         
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
@@ -96,6 +104,12 @@ class OrderSearchIndex extends Order
         if (!empty($this->created_to))
             $query->andFilterWhere(['<=', Order::tableName().'.created_at', strtotime($this->created_to)]);
         
+        if (!empty($this->assign_from))
+            $query->andFilterWhere(['>=', Order::tableName().'.order_worker_assign_time', strtotime($this->assign_from)]);
+
+        if (!empty($this->assign_to))
+            $query->andFilterWhere(['<=', Order::tableName().'.order_worker_assign_time', strtotime($this->assign_to)]);
+
         if (!empty($this->booked_from))
             $query->andFilterWhere(['>=', 'order_booked_begin_time', strtotime($this->booked_from)]);
         
@@ -118,6 +132,10 @@ class OrderSearchIndex extends Order
         {
             $statussList = explode('-', $this->statuss);
             if (!empty($statussList)) {
+                if(in_array(OrderStatusDict::ORDER_WORKER_BIND_ORDER,$statussList)){
+                    $statussList[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
+                    $statussList[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
+                }
                 $query->andWhere(['in', 'order_status_dict_id', $statussList]);
             }
         }
@@ -141,5 +159,5 @@ class OrderSearchIndex extends Order
         
         return $dataProvider;
     }
-    
+
 }

@@ -99,8 +99,9 @@ $(document).on("click",".cancel_address_btn",function(){
             + v.operation_city_name + ' '
             + v.operation_area_name + ' '
             + v.customer_address_detail + ' '
-            + v.customer_address_nickname + ' '
-            + v.customer_address_phone + '</label>' +
+            //+ v.customer_address_nickname + ' '
+            //+ v.customer_address_phone
+            + '</label>' +
             '<label class="col-sm-4" style="color: #FF0000;">' +
             (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
             '</label>' +
@@ -150,8 +151,9 @@ $(document).on("click",".save_address_btn",function(){
                     + v.operation_city_name + ' '
                     + v.operation_area_name + ' '
                     + v.customer_address_detail + ' '
-                    + v.customer_address_nickname + ' '
-                    + v.customer_address_phone + '</label>' +
+                    //+ v.customer_address_nickname + ' '
+                    //+ v.customer_address_phone
+                    + '</label>' +
                     '<label class="col-sm-4" style="color: #FF0000;">' +
                     (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
                     '</label>' +
@@ -356,8 +358,9 @@ function getCustomerInfo(){
                                         + v.operation_city_name + ' '
                                         + v.operation_area_name + ' '
                                         + v.customer_address_detail + ' '
-                                        + v.customer_address_nickname + ' '
-                                        + v.customer_address_phone + '</label>' +
+                                        //+ v.customer_address_nickname + ' '
+                                        //+ v.customer_address_phone
+                                        + '</label>' +
                                         '<label class="col-sm-4" style="color: #FF0000;">' +
                                         (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可下单') +
                                         '</label>' +

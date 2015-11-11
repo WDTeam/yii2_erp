@@ -36,7 +36,7 @@ class m150919_092739_create_table_worker extends Migration
             'worker_rule_id' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  1 COMMENT \'阿姨角色id \'',
             'worker_identity_id' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  1 COMMENT \'阿姨身份id \'',
             'worker_is_block' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否封号 0正常1封号\'',
-            'worker_is_vacation' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否请假 0正常1请假中\'',
+            'worker_is_vacation' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否请假 0正常1请事假中2请休假中\'',
             'worker_is_blacklist' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否黑名单 0正常1黑名单\'',
             'worker_blacklist_reason' => Schema::TYPE_STRING  . '(255) DEFAULT  NULL COMMENT \'阿姨被加入黑名单的原因\'',
             'worker_blacklist_time' => Schema::TYPE_INTEGER . '(10) NOT NULL  DEFAULT  0 COMMENT \'阿姨加入黑名单的原因\'',

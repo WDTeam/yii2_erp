@@ -280,10 +280,10 @@ echo Menu::widget([
                                 'operation/operation-city/opencity'
                             ],
                             'icon' => 'fa fa-angle-right'
-                        ]
-                        
-                    ]
-                ],
+                        ],
+    		
+    		]
+    		],
                 [
                     'label' => 'CMS管理',
                     'url' => [
@@ -337,21 +337,6 @@ echo Menu::widget([
                     ],
                     'items' => [
                         [
-                            'label' => '优惠券规则管理',
-                            'url' => [
-                                'operation/coupon/coupon/index'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
-                        [
-                            'label' => '优惠券用户管理',
-                            'url' => [
-                                'operation/coupon/coupon/create'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
-                        
-                        [
                             'label' => '规则管理',
                             'url' => [
                                 'operation/coupon/coupon-rule/index'
@@ -382,6 +367,38 @@ echo Menu::widget([
                     ],
                     'icon' => 'fa fa-angle-right'
                 ],
+
+    		
+    		 [
+    		'label' => '渠道管理',
+    		'url' => [
+    		'#'
+    				],
+    				'icon' => 'fa fa-angle-right',
+    				'options' => [
+    				'class' => 'treeview '
+    						],
+    						'items' => [
+    						[
+    						'label' => '订单渠道管理',
+    						'url' => [
+    						'operation/operation-order-channel'
+    								],
+    								'icon' => 'fa fa-angle-right'
+    										],
+    										[
+    										'label' => '支付渠道管理',
+    										'url' => [
+    										'operation/operation-pay-channel'
+    												],
+    												'icon' => 'fa fa-angle-right'
+    														]
+    														]
+    														], 
+    		
+    		
+    		
+    		
                 [
                     'label' => '服务卡管理',
                     'url' => [
@@ -422,9 +439,14 @@ echo Menu::widget([
                         ]
                     ]
                     
-                ]
-            ]
+                ],
+    		
+    		
+        ]
         ],
+    		
+    		
+    		
         [
             'label' => '财务管理',
             'url' => [
@@ -446,13 +468,6 @@ echo Menu::widget([
                         'class' => 'treeview '
                     ],
                     'items' => [
-                        [
-                            'label' => '渠道管理',
-                            'url' => [
-                                'finance/finance-pay-channel/index'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
                         [
                             'label' => '配置对账表头',
                             'url' => [

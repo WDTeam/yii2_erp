@@ -7,8 +7,8 @@ use yii\helpers\Html;
  * @var dbbase\models\FinanceHeader $model
  */
 
-$this->title = Yii::t('boss', ' {modelClass}', [
-    'modelClass' => '添加表头',
+$this->title = Yii::t('boss', '添加', [
+    'modelClass' => '表头',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '配置对账表头'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

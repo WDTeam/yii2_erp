@@ -22,10 +22,10 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
-//         'mongodb' => [
-//             'class' => '\yii\mongodb\Connection',
-//             'dsn' => 'mongodb://101.200.179.70:27017/boss_dev',
-//         ],
+         'mongodb' => [
+             'class' => '\yii\mongodb\Connection',
+             'dsn' => 'mongodb://101.200.179.70:27017/boss_dev',
+         ],
         /**
          * 极光推送,默认为开发环境配置
          */
@@ -262,6 +262,9 @@ return [
             'ORDER_BOOKED_WORKER_ASSIGN_TIME' => 900,
             'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME' => 300,
             'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME' => 900,
+            'USE_ORDER_FLOW_SERVICE_ITEMS'=>[
+                '家庭保洁'
+            ]
         ],
         'uploadpath' => true, //true上传到七牛 false 上传的本地
         'worker_base_salary' => 3000,//阿姨的底薪
