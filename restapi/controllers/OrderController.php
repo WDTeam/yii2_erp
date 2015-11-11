@@ -181,7 +181,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} channel_id 订单来源【值待定】
+     * @apiParam {String} channel_id 订单来源【1Android(版本号) 2.ios（版本号）3.Pcweb 4.H5 】
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 '1443695400'
      * @apiParam {String} address 服务地址
      * @apiParam {String} city_name 城市名称
@@ -269,7 +269,6 @@ class OrderController extends \restapi\components\Controller
       //  $attributes['order_customer_memo'] = ""; //客户备注
        // $attributes['order_is_use_balance'] = 0; //客户选择使用余额则去获取客户余额
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
-
         //创建订单
         try {
             $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
