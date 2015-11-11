@@ -125,6 +125,9 @@ class Order extends OrderModel
     const ADMIN_SYSTEM = 1;
     const ADMIN_CUSTOMER = 2;
     const ADMIN_WORKER = 3;
+
+    const ORDER_PAY_CHANNEL_CASH = 2;
+    const ORDER_PAY_CHANNEL_POP = 9;
     /**
      * 创建新订单
      * @param $attributes [
@@ -852,7 +855,7 @@ class Order extends OrderModel
             }
         }
 
-        if(!empty($this->pay_channel_id)) {
+        if(!empty($this->pay_channel_id) && in_array($this->pay_channel_id,[self::ORDER_PAY_CHANNEL_POP,self::ORDER_PAY_CHANNEL_CASH])) {
             $pay_channel_name = $this->getPayChannelName($this->pay_channel_id);
             if(empty($pay_channel_name)){
                 $this->addError('order_pay_channel_name', '获取支付渠道信息失败！');
@@ -868,10 +871,10 @@ class Order extends OrderModel
                 'order_pay_channel_type_name' => $pay_channel_type['name'],
                 'order_pay_channel_type_id' => $pay_channel_type['id'],
             ]);
-            if ($this->pay_channel_id == 9) { //TODO 第三方预付
+            if ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_POP) { //TODO 第三方预付
                 $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
                 $this->order_pay_money -= $this->order_money;
-            } elseif ($this->pay_channel_id == 2) {//TODO 现金支付
+            } elseif ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {//TODO 现金支付
                 if (!empty($this->coupon_id)) {//是否使用了优惠券
                     $coupon = self::getCouponById($this->coupon_id);
                     if (!empty($coupon)) {
