@@ -140,7 +140,7 @@ class Order extends OrderModel
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
-     *  int $pay_channel_id 支付渠道类别id
+     *  int $pay_channel_id 支付渠道id
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
@@ -209,8 +209,7 @@ class Order extends OrderModel
         }
 
         if ($this->_create($attributes,null,$customer_balance)) {
-            //交易记录1,现金支付,3第三支付,无需线上支付
-            if( $this->order_pay_money == 0 ){
+            if( $this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id==self::ORDER_PAY_CHANNEL_CASH ){
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
                     $order_model = OrderSearch::getOne($this->id);
                     $order_model->admin_id = $attributes['admin_id'];
@@ -359,7 +358,7 @@ class Order extends OrderModel
 
         $transact->commit();
 
-        if( $orderExtPay == 0)
+        if( $orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id']==self::ORDER_PAY_CHANNEL_CASH)
         {
             //交易记录
             if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay',2)) {
@@ -874,7 +873,17 @@ class Order extends OrderModel
             if ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_POP) { //TODO 第三方预付
                 $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
                 $this->order_pay_money -= $this->order_money;
+                $this->setAttributes([
+                    'order_pay_channel_name' => '第三方团购预收',
+                    'order_pay_channel_type_name' => '第三方团购',
+                    'order_pay_channel_type_id' => 3,
+                ]);
             } elseif ($this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {//TODO 现金支付
+                $this->setAttributes([
+                    'order_pay_channel_name' => '现金支付',
+                    'order_pay_channel_type_name' => 'e家洁',
+                    'order_pay_channel_type_id' => 2,
+                ]);
                 if (!empty($this->coupon_id)) {//是否使用了优惠券
                     $coupon = self::getCouponById($this->coupon_id);
                     if (!empty($coupon)) {
@@ -920,7 +929,7 @@ class Order extends OrderModel
                 $this->setAttributes([
                     'order_pay_channel_id' => 20,
                     'order_pay_channel_name' => '余额支付',
-                    'order_pay_channel_type_name' => 'E家洁支付',
+                    'order_pay_channel_type_name' => 'e家洁',
                     'order_pay_channel_type_id' => 2,
                 ]);
             }
