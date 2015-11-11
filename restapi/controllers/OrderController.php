@@ -2067,7 +2067,7 @@ class OrderController extends \restapi\components\Controller
                 }
                 return $this->send($r_order, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
-                return $this->send($r_order, "操作失败", 0, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
+                return $this->send(null, "操作失败", 0, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);
