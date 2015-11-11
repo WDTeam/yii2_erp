@@ -259,14 +259,14 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$newtime=time();
 		$couponCustomer1 = self::find()
 		->select(['id','customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
-		->where(['and',"couponrule_use_end_time>$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
+		->where(['and',"couponrule_use_end_time>$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
 		
 		$couponCustomer2 = self::find()
 		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
-		->where(['and',"couponrule_use_end_time>$last_month","couponrule_use_end_time<$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0']] )
+		->where(['and',"couponrule_use_end_time>$last_month","couponrule_use_end_time<$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1']] )
 		->orderBy(['coupon_userinfo_price'=>SORT_DESC,'couponrule_use_end_time'=>SORT_ASC,])
 		->asArray()
 		->all();

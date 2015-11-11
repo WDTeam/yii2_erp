@@ -35,9 +35,9 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-    		//$errt=\core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('15172543897','12','1','11');
     	
     	
+    	//\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList();
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
