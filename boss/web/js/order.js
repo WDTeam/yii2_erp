@@ -319,19 +319,19 @@ function checkCoupon(){
             success: function (data) {
                 if (!data) {
                     $('#order-order_coupon_code').next('.help-block-error').text('该优惠码与此次服务不匹配！');
-                    $('#field-order-order_coupon_code').addClass('has-error');
+                    $('.field-order-order_coupon_code').addClass('has-error');
                 } else {
                     coupon = data
                     $("#order-coupon_id").val(coupon.id);
                     var order_pay_money = $("#order-order_money").val() - coupon.coupon_userinfo_price;
                     $(".order_pay_money").text(order_pay_money.toFixed(2));
-                    $('#field-order-order_coupon_code').removeClass('has-error');
+                    $('.field-order-order_coupon_code').removeClass('has-error');
                     $('#order-order_coupon_code').next('.help-block-error').text('');
                 }
             }
         });
     }else{
-        $('#field-order-order_coupon_code').removeClass('has-error');
+        $('.field-order-order_coupon_code').removeClass('has-error');
         $('#order-order_coupon_code').next('.help-block-error').text('');
     }
 }
