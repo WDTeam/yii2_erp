@@ -150,7 +150,7 @@ class FinanceCompensateController extends Controller
             $model->created_at = time();
             $model->finance_compensate_code = FinanceCompensateSearch::getCompensateApplyCode();
             $model->finance_compensate_money = $model->finance_compensate_total_money;
-            $order_complaint = OrderComplaint::findOne($order_complaint_id);
+            $order_complaint = OrderComplaint::findOne(['id'=>$model->finance_complaint_id]);
             $model->order_id = $order_complaint->order_id;
             $model->order_code = $order_complaint->order_code_number;
             $model->finance_complaint_code = $order_complaint->complaint_code_number;
