@@ -11,8 +11,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update').Yii::t('app', 'Platform
 ?>
 <div class="operation-platform-update">
 
-    <!--<h1><?php //= Html::encode($this->title) ?></h1>-->
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

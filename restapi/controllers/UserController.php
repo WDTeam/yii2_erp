@@ -723,6 +723,7 @@ class UserController extends \restapi\components\Controller
      * @apiName actionUserSuggest
      * @apiGroup User
      * @apiParam {int} order_id       '订单ID'
+     * @apiParam {int} order_code       '订单号'
      * @apiParam {String} access_token 用户认证
      * @apiParam {int}  worker_id      '阿姨id'
      * @apiParam {String} worker_tel  '阿姨电话'
@@ -771,7 +772,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
-        if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
+        if (empty($param['order_id']) || empty($param['customer_comment_phone']) || empty($param['order_code'])) {
             return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
 
@@ -806,6 +807,9 @@ class UserController extends \restapi\components\Controller
         $param['customer_comment_level_name'] = isset($param['customer_comment_level_name'])?$param['customer_comment_level_name']:"";
         $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids'])?$param['customer_comment_tag_ids']:"";
         $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names'])?$param['customer_comment_tag_names']:"";
+        
+        $param['order_code'] = isset($param['order_code'])?$param['order_code']:"";
+        
         try {
             $customer = CustomerAccessToken::getCustomer($param['access_token']);
             
@@ -1446,7 +1450,7 @@ class UserController extends \restapi\components\Controller
             try {
                 $feedback = Customer::addFeedback($customer->id, $param['feedback_content']);
                 if ($feedback["response"] == 'success') {
-                    return $this->send('{}', "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
+                    return $this->send(null, "获取用户信息提交成功", 1, 200, null, alertMsgEnum::getUserFeedback);
                 } else {
                     return $this->send(null, "用户反馈信息提交失败", 0, 200, null, alertMsgEnum::getUserFeedbackFailure);
                 }
@@ -1519,7 +1523,6 @@ class UserController extends \restapi\components\Controller
         try {
             $userBalance = Customer::getBalanceById($customer_id);
         } catch (\Exception $e) {
-            # return $this->send($e, "获取用户余额系统错误", 1024, 200, null, alertMsgEnum::bossError);
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         if ($userBalance['response'] == 'success') {
@@ -1548,7 +1551,6 @@ class UserController extends \restapi\components\Controller
         try {
             $CouponCount = CouponUserinfo::CouponCount($customer_id);
         } catch (\Exception $e) {
-            #return $this->send($e, "获取用户优惠券数系统错误", 1024, 200, null, alertMsgEnum::bossError);
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }
         $result["coupon"] = $CouponCount['data'];

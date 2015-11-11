@@ -273,7 +273,7 @@ class FinanceWorkerSettleApplyController extends BaseAuthController
         if(isset($requestParams['isExport'])){
             $isExport = $requestParams['isExport'];
         }
-        if(\Yii::$app->user->identity->isMiniBossUser()){
+        if(\Yii::$app->user->identity->isNotAdmin()){
             $financeSearchModel->shop_id = Yii::$app->user->identity->getShopIds();
             $financeSearchModel->shop_manager_id = Yii::$app->user->identity->getShopManagerIds();
         }

@@ -149,6 +149,15 @@ class FinanceShopSettleApplyController extends Controller
         ]);
     }
     
+    public function actionShowWorkerOrderList($workerSettleApplyId){
+       $searchModel = new FinanceShopSettleApplySearch;
+       $financeWorkerOrderIncomeDataProvider = $searchModel->getWorkerOrderDataProviderBySettleId($workerSettleApplyId);
+        return $this->render('showWorkerOrderList', [
+            'financeWorkerOrderIncomeDataProvider' => $financeWorkerOrderIncomeDataProvider,
+            'model' => $searchModel,
+        ]);
+    }
+    
     /**
      * 门店人工结算完成
      * @return type
@@ -181,7 +190,7 @@ class FinanceShopSettleApplyController extends Controller
             $isExport = $requestParams['isExport'];
         }
         $searchModel->load($requestParams);
-        if(\Yii::$app->user->identity->isMiniBossUser()){
+        if(\Yii::$app->user->identity->isNotAdmin()){
             $searchModel->shop_id = Yii::$app->user->identity->getShopIds();
             $searchModel->shop_manager_id = Yii::$app->user->identity->getShopManagerIds();
         }

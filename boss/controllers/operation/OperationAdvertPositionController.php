@@ -7,6 +7,7 @@ use boss\models\operation\OperationAdvertPosition;
 use boss\models\operation\OperationAdvertPositionSearch;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
+use boss\models\operation\OperationAdvertContent;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -95,9 +96,11 @@ class OperationAdvertPositionController extends BaseAuthController
 
             //验证输入的信息是否重复
             $result = OperationAdvertPosition::verifyRepeat($post['OperationAdvertPosition']);
+
             if ($result == true) {
                 \Yii::$app->getSession()->setFlash('default',"创建失败!同平台版本上广告位置不能重复！");
             } else {
+
                 $platform = OperationPlatform::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_id']])->one();
                 $version = OperationPlatformVersion::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_version_id']])->one();
                 $model->operation_platform_name = $platform['operation_platform_name'];
@@ -137,10 +140,29 @@ class OperationAdvertPositionController extends BaseAuthController
         }
         $version = OperationPlatformVersion::find()->where(['operation_platform_id' => $model->operation_platform_id])->all();
         $versions = ['选择版本'];
+
         foreach((array)$version as $v){
             $versions[$v->id] = $v->operation_platform_version_name;
         }
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+        $post = Yii::$app->request->post();
+
+        if ($model->load($post)) {
+
+            $platform = OperationPlatform::find()
+                ->where(['id'=>$post['OperationAdvertPosition']['operation_platform_id']])
+                ->one();
+            $version = OperationPlatformVersion::find()
+                ->where(['id'=>$post['OperationAdvertPosition']['operation_platform_version_id']])
+                ->one();
+            $model->operation_platform_name = $platform['operation_platform_name'];
+            $model->operation_platform_version_name = $version['operation_platform_version_name'];
+
+            $model->save();
+
+            //更新冗余的广告位置名称,平台位置名称和平台版本
+            OperationAdvertContent::updateAdvertPlatformInfo($id, $post['OperationAdvertPosition']['operation_advert_position_name'], $post['OperationAdvertPosition']['operation_platform_id'], $post['OperationAdvertPosition']['operation_platform_version_id'], $platform['operation_platform_name'], $version['operation_platform_version_name']);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

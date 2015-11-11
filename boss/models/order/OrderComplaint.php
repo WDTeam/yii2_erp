@@ -38,7 +38,7 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     	if(!empty($code)){
     		$num = strlen($code);
     		$order_code = substr($code,2,$num-2);
-    		$new_order_code = "04".$order_code;
+    		$new_order_code = "05".$order_code;
     	}
     	$arr['OrderComplaint']['order_code_number'] = strval($code);
     	$arr['OrderComplaint']['complaint_code_number'] = strval($new_order_code);
