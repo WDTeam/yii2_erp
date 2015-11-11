@@ -1043,13 +1043,18 @@ class Order extends OrderModel
     }
 
     /**
-     * 获取渠道分类 TODO 高峰提供接口
+     * 获取渠道分类
      * @param int $channel_id
      * @return array
      */
     public function getOrderChannelType($channel_id = 0)
     {
-        return ['id'=>1,'name'=>'BOSS'];
+        $fd= OperationOrderChannel::configorder($channel_id);
+        if(!empty($fd)){
+            return ['id'=>$fd[0],'name'=>$fd[1]];
+        }else{
+            return false;
+        }
     }
 
 
