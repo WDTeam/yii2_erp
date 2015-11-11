@@ -197,123 +197,128 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function actionUserInit()
     {
-        $param = Yii::$app->request->get();
-        if(!isset($param['city_name'])||!$param['city_name']){
-            $param['city_name'] = "北京市";
-        }
-        if(!isset($param['platform_version'])||!$param['platform_version']){
-            return $this->send(null, 'app版本参数错误',0,200,null,alertMsgEnum::getUserInitFailed);
-        }
-        //判断来源版
-        $platform_name = "ios";
-        $platform_version_name = "4.0";
-        if(isset($param['platform_version'])&&$param['platform_version']){
-            $platform = explode("_",$param['platform_version']);
-            $platform_name = $platform[0];
-            $platform_version_name = $platform[1];
-        }
-        //判断token是否有效
-        $isEffect="0";
-        if(isset($param['access_token'])&&$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
-            $isEffect="1";
-        }
-        //获取城市列表
         try{
-            $onlineCitys = OperationCity::getOnlineCitys();
-            $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
-            //获取banner图
-            $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'],$platform_name,$platform_version_name);
-        } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getWorkerInitFailed);
-        }
-        //整理开通的城市
-        $onlineCityList = array();
-        foreach($onlineCitys as $key=>$val){
-            $onlineCityList[$key]['city_id'] = $val['city_id'];
-            $onlineCityList[$key]['city_name'] = $val['city_name'];
-        }
-        //整理开通的服务类型
-        $serviceCategoryList = array();
-        foreach($cityCategoryList as $key=>$val){
-            $serviceCategoryList[$key]['category_id'] = $val['id'];
-            $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
-            $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
-            $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
-            $serviceCategoryList[$key]['category_url'] = $val['operation_category_url'];
-            $serviceCategoryList[$key]['colour'] = 'FFCC00';
-            $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
-        }
-        
-        //整理焦点图
-        $pic_list = array();
-        if(!isset($bannerList['code'])&&!empty($bannerList)){
-            foreach($bannerList as $key=>$val){
-                $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
-                $pic_list[$key]["link"] = $val['operation_advert_url'];
-                $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+            $param = Yii::$app->request->get();
+            if(!isset($param['city_name'])||!$param['city_name']){
+                $param['city_name'] = "北京市";
             }
+            if(!isset($param['platform_version'])||!$param['platform_version']){
+                return $this->send(null, 'app版本参数错误',0,200,null,alertMsgEnum::getUserInitFailed);
+            }
+            //判断来源版
+            $platform_name = "ios";
+            $platform_version_name = "4.0";
+            if(isset($param['platform_version'])&&$param['platform_version']){
+                $platform = explode("_",$param['platform_version']);
+                $platform_name = $platform[0];
+                $platform_version_name = $platform[1];
+            }
+            //判断token是否有效
+            $isEffect="0";
+            if(isset($param['access_token'])&&$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
+                $isEffect="1";
+            }
+            //获取城市列表
+            try{
+                $onlineCitys = OperationCity::getOnlineCitys();
+                $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
+                //获取banner图
+                $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'],$platform_name,$platform_version_name);
+            } catch (\Exception $e) {
+                return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
+            }
+            //整理开通的城市
+            $onlineCityList = array();
+            foreach($onlineCitys as $key=>$val){
+                $onlineCityList[$key]['city_id'] = $val['city_id'];
+                $onlineCityList[$key]['city_name'] = $val['city_name'];
+            }
+            //整理开通的服务类型
+            $serviceCategoryList = array();
+            if($cityCategoryList){
+                foreach($cityCategoryList as $key=>$val){
+                    $serviceCategoryList[$key]['category_id'] = $val['id'];
+                    $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
+                    $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
+                    $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
+                    $serviceCategoryList[$key]['category_url'] = $val['operation_category_url'];
+                    $serviceCategoryList[$key]['colour'] = 'FFCC00';
+                    $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
+                }
+            }
+            //整理焦点图
+//            $pic_list = array();
+//            if(!isset($bannerList['code'])&&!empty($bannerList)){
+//                foreach($bannerList as $key=>$val){
+//                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+//                    $pic_list[$key]["link"] = $val['operation_advert_url'];
+//                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+//                }
+//            }
+            //页首链接
+            $header_link = [
+                'comment_link' => [
+                    'title' => '意见反馈',
+                    'url' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                    'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                ],
+                'phone_link' => [
+                    'title' => '18210922324',
+                    'url' => '',
+                    'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_Tel.png',
+                ],
+            ];
+            //获取首页轮播图
+            $pic_list = [
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                    "url_title" => "标准服务"
+                ],
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+                    "link" => "http://wap.1jiajie.com/pledge.html",
+                    "url_title" => "服务承诺"
+                ],
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+                    "link" => "",
+                    "url_title" => ""
+                ]
+            ];
+            //服务分类
+            $home_order_server = [
+                [
+                    'title' => '单次保洁',
+                    'introduction' => '新用户第1小时免费',
+                    'icon' => 'http://test.m2.1jiajie.com/statics/images/dancibaojie.png',
+                    'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/1',
+                    'bg_colour' => 'ffb518',
+                    'font_colour' => 'ffffff',
+                ],
+                [
+                    'title' => '周期保洁',
+                    'introduction' => '一次下单 清洁无忧',
+                    'icon' => 'http://test.m2.1jiajie.com/statics/images/zhouqibaojie.png',
+                    'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/2',
+                    'bg_colour' => 'ff8a44',
+                    'font_colour' => 'ffffff',
+                ]
+            ];
+            $isBlock="0";
+            $ret = [
+                'city_list' => $onlineCityList,
+                'header_link' => $header_link,
+                'pic_list' => $pic_list,
+                'home_order_server' => $home_order_server,
+                'server_list' => $serviceCategoryList,
+                'isBlock' => $isBlock,
+                'isEffect' => $isEffect,
+            ];
+            return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
         }
-        //页首链接
-        $header_link = [
-            'comment_link' => [
-                'title' => '意见反馈',
-                'url' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
-                'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
-            ],
-            'phone_link' => [
-                'title' => '18210922324',
-                'url' => '',
-                'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_Tel.png',
-            ],
-        ];
-        //获取首页轮播图
-        $pic_list = [
-            [
-                "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-                "link" => "http://wap.1jiajie.com/trainAuntie1.html",
-                "url_title" => "标准服务"
-            ],
-            [
-                "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-                "link" => "http://wap.1jiajie.com/pledge.html",
-                "url_title" => "服务承诺"
-            ],
-            [
-                "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-                "link" => "",
-                "url_title" => ""
-            ]
-        ];
-        //服务分类
-        $home_order_server = [
-            [
-                'title' => '单次保洁',
-                'introduction' => '新用户第1小时免费',
-                'icon' => 'http://test.m2.1jiajie.com/statics/images/dancibaojie.png',
-                'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/1',
-                'bg_colour' => 'ffb518',
-                'font_colour' => 'ffffff',
-            ],
-            [
-                'title' => '周期保洁',
-                'introduction' => '一次下单 清洁无忧',
-                'icon' => 'http://test.m2.1jiajie.com/statics/images/zhouqibaojie.png',
-                'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/2',
-                'bg_colour' => 'ff8a44',
-                'font_colour' => 'ffffff',
-            ]
-        ];
-        $isBlock="0";
-        $ret = [
-            'city_list' => $onlineCityList,
-            'header_link' => $header_link,
-            'pic_list' => $pic_list,
-            'home_order_server' => $home_order_server,
-            'server_list' => $serviceCategoryList,
-            'isBlock' => $isBlock,
-            'isEffect' => $isEffect,
-        ];
-        return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
     }
      /**
      * @api {GET} /configure/get-service-item [GET] /configure/get-service-item （0%）

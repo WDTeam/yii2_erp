@@ -18,6 +18,11 @@ class OperationPlatformVersion extends \dbbase\models\operation\OperationPlatfor
 {
 
     /**
+     * 删除标志
+     */
+    const IS_SOFTDEL = 1;
+
+    /**
      * 根据平台名称和平台版本获取平台的编号
      *
      * @param   string  $operation_platform_name            平台名称
@@ -50,6 +55,20 @@ class OperationPlatformVersion extends \dbbase\models\operation\OperationPlatfor
     public static function updatePlatformName($operation_platform_id, $operation_platform_name)
     {
         self::updateAll(['operation_platform_name' => $operation_platform_name], 'operation_platform_id= ' . $operation_platform_id);
+    }
+
+    /**
+     * 联动删除平台信息
+     *
+     * @param inter   $operation_platform_id     平台编号
+     */
+    public static function updatePlatformStatus($operation_platform_id)
+    {
+        self::deleteAll([
+            'operation_platform_id' => $operation_platform_id,
+        ]);
+
+        //self::updateAll(['is_softdel' => self::IS_SOFTDEL], 'operation_platform_id= ' . $operation_platform_id);
     }
     
 }

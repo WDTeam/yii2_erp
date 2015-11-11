@@ -65,11 +65,11 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
    * @return: （用户ID，优惠券ID，优惠券CODE，优惠券金额，交易记录号，交易流水号（自己生成，不能重复））   
    **/
 
-    public static function get_couponinfo($customer_id,$couponrule_id,$couponrule_price,$pay_nub,$order_code){
+    public static function get_couponinfo($customer_tel,$couponrule_id,$couponrule_price,$pay_nub,$order_code){
     	
     	
     	$coupon_code_arr = CouponUserinfo::find()
-    	->where(['customer_id'=>$customer_id,'coupon_userinfo_id'=>$couponrule_id,'coupon_userinfo_price'=>$couponrule_price,'is_used'=>0])
+    	->where(['customer_tel'=>$customer_tel,'coupon_userinfo_id'=>$couponrule_id,'coupon_userinfo_price'=>$couponrule_price,'is_used'=>0])
     	->asArray()
     	->one();
     	if($coupon_code_arr){
@@ -82,7 +82,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     	$coupon_code_edit->save();
 
     	$Couponlogobj=new CouponLog;
-    	$Couponlogobj->customer_id=$customer_id;
+    	$Couponlogobj->customer_id=0;
     	$Couponlogobj->order_id=$order_code;
     	$Couponlogobj->coupon_id=$couponrule_id;
     	$Couponlogobj->coupon_code_id=0;
@@ -146,10 +146,10 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	* @return:
 	**/
     
-	public static function getAbleCouponByCateId($customer_id, $cate_id){
+	public static function getAbleCouponByCateId($customer_tel, $cate_id){
 		$able_coupons = CouponUserinfo::find()
-			->select(['id', 'customer_id', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price', 'coupon_userinfo_code as coupon_code'])
-			->where(['customer_id'=>$customer_id,'is_used'=>0,'is_del'=>0,'is_disabled'=>0])
+			->select(['id', 'customer_id','customer_tel', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price', 'coupon_userinfo_code as coupon_code'])
+			->where(['customer_tel'=>$customer_tel,'is_used'=>0,'is_del'=>0,'is_disabled'=>0])
 			->andWhere(['<', 'couponrule_use_start_time', time()])
 			->andWhere(['>', 'couponrule_use_end_time', time()])
 			->andWhere(['or', ['and', 'couponrule_type=1', 'couponrule_service_type_id='.$cate_id], ['couponrule_type'=>0]])
@@ -182,9 +182,9 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	 * @return:
 	 **/
 
-	public static function getCouponBasicInfoById($coupon_id){
+	public static function getCouponBasicInfoById($customer_tel){
 	
-		if($coupon_id==0){
+		if($customer_tel==0){
 			$array=[
 			'is_status'=>1,
 			'msg'=>'亲,请传入规则id',
@@ -194,8 +194,8 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		}
 		
 		$coupon = CouponUserinfo::find()
-		->select(['id as coupon_id', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price'])
-		->where(['id'=>$coupon_id])
+		->select(['customer_tel', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price'])
+		->where(['customer_tel'=>$customer_tel])
 		->asArray()
 		->one();
 	
@@ -242,26 +242,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	* 根据客户id获取全部优惠券接口
 	* 刘道强使用
@@ -276,7 +257,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	public static function getcustomerlist_l($customer_tel){
 		$now_time=time();
 		$couponCustomer = self::find()		
-		->select(['id','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
+		->select(['customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
 		->where(['and',"customer_tel=$customer_tel"] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
@@ -297,31 +278,6 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 			return $array;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

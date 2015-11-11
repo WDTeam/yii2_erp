@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => Yii::t('yii', 'Delete'),
                                 'data-pjax'=>"0",
                                 'data-method'=>"post",
-                                'data-confirm'=>"您确定要删除此项吗？",
+                                'data-confirm'=>"如果删除平台，将删除平台下所有的广告，您确定要删除此项吗？",
                                 'aria-label'=>Yii::t('yii', 'Delete')
                             ]
                         );

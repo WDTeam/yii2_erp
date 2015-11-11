@@ -10,6 +10,7 @@ $this->title = Yii::t('app', 'Advert Position');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel panel-default">
+    <div class="container-fluid operation-panel">
     <div class="operation-advert-position-index">
 
         <div class="panel panel-info">
@@ -91,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'title' => Yii::t('yii', 'Delete'),
                                         'data-pjax'=>"0",
                                         'data-method'=>"post",
-                                        'data-confirm'=>"您确定要删除此项吗？",
+                                        'data-confirm'=>"如果删除平台位置，将删除此位置下所有的广告，您确定要删除此项吗？",
                                         'aria-label'=>Yii::t('yii', 'Delete')
                                     ]
                                 );
@@ -100,5 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ]); ?>
+    </div>
     </div>
 </div>

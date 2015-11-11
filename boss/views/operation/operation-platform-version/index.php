@@ -35,22 +35,46 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform-version/view','id' => $model->id, 'platform_id' => $model->operation_platform_id]),
-                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform-version/view',
+                                'id' => $model->id,
+                                'platform_id' => $model->operation_platform_id
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'View'),
+                                'class' => 'btn btn-success btn-sm'
+                            ]
                         );
                     },
                     'update' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform-version/update','id' => $model->id, 'platform_id' => $model->operation_platform_id]),
-                            ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform-version/update',
+                                'id' => $model->id,
+                                'platform_id' => $model->operation_platform_id]
+                            ),
+                            [
+                                'title' => Yii::t('yii', 'Update'),
+                                'class' => 'btn btn-info btn-sm'
+                            ]
                         );
                     },
                     'delete' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-platform-version/delete','id' => $model->id, 'platform_id' => $model->operation_platform_id]),
-                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-platform-version/delete',
+                                'id' => $model->id,
+                                'platform_id' => $model->operation_platform_id
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'class' => 'btn btn-danger btn-sm',
+                                'data-pjax'=>"0", 'data-method'=>"post",
+                                'data-confirm'=>"如果删除平台版本，将删除此版本下所有的广告，您确定要删除此项吗？",
+                                'aria-label'=>Yii::t('yii', 'Delete')
+                            ]
                         );
                     },
                 ],
