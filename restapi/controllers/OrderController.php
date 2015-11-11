@@ -1265,7 +1265,7 @@ class OrderController extends \restapi\components\Controller
             'order_code' => $orderInfo['order_code'],
             'order_money' => $orderInfo['order_money'],
             'order_channel_name' => $orderInfo['order_channel_name'],
-            'order_pay_type' => $orderInfo['order_pay_type'],
+            'order_pay_type' => $orderInfo['pay_channel_id'],
             'order_pay_channel_name' => $orderInfo['order_pay_channel_name'],
             'order_pay_money' => $orderInfo['order_pay_money'],
             'order_use_acc_balance' => $orderInfo['order_use_acc_balance'],
