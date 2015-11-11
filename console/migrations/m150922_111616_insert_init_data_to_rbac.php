@@ -23,20 +23,36 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'type'=>1,
             'description'=>'超级管理员',
         ]);
-        
+        $this->insert('{{%auth_item}}', [
+            'name'=>'system_group_admin',
+            'type'=>1,
+            'description'=>'管理员',
+        ]);
         /**
          * 给角色授权
          */
-//         $this->insert('{{%auth_item_child}}', [
-//             'parent'=>'super_admin',
-//             'child'=>'sidebar_customer',
-//         ]);
+        $this->insert('{{%auth_item_child}}', [
+            'parent'=>'system_group_super_admin',
+            'child'=>'system_group_admin',
+        ]);
         /**
          * 给用户分配角色
          */
         $this->insert('{{%auth_assignment}}', [
             'item_name'=>'system_group_super_admin',
             'user_id'=>1,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'system_group_super_admin',
+            'user_id'=>2,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'system_group_super_admin',
+            'user_id'=>3,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'system_group_super_admin',
+            'user_id'=>4,
         ]);
     }
 
