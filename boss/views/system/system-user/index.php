@@ -14,7 +14,7 @@ $this->title = Yii::t('app', 'System Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="system-user-index">
-
+    <?php echo $this->render('_search',['model'=>$searchModel]);?>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,

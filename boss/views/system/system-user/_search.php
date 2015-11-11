@@ -2,17 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-/**
- * @var yii\web\View $this
- * @var boss\models\search\SystemUserSearch $model
- * @var yii\widgets\ActiveForm $form
- */
-?>
-<?php
-
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\base\Widget;

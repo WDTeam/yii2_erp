@@ -33,20 +33,23 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     private $_roles = [];
     public function setRoles($roles)
     {
-        $this->_roles = $roles;
-        if($this->getIsNewRecord()){
-            
+        if(is_array($roles)){
+            $this->_roles = $roles;
         }else{
-            $auth = \Yii::$app->authManager;
-            $auth->revokeAll($this->id);
-            if(!empty($roles)){
-                foreach ($roles as $role){
-                    $auth->assign($auth->getRole($role), $this->id);
-                }
-                return $auth->getRolesByUser($this->id);
-            }else{
-                return [];
+            $this->_roles = [$roles];
+        }
+    }
+    public function saveRoles($roles)
+    {
+        $auth = \Yii::$app->authManager;
+        $auth->revokeAll($this->id);
+        if(!empty($roles)){
+            foreach ($roles as $role){
+                $auth->assign($auth->getRole($role), $this->id);
             }
+            return $auth->getRolesByUser($this->id);
+        }else{
+            return [];
         }
     }
     public function getRoles()
@@ -59,7 +62,7 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     }
     public function afterSave($insert, $changedAttributes)
     {
-        $this->setRoles($this->_roles);
+        $this->saveRoles($this->_roles);
         parent::afterSave($insert, $changedAttributes);
     }
 
