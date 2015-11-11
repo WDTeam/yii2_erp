@@ -130,16 +130,28 @@ class ServiceController extends \restapi\components\Controller
         $arrParams["sign"]=$sign; 
         $arrParams["nonce"]=$nonce; 
         $arrParams["api_key"]=$apiPopKey; 
-        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
-        $bolCheck = $objSign->checkSignature($arrParams);
+        try{
+            $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+            $bolCheck = $objSign->checkSignature($arrParams);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        }
         if(!$bolCheck){
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
         }
-        $categories = OperationCategory::getAllCategory();
+        try{
+            $categories = OperationCategory::getAllCategory();
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        }
         $gDate = [];
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                $goodses = OperationGoods::getCategoryGoods($category['id']);
+                try{
+                    $goodses = OperationGoods::getCategoryGoods($category['id']);
+                }catch (\Exception $e) {
+                    return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+                }
                 if (!empty($goodses)) {
                     foreach ($goodses as $gItem) {
                         $gobject = [
@@ -636,6 +648,13 @@ class ServiceController extends \restapi\components\Controller
     function actionSingleServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
+            return $this->send(null, "请填写服务地址或服务时长", 0, 403,null,alertMsgEnum::singleServiceTimeDataDefect);
+        }
+        $longitude = $param['longitude'];
+        $latitude = $param['latitude'];
+        $plan_time = $param['plan_time'];
+        $service_type = isset($param['service_type'])?$param['service_type']:"";
         //pop访问时可以不用输入access_token（用本身的验证加密方法）
         $apiPopKey = Yii::$app->params["apiPopKey"];
         $apiSecretKey= Yii::$app->params["apiSecretKey"];
@@ -645,8 +664,16 @@ class ServiceController extends \restapi\components\Controller
         $arrParams["sign"]=$sign; 
         $arrParams["nonce"]=$nonce; 
         $arrParams["api_key"]=$apiPopKey; 
-        $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
-        $bolCheck = $objSign->checkSignature($arrParams);
+        $arrParams["longitude"]=$longitude; 
+        $arrParams["latitude"]=$latitude; 
+        $arrParams["plan_time"]=$plan_time; 
+        $arrParams["service_type"]=$service_type;
+        try{
+            $objSign = new EjjEncryption($apiPopKey,$apiSecretKey);
+            $bolCheck = $objSign->checkSignature($arrParams);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        }
 //        var_dump($bolCheck);die;
          //生成加密
 //        $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
@@ -658,12 +685,7 @@ class ServiceController extends \restapi\components\Controller
                 return $this->send(null, "用户认证已经过期,请重新登录", 401, 403,null,alertMsgEnum::customerLoginFailed);
             }
         }
-        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
-            return $this->send(null, "请填写服务地址或服务时长", 0, 403,null,alertMsgEnum::singleServiceTimeDataDefect);
-        }
-        $longitude = $param['longitude'];
-        $latitude = $param['latitude'];
-        $plan_time = $param['plan_time'];
+        
         //根据经纬度获取商圈id
         try{
              $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);

@@ -22,6 +22,9 @@ use yii\widgets\ActiveForm;
         <div class="col-sm-2">
             <?= $form->field($model, 'operation_category_name') ?>
         </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'operation_goods_name') ?>
+        </div>
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'Search'), [

@@ -1514,7 +1514,7 @@ class UserController extends \restapi\components\Controller
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         $customer_id = $customer->id;
-
+        $customer_phone = $customer->customer_phone;
         $result = array();
         /**
          * 获取客户余额
@@ -1549,7 +1549,7 @@ class UserController extends \restapi\components\Controller
          * @param int $customer_id 用户id
          */
         try {
-            $CouponCount = CouponUserinfo::CouponCount($customer_id);
+            $CouponCount = CouponUserinfo::CouponCount($customer_phone);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::bossError);
         }

@@ -112,7 +112,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
-                <?= $form->field($model, 'order_pay_type')->inline()->radioList(['1'=>'现金支付','2'=>'余额支付','3'=>'第三方预付'])->label('支付方式'); ?>
+
+                <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList); ?>
+                <div id="order_pay_channel_1" >
+                    <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList); ?>
+                </div>
+                <div id="order_pay_channel_2" style="display:none;">
+                    <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->popPayChannelList); ?>
+                </div>
+
                 <div id="order_pay_type_1" >
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
@@ -131,7 +139,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 </div>
                 <div id="order_pay_type_3" style="display:none;">
-                <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList); ?>
                 <?= $form->field($model, 'order_pop_group_buy_code')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_pop_order_code')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_pop_order_money')->textInput(['maxlength' => true]) ?>
