@@ -209,8 +209,7 @@ class Order extends OrderModel
         }
 
         if ($this->_create($attributes,null,$customer_balance)) {
-            //交易记录1,现金支付,3第三支付,无需线上支付
-            if( $this->order_pay_money == 0 ){
+            if( $this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id==self::ORDER_PAY_CHANNEL_CASH ){
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
                     $order_model = OrderSearch::getOne($this->id);
                     $order_model->admin_id = $attributes['admin_id'];
@@ -359,7 +358,7 @@ class Order extends OrderModel
 
         $transact->commit();
 
-        if( $orderExtPay == 0)
+        if( $orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id']==self::ORDER_PAY_CHANNEL_CASH)
         {
             //交易记录
             if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay',2)) {

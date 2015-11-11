@@ -6,6 +6,7 @@ namespace boss\components;
 
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
+use core\models\auth\AuthItem;
 class RbacHelper extends Component
 {
     const CACHE_MENU = 'boss-menus';
@@ -63,7 +64,7 @@ class RbacHelper extends Component
                     $permission = $auth->createPermission($name);
                     $permission->description = $menu['label'];
                     $auth->add($permission);
-                    $admin = $auth->getRole('super_admin');
+                    $admin = $auth->getRole(AuthItem::SYSTEM_ROLE_SUPER_ADMIN);
                     $auth->addChild($admin, $permission);
                 }
                 $menu['visible'] = \Yii::$app->user->can($name);

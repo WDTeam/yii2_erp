@@ -146,5 +146,13 @@ class JPush extends Component
         $result = $this->client->report($msg_ids);
         return $result;
     }
-    
+    /**
+     * Jpush回调
+     * use:\Yii::$app->jpush->callback($data);
+     * @param unknown $params
+     */
+    public function callback($params)
+    {
+        
+    }
 }
