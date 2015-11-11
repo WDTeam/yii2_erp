@@ -295,21 +295,21 @@ echo Menu::widget([
                     ],
                     'items' => [
                         [
-                            'label' => '应用平台管理',
+                            'label' => '配置广告平台',
                             'url' => [
                                 'operation/operation-platform/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
-                            'label' => '广告位置管理',
+                            'label' => '配置广告位置',
                             'url' => [
                                 'operation/operation-advert-position/index'
                             ],
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
-                            'label' => '广告内容管理',
+                            'label' => '配置广告内容',
                             'url' => [
                                 'operation/operation-advert-content/index'
                             ],
