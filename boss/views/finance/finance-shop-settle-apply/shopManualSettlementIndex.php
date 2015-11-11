@@ -130,12 +130,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_tel',
             'worker_type_name',
             'worker_identity_name', 
-            'finance_settle_apply_order_count', 
+            'finance_worker_settle_apply_order_count', 
              [
                 'header' => Yii::t('app', '服务费'),
-                'attribute' => 'finance_settle_apply_order_count',
+                'attribute' => 'finance_worker_settle_apply_order_count',
                 'content'=>function($model,$key,$index){
-                            return $model->finance_settle_apply_order_count * FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
+                            return $model->finance_worker_settle_apply_order_count * FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
                 },
             ],                   
         ],

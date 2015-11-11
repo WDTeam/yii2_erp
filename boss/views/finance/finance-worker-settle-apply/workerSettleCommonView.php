@@ -56,10 +56,10 @@ if(isset($model->review_section)){
                 <?=  $model->workerTypeDes; ?>
             </div>
             <div class='col-md-1'>
-                <?=  $model->finance_settle_apply_cycle_des; ?>
+                <?=  $model->finance_worker_settle_apply_cycle_des; ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y-m-d',$model->finance_settle_apply_starttime).'至'.date('Y-m-d',$model->finance_settle_apply_endtime); ?>
+                <?=  date('Y-m-d',$model->finance_worker_settle_apply_starttime).'至'.date('Y-m-d',$model->finance_worker_settle_apply_endtime); ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',time()); ?>
@@ -118,68 +118,68 @@ if(isset($model->review_section)){
             <div class='settleDetail'>
                 
                 <?php
-                    if($model->finance_settle_apply_order_count > 0){
-                        echo '<span class = "ordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_count.'</u></span>';
+                    if($model->finance_worker_settle_apply_order_count > 0){
+                        echo '<span class = "ordercount" style = "cursor:pointer"><u>'.$model->finance_worker_settle_apply_order_count.'</u></span>';
                     }else{
-                        echo $model->finance_settle_apply_order_count;
+                        echo $model->finance_worker_settle_apply_order_count;
                     }
                 ?>
             </div>
             <div class='settleDetail'>
                  <?php
-                    echo $model->finance_settle_apply_order_money;
+                    echo $model->finance_worker_settle_apply_order_money;
                 ?>
             </div>
             <div class='settleDetail'>
                <?php
-                    echo $model->finance_settle_apply_base_salary_subsidy;
+                    echo $model->finance_worker_settle_apply_base_salary_subsidy;
                 ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    if($model->finance_settle_apply_task_count > 0){
-                            echo '<span class = "taskcount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_task_count.'</u></span>';
+                    if($model->finance_worker_settle_apply_task_count > 0){
+                            echo '<span class = "taskcount" style = "cursor:pointer"><u>'.$model->finance_worker_settle_apply_task_count.'</u></span>';
                         }else{
-                            echo $model->finance_settle_apply_task_count;
+                            echo $model->finance_worker_settle_apply_task_count;
                         }
                 ?>
             </div>
             <div class='settleDetail'>
                  <?php
-                    echo $model->finance_settle_apply_task_money;
+                    echo $model->finance_worker_settle_apply_task_money;
                 ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    if($model->finance_settle_apply_money_deduction > 0){
-                            echo '<span class = "deductionmoney" style = "cursor:pointer"><u>'.$model->finance_settle_apply_money_deduction.'</u></span>';
+                    if($model->finance_worker_settle_apply_money_deduction > 0){
+                            echo '<span class = "deductionmoney" style = "cursor:pointer"><u>'.$model->finance_worker_settle_apply_money_deduction.'</u></span>';
                         }else{
-                            echo $model->finance_settle_apply_money_deduction;
+                            echo $model->finance_worker_settle_apply_money_deduction;
                         }
                 ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    echo $model->finance_settle_apply_money_except_cash;
+                    echo $model->finance_worker_settle_apply_money_except_cash;
                 ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    if($model->finance_settle_apply_order_cash_count > 0){
-                            echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_cash_count.'</u></span>';
+                    if($model->finance_worker_settle_apply_order_cash_count > 0){
+                            echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_worker_settle_apply_order_cash_count.'</u></span>';
                         }else{
-                            echo $model->finance_settle_apply_order_cash_count;
+                            echo $model->finance_worker_settle_apply_order_cash_count;
                         }
                 ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    echo $model->finance_settle_apply_order_cash_money;
+                    echo $model->finance_worker_settle_apply_order_cash_money;
                 ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    echo $model->finance_settle_apply_money;
+                    echo $model->finance_worker_settle_apply_money;
                 ?>
             </div>
         </div>
@@ -190,10 +190,10 @@ if(isset($model->review_section)){
                'dataProvider' => $orderDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
-                   ['attribute'=>'order_id',
+                   ['attribute'=>'order_code',
                        'header' => Yii::t('app', '订单号'),
                         'content'=>function($model,$key,$index)
-                               {return  Html::a('<u>'.$model['order_id'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/view/','id' => $model['order_id']])],['data-pjax'=>'0','target' => '_blank',]);}
+                               {return  Html::a('<u>'.$model['order_code'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/edit/','id' => $model['order_code']])],['data-pjax'=>'0','target' => '_blank',]);}
                     ],
                     ['attribute'=>'order_service_type_name',
                        'header' => Yii::t('app', '服务类型'),],
@@ -255,10 +255,10 @@ if(isset($model->review_section)){
                'dataProvider' => $cashOrderDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
-                   ['attribute'=>'order_id',
+                   ['attribute'=>'order_code',
                        'header' => Yii::t('app', '订单号'),
                         'content'=>function($model,$key,$index)
-                               {return  Html::a('<u>'.$model['order_id'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/view/','id' => $model['order_id']])],['data-pjax'=>'0','target' => '_blank',]);}
+                               {return  Html::a('<u>'.$model['order_code'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/edit/','id' => $model['order_code']])],['data-pjax'=>'0','target' => '_blank',]);}
                     ],
                     ['attribute'=>'order_service_type_name',
                        'header' => Yii::t('app', '服务类型'),],

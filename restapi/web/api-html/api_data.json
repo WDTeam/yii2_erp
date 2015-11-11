@@ -947,8 +947,8 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_src_id",
-            "description": "<p>订单来源id 【2:IOS 3:Android 5:H5】</p> "
+            "field": "channel_id",
+            "description": "<p>订单来源【值待定】</p> "
           },
           {
             "group": "Parameter",

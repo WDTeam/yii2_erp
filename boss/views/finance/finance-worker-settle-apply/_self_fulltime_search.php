@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 use core\models\finance\FinanceShopSettleApplySearch;
 use kartik\datecontrol\DateControl;
 ?>
@@ -11,8 +11,6 @@ use kartik\datecontrol\DateControl;
 
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
-        //'id' => 'login-form-inline',
-        'action' => ['self-fulltime-worker-settle-index?settle_type='.$model->settle_type.'&review_section='.$model->review_section],
         'method' => 'get',
     ]); ?>
     
@@ -21,17 +19,17 @@ use kartik\datecontrol\DateControl;
     </div>
     
      <?php 
-    if($model->settle_type !=FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+    if($model->settle_type !=FinanceWorkerSettleApplySearch::ALL_WORKER_SETTELE){
         echo "<div class='col-md-2'>";
-        echo  $form->field($model, 'finance_settle_apply_status')->dropDownList([FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核未通过']);
+        echo  $form->field($model, 'finance_worker_settle_apply_status')->dropDownList([FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核未通过']);
         echo "</div> ";
     }
     ?>
     
     <?php 
-        if($model->settle_type ==FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+        if($model->settle_type ==FinanceWorkerSettleApplySearch::ALL_WORKER_SETTELE){
             echo "<div class='col-md-2'>";
-            echo  $form->field($model, 'finance_settle_apply_status')->dropDownList([FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核已通过,需要确认打款']);
+            echo  $form->field($model, 'finance_worker_settle_apply_status')->dropDownList([FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceWorkerSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核已通过,需要确认打款']);
             echo "</div> ";
         }
         ?>
