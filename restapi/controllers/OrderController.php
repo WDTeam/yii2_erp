@@ -236,9 +236,9 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
         //所在城市
-        if (!isset($args['city_name']) || !$args['city_name']) {
-            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-        }
+//        if (!isset($args['city_name']) || !$args['city_name']) {
+//            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+//        }
         //所在地址
         if (!isset($args['address_id']) ||!intval($args['address_id'])) {
             return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);

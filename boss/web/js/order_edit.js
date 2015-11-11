@@ -81,10 +81,12 @@ $(document).ready(function(){
 		var order_booked_begin_time = $("input[name='Order[orderBookedDate]']").val();
 		var order_booked_time_range = $("input[name='Order[orderBookedTimeRange]']:checked").val();
 		var id = $("input[name='Order[id]']").val();
+		var worker_id = $("input[name='OrderExtWorker[worker_id]']:checked").val();
 		//发送数据
 		var url = '/order/order/modify';
 		var data = {
 			'id':id,
+			'worker_id':worker_id,
 			'order_booked_begin_time':order_booked_begin_time,
 			'order_booked_time_range':order_booked_time_range,
 		};
@@ -92,12 +94,9 @@ $(document).ready(function(){
 			if(json.status == 1){
 				$(".service-info-view").show();
 				$(".service-info-edit").hide();
-				//order_booked_begin_time:2015-11-20
-				//order_booked_time_range:20:00-22:00
 				var html = order_booked_begin_time +' '+ order_booked_time_range.split('-')[0];
 				html += '~';
 				html += order_booked_begin_time +' '+ order_booked_time_range.split('-')[1];
-				console.log(html)
 				$(".service_time_html").html(html);
 			}
 		},'json');

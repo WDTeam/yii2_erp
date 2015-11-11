@@ -22,7 +22,6 @@ use boss\models\order\OrderComplaintHandle;
  * @property string $complaint_content
  * @property integer $complaint_time
  * @property integer $updated_at
- * @property integer $updated_at
  * @property integer $is_softdel
  */
 class OrderComplaint extends \core\models\order\OrderComplaint

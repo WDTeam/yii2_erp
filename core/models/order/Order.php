@@ -950,6 +950,7 @@ class Order extends OrderModel
         return $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
     }
 
+
     /**
      * 更新订单
      * @param $attributes
@@ -978,7 +979,7 @@ class Order extends OrderModel
         }
 
         //2:载入传入参数
-        $this->setAttributes($attributes);
+        //$this->setAttributes($attributes);
 
         //创建地址信息
         if( !empty($attributes['address_id']) )
@@ -987,6 +988,7 @@ class Order extends OrderModel
                 $address = CustomerAddress::getAddress($attributes['address_id']);
                 $addressInfo = $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone']; //地址信息
                 $this->setAttributes([
+                    'id'=>$attributes['id'],
                     'address_id'=>$address['id'],
                     'order_address'=>$addressInfo,
                 ]);
@@ -1000,34 +1002,27 @@ class Order extends OrderModel
         if( !empty($attributes['order_booked_begin_time']) && !empty($attributes['order_booked_time_range']) )
         {
             $time = explode('-',$attributes['order_booked_time_range']);
+
             $attr['order_booked_begin_time'] = strtotime($attributes['order_booked_begin_time'].' '.$time[0].':00');
             $attr['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($attributes['order_booked_begin_time'].'00:00:00 +1 days')):$attributes['order_booked_begin_time'].' '.$time[1].':00');
             //判断订单已经指定阿姨,检测阿姨时间段是否可用
-            if( !empty($this->orderExtWorker->worker_id) ){
-                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($this->district_id,$this->OrderExtWorker->worker_id,$attributes['order_booked_begin_time'],$attributes['order_booked_end_time']);
-                if(empty($checkWorkerTime))
-                {
-                    return false;
-                }
-            }
+//            if( !empty($this->orderExtWorker->worker_id) ){
+//                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($this->district_id,$this->orderExtWorker->worker_id,$attr['order_booked_begin_time'],$attr['order_booked_end_time']);
+//                if(empty($checkWorkerTime))
+//                    return false;
+//            }
 
             //设置参数
             $this->setAttributes([
+                'id'=>$attributes['id'],
+                'worker_id'=>$attributes['worker_id'],
                 'order_booked_begin_time'=>$attr['order_booked_begin_time'],
                 'order_booked_end_time'=>$attr['order_booked_end_time'],
             ]);
 
-            /**
-             * 获取阿姨时间排班表
-             * @param int $district_id 商圈id
-             * @param int $serverDurationTime 服务时长
-             * @param string $beginTime 排班表开始时间 默认今天
-             * @param int $timeLineLength 排班表长度 默认返回7天的排班表
-             * @param string $worker_id 阿姨id 通过阿姨id获取指定阿姨的排班表 默认返回所有阿姨排班表
-             * @return array
-             */
-            //worker::getWorkerTimeLine();
+
         }
+
         $this->setAttributes([
             'admin_id'=>Yii::$app->user->id
         ]);
@@ -1200,7 +1195,7 @@ class Order extends OrderModel
      */
     public function getThisOrderBookedTimeRangeList()
     {
-        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1);
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1, $this->orderExtWorker->worker_id);
         $order_booked_time_range = [];
         foreach($time_range[0]['timeline'] as $range){
             if($range['enable']) {
@@ -1218,11 +1213,11 @@ class Order extends OrderModel
      * @param int $days
      * @return array
      */
-    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
+    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1,$worker_id='')
     {
         if($district_id>0) {
             $date = strtotime($date);
-            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
+            return Worker::getWorkerTimeLine($district_id, $range, $date, $days,$worker_id);
         }
         $order_booked_time_range = [];
         for ($i = 8; $i <= 18; $i++) {
