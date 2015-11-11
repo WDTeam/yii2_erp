@@ -33,11 +33,10 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
-     * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填 #不给予后台传递,用来作为支付渠道的判断标示
      * @apiParam {String} order_booked_count 服务时长
      * @apiParam {String} address_id 订单地址id
      * @apiParam {String} channel_id 下单渠道
@@ -91,12 +90,6 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
-        if (empty($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
-        }
-        $attributes['order_src_id'] = $args['order_src_id'];
-
-
         if (empty($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
@@ -107,13 +100,15 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
 
-        if (empty($args['order_pay_type'])) {
-            return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+        if ($args['order_pay_type'] == 1) {
+            $attributes['pay_channel_id'] = 2;
+        } else {
+            $attributes['pay_channel_id'] = '';
         }
+
         if (empty($args['order_booked_count'])) {
             return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        $attributes['order_pay_type'] = $args['order_pay_type'];
         $attributes['order_booked_count'] = $args['order_booked_count'];
 
         if (isset($args['address_id'])) {
@@ -164,43 +159,16 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
-//        if (empty($args['times'])) {
-//            return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
-//        }
-//        #拼凑数组
-//        if ($args['times']) {
-//            $array = array();
-//            foreach ($args['times'] as $k => $v) {
-//                $array[$k]['admin_id'] = isset($attributes['admin_id']) ? $attributes['admin_id'] : "";
-//                $array[$k]['order_ip'] = isset($attributes['order_ip']) ? $attributes['order_ip'] : "";
-//                $array[$k]['order_is_use_balance'] = isset($attributes['order_is_use_balance']) ? $attributes['order_is_use_balance'] : "";
-//                $array[$k]['order_customer_need'] = isset($attributes['order_customer_need']) ? $attributes['order_customer_need'] : "";
-//                $array[$k]['order_booked_worker_id'] = isset($attributes['order_booked_worker_id']) ? $attributes['order_booked_worker_id'] : "";
-//                $array[$k]['coupon_id'] = isset($v['coupon_id']) ? $v['coupon_id'] : "";
-//                $array[$k]['order_customer_memo'] = isset($attributes['order_customer_memo']) ? $attributes['order_customer_memo'] : "";
-//                $array[$k]['order_pop_order_money'] = isset($attributes['order_pop_order_money']) ? $attributes['order_pop_order_money'] : "";
-//                $array[$k]['order_pop_group_buy_code'] = isset($attributes['order_pop_group_buy_code']) ? $attributes['order_pop_group_buy_code'] : "";
-//                $array[$k]['channel_id'] = isset($attributes['channel_id']) ? $attributes['channel_id'] : "";
-//                $array[$k]['address_id'] = isset($attributes['address_id']) ? $attributes['address_id'] : "";
-//                $array[$k]['order_booked_count'] = isset($v['order_booked_count']) ? $v['order_booked_count'] : "";
-//                $array[$k]['order_pop_order_code'] = isset($attributes['order_pop_order_code']) ? $attributes['order_pop_order_code'] : "";
-//                $array[$k]['order_pay_type'] = isset($attributes['order_pay_type']) ? $attributes['order_pay_type'] : "";
-//                $array[$k]['order_src_id'] = isset($attributes['order_src_id']) ? $attributes['order_src_id'] : "";
-//                $array[$k]['order_service_item_id'] = isset($attributes['order_service_item_id']) ? $attributes['order_service_item_id'] : "";
-//                $array[$k]['customer_id'] = isset($attributes['customer_id']) ? $attributes['customer_id'] : "";
-//                $array[$k]['order_booked_begin_time'] = isset($v['order_booked_begin_time']) ? strtotime($v['order_booked_begin_time']) : "";
-//                $array[$k]['order_booked_end_time'] = isset($v['order_booked_end_time']) ? strtotime($v['order_booked_end_time']) : "";
-//            }
-//        }
-
-        $order = new Order();
-
-        $is_success = $order->createNew($attributes);
-
-        if ($is_success) {
-            return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
-        } else {
-            return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
+        try {
+            $order = new Order();
+            $is_success = $order->createNew($attributes);
+            if ($is_success) {
+                return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
+            } else {
+                return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
+            }
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }
 
@@ -1705,11 +1673,10 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {String}  access_token      会话id. 必填 
      * @apiParam  {String}  [platform_version]  平台版本号
      * @apiParam  {integer} order_service_item_id 服务类型 商品id 必填
-     * @apiParam  {integer} order_src_id 订单来源id 必填
      * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
-     * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填 #改字段用于标示支付渠道
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {int}     order_booked_count 服务时长
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
@@ -1776,10 +1743,12 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "客户手机不能为空", 0, 200, null, alertMsgEnum::orderCustomerPhoneFaile);
         }
 
-        #判断支付方式
-        if (empty($param['order_pay_type'])) {
-            return $this->send(null, "支付方式不能为空", 0, 200, NULL, alertMsgEnum::orderPayTypeFaile);
+        if ($param['order_pay_type'] == 1) {
+            $param['pay_channel_id'] = 2;
+        } else {
+            $param['pay_channel_id'] = '';
         }
+
         #判断是否使用余额
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0, 200, NULL, alertMsgEnum::orderIsUseBalanceFaile);
@@ -1791,24 +1760,23 @@ class OrderController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
-                "order_ip" => $order_ip,
-                "order_service_item_id" => $param['order_service_item_id'],
-                "order_src_id" => $param['order_src_id'],
-                "channel_id" => $param['channel_id'],
-                "address_id" => $param['address_id'],
-                "customer_id" => $customer->id,
-                "order_customer_phone" => $param['order_customer_phone'],
-                "admin_id" => Order::ADMIN_CUSTOMER,
-                "order_pay_type" => $param['order_pay_type'],
-                "order_is_use_balance" => $param['order_is_use_balance'],
-                "order_booked_worker_id" => $param['order_booked_worker_id'],
-                "order_customer_need" => $param['order_customer_need'],
-                "order_customer_memo" => $param['order_customer_memo'],
-                "order_flag_change_booked_worker" => $param['accept_other_aunt']
+            "order_ip" => $order_ip,
+            "order_service_item_id" => $param['order_service_item_id'],
+            "channel_id" => $param['channel_id'],
+            "address_id" => $param['address_id'],
+            "customer_id" => $customer->id,
+            "order_customer_phone" => $param['order_customer_phone'],
+            "admin_id" => Order::ADMIN_CUSTOMER,
+            "pay_channel_id" =>$param['pay_channel_id'],
+            "order_is_use_balance" => $param['order_is_use_balance'],
+            "order_booked_worker_id" => $param['order_booked_worker_id'],
+            "order_customer_need" => $param['order_customer_need'],
+            "order_customer_memo" => $param['order_customer_memo'],
+            "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
+            #开始时间 结束时间 时间段 优惠码
             $booked_list = array();
-
             foreach ($param['order_booked_time'] as $key => $val) {
                 if (!isset($param['order_booked_time']['coupon_id'])) {
                     $val['coupon_id'] = null;
@@ -2167,6 +2135,7 @@ class OrderController extends \restapi\components\Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return OrderPush::push($id);
     }
+
     /**
      * @api {GET} /order/get-order-channel-list [GET] /order/get-order-channel-list (100%)
      * @apiName actionGetOrderChannelList（郝建设）
@@ -2204,23 +2173,23 @@ class OrderController extends \restapi\components\Controller
         $arrParams["sign"] = $sign;
         $arrParams["nonce"] = $nonce;
         $arrParams["api_key"] = $apiPopKey;
-        try{
+        try {
             $objSign = new EjjEncryption($apiPopKey, $apiSecretKey);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        try{
+        try {
             $bolCheck = $objSign->checkSignature($arrParams);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if (!$bolCheck) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::customerLoginFailed);
         }
-        try{
+        try {
             $orderChannels = OperationOrderChannel::getorderchannellist("all");
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         return $this->send($orderChannels, "数据获取成功", 1, 200, null, alertMsgEnum::getGoodsesSuccess);
     }
