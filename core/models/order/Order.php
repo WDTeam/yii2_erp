@@ -881,6 +881,7 @@ class Order extends OrderModel
                 'order_pay_channel_type_name' => 'e家洁',
                 'order_pay_channel_type_id' => 2,
             ]);
+            $this->order_pay_money -= $this->order_money;
 //            if (!empty($this->coupon_id)) {//是否使用了优惠券
 //                $coupon = self::getCouponById($this->coupon_id);
 //                if (!empty($coupon)) {
