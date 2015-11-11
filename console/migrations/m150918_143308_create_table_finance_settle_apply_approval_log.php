@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_143308_create_table_finance_settle_apply_log extends Migration
+class m150918_143308_create_table_finance_settle_apply_approval_log extends Migration
 {
     public function up()
     {
@@ -11,9 +11,10 @@ class m150918_143308_create_table_finance_settle_apply_log extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'结算申请审批日志表\'';
         }
-        $this->createTable('{{%finance_settle_apply_log}}', [
+        $this->createTable('{{%finance_settle_apply_approval_log}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'finance_settle_apply_id' => Schema::TYPE_INTEGER . '(10)  COMMENT \'结算申请id\'',
+            'finance_settle_apply_code' => Schema::TYPE_STRING . '(32)  COMMENT \'结算编号\'',
             'finance_settle_apply_reviewer_id' => Schema::TYPE_INTEGER . '(10)  COMMENT \'审核人员Id\'',
             'finance_settle_apply_reviewer' => Schema::TYPE_STRING . '(20)  COMMENT \'审核人员姓名\'',
             'finance_settle_apply_node_id' => Schema::TYPE_INTEGER . '(10)  COMMENT \'审核节点id\'',
@@ -28,19 +29,7 @@ class m150918_143308_create_table_finance_settle_apply_log extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%finance_settle_apply_log}}');
-
+        $this->dropTable('{{%finance_settle_apply_approval_log}}');
         return true;
     }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }

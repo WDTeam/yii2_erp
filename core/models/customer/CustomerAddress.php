@@ -27,9 +27,17 @@ use core\models\customer\Customer;
  */
 class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 {
-    
+
     /**
-     * 新增服务地址
+     * add customer address
+     * @param $customer_id
+     * @param $operation_province_name
+     * @param $operation_city_name
+     * @param $operation_area_name
+     * @param $customer_address_detail
+     * @param string $customer_address_nickname
+     * @param $customer_address_phone
+     * @return array|bool|CustomerAddress|null|\yii\db\ActiveRecord
      */
     public static function addAddress($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
         $customer_address = self::getAddressOne($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone);
@@ -56,25 +64,22 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 
             //根据区名查询省市区
 			$operationProvince = OperationArea::find()->where([
-				'area_name'=>$operation_province_name,
 				'level'=>1,
-				])->asArray()->one();
+				])->andWhere(['like', 'area_name', $operation_province_name])->asArray()->one();
 			$operation_province_id = $operationProvince['id'];
 			$operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
 
 			$operationCity = OperationArea::find()->where([
-				'area_name'=>$operation_city_name,
 				'level'=>2,
-				])->asArray()->one();
+				])->andWhere(['like', 'area_name', $operation_city_name])->asArray()->one();
 			$operation_city_id = $operationCity['id'];
 			$operation_city_name = $operationCity['area_name'];
             $operation_city_short_name = $operationCity['short_name'];
 
 			$operationArea = OperationArea::find()->where([
-				'area_name'=>$operation_area_name,
 				'level'=>3,
-				])->asArray()->one();
+				])->andWhere(['like', 'area_name', $operation_area_name])->asArray()->one();
 			$operation_area_id = $operationArea['id'];
 			$operation_area_name = $operationArea['area_name'];
             $operation_area_short_name = $operationArea['short_name'];
@@ -128,10 +133,10 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
             $customerAddress->is_del = 0;
 			//var_dump($customerAddress);
 			//exit();
-            $customerAddress->validate();
-			if($customerAddress->hasErrors()){
-				var_dump($customerAddress->getErrors());
-			}
+//            $customerAddress->validate();
+//			if($customerAddress->hasErrors()){
+//				var_dump($customerAddress->getErrors());
+//			}
             $customerAddress->save();
             $transaction->commit();
             return $customerAddress;
@@ -142,7 +147,9 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
     }
 
     /**
-     * 软删除服务地址
+     * delete customer address
+     * @param $id
+     * @return bool
      */
     public static function deleteAddress($id){
         $customerAddress = CustomerAddress::findOne($id);
@@ -159,7 +166,15 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
     }
 
     /**
-     * 修改服务地址
+     * update customer address
+     * @param $id
+     * @param $operation_province_name
+     * @param $operation_city_name
+     * @param $operation_area_name
+     * @param $customer_address_detail
+     * @param string $customer_address_nickname
+     * @param $customer_address_phone
+     * @return bool|null|static
      */
     public static function updateAddress($id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
@@ -177,26 +192,35 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
             }
             $customerAddress = self::findOne($id);
             //根据区名查询省市区
+//            $operationProvince = OperationArea::find()->where([
+//				'area_name'=>$operation_province_name,
+//				'level'=>1,
+//				])->asArray()->one();
             $operationProvince = OperationArea::find()->where([
-				'area_name'=>$operation_province_name,
-				'level'=>1,
-				])->asArray()->one();
+                'level'=>1,
+                ])->andWhere(['like', 'area_name', $operation_province_name])->asArray()->one();
 			$operation_province_id = $operationProvince['id'];
 			$operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
 
-			$operationCity = OperationArea::find()->where([
-				'area_name'=>$operation_city_name,
-				'level'=>2,
-				])->asArray()->one();
+//			$operationCity = OperationArea::find()->where([
+//				'area_name'=>$operation_city_name,
+//				'level'=>2,
+//				])->asArray()->one();
+            $operationCity = OperationArea::find()->where([
+                'level'=>2,
+                ])->andWhere(['like', 'area_name', $operation_city_name])->asArray()->one();
 			$operation_city_id = $operationCity['id'];
 			$operation_city_name = $operationCity['area_name'];
             $operation_city_short_name = $operationCity['short_name'];
 
-			$operationArea = OperationArea::find()->where([
-				'area_name'=>$operation_area_name,
-				'level'=>3,
-				])->asArray()->one();
+//			$operationArea = OperationArea::find()->where([
+//				'area_name'=>$operation_area_name,
+//				'level'=>3,
+//				])->asArray()->one();
+            $operationArea = OperationArea::find()->where([
+                'level'=>3,
+                ])->andWhere(['like', 'area_name', $operation_area_name])->asArray()->one();
 			$operation_area_id = $operationArea['id'];
 			$operation_area_name = $operationArea['area_name'];
             $operation_area_short_name = $operationArea['short_name'];
@@ -242,10 +266,15 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
         }
     }
 
-	/**
- 	 * add address for pop while area name and province are unknown
-	 */
-	public static function addAddressForPop($customer_id, $customer_address_phone, $city_name, $address){
+    /**
+     * add address for pop while area name and province are unknown
+     * @param $customer_id
+     * @param $customer_address_phone
+     * @param $city_name
+     * @param $address
+     * @return array|bool|CustomerAddress|null|\yii\db\ActiveRecord
+     */
+    public static function addAddressForPop($customer_id, $customer_address_phone, $city_name, $address){
 		try{
 		    $customerAddress = self::find()->where(['customer_id' => $customer_id, 'customer_address_detail' => $address])->one();
 		    if (!empty($customerAddress)) {
@@ -277,7 +306,9 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 	}
 
     /**
-     * 列出客户全部服务地址
+     * list customer address
+     * @param $customer_id
+     * @return array|\yii\db\ActiveRecord[]
      */
     public static function listAddress($customer_id){
         $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->all();
@@ -285,21 +316,36 @@ class CustomerAddress extends \dbbase\models\customer\CustomerAddress
     }
 
     /**
-     * 根据地址id查询地址
+     * get customer address by id
+     * @param $id
+     * @return bool|null|static
      */
     public static function getAddress($id){
         return self::findOne($id) ? self::findOne($id) : false;
     }
 
-	/**
- 	 *	get customer current address
-	 */
-	public static function getCurrentAddress($customer_id){
+    /**
+     * get customer current address
+     * @param $customer_id
+     * @return array|bool|null|\yii\db\ActiveRecord
+     */
+    public static function getCurrentAddress($customer_id){
 		$currentAddress = self::find()->where(['customer_id'=>$customer_id, 'customer_address_status'=>1])->one();
 		return $currentAddress == NULL ? false : $currentAddress;
 		
 	}
-    
+
+    /**
+     * get customer address as array
+     * @param $customer_id
+     * @param $operation_province_name
+     * @param $operation_city_name
+     * @param $operation_area_name
+     * @param $customer_address_detail
+     * @param string $customer_address_nickname
+     * @param $customer_address_phone
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public static function getAddressOne($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
         $customer_address = self::find()->where([
             'customer_id'=>$customer_id,

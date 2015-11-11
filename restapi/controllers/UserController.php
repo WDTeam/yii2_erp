@@ -506,6 +506,7 @@ class UserController extends \restapi\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             try {
                 $Address = CustomerAddress::getCurrentAddress($customer->id);
+                unset($Address['is_del']);
                 if (empty($Address)) {
                     return $this->send(null, "该用户没有默认地址", 0, 200, null, alertMsgEnum::defaultAddressNoAddress);
                 }
@@ -531,13 +532,11 @@ class UserController extends \restapi\components\Controller
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object} UserMoney 用户当前余额和消费记录对象
-     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      * {
      * "code": "1",
      * "msg": "查询成功",
-     * "alertMsg": "查询成功",
      * "ret": {
      * "userBalance": "用户余额",
      * "userRecord": [
@@ -571,9 +570,10 @@ class UserController extends \restapi\components\Controller
      * "customer_trans_record_verify": '验证',
      * "created_at":'创建时间',
      * "updated_at":'更新时间',
-     * }
-     * ]
-     * }
+     *    }
+     *   ]
+     *  },
+     * "alertMsg": "查询成功",
      * }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -723,6 +723,7 @@ class UserController extends \restapi\components\Controller
      * @apiName actionUserSuggest
      * @apiGroup User
      * @apiParam {int} order_id       '订单ID'
+     * @apiParam {int} order_code       '订单号'
      * @apiParam {String} access_token 用户认证
      * @apiParam {int}  worker_id      '阿姨id'
      * @apiParam {String} worker_tel  '阿姨电话'
@@ -771,7 +772,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
-        if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
+        if (empty($param['order_id']) || empty($param['customer_comment_phone']) || empty($param['order_code'])) {
             return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
 
@@ -800,13 +801,24 @@ class UserController extends \restapi\components\Controller
         if (empty($param['customer_comment_tag_ids'])) {
             $param['customer_comment_tag_ids'] = 0;
         }
+        $param['customer_comment_phone'] = isset($param['customer_comment_phone'])?$param['customer_comment_phone']:"";
+        $param['worker_tel'] = isset($param['worker_tel'])?$param['worker_tel']:"";
+        $param['customer_comment_content'] = isset($param['customer_comment_content'])?$param['customer_comment_content']:"";
+        $param['customer_comment_level_name'] = isset($param['customer_comment_level_name'])?$param['customer_comment_level_name']:"";
+        $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids'])?$param['customer_comment_tag_ids']:"";
+        $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names'])?$param['customer_comment_tag_names']:"";
+        
+        $param['order_code'] = isset($param['order_code'])?$param['order_code']:"";
+        
         try {
             $customer = CustomerAccessToken::getCustomer($param['access_token']);
+            
             if (!empty($customer) && !empty($customer->id)) {
 
                 $param['customer_id'] = $customer->id;
+                
                 $model = CustomerComment::addUserSuggest($param);
-
+                
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
@@ -960,11 +972,11 @@ class UserController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        
-        if(@$param['customer_comment_level']===false){
+
+        if (@$param['customer_comment_level'] === false) {
             return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
         }
-        
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
@@ -1451,7 +1463,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-money-score-coupon [GET] /user/get-money-score-coupon （100%）
+        * @api {GET} /user/get-money-score-coupon [GET] /user/get-money-score-coupon （100%）
      *
      * @apiDescription  个人中心获取用户的账户余额、积分、优惠券数（李勇）
      * @apiName actionCoupons

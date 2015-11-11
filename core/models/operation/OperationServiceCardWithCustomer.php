@@ -11,16 +11,16 @@ use core\models\customer\Customer;
  * @property string  $id
  * @property string  $service_card_sell_record_id
  * @property string  $service_card_sell_record_code
- * @property string  $server_card_info_id
+ * @property string  $service_card_info_id
  * @property string  $service_card_with_customer_code
- * @property string  $server_card_info_name
+ * @property string  $service_card_info_name
  * @property string  $customer_trans_record_pay_money
- * @property string  $server_card_info_value
+ * @property string  $service_card_info_value
  * @property string  $service_card_info_rebate_value
  * @property string  $service_card_with_customer_balance
  * @property integer $customer_id
  * @property string  $customer_phone
- * @property integer $server_card_info_scope
+ * @property integer $service_card_info_scope
  * @property integer $service_card_with_customer_buy_at
  * @property integer $service_card_with_customer_valid_at
  * @property integer $service_card_with_customer_activated_at
@@ -67,12 +67,14 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
      *      $service_card_with_customer_buy_at，支付时间】
      * @return mixed|null
      */
-    public function createServiceCardWithCustomer($service_card_sell_record_id,$customer_id,$customer_trans_record_pay_money,$service_card_with_customer_buy_at)
+    public function createServiceCardWithCustomer($attributes)
     {
         //0.新建客服服务卡对象
-        $model=new OperationServiceCardWithCustomer;
+        $model=new OperationServiceCardWithCustomer();
+        $model->setAttributes($attributes);
+
         //1.根据customer_id，获取用户对象
-        $customer = Customer::getCustomerById($this->customer_id);
+        $customer = Customer::getCustomerById($model->customer_id);
 
         //2.写入用户信息
         if($customer!=null){
@@ -83,51 +85,50 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
 
 
         //3.获取购卡销售订单信息
-        $operationServiceCardSellRecord=OperationServiceCardSellRecord::getServiceCardSellRecordById($service_card_sell_record_id);
+        $operationServiceCardSellRecord=OperationServiceCardSellRecord::getServiceCardSellRecordById($model->service_card_sell_record_id);
 
         //4.写入购卡销售订单信息
         if($operationServiceCardSellRecord!=null){
             $model->setAttributes([
                 'service_card_sell_record_code' => $operationServiceCardSellRecord->service_card_sell_record_code,
-                'server_card_info_id'=>$operationServiceCardSellRecord->server_card_info_id,
+                'service_card_info_id'=>$operationServiceCardSellRecord->service_card_info_id,
             ]);
         }
 
-
+     //   print_r( $operationServiceCardSellRecord);exit;
         //5.获取服务卡信息
-        $operationServiceCardInfo=OperationServiceCardInfo::getServiceCardInfo($operationServiceCardSellRecord->server_card_info_id);
+        $operationServiceCardInfo=OperationServiceCardInfo::getServiceCardInfoById($operationServiceCardSellRecord->service_card_info_id);
 
         //6.写入服务卡信息
         if($operationServiceCardInfo!=null){
+            //7.计算有效截至日期
+            $service_card_with_customer_valid_at=strtotime(date('y-m-d'))+$operationServiceCardInfo->service_card_info_valid_days*24*60*60;
             $model->setAttributes([
-                'server_card_info_name' =>  $operationServiceCardInfo->server_card_info_name,
-                'server_card_info_value'=> $operationServiceCardInfo->server_card_info_value,
-                'server_card_info_scope'=> $operationServiceCardInfo->server_card_info_scope,
+                'service_card_info_name' =>  $operationServiceCardInfo->service_card_info_name,
+                'service_card_info_value'=> $operationServiceCardInfo->service_card_info_value,
+                'service_card_info_scope'=> $operationServiceCardInfo->service_card_info_scope,
                 'service_card_info_rebate_value'=> $operationServiceCardInfo->service_card_info_rebate_value,
+                'service_card_with_customer_balance'=>$operationServiceCardInfo->service_card_info_value,//服务卡创建时，余额等于面值
+                'service_card_with_customer_valid_at'=>$service_card_with_customer_valid_at,
             ]);
-        }
+         }
 
 
-        //7.生成服务卡号
-        $service_card_with_customer_code=self::getServiceCardWithCustomerCode();
-
-        //8.计算有效截至日期
-        $service_card_with_customer_valid_at=strtotime(date('y-m-d'))+$operationServiceCardInfo->service_card_info_valid_days*24*60*60;
+        //8.生成服务卡号
+        $service_card_with_customer_code=OperationServiceCardWithCustomer::getServiceCardWithCustomerCode();
 
         //9.初始化其他字段
         $model->setAttributes([
             'is_del' => 0,
             'created_at'=>time(),
             'updated_at'=>time(),
-            'customer_trans_record_pay_money'=>$customer_trans_record_pay_money,
-            'service_card_with_customer_buy_at'=>$service_card_with_customer_buy_at,
-            'customer_id'=>$customer_id,
-            'service_card_sell_record_id'=>$service_card_sell_record_id,
-            'service_card_with_customer_activated_at'=>null,
-            'service_card_with_customer_status'=>0,
+            'customer_id'=>$model->customer_id,
+            'service_card_sell_record_id'=>$model->service_card_sell_record_id,
             'service_card_with_customer_code'=>$service_card_with_customer_code,
-            'service_card_with_customer_valid_at'=>$service_card_with_customer_valid_at,
-            'service_card_with_customer_balance'=>$operationServiceCardInfo->server_card_info_value,//服务卡创建时，余额等于面值
+            'customer_trans_record_pay_money'=>$model->customer_trans_record_pay_money,
+            'service_card_with_customer_buy_at'=>$model->service_card_with_customer_buy_at,
+            'service_card_with_customer_status'=>0
+
         ]);
 
         //10.保存客户服务卡关系记录
@@ -142,7 +143,7 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
      * @intruction 生成服务卡号
      * @return string
      */
-    private function getServiceCardWithCustomerCode(){
+    public static  function getServiceCardWithCustomerCode(){
         $code='88888888';
         return $code;
     }

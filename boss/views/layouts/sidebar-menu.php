@@ -21,7 +21,6 @@ ul.sidebar-menu ul.treeview-menu li.active a.active {
 </style>
 <?php
 use boss\widgets\Menu;
-use core\models\finance\FinanceSettleApplySearch;
 use core\models\finance\FinanceShopSettleApplySearch;
 use boss\components\RbacHelper;
 
@@ -432,7 +431,7 @@ echo Menu::widget([
                             'icon' => 'fa fa-angle-right'
                         ],
                         [
-                            'label' => '服务卡消费记录222',
+                            'label' => '服务卡消费记录',
                             'url' => [
                                 'operation/operation-service-card-consume-record/index'
                             ],
@@ -469,13 +468,6 @@ echo Menu::widget([
                         'class' => 'treeview '
                     ],
                     'items' => [
-                        [
-                            'label' => '渠道管理',
-                            'url' => [
-                                'finance/finance-pay-channel/index'
-                            ],
-                            'icon' => 'fa fa-angle-right'
-                        ],
                         [
                             'label' => '配置对账表头',
                             'url' => [
@@ -537,18 +529,14 @@ echo Menu::widget([
                                 [
                                     'label' => '全职结算',
                                     'url' => [
-                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
-                                        'settle_type'=>FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE,
-                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-worker-settle-apply/self-fulltime-index'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '兼职结算',
                                     'url' => [
-                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
-                                        'settle_type'=>FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE,
-                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-worker-settle-apply/self-parttime-index'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -568,16 +556,13 @@ echo Menu::widget([
                                     'label' => '门店结算',
                                     'url' => [
                                         'finance/finance-shop-settle-apply/index',
-                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '阿姨结算',
                                     'url' => [
-                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
-                                        'settle_type'=>FinanceSettleApplySearch::SHOP_WORKER_SETTELE,
-                                        'review_section'=>FinanceShopSettleApplySearch::BUSINESS_REVIEW
+                                        'finance/finance-worker-settle-apply/shop-worker-index'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -596,17 +581,14 @@ echo Menu::widget([
                                 [
                                     'label' => '阿姨结算',
                                     'url' => [
-                                        'finance/finance-settle-apply/self-fulltime-worker-settle-index',
-                                        'settle_type'=>FinanceSettleApplySearch::ALL_WORKER_SETTELE,
-                                        'review_section'=>FinanceShopSettleApplySearch::FINANCE_REVIEW
+                                        'finance/finance-worker-settle-apply/finance-settle-worker-index'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],
                                 [
                                     'label' => '门店结算',
                                     'url' => [
-                                        'finance/finance-shop-settle-apply/index',
-                                        'review_section'=>FinanceShopSettleApplySearch::FINANCE_REVIEW
+                                        'finance/finance-shop-settle-apply/finance-check-index',
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]
@@ -625,7 +607,7 @@ echo Menu::widget([
                                 [
                                     'label' => '阿姨结算',
                                     'url' => [
-                                        'finance/finance-settle-apply/query'
+                                        'finance/finance-worker-settle-apply/query'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ],

@@ -13,6 +13,7 @@ class m151009_091751_create_table_finance_shop_settle_apply extends Migration
         }
         $this->createTable('{{%finance_shop_settle_apply}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
+            'finance_shop_settle_apply_code' => Schema::TYPE_STRING . '(32)  COMMENT \'门店结算编号\'' ,
             'shop_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'门店id\'',
             'shop_name' => Schema::TYPE_STRING . '(100) NOT NULL COMMENT \'门店名称\'',
             'shop_manager_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'归属家政id\'',

@@ -37,8 +37,7 @@ $model->couponrule_promote_type=1;
     		 		'columns' => 1,
     		 		'attributes' => [
     				'couponrule_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>' 优惠券名称...', 'maxlength'=>100]],
-'couponrule_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券单价...', 'maxlength'=>8]],
-'couponrule_price_sum'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券总价...', 'maxlength'=>8]],			
+'couponrule_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券单价...', 'maxlength'=>8]],		
     		 'couponrule_classify'=>[
     		 'type'=> Form::INPUT_RADIO_LIST,
     		 'items'=>$configdate[1],'options'=>[]],

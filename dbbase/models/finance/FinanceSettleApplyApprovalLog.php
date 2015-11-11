@@ -5,10 +5,11 @@ namespace dbbase\models\finance;
 use Yii;
 
 /**
- * This is the model class for table "{{%finance_settle_apply_log}}".
+ * This is the model class for table "{{%finance_settle_apply_approval_log}}".
  *
  * @property integer $id
- * @property integer $finance_settle_apply_id
+ * @property string $finance_settle_apply_id
+ * @property integer $finance_settle_apply_code
  * @property integer $finance_settle_apply_reviewer_id
  * @property integer $finance_settle_apply_reviewer
  * @property integer $finance_settle_apply_node_id
@@ -19,14 +20,14 @@ use Yii;
  * @property integer $updated_at
  * @property integer $created_at
  */
-class FinanceSettleApplyLog extends \yii\db\ActiveRecord
+class FinanceSettleApplyApprovalLog extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%finance_settle_apply_log}}';
+        return '{{%finance_settle_apply_approval_log}}';
     }
 
     /**
@@ -48,6 +49,7 @@ class FinanceSettleApplyLog extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '主键'),
             'finance_settle_apply_id' => Yii::t('app', '结算申请id'),
+            'finance_settle_apply_code' => Yii::t('app', '结算编号，可能是阿姨结算编号，也可能是门店结算编号'),
             'finance_settle_apply_reviewer_id' => Yii::t('app', '审核人员Id'),
             'finance_settle_apply_reviewer' => Yii::t('app', '审核人员姓名'),
             'finance_settle_apply_node_id' => Yii::t('app', '审核节点id'),

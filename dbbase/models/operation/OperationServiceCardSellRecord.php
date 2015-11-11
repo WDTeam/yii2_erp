@@ -10,7 +10,7 @@ namespace dbbase\models\operation;
  * @property string $service_card_sell_record_code
  * @property string $customer_id
  * @property integer $customer_phone
- * @property string $server_card_info_id
+ * @property string $service_card_info_id
  * @property string $service_card_info_name
  * @property string $service_card_sell_record_money
  * @property integer $service_card_sell_record_channel_id

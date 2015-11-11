@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\datecontrol\DateControl;
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 ?>
 
 <div class="worker-search">
@@ -52,14 +52,14 @@ use core\models\finance\FinanceSettleApplySearch;
     <div class='col-md-2'>
         <?php 
             if(!\Yii::$app->user->identity->isMiniBossUser()){
-                echo  $form->field($model, 'worker_type_id')->dropDownList([FinanceSettleApplySearch::SELF_OPERATION=>'自营',FinanceSettleApplySearch::NON_SELF_OPERATION=>'小家政']);
+                echo  $form->field($model, 'worker_type_id')->dropDownList([FinanceWorkerSettleApplySearch::SELF_OPERATION=>'自营',FinanceWorkerSettleApplySearch::NON_SELF_OPERATION=>'小家政']);
             }
         ?>
     </div>
     <div class='col-md-2'>
         <?php 
             if(!\Yii::$app->user->identity->isMiniBossUser()){
-                echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceSettleApplySearch::FULLTIME=>'全职',FinanceSettleApplySearch::PARTTIME=>'兼职',FinanceSettleApplySearch::PARKTIME=>'高峰',FinanceSettleApplySearch::INTERVALTIME=>'时段']);
+                echo  $form->field($model, 'worker_identity_id')->dropDownList([FinanceWorkerSettleApplySearch::FULLTIME=>'全职',FinanceWorkerSettleApplySearch::PARTTIME=>'兼职',FinanceWorkerSettleApplySearch::PARKTIME=>'高峰',FinanceWorkerSettleApplySearch::INTERVALTIME=>'时段']);
             }
         ?>
     </div>

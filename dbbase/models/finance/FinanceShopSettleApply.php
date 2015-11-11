@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "{{%finance_shop_settle_apply}}".
  *
  * @property integer $id
+ * @property string $finance_shop_settle_apply_code
  * @property integer $shop_id
  * @property string $shop_name
  * @property integer $shop_manager_id
@@ -45,7 +46,7 @@ class FinanceShopSettleApply extends \yii\db\ActiveRecord
             [['shop_id', 'shop_name', 'shop_manager_id', 'shop_manager_name', 'finance_shop_settle_apply_cycle', 'finance_shop_settle_apply_cycle_des'], 'required'],
             [['shop_id', 'shop_manager_id', 'finance_shop_settle_apply_order_count', 'finance_shop_settle_apply_status', 'finance_shop_settle_apply_cycle', 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_shop_settle_apply_fee_per_order', 'finance_shop_settle_apply_fee'], 'number'],
-            [['finance_shop_settle_apply_cycle_des'], 'string'],
+            [['finance_shop_settle_apply_cycle_des','finance_shop_settle_apply_code'], 'string'],
             [['shop_name', 'shop_manager_name'], 'string', 'max' => 100],
             [['finance_shop_settle_apply_reviewer'], 'string', 'max' => 20]
         ];
@@ -58,6 +59,7 @@ class FinanceShopSettleApply extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键'),
+            'finance_shop_settle_apply_code' => Yii::t('app', '门店结算编号'),
             'shop_id' => Yii::t('app', '门店id'),
             'shop_name' => Yii::t('app', '门店名称'),
             'shop_manager_id' => Yii::t('app', '归属家政id'),

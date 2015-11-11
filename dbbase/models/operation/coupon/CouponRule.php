@@ -62,7 +62,7 @@ class CouponRule extends \yii\db\ActiveRecord
     {
         return [
             [['couponrule_classify', 'couponrule_category', 'couponrule_type', 'couponrule_service_type_id', 'couponrule_commodity_id', 'couponrule_city_limit', 'couponrule_city_id', 'couponrule_use_end_days', 'couponrule_promote_type', 'couponrule_code_num', 'couponrule_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
-            [['couponrule_order_min_price', 'couponrule_price', 'couponrule_price_sum'], 'number'],
+            [['couponrule_order_min_price', 'couponrule_price'], 'number'],
             [['couponrule_name','couponrule_category_name', 'couponrule_type_name', 'couponrule_service_type_name', 'couponrule_commodity_name', 'couponrule_customer_type_name'], 'string', 'max' => 100],
             [['couponrule_channelname'], 'string', 'max' => 80],
             [['couponrule_city_name', 'couponrule_promote_type_name'], 'string', 'max' => 60],

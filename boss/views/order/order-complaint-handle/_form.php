@@ -90,8 +90,8 @@ list-style-type:none;
 		</tr>
 		<?php foreach ($ochModel as $key=>$object){?>
 		<tr>
-			<td><?= Html::encode(date("Y-m-d H:i:s",$object->created_at));?></td>
-			<td><?= Html::encode($object->handle_operate); ?></td>
+			<td width="20%"><?= Html::encode(date("Y-m-d H:i:s",$object->created_at));?></td>
+			<td width="20%"><?= Html::encode($object->handle_operate); ?></td>
 			<td><?= Html::encode($object->handle_plan); ?></td>
 		</tr>
 			<?php }?>
@@ -116,7 +116,7 @@ list-style-type:none;
 		<div class="col-md-1 text-left"><span class="">投诉类型:</span></div>
 		<div class="col-md-9">
 		<?php if(!empty($complaintAssortment)){foreach ($complaintAssortment as $keyca=>$valca){?>
-	  	<ul id="assortment<?= $keyca; ?>" class="contented" style="color:#999999;<?php if($keyca == $orderComplaintModel->complaint_section){?>display:block;<?php }?>" >
+	  	<ul style="padding:0 !important;" id="assortment<?= $keyca; ?>" class="contented" style="color:#999999;<?php if($keyca == $orderComplaintModel->complaint_section){?>display:block;<?php }?>" >
 	  	<?php foreach ($valca as $keyca2=>$valca2){?>
 	  	<li style="float:left;">
 	  	<input type="radio" name="OrderComplaint[complaint_assortment]" value="<?= $keyca2; ?>" <?php if($keyca2 == $orderComplaintModel->complaint_assortment){?>checked="checked"<?php }?>>

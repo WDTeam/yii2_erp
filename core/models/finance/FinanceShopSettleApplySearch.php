@@ -5,10 +5,10 @@ namespace core\models\finance;
 use Yii;
 use yii\data\ActiveDataProvider;
 
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerSettleApplySearch;
 
 use dbbase\models\finance\FinanceShopSettleApply;
-use dbbase\models\finance\FinanceSettleApply;
+use dbbase\models\finance\FinanceWorkerSettleApply;
 /**
  * FinanceShopSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceShopSettleApply`.
  */
@@ -27,12 +27,12 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     public $settle_apply_create_end_time;//结算申请结束时间
     
     public $financeShopSettleApplyStatusArr = [
-       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
-       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
-       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT=>'提出申请，正在业务部门审核',
-       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED=>'业务部门审核通过，等待财务审核',
-       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过',
-        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED=>'财务已确认打款',];
+       FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
+       FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
+       FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT=>'提出申请，正在业务部门审核',
+       FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED=>'业务部门审核通过，等待财务审核',
+       FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过',
+        FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED=>'财务已确认打款',];
     
     public function rules()
     {
@@ -87,10 +87,10 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     }
     
     public function getShopSettleInfo($shopId){
-        $orderCount = FinanceSettleApply::find()
-                ->select(['sum(finance_settle_apply_order_count) as orderCount'])
-                ->andWhere(['shop_id'=>$shopId,'worker_type_id'=>FinanceSettleApplySearch::NON_SELF_OPERATION])
-                ->andFilterWhere(['>=','finance_settle_apply_status',FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])
+        $orderCount = FinanceWorkerSettleApply::find()
+                ->select(['sum(finance_worker_settle_apply_order_count) as orderCount'])
+                ->andWhere(['shop_id'=>$shopId,'worker_type_id'=>FinanceWorkerSettleApplySearch::NON_SELF_OPERATION])
+                ->andFilterWhere(['>=','finance_worker_settle_apply_status',FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])
                 ->asArray()->all();
         $this->finance_shop_settle_apply_order_count = $orderCount[0]['orderCount'];
         $this->finance_shop_settle_apply_fee_per_order = self::MANAGE_FEE_PER_ORDER;
@@ -98,7 +98,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     }
     
     public function getCanPayedShopSettlementList(){
-        $shopSettleApplyArray = self::find()->where(['finance_shop_settle_apply_status'=>FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])->all();
+        $shopSettleApplyArray = self::find()->where(['finance_shop_settle_apply_status'=>FinanceWorkerSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED])->all();
         return $shopSettleApplyArray;
     }
     

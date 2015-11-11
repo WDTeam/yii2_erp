@@ -9,7 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $worker_id
- * @property integer $finance_worker_non_order_income_code
+ * @property integer $finance_worker_non_order_income_id
+ * @property string $finance_worker_non_order_income_code
  * @property integer $finance_worker_non_order_income_type
  * @property integer $finance_worker_non_order_income_name
  * @property string $finance_worker_non_order_income
@@ -54,7 +55,8 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '主键'),
             'worker_id' => Yii::t('app', '阿姨id'),
-            'finance_worker_non_order_income_code' => Yii::t('app', '阿姨收入id，可能是任务Id，也可能是赔偿Id'),
+            'finance_worker_non_order_income_id' => Yii::t('app', '阿姨收入id，可能是任务Id，也可能是赔偿Id'),
+            'finance_worker_non_order_income_code' => Yii::t('app', '阿姨收入编号，可能是任务Id，也可能是赔偿编号'),
             'finance_worker_non_order_income_type' => Yii::t('app', '阿姨收入类型，1,任务；2赔偿'),
              'finance_worker_non_order_income_name' => Yii::t('app', '阿姨收入名称，可能是任务名称，也可能是赔偿名称'),
             'finance_worker_non_order_income' => Yii::t('app', '补贴金额'),

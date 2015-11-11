@@ -25,24 +25,32 @@ class WorkerTaskController extends Controller
      */
     public function actionIndex()
     {
-//         * 1、循环任务，查询获取昨日之前结束的任务
-//         * 2、计算时间段内各项条件的数值，保存数值，运算是否达到条件完成。
+        /**
+         * 1、循环任务，查询获取昨日之前结束的任务
+         * 2、计算时间段内各项条件的数值，保存数值，运算是否达到条件完成。
+         */
         $tasks = (array)WorkerTaskLog::find()
-        ->select(['worker_task_is_done','worker_task_log_start', 'worker_task_log_end', 'worker_id'])
         ->where('worker_task_is_done is NULL or worker_task_is_done=0')
-        ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
+//         ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
         ->all();
-        ConsoleHelper::log('截至昨日已结束但未处理的任务（%s）个', [count($tasks)]);
+        ConsoleHelper::log('所有未完成的任务（%s）个', [count($tasks)]);
         foreach ($tasks as $task){
             try{
                 $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
                 $task->setValues($conVals);
-                $is_done = $task->calculateIsDone();
-                ConsoleHelper::log('阿姨（%s）的任务（%s）%s',[
+                ConsoleHelper::log('阿姨（%s）任务（%s）最新值（%s）',[
                     $task->worker_id,
                     $task->worker_task_id,
-                    ($is_done?'完成':'失败')
+                    json_encode($conVals),
                 ]);
+                if($task->worker_task_log_end<=time()){
+                    $is_done = $task->calculateIsDone();
+                    ConsoleHelper::log('阿姨（%s）的任务（%s）%s',[
+                        $task->worker_id,
+                        $task->worker_task_id,
+                        ($is_done?'完成':'失败')
+                    ]);
+                }
             }catch(\Exception $e){
                 echo 'has error';
             }
@@ -61,8 +69,10 @@ class WorkerTaskController extends Controller
                             }
                         }
                         ConsoleHelper::log('阿姨（%s）分配任务"%s" 失败',[$model->id, $_model->worker_task_name]);
-                    }else{
+                    }elseif($_model->getIsNewRecord()){
                         ConsoleHelper::log('阿姨（%s）分配任务"%s" 成功',[$model->id,$_model->worker_task_name]);
+                    }else{
+                        ConsoleHelper::log('阿姨（%s）已存在任务"%s"',[$model->id,$_model->worker_task_name]);
                     }
                 }
             }catch(\Exception $e){
