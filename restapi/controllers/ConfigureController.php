@@ -357,14 +357,14 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function  actionGetServiceItem(){
         $param = Yii::$app->request->get();
-        if(!isset($param['city_name'])||!$param['city_name']){
+        if(!isset($param['city_name'])||!trim($param['city_name'])){
              return $this->send(null, '城市名称参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
         }
         if(!isset($param['category_id'])||!$param['category_id']){
             return $this->send(null, '服务类型参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
         }
         try{
-            $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'],intval($param['category_id']));
+            $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory(trim($param['city_name']),intval($param['category_id']));
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
         }
