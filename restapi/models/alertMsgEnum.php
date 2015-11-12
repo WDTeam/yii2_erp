@@ -51,6 +51,9 @@ class alertMsgEnum
     //根据地址获取百度地图数据
     const baiduMapSuccess = '获取百度地图数据成功';
     const baiduMapFailed = '获取百度地图数据失败';
+    
+    //指定阿姨订单列表
+    const worerSuccess = '指定阿姨订单列表';
     //会员余额支付
     const balancePaySuccess = '余额支付成功';
     const balancePayFailed = '余额支付失败';
@@ -462,5 +465,15 @@ class alertMsgEnum
     const getMoneyScoreCouponFail = '获取个人中心信息失败';
     //获取个人中心信息成功
     const getMoneyScoreCouponSuccess = '获取个人中心信息成功';
+    //分享微博
+    //分享微博成功
+    const shareWeiboSuccess = '分享微博成功';
+    //分享微博失败
+    const ShareWeiboFail = '分享微博失败';
+    //分享朋友圈
+    //分享朋友圈成功
+    const shareFriendsSuccess = '分享朋友圈成功';
+    //分享朋友圈失败
+    const ShareFriendsFail = '分享朋友圈失败';
 
 }

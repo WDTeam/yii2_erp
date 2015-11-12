@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 
 use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
-use dbbase\models\Worker;
+use core\models\worker\Worker;
 use dbbase\models\customer\CustomerFeedback;
 use dbbase\models\customer\CustomerExtBalanceRecord;
 
@@ -18,6 +18,7 @@ use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;
 use core\models\operation\OperationCity;
 use core\models\finance\FinanceOrderChannel;
+use core\models\operation\OperationOrderChannel;
 
 
 class Customer extends \dbbase\models\customer\Customer

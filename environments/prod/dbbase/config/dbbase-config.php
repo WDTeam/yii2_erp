@@ -52,6 +52,16 @@ return [
             'token' => '57b62a3462b52a1413a4e1934a60d983',
             'redirect_uri' => 'system/ivr/callback'
         ],
+        /**
+         * 七牛
+         */
+        'imageHelper'=>[
+            'class'=>'core\components\ImageHelper',
+            'accessKey' => 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw',
+            'secretKey' => 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq',
+            'domain' => '7b1f97.com1.z0.glb.clouddn.com',
+            'bucket' => 'bjzhichangmusic'
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '8P1C8K-jX8XahGh_4l_o3jxTxDIVLCIr',
@@ -256,7 +266,7 @@ return [
             'allowNegative' => false,
         ],
         "order_pop" => [
-            'api_url' => 'http://test.1jiajie.com/ejj-pop-api/web/'
+            'api_url' => 'http://pop.1jiajie.com/'
         ],
         'order' => [
             'MANUAL_ASSIGN_lONG_TIME' => 900,
@@ -271,10 +281,5 @@ return [
         'worker_base_salary' => 3000,//阿姨的底薪
         'unit_order_money_nonself_fulltime' => 50,//小家政全时段阿姨补贴的每单的金额
         'order_count_per_week' => 12,//小家政全时段阿姨的底薪策略是保单，每周12单
-        'service' => [
-            'user' => [
-                'domain' => 'http://dev.service.1jiajie.com:80/'
-            ]
-        ],
     ],
 ];

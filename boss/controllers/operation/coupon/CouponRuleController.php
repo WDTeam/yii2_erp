@@ -12,6 +12,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 
 use	dbbase\models\operation\CouponUserinfoceshi;
+use	dbbase\models\operation\coupon\CouponUserinfo;
 /**
  * CouponRuleController implements the CRUD actions for CouponRule model.
  */
@@ -33,7 +34,7 @@ class CouponRuleController extends Controller
     
     public function actionIndexceshi()
     {
-       $userinfoceshi= new \dbbase\models\operation\CouponUserinfoceshi;
+       $userinfoceshi= new CouponUserinfoceshi;
     	
        /* $datainfo=$userinfoceshi->find()
        ->where(['and','city_id is null'])
@@ -50,44 +51,85 @@ class CouponRuleController extends Controller
       } */
       
       // SELECT * from ejj_coupon_userinfoceshi  group by order_type order by id desc
-       
+     /*   $userinfoceshi= new CouponUserinfoceshi;
        $datainfo=$userinfoceshi->find()
        ->groupBy('order_type')
+       ->limit(1)
+       ->asArray()
+       ->all(); */
+		  /*  $googsdata=['通用'=>0,'洗衣'=>23,'洗鞋'=>25,'空调清洗'=>10,'杀虫'=>33,'地板抛光打蜡'=>19,'石材结晶保养'=>22,'地毯保养'=>18,'饮水机清洗'=>14,'擦玻璃'=>5,'厨房高温保洁'=>3,'卫生间保洁'=>4,'洗衣机清洗'=>15,'油烟机清洗'=>9,'窗帘清洗'=>34,'家庭保洁'=>1]; 
+		     $rty='';
+		    	foreach ($datainfo as $typedata){
+		    		$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
+					echo "UPDATE ejj_coupon_userinfoceshi SET order_typeid='".$googsdata[$typedata['order_type']]."' where order_type='".$typedata['order_type']."';<br>";
+		    	} */
+		//导入到新表       
+       $userinfoceshi= new CouponUserinfoceshi;
+       $data=$userinfoceshi->find()
+       ->where(['coupon_userinfo_id'=>1])
+       ->limit(5)
        ->asArray()
        ->all();
        
-   $googsdata=[
-				'通用'=>0,
-				'洗衣'=>23,
-				'洗鞋'=>25,
-				'空调清洗'=>10,
-				'杀虫'=>33,
-				'地板抛光打蜡'=>19,
-				'石材结晶保养'=>22,
-				'地毯保养'=>18,
-				'饮水机清洗'=>14,
-				'擦玻璃'=>5,
-				'厨房高温保洁'=>3,
-				'卫生间保洁'=>4,
-				'洗衣机清洗'=>15,
-				'油烟机清洗'=>9,
-				'窗帘清洗'=>34,
-				'家庭保洁'=>1]; 
        
+    	foreach ($data as $newdata){
+    		
+    		$newcoupon=new CouponUserinfo;
+    			//领取的优惠券
+				if($newdata['city_id']==0){
+					//全网优惠券
+					$newcoupon->couponrule_city_limit=1;
+					$newcoupon->couponrule_city_id=0;
+				}else{
+					//地区优惠券
+					$newcoupon->couponrule_city_limit=2;
+					$newcoupon->couponrule_city_id=$newdata['city_id'];					
+				}
+				if($newdata['order_typeid']==0){
+				//全国通用优惠券
+					$newcoupon->couponrule_type=1;
+					$newcoupon->couponrule_service_type_id=0;
+					$newcoupon->couponrule_commodity_id=0;
+				}else{
+					//不是全网优惠券 对应老数据就是商品优惠券，老数据没有，类别优惠券
+					$newcoupon->couponrule_type=3;
+					$newcoupon->couponrule_service_type_id=0;
+					$newcoupon->couponrule_commodity_id=$newdata['order_typeid'];
+				}
+				
+    		$newcoupon->coupon_userinfo_code=$newdata['coupon_userinfo_code']?$newdata['coupon_userinfo_code']:'0';
+    		$newcoupon->coupon_userinfo_name=$newdata['coupon_userinfo_name']?$newdata['coupon_userinfo_name']:'优惠券';
+    		$newcoupon->coupon_userinfo_gettime=$newdata['couponrule_use_start_time'];//领取时间默认为开始时间
+    		$newcoupon->couponrule_use_start_time=$newdata['couponrule_use_start_time'];
+    		$newcoupon->couponrule_use_end_time=$newdata['couponrule_use_end_time'];
+    		$newcoupon->coupon_userinfo_price=$newdata['coupon_userinfo_price'];
+    		$newcoupon->customer_tel=$newdata['customer_tel'];
+    		///////////////////////////////////////////
+    		
+    		$newcoupon->couponrule_order_min_price=0;
+    		$newcoupon->customer_id=0;
+    		$newcoupon->coupon_userinfo_id=0;
+    		$newcoupon->coupon_userinfo_usetime=0;
+    		$newcoupon->couponrule_classify=1;
+    		$newcoupon->couponrule_category=1;
+    		$newcoupon->couponrule_customer_type=1;
+    		$newcoupon->couponrule_use_end_days=0;
+    		$newcoupon->couponrule_promote_type=1;
+    		$newcoupon->couponrule_price=50;
+    		$newcoupon->order_code=0;
+    		$newcoupon->is_disabled=0;
+    		$newcoupon->system_user_id=0;
+    		$newcoupon->system_user_name='老数据导入';
+    		$newcoupon->is_used=0;
+    		$newcoupon->created_at=time();
+    		$newcoupon->updated_at=time();
+    		$newcoupon->is_del=0;
+    		$newcoupon->save();
+    	}
+    	
+    	
        
-       foreach ($datainfo as $typedata){
-       	
-       	$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
-       	$saveinfo->order_typeid=$googsdata[$typedata['order_type']];
-       	//var_dump($saveinfo->order_typeid);exit;
-       	$saveinfo->save();
-       }
-       
-       
-      
-       
-       
-    	//var_dump('11');exit;
+    	var_dump('11');exit;
     	
     	
     	
@@ -99,8 +141,6 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-    	//$rty=\core\models\operation\coupon\CouponRule::getcustomerlist_l('15172543897');
-    	//var_dump($rty);exit;
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

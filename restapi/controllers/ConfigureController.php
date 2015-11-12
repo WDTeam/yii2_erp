@@ -213,8 +213,9 @@ class ConfigureController extends \restapi\components\Controller
             $platform_version_name = "4.0";
             if(isset($param['platform_version'])&&$param['platform_version']){
                 $platform = explode("_",$param['platform_version']);
-                $platform_name = $platform[0];
-                $platform_version_name = $platform[1];
+                $platform_name = isset($platform[0])?$platform[0]:"ios";
+                $platform_version_name = isset($platform[1])?$platform[1]:"4.0";
+
             }
             //判断token是否有效
             $isEffect="0";
@@ -238,9 +239,9 @@ class ConfigureController extends \restapi\components\Controller
             }
             //整理开通的服务类型
             $serviceCategoryList = array();
-            if($cityCategoryList){
+            if($cityCategoryList&&!isset($cityCategoryList['code'])){
                 foreach($cityCategoryList as $key=>$val){
-                    $serviceCategoryList[$key]['category_id'] = $val['id'];
+                    $serviceCategoryList[$key]['category_id'] = isset($val['id'])?$val['id']:"0";
                     $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
                     $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
                     $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
@@ -249,6 +250,7 @@ class ConfigureController extends \restapi\components\Controller
                     $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
                 }
             }
+
             //整理焦点图
 //            $pic_list = array();
 //            if(!isset($bannerList['code'])&&!empty($bannerList)){

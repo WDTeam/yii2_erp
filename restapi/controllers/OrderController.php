@@ -277,6 +277,10 @@ class OrderController extends \restapi\components\Controller
             if ($is_success) {
                 return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
+                $result = $order->errors;
+                if(isset($result['order_service_item_name'])){
+                    return $this->send($order->errors, '创建订单失败', 0, 200, null, "您所填写的地址商圈不包含该服务");
+                }
                 return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
             }
         } catch (\Exception $e) {
@@ -1678,7 +1682,7 @@ class OrderController extends \restapi\components\Controller
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
                     $ret["orderData"] = $workerCount; // $workerCount; 实际返回数组名称
-                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1,200, null, alertMsgEnum::worerSuccess);
                 } catch (\Exception $e) {
                     return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
                 }
@@ -1709,7 +1713,7 @@ class OrderController extends \restapi\components\Controller
 //                        $worker->worker_is_block
 //                    ]; 状态有后台传递
                     $ret['worker_is_block'] = $worker->worker_is_block;
-                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1,200, null, alertMsgEnum::taskDoingSuccess);
                 } catch (\Exception $e) {
                     return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
                 }

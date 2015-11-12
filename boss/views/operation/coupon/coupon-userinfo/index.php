@@ -117,8 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
-            'type'=>'info', 
-			'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 添加绑定手机号', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                     
+            'type'=>'info',                                                                                                                                                   
 			'after'=>
 Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']),
 
