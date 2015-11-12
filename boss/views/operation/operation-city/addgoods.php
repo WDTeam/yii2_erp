@@ -119,7 +119,7 @@ $form = ActiveForm::begin([
                     echo '<div class="hid btn_ipo">';
                     echo "<div class='title_padding'>适用商圈</div>";
                     echo "<div class='over_flow'>";
-                    echo '<label class="reverse" for="reverse_'. $key . $k .'"><input id="reverse_'. $key . $k .'" type="checkbox" >全部商圈</label><br>';
+                    echo '<label id="reverse" for="reverse_'. $key . $k .'"><input id="reverse_'. $key . $k .'" type="checkbox" >全部商圈</label><br>';
                     foreach ((array)$shopdistrictinfo as $id => $name) {
                         echo '<label for="district_'. $key . $k . $id .'"><input id="district_'. $key . $k . $id .'" type="checkbox" name="'. $key .'['. $v['id'] .'][district][]" value="'. $id .'">' .$name. '</label><br>';
                     }
