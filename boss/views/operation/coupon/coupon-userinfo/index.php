@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\ActiveForm;
-
+use boss\models\operation\coupon\CouponRule;
+use boss\models\operation\coupon\CouponUserinfo;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -47,11 +48,26 @@ $this->params['breadcrumbs'][] = $this->title;
     		'format' => 'raw',
     		'label' => '客户名称',
     		'value' => function ($dataProvider) {
-    			return $dataProvider->customer_id ==0 ?'无此人': $dataProvider->customer_id;
+    			return CouponUserinfo::get_customer_name($dataProvider->customer_id);
     		},
     		],
             'customer_tel',
-            'coupon_userinfo_id',
+            [
+            'format' => 'raw',
+            'label' => '分类',
+            'value' => function ($dataProvider) {
+            	return CouponRule::couponconfiginfo(2,$dataProvider->couponrule_category);
+            },
+            ],
+            [
+            'format' => 'raw',
+            'label' => '分类',
+            'value' => function ($dataProvider) {
+            	return CouponRule::couponconfiginfo(4,$dataProvider->couponrule_city_limit);
+            },
+            ],
+            
+            
             'coupon_userinfo_code',
             'coupon_userinfo_name', 
             'coupon_userinfo_price', 
@@ -67,13 +83,22 @@ $this->params['breadcrumbs'][] = $this->title;
             
             'couponrule_use_end_time:datetime', 
             'order_code', 
-//            'system_user_id', 
-//            'system_user_name', 
-//            'is_used', 
-//            'created_at', 
-//            'updated_at', 
-//            'is_del', 
-
+            [
+            'format' => 'raw',
+            'label' => '状态',
+            'value' => function ($dataProvider) {
+            	return $dataProvider->is_disabled ==0 ?'启用':'禁用';
+            },
+            ],
+            [
+            'format' => 'raw',
+            'label' => '使用状态',
+            'value' => function ($dataProvider) {
+            	return $dataProvider->is_used ==0 ?'未使用':'已使用';
+            },
+            ],
+            
+            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
