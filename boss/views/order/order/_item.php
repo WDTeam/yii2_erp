@@ -77,10 +77,10 @@ use boss\models\order\Order;
             <td>
                 下单时间：<span><?= date('Y-m-d H:i', $model->created_at) ?></span><br/>
                 <?php if ($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT): ?>
-                    支付时间：<span><?= date('Y-m-d H:i', $model->orderExtPay->created_at) ?></span>
+                    支付时间：<span><?= date('Y-m-d H:i', $model->orderExtPay->created_at) ?></span><br/>
                 <?php endif; ?>
                 <?php if ($model->orderExtWorker->order_worker_assign_type > 0 and $model->orderExtWorker->order_worker_assign_type <= 2): ?>
-                    指定时间：<span><?= date('Y-m-d H:i', $model->orderExtWorker->created_at) ?></span>
+                    指定时间：<span><?= date('Y-m-d H:i', $model->orderExtWorker->created_at) ?></span><br/>
                 <?php elseif ($model->orderExtWorker->order_worker_assign_type > 2): ?>
                     接单时间：<span><?= date('Y-m-d H:i', $model->orderExtWorker->created_at) ?></span>
                 <?php endif; ?>
