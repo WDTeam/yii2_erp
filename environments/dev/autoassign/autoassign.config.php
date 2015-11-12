@@ -43,7 +43,7 @@ return [
     /*
      * SWOOLE 服务IP（推荐使用域名）
      */
-    'SWOOLE_SERVER_IP' => 'dev.boss.1jiajie.com',
+    'SWOOLE_SERVER_IP' => '101.200.1.79',
 
     /*
      * 设置启动的worker进程数
