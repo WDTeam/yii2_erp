@@ -1421,8 +1421,6 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam  {Object} [data]  数据对象
-     * @apiSuccessExample {json} Success-Response:
-     * 
      * 
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
