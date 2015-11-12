@@ -19,14 +19,6 @@ use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-<<<<<<< HEAD
-use crazyfd\qiniu\Qiniu;
-=======
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\finance\FinancePayChannel;
-use boss\models\finance\FinancePayChannelSearch;
-use boss\models\finance\FinanceOrderChannelSearch;
->>>>>>> e78322a7599fb747470fe71762148e1a120f38fc
 
 /**
  * FinanceHeaderController implements the CRUD actions for FinanceHeader model.
