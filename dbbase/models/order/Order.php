@@ -378,7 +378,7 @@ class Order extends ActiveRecord
      */
     public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'],$transact = null)
     {
-        $transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
+        $order_transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
         $is_new_record = $this->isNewRecord;
         if(!$this->isNewRecord)$this->version++;
 
@@ -411,7 +411,7 @@ class Order extends ActiveRecord
                 $$modelClassName->setAttributes($attributes);
 
                 if (!$$modelClassName->save()) {
-                    $transaction->rollBack();//插入不成功就回滚事务
+                    $order_transaction->rollBack();//插入不成功就回滚事务
                     $this->addErrors($$modelClassName->errors);
                     return false;
                 }
@@ -471,13 +471,13 @@ class Order extends ActiveRecord
             ]);
 
             if (!$OrderHistory->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
+                $order_transaction->rollBack();//插入不成功就回滚事务
                 return false;
             }
 
 
             if(empty($transact)){
-                $transaction->commit();
+                $order_transaction->commit();
             }
             return true;
         }

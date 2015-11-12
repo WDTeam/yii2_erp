@@ -1682,7 +1682,7 @@ class OrderController extends \restapi\components\Controller
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
                     $ret["orderData"] = $workerCount; // $workerCount; 实际返回数组名称
-                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1,200, null, alertMsgEnum::worerSuccess);
                 } catch (\Exception $e) {
                     return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
                 }
@@ -1713,7 +1713,7 @@ class OrderController extends \restapi\components\Controller
 //                        $worker->worker_is_block
 //                    ]; 状态有后台传递
                     $ret['worker_is_block'] = $worker->worker_is_block;
-                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1,200, null, alertMsgEnum::taskDoingSuccess);
                 } catch (\Exception $e) {
                     return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
                 }
