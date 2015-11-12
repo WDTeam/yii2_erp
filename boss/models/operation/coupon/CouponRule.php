@@ -23,6 +23,25 @@ class CouponRule extends CouponRuleModel
 
     
     
+    
+   
+    
+    public static function getcouponcode($key,$sum=10)
+    {
+    	$date=\Yii::$app->redis->SRANDMEMBER('ces',$sum);
+    	$tyu='';
+    	foreach ($date as $tyutyu){
+    		$tyu.=$tyutyu.' ';
+    	}
+    	return $tyu.'.....';
+    }
+    
+    public static function couponconfiginfo($id,$rid)
+    {
+    	if($rid=="" && $rid==0){ return '未知'; }
+    	$tyry=self::couponconfig();
+    	return $tyry[$id][$rid];
+    }
     public static function couponconfig()
     {
     	

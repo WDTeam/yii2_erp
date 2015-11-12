@@ -118,6 +118,25 @@ class Customer extends \dbbase\models\customer\Customer
             'customer_balance'=>$customer_balance,
             );
     }
+
+    /*****************************customer exists*********************************************/
+    /**
+     * @param $customer_id
+     * @return bool
+     */
+    public static function customerExistById($customer_id){
+        $count = self::find()->where(['id'=>$customer_id])->count();
+        return $count > 0;
+    }
+
+    /**
+     * @param $phone
+     * @return bool
+     */
+    public static function customerExistByPhone($phone){
+        $count = self::find()->where(['customer_phone'=>$phone])->count();
+        return $count > 0;
+    }
 /*********************************phone and id***********************************************/
 
     /**
@@ -621,6 +640,51 @@ class Customer extends \dbbase\models\customer\Customer
 
 	/*************************************worker*******************************************************/
     /**
+     * add customer worker
+     * @param $customer_id
+     * @param $worker_id
+     * @return array
+     */
+    public static function addWorker($customer_id, $worker_id){
+        $customer_exist = self::customerExistById($customer_id);
+        if(!$customer_exist) return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'customer not exist'];
+        $is_block_arr = self::isBlock($customer_id);
+        if($is_block_arr['response'] == 'error'){
+            return $is_block_arr;
+        }else{
+            $is_block = $is_block_arr['is_block'];
+            if($is_block){
+                return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'customer is in black-block'];
+            }
+        }
+
+        //whether worker is exist not not in block, if yes , return error message
+//        $worker_is_ok = wangzigen::func($worker_id);
+        $worker_is_enable = Worker::checkWorkerIsEnabled($worker_id);
+        if(!$worker_is_enable){
+            return ['response'=>'error', 'errcode'=>4, 'errmsg'=>'worker is not enable'];
+        }
+
+        //get customer phone by id
+        $customer_phone = self::getCustomerPhoneById($customer_id);
+
+        $customerWorker = new CustomerWorker;
+        $customerWorker->customer_id = $customer_id;
+        $customerWorker->customer_phone = $customer_phone;
+        $customerWorker->worker_id = $worker_id;
+        $customerWorker->customer_worker_status = 1;
+        $customerWorker->is_block = 0;
+        $customerWorker->created_at = time();
+        $customerWorker->updated_at = 0;
+        $customerWorker->is_del = 0;
+        if(!$customerWorker->validate()){
+            return ['response'=>'error', 'errcode'=>5, 'errmsg'=>'validate failed'];
+        }
+        $customerWorker->save();
+        return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+    }
+
+    /**
      * get customer's worker list
      * @param $customer_id
      * @return array
@@ -694,17 +758,6 @@ class Customer extends \dbbase\models\customer\Customer
         $customerWorkers = $customer->hasMany('\dbbase\models\customerWorker', ['customer_id'=>'id'])->all();
         return $customerWorkers != NULL ? $customerWorkers : false;
     }
-
-    // public static function getCustomerAddresses($customer_id)
-    // {
-    //     $customerAddress = CustomerAddress::find()->where(array(
-    //         'customer_id'=>$customer_id,
-    //         ))->all();
-    //     foreach ($customerAddress as $value) {
-    //         $generalRegion = GeneralRegion::findOne($value['general_region_id']);
-    //     }
-    // }
-
 
     /**
      * @param $id

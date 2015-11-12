@@ -27,14 +27,12 @@ use core\models\customer\CustomerAddress;
 use core\models\payment\PaymentCustomerTransRecord;
 
 use core\models\worker\Worker;
+use core\models\worker\WorkerForRedis;
 use core\models\worker\WorkerStat;
 
 /** dbbase */
-use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
-use dbbase\models\order\OrderExtCustomer;
-use dbbase\models\order\OrderSrc;
 
 use dbbase\models\finance\FinanceOrderChannel;
 
@@ -527,7 +525,7 @@ class Order extends OrderModel
             $result = self::_assignDone($order, $worker, $admin_id, $assign_type,$transact);
             $orderids[] = $order->id;
             //处理阿姨排班表
-            Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$order->id,$order->order_booked_count,$order->order_booked_begin_time,$order->order_booked_end_time);
+            WorkerForRedis::operateWorkerOrderInfoToRedis($worker['id'],1,$order->id,$order->order_booked_count,$order->order_booked_begin_time,$order->order_booked_end_time);
             if($result && $order->order_is_parent==1) { //如果是周期订单
                 foreach ($child_list as $child) {
                     $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
@@ -536,11 +534,11 @@ class Order extends OrderModel
                         break;
                     }
                     //处理阿姨排班表
-                    Worker::operateWorkerOrderInfoToRedis($worker['id'],1,$child->id,$child->order_booked_count,$child->order_booked_begin_time,$child->order_booked_end_time);
+                    WorkerForRedis::operateWorkerOrderInfoToRedis($worker['id'],1,$child->id,$child->order_booked_count,$child->order_booked_begin_time,$child->order_booked_end_time);
                 }
             }
 
-            if($result && $order->order_channel_type_id == OrderSrc::order_channel_type_POP){
+            if($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP){
                 $result = OrderPop::assignDoneToPop($order); //第三方同步失败则取消失败
             }
 
@@ -553,7 +551,7 @@ class Order extends OrderModel
                 $transact->rollBack();
                 foreach($orderids as $orderid) {
                     //失败后删除阿姨的订单信息
-                    Worker::deleteWorkerOrderInfoToRedis($worker['id'], $orderid);
+                    WorkerForRedis::deleteWorkerOrderInfoToRedis($worker['id'], $orderid);
                 }
             }
         }
@@ -616,7 +614,7 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = 1;
         $result = OrderStatus::_serviceDone($order,[],$transact);
-        if($result && $order->order_channel_type_id == OrderSrc::order_channel_type_POP){
+        if($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP){
             $result = OrderPop::serviceDoneToPop($order); //第三方同步失败则取消失败
         }
         if($result) {
@@ -735,7 +733,7 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
                     OrderStatusDict::ORDER_WORKER_BIND_ORDER
                 ]) && $result){
-                    $result = Worker::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
+                    $result = WorkerForRedis::deleteWorkerOrderInfoToRedis($order->orderExtWorker->worker_id, $order->id);
                 }
             }elseif($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP){
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
@@ -1034,7 +1032,7 @@ class Order extends OrderModel
         {
             //var_dump($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
             //更新阿姨排班表
-            return Worker::operateWorkerOrderInfoToRedis($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
+            return WorkerForRedis::operateWorkerOrderInfoToRedis($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
         }
     }
 

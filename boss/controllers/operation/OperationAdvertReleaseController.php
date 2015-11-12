@@ -53,14 +53,20 @@ class OperationAdvertReleaseController extends BaseAuthController
      * @param integer $id
      * @return mixed
      */
-    public function actionView($city_id = null)
+    public function actionView($city_id = '')
     {
+        $param = Yii::$app->request->getQueryParams();
+        if (isset($city_id) && $city_id != '') {
+            $param['OperationAdvertReleaseSearch']['city_id'] = $city_id;
+        }
+
         $searchModel = new OperationAdvertReleaseSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = $searchModel->search($param);
 
         return $this->render('view', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'city_id' => $city_id,
         ]);
     }
     
@@ -214,12 +220,12 @@ class OperationAdvertReleaseController extends BaseAuthController
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $city_id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'city_id' => $city_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

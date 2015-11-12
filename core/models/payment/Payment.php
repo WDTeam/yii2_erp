@@ -81,15 +81,19 @@ class Payment extends \dbbase\models\payment\Payment
                 //如果支付订单,查询订单数据
                 $fields = [
                     'id as order_id',
+                    'order_code',
                     'order_batch_code',
                     'channel_id',
+                    'order_channel_name',
                     'order_money',
                     'customer_id',
-                    'order_pay_type',
+                    'order_customer_phone',
+                    'pay_channel_id',
                     'order_pay_money',
                     'order_use_acc_balance',
                     'card_id',
                     'order_use_card_money',
+                    'coupon_id',
                     'order_use_coupon_money',
                     'order_use_promotion_money',
                     'order_pop_order_money'

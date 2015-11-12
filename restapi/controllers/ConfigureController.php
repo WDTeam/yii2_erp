@@ -199,6 +199,9 @@ class ConfigureController extends \restapi\components\Controller
     {
         try{
             $param = Yii::$app->request->get();
+            //获取环境变量对应的URL
+            $current_env_url = Yii::$app->params['envUrl'];
+            
             if(!isset($param['city_name'])||!$param['city_name']){
                 $param['city_name'] = "北京市";
             }
@@ -259,13 +262,13 @@ class ConfigureController extends \restapi\components\Controller
             $header_link = [
                 'comment_link' => [
                     'title' => '意见反馈',
-                    'url' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
-                    'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                    'url' => $current_env_url.'/statics/images/MyView_FeedBack.png',
+                    'img' => $current_env_url.'/statics/images/MyView_FeedBack.png',
                 ],
                 'phone_link' => [
                     'title' => '18210922324',
                     'url' => '',
-                    'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png',
+                    'img' => $current_env_url.'/statics/images/MyView_Tel.png',
                 ],
             ];
             //获取首页轮播图
@@ -291,16 +294,16 @@ class ConfigureController extends \restapi\components\Controller
                 [
                     'title' => '单次保洁',
                     'introduction' => '新用户第1小时免费',
-                    'icon' => 'http://dev.m2.1jiajie.com/statics/images/dancibaojie.png',
-                    'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/1',
+                    'icon' => $current_env_url.'/statics/images/dancibaojie.png',
+                    'url' => $current_env_url.'/#/order/createOnceOrder/1',
                     'bg_colour' => 'ffb518',
                     'font_colour' => 'ffffff',
                 ],
                 [
                     'title' => '周期保洁',
                     'introduction' => '一次下单 清洁无忧',
-                    'icon' => 'http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png',
-                    'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/2',
+                    'icon' => $current_env_url.'/statics/images/zhouqibaojie.png',
+                    'url' => $current_env_url.'/#/order/createOnceOrder/2',
                     'bg_colour' => 'ff8a44',
                     'font_colour' => 'ffffff',
                 ]

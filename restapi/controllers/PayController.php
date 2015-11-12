@@ -209,7 +209,7 @@ class PayController extends \restapi\components\Controller
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
             $retInfo = Payment::getPayParams($model->payment_type, $model->customer_id, $model->channel_id, $model->order_id, $ext_params);
-            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePayFailed);
+            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePaySuccess);
         }
         return $this->send(null, $model->errors, 0, 403, null, alertMsgEnum::onlinePayFailed);
     }

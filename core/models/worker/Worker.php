@@ -27,6 +27,7 @@ use core\models\worker\WorkerRuleConfig;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerSkillConfig;
 use core\models\worker\WorkerSchedule;
+use core\models\worker\WorkerForRedis;
 use core\models\customer\CustomerWorker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
@@ -63,8 +64,8 @@ use crazyfd\qiniu\Qiniu;
 class Worker extends \dbbase\models\worker\Worker
 {
 
-    const DISTRICT = 'DISTRICT';
-    const WORKER = 'WORKER';
+    const DISTRICT = 'DISTRICT_WORKER_RELATION';
+    const WORKER = 'WORKER_INFO';
     /**
      * 获取阿姨基本信息
      * @param integer $worker_id  阿姨id
@@ -331,7 +332,26 @@ class Worker extends \dbbase\models\worker\Worker
 
     }
 
-
+    /**
+     * 检查此阿姨是否可用
+     * @param $worker_id
+     * @return bool
+     */
+    public static function checkWorkerIsEnabled($worker_id){
+        $condition['id'] = $worker_id;
+        $condition['isdel'] = 0;
+        $condition['worker_is_block'] = 0;
+        $condition['worker_is_vacation'] = 0;
+        $condition['worker_is_blacklist'] = 0;
+        $condition['worker_is_dimission'] = 0;
+        $condition['worker_auth_status'] = [3,5,7];//3基础培训通过,5试工通过,6已上岗的阿姨可以 可以接单
+        $result = self::find()->where($condition)->asArray()->one();
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 
     /**
@@ -425,13 +445,13 @@ class Worker extends \dbbase\models\worker\Worker
      * @return array
      */
     protected static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
-        $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
+        $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [WorkerForRedis::DISTRICT_WORKER_RELATION.'_'.$district_id]);
         if($workerIdsArr){
             //指定阿姨
             if($worker_id){
                 //指定阿姨必须在该商圈中
                 if(in_array($worker_id,$workerIdsArr)){
-                    $workerInfoArr = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
+                    $workerInfoArr = Yii::$app->redis->executeCommand('get',[WorkerForRedis::WORKER_INFO.'_'.$worker_id]);
                     if($workerInfoArr){
                         $workerInfoArr = json_decode($workerInfoArr,1);
                         return [$workerInfoArr];
@@ -444,7 +464,7 @@ class Worker extends \dbbase\models\worker\Worker
             //所有阿姨
             }else{
                 foreach((array)$workerIdsArr as $key=>$val){
-                    $workerIdsArr[$key] = self::WORKER.'_'.$val;
+                    $workerIdsArr[$key] = WorkerForRedis::WORKER_INFO.'_'.$val;
                 }
                 $workerInfoArr = Yii::$app->redis->executeCommand('mget',$workerIdsArr);
 
@@ -825,7 +845,7 @@ class Worker extends \dbbase\models\worker\Worker
         if(empty($worker_id) || empty($order_id) || empty($order_booked_count) || empty($order_booked_begin_time) || empty($order_booked_end_time) ){
             return false;
         }
-        $workerInfo =  Yii::$app->redis->executeCommand('get', [self::WORKER.'_'.$worker_id]);
+        $workerInfo =  Yii::$app->redis->executeCommand('get', [WorkerForRedis::WORKER_INFO.'_'.$worker_id]);
         if(empty($workerInfo)){
             Yii::$app->redis->close();
             return false;
@@ -841,7 +861,7 @@ class Worker extends \dbbase\models\worker\Worker
                 $workerInfo = json_decode($workerInfo,1);
                 array_push($workerInfo['order'],$orderInfo);
                 $workerInfo = json_encode($workerInfo);
-                Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+                Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
                 Yii::$app->redis->close();
                 return true;
             //修改阿姨订单信息
@@ -853,7 +873,7 @@ class Worker extends \dbbase\models\worker\Worker
                     }
                 }
                 $workerInfo = json_encode($workerInfo);
-                Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+                Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
                 Yii::$app->redis->close();
                 return true;
             }else{
@@ -874,7 +894,7 @@ class Worker extends \dbbase\models\worker\Worker
             return false;
         }
 
-        $workerInfo =  Yii::$app->redis->executeCommand('get', [self::WORKER.'_'.$worker_id]);
+        $workerInfo =  Yii::$app->redis->executeCommand('get', [WorkerForRedis::WORKER_INFO.'_'.$worker_id]);
         if(empty($workerInfo)){
             Yii::$app->redis->close();
             return false;
@@ -886,7 +906,7 @@ class Worker extends \dbbase\models\worker\Worker
                 }
             }
             $workerInfo = json_encode($workerInfo);
-            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+            Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
             Yii::$app->redis->close();
             return true;
         }
@@ -907,7 +927,7 @@ class Worker extends \dbbase\models\worker\Worker
         //添加新的商圈绑定阿姨关系 [1,3,4]
         foreach ((array)$districtIdsArr as $val) {
             //如果商圈不存在，默认添加商圈set，并存储阿姨id
-            Yii::$app->redis->executeCommand('sadd', [self::DISTRICT.'_'.$val,$worker_id]);
+            Yii::$app->redis->executeCommand('sadd', [WorkerForRedis::DISTRICT_WORKER_RELATION.'_'.$val,$worker_id]);
         }
         Yii::$app->redis->close();
         return true;
@@ -920,7 +940,7 @@ class Worker extends \dbbase\models\worker\Worker
         //删除老的商圈绑定阿姨关系[['operation_shop_district_id'=>1]]
         $oldDistrictIdsArr = Worker::getWorkerDistrict($worker_id);
         foreach ((array)$oldDistrictIdsArr as $val) {
-            Yii::$app->redis->executeCommand('srem', [self::DISTRICT.'_'.$val['operation_shop_district_id'],$worker_id]);
+            Yii::$app->redis->executeCommand('srem', [WorkerForRedis::DISTRICT_WORKER_RELATION.'_'.$val['operation_shop_district_id'],$worker_id]);
         }
     }
 
@@ -950,13 +970,13 @@ class Worker extends \dbbase\models\worker\Worker
             $scheduleInfo = [];
         }
 
-        $workerInfo = Yii::$app->redis->executeCommand('get', [self::WORKER.'_'.$worker_id]);
+        $workerInfo = Yii::$app->redis->executeCommand('get', [WorkerForRedis::WORKER_INFO.'_'.$worker_id]);
         //如果有阿姨信息则更新阿姨的排班表信息 (不存在则代表阿姨当前状态为离职封号休假状态)
         if($workerInfo){
             $workerInfo = json_decode($workerInfo,1);
             $workerInfo['schedule'] = $scheduleInfo;
             $workerInfo = json_encode($workerInfo);
-            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+            Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
         }
 
         Yii::$app->redis->close();
@@ -984,7 +1004,7 @@ class Worker extends \dbbase\models\worker\Worker
         $workerInfo['schedule'] = [];
         $workerInfo['order'] = [];
         $workerInfo = json_encode($workerInfo);
-        Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
 
     }
 
@@ -1000,7 +1020,7 @@ class Worker extends \dbbase\models\worker\Worker
         if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
             return false;
         }
-        $workerInfo = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
+        $workerInfo = Yii::$app->redis->executeCommand('get',[WorkerForRedis::WORKER_INFO.'_'.$worker_id]);
         if($workerInfo){
             $workerInfo = json_decode($workerInfo,1);
             $workerInfo['info'] = [
@@ -1010,7 +1030,7 @@ class Worker extends \dbbase\models\worker\Worker
                 'worker_identity_id'=>$worker_identity_id
             ];
             $workerInfo = json_encode($workerInfo);
-            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+            Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
         }
     }
     /**
@@ -1561,10 +1581,17 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 阿姨商圈表连表方法
+     * 阿姨商圈表连表方法(一对一)
      */
     public function getWorkerDistrictRelation(){
         return $this->hasOne(WorkerDistrict::className(),['worker_id'=>'id'])->select('worker_id,operation_shop_district_id');
+    }
+
+    /**
+     * 阿姨商圈表连表方法(一对多)
+     */
+    public function getWorkerDistrictsRelation(){
+        return $this->hasMany(WorkerDistrict::className(),['worker_id'=>'id'])->select('worker_id,operation_shop_district_id');
     }
 
     /**

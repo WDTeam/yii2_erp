@@ -139,7 +139,7 @@ $this->title = $model->worker_name;
             'worker_phone',
             [
                 'attribute'=>'worker_idcard',
-                'displayOnly' => true
+                'displayOnly' => false
             ],
             [   'attribute' => 'worker_district',
                 'type' => DetailView::INPUT_WIDGET,

@@ -21,6 +21,34 @@ class CouponUserinfo extends CouponUserinfoModel
         ];
     }
 
+    
+    /**
+     * 根据客户id返回客户姓名
+     * @date: 2015-11-12
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_customer_name($id)
+    {
+    	 
+    	$customerinfo=\core\models\customer\Customer::getCustomerById($id);
+    	 
+    	if(isset($customerinfo->customer_name)){
+    		
+    		return $customerinfo->customer_name;
+    	}else{
+    		
+    		return '无名称';
+    	} 
+    	 
+    }
+    
+    
+    
+    
+    
+    
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -51,9 +79,17 @@ class CouponUserinfo extends CouponUserinfoModel
             'is_used' => $this->is_used,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+			'system_user_id'=>$this->system_user_id,	
             'is_del' => $this->is_del,
         ]);
 
+        
+        if($this->system_user_id==0){
+        	$query->andFilterWhere(['system_user_id'=>$this->system_user_id,]);
+        }else{
+        	$query->andFilterWhere(['!=', 'system_user_id',0]);
+        }
+        
         $query->andFilterWhere(['like', 'customer_tel', $this->customer_tel])
             ->andFilterWhere(['like', 'coupon_userinfo_code', $this->coupon_userinfo_code])
             ->andFilterWhere(['like', 'coupon_userinfo_name', $this->coupon_userinfo_name])

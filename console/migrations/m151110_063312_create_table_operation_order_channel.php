@@ -24,7 +24,7 @@ class m151110_063312_create_table_operation_order_channel extends Migration
 $this->execute("INSERT INTO {{%operation_order_channel}} VALUES ('1', 'Android(版本号)', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('2', 'ios(版本号)', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('3', 'Pcweb', '1', '1', '1', 'admin', '1447148814', '0');
-INSERT INTO {{%operation_order_channel}} VALUES ('4', 'H5', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('4', 'mobileweb', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('5', '微信公众号', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('6', '百度钱包app', '2', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('7', '百度直达号', '2', '1', '1', 'admin', '1447148814', '0');
@@ -46,7 +46,8 @@ INSERT INTO {{%operation_order_channel}} VALUES ('22', '大众点评团购', '3'
 INSERT INTO {{%operation_order_channel}} VALUES ('23', '糯米团购', '3', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('24', '赶集', '3', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('25', '58', '3', '1', '1', 'admin', '1447148814', '0');
-INSERT INTO {{%operation_order_channel}} VALUES ('26', '拉手团购', '3', '1', '1', 'admin', '1447148814', '0');"
+INSERT INTO {{%operation_order_channel}} VALUES ('26', '拉手团购', '3', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('27', 'e家洁老系统', '3', '1', '1', 'admin', '1447148814', '0');"
         );
     }
 

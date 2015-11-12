@@ -15,17 +15,17 @@ class IvrController extends Controller
     public function actionCallback()
     {
         $data = \Yii::$app->ivr->cb_data;
-        \Yii::getLogger()->log("ivr 回调日志", Logger::LEVEL_ERROR);
+        \Yii::getLogger()->log("ivr 回调日志", Logger::LEVEL_ERROR,'boss');
         $data['orderId'];
         $data['press'];
         $data['telephone'];
-        \Yii::getLogger()->log("ivr 回调日志,orderId=".$data['orderId'], Logger::LEVEL_ERROR);
+        \Yii::getLogger()->log("ivr 回调日志,orderId=".$data['orderId'], Logger::LEVEL_ERROR,'boss');
         if(isset($data['press'])){
-            \Yii::getLogger()->log("ivr 回调日志,press=".$data['press'], Logger::LEVEL_ERROR);
+            \Yii::getLogger()->log("ivr 回调日志,press=".$data['press'], Logger::LEVEL_ERROR,'boss');
         }
-        \Yii::getLogger()->log("ivr 回调日志,telephone=".$data['telephone'], Logger::LEVEL_ERROR);
+        \Yii::getLogger()->log("ivr 回调日志,telephone=".$data['telephone'], Logger::LEVEL_ERROR,'boss');
         if(isset($data['postType'])){
-            \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_ERROR);
+            \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_ERROR,'boss');
         }
         $order_id = intval(str_replace('pushToWorker_','',$data['orderId']));
         if(isset($data['postType']) && $data['postType']==1 && isset($data['press']) && $data['press']==1){
@@ -39,9 +39,9 @@ class IvrController extends Controller
             }
         }elseif(isset($data['postType']) && $data['postType']==2){
             if(isset($data['postType'])){
-                \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_ERROR);
+                \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_ERROR,'boss');
             }
-            \Yii::getLogger()->log("ivr 回调日志,阿姨没有按1，继续给其它阿姨电话", Logger::LEVEL_ERROR);
+            \Yii::getLogger()->log("ivr 回调日志,阿姨没有按1，继续给其它阿姨电话", Logger::LEVEL_ERROR,'boss');
             OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
             return json_encode(['code'=>0]);
         }

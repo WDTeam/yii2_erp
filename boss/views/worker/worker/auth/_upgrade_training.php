@@ -16,14 +16,14 @@ use core\models\worker\Worker;
 <?php
 
 $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
-if($worker_auth_status>=5){
+if($worker_auth_status>9){
     $attributes =[       // 2 column layout
         'actions'=>[
             'type'=>Form::INPUT_RAW,
             'value'=>'<span style="display: inline-block;font-size: 14px;font-weight: 300;margin-bottom: 15px">晋升培训状态：<span style="color:green">已通过</span></span>'
         ]
     ];
-}elseif($worker_auth_status<4){
+}elseif($worker_auth_status<8){
     $attributes =[       // 2 column layout
         'actions'=>[
             'type'=>Form::INPUT_RAW,
