@@ -293,8 +293,8 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} address_longitude 当前城市的精度
-     * @apiParam {String} address_latitude 当前城市维度
+     * @apiParam {String} address_longitude 填写地址的精度
+     * @apiParam {String} address_latitude 填写地址的纬度
      * @apiParam {String} city_name 当前城市名称 
      * @apiParam {String} [address_id] 用户地址ID
      *
@@ -1922,13 +1922,18 @@ class OrderController extends \restapi\components\Controller
 
         if (!empty($worker) && !empty($worker->id)) {
             try {
-
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
+                
+                if (!empty($setWorker['errors'])) {
+                    foreach ($setWorker['errors'] as $key => $val) {
+                        $val = $val[0];
+                    }
+                }
 
                 if ($setWorker && empty($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send($setWorker["errors"], "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
+                    return $this->send($setWorker["errors"], "阿姨抢单提交失败", 0, 200, null, $val);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);

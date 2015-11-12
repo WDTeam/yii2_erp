@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		'format' => 'raw',
     		'label' => '优惠券',
     		'value' => function ($dataProvider) {
-    			return $dataProvider->couponrule_code ==0 ?'一码一用': $dataProvider->couponrule_code;
+    			return \Yii::$app->redis->SRANDMEMBER($dataProvider->couponrule_Prefix);
     		},
     		],
     		[

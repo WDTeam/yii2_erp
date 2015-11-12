@@ -773,14 +773,14 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "address_longitude",
-            "description": "<p>当前城市的精度</p> "
+            "description": "<p>填写地址的精度</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "address_latitude",
-            "description": "<p>当前城市维度</p> "
+            "description": "<p>填写地址的纬度</p> "
           },
           {
             "group": "Parameter",
