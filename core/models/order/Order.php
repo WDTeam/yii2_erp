@@ -951,13 +951,17 @@ class Order extends OrderModel
 
 
     /**
-     * 更新订单
-     * @param $attributes
-     * @param $transact
+     * 修改预约时间
+     * @param $order_code
+     * @param $worker_id
+     * @param $begin_time
+     * @param $end_time
+     * @param $admin_id
      * @return bool
      */
-    public function modify($attributes, $transact = null)
+    public static function updateBookedTime($order_code,$worker_id,$begin_time,$end_time,$admin_id)
     {
+        $order = OrderSearch::getOneByCode($order_code);
         $status = [
             OrderStatusDict::ORDER_INIT, // = 1已创建
             OrderStatusDict::ORDER_WAIT_ASSIGN, // = 2待指派
@@ -971,70 +975,93 @@ class Order extends OrderModel
         ];
 
         //1:获取订单状态
-        if( !in_array($this->orderExtStatus->order_status_dict_id,$status))
-        {
-            $this->addError('order_status', '当前订单状态不可更新,当前订单状态');
+        if (!in_array($order->orderExtStatus->order_status_dict_id, $status)) {
+            $order->addError('order_status', '当前订单状态不可更新预约时间！');
             return false;
         }
-
-        //2:载入传入参数
-        //$this->setAttributes($attributes);
-
-        //创建地址信息
-        if( !empty($attributes['address_id']) )
-        {
-            try {
-                $address = CustomerAddress::getAddress($attributes['address_id']);
-                $addressInfo = $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone']; //地址信息
-                $this->setAttributes([
-                    'id'=>$attributes['id'],
-                    'address_id'=>$address['id'],
-                    'order_address'=>$addressInfo,
-                ]);
-            } catch (Exception $e) {
-                $this->addError('order_address', '创建时获取地址异常！');
+        $order->setAttributes(['admin_id' => $admin_id]);
+        if (!empty($worker_id) && $order->orderExtWorker->worker_id == $worker_id) { //如果修改阿姨没有变修改预约时间
+            $order->setAttributes([
+                'order_booked_begin_time' => $begin_time,
+                'order_booked_end_time' => $end_time,
+            ]);
+            //判断订单已经指定阿姨,检测阿姨时间段是否可用
+            $checkWorkerTime = worker::checkWorkerTimeIsDisabled($order->district_id, $worker_id, $order->order_booked_begin_time, $order->order_booked_end_time);
+            if (empty($checkWorkerTime)) {
+                $order->addError('order_booked_begin_time', "该阿姨的该时间段不可用了哟！");
                 return false;
             }
-        }
-
-        //获取服务日期时间段是否可用
-        if( !empty($attributes['order_booked_begin_time']) && !empty($attributes['order_booked_time_range']) )
-        {
-            $time = explode('-',$attributes['order_booked_time_range']);
-
-            $attr['order_booked_begin_time'] = strtotime($attributes['order_booked_begin_time'].' '.$time[0].':00');
-            $attr['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($attributes['order_booked_begin_time'].'00:00:00 +1 days')):$attributes['order_booked_begin_time'].' '.$time[1].':00');
-            //判断订单已经指定阿姨,检测阿姨时间段是否可用
-            if( !empty($this->orderExtWorker->worker_id) ){
-                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($this->district_id,$this->orderExtWorker->worker_id,$attr['order_booked_begin_time'],$attr['order_booked_end_time']);
-                if(empty($checkWorkerTime)){
-                    return false;
-                }
-            }
-
-            //设置参数
-            $this->setAttributes([
-                'id'=>$attributes['id'],
-                'worker_id'=>$attributes['worker_id'],
-                'order_booked_begin_time'=>$attr['order_booked_begin_time'],
-                'order_booked_end_time'=>$attr['order_booked_end_time'],
+            return $order->doSave(['OrderExtWorker']);
+        } else { //如果阿姨id为0 则重置为待指派状态
+            $order->setAttributes([
+                'worker_id' => 0,
+                'worker_type_id' => 0,
+                'order_worker_phone' => '',
+                'order_worker_name' => '',
+                'order_worker_type_name' => '',
+                'shop_id' => 0,
+                'order_worker_shop_name' => '',
+                'order_worker_assign_time' => 0,
+                'order_worker_assign_type' => 0,
+                'order_booked_begin_time' => $begin_time,
+                'order_booked_end_time' => $end_time,
             ]);
-
-
+            $range = date('G:i', $order->order_booked_begin_time) . '-' . date('G:i', $order->order_booked_end_time);
+            $ranges = $order->getThisOrderBookedTimeRangeList();
+            if (!in_array($range, $ranges)) {
+                $order->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
+                return false;
+            }
+            return OrderStatus::_updateToWaitAssign($order, ['OrderExtWorker']);
         }
 
-        $this->setAttributes([
-            'admin_id'=>Yii::$app->user->id
-        ]);
+    }
 
-        //3:修改订单信息
-        return $this->doSave(['OrderExtWorker'], $transact);
-        if($status)
-        {
-            //var_dump($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
-            //更新阿姨排班表
-            return WorkerForRedis::operateWorkerOrderInfoToRedis($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
-        }
+    public static function updateAddress(){
+
+        //创建地址信息
+//        if( !empty($attributes['address_id']) )
+//        {
+//            try {
+//                $address = CustomerAddress::getAddress($attributes['address_id']);
+//                $addressInfo = $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone']; //地址信息
+//                $order->setAttributes([
+//                    'id'=>$attributes['id'],
+//                    'address_id'=>$address['id'],
+//                    'order_address'=>$addressInfo,
+//                ]);
+//            } catch (Exception $e) {
+//                $order->addError('order_address', '创建时获取地址异常！');
+//                return false;
+//            }
+//        }
+//
+//        //获取服务日期时间段是否可用
+//        if( !empty($attributes['order_booked_begin_time']) && !empty($attributes['order_booked_time_range']) )
+//        {
+//            $time = explode('-',$attributes['order_booked_time_range']);
+//
+//            $attr['order_booked_begin_time'] = strtotime($attributes['order_booked_begin_time'].' '.$time[0].':00');
+//            $attr['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($attributes['order_booked_begin_time'].'00:00:00 +1 days')):$attributes['order_booked_begin_time'].' '.$time[1].':00');
+//            //判断订单已经指定阿姨,检测阿姨时间段是否可用
+//            if( !empty($order->orderExtWorker->worker_id) ){
+//                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($order->district_id,$order->orderExtWorker->worker_id,$attr['order_booked_begin_time'],$attr['order_booked_end_time']);
+//                if(empty($checkWorkerTime)){
+//                    return false;
+//                }
+//            }
+//
+//            //设置参数
+//            $order->setAttributes([
+//                'worker_id'=>$attributes['worker_id'],
+//                'order_booked_begin_time'=>$attr['order_booked_begin_time'],
+//                'order_booked_end_time'=>$attr['order_booked_end_time'],
+//            ]);
+//
+//
+//        }
+//        //3:修改订单信息
+//        return $order->doSave(['OrderExtWorker']);
     }
 
 

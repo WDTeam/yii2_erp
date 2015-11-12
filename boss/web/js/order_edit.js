@@ -78,25 +78,24 @@ $(document).ready(function(){
 	//保存服务信息
 	$(".order_service_info_save").on('click',function()
 	{
-		var order_booked_begin_time = $("input[name='Order[orderBookedDate]']").val();
+		var order_booked_date = $("input[name='Order[orderBookedDate]']").val();
 		var order_booked_time_range = $("input[name='Order[orderBookedTimeRange]']:checked").val();
-		var id = $("input[name='Order[id]']").val();
+		var order_code = $("#order-order_code").val();
 		var worker_id = $("input[name='OrderExtWorker[worker_id]']:checked").val();
 		//发送数据
-		var url = '/order/order/modify';
+		var url = '/order/order/update-booked-time?id='+order_code;
 		var data = {
-			'id':id,
 			'worker_id':worker_id,
-			'order_booked_begin_time':order_booked_begin_time,
+			'order_booked_date':order_booked_date,
 			'order_booked_time_range':order_booked_time_range,
 		};
 		$.post(url,data,function(json){
 			if(json.status == 1){
 				$(".service-info-view").show();
 				$(".service-info-edit").hide();
-				var html = order_booked_begin_time +' '+ order_booked_time_range.split('-')[0];
+				var html = order_booked_date +' '+ order_booked_time_range.split('-')[0];
 				html += '~';
-				html += order_booked_begin_time +' '+ order_booked_time_range.split('-')[1];
+				html += order_booked_date +' '+ order_booked_time_range.split('-')[1];
 				$(".service_time_html").html(html);
 			}
 		},'json');

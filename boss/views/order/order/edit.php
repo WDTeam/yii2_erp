@@ -256,6 +256,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- 客户需求修改END -->
         </div>
             <?= $form->field($model, 'id')->hiddenInput()->label('') ?>
+            <?= $form->field($model, 'order_code')->hiddenInput()->label('') ?>
             <?= $form->field($model, 'customer_id')->hiddenInput()->label('') ?>
 
         <?php ActiveForm::end(); ?>

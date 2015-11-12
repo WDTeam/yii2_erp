@@ -24,23 +24,38 @@ class OrderStatus extends Order
      */
     protected static function _payment(&$order, $must_models = [], $transact = null)
     {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         $current_status = $order->orderExtStatus->order_status_dict_id;
         if (in_array($current_status, [  //只有在以下状态下才可以改成待指派的状态
             OrderStatusDict::ORDER_INIT,//初始化
             OrderStatusDict::ORDER_MANUAL_ASSIGN_START, //人工指派中
         ])) {
-            if (self::_statusChange($order, $status, $must_models, $transact)) {
-                //支付成功后如果需要系统派单则把订单放入订单池
-                if ($order->orderExtFlag->order_flag_sys_assign == 1) {
-                    // 开始系统指派
-                    if (self::_sysAssignStart($order->id)) {
-                        OrderPool::addOrder($order->id);
-                    }
-                }
+            if(self::_updateToWaitAssign($order, $must_models, $transact)){
                 OrderMsg::payment($order);
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * 变更成待指派的状态 只有修改订单时可用
+     * @param $order
+     * @param array $must_models
+     * @param null $transact
+     * @return bool
+     */
+    protected static function _updateToWaitAssign(&$order, $must_models = [], $transact = null)
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
+        if (self::_statusChange($order, $status, $must_models, $transact)) {
+            //支付成功后如果需要系统派单则把订单放入订单池
+            if ($order->orderExtFlag->order_flag_sys_assign == 1) {
+                // 开始系统指派
+                if (self::_sysAssignStart($order->id)) {
+                    OrderPool::addOrder($order->id);
+                }
+            }
+            return true;
         }
         return false;
     }
