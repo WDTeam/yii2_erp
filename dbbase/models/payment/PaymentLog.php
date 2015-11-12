@@ -2,8 +2,6 @@
 
 namespace dbbase\models\payment;
 
-use dbbase\models\finance\FinancePayChannel;
-
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
