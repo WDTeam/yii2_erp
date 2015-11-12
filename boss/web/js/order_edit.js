@@ -6,13 +6,13 @@ $(document).ready(function(){
 	
 	$(".service-info-view").show();
 	$(".service-info-edit").hide();
-	
+
 	$(".btn-edit-service-info").click(function(){
 		$(".service-info-view").hide();
 		$(".service-info-edit").show();
 	});
 
-	$(document).on('.btn-edit-service-info','click',function(){
+	$('.btn-cancel-service-info').click(function(){
 		$(".service-info-view").show();
 		$(".service-info-edit").hide();
 	});
@@ -20,7 +20,7 @@ $(document).ready(function(){
 	$(".customer-info-view").show();
 	$(".customer-info-edit").hide();
 
-	$(document).on('.btn-edit-customer-info','click',function(){
+	$('.btn-edit-customer-info').click(function(){
 		$(".customer-info-view").hide();
 		$(".customer-info-edit").show();
 	});
@@ -31,7 +31,7 @@ $(document).ready(function(){
 	});
 
 	//显示编辑
-	$(document).on(".btn-edit-address-info",'click',function(){
+	$(".btn-edit-address-info").click(function(){
 		$.ajax({
 			type: "GET",
 			url: "/order/order/get-address?id=" + $("#address_id").val(),
