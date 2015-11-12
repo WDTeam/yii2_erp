@@ -186,7 +186,7 @@ function getTimeRange()
 
     $.ajax({
         type: "GET",
-        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val(),
+        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val()+"&worker_id="+$("input[name='OrderExtWorker[worker_id]']:checked").val(),
         dataType: "json",
         success: function (data) {
             $("#order-orderbookedtimerange").html('');

@@ -183,8 +183,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_service_item_id 服务项目id
      * @apiParam {String} channel_id 订单来源【1Android(版本号) 2.ios（版本号）3.Pcweb 4.H5 】
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 '1443695400'
-     * @apiParam {String} address 服务地址
-     * @apiParam {String} city_name 城市名称
+     * @apiParam {String} address_id 服务地址ID
+     * @apiParam {String} order_customer_need 客户
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -192,7 +192,7 @@ class OrderController extends \restapi\components\Controller
      *  "code": "1",
      *  "msg": "创建订单成功",
      *  "ret": {
-     *    "id":8
+     *    8//订单ID
      *   }
      *  "alertMsg": "创建订单成功"
      *  }
@@ -236,9 +236,9 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
         //所在城市
-        if (!isset($args['city_name']) || !$args['city_name']) {
-            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-        }
+//        if (!isset($args['city_name']) || !$args['city_name']) {
+//            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+//        }
         //所在地址
         if (!isset($args['address_id']) ||!intval($args['address_id'])) {
             return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
@@ -260,6 +260,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['channel_id'] = intval($args['channel_id']); //家洁
         $attributes['order_pay_type'] = 2; //现金支付
+        $attributes['order_customer_need'] = isset($args['order_customer_need'])?$args['order_customer_need']:""; //客户需求
 //        $attributes['order_pop_order_code'] = "0"; //第三方订单编号
 //        $attributes['order_pop_order_money'] = 0; //第三方订单金额
 //        $attributes['order_pop_group_buy_code'] = "0"; //

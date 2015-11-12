@@ -3,6 +3,7 @@
 namespace boss\controllers\order;
 
 use boss\components\BaseAuthController;
+use boss\models\order\OrderOtherDict;
 use boss\models\order\OrderSearch;
 use boss\models\order\Order;
 use boss\models\order\OrderManualAssign;
@@ -12,16 +13,13 @@ use core\models\customer\CustomerAddress;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderDispatcherKpi;
 use core\models\order\OrderWorkerRelation;
-use core\models\worker\Worker;
+use core\models\order\OrderStatusDict;
 use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use core\models\system\SystemUser;
 
-use dbbase\models\order\OrderOtherDict;
-use dbbase\models\order\OrderStatusDict;
 
-use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use Yii;
@@ -163,7 +161,8 @@ class OrderController extends BaseAuthController
         $order_booked_count = Yii::$app->request->get('order_booked_count');
         $district_id = Yii::$app->request->get('district_id');
         $date = Yii::$app->request->get('date');
-        return Order::getOrderBookedTimeRangeList($district_id, $order_booked_count, $date);
+        $worker_id = Yii::$app->request->get('worker_id','');
+        return Order::getOrderBookedTimeRangeList($district_id, $order_booked_count, $date,1,$worker_id);
     }
 
     /**
@@ -272,7 +271,14 @@ class OrderController extends BaseAuthController
             return $this->render('index-mini-boss', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel, 'searchParas' => $searchParas,]);
         }else{
             $dataProvider = $searchModel->search($searchParas);
-            return $this->render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel, 'searchParas' => $searchParas,]);
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'searchParas' => $searchParas,
+                'cancelCause' => OrderOtherDict::getCancelOrderCauseType(),
+                'cancelCustomerCause' => OrderOtherDict::getCancelOrderCustomerCause(),
+                'cancelCompanyCause' => OrderOtherDict::getCancelOrderCompanyCause(),
+            ]);
         }
     }
 

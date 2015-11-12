@@ -1414,15 +1414,13 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/set-worker-callback [GET] /worker/set-worker-callback(100%)
+     * @api {POST} /worker/set-worker-callback [POST] /worker/set-worker-callback(100%)
      * 
      * @apiDescription  极光推送,记录阿姨回调信息
      * @apiName actionSetWorkerCallback
      * @apiGroup Worker
      *
      * @apiParam  {Object} [data]  数据对象
-     * @apiSuccessExample {json} Success-Response:
-     * 
      * 
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK

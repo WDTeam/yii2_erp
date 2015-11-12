@@ -89,12 +89,12 @@ use boss\models\order\Order;
                 <p><a href="/order/order/edit?id=<?= Html::encode($model->order_code) ?>">查看订单</a></p>
 
                 <?php if ($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT): ?>
-                    <p><a href="###" class="m_tousu">投诉</a></p>
+                    <p><a href="javascript:void(0);" class="m_tousu">投诉</a></p>
                 <?php endif; ?>
                 <!-- <p><a href="###">发送短信</a></p> -->
 
                 <?php if ($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_CANCEL): ?>
-                    <p><a href="###" class="m_quxiao">取消订单</a></p>
+                    <p><a href="javascript:void(0);" class="m_quxiao">取消订单</a></p>
                 <?php endif; ?>
             </td>
         </tr>
