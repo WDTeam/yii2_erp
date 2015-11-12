@@ -51,6 +51,9 @@ class alertMsgEnum
     //根据地址获取百度地图数据
     const baiduMapSuccess = '获取百度地图数据成功';
     const baiduMapFailed = '获取百度地图数据失败';
+    
+    //指定阿姨订单列表
+    const worerSuccess = '指定阿姨订单列表';
     //会员余额支付
     const balancePaySuccess = '余额支付成功';
     const balancePayFailed = '余额支付失败';
