@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- end -->
 <input id="srvIsSuspend" name="srvIsSuspend" value="<?php echo $srvIsSuspend ? 'true':'false' ?>" hidden />
 <div class="container">
-    <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>"  />
-             <input id="serverport" class="form-control" style="width:30%;" name="serverport" type = "hidden" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" />
+    <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($config['SWOOLE_SERVER_IP'])? $config['SWOOLE_SERVER_IP']: ''?>"  />
+             <input id="serverport" class="form-control" style="width:30%;" name="serverport" type = "hidden" value="<?php echo !empty($config['SERVER_LISTEN_PORT'])? $config['SERVER_LISTEN_PORT'] : ''?>" />
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
