@@ -370,13 +370,6 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_src_id",
-            "description": "<p>订单来源id 访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
             "field": "order_booked_begin_time",
             "description": "<p>服务开始时间 时间戳  如 *'1443695400'</p> "
           },
@@ -399,7 +392,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填</p> "
+            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #不给予后台传递,用来作为支付渠道的判断标示</p> "
           },
           {
             "group": "Parameter",
@@ -784,13 +777,6 @@
           },
           {
             "group": "Parameter",
-            "type": "<p>integer</p> ",
-            "optional": false,
-            "field": "order_src_id",
-            "description": "<p>订单来源id 必填</p> "
-          },
-          {
-            "group": "Parameter",
             "type": "<p>string</p> ",
             "optional": false,
             "field": "channel_id",
@@ -815,7 +801,7 @@
             "type": "<p>int</p> ",
             "optional": false,
             "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填</p> "
+            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #改字段用于标示支付渠道</p> "
           },
           {
             "group": "Parameter",
@@ -961,15 +947,15 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "address",
-            "description": "<p>服务地址</p> "
+            "field": "address_id",
+            "description": "<p>服务地址ID</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "city_name",
-            "description": "<p>城市名称</p> "
+            "field": "order_customer_need",
+            "description": "<p>客户</p> "
           }
         ]
       }
@@ -978,7 +964,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":8\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   8//订单ID\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
           "type": "json"
         }
       ]
@@ -4780,6 +4766,48 @@
   },
   {
     "type": "GET",
+    "url": "/worker/set-worker-callback",
+    "title": "[GET] /worker/set-worker-callback(100%)",
+    "description": "<p>极光推送,记录阿姨回调信息</p> ",
+    "name": "actionSetWorkerCallback",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>Object</p> ",
+            "optional": true,
+            "field": "data",
+            "description": "<p>数据对象</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"alertMeg\": \"操作成功\",\n  \"ret\": {\n     \"worker\":1\n   },\n  \"msg\": \"操作成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 worker Not Found\n{\n  \"code\": 0,\n  \"msg\": \"操作删除失败\",\n  \"ret\": {},\n \"alertMeg\": \"操作删除失败\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
     "url": "/worker/system-news",
     "title": "[GET] /worker/system-news(0%)",
     "description": "<p>消息通知中心 （田玉星）</p> ",
@@ -5519,6 +5547,13 @@
             "optional": false,
             "field": "service_type_id",
             "description": "<p>服务类别id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Strimg</p> ",
+            "optional": false,
+            "field": "good_type_id",
+            "description": "<p>商品类别id</p> "
           },
           {
             "group": "Parameter",
