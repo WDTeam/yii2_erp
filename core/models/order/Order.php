@@ -1029,7 +1029,7 @@ class Order extends OrderModel
         ]);
 
         //3:修改订单信息
-        $status = $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+        return $this->doSave(['OrderExtWorker'], $transact);
         if($status)
         {
             //var_dump($this->orderExtWorker->worker_id,2,$this->id,$this->order_booked_count,$this->order_booked_begin_time,$this->order_booked_end_time);
@@ -1207,7 +1207,8 @@ class Order extends OrderModel
      */
     public function getThisOrderBookedTimeRangeList()
     {
-        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1, $this->orderExtWorker->worker_id);
+        $worker_id = !empty($this->orderExtWorker->worker_id) ? $this->orderExtWorker->worker_id : 0;
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,date('Y-m-d',$this->order_booked_begin_time),1, $worker_id);
         $order_booked_time_range = [];
         foreach($time_range[0]['timeline'] as $range){
             if($range['enable']) {

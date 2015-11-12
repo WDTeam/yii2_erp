@@ -15,7 +15,6 @@
 namespace core\models\customer;
 
 use Yii;
-use core\models\order\Order;
 use core\models\comment\CustomerCommentTag;
 use core\models\comment\CustomerCommentLevel;
 use core\models\order\OrderComplaint;
@@ -67,7 +66,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
     }
     
     /**
-     * 根据阿姨的id,开始时间和结束时间获取评价列表
+     * 根据阿姨的id,开始时间和结束时间获取评价列表条数
      * @date: 2015-10-27
      * @author: peak pan
      * @return:

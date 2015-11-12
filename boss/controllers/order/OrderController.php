@@ -257,6 +257,12 @@ class OrderController extends BaseAuthController
         }
     }
 
+    public function actionGetWaitManualAssignCount()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderManualAssign::getWaitAssignOrdersCount();
+    }
+
     /**
      * Lists all Order models.
      * @return mixed
