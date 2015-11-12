@@ -399,7 +399,7 @@ define({ "api": [
             "type": "<p>int</p> ",
             "optional": true,
             "field": "pay_channel_id",
-            "description": "<p>支付渠道id</p> "
+            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
           },
           {
             "group": "Parameter",
@@ -892,7 +892,7 @@ define({ "api": [
             "type": "<p>int</p> ",
             "optional": true,
             "field": "pay_channel_id",
-            "description": "<p>支付渠道id</p> "
+            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
           },
           {
             "group": "Parameter",
@@ -5510,7 +5510,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n          \"colour\": \"背景颜色\",\n          \"category_ico\": \"服务品类图标\",\n          \"category_name\": \"服务品类名称\",\n          \"category_english_name\": \"服务品类英文名\",\n          \"category_condition\": \"服务品类条件\",\n          \"category_price_description\": \"服务品类描述\",\n           \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n          ]\n }",
           "type": "json"
         }
       ]

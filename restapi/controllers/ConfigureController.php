@@ -342,9 +342,13 @@ class ConfigureController extends \restapi\components\Controller
      *      "msg": "获取数据成功",
      *      "alertMsg": "获取服务类型详情成功",
      *       "ret": [
-     *             "colour": "dfffrf",
-     *             "category_ico": "",
-     *             "item_list": [
+     *           "colour": "背景颜色",
+     *           "category_ico": "服务品类图标",
+     *           "category_name": "服务品类名称",
+     *           "category_english_name": "服务品类英文名",
+     *           "category_condition": "服务品类条件",
+     *           "category_price_description": "服务品类描述",
+     *            "item_list": [
      *                 {
      *                     "category_id": "分类ID",
      *                     "order_service_item_id": "商品ID",
@@ -353,8 +357,8 @@ class ConfigureController extends \restapi\components\Controller
      *                     "service_item_price": "商品价格",
      *                     "service_item_price_description": "商品价格描述"
      *                 }
-     *       ]
-     * }
+     *           ]
+     *  }
      *
      * @apiErrorExample Error-Response:
      * HTTP/1.1 200 OK
@@ -393,6 +397,10 @@ class ConfigureController extends \restapi\components\Controller
         $ret = [
             'colour'=>'dfffrf',
             'category_ico'=>"",
+            "category_name"=>"",
+            "category_english_name"=>"",
+            "category_condition"=>"",
+            "category_price_description"=>"",
             'item_list' =>$itemlist
         ];
         return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
