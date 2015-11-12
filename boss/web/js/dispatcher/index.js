@@ -110,7 +110,7 @@ function saveParams(){
    $.ajax({
       type: "GET",
       url: "/order/order/get-wait-manual-assign-count",
-      dataType:'text',
+      dataType:'json',
       success:function(msg){
          $('#nonAss').text(msg);
       }
