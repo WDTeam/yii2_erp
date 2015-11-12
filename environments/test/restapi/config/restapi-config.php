@@ -89,4 +89,6 @@ $config = [
 ];
 $config['params']['apiPopKey'] = 'pop-to-boss';
 $config['params']['apiSecretKey'] = 'pop-to-boss';
+//配置不同环境不同的URL
+$config['params']['envUrl'] = 'http://test.m2.1jiajie.com';
 return $config;

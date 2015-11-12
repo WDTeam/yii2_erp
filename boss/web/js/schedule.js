@@ -2,21 +2,40 @@
 
 $(document).on('click','td',function(){
     //console.log($(this).hasClass('success'));
+    if($(this).parent('tr').hasClass('show-schedule-for-redis')==true){
+        return false;
+    }
     if($(this).hasClass('success')==true){
         $(this).removeClass('success');
     }else{
         $(this).addClass('success');
     }
 });
-
+$(document).on('click','.switch',function(){
+    if($(this).attr('show_type')=='schedule-for-mysql'){
+        $(this).parents('.schedule_content').children('.schedule-info-redis').show();
+        $(this).parents('.schedule_content').children('.schedule-info').hide();
+        $(this).attr('show_type','schedule-for-redis');
+        $(this).text('切换数据库');
+    }else{
+        $(this).parents('.schedule_content').children('.schedule-info-redis').hide();
+        $(this).parents('.schedule_content').children('.schedule-info').show();
+        $(this).attr('show_type','schedule-for-mysql');
+        $(this).text('切换Redis');
+    }
+    console.log($(this).attr('show_type'));
+})
 $(document).on('change','input[type=checkbox]',function(){
+    if($(this).parent().siblings('td').hasClass('danger')){
+        return false;
+    }
     if($(this).is(':checked')){
         $(this).parent().siblings('td').attr('class','success')
     }else{
         $(this).parent().siblings('td').removeClass('success')
     }
 });
-$(document).on('click','.close',function(){
+$(document).on('click','.delete',function(){
     $(this).parents('.schedule_content').remove();
 });
 $('#btn-add').on('click',function(){
@@ -28,7 +47,8 @@ $('#btn-add').on('click',function(){
         alert('请选择时间');
         return false;
     }
-    var schedule_date = '<div date="'+date_range+'" class="schedule-date">工作日期：'+date_range+'<button type="button" class="close"  style="color:red;font-size:14px;margin-top:3px;margin-left: 3px">删除</button></div>';
+    var schedule_date = '<div date="'+date_range+'" class="schedule-date">工作日期：'+date_range+
+        '  <button type="button" class="delete btn btn-xs btn-danger" >删除</button></div>';
     var schedule_template = $('#schedule-template').html();
     var schedule_content = '<div class="schedule_content">'+schedule_date+schedule_template+'</div>';
     $('#schedule-list').append(schedule_content);
@@ -40,7 +60,7 @@ $('#btn-submit').on('click',function(){
     $('.schedule_content').each(function(index){
         schedule_date = $(this).children('.schedule-date').attr('date');
         weekday_arr = {};
-        $(this).find('tr').each(function(){
+        $(this).children('.schedule-info').find('tr').each(function(){
             schedule_weekday = $(this).children('th').attr('weekday');
             timeline_arr = {};
             i=0;
