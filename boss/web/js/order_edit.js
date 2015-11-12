@@ -19,8 +19,8 @@ $(document).ready(function(){
 	
 	$(".customer-info-view").show();
 	$(".customer-info-edit").hide();
-	
-	$(".btn-edit-customer-info").click(function(){
+
+	$(document).on('.btn-edit-customer-info','click',function(){
 		$(".customer-info-view").hide();
 		$(".customer-info-edit").show();
 	});
@@ -31,7 +31,7 @@ $(document).ready(function(){
 	});
 
 	//显示编辑
-	$(".btn-edit-address-info").on('click',function(){
+	$(document).on(".btn-edit-address-info",'click',function(){
 		$.ajax({
 			type: "GET",
 			url: "/order/order/get-address?id=" + $("#address_id").val(),
@@ -142,6 +142,7 @@ $(document).ready(function(){
 				var html = order_booked_date +' '+ order_booked_time_range.split('-')[0];
 				html += '~';
 				html += order_booked_date +' '+ order_booked_time_range.split('-')[1];
+				html += '<button type="button" style="margin-left: 50px;" class="btn btn-warning btn-xs btn-edit-service-info">修改时间</button>';
 				$(".service_time_html").html(html);
 			}
 		},'json');
