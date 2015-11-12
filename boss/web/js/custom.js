@@ -143,11 +143,13 @@ $(document).ready(function(){
     	if($(this).siblings().hasClass("selected")){
     		$(this).click(function(){
     			$(this).siblings().removeClass("selected");
+    			$(this).siblings().find("input").removettr("checked");
     			$(this).removeClass("selected");
     		});
     	}else{
     		$(this).click(function(){
     			$(this).siblings().addClass("selected");
+    			$(this).siblings().find("input").attr("checked","checked");
     			$(this).addClass("selected");
     		});
     	}
