@@ -11,7 +11,7 @@ var refuse_worker_id = 0;
 $(document).on("click",'#start_work',function(){
     window.work_status = 2;
     $('#work_status').text('空闲');
-    $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');
+    $("#work_console").html('<button id="pause_work" class="btn btn-warning col-sm-1" type="button">休息</button> <h4 id="get_order" class="col-sm-11">正在分配订单，请稍候……</h4>');
     getWaitManualAssignOrder();
     //触发统计派单员时间事件
     $('#startId').click();
@@ -22,7 +22,7 @@ $(document).on("click",'#continue_work',function(){
     var before_work_status = window.work_status;
     window.work_status = 2;
     $('#work_status').text('空闲');
-    $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');
+    $("#work_console").html('<button id="pause_work" class="btn btn-warning col-sm-1" type="button">休息</button> <h4 id="get_order" class="col-sm-11">正在分配订单，请稍候……</h4>');
     getWaitManualAssignOrder();
     //触发统计派单员时间事件
     if(before_work_status == 4){
@@ -39,8 +39,8 @@ $(document).on("click",'#pause_work',function(){
     window.work_status = 4;
     $('#work_status').text('小休');
     $("#work_console").html(
-        '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
-        '<button id="continue_work" class="btn btn-warning" type="button">继续</button>'
+        '<button id="stop_work" class="btn btn-warning col-sm-1" type="button">收工啦</button> ' +
+        '<button id="continue_work" class="btn btn-warning col-sm-1" type="button">我要接活儿</button>'
     );
     //触发统计派单员时间事件
     $('#restId').click();
@@ -51,7 +51,7 @@ $(document).on("click",'#stop_work',function(){
     window.work_status = 1;
     $('#work_status').text('休息');
     $("#work_console").html(
-        '<button id="start_work" class="btn btn-warning" type="button">开工啦</button>'
+        '<button id="start_work" class="btn btn-warning col-sm-1" type="button">开工啦</button> '
     );
     if(before_work_status == 4){
         $('#restEndId').click();
@@ -82,9 +82,9 @@ $(document).on("click",'.worker_assign',function(){
                 if(msg.status){
                     window.continue_work_count_down = 10;
                     $("#work_console").html(
-                        '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
-                        '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
-                        '<button id="continue_work" class="btn btn-warning" type="button">我要接活儿（'+window.continue_work_count_down+'s）</button>'
+                        '<button id="stop_work" class="btn btn-warning col-sm-1" type="button">收工啦</button> ' +
+                        '<button id="pause_work" class="btn btn-warning col-sm-1" type="button">休息</button> ' +
+                        '<button id="continue_work" class="btn btn-warning col-sm-1" type="button">我要接活儿（'+window.continue_work_count_down+'s）</button>'
                     );
                     $("#order_assign").hide();
                     $("#work_console").show();
@@ -193,9 +193,9 @@ function canNotAssign(){
             }
             window.continue_work_count_down = 10;
             $("#work_console").html(
-                '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
-                '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
-                '<button id="continue_work" class="btn btn-warning" type="button">我要接活儿（'+window.continue_work_count_down+'s）</button>'
+                '<button id="stop_work" class="btn btn-warning col-sm-1" type="button">收工啦</button> ' +
+                '<button id="pause_work" class="btn btn-warning col-sm-1" type="button">休息</button> ' +
+                '<button id="continue_work" class="btn btn-warning col-sm-1" type="button">我要接活儿（'+window.continue_work_count_down+'s）</button>'
             );
             $("#order_assign").hide();
             $("#work_console").show();
