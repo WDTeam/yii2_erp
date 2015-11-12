@@ -121,6 +121,7 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
         $data['worker_task_description'] = $model->getWorker_task_description();
         $worker_task = WorkerTask::findOne($this->worker_task_id);
         $cons= $worker_task->getConditions();
+        $data['worker_task_description_url'] = $worker_task->worker_task_description_url;
         $_values = [];
         foreach ($cons as $key=>$con){
             foreach ($data['values'] as $value){

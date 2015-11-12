@@ -144,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $workerList = [0=>'无'];
                     //判断是否已经指定阿姨
                     if( !empty($model->orderExtWorker->worker_id) ) {
-                        $workerList = array_merge($workerList,[$model->orderExtWorker->worker_id=>$model->orderExtWorker->order_worker_name]);
+                        $workerList[$model->orderExtWorker->worker_id] = $model->orderExtWorker->order_worker_name;
                     }
                     //显示指定阿姨
                     echo $form->field($model->orderExtWorker, 'worker_id')->inline()
