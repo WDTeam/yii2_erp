@@ -213,8 +213,9 @@ class ConfigureController extends \restapi\components\Controller
             $platform_version_name = "4.0";
             if(isset($param['platform_version'])&&$param['platform_version']){
                 $platform = explode("_",$param['platform_version']);
-                $platform_name = $platform[0];
-                $platform_version_name = $platform[1];
+                $platform_name = isset($platform[0])?$platform[0]:"ios";
+                $platform_version_name = isset($platform[1])?$platform[1]:"4.0";
+
             }
             //判断token是否有效
             $isEffect="0";
