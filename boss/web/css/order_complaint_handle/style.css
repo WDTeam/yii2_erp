@@ -26,6 +26,7 @@
 	label { 
 		vertical-align: middle !important; 
 		font-weight: normal !important;
+		padding: 0 5px !important;
 	}
 
 	.text-left {text-align:left; }
@@ -56,8 +57,13 @@
 	}
 
 	ul {
-    margin-top: 0 !important;
-    margin-bottom: 10px !important;
-    padding: 0 !important;
-    color: #333 !important;
-}
+	    margin-top: 0 !important;
+	    margin-bottom: 10px !important;
+	    padding: 0 !important;
+	    color: #333 !important;
+	}
+
+	.content-header,.content {
+		background: #fff !important;
+	}
+
