@@ -11,8 +11,10 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
-use \core\models\order\OrderStatus;
+use core\models\operation\OperationShopDistrictCoordinate;
+use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationOrderChannel;
+use \core\models\operation\OperationCity;
 use \core\models\order\OrderStatusHistory;
 use restapi\models\alertMsgEnum;
 use \restapi\models\EjjEncryption;
@@ -268,15 +270,8 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['channel_id'] = intval($args['channel_id']); //家洁
         $attributes['order_pay_type'] = 2; //现金支付
-        $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
-//        $attributes['order_pop_order_code'] = "0"; //第三方订单编号
-//        $attributes['order_pop_order_money'] = 0; //第三方订单金额
-//        $attributes['order_pop_group_buy_code'] = "0"; //
-        // $attributes['coupon_id'] = 0;
-        //$attributes['order_booked_worker_id'] = 0;
-        // $attributes['order_customer_need'] = ""; //客户需求
-        //  $attributes['order_customer_memo'] = ""; //客户备注
-        // $attributes['order_is_use_balance'] = 0; //客户选择使用余额则去获取客户余额
+
+        $attributes['order_customer_need'] = isset($args['order_customer_need'])?$args['order_customer_need']:""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
         try {
@@ -292,7 +287,86 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateFaile);
         }
     }
+    /**
+     * @api {POST} /order/check-district-goods [POST] /order/check-district-goods(100%)
+     * @apiDescription  创建增值服务订单 (田玉星)
+     *
+     * @apiName actionCheckDistrictGoods
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} order_service_item_id 服务项目id
+     * @apiParam {String} city_name 城市名称
+     * @apiParam {String} address 详细地址
+     *
+     * @apiSuccessExample Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *  "code": "1",
+     *  "msg": "创建订单成功",
+     *  "ret": {
+     *    8//订单ID
+     *   }
+     *  "alertMsg": "创建订单成功"
+     *  }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": 401,
+     *        "msg": "用户无效,请先登录",
+     *        "ret": {},
+     *        "alertMsg": "用户认证已经过期,请重新登录"
+     *     }
+     *
+     */
+    public function catch_fatal_error()
+    {
+      // Getting Last Error
+       $last_error =  error_get_last();
 
+      
+       print_R($last_error);
+
+    }
+    public function actionCheckDistrictGoods(){
+        register_shutdown_function('catch_fatal_error');
+        $param = Yii::$app->request->get();
+        if (!isset($param['access_token']) || !$param['access_token']) {
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+        //验证用户登录情况
+        $user = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!$user){
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+         if(!isset($param['order_service_item_id']) || !$param['order_service_item_id']) {
+          return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
+        }
+        //判断商圈地址
+        if(!isset($param['address_longitude']) || !$param['address_longitude']) {
+            return $this->send(null, "address_longitude经度参数错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        }
+        if(!isset($param['address_latitude']) || !$param['address_latitude']) {
+            return $this->send(null, "address_latitude维度参数错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        }
+        if(!isset($param['city_name']) || !$param['city_name']) {
+            return $this->send(null, "城市名称错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
+        }
+        $cityInfo = OperationCity::getCityId(trim($param['city_name']));
+        if(!$cityInfo){
+            return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
+        }
+        try{
+            $shopDistrictInfo =  OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'],$param['address_latitude']);
+            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityInfo['id'],$shopDistrictInfo['id'],intval($param['order_service_item_id']))){
+                return $this->send(null, "该服务不在当前地址商圈内", 0, 200, null, alertMsgEnum::orderShopDistrictGoodsFaile);
+            }
+            return $this->send(null, "该服务不在当前地址商圈内", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+        }
+    }
     /**
      * @api {GET} /order/orders [GET] /order/orders (100%)
      * @apiDescription 查询用户订单 (谢奕)
