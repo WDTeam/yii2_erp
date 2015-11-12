@@ -14,9 +14,9 @@ MySQL - 5.6.25 : Database - local-boss-db
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-/*[21:35:20][65 ms]*/ TRUNCATE TABLE `local-boss-db`.`ejj_shop`; 
-/*[21:35:30][31 ms]*/ TRUNCATE TABLE `local-boss-db`.`ejj_shop_manager`; 
-/*[21:35:39][80 ms]*/ TRUNCATE TABLE `local-boss-db`.`ejj_system_user`; 
+/*[21:35:20][65 ms]*/ TRUNCATE TABLE `ejj_shop`; 
+/*[21:35:30][31 ms]*/ TRUNCATE TABLE `ejj_shop_manager`; 
+/*[21:35:39][80 ms]*/ TRUNCATE TABLE `ejj_system_user`; 
 
 /*Data for the table `ejj_shop` */
 

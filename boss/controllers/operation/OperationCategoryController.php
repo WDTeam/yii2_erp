@@ -10,7 +10,7 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use crazyfd\qiniu\Qiniu;
+
 
 /**
  * OperationCategoryController implements the CRUD actions for OperationCategory model.
