@@ -27,6 +27,7 @@ use core\models\customer\CustomerAddress;
 use core\models\payment\PaymentCustomerTransRecord;
 
 use core\models\worker\Worker;
+use core\models\worker\WorkerForRedis;
 use core\models\worker\WorkerStat;
 
 /** dbbase */
