@@ -391,15 +391,15 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #不给予后台传递,用来作为支付渠道的判断标示</p> "
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_booked_count",
-            "description": "<p>服务时长</p> "
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "pay_channel_id",
+            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
           },
           {
             "group": "Parameter",
@@ -877,13 +877,6 @@
             "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #改字段用于标示支付渠道</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": false,
             "field": "order_is_use_balance",
             "description": "<p>是否使用余额 0否 1是 必填</p> "
           },
@@ -893,6 +886,13 @@
             "optional": false,
             "field": "order_booked_count",
             "description": "<p>服务时长</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "pay_channel_id",
+            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
           },
           {
             "group": "Parameter",
@@ -2750,70 +2750,6 @@
   },
   {
     "type": "GET",
-    "url": "/user/get-money-score-coupon",
-    "title": "[GET] /user/get-money-score-coupon （100%）",
-    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
-    "name": "actionCoupons",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 moeny Not Found\n{\n  \"code\": 0,\n  \"msg\": \"获取用户余额系统错误\",\n  \"ret\": {},\n \"alertMeg\": \"获取用户余额系统错误\"\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
     "url": "/user/default-address",
     "title": "[GET] /user/default-address(100%)",
     "description": "<p>获取默认地址(赵顺利)</p> ",
@@ -3379,6 +3315,70 @@
     "groupTitle": "User"
   },
   {
+    "type": "GET",
+    "url": "/user/get-money-score-coupon",
+    "title": "[GET] /user/get-money-score-coupon （100%）",
+    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
+    "name": "actionGetMoneyScoreCoupon",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 moeny Not Found\n{\n  \"code\": 0,\n  \"msg\": \"获取用户余额系统错误\",\n  \"ret\": {},\n \"alertMeg\": \"获取用户余额系统错误\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "POST",
     "url": "/user/get-user-feedback",
     "title": "[POST] /user/get-user-feedback （100%）",
@@ -3814,6 +3814,124 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": 0,\n  \"msg\": \"设置默认地址失败\",\n  \"ret\": {},\n \"alertMeg\": \"设置默认地址失败\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/share-friends",
+    "title": "[GET] /user/share-friends （100%）",
+    "description": "<p>分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
+    "name": "actionShareFriends",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"分享朋友圈成功\",\n      \"ret\": {\n          \"image\": \"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png\",\n          \"title\": \"品质生活 从e家洁开始  周期下单 情节无忧\",\n          \"content\": [\n              \"省时省力省心\",\n              \"固定星级阿姨\",\n              \"轻松回归生活\"\n          ],\n          \"url\": \"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1\"\n      },\n      \"alertMsg\": \"分享朋友圈成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/share_weibo",
+    "title": "[GET] /user/share_weibo （100%）",
+    "description": "<p>分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
+    "name": "actionShareWeibo",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"分享微博成功\",\n      \"ret\": {\n          \"image\": \"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png\",\n          \"title\": \"品质生活 从e家洁开始  周期下单 情节无忧\",\n          \"content\": [\n              \"省时省力省心\",\n              \"固定星级阿姨\",\n              \"轻松回归生活\"\n          ],\n          \"url\": \"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1\"\n      },\n      \"alertMsg\": \"分享微博成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]
@@ -5392,7 +5510,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n          \"colour\": \"背景颜色\",\n          \"category_ico\": \"服务品类图标\",\n          \"category_name\": \"服务品类名称\",\n          \"category_english_name\": \"服务品类英文名\",\n          \"category_condition\": \"服务品类条件\",\n          \"category_price_description\": \"服务品类描述\",\n           \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n          ]\n }",
           "type": "json"
         }
       ]
