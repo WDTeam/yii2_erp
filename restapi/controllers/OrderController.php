@@ -39,7 +39,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam  {int}     pay_channel_id     支付渠道id
+     * @apiParam  {int}     [pay_channel_id]     支付渠道id
      * @apiParam {String} address_id 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
@@ -1737,7 +1737,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {int}     order_booked_count 服务时长
-     * @apiParam  {int}     pay_channel_id     支付渠道id
+     * @apiParam  {int}     [pay_channel_id]     支付渠道id
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
      * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
