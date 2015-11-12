@@ -1923,13 +1923,18 @@ class OrderController extends \restapi\components\Controller
 
         if (!empty($worker) && !empty($worker->id)) {
             try {
-
                 $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
+                
+                if (!empty($setWorker['errors'])) {
+                    foreach ($setWorker['errors'] as $key => $val) {
+                        $val = $val[0];
+                    }
+                }
 
                 if ($setWorker && empty($setWorker["errors"])) {
                     return $this->send($setWorker, "阿姨抢单提交成功", 1, 200, null, alertMsgEnum::orderSetWorkerOrderSuccess);
                 } else {
-                    return $this->send($setWorker["errors"], "阿姨抢单提交失败", 0, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);
+                    return $this->send($setWorker["errors"], "阿姨抢单提交失败", 0, 200, null, $val);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderSetWorkerOrderFaile);

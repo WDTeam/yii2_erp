@@ -21,6 +21,34 @@ class CouponUserinfo extends CouponUserinfoModel
         ];
     }
 
+    
+    /**
+     * 根据客户id返回客户姓名
+     * @date: 2015-11-12
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_customer_name($id)
+    {
+    	 
+    	$customerinfo=\core\models\customer\Customer::getCustomerById($id);
+    	 
+    	if(isset($customerinfo->customer_name)){
+    		
+    		return $customerinfo->customer_name;
+    	}else{
+    		
+    		return '无名称';
+    	} 
+    	 
+    }
+    
+    
+    
+    
+    
+    
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
