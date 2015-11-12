@@ -206,44 +206,46 @@ function canNotAssign(){
 }
 
 function getWaitManualAssignOrder(){
-    $.ajax({
-        type: "GET",
-        url: "/order/order/get-wait-manual-assign-order",
-        dataType:"json",
-        success: function (data) {
-            if(data){
-                window.count_down_flag = true;
-                window.work_status = 3;
-                $('#work_status').text('忙碌');
-                window.order_data = data;
-                for(var k in data.booked_workers){
-                    var v = data.booked_workers[k];
-                    $("#worker_list thead").append('<tr>'+
-                        '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
-                        '<td>'+ v.worker_phone+'</td>'+
-                        '<td>'+ v.shop_name+'</td>'+
-                        '<td>'+ v.worker_identity_description+'</td>'+
-                        '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
-                        '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
-                        '<td>'+ v.tag+'</td>'+
-                        '<td id="worker_status_'+ v.id+'">'+ v.status.join(',')+'</td>'+
-                        '<td id="worker_memo_'+ v.id+'">'+ (v.memo.length>0?v.memo.join(','):'<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>')+'</td>'+
-                        '</tr>');
+    if(window.work_status == 2) {
+        $.ajax({
+            type: "GET",
+            url: "/order/order/get-wait-manual-assign-order",
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    window.count_down_flag = true;
+                    window.work_status = 3;
+                    $('#work_status').text('忙碌');
+                    window.order_data = data;
+                    for (var k in data.booked_workers) {
+                        var v = data.booked_workers[k];
+                        $("#worker_list thead").append('<tr>' +
+                            '<td><input type="hidden" value="' + v.id + '" /><a href="/worker/view/' + v.id + '" target="_blank">' + v.worker_name + '</a></td>' +
+                            '<td>' + v.worker_phone + '</td>' +
+                            '<td>' + v.shop_name + '</td>' +
+                            '<td>' + v.worker_identity_description + '</td>' +
+                            '<td>' + v.order_booked_time_range.join('<br/>') + '</td>' +
+                            '<td>' + v.worker_stat_order_refuse_percent + '</td>' +
+                            '<td>' + v.tag + '</td>' +
+                            '<td id="worker_status_' + v.id + '">' + v.status.join(',') + '</td>' +
+                            '<td id="worker_memo_' + v.id + '">' + (v.memo.length > 0 ? v.memo.join(',') : '<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>') + '</td>' +
+                            '</tr>');
+                    }
+                    getCanAssignWorkerList();
+                    showOrder();
+                    $("#work_console").hide();
+                    $("#order_assign").show();
+                    //触发统计派单员时间事件
+                    $('#waitId').click();
+                } else {
+                    setTimeout(getWaitManualAssignOrder, 3000);
                 }
-                getCanAssignWorkerList();
-                showOrder();
-                $("#work_console").hide();
-                $("#order_assign").show();
-                //触发统计派单员时间事件
-                $('#waitId').click();
-            }else{
-                setTimeout(getWaitManualAssignOrder,3000);
+            },
+            error: function ($msg) {
+                setTimeout(getWaitManualAssignOrder, 10000);
             }
-        },
-        error: function($msg){
-            setTimeout(getWaitManualAssignOrder,10000);
-        }
-    });
+        });
+    }
 }
 
 function getCanAssignWorkerList(){
@@ -278,8 +280,6 @@ function getCanAssignWorkerList(){
 
 function onbeforeunload_handler(){
     //1休息 2空闲 3忙碌 4小休
-    //停止时间计算
-    stopCount()
     switch (window.work_status ){
         case 1:break;
         case 2:
