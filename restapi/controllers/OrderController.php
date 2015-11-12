@@ -101,11 +101,11 @@ class OrderController extends \restapi\components\Controller
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        
+
         if (empty($args['channel_id'])) {
             return $this->send(null, "数据不完整,订单渠道ID为必填项", 0, 200, null, alertMsgEnum::orderCreateFaileChannelId);
         }
-        
+
         $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
 
         if ($args['order_pay_type'] == 1) {
@@ -228,15 +228,15 @@ class OrderController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
         }
-        if (!$user){
+        if (!$user) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         //填写服务项目
-        if (!isset($args['order_service_item_id'])||!intval($args['order_service_item_id'])) {
+        if (!isset($args['order_service_item_id']) || !intval($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         //下单渠道
-        if (!isset($args['channel_id'])||!intval($args['channel_id'])) {
+        if (!isset($args['channel_id']) || !intval($args['channel_id'])) {
             return $this->send(null, "请输入下单渠道", 0, 200, null, alertMsgEnum::orderChannleIDFaile);
         }
         //服务开始时间/阿姨上门时间
@@ -248,7 +248,7 @@ class OrderController extends \restapi\components\Controller
 //            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
 //        }
         //所在地址
-        if (!isset($args['address_id']) ||!intval($args['address_id'])) {
+        if (!isset($args['address_id']) || !intval($args['address_id'])) {
             return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
 //        try {
@@ -257,26 +257,26 @@ class OrderController extends \restapi\components\Controller
 //            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderAddressIdFaile);
 //        }
 //        if (!empty($model)) {
-            $attributes['address_id'] = intval($args['address_id']);
+        $attributes['address_id'] = intval($args['address_id']);
 //        } else {
 //            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
 //        }
         $attributes['customer_id'] = $user->id; //登录用户ID
         $attributes['order_service_item_id'] = intval($args['order_service_item_id']); //服务品类ID
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
-        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time']+10800; //服务结束时间
+        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['channel_id'] = intval($args['channel_id']); //家洁
         $attributes['order_pay_type'] = 2; //现金支付
-        $attributes['order_customer_need'] = isset($args['order_customer_need'])?$args['order_customer_need']:""; //客户需求
+        $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
 //        $attributes['order_pop_order_code'] = "0"; //第三方订单编号
 //        $attributes['order_pop_order_money'] = 0; //第三方订单金额
 //        $attributes['order_pop_group_buy_code'] = "0"; //
-       // $attributes['coupon_id'] = 0;
+        // $attributes['coupon_id'] = 0;
         //$attributes['order_booked_worker_id'] = 0;
-       // $attributes['order_customer_need'] = ""; //客户需求
-      //  $attributes['order_customer_memo'] = ""; //客户备注
-       // $attributes['order_is_use_balance'] = 0; //客户选择使用余额则去获取客户余额
+        // $attributes['order_customer_need'] = ""; //客户需求
+        //  $attributes['order_customer_memo'] = ""; //客户备注
+        // $attributes['order_is_use_balance'] = 0; //客户选择使用余额则去获取客户余额
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
         try {
@@ -1540,8 +1540,10 @@ class OrderController extends \restapi\components\Controller
      *       "address": "服务地址",
      *       "need": "备注说明",
      *       "money": "订单价格",
-     *       "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式", # 11月六号 涛涛说不要这个时间标示 18:22
-     *       "times" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22
+     *        "lng"     经度,
+     *         "lat"    纬度,
+     *      ### "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式", # 11月六号 涛涛说不要这个时间标示 18:22
+     *       ##"times" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22
      *                    "order_time":
      *                 [
      *                    '开始时间 - 结束时间',
@@ -1742,24 +1744,24 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-            
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
-            "order_ip" => $order_ip,
-            "order_service_item_id" => $param['order_service_item_id'],
-            "channel_id" => $param['channel_id'],
-            "address_id" => $param['address_id'],
-            "customer_id" => $customer->id,
-            "order_customer_phone" => $param['order_customer_phone'],
-            "admin_id" => Order::ADMIN_CUSTOMER,
-            "pay_channel_id" =>$param['pay_channel_id'],
-            "order_is_use_balance" => $param['order_is_use_balance'],
+                "order_ip" => $order_ip,
+                "order_service_item_id" => $param['order_service_item_id'],
+                "channel_id" => $param['channel_id'],
+                "address_id" => $param['address_id'],
+                "customer_id" => $customer->id,
+                "order_customer_phone" => $param['order_customer_phone'],
+                "admin_id" => Order::ADMIN_CUSTOMER,
+                "pay_channel_id" => $param['pay_channel_id'],
+                "order_is_use_balance" => $param['order_is_use_balance'],
                 //order_booked_worker_id edit by tianyuxing
-            "order_booked_worker_id" => isset($param['order_booked_worker_id'])?intval($param['order_booked_worker_id']):0,
-            "order_customer_need" => $param['order_customer_need'],
-            "order_customer_memo" => $param['order_customer_memo'],
-            "order_flag_change_booked_worker" => $param['accept_other_aunt']
+                "order_booked_worker_id" => isset($param['order_booked_worker_id']) ? intval($param['order_booked_worker_id']) : 0,
+                "order_customer_need" => $param['order_customer_need'],
+                "order_customer_memo" => $param['order_customer_memo'],
+                "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
             #开始时间 结束时间 时间段 优惠码
