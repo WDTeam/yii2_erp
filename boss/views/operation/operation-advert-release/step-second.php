@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <label class="control-label" for="operationadvertrelease-city_id">第二步：选择目标平台</label>
 
 <div class="form-group">
-    <?=Html::checkboxList('platform_id[]', null, $platforms, ['class' => 'step2']);?>
+    <?=Html::radioList('platform_id[]', null, $platforms, ['class' => 'step2']);?>
 </div>
 
 <div class="form-group">

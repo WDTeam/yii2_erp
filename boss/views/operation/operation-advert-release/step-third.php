@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="form-group">
             <label class="control-label" for="operationadvertrelease-city_id"><?=$platform['operation_platform_name']?>：</label>
             <?php foreach($platform['versions'] as $key => $version){?>
-                <label><?=Html::checkbox('version_id['.$platform['id'].'][]', false, ['value' => $version['id']]);?><?php echo $version['operation_platform_version_name']?></label>
+                <label><?=Html::radio('version_id['.$platform['id'].'][]', false, ['value' => $version['id']]);?><?php echo $version['operation_platform_version_name']?></label>
             <?php }?>
             <?php //=Html::checkboxList('OperationAdvertRelease[version_id][]', null, $versions, ['platform_id' => $platform['id'], 'class' => 'platform_versions']);?>
         </div>
