@@ -25,9 +25,9 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
      */
     public static function generateAndSend($phone){
         $transaction = \Yii::$app->db->beginTransaction();
-        
-        $expirated_arr_info = self::isLastCodeExpirated($phone);
-        if($expirated_arr_info['response'] == 'success' && !$expirated_arr_info['is_last_code_expirated']){
+
+        $expirated_arr_info = self::isLastCodeSendExpirated($phone);
+        if($expirated_arr_info['response'] == 'success' && !$expirated_arr_info['is_last_code_send_expirated']){
             return false;
         }
         
@@ -37,7 +37,6 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
         }
         
         try{
-            //$has_customer = Customer::hasCustomer($phone);
             $customerCodes = self::find()->where(['customer_phone'=>$phone])->all();
             foreach ($customerCodes as $customerCode) {
                 $customerCode->is_del = 1;
@@ -51,7 +50,7 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
             }
             
             $customerCode->customer_code = $customer_code;
-            $customerCode->customer_code_expiration = self::getCodeConfig('code_send_expiration');
+            $customerCode->customer_code_expiration = self::getCodeConfig('code_expiration');
             $customerCode->customer_phone = $phone;
             $customerCode->created_at = time();
             $customerCode->updated_at = 0;
@@ -93,7 +92,8 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
     public static function codeConfig(){
         return [
             'code_send_expiration'=>60,
-            'code_num_per_day'=>100,
+            'code_expiration'=>1800,
+            'code_num_per_day'=>30,
         ];
     }
 
@@ -114,7 +114,7 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
     }
 
     /**
-     * whether customer last code has been send to expiration
+     * whether customer last code has been expirated
      * @param $phone
      * @return array
      */
@@ -127,6 +127,22 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
             return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_last_code_expirated'=>true];
         }else{
             return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_last_code_expirated'=>false];
+        }
+    }
+
+    /**whether customer last code has been send expirated
+     * @param $phone
+     * @return array
+     */
+    public static function isLastCodeSendExpirated($phone){
+        $customer_code = self::find()->where(['customer_phone'=>$phone, 'is_del'=>0])->orderBy('created_at desc')->asArray()->one();
+        if(empty($customer_code)){
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_last_code_send_expirated'=>true];
+        }
+        if($customer_code['created_at'] + self::getCodeConfig('code_send_expiration')< time()){
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_last_code_send_expirated'=>true];
+        }else{
+            return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'', 'is_last_code_send_expirated'=>false];
         }
     }
 
