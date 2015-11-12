@@ -51,6 +51,16 @@ return [
             'token' => '57b62a3462b52a1413a4e1934a60d983',
             'redirect_uri' => 'system/ivr/callback'
         ],
+        /**
+         * 七牛
+         */
+        'imageHelper'=>[
+            'class'=>'core\components\ImageHelper',
+            'accessKey' => 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw',
+            'secretKey' => 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq',
+            'domain' => '7b1f97.com1.z0.glb.clouddn.com',
+            'bucket' => 'bjzhichangmusic'
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '8P1C8K-jX8XahGh_4l_o3jxTxDIVLCIr',

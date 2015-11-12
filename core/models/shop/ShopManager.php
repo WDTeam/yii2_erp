@@ -5,7 +5,7 @@ use yii\behaviors\TimestampBehavior;
 use core\models\operation\OperationArea;
 use yii\base\Object;
 use core\models\shop\ShopStatus;
-use crazyfd\qiniu\Qiniu;
+
 use core\behaviors\ShopStatusBehavior;
 use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;
@@ -201,8 +201,7 @@ class ShopManager extends \dbbase\models\shop\ShopManager
      */
     public function getBlPhotoUrlByQiniu()
     {
-        $qn = new Qiniu();
-        return $qn->getLink().$this->bl_photo_url;
+        return \Yii::$app->imageHelper->getLink($this->bl_photo_url);
     }
     /**
      * 密码处理

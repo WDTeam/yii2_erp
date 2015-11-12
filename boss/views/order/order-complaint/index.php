@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						 </div>
 						<div class="m_fr mar-t">
 							<?php echo $form->field($searchModel, 'order_code')->TextInput(['placeholder'=>'由1到20位数字组成','maxlength' => '20'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
-							<?php echo $form->field($searchModel, 'id')->TextInput(['placeholder'=>'由1到20位数字组成','maxlength' => '20'])->label('投诉编号 :', ['class' => 'm_ipone']); ?>
+							<?php echo $form->field($searchModel, 'complaint_code_number')->TextInput(['placeholder'=>'由1到20位数字组成','maxlength' => '20'])->label('投诉编号 :', ['class' => 'm_ipone']); ?>
 						</div>
 						 <div class="m_fr mar-t">
                             <label class="m_ipone">创建时间:</label>
@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉部门：</p>
-						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_section]="?>">全部</a></li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_section]="?>">全部</a></li>
 						    		<?php if(!empty($devpart)){
 						    		foreach ($devpart as $keyrt=>$valrt){?>
 						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_section']) && $keyrt == $params['OrderComplaintSearch']['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_section]={$keyrt}"?>"><?php echo $valrt;?></a></li>

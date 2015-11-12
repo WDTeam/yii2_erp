@@ -140,9 +140,22 @@ $(document).ready(function(){
     });
 
     $reverse_box.each(function(){
-    	$(this).click(function(){
-            $(this).siblings().addClass("selected");
-    	})
+        $(this).click(function(){
+            if($(this).siblings().hasClass("selected")){
+                $(this).click(function(){
+                    $(this).siblings().removeClass("selected");
+                    $(this).siblings().find("input").removeAttr("checked");
+                    $(this).removeClass("selected");
+                });
+            }else{
+                $(this).click(function(){
+                    $(this).siblings().addClass("selected");
+                    $(this).siblings().find("input").attr("checked","checked");
+                    $(this).addClass("selected");
+                });
+            }
+        })
+
     });
 
     //--------------------------------------------------------------------------------------结束

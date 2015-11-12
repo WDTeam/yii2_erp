@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 
-use crazyfd\qiniu\Qiniu;
+
 
 /**
  * OperationSelectedServiceController implements the CRUD actions for OperationGoods model.

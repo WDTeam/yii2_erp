@@ -16,12 +16,12 @@ class OrderComplaintSearch extends OrderComplaint{
 	
 	public function rules(){
 		return [
-				[['id','complaint_type','complaint_status','complaint_section','complaint_channel'], 'integer'],
-				[['complaint_phone', 'order_worker_phone','order_worker_name','complaint_level','order_code'], 'safe'],
-				[['order_worker_phone','id','complaint_phone','order_worker_name','order_code'],'trim'],
+				[['complaint_type','complaint_status','complaint_section','complaint_channel'], 'integer'],
+				[['complaint_phone', 'order_worker_phone','order_worker_name','complaint_level','order_code','complaint_code_number'], 'safe'],
+				[['order_worker_phone','complaint_code_number','complaint_phone','order_worker_name','order_code'],'trim'],
 				['order_worker_phone','match','pattern'=>'/1[3458]{1}\d{9}$/'],
 				['complaint_phone','match','pattern'=>'/1[3458]{1}\d{9}$/'],
-				['id','match','pattern'=>'/\d{1,20}$/'],
+				['complaint_code_number','match','pattern'=>'/\d{1,20}$/'],
 				['order_code','match','pattern'=>'/\d{1,20}$/'],
 				['order_worker_name','string','min'=>2,'max'=>20],
 		];
@@ -71,6 +71,7 @@ class OrderComplaintSearch extends OrderComplaint{
 		$query->andFilterWhere(['like','ejj_order_ext_worker.order_worker_name',$this->order_worker_name])->
 		andFilterWhere(['like',OrderComplaint::tableName().'.complaint_phone',$this->complaint_phone])->
 		andFilterWhere(['like','ejj_order_ext_worker.order_worker_phone',$this->order_worker_phone])->
+		andFilterWhere(['like',OrderComplaint::tableName().'.complaint_code_number',$this->complaint_code_number])->
 		andFilterWhere(['like','ejj_order.order_code',$this->order_code]);
 		if(!empty($params['starttime']) && !empty($params['endtime'])){
 			$query->andFilterWhere(['between', OrderComplaint::tableName().'.created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
