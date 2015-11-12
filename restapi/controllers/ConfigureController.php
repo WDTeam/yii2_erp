@@ -242,13 +242,14 @@ class ConfigureController extends \restapi\components\Controller
             if($cityCategoryList&&!isset($cityCategoryList['code'])){
                 foreach($cityCategoryList as $key=>$val){
                     if($val['id']==1) continue;
-                    $serviceCategoryList[$key]['category_id'] = $val['id'];
-                    $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
-                    $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
-                    $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
-                    $serviceCategoryList[$key]['category_url'] = $val['operation_category_url']?$val['operation_category_url']:"";
-                    $serviceCategoryList[$key]['colour'] = 'FFCC00';
-                    $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
+                    $itemService['category_id'] = $val['id'];
+                    $itemService['category_name'] = $val['operation_category_name'];
+                    $itemService['category_icon'] = $val['operation_category_icon'];
+                    $itemService['category_introduction'] = $val['operation_category_introduction'];
+                    $itemService['category_url'] = $val['operation_category_url']?$val['operation_category_url']:"";
+                    $itemService['colour'] = 'FFCC00';
+                    $itemService['category_price_description'] = $val['operation_category_price_description'];
+                    $serviceCategoryList[]=$itemService;
                 }
             }
 
@@ -269,7 +270,7 @@ class ConfigureController extends \restapi\components\Controller
                     'img' => $current_env_url.'/statics/images/MyView_FeedBack.png',
                 ],
                 'phone_link' => [
-                    'title' => '18210922324',
+                    'title' => '400-6767-636',
                     'url' => '',
                     'img' => $current_env_url.'/statics/images/MyView_Tel.png',
                 ],
