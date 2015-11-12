@@ -63,9 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="row" style="font-size:14px;" align="center" id="dispatchId" ><nobr>
                     <div class="col-md-6  form-inline"><span style="padding:50px;">
-                <label>距下单时间</label><span style="padding:10px;">1小时20分</span>
-                <label>距服务时间</label><span style="padding:10px;">1小时20分</span>
-                <label>请于</label><span id="rundown15Id" >900</span><span id="rundown15Name" style="color:red">15分0秒</span><label>内处理完成</label>
+                <span id="rundown15Id" >900</span><span id="rundown15Name" style="color:red">15分0秒</span>
                <span style="padding:100px;">
                 <button class="btn btn-default" id="dispatchedId" name="dispatchedId">指派成功</button><span style="padding:2px;">
                 <button class="btn btn-default" id="nonDispatchId" name="nonDispatchId">无法指派</button><span style="padding:2px;">
@@ -80,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <nobr></div>
         </div>
         <div id="work_console" class="panel-body">
-            <?= Html::button('开工啦', ['class' => 'btn btn-warning','id'=>'start_work']) ?>
+            <?= Html::button('开工啦', ['class' => 'btn btn-warning col-sm-1','id'=>'start_work']) ?>
         </div>
         <div id="order_assign" style="display:none; ">
             <div class="panel-body">
