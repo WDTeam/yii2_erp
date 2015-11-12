@@ -38,7 +38,6 @@ class WorkerExport extends Model
         return [
             ['excel','required'],
             ['excel_vacation','required'],
-            [['excel','excel_vacation'], 'file','extensions'=>'xls,xlsx', 'maxSize' => 1024 * 1024 * 1024],
         ];
     }
     /**
