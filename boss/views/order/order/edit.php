@@ -72,9 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6 right-text">
                         <input type="hidden" id="address_id" value="<?= Html::encode($model->address_id);?>">
                         <span id="address_static_label"><?= Html::encode($model->order_address);?></span>
-                        <button class="btn btn-warning btn-xs btn-edit-address-info" style="margin-left: 50px;" type="button">修改地址</button>
                         <div id="address_form" style="display: none;"></div>
                     </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-warning btn-xs btn-edit-address-info" type="button">修改地址</button>
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务类型</label>
@@ -93,11 +96,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务时间</label>
-                    <div class="col-sm-3 right-text service_time_html">
+                    <div class="col-sm-6 right-text service_time_html">
                         <?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?>
                     </div>
                     <div class="col-sm-3">
-                        <button class="btn btn-warning btn-xs btn-edit-service-info" style="margin-left: 50px;" type="button">修改时间</button>
+                        <button class="btn btn-warning btn-xs btn-edit-service-info" type="button">修改时间</button>
                     </div>
                 </div>
             </div>
@@ -184,7 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户需求</label>
                     <div class="col-sm-6 right-text order_customer_need"><?= Html::encode($model->orderExtCustomer->order_customer_need) ?></div>
-                    <button class="btn btn-warning btn-xs btn-edit-customer-info" style="margin-left: 50px;" type="button">修改客户需求</button>
+                    <div class="col-sm-3"><button class="btn btn-warning btn-xs btn-edit-customer-info" type="button">修改客户需求</button></div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户备注</label>
