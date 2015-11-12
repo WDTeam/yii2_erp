@@ -1,5 +1,8 @@
 <?php
 /**
+ * 图片管理类
+ * 这里使用的是七牛云存储
+ * @see https://github.com/crazyfd/yii2-qiniu
  * @author CoLee
  */
 namespace core\components;
