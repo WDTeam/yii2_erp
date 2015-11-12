@@ -38,6 +38,10 @@ class IvrController extends Controller
                 return json_encode(['code'=>0]);
             }
         }elseif(isset($data['postType']) && $data['postType']==2){
+            if(isset($data['postType'])){
+                \Yii::getLogger()->log("ivr 回调日志,postType=".$data['postType'], Logger::LEVEL_ERROR);
+            }
+            \Yii::getLogger()->log("ivr 回调日志,阿姨没有按1，继续给其它阿姨电话", Logger::LEVEL_ERROR);
             OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
             return json_encode(['code'=>0]);
         }
