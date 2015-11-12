@@ -18,7 +18,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use crazyfd\qiniu\Qiniu;
 
 use boss\models\finance\FinancePopOrderSearch;
 use boss\models\finance\FinanceRecordLogSearch;
