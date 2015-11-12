@@ -53,7 +53,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'coupon_userinfo_name', 
             'coupon_userinfo_price', 
             'coupon_userinfo_gettime:datetime', 
-            'coupon_userinfo_usetime:datetime', 
+            [
+            'format' => 'raw',
+            'label' => '使用时间',
+            'value' => function ($dataProvider) {
+            	$msg=!empty($dataProvider->coupon_userinfo_usetime)?date('Y-m-d H:i:s',$dataProvider->coupon_userinfo_usetime):'未使用';
+            	return $msg;
+            },
+            ],
+            
             'couponrule_use_end_time:datetime', 
             'order_code', 
 //            'system_user_id', 
