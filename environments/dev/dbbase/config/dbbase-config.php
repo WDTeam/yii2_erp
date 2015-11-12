@@ -55,7 +55,7 @@ return [
          * 七牛
          */
         'imageHelper'=>[
-            'class'=>'core\components\imageHelper',
+            'class'=>'core\components\ImageHelper',
             'accessKey' => 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw',
             'secretKey' => 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq',
             'domain' => '7b1f97.com1.z0.glb.clouddn.com',

@@ -36,17 +36,22 @@ class BiLogController extends \restapi\components\Controller
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::balancePayFailed);
         }
-		foreach($params as $value){
-			
+		$logNum =count($params['log_content']);
+		if($logNum>=20){
+			return $this->send(null,'日志批量提交数量超过20条了',401,200);
 		}
+		foreach($params['log_content'] as $key => $value){
+			$logArr[]=[
+				'type-name'	=> $value['type_name'],
+				'log-type' 	=> $value['log-type'],
+				'log-data' 	=> $value['log_data'],
+				'timestamp' => $value['timestamp'],
+			];
+		}
+		$logData[$params['log_source_name']] = $logArr;
 		
-		$logData[$params['log_source_name']][]=[
-			'type-name'	=> $params['type_name'],
-			'log-type' 	=> $params['log-type'],
-			'log-data' 	=> $params['log_data'],
-			'timestamp' => $params['timestamp'],
 			
-		];
+		
 		$res = BiLog::commitLog($logData);
 		if($res){
 			$res = json_decode($res,true);

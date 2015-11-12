@@ -13,7 +13,6 @@ namespace core\models\order;
 use core\models\finance\FinanceRefundadd;
 
 use core\models\operation\coupon\CouponRule;
-use core\models\operation\OperationPayChannel;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;
@@ -630,13 +629,15 @@ class Order extends OrderModel
      * 评价接口
      * @param $order_id
      * @param $admin_id
+     * @param $comment_id
      * @return bool
      */
-    public static function customerAcceptDone($order_id,$admin_id=Order::ADMIN_CUSTOMER)
+    public static function customerAcceptDone($order_id,$admin_id=Order::ADMIN_CUSTOMER,$comment_id)
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        return OrderStatus::_customerAcceptDone($order);
+        $order->$comment_id = $comment_id;
+        return OrderStatus::_customerAcceptDone($order,['OrderExtCustomer']);
     }
 
     /**
