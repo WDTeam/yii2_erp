@@ -357,33 +357,46 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
 
     /**
-     * 用城市编号，商圈编号，服务项目编号
+     * 获取上线项目详情
+     *
+     * @param  inter  $city_id          城市编号
+     * @param  inter  $shop_district    商圈编号
+     * @param  inter  $goods_id         服务项目编号
      */
     public static function getShopDistrictGoodsInfo($city_id = '', $shop_district = '', $goods_id = ''){
         if (empty($city_id) || empty($shop_district) || empty($goods_id)) {
             return '';
         }else{
-            return self::find()
-                ->select([
-                    'operation_goods_id',
-                    'operation_category_id',
-                    'operation_category_name',
-                    'operation_shop_district_goods_name',
-                    'operation_shop_district_goods_introduction',
-                    'operation_shop_district_goods_price',
-                    'operation_shop_district_goods_lowest_consume_num',
-                    'operation_shop_district_goods_lowest_consume',
-                    'operation_shop_district_goods_market_price',
-                    'created_at'
-                ])
-                ->asArray()
-                ->where([
-                    'operation_city_id' => $city_id,
-                    'operation_shop_district_id' => $shop_district,
-                    'operation_goods_id' => $goods_id,
-                    'operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE
-                ])
-                ->One();
+            $query = new \yii\db\Query();
+            $query = $query->select([
+                'osdg.operation_goods_id',
+                'osdg.operation_category_id',
+                'osdg.operation_category_name',
+                'osdg.operation_shop_district_goods_name',
+                'osdg.operation_shop_district_goods_price',
+                'osdg.operation_shop_district_goods_lowest_consume',
+                'osdg.operation_shop_district_goods_lowest_consume_num',
+                'osdg.operation_spec_strategy_unit',
+                'osdg.created_at',
+                'og.operation_goods_introduction',
+                'og.operation_goods_english_name',
+                'og.operation_goods_price_description',
+            ])
+            ->from('{{%operation_shop_district_goods}} as osdg')
+            ->leftJoin('{{%operation_goods}} as og','osdg.operation_goods_id= og.id')
+            ->andFilterWhere([
+                'osdg.operation_city_id' => $city_id,
+                'osdg.operation_shop_district_id' => $shop_district,
+                'osdg.operation_goods_id' => $goods_id,
+                'osdg.operation_shop_district_goods_status' => self::SHOP_DISTRICT_GOODS_ONLINE,
+            ]);
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+
+            $result = $dataProvider->query->one();
+            return $result;
         }
     }
 

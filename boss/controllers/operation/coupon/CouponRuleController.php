@@ -99,13 +99,8 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-    	
-    	$rty=\core\models\operation\coupon\CouponRule::getcustomerlist_l('15172543897');
-    	
-    	
-    	var_dump($rty);exit;
-    	
-    	
+    	//$rty=\core\models\operation\coupon\CouponRule::getcustomerlist_l('15172543897');
+    	//var_dump($rty);exit;
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -153,6 +148,7 @@ class CouponRuleController extends Controller
                 * 判断rdeis里面是否有此key值 （虽然数据库做了唯一，但是为了异常，这里再次判断）
            		* $rt=\Yii::$app->redis->SCARD($name);//一共有多少的数量
            		* $rt=\Yii::$app->redis->SPOP($name);//取走并删除 
+           		* $rt=\Yii::$app->redis->SMEMBERS($name) //随机取出一个
 				***/
            		for($i=1;$i<=$unm;$i++){
            			$datainfo=$name.sprintf("%'.05d\n",$i);
