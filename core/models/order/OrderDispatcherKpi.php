@@ -79,7 +79,7 @@ class OrderDispatcherKpi extends \dbbase\models\order\OrderDispatcherKpi{
         }
 
         //4.查询当前系统待派单总数（需订单模块哥们提供）
-        $non_assign_order_count=100;//getNonAssignOrderCount()调用其他模块方法
+        $non_assign_order_count=10;//OrderManualAssign::getWaitAssignOrdersCount();
         $model->setAttributes([
             'non_assign_order_count' =>$non_assign_order_count,
         ]);

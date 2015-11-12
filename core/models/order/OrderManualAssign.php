@@ -132,6 +132,33 @@ class OrderManualAssign extends Model
 
     }
 
+    /**
+     * 获取待指派订单数量
+     * @return int|string
+     */
+    public static function getWaitAssignOrdersCount()
+    {
+        return Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where([
+            'and',
+            ['>', 'order_booked_begin_time', time()], //服务开始时间大于当前时间
+            ['orderExtFlag.order_flag_send' => [0, 1,2]], //0可指派 1客服指派不了 2小家政指派不了
+            ['order_parent_id' => 0]
+        ])->andWhere([
+            'or',
+            ['orderExtFlag.order_flag_lock' => 0],
+            ['<', 'orderExtFlag.order_flag_lock_time', time() - Yii::$app->params['order']['MANUAL_ASSIGN_lONG_TIME']] //查询超时未解锁的订单
+        ])->andWhere([ //系统指派失败的 或者 已支付待指派并且标记不需要系统指派的订单
+            'or',
+            [
+                'orderExtStatus.order_status_dict_id' => OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE
+            ],
+            [
+                'orderExtStatus.order_status_dict_id' => OrderStatusDict::ORDER_WAIT_ASSIGN,
+                'orderExtFlag.order_flag_sys_assign' => 0
+            ]
+        ])->count();
+    }
+
 
     /**
      * 获取可指派阿姨的列表
