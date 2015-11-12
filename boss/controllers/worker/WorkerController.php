@@ -1046,16 +1046,11 @@ class WorkerController extends BaseAuthController
 
     }
 
-    public static function exportDataFromMysqlToRedis(){
-
-    }
-
+    /**
+     * 初始化redis数据
+     */
     public function actionInitWorkerForRedis(){
         WorkerForRedis::initAllWorkerToRedis();
-    }
-
-    public function actionTest1(){
-        Worker::getWorkerTimeLine(1,1);
     }
 
     public function actionTest(){

@@ -16,12 +16,6 @@ return [
             'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
         ],
-//        'redis' => [
-//            'class' => 'yii\redis\Connection',
-//            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-//            'port' => 6379,
-//            'database' => 0,
-//        ],
         'redis' => [
             'class' => 'yii\redis\Connection',
             'hostname' => 'deb09fcb1b404eb6.m.cnbja.kvstore.aliyuncs.com', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
@@ -29,10 +23,10 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
-         'mongodb' => [
-             'class' => '\yii\mongodb\Connection',
-             'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017/dev_boss_db',
-         ],
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017/dev_boss_db',
+        ],
         /**
          * 极光推送,默认为开发环境配置
          */
@@ -61,12 +55,12 @@ return [
         /**
          * 七牛
          */
-        'imageHelper'=>[
-            'class'=>'core\components\ImageHelper',
-            'accessKey' => 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw',
-            'secretKey' => 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq',
+        'imageHelper' => [
+            'class' => 'core\components\ImageHelper',
+            'accessKey' => '1i1GI39eRugqiqBjBFnYs-0k8D_hcfhNbFa2QRRy',
+            'secretKey' => 'U2dBSWEhnIwdIIwOGV9bDjNungn_Rn90vMnRpuJW',
             'domain' => '7b1f97.com1.z0.glb.clouddn.com',
-            'bucket' => 'bjzhichangmusic'
+            'bucket' => 'ejiajie-dev'
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -77,13 +71,9 @@ return [
             'defaultRoles' => ['guest'],
         ],
         'cache' => [
-            //'class' => 'yii\caching\FileCache',
-//            'class'=>'yii\caching\DbCache',
-            'class' => 'yii\redis\Cache',
-        ],
-        'file_cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+
         'i18n' => [
             'translations' => [
                 '*' => [
@@ -124,8 +114,8 @@ return [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'corp.1jiajie.com',
-                'username' => 'service@corp.1jiajie.com',
-                'password' => '123qweASDZXC',
+                'username' => 'boss-dev@corp.1jiajie.com',
+                'password' => '1jiajie@corp.com',
                 'port' => '25',
 //                'encryption' => 'ssl',
 
@@ -159,15 +149,7 @@ return [
                         'subject' => '事件绑定处理错误日志',
                     ],
                 ],
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error'],
-                    'logFile'=>'@core/runtime/logs/core.log',
-                    'categories' => ['core'],
-                    'maxFileSize' => 1024 * 2,
-                    'maxLogFiles' => 20,
-                ]
-            ]
+            ],
         ],
         'devicedetect' => [
             'class' => 'alexandernst\devicedetect\DeviceDetect'
@@ -280,14 +262,14 @@ return [
             'allowNegative' => false,
         ],
         "order_pop" => [
-            'api_url' => 'http://test.1jiajie.com/ejj-pop-api/web/'
+            'api_url' => 'http://dev.1jiajie.com/ejj-pop-api/web/'
         ],
         'order' => [
             'MANUAL_ASSIGN_lONG_TIME' => 900,
             'ORDER_BOOKED_WORKER_ASSIGN_TIME' => 900,
             'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME' => 300,
             'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME' => 900,
-            'USE_ORDER_FLOW_SERVICE_ITEMS'=>[
+            'USE_ORDER_FLOW_SERVICE_ITEMS' => [
                 '家庭保洁'
             ]
         ],
@@ -295,10 +277,5 @@ return [
         'worker_base_salary' => 3000,//阿姨的底薪
         'unit_order_money_nonself_fulltime' => 50,//小家政全时段阿姨补贴的每单的金额
         'order_count_per_week' => 12,//小家政全时段阿姨的底薪策略是保单，每周12单
-        'service' => [
-            'user' => [
-                'domain' => 'http://dev.service.1jiajie.com:80/'
-            ]
-        ],
     ],
 ];

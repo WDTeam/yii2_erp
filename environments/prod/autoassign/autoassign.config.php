@@ -17,7 +17,7 @@ return [
     /*
      * Redis 服务IP（推荐使用域名）
      */
-    'REDIS_SERVER_IP' => 'dev.boss.1jiajie.com',
+    'REDIS_SERVER_IP' => 'deb09fcb1b404eb6.m.cnbja.kvstore.aliyuncs.com',
     /*
      * Redis 服务PORT
      */
@@ -43,7 +43,7 @@ return [
     /*
      * SWOOLE 服务IP（推荐使用域名）
      */
-    'SWOOLE_SERVER_IP' => 'dev.boss.1jiajie.com',
+    'SWOOLE_SERVER_IP' => '101.200.1.79',
 
     /*
      * 设置启动的worker进程数
@@ -92,8 +92,6 @@ return [
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
 
     // 配置 BOSS API 地址
-    'BOSS_API_URL' => 'http://api.me/order/push/',
+    'BOSS_API_URL' => 'https://ssl.1jiajie.com/order/push/',
 
-    // 配置 BOSS CONFIG 地址
-    'BOSS_CONFIG_URL' => 'http://api.me/config/',
 ];
