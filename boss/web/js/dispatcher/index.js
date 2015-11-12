@@ -47,7 +47,7 @@ $(document).ready(function(){
    //单击我要接活
    $('#acceptId').click(function(){acceptWork();});
    //单击小休
-   $('#restId').click(function(){restWork();});
+   $('#restId').click(function(){restWork(3);});
    //单击我要接活（小休时）
    $('#restAcceptId').click(function(){restAcceptWork();});
    //单击收工啦
@@ -194,13 +194,13 @@ function restAcceptWork(){
    freeTimedCount();
 }
 //单击小休
-function restWork(){
+function restWork(before_work_status){
    //停止忙碌时间计算
    stopCount();
-   if(window.work_status==3) {
+   if(before_work_status==3) {
       //保存忙碌时间
       $('#busy_time').val(d);
-   }else if(window.work_status==2){
+   }else if(before_work_status==2){
       //保存空闲时间
       $('#free_time').val(d);
    }
