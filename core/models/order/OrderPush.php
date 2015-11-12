@@ -140,11 +140,7 @@ class OrderPush extends Order
         $order = OrderSearch::getOne($order_id);
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
-            $workerValues = null;
-            foreach ($worker as $w){
-                $workerValues = $workerValues.$w['id'].','.$w['worker_phone'].';';
-            }
-            \Yii::getLogger()->log("推送订单:".$order_id.';给阿姨:'.$workerValues, Logger::LEVEL_ERROR,'boss');
+            \Yii::getLogger()->log("推送订单:".$order_id, Logger::LEVEL_ERROR,'boss');
             if (!empty($worker)) {
                 $week = ['日','一','二','三','四','五','六'];
                 $range =  date('H点i分', $order->order_booked_begin_time).'至'. date('H点i分', $order->order_booked_end_time);
