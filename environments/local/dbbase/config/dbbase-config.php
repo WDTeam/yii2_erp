@@ -23,8 +23,8 @@ return [
             'database' => 0,
         ],
         'mongodb' => [
-             'class' => '\yii\mongodb\Connection',
-             'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017/dev_boss_db',
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017/dev_boss_db',
         ],
         /**
          * 极光推送,默认为开发环境配置
@@ -54,8 +54,8 @@ return [
         /**
          * 七牛
          */
-        'imageHelper'=>[
-            'class'=>'core\components\ImageHelper',
+        'imageHelper' => [
+            'class' => 'core\components\ImageHelper',
             'accessKey' => 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw',
             'secretKey' => 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq',
             'domain' => '7b1f97.com1.z0.glb.clouddn.com',
@@ -271,7 +271,7 @@ return [
             'ORDER_BOOKED_WORKER_ASSIGN_TIME' => 900,
             'ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME' => 300,
             'ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME' => 900,
-            'USE_ORDER_FLOW_SERVICE_ITEMS'=>[
+            'USE_ORDER_FLOW_SERVICE_ITEMS' => [
                 '家庭保洁'
             ]
         ],

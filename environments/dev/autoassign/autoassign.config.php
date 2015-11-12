@@ -43,7 +43,7 @@ return [
     /*
      * SWOOLE 服务IP（推荐使用域名）
      */
-    'SWOOLE_SERVER_IP' => '101.200.1.79',
+    'SWOOLE_SERVER_IP' => 'dev.boss.1jiajie.com',
 
     /*
      * 设置启动的worker进程数
@@ -94,6 +94,4 @@ return [
     // 配置 BOSS API 地址
     'BOSS_API_URL' => 'http://dev.api.1jiajie.com/order/push/',
 
-    // 配置 BOSS CONFIG 地址
-    'BOSS_CONFIG_URL' => 'http://dev.boss.1jiajie.com/config/',
 ];
