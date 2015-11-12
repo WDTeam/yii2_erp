@@ -197,17 +197,11 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function actionUserInit()
     {
-        //TODO:后面拿到配置文件中
-        $environments = array(
-            'dev'=>'http://dev.m2.1jiajie.com',
-            'local'=>'http://local.m2.1jiajie.com',
-            'prod'=>'http://m2.1jiajie.com',
-            'test'=>'http://test.m2.1jiajie.com',
-        );
-        //获取环境变量
         try{
             $param = Yii::$app->request->get();
-            $current_env_url = $environments[YII_ENV];//环境变量
+            //获取环境变量对应的URL
+            $current_env_url = Yii::$app->params['envUrl'];
+            
             if(!isset($param['city_name'])||!$param['city_name']){
                 $param['city_name'] = "北京市";
             }
