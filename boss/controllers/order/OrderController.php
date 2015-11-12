@@ -95,6 +95,12 @@ class OrderController extends BaseAuthController
         return $address;
     }
 
+    public function actionGetAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return CustomerAddress::getAddress($id);
+    }
+
     /**
      * 获取常用阿姨
      * @param $id
@@ -430,7 +436,7 @@ class OrderController extends BaseAuthController
     }
 
     /**
-     * ajax编辑订单
+     * ajax修改预约时间
      * @return array
      */
     public function actionUpdateBookedTime($id)
@@ -452,6 +458,26 @@ class OrderController extends BaseAuthController
             return ['status' => 0, 'info' => '修改失败'];
         }
 
+    }
+
+    public function actionUpdateOrderAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['address_id'])) {
+            $order = Order::updateAddress($order_code, $post['address_id'], $post['address_detail'],$admin_id);
+            if(isset($order->errors['order_address'])) {
+                return ['status' => 2, 'info' => '修改失败','address_error'=>$order->errors['order_address']];
+            }else if ($order->hasErrors()) {
+                return ['status' => 0, 'info' => '修改失败','errors'=>$order->errors];
+            } else {
+                return ['status' => 1, 'info' => '修改成功','address'=>$order->order_address];
+            }
+        }else{
+            return ['status' => 3, 'info' => '修改失败'];
+        }
     }
 
 

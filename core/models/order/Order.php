@@ -1017,51 +1017,86 @@ class Order extends OrderModel
 
     }
 
-    public static function updateAddress(){
+    /**
+     * 更改地址信息
+     * @param $order_code
+     * @param $address_id
+     * @param $address_detail
+     * @param $admin_id
+     * @return null|static
+     */
+    public static function updateAddress($order_code,$address_id,$address_detail,$admin_id)
+    {
+        $order = OrderSearch::getOneByCode($order_code);
+        $status = [
+            OrderStatusDict::ORDER_INIT, // = 1已创建
+            OrderStatusDict::ORDER_WAIT_ASSIGN, // = 2待指派
+            OrderStatusDict::ORDER_SYS_ASSIGN_START, // = 3智能指派开始
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE, // = 4智能指派完成
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE, // = 5未完成智能指派 待人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_START, // = 6开始人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE, // = 7完成人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE, // = 8未完成人工指派，如果客服和小家政都未完成人工指派则去响应，否则重回待指派状态。
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER, // = 9阿姨自助抢单
+        ];
 
-        //创建地址信息
-//        if( !empty($attributes['address_id']) )
-//        {
-//            try {
-//                $address = CustomerAddress::getAddress($attributes['address_id']);
-//                $addressInfo = $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone']; //地址信息
-//                $order->setAttributes([
-//                    'id'=>$attributes['id'],
-//                    'address_id'=>$address['id'],
-//                    'order_address'=>$addressInfo,
-//                ]);
-//            } catch (Exception $e) {
-//                $order->addError('order_address', '创建时获取地址异常！');
-//                return false;
-//            }
-//        }
-//
-//        //获取服务日期时间段是否可用
-//        if( !empty($attributes['order_booked_begin_time']) && !empty($attributes['order_booked_time_range']) )
-//        {
-//            $time = explode('-',$attributes['order_booked_time_range']);
-//
-//            $attr['order_booked_begin_time'] = strtotime($attributes['order_booked_begin_time'].' '.$time[0].':00');
-//            $attr['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($attributes['order_booked_begin_time'].'00:00:00 +1 days')):$attributes['order_booked_begin_time'].' '.$time[1].':00');
-//            //判断订单已经指定阿姨,检测阿姨时间段是否可用
-//            if( !empty($order->orderExtWorker->worker_id) ){
-//                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($order->district_id,$order->orderExtWorker->worker_id,$attr['order_booked_begin_time'],$attr['order_booked_end_time']);
-//                if(empty($checkWorkerTime)){
-//                    return false;
-//                }
-//            }
-//
-//            //设置参数
-//            $order->setAttributes([
-//                'worker_id'=>$attributes['worker_id'],
-//                'order_booked_begin_time'=>$attr['order_booked_begin_time'],
-//                'order_booked_end_time'=>$attr['order_booked_end_time'],
-//            ]);
-//
-//
-//        }
-//        //3:修改订单信息
-//        return $order->doSave(['OrderExtWorker']);
+        //1:获取订单状态
+        if (!in_array($order->orderExtStatus->order_status_dict_id, $status)) {
+            $order->addError('order_address', '当前订单状态不可更新地址信息！');
+            return $order;
+        }
+        $order->setAttributes(['admin_id' => $admin_id]);
+
+        try {
+            $address = CustomerAddress::getAddress($address_id);
+        } catch (Exception $e) {
+            $order->addError('order_address', '获取地址信息失败！');
+            return $order;
+        }
+
+        $city_encode = urlencode($address['operation_city_name']);
+        $detail_encode = urlencode($address['operation_province_name'].$address['operation_city_name'].$address['operation_area_name'].$address_detail);
+        $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
+        $address_decode = json_decode($address_encode, true);
+
+        if($address_decode['status'] == 0){
+            $lng = $address_decode['result']['location']['lng'];
+            $lat = $address_decode['result']['location']['lat'];
+        }else{
+            $order->addError('order_address', '获取地址经纬度失败！');
+            return $order;
+        }
+
+        $shop_district_info = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($lng,$lat);
+        if(!isset($shop_district_info['operation_shop_district_id'])){
+            $order->addError('order_address', '获取商圈信息失败！');
+            return $order;
+        }
+        if($shop_district_info['operation_shop_district_id'] != $order->district_id){
+            $order->addError('order_address', '商圈有变化，不可修改到此地址，如有需要请取消订单重新下单！');
+            return $order;
+        }
+
+        $address = CustomerAddress::updateAddress($address_id, $address['operation_province_name'], $address['operation_city_name'], $address['operation_area_name'], $address_detail, $address['customer_address_nickname'], $address['customer_address_phone']);
+
+        if(!$address){
+            $order->addError('order_address', '修改地址信息失败！');
+            return $order;
+        }
+
+        $order->setAttributes([
+            'address_id' => $address_id,
+            'order_address' => (empty($address->operation_province_name)?'': $address->operation_province_name.',')
+                . $address->operation_city_name . ','
+                . $address->operation_area_name . ','
+                . $address->customer_address_detail, //地址信息
+            'order_lat' => $address->customer_address_latitude,
+            'order_lng' => $address->customer_address_longitude
+        ]);
+        $order->doSave();
+
+        return $order;
+
     }
 
 
