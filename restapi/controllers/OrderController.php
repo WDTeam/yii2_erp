@@ -318,7 +318,6 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionCheckDistrictGoods()
     {
-        print_R(YII_ENV);die;
         $param = Yii::$app->request->get();
         if (!isset($param['access_token']) || !$param['access_token']) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
