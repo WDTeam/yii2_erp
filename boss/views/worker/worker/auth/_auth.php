@@ -14,7 +14,7 @@ use core\models\worker\Worker;
 ?>
 
 <?php
-if($worker_auth_status>=1){
+if($worker_auth_status>1){
     $attributes =[       // 2 column layout
         'actions'=>[
             'type'=>Form::INPUT_RAW,

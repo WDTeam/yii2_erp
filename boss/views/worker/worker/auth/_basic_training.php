@@ -14,14 +14,14 @@ use core\models\worker\Worker;
 ?>
 
 <?php
-if($worker_auth_status>=2){
+if($worker_auth_status>3){
     $attributes =[       // 2 column layout
         'actions'=>[
             'type'=>Form::INPUT_RAW,
             'value'=>'<span style="display: inline-block;font-size: 14px;font-weight: 300;margin-bottom: 15px">基础培训：<span style="color:green">已通过</span></span>'
         ]
     ];
-}elseif($worker_auth_status<1){
+}elseif($worker_auth_status<2){
     $attributes =[       // 2 column layout
         'actions'=>[
             'type'=>Form::INPUT_RAW,

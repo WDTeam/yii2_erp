@@ -15,9 +15,12 @@ use kartik\daterange\DateRangePicker;
     td{cursor:pointer}
     tr{margin-bottom: 4px}
     .form-control{line-height:2.0}
-    .schedule-date{margin-left: 20px;font-size:14px;width:280px}
+    .schedule-date{margin-left: 20px;font-size:14px;width:400px}
     .close{color:red;font-size:14px;margin-top:4px;margin-left: 3px}
     .close:hover{color:red}
+    .disabled{background: #F3F4F5}
+    .delete{margin-left: 10px;}
+    .switch{margin-left: 10px;}
 </style>
 <div class="panel panel-info">
 
@@ -27,14 +30,15 @@ use kartik\daterange\DateRangePicker;
     <?php
         echo DateRangePicker::widget([
             'name'=>'date_range',
-            'useWithAddon'=>true,
+            'useWithAddon'=>false,
             'language'=>'zh-CN',
             'hideInput'=>true,
             'presetDropdown'=>false,
+            'initRangeExpr'=>true,
             'pluginOptions'=>[
                 'locale'=>['format'=>'date'],
                 'separator'=>' 至 ',
-                'opens'=>'right'
+                'opens'=>'right',
             ]
         ]);
     ?>
@@ -48,14 +52,19 @@ use kartik\daterange\DateRangePicker;
 </div>
 <div id="schedule-list">
     <?php
+    $schedule_from_redis = \yii\helpers\ArrayHelper::index($schedule_from_redis,'schedule_id');
     foreach ($schedule as $val) {
+
     ?>
     <div class="schedule_content">
-        <div date="<?=date('Y-m-d',$val['worker_schedule_start_date'])?> 至 <?=date('Y-m-d',$val['worker_schedule_end_date'])?>" class="schedule-date">工作日期：<?=date('Y-m-d',$val['worker_schedule_start_date'])?> 至 <?=date('Y-m-d',$val['worker_schedule_end_date'])?><button type="button" class="close" >删除</button></div>
+        <div date="<?=date('Y-m-d',$val['worker_schedule_start_date'])?> 至 <?=date('Y-m-d',$val['worker_schedule_end_date'])?>" class="schedule-date">工作日期：<?=date('Y-m-d',$val['worker_schedule_start_date'])?> 至 <?=date('Y-m-d',$val['worker_schedule_end_date'])?>
+            <button type="button" class="delete btn btn-xs btn-danger" >删除</button>
+            <button show_type='schedule-for-mysql' type="button" class="switch btn btn-xs btn-warning" >切换Redis</button>
+        </div>
 
         <div class="schedule-info panel-body">
 
-            <table class="table table-bordered " style="width: 80%;" "="">
+            <table  class=" table table-bordered " style="width: 80%;">
             <tbody>
             <?php $weekday = json_decode($val['worker_schedule_timeline'],1)?>
             <?php foreach ($weekday as $w_key=>$w_val) {
@@ -82,6 +91,46 @@ use kartik\daterange\DateRangePicker;
                     </th>
                 </tr>
             <?php
+            }
+            ?>
+            </tbody>
+            </table>
+        </div>
+        <div class="schedule-info-redis panel-body" style="display: none">
+
+            <table  class=" table table-bordered " style="width: 77%;" "="">
+            <tbody>
+            <?php
+                if(isset($schedule_from_redis[$val['id']])){
+                    $weekday = $schedule_from_redis[$val['id']]['worker_schedule_timeline'];
+                    $weekdayIsDisabled = false;
+                }else{
+                    $weekday = [1=>[],2=>[],3=>[],4=>[],5=>[],6=>[],7=>[]];
+                    $weekdayIsDisabled = true;
+                }
+
+            ?>
+            <?php foreach ($weekday as $w_key=>$w_val) {
+                ?>
+                <tr style="height: 36px" class="show-schedule-for-redis">
+                    <th scope="row" weekday="<?= $w_key?>"><?= WorkerSchedule::getWeekdayShow($w_key)?></th>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('8:00',$w_val)){echo 'success';}}?>">8:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('9:00',$w_val)){echo 'success';}}?>">9:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('10:00',$w_val)){echo 'success';}}?>">10:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('11:00',$w_val)){echo 'success';}}?>">11:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('12:00',$w_val)){echo 'success';}}?>">12:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('13:00',$w_val)){echo 'success';}}?>">13:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('14:00',$w_val)){echo 'success';}}?>">14:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('15:00',$w_val)){echo 'success';}}?>">15:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('16:00',$w_val)){echo 'success';}}?>">16:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('17:00',$w_val)){echo 'success';}}?>">17:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('18:00',$w_val)){echo 'success';}}?>">18:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('19:00',$w_val)){echo 'success';}}?>">19:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('20:00',$w_val)){echo 'success';}}?>">20:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('21:00',$w_val)){echo 'success';}}?>">21:00</td>
+                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('22:00',$w_val)){echo 'success';}}?>">22:00</td>
+                </tr>
+                <?php
             }
             ?>
             </tbody>

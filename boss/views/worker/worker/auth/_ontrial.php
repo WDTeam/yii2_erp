@@ -17,7 +17,7 @@ use core\models\worker\WorkerStat;
 <?php
 $workerStat = WorkerStat::find()->where(['worker_id'=>$workerAuthModel->worker_id])->one();
 
-if($worker_auth_status>=3){
+if($worker_auth_status>5){
     $attributes =[       // 2 column layout
         'stat'=>[
             'label'=>'试工信息',
@@ -30,7 +30,7 @@ if($worker_auth_status>=3){
             'value'=>'<span style="display: inline-block;font-size: 14px;font-weight: 300;margin-bottom: 15px">试工状态：<span style="color:green">已通过</span></span>'
         ]
     ];
-}elseif($worker_auth_status<2){
+}elseif($worker_auth_status<4){
     $attributes =[       // 2 column layout
         'actions'=>[
             'type'=>Form::INPUT_RAW,
