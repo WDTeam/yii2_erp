@@ -620,7 +620,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['respMsg'],   //支付状态
             'payment_log_status' => $post['respMsg'],   //支付状态
             'pay_channel_id' => 12,  //支付渠道ID
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
 
@@ -720,7 +720,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
             'pay_channel_id' => 7,  //支付渠道ID
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
         $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
@@ -857,7 +857,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
             'pay_channel_id' => 7,  //支付渠道,支付宝
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
         $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
@@ -985,7 +985,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['trade_state'],   //支付状态
             'payment_log_status' => $post['trade_state'],   //支付状态
             'pay_channel_id' => 13,  //财付通
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
 
@@ -1085,7 +1085,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
             'pay_channel_id' => 8,  //百度钱包
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
         $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
@@ -1202,7 +1202,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['return_code'],   //支付状态
             'payment_log_status' => $post['return_code'],   //支付状态
             'pay_channel_id' => 10,  //微信后台
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
         $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
@@ -1296,7 +1296,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
             'pay_channel_id' => 8,  //百度钱包
-            'payment_log_json_aggregation' => json_encode($post),
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
         $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
