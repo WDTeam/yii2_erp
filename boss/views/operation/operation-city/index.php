@@ -170,7 +170,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', '增加城市'), ['create'], ['class' => 'btn btn-success']), 
             'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app','Reset List'), ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false,
-            'footer' => false
         ],
     ]); Pjax::end(); ?>
 
