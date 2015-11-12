@@ -271,7 +271,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['channel_id'] = intval($args['channel_id']); //家洁
         $attributes['order_pay_type'] = 2; //现金支付
 
-        $attributes['order_customer_need'] = isset($args['order_customer_need'])?$args['order_customer_need']:""; //客户需求
+        $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
         try {
@@ -287,6 +287,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateFaile);
         }
     }
+
     /**
      * @api {GET} /order/check-district-goods [GET] /order/check-district-goods(100%)
      * @apiDescription  检查当前商圈是否已经开通选择的服务 (田玉星)
@@ -318,44 +319,45 @@ class OrderController extends \restapi\components\Controller
      *   }
      *
      */
-
-    public function actionCheckDistrictGoods(){
+    public function actionCheckDistrictGoods()
+    {
         $param = Yii::$app->request->get();
         if (!isset($param['access_token']) || !$param['access_token']) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         //验证用户登录情况
         $user = CustomerAccessToken::getCustomer($param['access_token']);
-        if (!$user){
+        if (!$user) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
-         if(!isset($param['order_service_item_id']) || !$param['order_service_item_id']) {
-          return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
+        if (!isset($param['order_service_item_id']) || !$param['order_service_item_id']) {
+            return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         //判断商圈地址
-        if(!isset($param['address_longitude']) || !$param['address_longitude']) {
+        if (!isset($param['address_longitude']) || !$param['address_longitude']) {
             return $this->send(null, "address_longitude经度参数错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        if(!isset($param['address_latitude']) || !$param['address_latitude']) {
+        if (!isset($param['address_latitude']) || !$param['address_latitude']) {
             return $this->send(null, "address_latitude维度参数错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        if(!isset($param['city_name']) || !$param['city_name']) {
+        if (!isset($param['city_name']) || !$param['city_name']) {
             return $this->send(null, "城市名称错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
         $cityID = OperationCity::getCityId(trim($param['city_name']));
-        if(!$cityID){
+        if (!$cityID) {
             return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
         }
-        try{
-            $shopDistrictInfo =  OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'],$param['address_latitude']);
-            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID,$shopDistrictInfo['operation_shop_district_id'],intval($param['order_service_item_id']))){
+        try {
+            $shopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'], $param['address_latitude']);
+            if (!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID, $shopDistrictInfo['operation_shop_district_id'], intval($param['order_service_item_id']))) {
                 return $this->send(null, "该服务不在当前地址商圈内", 0, 200, null, alertMsgEnum::orderShopDistrictGoodsFaile);
             }
             return $this->send(null, "当前商圈内包含该服务", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
     }
+
     /**
      * @api {GET} /order/orders [GET] /order/orders (100%)
      * @apiDescription 查询用户订单 (谢奕)

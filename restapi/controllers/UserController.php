@@ -1309,7 +1309,7 @@ class UserController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (empty($customer)) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInfoFailed);
+            return $this->send(null, "获取用户信息失败", 1024, 200, null, alertMsgEnum::getUserInfoFailed);
         }
         $ret = [
             "user" => $customer,
