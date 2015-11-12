@@ -1497,15 +1497,25 @@ class Worker extends \dbbase\models\worker\Worker
             case 0:
                 return '新录入';
             case 1:
-                return '已审核';
+                return '审核不通过';
             case 2:
-                return '通过基础培训';
+                return '已审核';
             case 3:
-                return '已试工';
+                return '已基础培训';
             case 4:
-                return '已上岗';
+                return '基础培训通过';
             case 5:
-                return '通过晋升培训';
+                return '试工不通过';
+            case 6:
+                return '已试工';
+            case 7:
+                return '上岗不通过';
+            case 8:
+                return '已上岗';
+            case 9:
+                return '晋升培训不通过';
+            case 10:
+                return '已晋升培训';
         }
        /* if($worker_auth_status==1){
             return '通过';
@@ -1626,6 +1636,7 @@ class Worker extends \dbbase\models\worker\Worker
      */
     public function getworker_district(){
         $workerDistrictArr = self::getWorkerDistrict($this->id);
+        var_dump($workerDistrictArr);
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
 

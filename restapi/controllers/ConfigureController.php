@@ -342,9 +342,13 @@ class ConfigureController extends \restapi\components\Controller
      *      "msg": "获取数据成功",
      *      "alertMsg": "获取服务类型详情成功",
      *       "ret": [
-     *             "colour": "dfffrf",
-     *             "category_ico": "",
-     *             "item_list": [
+     *           "colour": "背景颜色",
+     *           "category_ico": "服务品类图标",
+     *           "category_name": "服务品类名称",
+     *           "category_english_name": "服务品类英文名",
+     *           "category_condition": "服务品类条件",
+     *           "category_price_description": "服务品类描述",
+     *            "item_list": [
      *                 {
      *                     "category_id": "分类ID",
      *                     "order_service_item_id": "商品ID",
@@ -353,8 +357,8 @@ class ConfigureController extends \restapi\components\Controller
      *                     "service_item_price": "商品价格",
      *                     "service_item_price_description": "商品价格描述"
      *                 }
-     *       ]
-     * }
+     *           ]
+     *  }
      *
      * @apiErrorExample Error-Response:
      * HTTP/1.1 200 OK
@@ -371,10 +375,11 @@ class ConfigureController extends \restapi\components\Controller
         if(!isset($param['city_name'])||!trim($param['city_name'])){
              return $this->send(null, '城市名称参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
         }
-        if(!isset($param['category_id'])||!$param['category_id']){
+        if(!isset($param['category_id'])||!intval($param['category_id'])){
             return $this->send(null, '服务类型参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
         }
         try{
+            $categoryInfo = OperationCategory::getCategoryById(intval($param['category_id']));
             $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory(trim($param['city_name']),intval($param['category_id']));
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
@@ -390,9 +395,26 @@ class ConfigureController extends \restapi\components\Controller
                 $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
             }
         }
+        //二级页背景颜色 TODO:后面从数据库中读取
+        $categoryColour = array(
+            'category_1'=>"dfffrf",
+            'category_2'=>"dfffrf",
+            'category_3'=>"dfffrf",
+            'category_4'=>"dfffrf",
+            'category_5'=>"dfffrf",
+            'category_6'=>"dfffrf",
+        );
+        $colour = "dfffrf";
+        if(isset($categoryColour['category_'.intval($param['category_id'])])){
+            $colour = $categoryColour['category_'.intval($param['category_id'])];
+        }
         $ret = [
-            'colour'=>'dfffrf',
-            'category_ico'=>"",
+            'colour'=>$colour,
+            'category_ico'=>$categoryInfo['operation_category_icon'],
+            "category_name"=>$categoryInfo['operation_category_name'],
+            "category_english_name"=>"",
+            "category_condition"=>"",
+            "category_price_description"=>$categoryInfo['operation_category_price_description'],
             'item_list' =>$itemlist
         ];
         return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);

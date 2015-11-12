@@ -41,7 +41,6 @@ use yii\helpers\ArrayHelper;
  */
 class Worker extends \core\models\worker\Worker
 {
-    public $worker_district;
     /**
      * @inheritdoc
      */
@@ -216,16 +215,11 @@ class Worker extends \core\models\worker\Worker
     /**
      * 设置worker_district属性
      */
-//    public function getworker_district(){
-//        $workerDistrictArr = self::getWorkerDistrict($this->id);
-//        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
-//    }
-    /**
-     * 设置worker_district属性
-     */
-//    public function setworker_district(){
-//        return 1;
-//    }
+    public function getworker_district(){
+        $workerDistrictArr = self::getWorkerDistrict($this->id);
+        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
+    }
+
 
 
 }

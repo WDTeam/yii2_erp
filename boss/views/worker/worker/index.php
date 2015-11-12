@@ -84,6 +84,15 @@ if(\Yii::$app->user->identity->isNotAdmin()){
         ],
         [
             'format' => 'raw',
+            'label' => '子状态',
+            'hidden' => Worker::columnsIsHidden('other'),
+            'value' => function($dataProvider){
+                return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
+            },
+            'width' => "100px",
+        ],
+        [
+            'format' => 'raw',
             'label' => '阿姨入职时间',
             'hidden' => Worker::columnsIsHidden('other'),
             'value' => function ($dataProvider) {
