@@ -1452,7 +1452,7 @@ class WorkerController extends \restapi\components\Controller
     public function actionSetWorkerCallback()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-       
+
         if (empty($param['access_token']) || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }

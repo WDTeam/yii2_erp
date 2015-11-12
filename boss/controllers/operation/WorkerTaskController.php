@@ -69,6 +69,8 @@ class WorkerTaskController extends BaseAuthController
     public function actionCreate()
     {
         $model = new WorkerTask;
+        $model->worker_task_start = strtotime('+1 day');
+        $model->worker_task_end = strtotime('+6 month', $model->worker_task_start);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

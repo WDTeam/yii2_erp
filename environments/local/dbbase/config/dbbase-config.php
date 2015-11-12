@@ -23,8 +23,8 @@ return [
             'database' => 0,
         ],
         'mongodb' => [
-            'class' => '\yii\mongodb\Connection',
-            'dsn' => 'mongodb://101.200.179.70:27017/boss_dev',
+             'class' => '\yii\mongodb\Connection',
+             'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017/dev_boss_db',
         ],
         /**
          * 极光推送,默认为开发环境配置

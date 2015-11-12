@@ -259,13 +259,13 @@ class ConfigureController extends \restapi\components\Controller
             $header_link = [
                 'comment_link' => [
                     'title' => '意见反馈',
-                    'url' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
-                    'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                    'url' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                    'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
                 ],
                 'phone_link' => [
                     'title' => '18210922324',
                     'url' => '',
-                    'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png',
+                    'img' => 'http://test.m2.1jiajie.com/statics/images/MyView_Tel.png',
                 ],
             ];
             //获取首页轮播图
@@ -291,16 +291,16 @@ class ConfigureController extends \restapi\components\Controller
                 [
                     'title' => '单次保洁',
                     'introduction' => '新用户第1小时免费',
-                    'icon' => 'http://dev.m2.1jiajie.com/statics/images/dancibaojie.png',
-                    'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/1',
+                    'icon' => 'http://test.m2.1jiajie.com/statics/images/dancibaojie.png',
+                    'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/1',
                     'bg_colour' => 'ffb518',
                     'font_colour' => 'ffffff',
                 ],
                 [
                     'title' => '周期保洁',
                     'introduction' => '一次下单 清洁无忧',
-                    'icon' => 'http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png',
-                    'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/2',
+                    'icon' => 'http://test.m2.1jiajie.com/statics/images/zhouqibaojie.png',
+                    'url' => 'http://test.m2.1jiajie.com/#/order/createOnceOrder/2',
                     'bg_colour' => 'ff8a44',
                     'font_colour' => 'ffffff',
                 ]

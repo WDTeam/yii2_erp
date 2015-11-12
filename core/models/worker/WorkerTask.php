@@ -88,10 +88,6 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     }
     public function getWorker_task_time()
     {
-        if($this->getIsNewRecord()){
-            $this->worker_task_start = time();
-            $this->worker_task_end = time()+3600*24*30;
-        }
         $str = date('m/d/Y', $this->worker_task_start);
         $str .= ' - ';
         $str .= date('m/d/Y', $this->worker_task_end);

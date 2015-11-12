@@ -103,11 +103,11 @@ class OrderController extends \restapi\components\Controller
         if (empty($args['order_pay_type'])) {
             return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
-        
+
         if (empty($args['channel_id'])) {
             return $this->send(null, "数据不完整,订单渠道ID为必填项", 0, 200, null, alertMsgEnum::orderCreateFaileChannelId);
         }
-        
+
         $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
 
         if ($args['order_pay_type'] == 1) {
@@ -230,27 +230,23 @@ class OrderController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::userLoginFailed);
         }
-        if (!$user){
+        if (!$user) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         //填写服务项目
-        if (!isset($args['order_service_item_id'])||!intval($args['order_service_item_id'])) {
+        if (!isset($args['order_service_item_id']) || !intval($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         //下单渠道
-        if (!isset($args['channel_id'])||!intval($args['channel_id'])) {
+        if (!isset($args['channel_id']) || !intval($args['channel_id'])) {
             return $this->send(null, "请输入下单渠道", 0, 200, null, alertMsgEnum::orderChannleIDFaile);
         }
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
-        //所在城市
-//        if (!isset($args['city_name']) || !$args['city_name']) {
-//            return $this->send(null, "数据不完整,请输入常用城市", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-//        }
         //所在地址
-        if (!isset($args['address_id']) ||!intval($args['address_id'])) {
+        if (!isset($args['address_id']) || !intval($args['address_id'])) {
             return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
 //        try {
@@ -259,18 +255,19 @@ class OrderController extends \restapi\components\Controller
 //            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderAddressIdFaile);
 //        }
 //        if (!empty($model)) {
-            $attributes['address_id'] = intval($args['address_id']);
+        $attributes['address_id'] = intval($args['address_id']);
 //        } else {
 //            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
 //        }
         $attributes['customer_id'] = $user->id; //登录用户ID
         $attributes['order_service_item_id'] = intval($args['order_service_item_id']); //服务品类ID
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
-        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time']+10800; //服务结束时间
+        $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['channel_id'] = intval($args['channel_id']); //家洁
         $attributes['order_pay_type'] = 2; //现金支付
-        $attributes['order_customer_need'] = isset($args['order_customer_need'])?$args['order_customer_need']:""; //客户需求
+
+        $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
         try {
@@ -286,86 +283,92 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateFaile);
         }
     }
+
     /**
-     * @api {POST} /order/check-district-goods [POST] /order/check-district-goods(100%)
-     * @apiDescription  创建增值服务订单 (田玉星)
+     * @api {GET} /order/check-district-goods [GET] /order/check-district-goods(100%)
+     * @apiDescription  检查当前商圈是否已经开通选择的服务 (田玉星)
      *
      * @apiName actionCheckDistrictGoods
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} city_name 城市名称
-     * @apiParam {String} address 详细地址
+     * @apiParam {String} address_longitude 当前城市的精度
+     * @apiParam {String} address_latitude 当前城市维度
+     * @apiParam {String} city_name 当前城市名称 
+     * @apiParam {String} [address_id] 用户地址ID
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *  "code": "1",
-     *  "msg": "创建订单成功",
-     *  "ret": {
-     *    8//订单ID
+     *   {
+     *       "code": 1,
+     *       "msg": "当前商圈内包含该服务",
+     *       "ret": {},
+     *       "alertMsg": "当前商圈包含该服务"
      *   }
-     *  "alertMsg": "创建订单成功"
-     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": 401,
-     *        "msg": "用户无效,请先登录",
-     *        "ret": {},
-     *        "alertMsg": "用户认证已经过期,请重新登录"
-     *     }
+     *   {
+     *       "code": 0,
+     *       "msg": "该服务不在当前地址商圈内",
+     *       "ret": {},
+     *       "alertMsg": "该服务不在当前商圈内"
+     *   }
      *
      */
-    public function catch_fatal_error()
+    public function actionCheckDistrictGoods()
     {
-      // Getting Last Error
-       $last_error =  error_get_last();
-
-      
-       print_R($last_error);
-
-    }
-    public function actionCheckDistrictGoods(){
-        register_shutdown_function('catch_fatal_error');
         $param = Yii::$app->request->get();
         if (!isset($param['access_token']) || !$param['access_token']) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         //验证用户登录情况
         $user = CustomerAccessToken::getCustomer($param['access_token']);
-        if (!$user){
+        if (!$user) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
-         if(!isset($param['order_service_item_id']) || !$param['order_service_item_id']) {
-          return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
+        if (!isset($param['order_service_item_id']) || !$param['order_service_item_id']) {
+            return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         //判断商圈地址
-        if(!isset($param['address_longitude']) || !$param['address_longitude']) {
+        if (!isset($param['address_longitude']) || !$param['address_longitude']) {
             return $this->send(null, "address_longitude经度参数错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        if(!isset($param['address_latitude']) || !$param['address_latitude']) {
+        if (!isset($param['address_latitude']) || !$param['address_latitude']) {
             return $this->send(null, "address_latitude维度参数错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        if(!isset($param['city_name']) || !$param['city_name']) {
+        if (!isset($param['city_name']) || !$param['city_name']) {
             return $this->send(null, "城市名称错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        $cityInfo = OperationCity::getCityId(trim($param['city_name']));
-        if(!$cityInfo){
+        $cityID = OperationCity::getCityId(trim($param['city_name']));
+        if (!$cityID) {
             return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
         }
+<<<<<<< HEAD
         try{
+            //TODO:田玉星觉得产品设计有问题，所以留取两种方案
+            if(isset($param['address_id'])&&intval($param['address_id'])){
+                $addressModel = CustomerAddress::getAddress(intval($param['address_id']));
+                if($addressModel){
+                    $param['address_longitude'] = $addressModel->customer_address_longitude;
+                    $param['address_latitude'] = $addressModel->customer_address_latitude;
+                }
+            }
             $shopDistrictInfo =  OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'],$param['address_latitude']);
-            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityInfo['id'],$shopDistrictInfo['id'],intval($param['order_service_item_id']))){
+            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID,$shopDistrictInfo['operation_shop_district_id'],intval($param['order_service_item_id']))){
+=======
+        try {
+            $shopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'], $param['address_latitude']);
+            if (!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID, $shopDistrictInfo['operation_shop_district_id'], intval($param['order_service_item_id']))) {
+>>>>>>> b215ec255ea9fdf65f9506fa12ed1d94020c16b6
                 return $this->send(null, "该服务不在当前地址商圈内", 0, 200, null, alertMsgEnum::orderShopDistrictGoodsFaile);
             }
-            return $this->send(null, "该服务不在当前地址商圈内", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
-        }catch (\Exception $e) {
+            return $this->send(null, "当前商圈内包含该服务", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
+        } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
     }
+
     /**
      * @api {GET} /order/orders [GET] /order/orders (100%)
      * @apiDescription 查询用户订单 (谢奕)
@@ -1613,8 +1616,10 @@ class OrderController extends \restapi\components\Controller
      *       "address": "服务地址",
      *       "need": "备注说明",
      *       "money": "订单价格",
-     *       "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式", # 11月六号 涛涛说不要这个时间标示 18:22
-     *       "times" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22
+     *        "lng"     经度,
+     *         "lat"    纬度,
+     *      ### "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式", # 11月六号 涛涛说不要这个时间标示 18:22
+     *       ##"times" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22
      *                    "order_time":
      *                 [
      *                    '开始时间 - 结束时间',
@@ -1815,24 +1820,24 @@ class OrderController extends \restapi\components\Controller
         if (is_null($param['accept_other_aunt'])) {
             $param['accept_other_aunt'] = 0;
         }
-            
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
-            "order_ip" => $order_ip,
-            "order_service_item_id" => $param['order_service_item_id'],
-            "channel_id" => $param['channel_id'],
-            "address_id" => $param['address_id'],
-            "customer_id" => $customer->id,
-            "order_customer_phone" => $param['order_customer_phone'],
-            "admin_id" => Order::ADMIN_CUSTOMER,
-            "pay_channel_id" =>$param['pay_channel_id'],
-            "order_is_use_balance" => $param['order_is_use_balance'],
+                "order_ip" => $order_ip,
+                "order_service_item_id" => $param['order_service_item_id'],
+                "channel_id" => $param['channel_id'],
+                "address_id" => $param['address_id'],
+                "customer_id" => $customer->id,
+                "order_customer_phone" => $param['order_customer_phone'],
+                "admin_id" => Order::ADMIN_CUSTOMER,
+                "pay_channel_id" => $param['pay_channel_id'],
+                "order_is_use_balance" => $param['order_is_use_balance'],
                 //order_booked_worker_id edit by tianyuxing
-            "order_booked_worker_id" => isset($param['order_booked_worker_id'])?intval($param['order_booked_worker_id']):0,
-            "order_customer_need" => $param['order_customer_need'],
-            "order_customer_memo" => $param['order_customer_memo'],
-            "order_flag_change_booked_worker" => $param['accept_other_aunt']
+                "order_booked_worker_id" => isset($param['order_booked_worker_id']) ? intval($param['order_booked_worker_id']) : 0,
+                "order_customer_need" => $param['order_customer_need'],
+                "order_customer_memo" => $param['order_customer_memo'],
+                "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
             #开始时间 结束时间 时间段 优惠码

@@ -41,11 +41,11 @@ class OrderPush extends Order
             }elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME']) {
                 //获取全职阿姨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
-                $workerValues = null;
+                \Yii::getLogger()->log("获取的全职阿姨数量为:".count($workers), Logger::LEVEL_ERROR,'core');
                 foreach ($workers as $w){
-                    $workerValues = $workerValues.$w['id'].','.$w['worker_phone'].';';
+                    \Yii::getLogger()->log("获取的全职阿姨为:".$w['id'].','.$w['worker_phone'], Logger::LEVEL_ERROR,'core');
                 }
-                \Yii::getLogger()->log("获取的全职阿姨为:".$workerValues, Logger::LEVEL_ERROR,'boss');
+                
                 $push_status = $full_time;
                 if (empty($workers)) {
                     //没有全职阿姨 获取兼职阿姨
@@ -95,11 +95,11 @@ class OrderPush extends Order
         $jpush_flag = false;
         $order = OrderSearch::getOne($order_id);
         $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_IVR_PUSH_SUCCESS);
-        $ids = null;
+        \Yii::getLogger()->log("已经推送过ivr的阿姨数量为:".count($is_ivr_worker_ids), Logger::LEVEL_ERROR,'core');
         foreach($is_ivr_worker_ids as $id){
-            $ids = $ids.$id['worker_id'];
+            \Yii::getLogger()->log("已经推送过ivr的阿姨为:".$id['worker_id'], Logger::LEVEL_ERROR,'core');
         }
-        \Yii::getLogger()->log("已经推送过ivr的阿姨为:".  $ids, Logger::LEVEL_ERROR,'boss');
+        
         $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS);
         foreach ($workers as $v) {
             if (!in_array($v['id'], $is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
@@ -140,11 +140,7 @@ class OrderPush extends Order
         $order = OrderSearch::getOne($order_id);
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
-            $workerValues = null;
-            foreach ($worker as $w){
-                $workerValues = $workerValues.$w['id'].','.$w['worker_phone'].';';
-            }
-            \Yii::getLogger()->log("推送订单:".$order_id.';给阿姨:'.$workerValues, Logger::LEVEL_ERROR,'boss');
+            \Yii::getLogger()->log("推送订单:".$order_id, Logger::LEVEL_ERROR,'core');
             if (!empty($worker)) {
                 $week = ['日','一','二','三','四','五','六'];
                 $range =  date('H点i分', $order->order_booked_begin_time).'至'. date('H点i分', $order->order_booked_end_time);
