@@ -300,12 +300,17 @@ echo DetailView::widget([
         
     ],
     'enableEditMode'=>false,
-]); 
+]);
 
+//$res = \core\models\operation\coupon\CouponRule::getcustomerlist_l($model->customer_phone);
+//$query = null;
+//if($res['is_status']==1){
+//    $query = $res['data'];
+//}
 //$couponCustomerProvider = new ActiveDataProvider([
-//	'query' => \core\models\operation\coupon\CouponRule::getcustomerlist_l($model->customer_phone),
+//	'query' =>$query,
 //]);
-//if((int)($couponCustomerProvider->query->count()) > 0){
+//if($res['is_status'] == 1){
 //	echo GridView::widget([
 //		'dataProvider' => $couponCustomerProvider,
 //

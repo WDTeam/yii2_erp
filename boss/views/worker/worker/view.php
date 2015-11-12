@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
  */
 $this->title = $workerModel->worker_name;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);
-$content2 = $this->render('view_schedule',['worker_id'=>$workerModel->id,'schedule'=>$schedule]);
+$content2 = $this->render('view_schedule',['worker_id'=>$workerModel->id,'schedule'=>$schedule,'schedule_from_redis'=>$schedule_from_redis]);
 $content3 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
 $content4 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
 if(Yii::$app->request->get('tab')==2){
