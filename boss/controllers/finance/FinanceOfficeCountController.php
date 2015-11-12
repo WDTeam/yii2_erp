@@ -17,17 +17,6 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use core\models\order\OrderSearch;
-<<<<<<< HEAD
-=======
-use core\models\payment\GeneralPaySearch;
-use dbbase\models\finance\FinanceRecordLog;
-
-use dbbase\models\finance\FinancePayChannel;
-
-
-use core\models\order\Order;
-
->>>>>>> e78322a7599fb747470fe71762148e1a120f38fc
 
 class FinanceOfficeCountController extends Controller
 {
