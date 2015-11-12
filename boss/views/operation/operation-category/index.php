@@ -147,7 +147,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ),
             'after'=>false,
             'showFooter'=>false,
-            'footer' => false
         ],
     ]); Pjax::end(); ?>
 
