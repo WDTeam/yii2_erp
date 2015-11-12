@@ -5,6 +5,7 @@ namespace boss\controllers\operation;
 use boss\models\operation\OperationSpec;
 use boss\models\operation\OperationGoods;
 use boss\models\operation\OperationSpecSearch;
+use boss\models\operation\OperationShopDistrictGoods;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -116,6 +117,7 @@ class OperationSpecController extends Controller
 
                 //关联修改服务项目表冗余的计量单位
                 OperationGoods::updateGoodsSpec($id, $post['OperationSpec']['operation_spec_strategy_unit']);
+                OperationShopDistrictGoods::updateGoodsSpec($id, $post['OperationSpec']['operation_spec_strategy_unit']);
 
                 return $this->redirect(['view', 'id' => $model->id]);
             }
