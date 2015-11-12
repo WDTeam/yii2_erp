@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						 </div>
 						<div class="m_fr mar-t">
 							<?php echo $form->field($searchModel, 'order_code')->TextInput(['placeholder'=>'由1到20位数字组成','maxlength' => '20'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
-							<?php echo $form->field($searchModel, 'id')->TextInput(['placeholder'=>'由1到20位数字组成','maxlength' => '20'])->label('投诉编号 :', ['class' => 'm_ipone']); ?>
+							<?php echo $form->field($searchModel, 'complaint_code_number')->TextInput(['placeholder'=>'由1到20位数字组成','maxlength' => '20'])->label('投诉编号 :', ['class' => 'm_ipone']); ?>
 						</div>
 						 <div class="m_fr mar-t">
                             <label class="m_ipone">创建时间:</label>
