@@ -12,15 +12,11 @@ use yii\helpers\Html; use yii\widgets\ActiveForm;
 <div class="operation-advert-release-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['view'],
+        'action' => ['view', 'city_id' => $city_id],
         'method' => 'get',
     ]); ?>
 
     <div class="row">
-        <div class="col-sm-2">
-            <?= $form->field($model, 'city_name') ?>
-        </div>
-
         <div class="col-sm-2">
             <?= $form->field($model, 'operation_advert_content_name') ?>
         </div>

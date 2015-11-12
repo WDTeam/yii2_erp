@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 已发布广告搜索</h3>
         </div>
         <div class="panel-body">
-            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?php  echo $this->render('_search', ['model' => $searchModel, 'city_id' => $city_id]); ?>
         </div>
     </div>
 
@@ -106,11 +106,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                         );
                     },
-                    'update' => function ($url, $model) {
+                    'update' => function ($url, $model) use ($city_id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/update','id' => $model->id]),
-                            ['title' => Yii::t('yii', 'Update')]
+                            Yii::$app->urlManager->createUrl([
+                                '/operation/operation-advert-release/update',
+                                'id' => $model->id,
+                                'city_id' => $city_id,
+                            ]),
+                            [
+                                'title' => Yii::t('yii', 'Update')
+                            ]
                         );
                     },
                     'delete' => function ($url, $model) {
