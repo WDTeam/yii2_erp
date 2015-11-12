@@ -22,7 +22,7 @@ class m150919_092739_create_table_worker extends Migration
             'worker_password' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨端登录密码\'',
             'worker_photo' => Schema::TYPE_STRING . '(150)  DEFAULT \'\' COMMENT \'阿姨头像地址\'',
             'worker_level' => Schema::TYPE_BOOLEAN  . '(4)   DEFAULT 1 COMMENT \'阿姨等级\'',
-            'worker_auth_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT  0 COMMENT \'阿姨审核状态 0新录入1已审核2已基础培训3已试工4已上岗5已晋升培训\'',
+            'worker_auth_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT  0 COMMENT \'阿姨审核状态 0新录入1审核不通过2已审核3培训不通过4基础培训通过5试工不通过6试工通过7上岗失败8已上岗9晋升培训失败10已晋升培训\'',
 //            'worker_auth_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT  0 COMMENT \'阿姨审核状态 0未通过1通过\'',
 //            'worker_ontrial_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT 0 COMMENT \'阿姨试工状态 0未试工，1已试工\'',
 //            'worker_onboard_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT 0 COMMENT \'阿姨上岗状态 0未上岗 1已上岗 \'',

@@ -96,6 +96,11 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
+        #过滤 北京市
+        if ($param['operation_province_name'] == '北京市') {
+            $param['operation_province_name'] = str_replace("市", "", $param['operation_province_name']);
+        }
+
         //控制添加地址时手机号码必须填写
         if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
             return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200, null, alertMsgEnum::addAddressNoPhone);
@@ -801,24 +806,24 @@ class UserController extends \restapi\components\Controller
         if (empty($param['customer_comment_tag_ids'])) {
             $param['customer_comment_tag_ids'] = 0;
         }
-        $param['customer_comment_phone'] = isset($param['customer_comment_phone'])?$param['customer_comment_phone']:"";
-        $param['worker_tel'] = isset($param['worker_tel'])?$param['worker_tel']:"";
-        $param['customer_comment_content'] = isset($param['customer_comment_content'])?$param['customer_comment_content']:"";
-        $param['customer_comment_level_name'] = isset($param['customer_comment_level_name'])?$param['customer_comment_level_name']:"";
-        $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids'])?$param['customer_comment_tag_ids']:"";
-        $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names'])?$param['customer_comment_tag_names']:"";
-        
-        $param['order_code'] = isset($param['order_code'])?$param['order_code']:"";
-        
+        $param['customer_comment_phone'] = isset($param['customer_comment_phone']) ? $param['customer_comment_phone'] : "";
+        $param['worker_tel'] = isset($param['worker_tel']) ? $param['worker_tel'] : "";
+        $param['customer_comment_content'] = isset($param['customer_comment_content']) ? $param['customer_comment_content'] : "";
+        $param['customer_comment_level_name'] = isset($param['customer_comment_level_name']) ? $param['customer_comment_level_name'] : "";
+        $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids']) ? $param['customer_comment_tag_ids'] : "";
+        $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names']) ? $param['customer_comment_tag_names'] : "";
+
+        $param['order_code'] = isset($param['order_code']) ? $param['order_code'] : "";
+
         try {
             $customer = CustomerAccessToken::getCustomer($param['access_token']);
-            
+
             if (!empty($customer) && !empty($customer->id)) {
 
                 $param['customer_id'] = $customer->id;
-                
+
                 $model = CustomerComment::addUserSuggest($param);
-                
+
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
@@ -1463,10 +1468,10 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-        * @api {GET} /user/get-money-score-coupon [GET] /user/get-money-score-coupon （100%）
+     * @api {GET} /user/get-money-score-coupon [GET] /user/get-money-score-coupon （100%）
      *
      * @apiDescription  个人中心获取用户的账户余额、积分、优惠券数（李勇）
-     * @apiName actionCoupons
+     * @apiName actionGetMoneyScoreCoupon
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -1560,5 +1565,131 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "获取个人中心信息失败", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
     }
+    
+    /**
+     * @api {GET} /user/share_weibo [GET] /user/share_weibo （100%）
+     *
+     * @apiDescription  分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）
+     * @apiName actionShareWeibo
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *         "code": 1,
+     *         "msg": "分享微博成功",
+     *         "ret": {
+     *             "image": "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+     *             "title": "品质生活 从e家洁开始  周期下单 情节无忧",
+     *             "content": [
+     *                 "省时省力省心",
+     *                 "固定星级阿姨",
+     *                 "轻松回归生活"
+     *             ],
+     *             "url": "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+     *         },
+     *         "alertMsg": "分享微博成功"
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 Not Found
+     *       {
+     *          "code": 401,
+     *          "msg": "用户认证已经过期,请重新登录",
+     *          "ret": {},
+     *          "alertMsg": "用户认证已经过期,请重新登录"
+     *        }
+     *
+     */
+    public function actionShareWeibo()
+    {
 
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
+        }
+        $result=array();
+        $result=[
+            "image"=>"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+            "title"=>"品质生活 从e家洁开始  周期下单 情节无忧",
+            "content"=>[
+                "省时省力省心",
+                "固定星级阿姨",
+                "轻松回归生活"
+            ],
+            "url"=>"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+        ];
+        if (!empty($result)){
+            return $this->send($result, "分享微博成功", 1, 200, null, alertMsgEnum::shareWeiboSuccess);
+        } else {
+            return $this->send(null, "分享微博失败", 0, 200, null, alertMsgEnum::ShareWeiboFail);
+        }
+    }
+     /**
+     * @api {GET} /user/share-friends [GET] /user/share-friends （100%）
+     *
+     * @apiDescription  分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）
+     * @apiName actionShareFriends
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *         "code": 1,
+     *         "msg": "分享朋友圈成功",
+     *         "ret": {
+     *             "image": "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+     *             "title": "品质生活 从e家洁开始  周期下单 情节无忧",
+     *             "content": [
+     *                 "省时省力省心",
+     *                 "固定星级阿姨",
+     *                 "轻松回归生活"
+     *             ],
+     *             "url": "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+     *         },
+     *         "alertMsg": "分享朋友圈成功"
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 Not Found
+     *       {
+     *          "code": 401,
+     *          "msg": "用户认证已经过期,请重新登录",
+     *          "ret": {},
+     *          "alertMsg": "用户认证已经过期,请重新登录"
+     *        }
+     *
+     */
+    public function actionShareFriends()
+    {
+
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
+        }
+        $result=array();
+        $result=[
+            "image"=>"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+            "title"=>"品质生活 从e家洁开始  周期下单 情节无忧",
+            "content"=>[
+                "省时省力省心",
+                "固定星级阿姨",
+                "轻松回归生活"
+            ],
+            "url"=>"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+        ];
+        if (!empty($result)){
+            return $this->send($result, "分享朋友圈成功", 1, 200, null, alertMsgEnum::shareFriendsSuccess);
+        } else {
+            return $this->send(null, "分享朋友圈失败", 0, 200, null, alertMsgEnum::ShareFriendsFail);
+        }
+    }
 }

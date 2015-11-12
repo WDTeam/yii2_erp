@@ -33,7 +33,7 @@ class CouponRuleController extends Controller
     
     public function actionIndexceshi()
     {
-       $userinfoceshi= new \dbbase\models\operation\CouponUserinfoceshi;
+       $userinfoceshi= new CouponUserinfoceshi;
     	
        /* $datainfo=$userinfoceshi->find()
        ->where(['and','city_id is null'])
@@ -50,9 +50,10 @@ class CouponRuleController extends Controller
       } */
       
       // SELECT * from ejj_coupon_userinfoceshi  group by order_type order by id desc
-       
+       $userinfoceshi= new CouponUserinfoceshi;
        $datainfo=$userinfoceshi->find()
        ->groupBy('order_type')
+       ->limit(1)
        ->asArray()
        ->all();
        
@@ -73,16 +74,11 @@ class CouponRuleController extends Controller
 				'油烟机清洗'=>9,
 				'窗帘清洗'=>34,
 				'家庭保洁'=>1]; 
-       
-       
-       foreach ($datainfo as $typedata){
-       	
-       	$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
-       	$saveinfo->order_typeid=$googsdata[$typedata['order_type']];
-       	//var_dump($saveinfo->order_typeid);exit;
-       	$saveinfo->save();
-       }
-       
+     $rty='';
+    	foreach ($datainfo as $typedata){
+    		$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
+			echo "UPDATE ejj_coupon_userinfoceshi SET order_typeid='".$googsdata[$typedata['order_type']]."' where order_type='".$typedata['order_type']."';<br>";
+    	}
        
       
        
@@ -99,8 +95,6 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-    	//$rty=\core\models\operation\coupon\CouponRule::getcustomerlist_l('15172543897');
-    	//var_dump($rty);exit;
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
