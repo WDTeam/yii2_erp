@@ -13,6 +13,7 @@ use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderOtherDict;
 use Yii;
 use core\models\worker\Worker;
+use yii\log\Logger;
 
 class OrderPush extends Order
 {
