@@ -13,7 +13,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 
-use crazyfd\qiniu\Qiniu;
 
 /**
  * OperationBootPageController implements the CRUD actions for OperationBootPage model.
@@ -75,13 +74,12 @@ class OperationBootPageController extends BaseAuthController
             $post['OperationBootPage']['updated_at'] = time();
             $operation_boot_page_ios_img_file = UploadedFile::getInstance($model, 'operation_boot_page_ios_img');
             $operation_boot_page_android_img_file = UploadedFile::getInstance($model, 'operation_boot_page_android_img');
-            $qiniu = new Qiniu();
             $ios_key = time().mt_rand('1000', '9999');
             $android_key = time().mt_rand('1000', '9999');
-            $qiniu->uploadFile($operation_boot_page_ios_img_file->tempName, $ios_key);
-            $qiniu->uploadFile($operation_boot_page_android_img_file->tempName, $android_key);
-            $post['OperationBootPage']['operation_boot_page_ios_img'] = $qiniu->getLink($ios_key);
-            $post['OperationBootPage']['operation_boot_page_android_img'] = $qiniu->getLink($android_key);
+            $path = \Yii::$app->imageHelper->uploadFile($operation_boot_page_ios_img_file->tempName, $ios_key);
+            $path = \Yii::$app->imageHelper->uploadFile($operation_boot_page_android_img_file->tempName, $android_key);
+            $post['OperationBootPage']['operation_boot_page_ios_img'] = \Yii::$app->imageHelper->getLink($ios_key);
+            $post['OperationBootPage']['operation_boot_page_android_img'] = \Yii::$app->imageHelper->getLink($android_key);
         }
         if ($model->load($post) && $model->save()) {
             if(isset($post['citylist'])){
@@ -113,13 +111,12 @@ class OperationBootPageController extends BaseAuthController
             $post['OperationBootPage']['updated_at'] = time();
             $operation_boot_page_ios_img_file = UploadedFile::getInstance($model, 'operation_boot_page_ios_img');
             $operation_boot_page_android_img_file = UploadedFile::getInstance($model, 'operation_boot_page_android_img');
-            $qiniu = new Qiniu();
             $ios_key = time().mt_rand('1000', '9999');
             $android_key = time().mt_rand('1000', '9999');
-            $qiniu->uploadFile($operation_boot_page_ios_img_file->tempName, $ios_key);
-            $qiniu->uploadFile($operation_boot_page_android_img_file->tempName, $android_key);
-            $post['OperationBootPage']['operation_boot_page_ios_img'] = $qiniu->getLink($ios_key);
-            $post['OperationBootPage']['operation_boot_page_android_img'] = $qiniu->getLink($android_key);
+            $path = \Yii::$app->imageHelper->uploadFile($operation_boot_page_ios_img_file->tempName, $ios_key);
+            $path = \Yii::$app->imageHelper->uploadFile($operation_boot_page_android_img_file->tempName, $android_key);
+            $post['OperationBootPage']['operation_boot_page_ios_img'] = \Yii::$app->imageHelper->getLink($ios_key);
+            $post['OperationBootPage']['operation_boot_page_android_img'] = \Yii::$app->imageHelper->getLink($android_key);
         }
         if ($model->load($post) && $model->save()) {
             if(isset($post['citylist'])){

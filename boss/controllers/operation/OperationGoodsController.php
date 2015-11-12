@@ -16,7 +16,6 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 
-use crazyfd\qiniu\Qiniu;
 
 /**
  * OperationGoodsController implements the CRUD actions for OperationGoods model.
@@ -236,14 +235,13 @@ class OperationGoodsController extends Controller
     }
     
     private function handleGoodsImgs($model, $files = array()){
-        $qiniu = new Qiniu();
         $data = array();
         foreach((array)$files as $filekey => $filevalue){
             $fileinfo = UploadedFile::getInstance($model, $filevalue);
             if(!empty($fileinfo)){
                 $key = time().mt_rand('1000', '9999').uniqid();
-                $qiniu->uploadFile($fileinfo->tempName, $key);
-                $data[$filevalue] = $qiniu->getLink($key);
+                $path = \Yii::$app->imageHelper->uploadFile($fileinfo->tempName, $key);
+                $data[$filevalue] = \Yii::$app->imageHelper->getLink($key);
             }
         }
         return $data;
