@@ -201,8 +201,7 @@ class ShopManager extends \dbbase\models\shop\ShopManager
      */
     public function getBlPhotoUrlByQiniu()
     {
-        $qn = new Qiniu();
-        return $qn->getLink().$this->bl_photo_url;
+        return \Yii::$app->imageHelper->getLink($this->bl_photo_url);
     }
     /**
      * 密码处理

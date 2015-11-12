@@ -53,10 +53,9 @@ class CouponUserinfoController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {	
+        return $this->redirect(['index']);
+        } else {	
         return $this->render('view', ['model' => $model]);
 }
     }
@@ -91,7 +90,7 @@ class CouponUserinfoController extends Controller
 	        	// 3 目前不考虑不同城市优惠的判断，比喻如果这个手机号是天津的，他所选择的规则是北京地区的，理论上是不容许添加的
 	        	$dataname=explode('|',$dateinfo['CouponUserinfo']['customer_tel']);
 	        	
-	        	
+	        	//var_dump($dataname);exit;
 	        	foreach ($dataname as $usertel){
 	        		$userinfo=Customer::getCustomerInfo($usertel);
 	        		
@@ -129,38 +128,41 @@ class CouponUserinfoController extends Controller
 	        			$model->is_del=0;
 	        			$model->save();
 	        		}else{
+	        			$modelinfo = new CouponUserinfo;
 	        			//此手机号码无人
-	        			$model->customer_id=0;
-	        			$model->customer_tel=$usertel;
-	        			$model->coupon_userinfo_id=1;
-	        			$model->coupon_userinfo_code='0';
-	        			$model->coupon_userinfo_name='0';
-	        			$model->coupon_userinfo_price=0.00;
-	        			$model->coupon_userinfo_gettime=time();//领取时间
-	        			$model->coupon_userinfo_usetime=0;//使用时间
-	        			$model->couponrule_use_start_time=0;
-	        			$model->couponrule_use_end_time=0;
-	        			$model->couponrule_classify=0;
-	        			$model->couponrule_category=0;
-	        			$model->couponrule_type=0;
-	        			$model->couponrule_service_type_id=0;
-	        			$model->couponrule_commodity_id=0;
-	        			$model->couponrule_city_limit=0;
-	        			$model->couponrule_city_id=0;	
-	        			$model->couponrule_customer_type=0;
-	        			$model->couponrule_use_end_days=0;
-	        			$model->couponrule_promote_type=0;
-	        			$model->couponrule_order_min_price=0;
-	        			$model->couponrule_price=0;
-	        			$model->order_code='0';
-	        			$model->is_disabled=0;
-	        			$model->system_user_id=Yii::$app->user->identity->id;
-	        			$model->system_user_name=Yii::$app->user->identity->username;;
-	        			$model->is_used=1;
-	        			$model->created_at=time();
-	        			$model->updated_at=time();
-	        			$model->is_del=0;
-	        			$model->save();
+	        			$modelinfo->customer_id=0;
+	        			$modelinfo->customer_tel=$usertel;
+	        			$modelinfo->coupon_userinfo_id=1;
+	        			$modelinfo->coupon_userinfo_code='0';
+	        			$modelinfo->coupon_userinfo_name='0';
+	        			$modelinfo->coupon_userinfo_price=0.00;
+	        			$modelinfo->coupon_userinfo_gettime=time();//领取时间
+	        			$modelinfo->coupon_userinfo_usetime=0;//使用时间
+	        			$modelinfo->couponrule_use_start_time=0;
+	        			$modelinfo->couponrule_use_end_time=0;
+	        			$modelinfo->couponrule_classify=0;
+	        			$modelinfo->couponrule_category=0;
+	        			$modelinfo->couponrule_type=0;
+	        			$modelinfo->couponrule_service_type_id=0;
+	        			$modelinfo->couponrule_commodity_id=0;
+	        			$modelinfo->couponrule_city_limit=0;
+	        			$modelinfo->couponrule_city_id=0;	
+	        			$modelinfo->couponrule_customer_type=0;
+	        			$modelinfo->couponrule_use_end_days=0;
+	        			$modelinfo->couponrule_promote_type=0;
+	        			$modelinfo->couponrule_order_min_price=0;
+	        			$modelinfo->couponrule_price=0;
+	        			$modelinfo->order_code='0';
+	        			$modelinfo->is_disabled=0;
+	        			$modelinfo->system_user_id=Yii::$app->user->identity->id;
+	        			$modelinfo->system_user_name=Yii::$app->user->identity->username;;
+	        			$modelinfo->is_used=1;
+	        			$modelinfo->created_at=time();
+	        			$modelinfo->updated_at=time();
+	        			$modelinfo->is_del=0;
+	        			$modelinfo->save();
+	        			unset($modelinfo);
+	        			unset($usertel);
 	        		}
 	        	}	
 	        	}else{

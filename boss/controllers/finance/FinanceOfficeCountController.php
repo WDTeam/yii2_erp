@@ -27,7 +27,7 @@ use boss\models\finance\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
 use core\models\payment\GeneralPaySearch;
 use dbbase\models\finance\FinanceRecordLog;
-use crazyfd\qiniu\Qiniu;
+
 use dbbase\models\finance\FinancePayChannel;
 
 

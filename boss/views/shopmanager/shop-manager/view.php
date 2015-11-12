@@ -122,6 +122,9 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?= DetailView::widget([
         'model' => $model,
+        'formOptions' =>  [
+            'options' =>  ['enctype' => 'multipart/form-data']
+        ],
         'condensed'=>false,
         'hover'=>true,
         'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,

@@ -23,7 +23,6 @@ use dbbase\models\finance\FinanceOrderChannel;
 use dbbase\models\finance\FinancePayChannel;
 use boss\models\finance\FinancePayChannelSearch;
 use boss\models\finance\FinanceOrderChannelSearch;
-use crazyfd\qiniu\Qiniu;
 
 /**
  * FinanceHeaderController implements the CRUD actions for FinanceHeader model.
@@ -104,11 +103,10 @@ class FinanceHeaderController extends BaseAuthController
        		}
        		$filenamesitename=$file->baseName;
        		if($file){
-       			$qiniu = new Qiniu();
-       			$path = $qiniu->uploadFile($file->tempName);
+       			$path = \Yii::$app->imageHelper->uploadFile($file->tempName);
        			$model->finance_uplod_url = $path['key'];
        		}
-       		$qiniuurl=$qiniu->getLink($path['key']);
+       		$qiniuurl=\Yii::$app->imageHelper->getLink($path['key']);
        		$filePath=$file->tempName;
        	}else{
        		//文件存储在本地

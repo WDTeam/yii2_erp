@@ -8,7 +8,7 @@ use core\models\shop\ShopManagerSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use crazyfd\qiniu\Qiniu;
+
 use yii\helpers\ArrayHelper;
 use kartik\helpers\Html;
 use yii\helpers\Json;
@@ -75,7 +75,13 @@ class ShopManagerController extends BaseAuthController
     {
         $this->can($id);
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($model, 'bl_photo_url');
+            if($file){
+                $path = \Yii::$app->imageHelper->uploadFile($file->tempName);
+                $model->bl_photo_url = $path['key'];
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('view', ['model' => $model]);
@@ -96,8 +102,7 @@ class ShopManagerController extends BaseAuthController
             $model->load($data);
             $file = UploadedFile::getInstance($model, 'bl_photo_url');
             if($file){
-                $qiniu = new Qiniu();
-                $path = $qiniu->uploadFile($file->tempName);
+                $path = \Yii::$app->imageHelper->uploadFile($file->tempName);
                 $model->bl_photo_url = $path['key'];
             }
             
@@ -128,8 +133,7 @@ class ShopManagerController extends BaseAuthController
             $model->load($data);
             $file = UploadedFile::getInstance($model, 'bl_photo_url');
             if($file){
-                $qiniu = new Qiniu();
-                $path = $qiniu->uploadFile($file->tempName);
+                $path = \Yii::$app->imageHelper->uploadFile($file->tempName);
                 $model->bl_photo_url = $path['key'];
             }
             if($model->save()){
