@@ -385,7 +385,7 @@ class ConfigureController extends \restapi\components\Controller
                 $itemlist[$key]['category_id'] = $val['operation_category_id'];
                 $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
                 $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
-                $itemlist[$key]['icon'] = '';//$val['operation_goods_pc_ico'];
+                $itemlist[$key]['icon'] = $val['operation_goods_img']?$val['operation_goods_img']:"";
                 $itemlist[$key]['service_item_price'] = $val['operation_goods_price'];
                 $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
             }
