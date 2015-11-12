@@ -76,7 +76,7 @@ use kartik\daterange\DateRangePicker;
 
 <div id="schedule-list">
     <?php
-    $schedule_from_redis = \yii\helpers\ArrayHelper::index($schedule_from_redis,'schedule_id');
+
     foreach ($schedule as $val) {
 
     ?>
@@ -125,6 +125,11 @@ use kartik\daterange\DateRangePicker;
             <table  class=" table table-bordered " style="width: 77%;" "="">
             <tbody>
             <?php
+                if(is_array($schedule_from_redis)){
+                    $schedule_from_redis = \yii\helpers\ArrayHelper::index($schedule_from_redis,'schedule_id');
+                }else{
+                    $schedule_from_redis = [];
+                }
                 if(isset($schedule_from_redis[$val['id']])){
                     $weekday = $schedule_from_redis[$val['id']]['worker_schedule_timeline'];
                     $weekdayIsDisabled = false;
