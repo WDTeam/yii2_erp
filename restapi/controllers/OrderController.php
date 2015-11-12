@@ -277,6 +277,10 @@ class OrderController extends \restapi\components\Controller
             if ($is_success) {
                 return $this->send($order->id, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
+                $result = $order->errors;
+                if(isset($result['order_service_item_name'])){
+                    return $this->send($order->errors, '创建订单失败', 0, 200, null, "您所填写的地址商圈不包含该服务");
+                }
                 return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
             }
         } catch (\Exception $e) {

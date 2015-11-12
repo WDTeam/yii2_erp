@@ -462,5 +462,15 @@ class alertMsgEnum
     const getMoneyScoreCouponFail = '获取个人中心信息失败';
     //获取个人中心信息成功
     const getMoneyScoreCouponSuccess = '获取个人中心信息成功';
+    //分享微博
+    //分享微博成功
+    const shareWeiboSuccess = '分享微博成功';
+    //分享微博失败
+    const ShareWeiboFail = '分享微博失败';
+    //分享朋友圈
+    //分享朋友圈成功
+    const shareFriendsSuccess = '分享朋友圈成功';
+    //分享朋友圈失败
+    const ShareFriendsFail = '分享朋友圈失败';
 
 }

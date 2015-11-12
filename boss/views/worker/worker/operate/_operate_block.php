@@ -37,10 +37,8 @@ if($workerBlockModel===null){
             'locale'=>['format'=>'date'],
             'separator'=>' 至 ',
             'opens'=>'right',
-            'minDate'=>'date'
         ]
     ]);
-    echo $form->field($workerBlockModel, 'worker_block_status')->radioList([ '1' => '开启','0' => '关闭'], ['inline' => true]);
     echo Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);
     ActiveForm::end();
 ?>

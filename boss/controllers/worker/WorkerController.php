@@ -7,6 +7,7 @@ namespace boss\controllers\worker;
 use boss\models\operation\OperationCity;
 use boss\models\worker\WorkerExport;
 use Composer\Package\Loader\ValidatingArrayLoader;
+use core\models\worker\WorkerForRedis;
 use core\models\worker\WorkerIdentityConfig;
 use Yii;
 use yii\web\ForbiddenHttpException;
@@ -91,8 +92,8 @@ class WorkerController extends BaseAuthController
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
-            Worker::deleteDistrictWorkerRelationToRedis($workerModel->id);
-            Worker::updateWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
+            WorkerForRedis::deleteDistrictWorkerRelationToRedis($workerModel->id);
+            WorkerForRedis::updateWorkerInfoToRedis($workerModel->id,$workerModel->shop_id,$workerModel->worker_phone,$workerModel->worker_name,$workerModel->worker_type,$workerModel->worker_identity_id);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
                     $workerDistrictModel = new WorkerDistrict;
@@ -102,7 +103,7 @@ class WorkerController extends BaseAuthController
                     $workerDistrictModel->save();
                 }
                 //更新商圈绑定阿姨到redis
-                $operateStatus = Worker::operateDistrictWorkerRelationToRedis($id,$workerParam['worker_district']);
+                $operateStatus = WorkerForRedis::operateDistrictWorkerRelationToRedis($id,$workerParam['worker_district']);
                 if($operateStatus==false){
                     throw new ServerErrorHttpException('更新商圈绑定阿姨到缓存失败');
                 }
@@ -119,8 +120,8 @@ class WorkerController extends BaseAuthController
                 'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
             ]);
             $schedule = WorkerSchedule::find()->where(['worker_id'=>$workerModel->id])->asArray()->all();
-
-            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData,'schedule'=>$schedule]);
+            $scheduleFromRedis = WorkerForRedis::getWorkerSchedule($id);
+            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData,'schedule'=>$schedule,'schedule_from_redis'=>$scheduleFromRedis]);
         }
     }
 
@@ -145,26 +146,50 @@ class WorkerController extends BaseAuthController
                   $scheduleModel->save();
                   //var_dump($scheduleModel->getErrors());
               }
-            Worker::updateWorkerScheduleInfoToRedis($id);
+            WorkerForRedis::updateWorkerScheduleInfoToRedis($id);
           }
         return $this->redirect(['view', 'id' => $id,'tab'=>2]);
     }
 
-
+    /**
+     * 操作阿姨黑名单
+     * @param $id
+     * @return \yii\web\Response
+     */
     public function actionOperateBlacklist($id){
-        $workerModel = $this->findModel($id);
+        $workerModel = Worker::findModel($id);
         if($workerModel->load(Yii::$app->request->post())){
             $workerModel->worker_blacklist_time = time();
-            $workerModel->save();
+            $modifiedAttributes = $workerModel->getDirtyAttributes();
+            if($workerModel->save() && isset($modifiedAttributes['worker_is_blacklist'])){
+                if($workerModel->worker_is_blacklist==0){
+                    WorkerForRedis::initWorkerToRedis($id);
+                }else{
+                    WorkerForRedis::deleteWorkerToRedis($id);
+                }
+            }
+            var_dump($workerModel->errors);die;
         }
         return $this->redirect(['auth', 'id' => $id]);
     }
 
+    /**
+     * 操作阿姨离职
+     * @param $id
+     * @return \yii\web\Response
+     */
     public function actionOperateDimission($id){
         $workerModel = $this->findModel($id);
         if($workerModel->load(Yii::$app->request->post())){
             $workerModel->worker_dimission_time = time();
-            $workerModel->save();
+            $modifiedAttributes = $workerModel->getDirtyAttributes();
+            if($workerModel->save() && isset($modifiedAttributes['worker_is_dimission'])){
+                if($workerModel->worker_is_dimission==0){
+                    WorkerForRedis::initWorkerToRedis($id);
+                }else{
+                    WorkerForRedis::deleteWorkerToRedis($id);
+                }
+            }
         }
         return $this->redirect(['auth', 'id' => $id]);
     }
@@ -193,7 +218,7 @@ class WorkerController extends BaseAuthController
                 $workerAuthModel->worker_id = $workerModel->id;
                 $workerAuthModel->save();
                 $workerParam = Yii::$app->request->post('Worker');
-                Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type,$workerModel->worker_identity_id);
+                WorkerForRedis::addWorkerInfoToRedis($workerModel->id,$workerModel->shop_id,$workerModel->worker_phone,$workerModel->worker_name,$workerModel->worker_type,$workerModel->worker_identity_id);
                 if($workerParam['worker_district']){
                     foreach($workerParam['worker_district'] as $val){
                         $workerDistrictModel = new WorkerDistrict;
@@ -202,14 +227,9 @@ class WorkerController extends BaseAuthController
                         $workerDistrictModel->operation_shop_district_id = $val;
                         $workerDistrictModel->save();
                     }
-                    $operateStatus = Worker::operateDistrictWorkerRelationToRedis($workerModel->id,$workerParam['worker_district']);
-                    if($operateStatus==false){
-                        throw new ServerErrorHttpException('更新商圈绑定阿姨到缓存失败');
-                    }
+                    WorkerForRedis::operateDistrictWorkerRelationToRedis($workerModel->id,$workerParam['worker_district']);
                 }
                 return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
-            }else{
-                var_dump($workerModel->errors);
             }
         } else {
             return $this->render('create', [
@@ -266,20 +286,35 @@ class WorkerController extends BaseAuthController
             $param = Yii::$app->request->post('WorkerAuth');
             $workerModel = Worker::findModel($id);
             if($workerAuthModel->load(Yii::$app->request->post()) && $workerAuthModel->save()){
-                if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
+                if(isset($param['worker_auth_status']) && $param['worker_auth_status']==2){
                     $workerModel->worker_auth_status = 1;
                     $workerModel->save();
-                }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==1){
+                }elseif(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
                     $workerModel->worker_auth_status = 2;
                     $workerModel->save();
-                } elseif(isset($param['worker_ontrial_status']) && $param['worker_ontrial_status']==1){
+                }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==2){
                     $workerModel->worker_auth_status = 3;
                     $workerModel->save();
-                }elseif(isset($param['worker_onboard_status']) && $param['worker_onboard_status']==1){
+                }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==1){
                     $workerModel->worker_auth_status = 4;
                     $workerModel->save();
-                }elseif(isset($param['worker_upgrade_training_status']) && $param['worker_upgrade_training_status']==1){
+                }  elseif(isset($param['worker_ontrial_status']) && $param['worker_ontrial_status']==2){
                     $workerModel->worker_auth_status = 5;
+                    $workerModel->save();
+                } elseif(isset($param['worker_ontrial_status']) && $param['worker_ontrial_status']==1){
+                    $workerModel->worker_auth_status = 6;
+                    $workerModel->save();
+                }elseif(isset($param['worker_onboard_status']) && $param['worker_onboard_status']==2){
+                    $workerModel->worker_auth_status = 7;
+                    $workerModel->save();
+                }elseif(isset($param['worker_onboard_status']) && $param['worker_onboard_status']==1){
+                    $workerModel->worker_auth_status = 8;
+                    $workerModel->save();
+                }elseif(isset($param['worker_upgrade_training_status']) && $param['worker_upgrade_training_status']==2){
+                    $workerModel->worker_auth_status = 9;
+                    $workerModel->save();
+                }elseif(isset($param['worker_upgrade_training_status']) && $param['worker_upgrade_training_status']==1){
+                    $workerModel->worker_auth_status = 10;
                     $workerModel->save();
                 }
             }
@@ -315,7 +350,9 @@ class WorkerController extends BaseAuthController
     {
         $model=Worker::findModel($id);
         $model->isdel = 1;
-        $model->save();
+        if($model->save()){
+            WorkerForRedis::deleteWorkerToRedis($id);
+        }
         return $this->redirect(['index']);
     }
 
@@ -510,45 +547,19 @@ class WorkerController extends BaseAuthController
             $workerBlockModel->worker_block_start_time = strtotime($startDate);
             $workerBlockModel->worker_block_finish_time = strtotime($finishDate);
             $workerBlockModel->worker_block_reason = $param['worker_block_reason'];
-            $workerBlockModel->worker_block_status = intval($param['worker_block_status']);
-            //为更改前的阿姨封号属性
-            $oldAttributes = $workerBlockModel->oldAttributes;
             //更改的阿姨封号属性
             $modifiedAttributes = $workerBlockModel->getDirtyAttributes();
-            //记录阿姨日志
-            if($workerBlockModel->save()){
+            $current_time = strtotime(date('Y-m-d'));
+            if($workerBlockModel->save() && (isset($modifiedAttributes['worker_block_start_time']) || isset($modifiedAttributes['worker_block_finish_time']))){
                 $workerModel = Worker::findModel($workerId);
-                if(empty($param['id'])){
-                    if($param['worker_block_status']==1){
-                        $workerModel->worker_is_block = 1;
-                        $workerModel->save();
-                    }elseif($modifiedAttributes['worker_block_status']==0){
-                        $workerModel->worker_is_block = 0;
-                        $workerModel->save();
-                    }
-                    $this->CreateBlockLog($workerId,$workerBlockModel->id,1);
+                if($workerBlockModel->worker_block_start_time<=$current_time && $workerBlockModel->worker_block_finish_time>=$current_time){
+                    $workerModel->worker_is_block = 1;
+                    $workerModel->save();
+                    WorkerForRedis::deleteWorkerToRedis($workerId);
                 }else{
-                    if(isset($modifiedAttributes['worker_block_finish_time'])){
-                        if($modifiedAttributes['worker_block_finish_time']<$oldAttributes['worker_block_finish_time']){
-                            $this->CreateBlockLog($workerId,$workerBlockModel->id,2);
-                        }elseif($modifiedAttributes['worker_block_finish_time']>$oldAttributes['worker_block_finish_time']){
-                            $this->CreateBlockLog($workerId,$workerBlockModel->id,3);
-                        }
-                    }
-                    if(isset($modifiedAttributes['worker_block_status'])){
-                        if($modifiedAttributes['worker_block_status']==1){
-                            $workerModel->worker_is_block = 1;
-                            $workerModel->save();
-                            //记录日志记录
-                            $this->CreateBlockLog($workerId,$workerBlockModel->id,5);
-                        }elseif($modifiedAttributes['worker_block_status']==0){
-                            $workerModel->worker_is_block = 0;
-                            $workerModel->save();
-                            //记录日志记录
-                            $this->CreateBlockLog($workerId,$workerBlockModel->id,4);
-                        }
-                    }
-
+                    $workerModel->worker_is_block = 0;
+                    $workerModel->save();
+                    WorkerForRedis::initWorkerToRedis($workerId);
                 }
             }
             return $this->redirect(['auth', 'id' => $workerId]);
@@ -635,6 +646,7 @@ class WorkerController extends BaseAuthController
      * 导入新阿姨从Excel
      */
     public function actionExportDataFromExcel(){
+        ini_set('memory_limit','512M');
         $model = new WorkerExport();
         //上传阿姨信息
         $model->excel = UploadedFile::getInstance($model, 'excel');
@@ -646,6 +658,8 @@ class WorkerController extends BaseAuthController
                 \Yii::$app->getSession()->setFlash('default','上传文件错误');
             }
             $filePath = $path.$filename;
+//            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory;
+//            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
             $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
             $this->insertWorkerData($sheetData);
@@ -680,7 +694,6 @@ class WorkerController extends BaseAuthController
     public function insertWorkerVacationData($workerVacationInfo){
         $typeList = ['休假'=>2,'事假'=>1];
         $connectionNew =  \Yii::$app->db;
-        echo '<pre>';
         foreach ($workerVacationInfo as $key=>$col) {
             if($key<2){
                 continue;
@@ -709,7 +722,6 @@ class WorkerController extends BaseAuthController
     }
 
     public function insertWorkerData($workerInfo){
-        ini_set('memory_limit','512M');
         $operationArea = new OperationArea();
         $connectionNew =  \Yii::$app->db;
         $shopArr = Shop::find()->asArray()->all();
@@ -763,6 +775,7 @@ class WorkerController extends BaseAuthController
                 $workerArr['worker_is_blacklist'] = $blacklist[$col['AB']];
                 $workerArr['worker_blacklist_time'] = strtotime($col['AC']);
                 $workerArr['worker_blacklist_reason'] = trim($col['AD']);
+                $workerArr['worker_auth_status'] = 7;
                 if($col['AM']=='0000-00-00 00:00:00'){
                     $workerArr['created_ad'] = strtotime($col['AM']);
                 }else{
@@ -836,6 +849,10 @@ class WorkerController extends BaseAuthController
                 $workerBlockArr['worker_block_reason'] = trim($col['AA']);
 
                 $workerAuthArr['worker_id'] = $worker_id;
+                $workerAuthArr['worker_auth_status'] = 1;
+                $workerAuthArr['worker_basic_training_status'] = 1;
+                $workerAuthArr['worker_ontrial_status'] = 1;
+                $workerAuthArr['worker_onboard_status'] = 1;
 
                 $workerDeviceArr['worker_id'] = $worker_id;
 
@@ -872,6 +889,7 @@ class WorkerController extends BaseAuthController
             }
             $workerBlockColumns = array_keys($workerBlockArr);
             $connectionNew->createCommand()->batchInsert('{{%worker_block}}',$workerBlockColumns, $batchWorkerBlockArr)->execute();
+            WorkerForRedis::initAllWorkerToRedis();
         }
     }
 
@@ -914,6 +932,7 @@ class WorkerController extends BaseAuthController
                 $workerArr['worker_password'] = $val['app_pass'];
                 $workerArr['worker_type'] = $val['is_agency']==0?1:2;
                 $workerArr['created_ad'] = strtotime($val['create_time']);
+                $workerArr['worker_auth_status'] = 7;
                 //原有阿姨身份太凌乱，暂时只取兼职和全职
                 if(strpos($val['is_fulltime'],'兼职')){
                     $workerArr['worker_identity_id']=2;
@@ -996,6 +1015,10 @@ class WorkerController extends BaseAuthController
                 $workerStatArr['worker_stat_sale_cards'] = intval($val['sale_card']);
 
                 $workerAuthArr['worker_id'] = $val['id'];
+                $workerAuthArr['worker_auth_status'] = 1;
+                $workerAuthArr['worker_basic_training_status'] = 1;
+                $workerAuthArr['worker_ontrial_status'] = 1;
+                $workerAuthArr['worker_onboard_status'] = 1;
 
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
@@ -1024,18 +1047,18 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest1(){
-        Worker::operateWorkerOrderInfoToRedis(19077,1,123,2,1446681600,1446685200);
+        Worker::getWorkerTimeLine(1,1);
     }
 
     public function actionTest(){
         echo '<pre>';
-        $a = Worker::findAllModel(['isdel'=>0],true);
-        var_dump($a);
+//        $a = Worker::findAllModel(['isdel'=>0],true);
+//        var_dump($a);
         //var_dump(Worker::getWorkerDetailInfo(19077));die;
         //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         //echo '<br>';
-        var_dump(WorkerVacationApplication::getApplicationTimeLine(19074,1));die;
+        var_dump(WorkerForRedis::initAllWorkerToRedis());die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);

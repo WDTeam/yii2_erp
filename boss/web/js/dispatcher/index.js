@@ -197,8 +197,13 @@ function restAcceptWork(){
 function restWork(){
    //停止忙碌时间计算
    stopCount();
-   //保存忙碌时间
-   $('#busy_time').val(d);
+   if(window.work_status==3) {
+      //保存忙碌时间
+      $('#busy_time').val(d);
+   }else if(window.work_status==2){
+      //保存空闲时间
+      $('#free_time').val(d);
+   }
    //调用后台，更新当日忙碌时间和状态2==============================
    saveParams();
    //初始化计时参数
