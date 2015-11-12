@@ -92,9 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>$model->worker_task_start>time()?
-                    '{view} {update} {online}':
-                    '{view} {online}',
+                'template'=>'{view} {update} {online}',
                 'buttons' => [
                     'online'=>function($url, $model){
                         if($model->worker_task_online==1){
