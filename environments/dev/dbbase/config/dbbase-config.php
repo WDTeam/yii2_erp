@@ -24,7 +24,7 @@ return [
         ],
          'mongodb' => [
              'class' => '\yii\mongodb\Connection',
-             'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@101.200.179.70:27017/dev_boss_db',
+             'dsn' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017/dev_boss_db',
          ],
         /**
          * 极光推送,默认为开发环境配置
