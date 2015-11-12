@@ -74,6 +74,11 @@ class SystemUser extends \dbbase\models\system\SystemUser
                 var_dump($model->errors);exit;
             }
         }
+        $this->_shop_ids = Shop::find()
+        ->select(['id'])
+        ->andFilterWhere(['in','shop_manager_id', $shop_manager_ids])
+        ->column();
+        $this->saveShopIds();
         return true;
     }
     /**
