@@ -480,6 +480,23 @@ class OrderController extends BaseAuthController
         }
     }
 
+    public function actionUpdateCustomerNeed($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['order_customer_memo'])&&isset($post['order_cs_memo'])&&isset($post['order_customer_need'])) {
+            if(Order::updateCustomerNeed($order_code, $post['order_customer_memo'], $post['order_cs_memo'],$post['order_customer_need'],$admin_id)){
+                return ['status' => 1, 'info' => '修改成功'];
+            }else{
+                return ['status' => 0, 'info' => '修改失败'];
+            }
+        }else{
+            return ['status' => 3, 'info' => '修改失败'];
+        }
+    }
+
 
     /**
      * 订单指派页面

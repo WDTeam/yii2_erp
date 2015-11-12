@@ -167,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-offset-3 col-sm-12">
                         <button class="btn btn-warning order_service_info_save" type="button">保存更改</button>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button class="btn btn-warning btn-cancel-service-info" type="button">取消更改</button>
+                        <button class="btn btn-default btn-cancel-service-info" type="button">取消更改</button>
                     </div>
                 </div>
             </div>
@@ -177,14 +177,12 @@ $this->params['breadcrumbs'][] = $this->title;
            <!-- 客户需求START -->
            <div class="panel-heading customer-info-view">
                 <h3 class="panel-title">客户需求</h3>
-                <div class="pull-right" style="margin-top: -26px;">
-                     <button class="btn btn-warning btn-edit-customer-info" type="button">修改</button>
-                </div>
             </div>
             <div class="panel-body customer-info-view">
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户需求</label>
                     <div class="col-sm-6 right-text order_customer_need"><?= Html::encode($model->orderExtCustomer->order_customer_need) ?></div>
+                    <button class="btn btn-warning btn-xs btn-edit-customer-info" style="margin-left: 50px;" type="button">修改客户需求</button>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户备注</label>
@@ -207,7 +205,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     $model->order_customer_need = explode(',',$model->orderExtCustomer->order_customer_need);
                     echo $form->field($model, 'order_customer_need')->inline()->checkboxList($model->customerNeeds)
                 ?>
-                <?= $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]) ?>
+                <?php
+                    $model->order_customer_memo = $model->orderExtCustomer->order_customer_memo;
+                    echo $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]);
+                ?>
                 <?= $form->field($model, 'order_cs_memo')->textInput(['maxlength' => true]) ?>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-12">

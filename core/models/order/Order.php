@@ -1099,6 +1099,29 @@ class Order extends OrderModel
 
     }
 
+    /**
+     * 修改客户需求
+     * @param $order_code
+     * @param $order_customer_memo
+     * @param $order_cs_memo
+     * @param $order_customer_need
+     * @param $admin_id
+     * @return bool
+     */
+    public static function updateCustomerNeed($order_code,$order_customer_memo,$order_cs_memo,$order_customer_need,$admin_id)
+    {
+        $order = OrderSearch::getOneByCode($order_code);
+
+        $order->setAttributes([
+            'admin_id' => $admin_id,
+            'order_customer_memo'=>$order_customer_memo,
+            'order_cs_memo'=>$order_cs_memo,
+            'order_customer_need'=>$order_customer_need,
+        ]);
+        return $order->doSave(['OrderExtCustomer']);
+
+    }
+
 
     /**
      * 获取订单渠道
