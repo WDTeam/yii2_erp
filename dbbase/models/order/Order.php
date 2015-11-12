@@ -378,7 +378,7 @@ class Order extends ActiveRecord
      */
     public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'],$transact = null)
     {
-        $transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
+        $transaction = empty($transact)?static::getDb()->beginTransaction(1):$transact; //开启一个事务
         $is_new_record = $this->isNewRecord;
         if(!$this->isNewRecord)$this->version++;
 
