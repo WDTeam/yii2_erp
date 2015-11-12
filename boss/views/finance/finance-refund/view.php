@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		'attribute' => 'finance_refund_worker_id',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
+    		
     		'value'=>FinanceRefund::get_adminname($model->finance_refund_worker_id),
     		],
     		'finance_refund_worker_tel',

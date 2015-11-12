@@ -81,19 +81,15 @@ class CouponRule extends \yii\db\ActiveRecord
             'couponrule_name' => Yii::t('core', '优惠券名称'),
             'couponrule_channelname' => Yii::t('core', '渠道名称'),//(主要使用到一码多用分渠道发)
             'couponrule_classify' => Yii::t('core', '类型'),//1 一码一用  2 一码多用
-            
+
             'couponrule_category' => Yii::t('core', '分类'),//优惠券分类0为一般优惠券1为赔付优惠券
             'couponrule_category_name' => Yii::t('core', '优惠券范畴'),
             'couponrule_type' => Yii::t('core', '优惠券类别'),//优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券
             'couponrule_type_name' => Yii::t('core', '优惠券类型名称'),
-            
             'couponrule_service_type_id' => Yii::t('core', '服务类别id'),//分类
             'couponrule_service_type_name' => Yii::t('core', '服务类别名称'),//分类 名称
-            
             'couponrule_commodity_id' => Yii::t('core', '如果是商品优惠券id'),//洗衣的内心id
             'couponrule_commodity_name' => Yii::t('core', '如果是商品名称'),//洗衣
-            
-            
             'couponrule_city_limit' => Yii::t('core', '地区限制'),//城市限制0为不限1为单一城市限制
             'couponrule_city_id' => Yii::t('core', '关联城市'),
             'couponrule_city_name' => Yii::t('core', '城市名称'),

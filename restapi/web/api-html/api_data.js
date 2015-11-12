@@ -773,14 +773,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "address_longitude",
-            "description": "<p>当前城市的精度</p> "
+            "description": "<p>填写地址的精度</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "address_latitude",
-            "description": "<p>当前城市维度</p> "
+            "description": "<p>填写地址的纬度</p> "
           },
           {
             "group": "Parameter",
@@ -788,6 +788,13 @@ define({ "api": [
             "optional": false,
             "field": "city_name",
             "description": "<p>当前城市名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "address_id",
+            "description": "<p>用户地址ID</p> "
           }
         ]
       }
@@ -1248,7 +1255,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": 0/1  阿姨是否封号 0正常1封号\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      \"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": 0/1  阿姨是否封号 0正常1封号\n     },\n     \"alertMsg\": \"操作成功\"\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"1\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n       \"lng\"     经度,\n        \"lat\"    纬度,\n     ### \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\", # 11月六号 涛涛说不要这个时间标示 18:22\n      ##\"times\" => '2:00:00', # 11月六号 涛涛说不要这个时间标示 18:22\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
