@@ -187,7 +187,7 @@ class OrderManualAssign extends Model
             return array_merge(Worker::getDistrictCycleFreeWorker($order->district_id, 1, $times), Worker::getDistrictCycleFreeWorker($order->district_id, 2, $times));
 
         } catch (Exception $e) {
-            return false;
+            return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
     }
 

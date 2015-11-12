@@ -13,7 +13,6 @@ namespace core\models\order;
 use core\models\finance\FinanceRefundadd;
 
 use core\models\operation\coupon\CouponRule;
-use core\models\operation\OperationPayChannel;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;

@@ -51,11 +51,11 @@ class OrderManualAssign extends OrderManualAssignModel
     {
         $order = OrderSearch::getOne($order_id);
         $worker_list = parent::getCanAssignWorkerList($order);
-        if($worker_list){
+        if(isset($worker_list['code']) || !$worker_list){
+            return $worker_list;
+        }else{
             $workers = self::_formatWorker($order,$worker_list);
             return ['code' => 200, 'data' => $workers];
-        }else {
-            return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
     }
 
