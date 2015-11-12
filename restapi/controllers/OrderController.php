@@ -344,7 +344,6 @@ class OrderController extends \restapi\components\Controller
         if (!$cityID) {
             return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
         }
-<<<<<<< HEAD
         try{
             //TODO:田玉星觉得产品设计有问题，所以留取两种方案
             if(isset($param['address_id'])&&intval($param['address_id'])){
@@ -354,13 +353,8 @@ class OrderController extends \restapi\components\Controller
                     $param['address_latitude'] = $addressModel->customer_address_latitude;
                 }
             }
-            $shopDistrictInfo =  OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'],$param['address_latitude']);
-            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID,$shopDistrictInfo['operation_shop_district_id'],intval($param['order_service_item_id']))){
-=======
-        try {
             $shopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'], $param['address_latitude']);
             if (!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID, $shopDistrictInfo['operation_shop_district_id'], intval($param['order_service_item_id']))) {
->>>>>>> b215ec255ea9fdf65f9506fa12ed1d94020c16b6
                 return $this->send(null, "该服务不在当前地址商圈内", 0, 200, null, alertMsgEnum::orderShopDistrictGoodsFaile);
             }
             return $this->send(null, "当前商圈内包含该服务", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
