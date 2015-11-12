@@ -44,7 +44,16 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error'],
                     'logFile'=>'@boss/runtime/logs/boss.log',
-                    'categories' => ['boss','core'],
+                    'categories' => ['boss'],
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 20,
+                ]
+                ,
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error'],
+                    'logFile'=>'@core/runtime/logs/core.log',
+                    'categories' => ['core'],
                     'maxFileSize' => 1024 * 2,
                     'maxLogFiles' => 20,
                 ]
