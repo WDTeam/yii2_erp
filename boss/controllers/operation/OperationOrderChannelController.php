@@ -1,13 +1,26 @@
 <?php
-
+/**
+* 控制器 订单 渠道
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 namespace boss\controllers\operation;
 
 use Yii;
-use dbbase\models\operation\OperationOrderChannel;
-use boss\models\operation\OperationOrderChannelSearch;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use dbbase\models\operation\OperationOrderChannel;
+
+use boss\models\operation\OperationOrderChannelSearch;
+use boss\components\BaseAuthController;
+
 
 /**
  * OperationOrderChannelController implements the CRUD actions for OperationOrderChannel model.
@@ -32,10 +45,6 @@ class OperationOrderChannelController extends BaseAuthController
      */
     public function actionIndex()
     { 
-    	
-    	
-    	
-    	
         $searchModel = new OperationOrderChannelSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
