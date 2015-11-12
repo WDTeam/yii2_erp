@@ -96,6 +96,11 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
+        #过滤 北京市
+        if ($param['operation_province_name'] == '北京市') {
+            $param['operation_province_name'] = str_replace("市", "", $param['operation_province_name']);
+        }
+
         //控制添加地址时手机号码必须填写
         if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
             return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200, null, alertMsgEnum::addAddressNoPhone);
@@ -801,24 +806,24 @@ class UserController extends \restapi\components\Controller
         if (empty($param['customer_comment_tag_ids'])) {
             $param['customer_comment_tag_ids'] = 0;
         }
-        $param['customer_comment_phone'] = isset($param['customer_comment_phone'])?$param['customer_comment_phone']:"";
-        $param['worker_tel'] = isset($param['worker_tel'])?$param['worker_tel']:"";
-        $param['customer_comment_content'] = isset($param['customer_comment_content'])?$param['customer_comment_content']:"";
-        $param['customer_comment_level_name'] = isset($param['customer_comment_level_name'])?$param['customer_comment_level_name']:"";
-        $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids'])?$param['customer_comment_tag_ids']:"";
-        $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names'])?$param['customer_comment_tag_names']:"";
-        
-        $param['order_code'] = isset($param['order_code'])?$param['order_code']:"";
-        
+        $param['customer_comment_phone'] = isset($param['customer_comment_phone']) ? $param['customer_comment_phone'] : "";
+        $param['worker_tel'] = isset($param['worker_tel']) ? $param['worker_tel'] : "";
+        $param['customer_comment_content'] = isset($param['customer_comment_content']) ? $param['customer_comment_content'] : "";
+        $param['customer_comment_level_name'] = isset($param['customer_comment_level_name']) ? $param['customer_comment_level_name'] : "";
+        $param['customer_comment_tag_ids'] = isset($param['customer_comment_tag_ids']) ? $param['customer_comment_tag_ids'] : "";
+        $param['customer_comment_tag_names'] = isset($param['customer_comment_tag_names']) ? $param['customer_comment_tag_names'] : "";
+
+        $param['order_code'] = isset($param['order_code']) ? $param['order_code'] : "";
+
         try {
             $customer = CustomerAccessToken::getCustomer($param['access_token']);
-            
+
             if (!empty($customer) && !empty($customer->id)) {
 
                 $param['customer_id'] = $customer->id;
-                
+
                 $model = CustomerComment::addUserSuggest($param);
-                
+
                 if (!empty($model)) {
                     return $this->send(null, "添加评论成功", 1, 200, null, alertMsgEnum::userSuggestSuccess);
                 } else {
