@@ -288,49 +288,38 @@ class OrderController extends \restapi\components\Controller
         }
     }
     /**
-     * @api {POST} /order/check-district-goods [POST] /order/check-district-goods(100%)
-     * @apiDescription  创建增值服务订单 (田玉星)
+     * @api {GET} /order/check-district-goods [GET] /order/check-district-goods(100%)
+     * @apiDescription  检查当前商圈是否已经开通选择的服务 (田玉星)
      *
      * @apiName actionCheckDistrictGoods
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} city_name 城市名称
-     * @apiParam {String} address 详细地址
+     * @apiParam {String} address_longitude 当前城市的精度
+     * @apiParam {String} address_latitude 当前城市维度
+     * @apiParam {String} city_name 当前城市名称 
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *  "code": "1",
-     *  "msg": "创建订单成功",
-     *  "ret": {
-     *    8//订单ID
+     *   {
+     *       "code": 1,
+     *       "msg": "当前商圈内包含该服务",
+     *       "ret": {},
+     *       "alertMsg": "当前商圈包含该服务"
      *   }
-     *  "alertMsg": "创建订单成功"
-     *  }
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": 401,
-     *        "msg": "用户无效,请先登录",
-     *        "ret": {},
-     *        "alertMsg": "用户认证已经过期,请重新登录"
-     *     }
+     *   {
+     *       "code": 0,
+     *       "msg": "该服务不在当前地址商圈内",
+     *       "ret": {},
+     *       "alertMsg": "该服务不在当前商圈内"
+     *   }
      *
      */
-    public function catch_fatal_error()
-    {
-      // Getting Last Error
-       $last_error =  error_get_last();
 
-      
-       print_R($last_error);
-
-    }
     public function actionCheckDistrictGoods(){
-        register_shutdown_function('catch_fatal_error');
         $param = Yii::$app->request->get();
         if (!isset($param['access_token']) || !$param['access_token']) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
@@ -353,16 +342,16 @@ class OrderController extends \restapi\components\Controller
         if(!isset($param['city_name']) || !$param['city_name']) {
             return $this->send(null, "城市名称错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        $cityInfo = OperationCity::getCityId(trim($param['city_name']));
-        if(!$cityInfo){
+        $cityID = OperationCity::getCityId(trim($param['city_name']));
+        if(!$cityID){
             return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
         }
         try{
             $shopDistrictInfo =  OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($param['address_longitude'],$param['address_latitude']);
-            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityInfo['id'],$shopDistrictInfo['id'],intval($param['order_service_item_id']))){
+            if(!OperationShopDistrictGoods::getShopDistrictGoodsInfo($cityID,$shopDistrictInfo['operation_shop_district_id'],intval($param['order_service_item_id']))){
                 return $this->send(null, "该服务不在当前地址商圈内", 0, 200, null, alertMsgEnum::orderShopDistrictGoodsFaile);
             }
-            return $this->send(null, "该服务不在当前地址商圈内", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
+            return $this->send(null, "当前商圈内包含该服务", 1, 200, null, alertMsgEnum::orderShopDistrictGoodsSuccess);
         }catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
