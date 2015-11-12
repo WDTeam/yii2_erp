@@ -253,8 +253,8 @@ class WorkerController extends BaseAuthController
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
         //添加阿姨
         }else{
-//            $workerModel = Worker::findAll(['isdel'=>0]);
-            $workerModel = new Worker;
+            //$workerModel = Worker::findAll(['isdel'=>0]);
+            $workerModel = new Worker(['isdel'=>0]);
             $workerModel->load(Yii::$app->request->post());
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
         }
@@ -369,10 +369,14 @@ class WorkerController extends BaseAuthController
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
-        $condition = '';
+        $condition = '1=1';
         if($city_id){
-            $condition = ['city_id'=>$city_id];
+            $condition .= ' and city_id='.$city_id;
         }
+        if($q){
+            $condition .=" and name like'%$q%'";
+        }
+
         $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
         $out['results'] = array_values($shopResult);
         //$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
@@ -647,6 +651,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionExportDataFromExcel(){
         ini_set('memory_limit','512M');
+        set_time_limit(0);
         $model = new WorkerExport();
         //上传阿姨信息
         $model->excel = UploadedFile::getInstance($model, 'excel');
@@ -658,8 +663,6 @@ class WorkerController extends BaseAuthController
                 \Yii::$app->getSession()->setFlash('default','上传文件错误');
             }
             $filePath = $path.$filename;
-//            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory;
-//            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
             $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
             $this->insertWorkerData($sheetData);
@@ -730,6 +733,7 @@ class WorkerController extends BaseAuthController
 //        $identityConfigArr = ArrayHelper::map($identityConfigArr,'worker_identity_name','id');
         $onlineCityList = OperationCity::getCityOnlineInfoList();
         $onlineCityList =  ArrayHelper::map($onlineCityList,'city_name','city_id');
+        $onlineCityList = ['上海市'=>310100,'北京市'=>110100,'深圳市'=>440300];
         $districtList = OperationShopDistrict::getCityShopDistrictList();
         $districtList = ArrayHelper::map($districtList,'operation_shop_district_name','id');
         $sexList = ['女'=>0,'男'=>1];
@@ -753,46 +757,46 @@ class WorkerController extends BaseAuthController
                 if($key<2){
                     continue;
                 }
-                if($col['L']!='自营'){
+                if($col['K']!='自营'){
                     continue;
                 }
-                if($col['M']!='全职全日' && $col['M']!='兼职'){
+                if($col['L']!='全职全日' && $col['L']!='兼职'){
                     continue;
                 }
                 $worker_id++;
                 $workerArr['id'] = $worker_id;
-                $workerArr['worker_name'] = $col['A'];
-                $workerArr['shop_id'] = isset($shopArr[$col['B']])?$shopArr[$col['B']]:'';
-                $workerArr['worker_phone'] = $col['C'];
-                $workerArr['worker_idcard'] = $col['D'];
+                $workerArr['worker_name'] = $col['B'];
+                $workerArr['shop_id'] = isset($shopArr[$col['C']])?$shopArr[$col['C']]:'';
+                $workerArr['worker_phone'] = $col['D'];
+                $workerArr['worker_idcard'] = $col['E'];
                 //$workerArr['worker_photo'] = $col['E'];
-                if(stripos($col['F'],'市')===false){
-                    $onlineCity = $col['F'].'市';
+                if(stripos($col['G'],'市')===false){
+                    $onlineCity = $col['G'].'市';
                     $workerArr['worker_work_city'] = isset($onlineCityList[$onlineCity])?$onlineCityList[$onlineCity]:0;
                 }
-                $workerArr['worker_type'] = $typeList[$col['L']];
-                $workerArr['worker_identity_id'] = $identityConfigArr[$col['M']];
-                $workerArr['worker_is_blacklist'] = $blacklist[$col['AB']];
-                $workerArr['worker_blacklist_time'] = strtotime($col['AC']);
-                $workerArr['worker_blacklist_reason'] = trim($col['AD']);
-                $workerArr['worker_auth_status'] = 7;
-                if($col['AM']=='0000-00-00 00:00:00'){
-                    $workerArr['created_ad'] = strtotime($col['AM']);
+                $workerArr['worker_type'] = $typeList[$col['K']];
+                $workerArr['worker_identity_id'] = $identityConfigArr[$col['L']];
+//                $workerArr['worker_is_blacklist'] = $blacklist[$col['AB']];
+//                $workerArr['worker_blacklist_time'] = strtotime($col['AC']);
+//                $workerArr['worker_blacklist_reason'] = trim($col['AD']);
+                $workerArr['worker_auth_status'] = 8;
+                if($col['AX']=='0000-00-00 00:00:00'){
+                    $workerArr['created_ad'] = strtotime($col['AX']);
                 }else{
                     $workerArr['created_ad'] = '';
                 }
 
                 $workerExtArr['worker_id'] = $worker_id;
-                $workerExtArr['worker_age'] = intval($col['N']);
-                $workerExtArr['worker_sex'] = $sexList[$col['O']];
-                $workerExtArr['worker_edu'] = isset($workerEduList[$col['P']])?$workerEduList[$col['P']]:'';
-                $workerExtArr['worker_is_health'] = intval(['Q']);
-                $workerExtArr['worker_is_insurance'] = intval($col['R']);
-                $workerExtArr['worker_source'] = $col['S'];
-                $workerExtArr['worker_bank_name'] = $col['T'];
-                $workerExtArr['worker_bank_from'] = $col['U'];
-                $workerExtArr['worker_bank_area'] = $col['V'];
-                $workerExtArr['worker_bank_card'] = $col['W'];
+                $workerExtArr['worker_age'] = intval($col['O']);
+                $workerExtArr['worker_sex'] = $sexList[$col['P']];
+                $workerExtArr['worker_edu'] = isset($workerEduList[$col['Q']])?$workerEduList[$col['Q']]:'';
+                $workerExtArr['worker_is_health'] = intval(['R']);
+                $workerExtArr['worker_is_insurance'] = intval($col['S']);
+                $workerExtArr['worker_source'] = $col['U'];
+                $workerExtArr['worker_bank_name'] = $col['V'];
+                $workerExtArr['worker_bank_from'] = $col['W'];
+                $workerExtArr['worker_bank_area'] = $col['X'];
+                $workerExtArr['worker_bank_card'] = $col['Y'];
 //                if($col['K']){
 //                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$col['H']])->asArray()->one();
 //                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$col['I']])->asArray()->one();
@@ -802,51 +806,51 @@ class WorkerController extends BaseAuthController
 //                    $workerExtArr['worker_live_area'] = $areaResult['id'];
 //                    $workerExtArr['worker_live_street'] = $col['K'];
 //                }
-                if($col['K']){
-                    $areaArr = explode(':#:',$col['K']);
-                    if(strpos($areaArr[0],'市')!==false){
-                        $areaArr[0] = str_replace('市','',$areaArr[0]);
-                    }
-                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[0]])->asArray()->one();
-                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[1]])->asArray()->one();
-                    $areaResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[2]])->asArray()->one();
-                    $workerExtArr['worker_live_province'] = $provinceResult['id'];
-                    $workerExtArr['worker_live_city'] = $cityResult['id'];
-                    $workerExtArr['worker_live_area'] = $areaResult['id'];
-                    $workerExtArr['worker_live_street'] = $areaArr[3];
-                }else{
-                    $workerExtArr['worker_live_province'] = '';
-                    $workerExtArr['worker_live_city'] = '';
-                    $workerExtArr['worker_live_area'] = '';
-                    $workerExtArr['worker_live_street'] = '';
-                }
+//                if($col['K']){
+//                    $areaArr = explode(':#:',$col['K']);
+//                    if(strpos($areaArr[0],'市')!==false){
+//                        $areaArr[0] = str_replace('市','',$areaArr[0]);
+//                    }
+//                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[0]])->asArray()->one();
+//                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[1]])->asArray()->one();
+//                    $areaResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[2]])->asArray()->one();
+//                    $workerExtArr['worker_live_province'] = $provinceResult['id'];
+//                    $workerExtArr['worker_live_city'] = $cityResult['id'];
+//                    $workerExtArr['worker_live_area'] = $areaResult['id'];
+//                    $workerExtArr['worker_live_street'] = $areaArr[3];
+//                }else{
+//                    $workerExtArr['worker_live_province'] = '';
+//                    $workerExtArr['worker_live_city'] = '';
+//                    $workerExtArr['worker_live_area'] = '';
+//                    $workerExtArr['worker_live_street'] = '';
+//                }
 
 
 
 
                 $workerStatArr['worker_id'] = $worker_id;
-                $workerStatArr['worker_stat_order_num'] =  intval($col['AE']);
-                $workerStatArr['worker_stat_order_money'] = intval($col['AH']);
-                $workerStatArr['worker_stat_order_refuse'] = intval($col['AF']);
-                $workerStatArr['worker_stat_order_complaint'] = intval($col['AG']);
-                $workerStatArr['worker_stat_sale_cards'] = intval($col['AI']);
-                $workerStatArr['worker_stat_comment_good'] = intval($col['AJ']);
-                $workerStatArr['worker_stat_comment_normal'] = intval($col['AK']);
-                $workerStatArr['worker_stat_comment_bad'] = intval($col['AL']);
+                $workerStatArr['worker_stat_order_num'] =  intval($col['AL']);
+//                $workerStatArr['worker_stat_order_money'] = intval($col['AH']);
+//                $workerStatArr['worker_stat_order_refuse'] = intval($col['AF']);
+//                $workerStatArr['worker_stat_order_complaint'] = intval($col['AG']);
+//                $workerStatArr['worker_stat_sale_cards'] = intval($col['AI']);
+//                $workerStatArr['worker_stat_comment_good'] = intval($col['AJ']);
+//                $workerStatArr['worker_stat_comment_normal'] = intval($col['AK']);
+//                $workerStatArr['worker_stat_comment_bad'] = intval($col['AL']);
 
                 $workerBlockArr['worker_id'] = $worker_id;
                 $time = time();
-                $workerBlockArr['worker_block_start_time'] = strtotime($col['Y']);
-                $workerBlockArr['worker_block_finish_time'] = strtotime($col['Z']);
-                $workerBlockArr['created_ad'] = time();
-                if($workerBlockArr['worker_block_start_time']<$time && $workerBlockArr['worker_block_finish_time']>=$time){
-                    $workerBlockArr['worker_block_status'] = 1;
-                    $workerArr['worker_is_block'] = 1;
-                }else{
-                    $workerBlockArr['worker_block_status'] = 0;
-                    $workerArr['worker_is_block'] = 0;
-                }
-                $workerBlockArr['worker_block_reason'] = trim($col['AA']);
+//                $workerBlockArr['worker_block_start_time'] = strtotime($col['Y']);
+//                $workerBlockArr['worker_block_finish_time'] = strtotime($col['Z']);
+//                $workerBlockArr['created_ad'] = time();
+//                if($workerBlockArr['worker_block_start_time']<$time && $workerBlockArr['worker_block_finish_time']>=$time){
+//                    $workerBlockArr['worker_block_status'] = 1;
+//                    $workerArr['worker_is_block'] = 1;
+//                }else{
+//                    $workerBlockArr['worker_block_status'] = 0;
+//                    $workerArr['worker_is_block'] = 0;
+//                }
+//                $workerBlockArr['worker_block_reason'] = trim($col['AA']);
 
                 $workerAuthArr['worker_id'] = $worker_id;
                 $workerAuthArr['worker_auth_status'] = 1;
@@ -856,16 +860,16 @@ class WorkerController extends BaseAuthController
 
                 $workerDeviceArr['worker_id'] = $worker_id;
 
-                $districtArr = explode(',',$col['G']);
-                if($col['G']){
-                    foreach ((array)$districtArr as $d_val) {
-                        $batchWorkerDistrict[] = [
-                            'worker_id'=>$worker_id,
-                            'operation_shop_district_id'=>$districtList[$d_val],
-                            'create_ad'=>time(),
-                        ];
-                    }
-                }
+//                $districtArr = explode(',',$col['G']);
+//                if($col['G']){
+//                    foreach ((array)$districtArr as $d_val) {
+//                        $batchWorkerDistrict[] = [
+//                            'worker_id'=>$worker_id,
+//                            'operation_shop_district_id'=>$districtList[$d_val],
+//                            'create_ad'=>time(),
+//                        ];
+//                    }
+//                }
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
                 $batchWorkerDevice[] = $workerDeviceArr;
@@ -932,7 +936,7 @@ class WorkerController extends BaseAuthController
                 $workerArr['worker_password'] = $val['app_pass'];
                 $workerArr['worker_type'] = $val['is_agency']==0?1:2;
                 $workerArr['created_ad'] = strtotime($val['create_time']);
-                $workerArr['worker_auth_status'] = 7;
+                $workerArr['worker_auth_status'] = 8;
                 //原有阿姨身份太凌乱，暂时只取兼职和全职
                 if(strpos($val['is_fulltime'],'兼职')){
                     $workerArr['worker_identity_id']=2;
@@ -1044,6 +1048,10 @@ class WorkerController extends BaseAuthController
 
     public static function exportDataFromMysqlToRedis(){
 
+    }
+
+    public function actionInitWorkerForRedis(){
+        WorkerForRedis::initAllWorkerToRedis();
     }
 
     public function actionTest1(){
