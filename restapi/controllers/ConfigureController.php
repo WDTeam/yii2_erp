@@ -241,7 +241,8 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList = array();
             if($cityCategoryList&&!isset($cityCategoryList['code'])){
                 foreach($cityCategoryList as $key=>$val){
-                    $serviceCategoryList[$key]['category_id'] = isset($val['id'])?$val['id']:"0";
+                    if($val['id']==1) continue;
+                    $serviceCategoryList[$key]['category_id'] = $val['id'];
                     $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
                     $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
                     $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
