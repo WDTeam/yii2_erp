@@ -43,7 +43,7 @@ class OrderPush extends Order
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $workerValues = null;
                 foreach ($workers as $w){
-                    $workerValues = $workerValues.$w;
+                    $workerValues = $workerValues.$w['id'].','.$w['worker_phone'].';';
                 }
                 \Yii::getLogger()->log("获取的全职阿姨为:".$workerValues, Logger::LEVEL_ERROR);
                 $push_status = $full_time;
@@ -97,7 +97,7 @@ class OrderPush extends Order
         $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_IVR_PUSH_SUCCESS);
         $ids = null;
         foreach($is_ivr_worker_ids as $id){
-            $ids = $ids.$id;
+            $ids = $ids.$id['worker_id'];
         }
         \Yii::getLogger()->log("已经推送过ivr的阿姨为:".  $ids, Logger::LEVEL_ERROR);
         $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS);
