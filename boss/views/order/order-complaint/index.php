@@ -1,3 +1,7 @@
+<style>
+	.summary {padding-left:20px !important;}	
+</style>
+
 <?php
 use yii\helpers\Html;
 use kartik\grid\GridView;

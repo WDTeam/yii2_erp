@@ -257,10 +257,14 @@ class OrderController extends BaseAuthController
         }
     }
 
+    /**
+     * 获取待人工指派订单数量
+     * @return int|string
+     */
     public function actionGetWaitManualAssignCount()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderManualAssign::getWaitAssignOrdersCount();
+        return OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
     }
 
     /**
@@ -473,6 +477,7 @@ class OrderController extends BaseAuthController
     {
         $kpiModel = new OrderDispatcherKpi();
         $model = $kpiModel->queryHistoricalKpi(yii::$app->user->id,strtotime(date('y-m-d')));
+        $model->non_assign_order_count = OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
         return $this->render('assign', [
             'model' => $model
         ]);
