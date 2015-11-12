@@ -4,6 +4,7 @@ namespace boss\controllers\operation;
 
 use boss\components\BaseAuthController;
 use boss\models\operation\OperationShopDistrict;
+use boss\models\operation\OperationShopDistrictSearch;
 use boss\models\operation\OperationShopDistrictCoordinate;
 use boss\models\operation\OperationShopDistrictGoods;
 use boss\models\operation\OperationCity;
@@ -61,14 +62,14 @@ class OperationShopDistrictController extends BaseAuthController
         $city_id = $this->city_id;
         $city_name = $this->city_name;
 
+        $param = Yii::$app->request->getQueryParams();
+        $param['OperationShopDistrictSearch']['operation_city_id'] = $city_id;
+
+        $searchModel = new OperationShopDistrictSearch;
+        $dataProvider = $searchModel->search($param);
+
         $model = new OperationShopDistrict();
         $districtModel = new OperationShopDistrictGoods();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationShopDistrict::find()->where([
-                'operation_city_id' => $city_id
-            ]),
-        ]);
 
         //批量上传
     	if(Yii::$app->request->isPost) {
@@ -100,6 +101,7 @@ class OperationShopDistrictController extends BaseAuthController
             'city_id' => $city_id,
             'dataProvider' => $dataProvider,
             'districtModel' => $districtModel,
+            'searchModel' => $searchModel,
         ]);
     }
 

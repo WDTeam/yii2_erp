@@ -12,6 +12,7 @@ use core\models\finance\FinanceWorkerSettleApplySearch;
 use core\models\order\OrderSearch;
 use core\models\order\OrderComplaint;
 use restapi\models\Worker as ApiWorker;
+use \core\models\worker\WorkerAccessToken;
 use restapi\models\alertMsgEnum;
 use Yii;
 
@@ -1419,6 +1420,12 @@ class WorkerController extends \restapi\components\Controller
      * @apiDescription  极光推送,记录阿姨回调信息
      * @apiName actionSetWorkerCallback
      * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} imei            序列号
+     * @apiParam {String} tag             阿姨电话号码    
+     * @apiParam {int}   status           1:收到通知  2：点击通知          
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiParam  {Object} [data]  数据对象
      * 
@@ -1445,10 +1452,19 @@ class WorkerController extends \restapi\components\Controller
     public function actionSetWorkerCallback()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+       
+        if (empty($param['access_token']) || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+
+        if (empty($param['imei']) || empty($param['tag']) || empty($param['status'])) {
+            return $this->send(null, "提交参数中缺少必要的参数", 0, 200, null, alertMsgEnum::userSuggestNoOrder);
+        }
 
         $callback = \Yii::$app->jpush->callback($param);
+
         if ($callback) {
-            $ret=array("worker"=>1);
+            $ret = array("worker" => 1);
             return $this->send($ret, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
         } else {
             return $this->send(null, "操作失败", 0, 200, null, alertMsgEnum::GetOrderOneFail);

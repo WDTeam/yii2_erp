@@ -56,7 +56,13 @@ class OperationArea extends CommonOperationArea
     	->andFilterWhere(['like', 'area_name',$name])
     	->asArray()
     	->one();
-    	return $data['id'];
+    	
+    	if($data['id']){
+    		return $data['id'];
+    	}else{
+    		return 0;
+    	}
+    	
     }
     
     

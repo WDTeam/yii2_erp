@@ -29,6 +29,70 @@ class CouponRuleController extends Controller
         ];
     }
 
+    
+    
+    public function actionIndexceshi()
+    {
+       $userinfoceshi= new \dbbase\models\operation\CouponUserinfoceshi;
+    	
+       /* $datainfo=$userinfoceshi->find()
+       ->where(['and','city_id is null'])
+       ->asArray()
+       ->limit(50)
+       ->all();
+    	
+      foreach ($datainfo as $key=>$vlu){
+      $cityid=\core\models\operation\OperationArea::getAreaid($vlu['city_name']);
+      $saveinfo=$userinfoceshi->findOne($vlu['id']);
+      $saveinfo->city_id=$cityid;
+      $saveinfo->save();
+      echo  $key;
+      } */
+      
+      // SELECT * from ejj_coupon_userinfoceshi  group by order_type order by id desc
+       
+       $datainfo=$userinfoceshi->find()
+       ->groupBy('order_type')
+       ->asArray()
+       ->all();
+       
+   $googsdata=[
+				'通用'=>0,
+				'洗衣'=>23,
+				'洗鞋'=>25,
+				'空调清洗'=>10,
+				'杀虫'=>33,
+				'地板抛光打蜡'=>19,
+				'石材结晶保养'=>22,
+				'地毯保养'=>18,
+				'饮水机清洗'=>14,
+				'擦玻璃'=>5,
+				'厨房高温保洁'=>3,
+				'卫生间保洁'=>4,
+				'洗衣机清洗'=>15,
+				'油烟机清洗'=>9,
+				'窗帘清洗'=>34,
+				'家庭保洁'=>1]; 
+       
+       
+       foreach ($datainfo as $typedata){
+       	
+       	$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
+       	$saveinfo->order_typeid=$googsdata[$typedata['order_type']];
+       	//var_dump($saveinfo->order_typeid);exit;
+       	$saveinfo->save();
+       }
+       
+       
+      
+       
+       
+    	//var_dump('11');exit;
+    	
+    	
+    	
+    }
+    
     /**
      * Lists all CouponRule models.
      * @return mixed
@@ -36,8 +100,12 @@ class CouponRuleController extends Controller
     public function actionIndex()
     {
     	
+    	$rty=\core\models\operation\coupon\CouponRule::getcustomerlist_l('15172543897');
     	
-    	//\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList();
+    	
+    	var_dump($rty);exit;
+    	
+    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

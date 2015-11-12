@@ -183,10 +183,10 @@ function getTimeRange()
 {
     $("#order-orderbookedtimerange").html(progress);
     setTimeout(function(){$("#order-orderbookedtimerange .progress-bar").css("width","100%");},100);
-
+    var worker_id = typeof($("input[name='OrderExtWorker[worker_id]']:checked").val()) == 'undefined' ? 0 : $("input[name='OrderExtWorker[worker_id]']:checked").val();
     $.ajax({
         type: "GET",
-        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val()+"&worker_id="+$("input[name='OrderExtWorker[worker_id]']:checked").val(),
+        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val()+"&worker_id="+worker_id,
         dataType: "json",
         success: function (data) {
             $("#order-orderbookedtimerange").html('');

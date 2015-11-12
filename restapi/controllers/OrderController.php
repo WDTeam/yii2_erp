@@ -100,6 +100,14 @@ class OrderController extends \restapi\components\Controller
         if (empty($args['order_booked_end_time'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
+        if (empty($args['order_pay_type'])) {
+            return $this->send(null, "数据不完整,请输入支付方式", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
+        }
+        
+        if (empty($args['channel_id'])) {
+            return $this->send(null, "数据不完整,订单渠道ID为必填项", 0, 200, null, alertMsgEnum::orderCreateFaileChannelId);
+        }
+        
         $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
 
         if ($args['order_pay_type'] == 1) {

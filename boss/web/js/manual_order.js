@@ -84,7 +84,7 @@ $(document).on("click",'.worker_assign',function(){
                     $("#work_console").html(
                         '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
                         '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
-                        '<button id="continue_work" class="btn btn-warning" type="button">继续（'+window.continue_work_count_down+'s）</button>'
+                        '<button id="continue_work" class="btn btn-warning" type="button">我要接活儿（'+window.continue_work_count_down+'s）</button>'
                     );
                     $("#order_assign").hide();
                     $("#work_console").show();
@@ -195,7 +195,7 @@ function canNotAssign(){
             $("#work_console").html(
                 '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
                 '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
-                '<button id="continue_work" class="btn btn-warning" type="button">继续（'+window.continue_work_count_down+'s）</button>'
+                '<button id="continue_work" class="btn btn-warning" type="button">我要接活儿（'+window.continue_work_count_down+'s）</button>'
             );
             $("#order_assign").hide();
             $("#work_console").show();
@@ -277,6 +277,27 @@ function getCanAssignWorkerList(){
 }
 
 function onbeforeunload_handler(){
+    //1休息 2空闲 3忙碌 4小休
+    //停止时间计算
+    stopCount()
+    switch (window.work_status ){
+        case 1:break;
+        case 2:
+            //保存空闲时间
+            $('#free_time').val(d);
+            break;
+        case 3:
+            //保存忙碌时间
+            $('#busy_time').val(d);
+            break;
+        case 4:
+            //保存小休时间
+            $('#rest_time').val(d);
+            break;
+        default :break;
+    }
+    //调用后台，更新当日空闲时间和获得指派单数量===============================
+    saveParams();
     return "确认退出？";
 }
 function timer(){
@@ -293,7 +314,7 @@ function timer(){
         }
         if($("#work_console").css('display')=='block'){
             window.continue_work_count_down--;
-            $("#continue_work").text('继续（'+window.continue_work_count_down+'s）');
+            $("#continue_work").text('我要接活儿（'+window.continue_work_count_down+'s）');
             if(window.continue_work_count_down<=0){
                 $("#continue_work").click();
             }

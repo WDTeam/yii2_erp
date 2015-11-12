@@ -37,6 +37,8 @@ class OrderPool extends Model
             'address' => $order->order_address,
             'need' => $order->orderExtCustomer->order_customer_need,
             'money' => $order->order_money,
+            'lng' => $order->order_lng,
+            'lat' => $order->order_lat,
             'is_booked_worker' => ($order->order_booked_worker_id==$worker_id)?"true":"false",
             'order_time' => [$order->order_booked_begin_time.'-'.$order->order_booked_end_time]
         ];

@@ -258,6 +258,16 @@ class OrderController extends BaseAuthController
     }
 
     /**
+     * 获取待人工指派订单数量
+     * @return int|string
+     */
+    public function actionGetWaitManualAssignCount()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
+    }
+
+    /**
      * Lists all Order models.
      * @return mixed
      */

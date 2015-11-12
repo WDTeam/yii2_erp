@@ -310,9 +310,14 @@ class alertMsgEnum
     const orderAddressIdFaile = "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）";
     const orderCreateSuccess = "订单创建成功";
     const orderCreateFaile = "订单创建失败";
+<<<<<<< HEAD
     const orderCityDistrictFaile = "该城市未开通";
     const orderShopDistrictGoodsFaile = "该服务不在当前商圈内";
     const orderShopDistrictGoodsSuccess = "当前商圈包含该服务";
+=======
+    
+     const orderCreateFaileChannelId = "数据不完整,订单渠道ID为必填项";
+>>>>>>> 227b229382d5a135a12e3e26cac1df6623150c2b
     //追加订单
     const orderAppendOrderSuccess = '追加订单成功';
     const orderAppendOrderFaile = '追加订单失败';
