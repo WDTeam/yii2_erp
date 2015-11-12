@@ -238,7 +238,7 @@ class ConfigureController extends \restapi\components\Controller
             }
             //整理开通的服务类型
             $serviceCategoryList = array();
-            if($cityCategoryList){
+            if($cityCategoryList&&!isset($cityCategoryList['code'])){
                 foreach($cityCategoryList as $key=>$val){
                     $serviceCategoryList[$key]['category_id'] = isset($val['id'])?$val['id']:"0";
                     $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
