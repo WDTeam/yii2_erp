@@ -13,6 +13,9 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('app', '优惠券用户管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style type="text/css">
+    textarea[name="export_content"] {display: none !important;}
+</style>
 <div class="coupon-userinfo-index">
    
    <div class="panel panel-info">
