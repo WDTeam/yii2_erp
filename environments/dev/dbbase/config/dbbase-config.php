@@ -142,14 +142,14 @@ return [
                         'subject' => '事件绑定处理错误日志',
                     ],
                 ],
-            ],
-            [
-                'class' => 'yii\log\FileTarget',
-                'levels' => ['error'],
-                'logFile'=>'@core/runtime/logs/core.log',
-                'categories' => ['core'],
-                'maxFileSize' => 1024 * 2,
-                'maxLogFiles' => 20,
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error'],
+                    'logFile'=>'@core/runtime/logs/core.log',
+                    'categories' => ['core'],
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 20,
+                ]
             ]
         ],
         'devicedetect' => [
