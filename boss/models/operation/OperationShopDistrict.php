@@ -49,6 +49,7 @@ class OperationShopDistrict extends \core\models\operation\OperationShopDistrict
             'operation_shop_district_name' => Yii::t('operation', '商圈名称'),
             'operation_city_id' => Yii::t('operation', '城市编号'),
             'operation_city_name' => Yii::t('operation', '城市名称'),
+            'operation_area_id' => Yii::t('operation', '区域编号'),
             'operation_area_name' => Yii::t('operation', '所属区域'),
             'operation_shop_district_latitude_longitude' => Yii::t('operation', '商圈经纬度'),
             'created_at' => Yii::t('operation', '创建时间'),

@@ -81,6 +81,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
 
                 $operation_shop_district_goods_lowest_consume_num = $value['operation_shop_district_goods_lowest_consume_num'] ? $value['operation_shop_district_goods_lowest_consume_num'] : 0;
 
+                $operation_spec_info = $value['operation_spec_info'];
                 $operation_spec_strategy_unit = $value['operation_spec_strategy_unit'];
 
                 //商圈的数据
@@ -108,6 +109,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                     $model->operation_shop_district_name = $operation_shop_district_name;
 
                     //服务项目规格数据
+                    $model->operation_spec_info = $operation_spec_info;
                     $model->operation_spec_strategy_unit = $operation_spec_strategy_unit;
 
                     $model->insert();
@@ -354,8 +356,11 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     }
 
 
+    /**
+     * 用城市编号，商圈编号，服务项目编号
+     */
     public static function getShopDistrictGoodsInfo($city_id = '', $shop_district = '', $goods_id = ''){
-        if(empty($city_id) || empty($shop_district) || empty($goods_id)){
+        if (empty($city_id) || empty($shop_district) || empty($goods_id)) {
             return '';
         }else{
             return self::find()
@@ -613,8 +618,9 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
     /**
      * 根据服务项目id和城市id获取商品在商圈的具体信息
      *
-     * @param  inter  $shop_district_id    商品在商圈里的编号
-     * @return array  $result              上线商品的信息
+     * @param  inter  $operation_goods_id    商品在商圈里的编号
+     * @param  inter  $city_id               城市编号
+     * @return array  $result                上线商品的信息
      */
     public static function getDistrictGoodsInfo($operation_goods_id, $city_id)
     {
@@ -734,5 +740,16 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             ['operation_shop_district_goods_status' => $operation_shop_district_goods_status],
             ['operation_goods_id' => $operation_goods_id, 'operation_city_id' => $operation_city_id]
         );
+    }
+
+    /**
+     * 更新冗余的规格名称
+     *
+     * @param inter   $operation_spec_info            规格编号
+     * @param string  $operation_spec_strategy_unit   规格单位备注
+     */
+    public static function updateGoodsSpec($operation_spec_info, $operation_spec_strategy_unit)
+    {
+        self::updateAll(['operation_spec_strategy_unit' => $operation_spec_strategy_unit], 'operation_spec_info = ' . $operation_spec_info);
     }
 }
