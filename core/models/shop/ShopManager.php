@@ -5,7 +5,7 @@ use yii\behaviors\TimestampBehavior;
 use core\models\operation\OperationArea;
 use yii\base\Object;
 use core\models\shop\ShopStatus;
-use crazyfd\qiniu\Qiniu;
+
 use core\behaviors\ShopStatusBehavior;
 use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;

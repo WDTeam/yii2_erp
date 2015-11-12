@@ -35,8 +35,8 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
      */
     const REWARD_TYPES = [
         1=>'(元)现金',
-        2=>'(MB)当月流量',
-        3=>'(MB)次月流量',
+//         2=>'(MB)当月流量',
+//         3=>'(MB)次月流量',
     ];
     
     const TASK_CYCLES = [

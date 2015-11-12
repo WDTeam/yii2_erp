@@ -85,7 +85,7 @@ $(document).ready(function(){
     var $btn_tabradio =$("div.btn_ipo .over_flow label");
     var $tab_text =$("div.tab_text");
     var $btn_tab_box =$("div.btn_tab_box");
-    var $reverse_box =$("#reverse");
+    var $reverse_box =$(".reverse");
 
     $div_li.click(function(){
         $(this).addClass("selected").siblings().removeClass("selected");
@@ -139,21 +139,23 @@ $(document).ready(function(){
     	}
     });
 
-    $reverse_box.click(function(){
-    	if($(this).siblings().hasClass("selected")){
-    		$(this).click(function(){
-    			$(this).siblings().removeClass("selected");
-    			$(this).siblings().find("input").removettr("checked");
-    			$(this).removeClass("selected");
-    		});
-    	}else{
-    		$(this).click(function(){
-    			$(this).siblings().addClass("selected");
-    			$(this).siblings().find("input").attr("checked","checked");
-    			$(this).addClass("selected");
-    		});
-    	}
-        
+    $reverse_box.each(function(){
+        $(this).click(function(){
+            if($(this).siblings().hasClass("selected")){
+                $(this).click(function(){
+                    $(this).siblings().removeClass("selected");
+                    $(this).siblings().find("input").removeAttr("checked");
+                    $(this).removeClass("selected");
+                });
+            }else{
+                $(this).click(function(){
+                    $(this).siblings().addClass("selected");
+                    $(this).siblings().find("input").attr("checked","checked");
+                    $(this).addClass("selected");
+                });
+            }
+        })
+
     });
 
     //--------------------------------------------------------------------------------------结束
