@@ -39,7 +39,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_id]     支付渠道id
+     * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
      * @apiParam {String} address_id 订单地址id
      * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
@@ -262,7 +262,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['channel_id'] = intval($args['channel_id']); //家洁
-        $attributes['order_pay_type'] = 2; //现金支付
+        $attributes['pay_channel_id'] = 2; //现金支付
 
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
@@ -1737,7 +1737,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {int}     order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_id]     支付渠道id
+     * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
      * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
