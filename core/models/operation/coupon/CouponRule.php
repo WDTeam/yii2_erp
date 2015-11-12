@@ -256,7 +256,8 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	
 	public static function getcustomerlist_l($customer_tel){
 		$now_time=time();
-		$couponCustomer = self::find()		
+		
+		$couponCustomer = CouponUserinfo::find()		
 		->select(['customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
 		->where(['and',"customer_tel=$customer_tel"] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])

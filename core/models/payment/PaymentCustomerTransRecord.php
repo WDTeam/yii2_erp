@@ -2,6 +2,7 @@
 
 namespace core\models\payment;
 
+use core\models\payment\Payment;
 use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
