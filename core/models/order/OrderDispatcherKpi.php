@@ -78,12 +78,6 @@ class OrderDispatcherKpi extends \dbbase\models\order\OrderDispatcherKpi{
             $model->setAttributes($agvKpi);
         }
 
-        //4.查询当前系统待派单总数（需订单模块哥们提供）
-        $non_assign_order_count=OrderManualAssign::getWaitAssignOrdersCount();
-        $model->setAttributes([
-            'non_assign_order_count' =>$non_assign_order_count,
-        ]);
-
         //5.回写参数
         return $model;
     }

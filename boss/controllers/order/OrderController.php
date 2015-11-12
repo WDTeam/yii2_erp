@@ -477,6 +477,7 @@ class OrderController extends BaseAuthController
     {
         $kpiModel = new OrderDispatcherKpi();
         $model = $kpiModel->queryHistoricalKpi(yii::$app->user->id,strtotime(date('y-m-d')));
+        $model->non_assign_order_count = OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
         return $this->render('assign', [
             'model' => $model
         ]);
