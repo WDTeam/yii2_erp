@@ -5,7 +5,6 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use boss\models\finance\FinancePopOrderSearch;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
 

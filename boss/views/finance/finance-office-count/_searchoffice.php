@@ -15,8 +15,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use kartik\date\DatePicker;
-use core\models\finance\FinanceOrderChannel;
-use core\models\finance\FinancePayChannel;
 
 ?>
 
@@ -45,7 +43,7 @@ use core\models\finance\FinancePayChannel;
     <?= $form->field($model, 'channel_id')->widget(Select2::classname(), [
         'name' => '订单渠道',
         'hideSearch' => true,
-        'data' => FinanceOrderChannel::get_order_channel_listes(),
+        'data' => \core\models\operation\OperationOrderChannel::getorderchannellist('all'),
         'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
         'pluginOptions' => [
             'allowClear' => true
@@ -60,7 +58,7 @@ use core\models\finance\FinancePayChannel;
     <?= $form->field($model, 'pay_channel_id')->widget(Select2::classname(), [
         'name' => '支付渠道',
         'hideSearch' => true,		
-        'data' => FinancePayChannel::get_pay_channel_list('all'),
+        'data' => \core\models\operation\OperationPayChannel::getpaychannellist('all'),
         'options' => ['placeholder' => '选择处理状态','class' => 'col-md-2'],
         'pluginOptions' => [
             'allowClear' => true

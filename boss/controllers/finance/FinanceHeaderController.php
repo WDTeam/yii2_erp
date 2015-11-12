@@ -19,10 +19,6 @@ use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\finance\FinancePayChannel;
-use boss\models\finance\FinancePayChannelSearch;
-use boss\models\finance\FinanceOrderChannelSearch;
 use crazyfd\qiniu\Qiniu;
 
 /**
@@ -132,14 +128,8 @@ class FinanceHeaderController extends BaseAuthController
        	header("Content-Type: text/html; charset=utf-8");
        	$model = new FinanceHeader;
        	$post = Yii::$app->request->post();
-   
-        $modelPay = new FinancePayChannelSearch;
-        $modelesr= new FinanceOrderChannelSearch;
-       	$nameorder=$post['FinanceHeader']['finance_order_channel_name'];
-       	$ordername=$modelesr->searchfind(array('id'=>$nameorder),'finance_order_channel_name');
-       	
-       	 	$payname=$post['FinanceHeader']['finance_pay_channel_name'];
-       		$paynameinfo=$modelPay->searchfind(array('id'=>$payname),'finance_pay_channel_name');
+       	$ordername=\core\models\operation\OperationOrderChannel::get_post_name($post['FinanceHeader']['finance_order_channel_name']);
+       	$paynameinfo=\core\models\operation\OperationPayChannel::get_post_name($post['FinanceHeader']['finance_pay_channel_name']);
        	
        	$post['FinanceHeader']['finance_header_title'] = $post['FinanceHeader']['finance_header_title']?trim($post['FinanceHeader']['finance_header_title']):'美团的'; 	
        	

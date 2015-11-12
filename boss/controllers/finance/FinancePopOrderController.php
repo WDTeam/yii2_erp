@@ -14,22 +14,23 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use dbbase\models\finance\FinancePopOrder;
-use boss\models\finance\FinancePopOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\finance\FinanceHeader;
+use crazyfd\qiniu\Qiniu;
+
+use boss\models\finance\FinancePopOrderSearch;
 use boss\models\finance\FinanceRecordLogSearch;
-use boss\models\finance\FinanceOrderChannelSearch;
+
+use dbbase\models\finance\FinanceHeader;
+use dbbase\models\finance\FinanceRecordLog;
+use dbbase\models\finance\FinancePopOrder;
+
 use core\models\order\OrderSearch;
 use core\models\payment\PaymentSearch;
-use dbbase\models\finance\FinanceRecordLog;
-use crazyfd\qiniu\Qiniu;
-use dbbase\models\finance\FinancePayChannel;
 use core\models\order\Order;
+
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -60,13 +61,7 @@ class FinancePopOrderController extends Controller
     public function actionIndexredis()
     {
     	
-    	echo sprintf("%'.06d\n", 1);  exit;
-    	
-    
-    	
-    	
-    	
-    	
+    	//echo sprintf("%'.06d\n", 1);  exit;
     	//\Yii::$app->redis->SADD($name,$datainfo);
     	
     	//exit;
@@ -212,9 +207,9 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
-    			$postdate['finance_order_channel_title'] =FinanceOrderChannel::getOrderChannelByName($channelid);
+    			$postdate['finance_order_channel_title'] =\core\models\operation\OperationOrderChannel::get_post_name($channelid);
     			$postdate['finance_pay_channel_id'] =$paychannelid=='0'?$statusinfo['pay_channel_id']:$paychannelid;
-    			$postdate['finance_pay_channel_title'] =$paychannelid=='0'?$statusinfo['order_pay_channel_name']:FinancePayChannel::getPayChannelByName($postdate['finance_pay_channel_id']);
+    			$postdate['finance_pay_channel_title'] =$paychannelid=='0'?$statusinfo['order_pay_channel_name']:\core\models\operation\OperationPayChannel::get_post_name($postdate['finance_pay_channel_id']);
     			$postdate['finance_pop_order_customer_tel'] =$statusinfo['order_customer_phone'];
     			$postdate['finance_pop_order_worker_uid'] =$statusinfo['worker_id'];
     			$postdate['finance_pop_order_booked_time'] =$statusinfo['order_booked_begin_time'];
@@ -266,10 +261,7 @@ class FinancePopOrderController extends Controller
     		//收款渠道id
     		$customer_info->finance_pay_channel_id=$channelid;
     		
-    		//$modelPay = new FinancePayChannelSearch;
-    		$modelesr= new FinanceOrderChannelSearch;
-    		$ordername=$modelesr->searchfind(array('id'=>$channelid),'finance_order_channel_name');
-    		
+    		$ordername=\core\models\operation\OperationOrderChannel::get_post_name($channelid);
     		
     		//收款渠道名称
     		$customer_info->finance_pay_channel_name=$ordername;
