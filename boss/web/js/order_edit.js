@@ -12,7 +12,7 @@ $(document).ready(function(){
 		$(".service-info-edit").show();
 	});
 
-	$(".btn-cancel-service-info").click(function(){
+	$(document).on('.btn-edit-service-info','click',function(){
 		$(".service-info-view").show();
 		$(".service-info-edit").hide();
 	});
@@ -142,7 +142,6 @@ $(document).ready(function(){
 				var html = order_booked_date +' '+ order_booked_time_range.split('-')[0];
 				html += '~';
 				html += order_booked_date +' '+ order_booked_time_range.split('-')[1];
-				html += '<button type="button" style="margin-left: 50px;" class="btn btn-warning btn-xs btn-edit-service-info">修改时间</button>';
 				$(".service_time_html").html(html);
 			}
 		},'json');

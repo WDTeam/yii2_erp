@@ -93,8 +93,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务时间</label>
-                    <div class="col-sm-6 right-text service_time_html">
+                    <div class="col-sm-3 right-text service_time_html">
                         <?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?>
+                    </div>
+                    <div class="col-sm-3">
                         <button class="btn btn-warning btn-xs btn-edit-service-info" style="margin-left: 50px;" type="button">修改时间</button>
                     </div>
                 </div>
