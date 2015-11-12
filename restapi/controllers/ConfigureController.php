@@ -240,7 +240,7 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList = array();
             if($cityCategoryList){
                 foreach($cityCategoryList as $key=>$val){
-                    $serviceCategoryList[$key]['category_id'] = $val['id'];
+                    $serviceCategoryList[$key]['category_id'] = isset($val['id'])?$val['id']:"0";
                     $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
                     $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
                     $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
@@ -249,6 +249,7 @@ class ConfigureController extends \restapi\components\Controller
                     $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
                 }
             }
+
             //整理焦点图
 //            $pic_list = array();
 //            if(!isset($bannerList['code'])&&!empty($bannerList)){
