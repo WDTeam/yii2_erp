@@ -47,7 +47,7 @@ use kartik\widgets\FileInput;
                     'type' => Form::INPUT_TEXT,
                     'options' => [
                         'placeholder' => '输入服务品类跳转地址...',
-                        'maxlength'=>50
+                        'maxlength'=>258
                     ]
                 ],
                 'operation_category_introduction' => [
