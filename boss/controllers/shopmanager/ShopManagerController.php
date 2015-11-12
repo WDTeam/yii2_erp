@@ -77,7 +77,6 @@ class ShopManagerController extends BaseAuthController
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'bl_photo_url');
-            var_dump(Yii::$app->request->post(), $file);exit;
             if($file){
                 $path = \Yii::$app->imageHelper->uploadFile($file->tempName);
                 $model->bl_photo_url = $path['key'];
