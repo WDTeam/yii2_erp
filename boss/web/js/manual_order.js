@@ -36,6 +36,7 @@ $(document).on("click",'#continue_work',function(){
 
 
 $(document).on("click",'#pause_work',function(){
+    var before_work_status = window.work_status;
     window.work_status = 4;
     $('#work_status').text('小休');
     $("#work_console").html(
@@ -43,7 +44,7 @@ $(document).on("click",'#pause_work',function(){
         '<button id="continue_work" class="btn btn-warning col-sm-1" type="button">我要接活儿</button>'
     );
     //触发统计派单员时间事件
-    $('#restId').click();
+    restWork(before_work_status);
 });
 
 $(document).on("click",'#stop_work',function(){

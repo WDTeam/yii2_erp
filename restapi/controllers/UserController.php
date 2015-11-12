@@ -96,11 +96,8 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
 
-        #过滤 北京市
-        if ($param['operation_province_name'] == '北京市') {
-            $param['operation_province_name'] = str_replace("市", "", $param['operation_province_name']);
-        }
-
+        #过滤 北京市 天津市
+        $param['operation_province_name'] = str_replace("市", "", $param['operation_province_name']);
         //控制添加地址时手机号码必须填写
         if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
             return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 200, null, alertMsgEnum::addAddressNoPhone);
@@ -1565,7 +1562,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "获取个人中心信息失败", 0, 200, null, alertMsgEnum::getMoneyScoreCouponFail);
         }
     }
-    
+
     /**
      * @api {GET} /user/share_weibo [GET] /user/share_weibo （100%）
      *
@@ -1612,24 +1609,25 @@ class UserController extends \restapi\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
         }
-        $result=array();
-        $result=[
-            "image"=>"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
-            "title"=>"品质生活 从e家洁开始  周期下单 情节无忧",
-            "content"=>[
+        $result = array();
+        $result = [
+            "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+            "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+            "content" => [
                 "省时省力省心",
                 "固定星级阿姨",
                 "轻松回归生活"
             ],
-            "url"=>"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
         ];
-        if (!empty($result)){
+        if (!empty($result)) {
             return $this->send($result, "分享微博成功", 1, 200, null, alertMsgEnum::shareWeiboSuccess);
         } else {
             return $this->send(null, "分享微博失败", 0, 200, null, alertMsgEnum::ShareWeiboFail);
         }
     }
-     /**
+
+    /**
      * @api {GET} /user/share-friends [GET] /user/share-friends （100%）
      *
      * @apiDescription  分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）
@@ -1675,21 +1673,22 @@ class UserController extends \restapi\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
         }
-        $result=array();
-        $result=[
-            "image"=>"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
-            "title"=>"品质生活 从e家洁开始  周期下单 情节无忧",
-            "content"=>[
+        $result = array();
+        $result = [
+            "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+            "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+            "content" => [
                 "省时省力省心",
                 "固定星级阿姨",
                 "轻松回归生活"
             ],
-            "url"=>"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
         ];
-        if (!empty($result)){
+        if (!empty($result)) {
             return $this->send($result, "分享朋友圈成功", 1, 200, null, alertMsgEnum::shareFriendsSuccess);
         } else {
             return $this->send(null, "分享朋友圈失败", 0, 200, null, alertMsgEnum::ShareFriendsFail);
         }
     }
+
 }

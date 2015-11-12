@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉部门：</p>
-						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_section]="?>">全部</a></li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_section]="?>">全部</a></li>
 						    		<?php if(!empty($devpart)){
 						    		foreach ($devpart as $keyrt=>$valrt){?>
 						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_section']) && $keyrt == $params['OrderComplaintSearch']['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_section]={$keyrt}"?>"><?php echo $valrt;?></a></li>
