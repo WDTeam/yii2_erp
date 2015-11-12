@@ -12,12 +12,15 @@
 namespace boss\components;
 
 use Yii;
-use crazyfd\qiniu\Qiniu;
 use yii\web\UploadedFile;
 use yii\base\Widget;
 use yii\base\Object;
-/**
- * 
+/*
+    $this->accessKey = 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw';
+    $this->secretKey = 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq';
+    $this->domain = '7b1f97.com1.z0.glb.clouddn.com';
+    $this->bucket = 'bjzhichangmusic';
+    //这是成江的号
  */
 class UploadFile extends Widget{
     private $key;
@@ -32,7 +35,7 @@ class UploadFile extends Widget{
     }
     
     public function upfile(){
-        $qiniu = new Qiniu();
+        $qiniu = \Yii::$app->imageHelper;
         $qiniu->uploadFile($this->file['tmp_name'], $this->key);
         $this->dest_path = $qiniu->getLink($this->key);//.'?e='. $this->getUnixTime();
 //        $token = $qiniu->Sign($downUrl);

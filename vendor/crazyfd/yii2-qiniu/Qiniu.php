@@ -28,17 +28,12 @@ class Qiniu
     protected $bucket;
     protected $domain;
 
-    function __construct()
+    function __construct($accessKey, $secretKey, $domain, $bucket = '')
     {
-//        $this->accessKey = '2JcEasZbcnt02g3BAKO6s_gFoTEDqk5hlGOzYuD7';
-//        $this->secretKey = '8eqb4y55q2dOW45FYMeuqypbcmnazFHGMJ6p7xuf';
-//        $this->domain = '7xn0um.com1.z0.glb.clouddn.com';
-//        $this->bucket = 'ejiajie';
-        $this->accessKey = 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw';
-        $this->secretKey = 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq';
-        $this->domain = '7b1f97.com1.z0.glb.clouddn.com';
-        $this->bucket = 'bjzhichangmusic';
-//        这里暂时使用我个人的东西进行测试，回头请改成企业的
+        $this->accessKey = $accessKey;
+        $this->secretKey = $secretKey;
+        $this->domain = $domain;
+        $this->bucket = $bucket;
     }
 
     /**
@@ -59,10 +54,10 @@ class Qiniu
         $uploadToken = $this->uploadToken(array('scope' => $bucket));
         $data = [];
         if (class_exists('\CURLFile')) {
-			$data['file'] = new \CURLFile($filePath);
-		} else {
-			$data['file'] = '@' .$filePath;
-		}
+            $data['file'] = new \CURLFile($filePath);
+        } else {
+            $data['file'] = '@' .$filePath;
+        }
         $data['token'] = $uploadToken;
         if ($key) {
             $data['key'] = $key;
@@ -244,20 +239,15 @@ class Qiniu
     }
 
     public function uploadToken($flags)
-{
-    if (!isset($flags['deadline'])) {
-        $flags['deadline'] = 3600 + time();
-    }
-    $encodedFlags = self::urlBase64Encode(json_encode($flags));
-    $sign = hash_hmac('sha1', $encodedFlags, $this->secretKey, true);
-    $encodedSign = self::urlBase64Encode($sign);
-    $token = $this->accessKey . ':' . $encodedSign . ':' . $encodedFlags;
-    return $token;
-}
-    public function Sign($data) // => $token
     {
-        $sign = hash_hmac('sha1', $data, $this->secretKey, true);
-        return $this->accessKey . ':' . base64_encode($sign);
+        if (!isset($flags['deadline'])) {
+            $flags['deadline'] = 3600 + time();
+        }
+        $encodedFlags = self::urlBase64Encode(json_encode($flags));
+        $sign = hash_hmac('sha1', $encodedFlags, $this->secretKey, true);
+        $encodedSign = self::urlBase64Encode($sign);
+        $token = $this->accessKey . ':' . $encodedSign . ':' . $encodedFlags;
+        return $token;
     }
 
     public function accessToken($url, $body = false)
