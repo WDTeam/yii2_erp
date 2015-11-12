@@ -1,6 +1,6 @@
 <?php
 /**
-* 控制器  订单渠道
+* 控制器 对接 订单渠道
 * ==========================
 * 北京一家洁 版权所有 2015-2018 
 * ----------------------------
@@ -42,6 +42,20 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 		
 	}
 	
+	
+	/**
+	* 获取订单渠道的比例
+	* @date: 2015-11-12
+	* @author: peak pan
+	* @return:
+	**/
+	public static function getchannel_rate($channelid){
+	
+		$data = self::find();
+		$data = $data->select('operation_order_channel_rate')->asArray()->all();
+		return $data['operation_order_channel_rate'];
+	
+	}
 	
 	
 	/**
