@@ -171,15 +171,10 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
-        print_r($attributes);
         try {
             $order = new Order();
-            echo 111;
             $is_success = $order->createNew($attributes);
-            print_r($order->errors);
-            var_dump($is_success);
-            echo 333;
-            exit;
+            
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
