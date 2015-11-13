@@ -623,10 +623,10 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
-
+        try{
+            $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
+            $this->trigger('insertLog');
+        }catch(Exception $e){}
         //获取交易ID
         $paymentId = $this->getPaymentId($post['orderId']);
 
