@@ -831,9 +831,7 @@ class Order extends OrderModel
         $channel = $this->getOrderChannel($this->order_channel_name);
 
         if(!isset($channel['id'])){
-            $channel = [
-              'id'=>0, 'operation_order_channel_type'=>0,'ordertype'=>'其它'
-            ];
+            $channel = ['id'=>0, 'operation_order_channel_type'=>0,'ordertype'=>'其它'];
         }
 
         if (in_array($channel['operation_order_channel_type'], [2, 3]) && $this->order_channel_name != '后台下单') { //第三方
