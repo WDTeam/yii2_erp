@@ -78,4 +78,9 @@ class DemoController extends BaseAuthController
     {
         \Yii::info(['a'=>111], 'customs\test');
     }
+    
+    public function actionQiniu()
+    {
+        echo \Yii::$app->imageHelper->getLink('Fl4NNh_n5xoYzAeBTY7RgIBcAQCZ');
+    }
 }
