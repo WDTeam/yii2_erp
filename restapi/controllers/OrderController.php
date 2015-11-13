@@ -174,12 +174,13 @@ class OrderController extends \restapi\components\Controller
             print_r($attributes);
             
             
-            
+             echo 333;
             $is_success = $order->createNew($attributes);
+              echo 55;
                var_dump($order);
-            echo 333;
+           
             var_dump($is_success);
-            echo 55;
+          
             
            exit;
            
