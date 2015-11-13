@@ -174,8 +174,7 @@ class OrderController extends \restapi\components\Controller
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
-            print_r($order->errors);
-            exit;
+
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -183,12 +182,14 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-//                $msgErrors = $order->errors;
-                return $this->send($order->errors, '创建订单失败', 1024, 200, null, '创建订单失败');
+                foreach ($order->errors as $val) {
+                    $values = $val[0];
+                }
+                return $this->send($order->errors, '创建订单失败', 1024, 200, null, $values);
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败');//current(current($msgErrors)));
-        } 
+            return $this->send(null, $e->getMessage(), 1024, 200, null, $values); //current(current($msgErrors)));
+        }
     }
 
     /**
@@ -272,7 +273,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
-        $attributes['order_channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "" ;
+        $attributes['order_channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
         $attributes['pay_channel_id'] = 2; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
@@ -353,7 +354,7 @@ class OrderController extends \restapi\components\Controller
         if (!isset($param['city_name']) || !$param['city_name']) {
             return $this->send(null, "城市名称错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        
+
         $cityID = OperationCity::getCityId(trim($param['city_name']));
         if (!$cityID) {
             return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
@@ -1814,7 +1815,6 @@ class OrderController extends \restapi\components\Controller
 //        if (empty($param['order_src_id'])) {
 //            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
 //        }
-         
         #判断地址不能为空
         if (empty($param['address_id'])) {
             return $this->send(null, "用户地址不能为空", 0, 200, null, alertMsgEnum::orderAddressFaile);
