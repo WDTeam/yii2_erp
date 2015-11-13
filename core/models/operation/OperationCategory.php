@@ -50,7 +50,7 @@ class OperationCategory extends \dbbase\models\operation\OperationCategory
      */
     public function uploadImgToQiniu($field){
         $fileinfo = UploadedFile::getInstance($this, $field);
-        if(!empty($fileinfo)){
+        if (!empty($fileinfo)) {
             $key = time().mt_rand('1000', '9999').uniqid();
             \Yii::$app->imageHelper->uploadFile($fileinfo->tempName, $key);
             $imgUrl = \Yii::$app->imageHelper->getLink($key);

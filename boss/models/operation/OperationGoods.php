@@ -43,7 +43,6 @@ class OperationGoods extends \core\models\operation\OperationGoods
             [['operation_category_id'], 'required', 'message' => '请选择服务类型'],
             [['operation_spec_info'], 'required', 'message' => '商品规格不能为空'],
             [[
-                'operation_goods_img',
                 'operation_goods_english_name',
                 'operation_goods_introduction',
                 'operation_goods_name',
@@ -57,6 +56,7 @@ class OperationGoods extends \core\models\operation\OperationGoods
             [['operation_category_ids'], 'string', 'max' => 100],
             [['operation_goods_start_time', 'operation_goods_end_time'], 'string', 'max' => 20],
             ['operation_goods_img', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
+            ['operation_goods_img', 'required', 'on' => ['create']],
         ];
     }
 
