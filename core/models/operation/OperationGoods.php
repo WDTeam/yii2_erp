@@ -85,8 +85,8 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
         $fileinfo = UploadedFile::getInstance($this, $field);
         if(!empty($fileinfo)){
             $key = time().mt_rand('1000', '9999').uniqid();
-            \Yii::$app->imageHelperuploadFile($fileinfo->tempName, $key);
-            $imgUrl = \Yii::$app->imageHelpergetLink($key);
+            \Yii::$app->imageHelper->uploadFile($fileinfo->tempName, $key);
+            $imgUrl = \Yii::$app->imageHelper->getLink($key);
             $this->$field = $imgUrl;
         }
     }

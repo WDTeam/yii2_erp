@@ -38,12 +38,13 @@ class OperationCategory extends \core\models\operation\OperationCategory
         return [
             [['operation_category_name'], 'string', 'max' => 30],
             ['operation_category_name', 'unique', 'message' => '该服务品类已存在'],
-            [['operation_category_name', 'operation_category_icon', 'operation_category_introduction'], 'required'],
+            [['operation_category_name', 'operation_category_introduction'], 'required'],
             [['operation_category_introduction'], 'string'],
             [['operation_category_parent_id', 'sort', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
             [['operation_category_icon', 'operation_category_price_description'], 'string', 'max' => 128],
             [['operation_category_url'], 'string', 'max' => 258],
             ['operation_category_icon', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
+            ['operation_category_icon', 'required', 'on' => ['create']],
         ];
     }
 
