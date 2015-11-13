@@ -35,13 +35,13 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
-     * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
+     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'2015-10-15 10:10:10'
+     * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'2015-10-15 12:10:10'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
      * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
      * @apiParam {String} address_id 订单地址id
-     * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
      * @apiParam {String} [order_pop_order_code] 第三方订单号
@@ -105,7 +105,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
 
-        $attributes['channel_id'] = $args['channel_id'];
+        $attributes['channel_name'] = $args['channel_name'];
         if (empty($attributes['channel_id'])) {
             return $this->send(null, "数据不完整,订单渠道ID为必填项", 0, 200, null, alertMsgEnum::orderCreateFaileChannelId);
         }
