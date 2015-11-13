@@ -287,7 +287,7 @@ class OperationCityController extends BaseAuthController
             ]);
         } else {
             return $this->redirect([
-                'opencity',
+                'operation/operation-shop-district-goods/index',
             ]);
         }
     }
@@ -305,7 +305,7 @@ class OperationCityController extends BaseAuthController
         $goodsInfo = OperationGoods::getGoodsInfo($goods_id);
 
         if (!isset($post) || empty($post)) {
-            return $this->redirect(['opencity']);
+            return $this->redirect(['operation/operation-shop-district-goods/index']);
         } else {
             OperationShopDistrictGoods::saveOnlineCity($post);
 
@@ -314,7 +314,7 @@ class OperationCityController extends BaseAuthController
             }
             //设置开通城市状态
             OperationCity::setoperation_city_is_online($city_id);
-            return $this->redirect(['opencity']);
+            return $this->redirect(['operation/operation-shop-district-goods/index']);
         }
     }
 

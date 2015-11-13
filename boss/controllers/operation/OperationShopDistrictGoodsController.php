@@ -3,11 +3,12 @@
 namespace boss\controllers\operation;
 
 use boss\models\operation\OperationShopDistrictGoods;
+use boss\models\operation\OperationShopDistrictGoodsSearch;
 use boss\models\operation\OperationCity;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -16,8 +17,6 @@ use yii\filters\VerbFilter;
  */
 class OperationShopDistrictGoodsController extends Controller
 {
-    public $city_id; //城市id
-    public $city_name; //城市名称
     public function behaviors()
     {
         return [
@@ -29,19 +28,6 @@ class OperationShopDistrictGoodsController extends Controller
             ],
         ];
     }
-    
-    public function init(){
-        $this->city_id = Yii::$app->request->get('city_id');
-        if(!empty($this->city_id)){
-            setcookie('city_id', $this->city_id, time()+86400);
-        }else{
-            $this->city_id = $_COOKIE['city_id'];
-            if(empty($this->city_id)){
-                return $this->redirect(['/operation/operation-city/index']);
-            }
-        }
-        $this->city_name = OperationCity::getCityName($this->city_id);
-    }
 
     /**
      * Lists all OperationShopDistrictGoods models.
@@ -49,13 +35,12 @@ class OperationShopDistrictGoodsController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationShopDistrictGoods::getCityShopDistrictGoodsList($this->city_id),
-        ]);
+        $searchModel = new OperationShopDistrictGoodsSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'city_id' => $this->city_id,
-            'city_name' => $this->city_name,
+            'searchModel' => $searchModel,
         ]);
     }
 
@@ -120,8 +105,8 @@ class OperationShopDistrictGoodsController extends Controller
      */
     public function actionDelete($id)
     {
-//        $this->findModel($id)->delete();
-        OperationShopDistrictGoods::setCityShopDistrictGoodsStatus($id, $this->city_id);
+        $this->findModel($id)->delete();
+
         return $this->redirect(['index']);
     }
 
