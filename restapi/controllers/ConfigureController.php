@@ -22,7 +22,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} city_name 城市
-     * @apiParam {String} order_channel_name 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -119,7 +119,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} order_channel_name 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -337,7 +337,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} category_id 服务类型
-     * @apiParam {String} order_channel_name 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -435,7 +435,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_channel_name 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -471,7 +471,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_channel_name 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -631,7 +631,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionStartPage
      * @apiGroup configure
      *
-     * @apiParam {String} order_channel_name 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
