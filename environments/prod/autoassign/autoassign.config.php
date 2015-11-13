@@ -22,6 +22,10 @@ return [
      * Redis 服务PORT
      */
     'REDIS_SERVER_PORT ' => 6379,
+     /*
+     * Redis 服务password
+     */
+    'REDIS_SERVER_PASSWORD' => '6c55da921a534ba7:Ejiajie2015test',
     /*
      * Redis 服务运行状态
      */
