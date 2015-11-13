@@ -12,9 +12,13 @@ use core\models\shop\ShopManager;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
 use yii\base\Event;
+
 use dbbase\components\JPush;
 use dbbase\components\Sms;
 use dbbase\components\Ivr;
+use dbbase\models\payment\PaymentLog;
+use dbbase\models\payment\PaymentCustomerTransRecordLog;
+
 class EventBind extends Component implements BootstrapInterface
 {
     public function bootstrap($app)
@@ -163,6 +167,46 @@ class EventBind extends Component implements BootstrapInterface
                     $res = $collection->insert($data);
                 }catch(\Exception $e){
                     \Yii::error($e, 'event\ivrcallback');
+                }
+            }
+        );
+
+        /**
+         * CUSTOMER 交易记录记录到mongo
+         */
+        Event::on(
+            PaymentCustomerTransRecordLog::className(),
+            PaymentCustomerTransRecordLog::EVENT_MONGO_INSERT,
+            function ($event) {
+                try{
+                    $collection = \Yii::$app->mongodb->getCollection('payment_customer_trans_record_log');
+                    $data = (array)$event->sender->trans_record_log_data;
+                    $data['created_at'] = date('Y-m-d H:i:s');
+                    $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
+                    $collection->insert($data);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event\paymentcustomertransrecordlog');
+                }
+            }
+        );
+
+        /**
+         * CUSTOMER 支付记录记录到mongo
+         */
+        Event::on(
+            PaymentLog::className(),
+            PaymentLog::EVENT_MONGO_INSERT,
+            function ($event) {
+                try{
+                    $collection = \Yii::$app->mongodb->getCollection('payment_log');
+                    $data = (array)$event->sender->payment_log_data;
+                    $data['created_at'] = date('Y-m-d H:i:s');
+                    $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
+                    $collection->insert($data);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event\paymentlog');
                 }
             }
         );

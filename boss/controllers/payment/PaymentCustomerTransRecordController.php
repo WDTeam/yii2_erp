@@ -3,12 +3,11 @@
 namespace boss\controllers\payment;
 
 use boss\components\BaseAuthController;
-use boss\models\payment\PaymentCustomerTransRecordSearch;
 use boss\models\payment\PaymentCustomerTransRecord;
-
+use boss\models\payment\PaymentCustomerTransRecordSearch;
 use Yii;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 
 /**
@@ -65,20 +64,20 @@ class PaymentCustomerTransRecordController extends BaseAuthController
      * @return mixed
 
     public function actionCreate()
-    {
-        $model = new CustomerTransRecord;
-        $data = Yii::$app->request->post();
-        $data['CustomerTransRecord']['scenario'] = 3;
-        //var_dump(Yii::$app->request->post());exit;
-        if ($model->load(Yii::$app->request->post())) {
-            $model = $this->createRecord($data['CustomerTransRecord']);
-            //return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+     * {
+     * $model = new CustomerTransRecord;
+     * $data = Yii::$app->request->post();
+     * $data['CustomerTransRecord']['scenario'] = 3;
+     * //var_dump(Yii::$app->request->post());exit;
+     * if ($model->load(Yii::$app->request->post())) {
+     * $model = $this->createRecord($data['CustomerTransRecord']);
+     * //return $this->redirect(['view', 'id' => $model->id]);
+     * } else {
+     * return $this->render('create', [
+     * 'model' => $model,
+     * ]);
+     * }
+     * }
      */
     /**
      * Updates an existing CustomerTransRecord model.
@@ -87,17 +86,17 @@ class PaymentCustomerTransRecordController extends BaseAuthController
      * @return mixed
 
     public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
+     * {
+     * $model = $this->findModel($id);
+     *
+     * if ($model->load(Yii::$app->request->post()) && $model->save()) {
+     * return $this->redirect(['view', 'id' => $model->id]);
+     * } else {
+     * return $this->render('update', [
+     * 'model' => $model,
+     * ]);
+     * }
+     * }
      */
     /**
      * Deletes an existing CustomerTransRecord model.
@@ -106,11 +105,11 @@ class PaymentCustomerTransRecordController extends BaseAuthController
      * @return mixed
 
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-        return $this->redirect(['index']);
-    }
-*/
+     * {
+     * $this->findModel($id)->delete();
+     * return $this->redirect(['index']);
+     * }
+     */
     /**
      * Finds the CustomerTransRecord model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
