@@ -191,8 +191,6 @@ class Order extends OrderModel
         //如果客户选择使用余额则去获取客户余额
         if (!empty($attributes['order_is_use_balance'])) {
             try {
-                echo $attributes['order_customer_phone'];
-                exit;
                 $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
