@@ -229,10 +229,11 @@ class ConfigureController extends \restapi\components\Controller
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
             //整理开通的城市
-            $onlineCityList = array();
+            $onlineCityList = $temp = array();
             foreach ($onlineCitys as $key => $val) {
-                $onlineCityList[$key]['city_id'] = $val['city_id'];
-                $onlineCityList[$key]['city_name'] = $val['city_name'];
+                $temp['city_id'] = $val['city_id'];
+                $temp['city_name'] = $val['city_name'];
+                $onlineCityList[] = $temp;
             }
             //整理开通的服务类型
             $serviceCategoryList = array();
@@ -385,15 +386,16 @@ class ConfigureController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
         }
-        $itemlist = array();
+        $itemlist = $temp = array();
         if ($itemInfo) {
             foreach ($itemInfo as $key => $val) {
-                $itemlist[$key]['category_id'] = $val['operation_category_id'];
-                $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
-                $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
-                $itemlist[$key]['icon'] = $val['operation_goods_img'] ? $val['operation_goods_img'] : "";
-                $itemlist[$key]['service_item_price'] = $val['operation_goods_price'];
-                $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
+                $temp['category_id'] = $val['operation_category_id'];
+                $temp['order_service_item_id'] = $val['goods_id'];
+                $temp['order_service_item_name'] = $val['operation_goods_name'];
+                $temp['icon'] = $val['operation_goods_img'] ? $val['operation_goods_img'] : "";
+                $temp['service_item_price'] = $val['operation_goods_price'];
+                $temp['service_item_price_description'] = $val['operation_goods_price_description'];
+                $itemlist[] = $temp;
             }
         }
         //二级页背景颜色 TODO:后面从数据库中读取
