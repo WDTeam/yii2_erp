@@ -121,7 +121,7 @@ class OrderPush extends Order
                 }catch(\Exception $e){
                     \Yii::error($e, 'event\order_jpush_log');
                 }
-                if (isset($result->isOK)) {
+                if (isset($result->isOk)) {
                     OrderWorkerRelation::jpushPushSuccess($order_id, $v['id'], 1);
                     $jpush_flag = true;
                 }else{

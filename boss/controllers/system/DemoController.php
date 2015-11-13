@@ -20,15 +20,22 @@ class DemoController extends BaseAuthController
     public function actionJpush()
     {
         $res = \Yii::$app->jpush;
-        $_res = $res->push(['15110249233'],'test: 服务时间是:15年11月12日，星期四，09点至12点半，时长0个半小时。服务地址是：北京,北京市,朝阳区,光华路soho,林,13141451414！');
-        var_dump($_res);
+        $i=0;
+        $_res = [];
+        while ($i<5){
+            $_res[] = $r = $res->push(['worker_15110249233'],'test: 服务时间是:15年11月12日，星期四，09点至12点半，时长0个半小时。服务地址是：北京,北京市,朝阳区,光华路soho,林,13141451414！');
+            $i++;
+            var_dump($r->isOk);
+        }
+//         var_dump($_res);
     }
     /**
      * 发短信 DEMO
      */
     public function actionSms()
     {
-        return \Yii::$app->sms->send('15110249233', 'test msg', 1);
+        $res = \Yii::$app->sms->send('15110249233', 'test msg', 1);
+        return $res;
     }
     
     public function actionTask()
