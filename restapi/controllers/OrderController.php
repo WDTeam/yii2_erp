@@ -80,18 +80,18 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionCreateOrder()
     {
-        
+
         echo 333;
         $args = Yii::$app->request->post() or $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
-     echo 444;
+        echo 444;
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
-        
+
         if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
@@ -137,8 +137,8 @@ class OrderController extends \restapi\components\Controller
         } else {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-        
-      
+
+
         if (isset($args['order_pop_order_code'])) {
             $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
         }
@@ -170,16 +170,16 @@ class OrderController extends \restapi\components\Controller
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
         echo 111;
-       
+
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
-    echo 7777;
+        echo 7777;
         try {
-          echo 1010;
+            echo 1010;
             $order = new Order();
             $is_success = $order->createNew($attributes);
             var_dump($is_success);
-       
+
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -187,11 +187,11 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-               echo 3636;
+                echo 3636;
                 return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
             }
         } catch (\Exception $e) {
-               echo 6767;
+            echo 6767;
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateFaile);
         }
     }

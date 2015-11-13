@@ -183,6 +183,7 @@ class Order extends OrderModel
         $attributes['order_is_parent'] = 0;
 
         $customer = Customer::getCustomerById($attributes['customer_id']);
+        var_dump($customer);
         if(!empty($customer)) {
             $attributes['order_customer_phone'] = $customer->customer_phone;
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
