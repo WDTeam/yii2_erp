@@ -84,6 +84,15 @@ if(\Yii::$app->user->identity->isNotAdmin()){
         ],
         [
             'format' => 'raw',
+            'label' => '子状态',
+            'hidden' => Worker::columnsIsHidden('other'),
+            'value' => function($dataProvider){
+                return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
+            },
+            'width' => "100px",
+        ],
+        [
+            'format' => 'raw',
             'label' => '阿姨入职时间',
             'hidden' => Worker::columnsIsHidden('other'),
             'value' => function ($dataProvider) {
@@ -615,9 +624,9 @@ if(\Yii::$app->user->identity->isNotAdmin()){
 
     $switchBtn =
         Html::a('<i class="glyphicon" ></i>全部 '.Worker::CountWorker(), ['/worker/worker'], ['class' => 'btn '.Worker::setBtnCss(0), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待审核 '.Worker::CountWorkerStatus(0), ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::setBtnCss(1), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=2'], ['class' => 'btn '.Worker::setBtnCss(2), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(3), ['index?WorkerSearch[worker_auth_status]=3'], ['class' => 'btn '.Worker::setBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>审核 '.Worker::CountWorkerStatus([1,2]), ['index?WorkerSearch[worker_auth_status]=1,2'], ['class' => 'btn '.Worker::setBtnCss(1), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>试工 '.Worker::CountWorkerStatus([5,6]), ['index?WorkerSearch[worker_auth_status]=5,6'], ['class' => 'btn '.Worker::setBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>上岗 '.Worker::CountWorkerStatus([7,8]), ['index?WorkerSearch[worker_auth_status]=7,8'], ['class' => 'btn '.Worker::setBtnCss(3), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountWorkerIdentity(1), ['index?WorkerSearch[worker_identity_id]=1'], ['class' => 'btn '.Worker::setBtnCss(4), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerIdentity(2), ['index?WorkerSearch[worker_identity_id]=2'], ['class' => 'btn '.Worker::setBtnCss(5), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerIdentity(3), ['index?WorkerSearch[worker_identity_id]=3'], ['class' => 'btn '.Worker::setBtnCss(6), 'style' => 'margin-right:10px']) .

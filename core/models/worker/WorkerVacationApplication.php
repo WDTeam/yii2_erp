@@ -111,6 +111,27 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
     }
 
     /**
+     * 检查阿姨是否请假
+     * @param $worker_id 阿姨id
+     * @param $vacationDate 阿姨请假日期
+     * @param $vacationType 阿姨请假类型 1休假 2事假
+     * @return bool true 可用 false 不可用
+     * @return array
+     */
+    public static function checkWorkerIsApplication($worker_id,$vacationDate,$vacationType){
+        $condition['worker_vacation_application_start_time'] = strtotime($vacationDate);
+        $condition['worker_id'] = $worker_id;
+        $condition['worker_vacation_application_type'] = $vacationType;
+        $condition['worker_vacation_application_approve_status'] = [0,1];
+        $result = self::find()->where($condition)->asArray()->one();
+        if($result){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
      * 申请请假阿姨信息
      * @param $worker_id 阿姨id
      * @param $vacationDate 阿姨请假日期
@@ -130,7 +151,6 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
         }else{
             return fasle;
         }
-
     }
 
     public function getWorker(){

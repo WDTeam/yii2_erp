@@ -2,7 +2,7 @@
 
 namespace core\models\payment;
 
-use core\models\finance\FinancePayChannel;
+use core\models\operation\OperationPayChannel;
 
 use Yii;
 use yii\base\Exception;
@@ -42,7 +42,7 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
 
         //渠道名称
         try{
-            $param->data['pay_channel_name'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
+            $param->data['pay_channel_name'] = OperationPayChannel::get_post_name($param->data['pay_channel_id']);
         }catch(Exception $e){
             $param->data['pay_channel_name'] = '未找到渠道';
         }

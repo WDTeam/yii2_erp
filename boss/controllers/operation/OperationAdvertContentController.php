@@ -114,16 +114,20 @@ class OperationAdvertContentController extends BaseAuthController
     {
         $model = new OperationAdvertContent();
         $post = Yii::$app->request->post();
-        if($post){
-            if(!empty($post['old_operation_advert_picture_text'])){
+        $model->setScenario('create');
+
+        if ($post) {
+            if (!empty($post['old_operation_advert_picture_text'])) {
                 $old_operation_advert_picture_text = $post['old_operation_advert_picture_text'];
                 unset($post['old_operation_advert_picture_text']);
             }
-            if(!empty($_FILES['operation_advert_picture_text']['tmp_name'])){
+
+            if (!empty($_FILES['operation_advert_picture_text']['tmp_name'])) {
                 $path = UploadFile::widget(['fileInputName' => 'operation_advert_picture_text']);
-            }else{
+            } else {
                 $path = $old_operation_advert_picture_text;
             }
+
             $post['OperationAdvertContent']['operation_advert_picture_text'] = $path;
             $model->load($post);
             $position = OperationAdvertPosition::find()->asArray()->where(['id' => $post['OperationAdvertContent']['position_id']])->one();

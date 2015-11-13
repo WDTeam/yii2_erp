@@ -36,7 +36,7 @@ class WorkerForRedis extends Model
         $defaultCondition['worker_is_vacation'] = 0;
         $defaultCondition['worker_is_blacklist'] = 0;
         $defaultCondition['worker_is_dimission'] = 0;
-        $defaultCondition['worker_auth_status'] = [3,5,7];//3基础培训通过,5试工通过,6已上岗的阿姨可以 可以接单
+        $defaultCondition['worker_auth_status'] = [4,6,8,10];//3基础培训通过,5试工通过,6已上岗的阿姨可以 可以接单
         $workerResult = Worker::find()
             ->select('{{%worker}}.id ,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type')
             ->joinWith('workerDistrictsRelation') //关联worker workerDistrictRelation方法
@@ -118,7 +118,7 @@ class WorkerForRedis extends Model
      * @return mixed
      */
     public static function deleteDistrictToRedis($district_id){
-        if($district_id){
+        if(empty($district_id)){
             return false;
         }
         return Yii::$app->redis->executeCommand('del', [self::DISTRICT_WORKER_RELATION.'_'.$district_id]);
@@ -300,7 +300,6 @@ class WorkerForRedis extends Model
         if(!self::checkWorkerIsEnabled($worker_id)){
             return false;
         }
-
         //添加新的商圈绑定阿姨关系 [1,3,4]
         foreach ((array)$districtIdsArr as $val) {
             //如果商圈不存在，默认添加商圈set，并存储阿姨id
@@ -526,7 +525,7 @@ class WorkerForRedis extends Model
             $worker = json_decode($worker,1);
             return $worker['schedule'];
         }else{
-            return [];
+            return false;
         }
 
     }

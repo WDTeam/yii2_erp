@@ -50,9 +50,33 @@ use kartik\daterange\DateRangePicker;
     </form>
 
 </div>
+<?php
+//
+//if($scheduleFromRedis!==false){
+//?>
+<!--    <div class="callout callout-info">-->
+<!--        <h4>当前阿姨排班表可用</h4>-->
+<!--    </div>-->
+<?php
+//}else{
+//    $worker_info = Worker::find()->where(['worker_id'=>$worker_id])->asArray()->one();
+//    if($worker_info['worker_is_block']!=0){
+//        $message = '阿姨当前正处于封号中';
+//    }elseif($worker_info['worker_is_blacklist']!=0){
+//        $message = '阿姨当前';
+//    }
+//?>
+<!--    <div class="callout callout-danger">-->
+<!--        <h4>当前阿姨排班表不可用</h4>-->
+<!--        <p>不可用原因：</p>-->
+<!--    </div>-->
+<?php
+//}
+//?>
+
 <div id="schedule-list">
     <?php
-    $schedule_from_redis = \yii\helpers\ArrayHelper::index($schedule_from_redis,'schedule_id');
+
     foreach ($schedule as $val) {
 
     ?>
@@ -101,6 +125,11 @@ use kartik\daterange\DateRangePicker;
             <table  class=" table table-bordered " style="width: 77%;" "="">
             <tbody>
             <?php
+                if(is_array($schedule_from_redis)){
+                    $schedule_from_redis = \yii\helpers\ArrayHelper::index($schedule_from_redis,'schedule_id');
+                }else{
+                    $schedule_from_redis = [];
+                }
                 if(isset($schedule_from_redis[$val['id']])){
                     $weekday = $schedule_from_redis[$val['id']]['worker_schedule_timeline'];
                     $weekdayIsDisabled = false;

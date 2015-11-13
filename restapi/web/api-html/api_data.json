@@ -391,15 +391,15 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #不给予后台传递,用来作为支付渠道的判断标示</p> "
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_booked_count",
-            "description": "<p>服务时长</p> "
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "pay_channel_id",
+            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
           },
           {
             "group": "Parameter",
@@ -503,7 +503,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   8\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":\"订单id\",\n   \"order_code\":\"订单号\"\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
           "type": "json"
         }
       ]
@@ -877,13 +877,6 @@
             "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #改字段用于标示支付渠道</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": false,
             "field": "order_is_use_balance",
             "description": "<p>是否使用余额 0否 1是 必填</p> "
           },
@@ -893,6 +886,13 @@
             "optional": false,
             "field": "order_booked_count",
             "description": "<p>服务时长</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "pay_channel_id",
+            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
           },
           {
             "group": "Parameter",
@@ -1041,7 +1041,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   8//订单ID\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":\"订单id\",\n   \"order_code\":\"订单号\"\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
           "type": "json"
         }
       ]
@@ -1175,7 +1175,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"0\",\n  \"order_is_parent\": 0,\n  \"created_at\": \"1446041297\",\n  \"updated_at\": \"1446041297\",\n  \"isdel\": 0,\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n    \"address_id\": \"1\",\n    \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n},\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"父级id\",\n  \"order_is_parent\": 有无子订单 1有 0无,\n  \"created_at\": \"1446041297\", 创建时间\n  \"updated_at\": \"1446041297\", 修改时间\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n  \"address_id\": \"1\",\n  \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1532,6 +1532,11 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 OK\n{\n   \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 0,\n   \"msg\": \"阿姨抢单提交失败\",\n   \"ret\": {\n   \"id\": [\n     \"阿姨服务时间冲突！\" 或  \"订单正在进行人工指派！\"  或  \"订单已经指派阿姨！\"\n    ]\n   },\n   \"alertMsg\": \"阿姨服务时间冲突！\" 或  \"订单正在进行人工指派！\"  或  \"订单已经指派阿姨！\"\n}",
           "type": "json"
         }
       ]
@@ -1965,7 +1970,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n     \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n     {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n       }\n      ]\n     }\n \"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n {\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n     \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n     {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",#开始时间\n         \"updated_at\": \"1445347126\",#结束时间\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n       }\n      ]\n     }\n \"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -2134,7 +2139,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n     \"limit\": \"1\",\n      \"page_total\": 4,\n      \"offset\": 0,\n      \"orders\": [\n       {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n          \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_pay_type\": \"支付方式\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n          }\n   ]\n },\n\"alertMsg\": \"操作成功\"\n }",
+          "content": " HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n     \"limit\": \"1\",\n      \"page_total\": 4,\n      \"offset\": 0,\n      \"orders\": [\n       {\n         \"id\": \"订单id\",\n         \"order_code\": \"订单号\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n          \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_pay_type\": \"支付方式\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n          }\n   ]\n },\n\"alertMsg\": \"操作成功\"\n }",
           "type": "json"
         }
       ]
@@ -2750,70 +2755,6 @@
   },
   {
     "type": "GET",
-    "url": "/user/get-money-score-coupon",
-    "title": "[GET] /user/get-money-score-coupon （100%）",
-    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
-    "name": "actionCoupons",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 moeny Not Found\n{\n  \"code\": 0,\n  \"msg\": \"获取用户余额系统错误\",\n  \"ret\": {},\n \"alertMeg\": \"获取用户余额系统错误\"\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
     "url": "/user/default-address",
     "title": "[GET] /user/default-address(100%)",
     "description": "<p>获取默认地址(赵顺利)</p> ",
@@ -3379,6 +3320,70 @@
     "groupTitle": "User"
   },
   {
+    "type": "GET",
+    "url": "/user/get-money-score-coupon",
+    "title": "[GET] /user/get-money-score-coupon （100%）",
+    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
+    "name": "actionGetMoneyScoreCoupon",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 moeny Not Found\n{\n  \"code\": 0,\n  \"msg\": \"获取用户余额系统错误\",\n  \"ret\": {},\n \"alertMeg\": \"获取用户余额系统错误\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "POST",
     "url": "/user/get-user-feedback",
     "title": "[POST] /user/get-user-feedback （100%）",
@@ -3814,6 +3819,124 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": 0,\n  \"msg\": \"设置默认地址失败\",\n  \"ret\": {},\n \"alertMeg\": \"设置默认地址失败\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/share-friends",
+    "title": "[GET] /user/share-friends （100%）",
+    "description": "<p>分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
+    "name": "actionShareFriends",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"分享朋友圈成功\",\n      \"ret\": {\n          \"image\": \"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png\",\n          \"title\": \"品质生活 从e家洁开始  周期下单 情节无忧\",\n          \"content\": [\n              \"省时省力省心\",\n              \"固定星级阿姨\",\n              \"轻松回归生活\"\n          ],\n          \"url\": \"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1\"\n      },\n      \"alertMsg\": \"分享朋友圈成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/share_weibo",
+    "title": "[GET] /user/share_weibo （100%）",
+    "description": "<p>分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
+    "name": "actionShareWeibo",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"分享微博成功\",\n      \"ret\": {\n          \"image\": \"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png\",\n          \"title\": \"品质生活 从e家洁开始  周期下单 情节无忧\",\n          \"content\": [\n              \"省时省力省心\",\n              \"固定星级阿姨\",\n              \"轻松回归生活\"\n          ],\n          \"url\": \"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1\"\n      },\n      \"alertMsg\": \"分享微博成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
           "type": "json"
         }
       ]
@@ -4452,7 +4575,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取阿姨请假历史记录成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"请假类型【1休假 2事假】\",\n              \"leave_time\": \"请假时间\",\n              \"leave_status\": \"请假状态\"\n          }\n      ]\n     }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取阿姨请假历史记录成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"请假类型【1休假 2事假】\",\n              \"leave_time\": \"请假时间\",\n              \"leave_status\": \"请假状态【0待审核 1审核通过 2.审核不通过】\"\n          }\n      ]\n     }\n  }",
           "type": "json"
         }
       ]
@@ -5277,7 +5400,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"2015-10-28\": true,\n      \"2015-10-29\": true,\n      \"2015-10-30\": false,\n      \"2015-10-31\": false,\n      \"2015-11-01\": false,\n      \"2015-11-02\": true,\n      \"2015-11-03\": true,\n      \"2015-11-04\": true,\n      \"2015-11-05\": true,\n      \"2015-11-06\": false,\n      \"2015-11-07\": false,\n      \"2015-11-08\": false,\n      \"2015-11-09\": true,\n  },\n \"alertMsg\": \"获取阿姨请假排班表成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"leave_time\": [\n      {\n          \"date\": \"2015-11-13\",\n          \"enable\": false,\n          \"week\": \"周五\"\n      }\n     ]\n  },\n \"alertMsg\": \"获取阿姨请假排班表成功\"\n}",
           "type": "json"
         }
       ]
@@ -5392,7 +5515,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n          \"colour\": \"背景颜色\",\n          \"category_ico\": \"服务品类图标\",\n          \"category_name\": \"服务品类名称\",\n          \"category_english_name\": \"服务品类英文名\",\n          \"category_condition\": \"服务品类条件\",\n          \"category_price_description\": \"服务品类描述\",\n           \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n          ]\n }",
           "type": "json"
         }
       ]

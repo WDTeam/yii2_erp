@@ -3,11 +3,12 @@
 namespace boss\controllers\finance;
 
 use Yii;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 use dbbase\models\finance\FinanceInvoice;
 use boss\models\finance\FinanceInvoiceSearch;
 use boss\components\BaseAuthController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+
 
 /**
  * FinanceInvoiceController implements the CRUD actions for FinanceInvoice model.

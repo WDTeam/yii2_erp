@@ -50,10 +50,10 @@ if(empty($customer_ext_srcs)){
 	$device_no_str = '-';
 }else{
 	foreach($customer_ext_srcs as $customer_ext_src){
-		$platform_name= empty($customer_ext_src) ? '-' : empty($customer_ext_src['platform_name']) ? '-' : $customer_ext_src['platform_name']; 
-		$channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
-		$device_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_name']) ? '-' : $customer_ext_src['device_name']; 
-		$device_no = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_no']) ? '-' : $customer_ext_src['device_no']; 
+		$platform_name= empty($customer_ext_src) ? '' : empty($customer_ext_src['platform_name']) ? '' : $customer_ext_src['platform_name'];
+		$channal_name = empty($customer_ext_src) ? '' : empty($customer_ext_src['channal_name']) ? '' : $customer_ext_src['channal_name'];
+		$device_name = empty($customer_ext_src) ? '' : empty($customer_ext_src['device_name']) ? '' : $customer_ext_src['device_name'];
+		$device_no = empty($customer_ext_src) ? '' : empty($customer_ext_src['device_no']) ? '' : $customer_ext_src['device_no'];
 
 		$platform_name_str .= $platform_name.'/';
 		$channal_name_str .= $channal_name.'/';
@@ -110,7 +110,12 @@ if(empty($customer_workers_res['customer_workers'])){
 }
 foreach ($customer_workers_res['customer_workers'] as $key => $worker)
 {
-	$worker_names .= $worker['worker_name'].'/';
+    if(!empty($worker['worker_name'])){
+        $worker_names .= $worker['worker_name'].'/';
+    }
+}
+if(empty($worker_names)){
+    $worker_names = '-';
 }
 
 echo DetailView::widget([
@@ -143,7 +148,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'城市',
             'format'=>'raw',
-            'value'=>$model->operation_city_name,
+            'value'=>empty($model->operation_city_name) ? '-' : $model->operation_city_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -206,7 +211,7 @@ echo DetailView::widget([
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
-    'enableEditMode'=>true,
+    'enableEditMode'=>false,
 ]); 
 
 // echo DetailView::widget([

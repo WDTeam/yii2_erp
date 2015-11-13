@@ -5,10 +5,6 @@ $config = [
     'controllerNamespace' => 'boss\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-//        'blog' => [
-//            'class' => 'funson86\blog\Module',
-//            'controllerNamespace' => 'funson86\blog\controllers\boss'
-//        ],
         'dynagrid' => [
             'class' => '\kartik\dynagrid\Module',
         ],
@@ -43,7 +39,7 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error'],
-                ]
+                ],
             ],
         ],
         'errorHandler' => [
@@ -52,7 +48,6 @@ $config = [
         'areacascade' => [
             'class' => 'boss\components\AreaCascade'
         ],
-    ]
+    ],
 ];
-
 return $config;
