@@ -220,6 +220,8 @@ class Worker extends \core\models\worker\Worker
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
 
-
+    public function setworker_district(){
+        return 1;
+    }
 
 }
