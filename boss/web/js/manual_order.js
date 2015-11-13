@@ -271,7 +271,7 @@ function getCanAssignWorkerList(){
                     '<td id="worker_memo_'+ v.id+'">'+ (v.memo.length>0?v.memo.join(','):'<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>')+'</td>'+
                     '</tr>');
                 }
-            }else{
+            }else if(data.code==500){
                 alert(data.msg);
             }
         }
