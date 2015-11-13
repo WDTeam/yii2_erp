@@ -143,7 +143,11 @@ class WorkerController extends \restapi\components\Controller
         if (!isset($param['leave_time']) || !$param['leave_time']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403, null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
+        
         try {
+            if(!WorkerVacationApplication::checkWorkerIsApplication($workerID,$param['leave_time'],$vacationType)){
+                return $this->send(null, "不能重复请假", 0, 403, null, "该时段您已请过假，请等待审核");
+            }
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID, $vacationType);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::workerApplyLeaveFailed);
