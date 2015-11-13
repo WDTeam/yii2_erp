@@ -21,7 +21,7 @@ return [
     /*
      * Redis 服务PORT
      */
-    'REDIS_SERVER_PORT ' => 6379,
+    'REDIS_SERVER_PORT' => 6379,
      /*
      * Redis 服务password
      */
