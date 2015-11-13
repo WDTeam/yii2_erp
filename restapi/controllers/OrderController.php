@@ -88,6 +88,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
         $attributes['customer_id'] = $user->id;
+        
         if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
@@ -1579,7 +1580,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 阿姨抢单数 (郝建设)
      * @apiParam {String} access_token      阿姨认证
-     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} [platform_version]  平台版本号
      * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
      * @apiParam {String} [page]              页面  #leveltype =2 时要传递
      * @apiParam {String} leveltype          判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
