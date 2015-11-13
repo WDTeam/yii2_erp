@@ -1094,7 +1094,7 @@ class WorkerController extends BaseAuthController
             }
             $workerBlockColumns = array_keys($workerBlockArr);
             $connectionNew->createCommand()->batchInsert('{{%worker_block}}',$workerBlockColumns, $batchWorkerBlockArr)->execute();
-            WorkerForRedis::initAllWorkerToRedis();
+            //WorkerForRedis::initAllWorkerToRedis();
         }
     }
 
@@ -1251,7 +1251,7 @@ class WorkerController extends BaseAuthController
      * 初始化redis数据
      */
     public function actionInitWorkerForRedis(){
-        WorkerForRedis::initAllWorkerToRedis();
+        //WorkerForRedis::initAllWorkerToRedis();
     }
 
     public function getWorkerDistrict($city_encode,$detail_encode){
@@ -1290,7 +1290,6 @@ class WorkerController extends BaseAuthController
         //echo '星期1 8:00 10:00';
         //echo date('Y-m-d H:i',1446253200);
         //echo '<br>';
-        var_dump(WorkerForRedis::initAllWorkerToRedis());die;
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
