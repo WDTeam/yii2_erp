@@ -60,14 +60,11 @@ class PaymentLog extends \yii\db\ActiveRecord
     public function mogonInsert($data)
     {
         try{
-            $mongo = \Yii::$app->mongodb;
-            $collection = $mongo->getCollection('payment_log');
+            $collection = Yii::$app->mongodb->getCollection('payment_log');
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['create_time'] = time();
             return $collection->insert($data);
-        }catch(Exception $e){
-
-        }
+        }catch(Exception $e){echo 'mongo not connect';}
     }
 
 
