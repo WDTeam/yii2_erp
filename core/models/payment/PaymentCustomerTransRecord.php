@@ -6,7 +6,6 @@ use core\models\payment\Payment;
 use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
-use core\models\finance\FinancePayChannel;
 use core\models\operation\OperationPayChannel;
 
 use dbbase\models\payment\PaymentCustomerTransRecordLog;

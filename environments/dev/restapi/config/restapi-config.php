@@ -8,20 +8,18 @@ $config = [
     ],
     'controllerNamespace' => 'restapi\controllers',
     'modules' => [
-//         'user' => [
-//             'class' => 'api\modules\user\Module',
-//         ],
+
     ],
     'components' => [
         'urlManager' => [
             'enablePrettyUrl' => true,
-//            'enableStrictParsing' => true,
+
             'showScriptName' => false,
             'rules' => [
                 'v<version:\d>/<controller:\w+>/<id:\d+>' => '<controller>/view',
                 'v<version:\d>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 'v<version:\d>/<controller:\S+>/<action:\S+>' => '<controller>/<action>',
-                //'v<version:\d>/<controller:\S+>' => '<controller>',
+
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'user-info',
@@ -73,16 +71,16 @@ $config = [
             'viewPath' => 'dbbase/mail',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.163.com',
-                'username' => 'linuu90@163.com',
-                'password' => 'uu801272',
+                'host' => 'corp.1jiajie.com',
+                'username' => 'boss-dev@corp.1jiajie.com',
+                'password' => '1jiajie@corp.com',
                 'port' => '25',
                 'encryption' => 'tls',
 
             ],
             'messageConfig' => [
                 'charset' => 'UTF-8',
-                'from' => ['linuu90@163.com' => 'APIForDevelopLocalhost']
+                'from' => ['boss-dev@corp.1jiajie.com' => 'APIForDevelopLocalhost']
             ],
         ],
     ]

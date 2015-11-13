@@ -1,5 +1,6 @@
 <?php
 namespace restapi\controllers;
+
 use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
@@ -17,9 +18,9 @@ class ConfigureController extends \restapi\components\Controller
     /**
      * @api {GET} /configure/all-services  [GET] /configure/all-services（100%）
      * @apiDescription 获取城市全部上线服务 (赵顺利)
-     * @apiName actionAllServices 
+     * @apiName actionAllServices
      * @apiGroup configure
-     * 
+     *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -68,14 +69,14 @@ class ConfigureController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::allServicesFailed);
+            return $this->send(null, "未取得城市信息", 0, 403, null, alertMsgEnum::allServicesFailed);
         }
 
         $categoryes = OperationCategory::getAllCategory();
         $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", 0, 403,null,alertMsgEnum::allServicesFailed);
+            return $this->send(null, "该城市暂未开通", 0, 403, null, alertMsgEnum::allServicesFailed);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -107,7 +108,7 @@ class ConfigureController extends \restapi\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功", 1,200,null,alertMsgEnum::allServicesSuccess);
+        return $this->send($cDate, "数据获取成功", 1, 200, null, alertMsgEnum::allServicesSuccess);
     }
 
     /**
@@ -185,7 +186,6 @@ class ConfigureController extends \restapi\components\Controller
      *         "isEffect": "用户token是否有效【0表示正常，1表示失效】"
      *     }
      * }
- 
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 OK
@@ -197,120 +197,120 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function actionUserInit()
     {
-        try{
+        try {
             $param = Yii::$app->request->get();
             //获取环境变量对应的URL
             $current_env_url = Yii::$app->params['envUrl'];
-            
-            if(!isset($param['city_name'])||!$param['city_name']){
+
+            if (!isset($param['city_name']) || !$param['city_name']) {
                 $param['city_name'] = "北京市";
             }
-            if(!isset($param['platform_version'])||!$param['platform_version']){
-                return $this->send(null, 'app版本参数错误',0,200,null,alertMsgEnum::getUserInitFailed);
+            if (!isset($param['platform_version']) || !$param['platform_version']) {
+                return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
-            //判断来源版
-            $platform_name = "ios";
-            $platform_version_name = "4.0";
-            if(isset($param['platform_version'])&&$param['platform_version']){
-                $platform = explode("_",$param['platform_version']);
-                $platform_name = isset($platform[0])?$platform[0]:"ios";
-                $platform_version_name = isset($platform[1])?$platform[1]:"4.0";
-
+            $platform = explode("_", $param['platform_version']);
+            if(count($platform)!=2){
+                return $this->send(null, 'app版本参数格式错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
+            $platform_name = $platform[0];
+            $platform_version_name = $platform[1];
             //判断token是否有效
-            $isEffect="0";
-            if(isset($param['access_token'])&&$param['access_token']&&!CustomerAccessToken::checkAccessToken($param['access_token'])){
-                $isEffect="1";
+            $isEffect = "0";
+            if (isset($param['access_token']) && $param['access_token'] && !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+                $isEffect = "1";
             }
             //获取城市列表
-            try{
+            try {
                 $onlineCitys = OperationCity::getOnlineCitys();
                 $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
                 //获取banner图
-                $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'],$platform_name,$platform_version_name);
+                $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
             //整理开通的城市
             $onlineCityList = array();
-            foreach($onlineCitys as $key=>$val){
+            foreach ($onlineCitys as $key => $val) {
                 $onlineCityList[$key]['city_id'] = $val['city_id'];
                 $onlineCityList[$key]['city_name'] = $val['city_name'];
             }
             //整理开通的服务类型
             $serviceCategoryList = array();
-            if($cityCategoryList&&!isset($cityCategoryList['code'])){
-                foreach($cityCategoryList as $key=>$val){
-                    $serviceCategoryList[$key]['category_id'] = isset($val['id'])?$val['id']:"0";
-                    $serviceCategoryList[$key]['category_name'] = $val['operation_category_name'];
-                    $serviceCategoryList[$key]['category_icon'] = $val['operation_category_icon'];
-                    $serviceCategoryList[$key]['category_introduction'] = $val['operation_category_introduction'];
-                    $serviceCategoryList[$key]['category_url'] = $val['operation_category_url']?$val['operation_category_url']:"";
-                    $serviceCategoryList[$key]['colour'] = 'FFCC00';
-                    $serviceCategoryList[$key]['category_price_description'] = $val['operation_category_price_description'];
+            if ($cityCategoryList && !isset($cityCategoryList['code'])) {
+                foreach ($cityCategoryList as $key => $val) {
+                    if ($val['id'] == 1) continue;
+                    $itemService['category_id'] = $val['id'];
+                    $itemService['category_name'] = $val['operation_category_name'];
+                    $itemService['category_icon'] = $val['operation_category_icon'];
+                    $itemService['category_introduction'] = $val['operation_category_introduction'];
+                    $itemService['category_url'] = $val['operation_category_url'] ? $val['operation_category_url'] : "";
+                    $itemService['colour'] = 'FFCC00';
+                    $itemService['category_price_description'] = $val['operation_category_price_description'];
+                    $serviceCategoryList[] = $itemService;
                 }
             }
 
             //整理焦点图
-//            $pic_list = array();
-//            if(!isset($bannerList['code'])&&!empty($bannerList)){
-//                foreach($bannerList as $key=>$val){
-//                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
-//                    $pic_list[$key]["link"] = $val['operation_advert_url'];
-//                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
-//                }
-//            }
+            $pic_list = array();
+            if (!isset($bannerList['code']) && !empty($bannerList)) {
+                foreach ($bannerList as $key => $val) {
+                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+                    $pic_list[$key]["link"] = $val['operation_advert_url'];
+                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+                }
+            }
+
             //页首链接
             $header_link = [
                 'comment_link' => [
                     'title' => '意见反馈',
-                    'url' => $current_env_url.'/statics/images/MyView_FeedBack.png',
-                    'img' => $current_env_url.'/statics/images/MyView_FeedBack.png',
+                    'url' => $current_env_url . '/statics/images/MyView_FeedBack.png',
+                    'img' => $current_env_url . '/statics/images/MyView_FeedBack.png',
                 ],
                 'phone_link' => [
-                    'title' => '18210922324',
+                    'title' => '400-6767-636',
                     'url' => '',
-                    'img' => $current_env_url.'/statics/images/MyView_Tel.png',
+                    'img' => $current_env_url . '/statics/images/MyView_Tel.png',
                 ],
             ];
             //获取首页轮播图
-            $pic_list = [
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
-                    "url_title" => "标准服务"
-                ],
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-                    "link" => "http://wap.1jiajie.com/pledge.html",
-                    "url_title" => "服务承诺"
-                ],
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-                    "link" => "",
-                    "url_title" => ""
-                ]
-            ];
+//            $pic_list = [
+//                [
+//                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+//                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+//                    "url_title" => "标准服务"
+//                ],
+//                [
+//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+//                    "link" => "http://wap.1jiajie.com/pledge.html",
+//                    "url_title" => "服务承诺"
+//                ],
+//                [
+//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+//                    "link" => "",
+//                    "url_title" => ""
+//                ]
+//            ];
             //服务分类
             $home_order_server = [
                 [
                     'title' => '单次保洁',
                     'introduction' => '新用户第1小时免费',
-                    'icon' => $current_env_url.'/statics/images/dancibaojie.png',
-                    'url' => $current_env_url.'/#/order/createOnceOrder/1',
+                    'icon' => $current_env_url . '/statics/images/dancibaojie.png',
+                    'url' => $current_env_url . '/#/order/createOnceOrder/1',
                     'bg_colour' => 'ffb518',
                     'font_colour' => 'ffffff',
                 ],
                 [
                     'title' => '周期保洁',
                     'introduction' => '一次下单 清洁无忧',
-                    'icon' => $current_env_url.'/statics/images/zhouqibaojie.png',
-                    'url' => $current_env_url.'/#/order/createOnceOrder/2',
+                    'icon' => $current_env_url . '/statics/images/zhouqibaojie.png',
+                    'url' => $current_env_url . '/#/order/createOnceOrder/2',
                     'bg_colour' => 'ff8a44',
                     'font_colour' => 'ffffff',
                 ]
             ];
-            $isBlock="0";
+            $isBlock = "0";
             $ret = [
                 'city_list' => $onlineCityList,
                 'header_link' => $header_link,
@@ -320,12 +320,13 @@ class ConfigureController extends \restapi\components\Controller
                 'isBlock' => $isBlock,
                 'isEffect' => $isEffect,
             ];
-            return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
-        }catch (\Exception $e) {
+            return $this->send($ret, '操作成功', 1, 200, null, alertMsgEnum::getUserInitSuccess);
+        } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
         }
     }
-     /**
+
+    /**
      * @api {GET} /configure/get-service-item [GET] /configure/get-service-item （0%）
      * @apiDescription 根据城市名称和服务类型获取对应的服务品类 (田玉星)
      * @apiName actionGetServiceItem
@@ -341,9 +342,13 @@ class ConfigureController extends \restapi\components\Controller
      *      "msg": "获取数据成功",
      *      "alertMsg": "获取服务类型详情成功",
      *       "ret": [
-     *             "colour": "dfffrf",
-     *             "category_ico": "",
-     *             "item_list": [
+     *           "colour": "背景颜色",
+     *           "category_ico": "服务品类图标",
+     *           "category_name": "服务品类名称",
+     *           "category_english_name": "服务品类英文名",
+     *           "category_condition": "服务品类条件",
+     *           "category_price_description": "服务品类描述",
+     *            "item_list": [
      *                 {
      *                     "category_id": "分类ID",
      *                     "order_service_item_id": "商品ID",
@@ -352,8 +357,8 @@ class ConfigureController extends \restapi\components\Controller
      *                     "service_item_price": "商品价格",
      *                     "service_item_price_description": "商品价格描述"
      *                 }
-     *       ]
-     * }
+     *           ]
+     *  }
      *
      * @apiErrorExample Error-Response:
      * HTTP/1.1 200 OK
@@ -365,40 +370,59 @@ class ConfigureController extends \restapi\components\Controller
      *   }
      *
      */
-    public function  actionGetServiceItem(){
+    public function  actionGetServiceItem()
+    {
         $param = Yii::$app->request->get();
-        if(!isset($param['city_name'])||!trim($param['city_name'])){
-             return $this->send(null, '城市名称参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
+        if (!isset($param['city_name']) || !trim($param['city_name'])) {
+            return $this->send(null, '城市名称参数错误', 0, 200, null, alertMsgEnum::getServiceItemFailed);
         }
-        if(!isset($param['category_id'])||!$param['category_id']){
-            return $this->send(null, '服务类型参数错误',0,200,null,alertMsgEnum::getServiceItemFailed);
+        if (!isset($param['category_id']) || !intval($param['category_id'])) {
+            return $this->send(null, '服务类型参数错误', 0, 200, null, alertMsgEnum::getServiceItemFailed);
         }
-        try{
-            $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory(trim($param['city_name']),intval($param['category_id']));
-        }catch (\Exception $e) {
+        try {
+            $categoryInfo = OperationCategory::getCategoryById(intval($param['category_id']));
+            $itemInfo = OperationShopDistrictGoods::getGoodsByCityCategory(trim($param['city_name']), intval($param['category_id']));
+        } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
         }
         $itemlist = array();
-        if($itemInfo){
-            foreach($itemInfo as $key=>$val){
+        if ($itemInfo) {
+            foreach ($itemInfo as $key => $val) {
                 $itemlist[$key]['category_id'] = $val['operation_category_id'];
                 $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
                 $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
-                $itemlist[$key]['icon'] = '';//$val['operation_goods_pc_ico'];
+                $itemlist[$key]['icon'] = $val['operation_goods_img'] ? $val['operation_goods_img'] : "";
                 $itemlist[$key]['service_item_price'] = $val['operation_goods_price'];
                 $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
             }
         }
+        //二级页背景颜色 TODO:后面从数据库中读取
+        $categoryColour = array(
+            'category_1' => "dfffrf",
+            'category_2' => "dfffrf",
+            'category_3' => "dfffrf",
+            'category_4' => "dfffrf",
+            'category_5' => "dfffrf",
+            'category_6' => "dfffrf",
+        );
+        $colour = "dfffrf";
+        if (isset($categoryColour['category_' . intval($param['category_id'])])) {
+            $colour = $categoryColour['category_' . intval($param['category_id'])];
+        }
         $ret = [
-            'colour'=>'dfffrf',
-            'category_ico'=>"",
-            'item_list' =>$itemlist
+            'colour' => $colour,
+            'category_ico' => $categoryInfo['operation_category_icon'],
+            "category_name" => $categoryInfo['operation_category_name'],
+            "category_english_name" => "",
+            "category_condition" => "",
+            "category_price_description" => $categoryInfo['operation_category_price_description'],
+            'item_list' => $itemlist
         ];
         return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
     }
-    
-    
-    
+
+
+
     /**
      * @api {GET} /configure/worker-check-update [GET] /configure/worker-check-update （0%）
      * @apiDescription 检查阿姨端版本更新 (赵顺利)
@@ -510,7 +534,7 @@ class ConfigureController extends \restapi\components\Controller
         @$token = $params['access_token'];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 401,403,null,alertMsgEnum::getWorkerInitFailed);
+            return $this->send(null, "用户无效,请先登录", 401, 403, null, alertMsgEnum::getWorkerInitFailed);
         }
         //获取阿姨待服务订单
         $args["owr.worker_id"] = $worker->id;
@@ -591,7 +615,7 @@ class ConfigureController extends \restapi\components\Controller
             'footer_link' => $footer_link,
         ];
 
-        return $this->send($ret, "查询成功",1,200,null,alertMsgEnum::getWorkerInitSuccess);
+        return $this->send($ret, "查询成功", 1, 200, null, alertMsgEnum::getWorkerInitSuccess);
 
     }
 
@@ -648,7 +672,7 @@ class ConfigureController extends \restapi\components\Controller
         $app_version = $params['app_version'];
 
         if (empty($app_version)) {
-            return $this->send(null, "访问源信息不存在，请确认信息完整",0,403,alertMsgEnum::getWorkerStartPageFailed);
+            return $this->send(null, "访问源信息不存在，请确认信息完整", 0, 403, alertMsgEnum::getWorkerStartPageFailed);
         }
         $pages = [
             [
@@ -670,10 +694,10 @@ class ConfigureController extends \restapi\components\Controller
                 "next_url" => "",
             ],
         ];
-        $ret=[
-            'pages'=>$pages
+        $ret = [
+            'pages' => $pages
         ];
-        return $this->send($ret, "查询成功",1,200,alertMsgEnum::getWorkerStartPageSuccess);
+        return $this->send($ret, "查询成功", 1, 200, alertMsgEnum::getWorkerStartPageSuccess);
     }
 
     /**

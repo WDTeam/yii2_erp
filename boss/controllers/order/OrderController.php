@@ -95,6 +95,12 @@ class OrderController extends BaseAuthController
         return $address;
     }
 
+    public function actionGetAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return CustomerAddress::getAddress($id);
+    }
+
     /**
      * 获取常用阿姨
      * @param $id
@@ -414,58 +420,81 @@ class OrderController extends BaseAuthController
      */
     public function actionEdit($id)
     {
-
         $model = OrderSearch::getOneByCode($id);
-        $post = Yii::$app->request->post();
-        $model['admin_id'] = Yii::$app->user->id;
-
         $history = [];
-
         $createRecord = OrderStatusHistory::find()->where([
             'order_id' => $model->id,
             'order_status_dict_id' => OrderStatusDict::ORDER_INIT,
         ])->one();
         $history['creator_name'] = SystemUser::findOne(['id' => $createRecord['admin_id']])['username'];
-
         $payRecord = OrderStatusHistory::find()->where([
             'order_id' => $model->id,
             'order_status_dict_id' => OrderStatusDict::ORDER_WAIT_ASSIGN,
         ])->one();
         $history['pay_time'] = $payRecord ? date('Y-m-d H:i:s', $payRecord['created_at']) : null;
-
-        if ($model->load($post)) {
-            $post['Order']['admin_id'] = Yii::$app->user->id;
-            $post['Order']['order_ip'] = Yii::$app->request->userIP;
-            $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need'])) ? implode(',', $post['Order']['order_customer_need']) : ''; //客户需求
-
-            //预约时间处理
-            $time = explode('-', $post['Order']['orderBookedTimeRange']);
-            $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'] . ' ' . $time[0] . ':00');
-            $post['Order']['order_booked_end_time'] = strtotime(($time[1] == '24:00') ? date('Y-m-d H:i:s', strtotime($post['Order']['orderBookedDate'] . '00:00:00 +1 days')) : $post['Order']['orderBookedDate'] . ' ' . $time[1] . ':00');
-
-            if ($model->update($post)) {
-                return $this->redirect(['edit', 'id' => $model->id]);
-            }
-        }
-
         return $this->render('edit', ['model' => $model, 'history' => $history]);
     }
 
     /**
-     * ajax编辑订单
+     * ajax修改预约时间
      * @return array
      */
-    public function actionModify()
+    public function actionUpdateBookedTime($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $attr = Yii::$app->request->post();
-        $order = OrderSearch::getOne($attr['id']);
-        if ($order->modify($attr)) {
-            return ['status' => 1, 'info' => '修改成功'];
-        } else {
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['order_booked_time_range']) && isset($post['order_booked_date'])) {
+            $time = explode('-', $post['order_booked_time_range']);
+            $begin_time = strtotime($post['order_booked_date'] . ' ' . $time[0] . ':00');
+            $end_time = strtotime(($time[1] == '24:00') ? date('Y-m-d H:i:s', strtotime($post['order_booked_date'] . '00:00:00 +1 days')) : $post['order_booked_date'] . ' ' . $time[1] . ':00');
+            if (Order::updateBookedTime($order_code, $post['worker_id'], $begin_time, $end_time, $admin_id)) {
+                return ['status' => 1, 'info' => '修改成功'];
+            } else {
+                return ['status' => 0, 'info' => '修改失败'];
+            }
+        }else{
             return ['status' => 0, 'info' => '修改失败'];
         }
 
+    }
+
+    public function actionUpdateOrderAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['address_id'])) {
+            $order = Order::updateAddress($order_code, $post['address_id'], $post['address_detail'],$admin_id);
+            if(isset($order->errors['order_address'])) {
+                return ['status' => 2, 'info' => '修改失败','address_error'=>$order->errors['order_address']];
+            }else if ($order->hasErrors()) {
+                return ['status' => 0, 'info' => '修改失败','errors'=>$order->errors];
+            } else {
+                return ['status' => 1, 'info' => '修改成功','address'=>$order->order_address];
+            }
+        }else{
+            return ['status' => 3, 'info' => '修改失败'];
+        }
+    }
+
+    public function actionUpdateCustomerNeed($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['order_customer_memo'])&&isset($post['order_cs_memo'])&&isset($post['order_customer_need'])) {
+            if(Order::updateCustomerNeed($order_code, $post['order_customer_memo'], $post['order_cs_memo'],$post['order_customer_need'],$admin_id)){
+                return ['status' => 1, 'info' => '修改成功'];
+            }else{
+                return ['status' => 0, 'info' => '修改失败'];
+            }
+        }else{
+            return ['status' => 3, 'info' => '修改失败'];
+        }
     }
 
 

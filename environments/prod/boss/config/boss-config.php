@@ -1,15 +1,10 @@
 <?php
-
 $config = [
     'id' => 'app-boss',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'boss\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-//        'blog' => [
-//            'class' => 'funson86\blog\Module',
-//            'controllerNamespace' => 'funson86\blog\controllers\boss'
-//        ],
         'dynagrid' => [
             'class' => '\kartik\dynagrid\Module',
         ],
@@ -43,7 +38,7 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error'],
                 ],
             ],
         ],

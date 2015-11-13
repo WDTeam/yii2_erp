@@ -94,6 +94,4 @@ return [
     // 配置 BOSS API 地址
     'BOSS_API_URL' => 'http://dev.api.1jiajie.com/order/push/',
 
-    // 配置 BOSS CONFIG 地址
-    'BOSS_CONFIG_URL' => 'http://dev.boss.1jiajie.com/config/',
 ];

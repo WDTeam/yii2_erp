@@ -1,8 +1,8 @@
 <?php
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'test');
-ini_set("display_errors", "on");
-error_reporting(E_ALL);//bossºóÌ¨½«¸÷¼¶±ð´íÎó¶¼ÌáÊ¾³öÀ´
+ini_set("display_errors", "on");//ç”Ÿäº§çŽ¯å¢ƒå±è”½æ‰€æœ‰é”™è¯¯ä¿¡æ¯
+error_reporting(E_ALL);//bossåŽå°å°†å„çº§åˆ«é”™è¯¯éƒ½æç¤ºå‡ºæ¥
 require(__DIR__ . '/../../vendor/autoload.php');
 require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 require(__DIR__ . '/../../dbbase/config/bootstrap.php');

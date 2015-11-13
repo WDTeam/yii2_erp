@@ -1,5 +1,5 @@
 <?php
-defined('YII_DEBUG') or define('YII_DEBUG', true);
+defined('YII_DEBUG') or define('YII_DEBUG', false);
 defined('YII_ENV') or define('YII_ENV', 'prod');
 ini_set("display_errors", "off");//生产环境屏蔽所有错误信息
 require(__DIR__ . '/../../vendor/autoload.php');

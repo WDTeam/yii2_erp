@@ -2,14 +2,15 @@
 
 namespace boss\controllers\finance;
 
-use core\models\finance\FinanceCompensate as FinanceCompensateSearch;
-use core\models\order\OrderComplaint;
-use core\models\customer\Customer;
-
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
+
+use core\models\finance\FinanceCompensate as FinanceCompensateSearch;
+use core\models\order\OrderComplaint;
+use core\models\customer\Customer;
+
 
 /**
  * FinanceCompensateController implements the CRUD actions for FinanceCompensate model.
