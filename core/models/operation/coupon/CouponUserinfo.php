@@ -323,7 +323,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$array=[
 		'is_status'=>1,
 		'msg'=>'查询成功',
-		'data'=>!empty($couponCustomer['suminfo'])?$couponCustomer['suminfo']:0,
+		'data'=>$couponCustomer['suminfo'],
 		];
 		return $array;
 		
