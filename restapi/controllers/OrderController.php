@@ -966,7 +966,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \OrderSearch();
+        $orderSearch = new OrderSearch();
         $ret = [];
         $arr = array();
         $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
@@ -1704,9 +1704,9 @@ class OrderController extends \restapi\components\Controller
                 try {
 
                     #指定阿姨订单数
-                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     #待抢单订单数
-                    $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $args["owr.worker_id"] = $worker->id;
                     $args["oc.customer_id"] = null;
                     $orderSearch = new OrderSearch();
