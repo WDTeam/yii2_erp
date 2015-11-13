@@ -159,12 +159,13 @@ class SystemUser extends \dbbase\models\system\SystemUser
     public function rules()
     {
         return ArrayHelper::merge(parent::rules(), [
-            [['username', 'mobile'], 'required'],
+            [['username', 'mobile', 'password'], 'required'],
             [['password', 'repassword'], 'required', 'on' => ['admin-create']],
             [['username', 'email', 'mobile', 'password', 'repassword'], 'trim'],
             [['password', 'repassword'], 'string', 'min' => 6, 'max' => 30],
             // Unique
             [['username', 'email', 'mobile'], 'unique'],
+            ['mobile', 'match', 'pattern'=>'/[\d]{11,11}/'],
             // Username
         //             ['username', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
             ['username', 'string', 'min' => 3, 'max' => 30],

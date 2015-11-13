@@ -317,7 +317,7 @@ class alertMsgEnum
     const orderCityDistrictFaile = "该城市未开通";
     const orderShopDistrictGoodsFaile = "该服务不在当前商圈内";
     const orderShopDistrictGoodsSuccess = "当前商圈包含该服务";
-    const orderCreateFaileChannelId = "数据不完整,订单渠道ID为必填项";
+    const orderCreateFaileChannelId = "数据不完整,订单渠道为必填项";
     const customerPhoneFaile = "对不起，用户手机错误";
     const orderStartEndTime = "对不起,开始时间不能大于等于结束时间";
     //追加订单

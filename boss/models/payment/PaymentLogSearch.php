@@ -15,7 +15,7 @@ class PaymentLogSearch extends PaymentLog
     public function rules()
     {
         return [
-            [['_id','id', 'payment_log_status_bool', 'pay_channel_id', 'created_at', 'updated_at'], 'integer'],
+            [['_id','id', 'payment_log_status_bool', 'pay_channel_id', 'created_at'], 'integer'],
             [['payment_log_price'], 'number'],
             [['payment_log_shop_name', 'payment_log_eo_order_id', 'payment_log_transaction_id', 'payment_log_status', 'pay_channel_name', 'payment_log_json_aggregation'], 'safe'],
         ];
@@ -40,12 +40,11 @@ class PaymentLogSearch extends PaymentLog
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
+            '_id' => $this->id,
             'payment_log_price' => $this->payment_log_price,
             'payment_log_status_bool' => $this->payment_log_status_bool,
             'pay_channel_id' => $this->pay_channel_id,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'payment_log_shop_name', $this->payment_log_shop_name])

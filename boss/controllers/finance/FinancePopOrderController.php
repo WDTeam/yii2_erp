@@ -30,7 +30,6 @@ use core\models\order\OrderSearch;
 use core\models\payment\PaymentSearch;
 use core\models\order\Order;
 
-
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
  */
@@ -463,11 +462,6 @@ class FinancePopOrderController extends Controller
     	$requestModel = Yii::$app->request->post();
 		//$idArr = implode(',',);
     	if(!empty($requestModel) && array_key_exists('ids',$requestModel)){
-    	//财务审核通知订单修改状态	（林洪优）提供
-		//checked($order_id)
-		
-  
-    		
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
 			if(isset($model->order_code)){
@@ -480,6 +474,10 @@ class FinancePopOrderController extends Controller
 			$model->finance_pop_order_finance_time=time();
 			$model->finance_pop_order_pay_status='1';
 			$model->save();
+			
+			//财务审核通知订单修改状态	（林洪优）提供
+			Order::checked($model->order_code,$model->finance_pop_order_code,Yii::$app->user->id);
+
 		}
 		}else{
 			\Yii::$app->getSession()->setFlash('default','请选择需要处理的数据！');

@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{view} {update} {delete} {bind_shop_manager} {bind_shop}',
+                'template'=>'{view} {update} {bind_shop_manager} {bind_shop}',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', [

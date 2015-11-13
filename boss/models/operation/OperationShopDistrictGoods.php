@@ -44,6 +44,11 @@ class OperationShopDistrictGoods extends \core\models\operation\OperationShopDis
 {
 
     /**
+     * 对应城市下上线服务项目的商圈数量
+     */
+	public $district_nums;
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -66,16 +71,17 @@ class OperationShopDistrictGoods extends \core\models\operation\OperationShopDis
     {
         return [
             'id' => Yii::t('operation', '编号'),
-            'operation_shop_district_goods_name' => Yii::t('operation', '商品名称'),
+            'operation_shop_district_goods_name' => Yii::t('operation', '服务项目名称'),
             'operation_shop_district_goods_no' => Yii::t('operation', '商品货号'),
             'operation_goods_id' => Yii::t('operation', '商品编号'),
             'operation_shop_district_id' => Yii::t('operation', '商圈id'),
             'operation_shop_district_name' => Yii::t('operation', '商圈名称'),
             'operation_city_id' => Yii::t('operation', '城市编号'),
             'operation_city_name' => Yii::t('operation', '城市名称'),
+            'district_nums' => Yii::t('operation', '商圈数量'),
             'operation_category_id' => Yii::t('operation', '对应服务品类编号（所属分类编号冗余）'),
             'operation_category_ids' => Yii::t('operation', '对应服务品类的所有编号以“,”关联'),
-            'operation_category_name' => Yii::t('operation', '对应服务品类名称（所属分类名称冗余）'),
+            'operation_category_name' => Yii::t('operation', '服务品类名称'),
             'operation_shop_district_goods_introduction' => Yii::t('operation', '服务类型简介'),
             'operation_shop_district_goods_english_name' => Yii::t('operation', '服务类型英文名称'),
             'operation_shop_district_goods_start_time' => Yii::t('operation', '开始服务时间即开始时间'),

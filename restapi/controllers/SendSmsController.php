@@ -15,7 +15,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionSendV
      * @apiGroup SendSms
      *
-     * @apiParam {String} platform_version 平台版本
+     * @apiParam {String} platform_version      版本号
      * @apiParam {Number} telephone 电话
      * @apiParam {Mixed} message 发送消息
      *
@@ -61,7 +61,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录(赵顺利)
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -109,7 +109,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionSendWorkerMessageCode
      * @apiGroup SendSms
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
