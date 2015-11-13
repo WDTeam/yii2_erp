@@ -39,7 +39,7 @@ if($worker->worker_auth_status==0){
     $btnState = [];
     $currentAuthState= '上岗失败';
 }elseif($worker->worker_auth_status==8){
-    $btnState = ['disabled'=>'disabled'];
+    $btnState = [];
     $currentAuthState= '晋升培训中';
 }elseif($worker->worker_auth_status==9){
     $btnState = [];
