@@ -158,13 +158,13 @@ class SystemUser extends \dbbase\models\system\SystemUser
      */
     public function rules()
     {
-        return [
-            [['username', 'email'], 'required'],
+        return ArrayHelper::merge(parent::rules(), [
+            [['username', 'mobile'], 'required'],
             [['password', 'repassword'], 'required', 'on' => ['admin-create']],
-            [['username', 'email', 'password', 'repassword'], 'trim'],
+            [['username', 'email', 'mobile', 'password', 'repassword'], 'trim'],
             [['password', 'repassword'], 'string', 'min' => 6, 'max' => 30],
             // Unique
-            [['username', 'email'], 'unique'],
+            [['username', 'email', 'mobile'], 'unique'],
             // Username
         //             ['username', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
             ['username', 'string', 'min' => 3, 'max' => 30],
@@ -177,19 +177,8 @@ class SystemUser extends \dbbase\models\system\SystemUser
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             [['shopIds', 'shopManagerIds'], 'safe'],
             // Status
-            ['roles', 'validateRole'],
-        ];
-    }
-    /**
-     * role 验证规则
-     * @see \dbbase\models\SystemUser::validateRole()
-     */
-    public function validateRole($attribute, $params)
-    {
-        //         array_keys(self::getArrayRole());
-        if (!$this->hasErrors()) {
-    
-        }
+            ['roles', 'safe'],
+        ]);
     }
     
     /**

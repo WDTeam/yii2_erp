@@ -42,6 +42,12 @@ $menuItemsMain = RbacHelper::topMenu([
     ]
 ]);
 $menuItemsMain[0]['items'][] = [
+    'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '更新个人资料'),
+    'url' => [
+        'system/system-user/update-profile'
+    ]
+];
+$menuItemsMain[0]['items'][] = [
     'label' => '<i class="fa fa-sign-out"></i> ' . Yii::t('app', '退出系统'),
     'url' => [
         'system/site/logout'
