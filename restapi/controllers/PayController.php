@@ -209,6 +209,19 @@ class PayController extends \restapi\components\Controller
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
             $retInfo = Payment::getPayParams($model->payment_type, $model->customer_id, $model->channel_id, $model->order_id, $ext_params);
+            //支付类型,1普通订单,2周期订单,3充值订单,(为了支持native跳转,在API层增加重定向地址)
+            switch($model->payment_type)
+            {
+                case 1 :
+                    $retInfo['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    break;
+                case 2:
+                    $retInfo['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    break;
+                case 3:
+                    $retInfo['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    break;
+            }
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePaySuccess);
         }
         return $this->send(null, $model->errors, 0, 403, null, alertMsgEnum::onlinePayFailed);
