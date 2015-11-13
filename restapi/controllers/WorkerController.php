@@ -1019,6 +1019,20 @@ class WorkerController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
+        if($ret){
+            $week =[
+              '1'=>'周一',
+              '2'=>'周二', 
+              '3'=>'周三', 
+              '4'=>'周四', 
+              '5'=>'周五', 
+              '6'=>'周六', 
+              '7'=>'周日', 
+            ];
+            foreach($ret as $key=>$val){
+                $ret[$key]['week'] = $week[date('N', strtotime($val['date']))];
+            }
+        }
         $leave_time['leave_time'] = $ret;
         return $this->send($leave_time, "获取阿姨请假表成功", 1, 200, null, alertMsgEnum::workerLeaveSuccess);
     }
