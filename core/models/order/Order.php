@@ -612,7 +612,7 @@ class Order extends OrderModel
             try { //添加常用阿姨
                 Customer::addWorker($order->orderExtCustomer->customer_id, $order->orderExtWorker->worker_id);
             } catch (Exception $e) {
-                
+
             }
         } else {
             $transact->rollBack();
@@ -637,13 +637,14 @@ class Order extends OrderModel
 
     /**
      * 订单已对账
-     * @param $order_id
+     * @param $order_code
+     * @param $checked_code
      * @param $admin_id
      * @return bool
      */
-    public static function checked($order_id, $admin_id)
+    public static function checked($order_code,$checked_code, $admin_id)
     {
-        $order = OrderSearch::getOne($order_id);
+        $order = OrderSearch::getOneByCode($order_code);
         $order->admin_id = $admin_id;
         $order->order_flag_is_checked = 1;
         return $order->doSave(['OrderExtFlag']);

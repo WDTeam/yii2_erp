@@ -13,6 +13,8 @@ use dbbase\models\ActiveRecord;
  * @property string $pay_channel_id
  * @property string $order_pay_channel_name
  * @property string $order_pay_flow_num
+ * @property string $order_pay_code
+ * @property string $order_balance_code
  * @property string $order_pay_money
  * @property string $order_use_acc_balance
  * @property string $card_id
@@ -46,7 +48,7 @@ class OrderExtPay extends ActiveRecord
             [[ 'pay_channel_id','pay_channel_type_id', 'card_id', 'coupon_id', 'promotion_id', 'created_at', 'updated_at'], 'integer'],
             [['order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
             [['order_pay_channel_name','order_pay_channel_type_name','order_coupon_code'], 'string', 'max' => 128],
-            [['order_pay_flow_num'], 'string', 'max' => 255]
+            [['order_pay_flow_num','order_pay_code','order_balance_code'], 'string', 'max' => 255]
         ];
     }
 
@@ -62,6 +64,8 @@ class OrderExtPay extends ActiveRecord
             'pay_channel_id' => '支付渠道id',
             'order_pay_channel_name' => '支付渠道名称',
             'order_pay_flow_num' => '支付流水号',
+            'order_pay_code' => '支付单号',
+            'order_balance_code' => '余额支付单号',
             'order_pay_money' => '支付金额',
             'order_use_acc_balance' => '使用余额',
             'card_id' => '服务卡ID',
