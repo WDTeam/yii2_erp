@@ -176,8 +176,8 @@ class OrderController extends \restapi\components\Controller
             $order = new Order();
             echo 111;
             $is_success = $order->createNew($attributes);
-            
-            print_r($is_success);
+            print_r($order->errors);
+            var_dump($is_success);
             echo 333;
             exit;
             if ($is_success) {
@@ -187,7 +187,7 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                $msgErrors = $order->errors;
+//                $msgErrors = $order->errors;
                 return $this->send($order->errors, '创建订单失败', 1024, 200, null, '创建订单失败');
             }
         } catch (\Exception $e) {
