@@ -1833,6 +1833,9 @@ class OrderController extends \restapi\components\Controller
             $param['accept_other_aunt'] = 0;
         }
 
+        if (empty($param['order_customer_memo'])) {
+            $param['order_customer_memo'] = '';
+        }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
