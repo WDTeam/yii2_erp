@@ -303,9 +303,9 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} address_longitude 填写地址的精度
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} address_longitude 填写地址的经度
      * @apiParam {String} address_latitude 填写地址的纬度
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} city_name 当前城市名称 
      * @apiParam {String} [address_id] 用户地址ID
      *

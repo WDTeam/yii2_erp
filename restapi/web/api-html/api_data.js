@@ -787,14 +787,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "address_longitude",
-            "description": "<p>填写地址的精度</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>版本号</p> "
+            "description": "<p>填写地址的经度</p> "
           },
           {
             "group": "Parameter",
@@ -802,6 +795,13 @@ define({ "api": [
             "optional": false,
             "field": "address_latitude",
             "description": "<p>填写地址的纬度</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
