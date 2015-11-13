@@ -42,6 +42,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
 {
+
+    const EVENT_MONGO_INSERT = 'pyamentCustomerTransRecordLogInsert';
+    public $trans_record_log_data = [];
     /**
      * @inheritdoc
      */
@@ -69,30 +72,16 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
      * 日志记录
      * @param array $param
      */
-    public function insertLog($param)
+    public function insertLog($data)
     {
         //写入文本日志
-        $writeLog = array(
-            'path' => '/tmp/log/transaction_record/'.date('Ym',time()),
-            'data' => $param->data,
-            'filename' => date('Y-m-d',time()).'.log'
-        );
-
-        $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
-        $this->trigger('writeTextLog');
+        $writeLog = ['data' => $data];
+        $this->writeTextLog($writeLog);
 
         //makeSign
-        $param->data['payment_customer_trans_record_verify'] = self::sign($param->data);
-
-        //写入数据库日志
-        try{
-            $mongo = \Yii::$app->mongodb;
-            $collection = $mongo->getCollection('trans_record_log');
-            $data = $param->data;
-            $data['created_at'] = date('Y-m-d H:i:s');
-            $data['create_time'] = time();
-            return $collection->insert($data);
-        }catch(Exception $e){}
+        $data['payment_customer_trans_record_verify'] = self::sign($data);
+        $this->trans_record_log_data = $data;
+        $this->trigger(self::EVENT_MONGO_INSERT);
     }
 
     /**
@@ -101,17 +90,17 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
      * @param $filename 文件名称
      * @param $data 写入数据
      */
-    public function writeTextLog($param)
+    public function writeTextLog($data)
     {
         //创建目录
-        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/boss_log/trans_record/'.date('Ym',time());
+        $path = !empty($data['path']) ? $data['path'] : '/tmp/boss_log/trans_record/'.date('Ym',time());
         is_dir($path) || mkdir($path,0777,true);
 
         //文件名称
-        $filename = !empty($param->data['filename']) ? $param->data['filename'] : date('Y-m-d',time()).'.log';
+        $filename = !empty($data['filename']) ? $data['filename'] : date('Y-m-d',time()).'.log';
         //写入数据
         $fullFileName = rtrim($path,'/').'/'.$filename;
-        file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
+        file_put_contents($fullFileName,serialize($data['data']).'||',FILE_APPEND);
     }
 
     /**
