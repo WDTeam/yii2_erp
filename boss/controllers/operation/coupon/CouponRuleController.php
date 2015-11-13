@@ -164,6 +164,15 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
+    	
+    	$rtty=\core\models\operation\coupon\CouponUserinfo::GetCustomerCouponTotal('13501268242','1');
+    var_dump($rtty);
+
+   
+    
+    
+    
+    
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
