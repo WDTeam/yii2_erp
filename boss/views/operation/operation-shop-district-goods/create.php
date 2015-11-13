@@ -4,13 +4,11 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Operation\OperationShopDistrictGoods $model
+ * @var boss\models\operation\OperationShopDistrictGoods $model
  */
 
-$this->title = Yii::t('operation', 'Create {modelClass}', [
-    'modelClass' => 'Operation Shop District Goods',
-]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('operation', 'Operation Shop District Goods'), 'url' => ['index']];
+$this->title = 'Create Operation Shop District Goods';
+$this->params['breadcrumbs'][] = ['label' => 'Operation Shop District Goods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-shop-district-goods-create">
