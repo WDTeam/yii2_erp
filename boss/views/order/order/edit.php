@@ -70,39 +70,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group field-order-address_id required">
                     <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
                     <div class="col-sm-6 right-text">
-                        <?= Html::encode($model->order_address);?>
-                        <input type="hidden" value="" name="Order[address_id]">
-                        <div id="order-address_id"></div>
-                        <div class="help-block help-block-error "></div>
-
-                        <div id="address_form" style="display: none;">
-                            <div class="col-sm-4" style="padding-left: 0;">
-                                <?php //Html::dropDownList('province','',[''=>'请选择省份']+$model->onlineProvinceList,['class'=>'form-control province_form']); ?>
-                            </div>
-                            <div class="col-sm-3" >
-                                <?= Html::dropDownList('city','',[''=>'请选择城市'],['class'=>'form-control city_form']); ?>
-                            </div>
-                            <div class="col-sm-4">
-                                <?= Html::dropDownList('county','',[''=>'请选择区县'],['class'=>'form-control  county_form']); ?>
-                            </div>
-                            <button class="btn btn-sm btn-warning col-sm-1 cancel_address_btn" style="margin-top:10px;" type="button">取消</button>
-                            <div class="col-sm-5" style="padding-left: 0; margin-top:10px;">
-                                <?= Html::textInput('detail','',['placeholder'=>'详细地址','class'=>'form-control  detail_form']); ?>
-                            </div>
-                            <div class="col-sm-3" style="margin-top:10px;">
-                                <?= Html::textInput('nickname','',['placeholder'=>'联系人','class'=>'form-control  nickname_form']); ?>
-                            </div>
-                            <div class="col-sm-3" style="margin-top:10px;">
-                                <?= Html::textInput('phone','',['placeholder'=>'手机号','class'=>'form-control  phone_form']); ?>
-                            </div>
-                            <button class="btn btn-sm btn-warning col-sm-1 save_address_btn" style="margin-top:10px;" type="button">保存</button>
-                        </div>
+                        <input type="hidden" id="address_id" value="<?= Html::encode($model->address_id);?>">
+                        <span id="address_static_label"><?= Html::encode($model->order_address);?></span>
+                        <div id="address_form" style="display: none;"></div>
                     </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-warning btn-xs btn-edit-address-info" type="button">修改地址</button>
+                    </div>
+
                 </div>
-                <!--div>
-                <?= Html::button('修改', ['class' =>  'btn btn-warning pull-right address-edit-btn','id'=>'add_address_btn']); ?>
-                <?= Html::button('保存', ['class' =>  'btn btn-warning pull-right address-save-btn','style'=>'display:none']); ?>
-                </div-->
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务类型</label>
                     <div class="col-sm-6 right-text"><?= Html::encode($model->order_service_type_name) ?></div>
@@ -112,18 +88,20 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- 服务信息START -->
            <div class="panel-heading service-info-view">
                 <h3 class="panel-title">服务信息</h3>
-                <div class="pull-right" style="margin-top: -26px;">
-                     <button class="btn btn-warning btn-edit-service-info" type="button">修改</button>
-                </div>
             </div>
             <div class="panel-body service-info-view">
                 <div class="form-group">
-                    <label class="control-label col-sm-3">指定阿姨</label>
-                    <div class="col-sm-6 right-text"></div>
+                    <label class="control-label col-sm-3">已派阿姨</label>
+                    <div class="col-sm-6 right-text"><?=$model->orderExtWorker->order_worker_name;?></div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务时间</label>
-                    <div class="col-sm-6 right-text service_time_html"><?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?></div>
+                    <div class="col-sm-6 right-text service_time_html">
+                        <?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-warning btn-xs btn-edit-service-info" type="button">修改时间</button>
+                    </div>
                 </div>
             </div>
             <!-- 服务信息修改END -->
@@ -194,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-offset-3 col-sm-12">
                         <button class="btn btn-warning order_service_info_save" type="button">保存更改</button>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button class="btn btn-warning btn-cancel-service-info" type="button">取消更改</button>
+                        <button class="btn btn-default btn-cancel-service-info" type="button">取消更改</button>
                     </div>
                 </div>
             </div>
@@ -204,14 +182,12 @@ $this->params['breadcrumbs'][] = $this->title;
            <!-- 客户需求START -->
            <div class="panel-heading customer-info-view">
                 <h3 class="panel-title">客户需求</h3>
-                <div class="pull-right" style="margin-top: -26px;">
-                     <button class="btn btn-warning btn-edit-customer-info" type="button">修改</button>
-                </div>
             </div>
             <div class="panel-body customer-info-view">
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户需求</label>
                     <div class="col-sm-6 right-text order_customer_need"><?= Html::encode($model->orderExtCustomer->order_customer_need) ?></div>
+                    <div class="col-sm-3"><button class="btn btn-warning btn-xs btn-edit-customer-info" type="button">修改客户需求</button></div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">客户备注</label>
@@ -220,10 +196,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class="control-label col-sm-3">客服备注</label>
                     <div class="col-sm-6 right-text order_cs_memo"><?= Html::encode($model->order_cs_memo) ?></div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-3">系统指派</label>
-                    <div class="col-sm-6 right-text"><?= $model->orderExtFlag->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
                 </div>
             </div>
             <!-- 客户需求END -->
@@ -238,13 +210,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     $model->order_customer_need = explode(',',$model->orderExtCustomer->order_customer_need);
                     echo $form->field($model, 'order_customer_need')->inline()->checkboxList($model->customerNeeds)
                 ?>
-                <?= $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]) ?>
+                <?php
+                    $model->order_customer_memo = $model->orderExtCustomer->order_customer_memo;
+                    echo $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]);
+                ?>
                 <?= $form->field($model, 'order_cs_memo')->textInput(['maxlength' => true]) ?>
-
-                <div class="form-group">
-                    <label class="control-label col-sm-3">系统指派</label>
-                    <div class="col-sm-6 right-text"><?= $model->orderExtFlag->order_flag_sys_assign == 1 ? '是' : '否' ?></div>
-                </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-12">
                         <button class="btn btn-warning order_customer_need_save" type="button">保存更改</button>

@@ -148,7 +148,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'城市',
             'format'=>'raw',
-            'value'=>$model->operation_city_name,
+            'value'=>empty($model->operation_city_name) ? '-' : $model->operation_city_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -211,7 +211,7 @@ echo DetailView::widget([
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
-    'enableEditMode'=>true,
+    'enableEditMode'=>false,
 ]); 
 
 // echo DetailView::widget([
