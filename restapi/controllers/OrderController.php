@@ -1847,8 +1847,8 @@ class OrderController extends \restapi\components\Controller
                 "order_is_use_balance" => $param['order_is_use_balance'],
                 //order_booked_worker_id edit by tianyuxing
                 "order_booked_worker_id" => isset($param['order_booked_worker_id']) ? intval($param['order_booked_worker_id']) : 0,
-                "order_customer_need" => $param['order_customer_need'],
-                "order_customer_memo" => $param['order_customer_memo'],
+                "order_customer_need" => isset($param['order_customer_need']) ? $param['order_customer_need'] : "",
+                "order_customer_memo" => isset($param['order_customer_memo']) ? $param['order_customer_memo'] : "",
                 "order_flag_change_booked_worker" => $param['accept_other_aunt']
             );
 
