@@ -165,6 +165,7 @@ class Order extends OrderModel
                 unset($attributes[$k]);
             }
         }
+        echo 22;
         foreach ($attributes_required as $v) {
             if (empty($attributes[$v])) {
                 $this->addError($v, Order::getAttributeLabel($v) . '为必填项！');
@@ -174,7 +175,7 @@ class Order extends OrderModel
 
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
-
+echo 333;
         $customer = Customer::getCustomerById($attributes['customer_id']);
         if (!empty($customer)) {
             $attributes['order_customer_phone'] = $customer->customer_phone;
@@ -199,6 +200,7 @@ class Order extends OrderModel
             }
         }
 
+        echo 444;
         if ($this->_create($attributes, null, $customer_balance)) {
             if ($this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
