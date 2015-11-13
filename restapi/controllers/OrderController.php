@@ -113,8 +113,8 @@ class OrderController extends \restapi\components\Controller
         if ($attributes['order_booked_end_time'] <= $attributes['order_booked_begin_time']) {
             return $this->send(null, "对不起,开始时间不能大于等于结束时间", 0, 200, null, alertMsgEnum::orderStartEndTime);
         }
-        
-         if (empty($args['order_customer_phone']) || !is_numeric($args['order_customer_phone'])) {
+
+        if (empty($args['order_customer_phone']) || !is_numeric($args['order_customer_phone'])) {
             return $this->send(null, "对不起，用户手机错误", 0, 200, null, alertMsgEnum::customerPhoneFaile);
         }
 
@@ -183,11 +183,11 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-
-                return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
+                $msgErrors = $order->errors;
+                return $this->send($order->errors, '创建订单失败', 1024, 200, null, current(current($msgErrors)));
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateFaile);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, current(current($msgErrors)));
         }
     }
 
@@ -291,14 +291,11 @@ class OrderController extends \restapi\components\Controller
             if ($is_success) {
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                $result = $order->errors;
-                if (isset($result['order_service_item_name'])) {
-                    return $this->send($order->errors, '创建订单失败', 0, 200, null, "您所填写的地址商圈不包含该服务");
-                }
-                return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
+                $msgErrors = $order->errors;
+                return $this->send($order->errors, '创建订单失败', 0, 200, null, current(current($msgErrors)));
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateFaile);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, current(current($msgErrors)));
         }
     }
 
