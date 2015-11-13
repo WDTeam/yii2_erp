@@ -105,7 +105,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
 
-        $attributes['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
+        $attributes['order_channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
 
 
         if ($attributes['order_booked_end_time'] <= $attributes['order_booked_begin_time']) {
@@ -246,7 +246,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         //下单渠道 
-        $args['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
+        //$args['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
@@ -270,7 +270,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
-        $attributes['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "" ;
+        $attributes['order_channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "" ;
         $attributes['pay_channel_id'] = 2; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
@@ -1837,7 +1837,7 @@ class OrderController extends \restapi\components\Controller
             $attributes = array(
                 "order_ip" => $order_ip,
                 "order_service_item_id" => $param['order_service_item_id'],
-                "channel_name" => isset($param['platform_version']) ? $param['platform_version'] : "",
+                "order_channel_name" => isset($param['platform_version']) ? $param['platform_version'] : "",
                 "address_id" => $param['address_id'],
                 "customer_id" => $customer->id,
                 "order_customer_phone" => $param['order_customer_phone'],

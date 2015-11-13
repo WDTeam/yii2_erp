@@ -17,11 +17,15 @@ return [
     /*
      * Redis 服务IP（推荐使用域名）
      */
-    'REDIS_SERVER_IP' => 'test.boss.1jiajie.com',
+    'REDIS_SERVER_IP' => '6c55da921a534ba7.m.cnhza.kvstore.aliyuncs.com',
     /*
      * Redis 服务PORT
      */
     'REDIS_SERVER_PORT ' => 6379,
+    /*
+     * Redis 服务password
+     */
+    'REDIS_SERVER_PASSWORD' => '6c55da921a534ba7:Ejiajie2015test',
     /*
      * Redis 服务运行状态
      */
