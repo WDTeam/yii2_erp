@@ -56,7 +56,6 @@ class m151007_153202_create_table_order extends Migration
             'order_refund_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'退款单编号\'',
             'order_complaint_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'投诉单编号\'',
             'order_compensate_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'赔偿单编号\'',
-            'order_compensate_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'赔偿单编号\'',
 
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
