@@ -228,7 +228,7 @@ class ConfigureController extends \restapi\components\Controller
                 $onlineCitys = OperationCity::getOnlineCitys();
                 $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
                 //获取banner图
-                $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
+                //$bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
@@ -256,14 +256,14 @@ class ConfigureController extends \restapi\components\Controller
             }
 
             //整理焦点图
-            $pic_list = array();
-            if (!isset($bannerList['code']) && !empty($bannerList)) {
-                foreach ($bannerList as $key => $val) {
-                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
-                    $pic_list[$key]["link"] = $val['operation_advert_url'];
-                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
-                }
-            }
+//            $pic_list = array();
+//            if (!isset($bannerList['code']) && !empty($bannerList)) {
+//                foreach ($bannerList as $key => $val) {
+//                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+//                    $pic_list[$key]["link"] = $val['operation_advert_url'];
+//                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+//                }
+//            }
 
             //页首链接
             $header_link = [
@@ -279,23 +279,23 @@ class ConfigureController extends \restapi\components\Controller
                 ],
             ];
             //获取首页轮播图
-//            $pic_list = [
-//                [
-//                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-//                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
-//                    "url_title" => "标准服务"
-//                ],
-//                [
-//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-//                    "link" => "http://wap.1jiajie.com/pledge.html",
-//                    "url_title" => "服务承诺"
-//                ],
-//                [
-//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-//                    "link" => "",
-//                    "url_title" => ""
-//                ]
-//            ];
+            $pic_list = [
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                    "url_title" => "标准服务"
+                ],
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+                    "link" => "http://wap.1jiajie.com/pledge.html",
+                    "url_title" => "服务承诺"
+                ],
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+                    "link" => "",
+                    "url_title" => ""
+                ]
+            ];
             //服务分类
             $home_order_server = [
                 [
