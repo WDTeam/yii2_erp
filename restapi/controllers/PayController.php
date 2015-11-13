@@ -18,7 +18,7 @@ class PayController extends \restapi\components\Controller
      * @apiGroup Pay
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version app版本
      * @apiParam {String} order_id    订单ID.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -71,7 +71,7 @@ class PayController extends \restapi\components\Controller
      * @apiGroup Pay
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version app版本
      * @apiParam {String} payment_type 支付类型:1普通订单,2周期订单,3充值
      * @apiParam {String} channel_id 渠道ID
      *                              1=APP微信,
@@ -221,7 +221,7 @@ class PayController extends \restapi\components\Controller
      * @apiGroup Pay
      *
      * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} platform_version app版本
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
