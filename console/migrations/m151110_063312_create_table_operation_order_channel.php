@@ -53,10 +53,10 @@ INSERT INTO {{%operation_order_channel}} VALUES ('29', 'iOS4.0.3', '1', '1', '1'
 INSERT INTO {{%operation_order_channel}} VALUES ('30', 'iOS4.2.2', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('31', 'iOS4.2.2', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('32', 'iOS4.1.1', '1', '1', '1', 'admin', '1447148814', '0');
-INSERT INTO {{%operation_order_channel}} VALUES ('33', 'Android4.0.1', '1', '1', '1', 'admin', '1447148814', '0')
-INSERT INTO {{%operation_order_channel}} VALUES ('34', 'Android4.2.3', '1', '1', '1', 'admin', '1447148814', '0')
-INSERT INTO {{%operation_order_channel}} VALUES ('35', 'Android4.2.2', '1', '1', '1', 'admin', '1447148814', '0')
-INSERT INTO {{%operation_order_channel}} VALUES ('36', 'Android4.2.1', '1', '1', '1', 'admin', '1447148814', '0')"
+INSERT INTO {{%operation_order_channel}} VALUES ('33', 'Android4.0.1', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('34', 'Android4.2.3', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('35', 'Android4.2.2', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('36', 'Android4.2.1', '1', '1', '1', 'admin', '1447148814', '0');"
         );
     }
 
