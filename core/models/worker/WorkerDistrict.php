@@ -26,4 +26,12 @@ class WorkerDistrict extends \dbbase\models\worker\WorkerDistrict
         return $this->hasMany(OperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
     }
 
+    public static function deleteDistrict($district_id){
+        if(empty($district_id)){
+            return false;
+        }
+        self::deleteAll(['operation_shop_district_id'=>$district_id]);
+        WorkerForRedis::deleteDistrictToRedis($district_id);
+    }
+
 }

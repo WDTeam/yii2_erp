@@ -1054,6 +1054,18 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
+
+        WorkerDistrict::deleteDistrict(1);
+        die;
+        $city_encode = '北京市';
+        $detail_encode = urlencode('北京市东城区东直门');
+        $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
+        $address_decode = json_decode($address_encode, true);
+        $longitude = $address_decode['result']['location']['lng'];
+        $latitude = $address_decode['result']['location']['lat'];
+        $ShopDistrictInfo = \core\models\operation\OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        var_dump($ShopDistrictInfo);
+        die;
         echo '<pre>';
 //        $a = Worker::findAllModel(['isdel'=>0],true);
 //        var_dump($a);
