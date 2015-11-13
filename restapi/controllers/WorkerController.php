@@ -194,7 +194,7 @@ class WorkerController extends \restapi\components\Controller
      *           {
      *               "leave_type": "请假类型【1休假 2事假】",
      *               "leave_time": "请假时间",
-     *               "leave_status": "请假状态【0待审核 1审核通过 2.审核不通过】"
+     *               "leave_status": "请假状态【0待审核 1成功 2.失败】"
      *           }
      *       ]
      *      }

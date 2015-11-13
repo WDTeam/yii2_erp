@@ -184,6 +184,10 @@ class ConfigureController extends \restapi\components\Controller
      *         ],
      *         "isBlock": "用户是否为黑名单【1表示黑名单，0表示正常】",
      *         "isEffect": "用户token是否有效【0表示正常，1表示失效】"
+     *          isUpdate: "0", 
+     *          updateContent: "",
+     *          updateUrl: "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
+     *          isShowGiveStar :"0"
      *     }
      * }
      *
@@ -224,7 +228,7 @@ class ConfigureController extends \restapi\components\Controller
                 $onlineCitys = OperationCity::getOnlineCitys();
                 $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
                 //获取banner图
-                $bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
+                //$bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
@@ -252,14 +256,14 @@ class ConfigureController extends \restapi\components\Controller
             }
 
             //整理焦点图
-            $pic_list = array();
-            if (!isset($bannerList['code']) && !empty($bannerList)) {
-                foreach ($bannerList as $key => $val) {
-                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
-                    $pic_list[$key]["link"] = $val['operation_advert_url'];
-                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
-                }
-            }
+//            $pic_list = array();
+//            if (!isset($bannerList['code']) && !empty($bannerList)) {
+//                foreach ($bannerList as $key => $val) {
+//                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+//                    $pic_list[$key]["link"] = $val['operation_advert_url'];
+//                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+//                }
+//            }
 
             //页首链接
             $header_link = [
@@ -275,27 +279,27 @@ class ConfigureController extends \restapi\components\Controller
                 ],
             ];
             //获取首页轮播图
-//            $pic_list = [
-//                [
-//                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-//                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
-//                    "url_title" => "标准服务"
-//                ],
-//                [
-//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-//                    "link" => "http://wap.1jiajie.com/pledge.html",
-//                    "url_title" => "服务承诺"
-//                ],
-//                [
-//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-//                    "link" => "",
-//                    "url_title" => ""
-//                ]
-//            ];
+            $pic_list = [
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                    "url_title" => "标准服务"
+                ],
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+                    "link" => "http://wap.1jiajie.com/pledge.html",
+                    "url_title" => "服务承诺"
+                ],
+                [
+                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+                    "link" => "",
+                    "url_title" => ""
+                ]
+            ];
             //服务分类
             $home_order_server = [
                 [
-                    'title' => '单次保洁',
+                    'title' => '单次体验',
                     'introduction' => '新用户第1小时免费',
                     'icon' => $current_env_url . '/statics/images/dancibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/1',
@@ -303,7 +307,7 @@ class ConfigureController extends \restapi\components\Controller
                     'font_colour' => 'ffffff',
                 ],
                 [
-                    'title' => '周期保洁',
+                    'title' => '预约随心',
                     'introduction' => '一次下单 清洁无忧',
                     'icon' => $current_env_url . '/statics/images/zhouqibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/2',
@@ -320,6 +324,10 @@ class ConfigureController extends \restapi\components\Controller
                 'server_list' => $serviceCategoryList,
                 'isBlock' => $isBlock,
                 'isEffect' => $isEffect,
+                "isUpdate"=> "0", 
+                "updateContent"=> "",
+                "updateUrl"=>"https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
+                "isShowGiveStar" =>"0"
             ];
             return $this->send($ret, '操作成功', 1, 200, null, alertMsgEnum::getUserInitSuccess);
         } catch (\Exception $e) {

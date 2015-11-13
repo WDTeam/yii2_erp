@@ -41,8 +41,9 @@ class RoleController extends BaseAuthController
     {
         Url::remember();
         $searchModel = new AuthSearch();
+        $searchModel->load(Yii::$app->request->get());
         $searchModel->type = Auth::TYPE_ROLE;
-        $dataProvider = $searchModel->search(Yii::$app->request->get(), Auth::TYPE_ROLE);
+        $dataProvider = $searchModel->search();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -53,7 +54,7 @@ class RoleController extends BaseAuthController
     {
         $auth = \Yii::$app->authManager;
         $model = new Auth();
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $role = $auth->createRole($model->name);
             $role->description = $model->description;
             $auth->add($role);

@@ -21,7 +21,6 @@ class m151110_063312_create_table_operation_order_channel extends Migration
             'create_time'=>  Schema::TYPE_INTEGER.'(10) DEFAULT NULL COMMENT \'增加时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(1) DEFAULT 0 COMMENT \'0 正常 1 删除\'',
             ], $tableOptions);
-		$this->createIndex('operation_order_channel_name','{{%operation_order_channel}}','operation_order_channel_name');
 $this->execute("INSERT INTO {{%operation_order_channel}} VALUES ('1', 'android_user5.0.0', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('3', 'Pcweb', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('4', 'mobileweb', '1', '1', '1', 'admin', '1447148814', '0');

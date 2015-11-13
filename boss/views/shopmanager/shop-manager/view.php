@@ -42,15 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //                 ],
 //             ],
             [
-                'attribute'=>'account',
-                'type'=> Form::INPUT_TEXT,
-            ],
-            [
-                'label'=>'密码',
-                'attribute'=>'password',
-                'type'=> Form::INPUT_PASSWORD,
-            ],
-            [
                 'attribute'=>'city_id',
                 'label'=>'地址',
                 'value'=>$model->getAllAddress(),

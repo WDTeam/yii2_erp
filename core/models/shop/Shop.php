@@ -40,6 +40,7 @@ class Shop extends \dbbase\models\shop\Shop
     public function rules()
     {
         return array_merge(parent::rules(),[
+            ['name', 'unique'],
             [['name','city_id', 'street', 'principal', 'tel', 
                 'operation_shop_district_id',
             'shop_manager_id'], 'required'],
