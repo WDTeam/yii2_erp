@@ -835,16 +835,6 @@ class Order extends OrderModel
               'id'=>0, 'operation_order_channel_type'=>0,'ordertype'=>'其它'
             ];
         }
-//        $channel_name = $this->getOrderChannelName($this->channel_id);
-//        if (empty($channel_name)) {
-//            $this->addError('order_channel_name', '获取渠道信息失败！');
-//            return false;
-//        }
-//        $channel_type = $this->getOrderChannelType($this->channel_id);
-//        if (empty($channel_type)) {
-//            $this->addError('order_channel_type_name', '获取渠道分类信息失败！');
-//            return false;
-//        }
 
         if (in_array($channel['operation_order_channel_type'], [2, 3]) && $this->order_channel_name != '后台下单') { //第三方
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
@@ -863,17 +853,6 @@ class Order extends OrderModel
                 'pay_channel_type_id' => 2,
             ]);
             $this->order_pay_money -= $this->order_money;
-//            if (!empty($this->coupon_id)) {//是否使用了优惠券
-//                $coupon = self::getCouponById($this->coupon_id);
-//                if (!empty($coupon)) {
-//                    $this->order_use_coupon_money = $coupon['coupon_price'];
-//                    $this->order_coupon_code = $coupon['coupon_code'];
-//                    $this->order_pay_money -= $this->order_use_coupon_money;
-//                } else {
-//                    $this->addError('coupon_id', '获取优惠券信息失败！');
-//                    return false;
-//                }
-//            }
         } else {//如果不传支付渠道就是线上支付
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);
