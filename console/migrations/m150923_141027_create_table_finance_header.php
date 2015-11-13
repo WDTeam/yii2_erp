@@ -147,7 +147,16 @@ INSERT INTO {{%finance_header}} VALUES ('185', '7', '到位', '代金券名称',
 INSERT INTO {{%finance_header}} VALUES ('186', '8', '到位', '代金券金额', '18', 'APP到位', '1', '', 'order_channel_promote', '1445843174', '0');
 INSERT INTO {{%finance_header}} VALUES ('187', '9', '到位', '流水号', '18', 'APP到位', '1', null, null, '1445843174', '0');
 INSERT INTO {{%finance_header}} VALUES ('188', '10', '到位', '创建时间', '18', 'APP到位', '1', null, null, '1445843174', '0');
-INSERT INTO {{%finance_header}} VALUES ('189', '11', '到位', '完成时间', '18', 'APP到位', '1', null, null, '1445843174', '0');"
+INSERT INTO {{%finance_header}} VALUES ('189', '11', '到位', '完成时间', '18', 'APP到位', '1', null, null, '1445843174', '0');
+INSERT INTO {{%finance_header}} VALUES ('190', '0', '财付通支付', '序号', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('191', '1', '财付通支付', '商家订单号', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('192', '2', '财付通支付', '交易订单号', '0', '未知', '13', '财付通支付', 'order_channel_order_num', '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('193', '3', '财付通支付', '交易时间', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('194', '4', '财付通支付', '更新时间', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('195', '5', '财付通支付', '支付类型', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('196', '6', '财付通支付', '交易状态', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('197', '7', '财付通支付', '分账状态', '0', '未知', '13', '财付通支付', null, '1447415793', '0');
+INSERT INTO {{%finance_header}} VALUES ('198', '8', '财付通支付', '交易金额', '0', '未知', '13', '财付通支付', 'order_money', '1447415793', '0');"
     );
     }
 
