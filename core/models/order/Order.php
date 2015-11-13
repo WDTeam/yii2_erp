@@ -124,7 +124,7 @@ class Order extends OrderModel
      * @param $attributes [
      *  string $order_ip 下单IP地址 必填
      *  integer $order_service_item_id 服务项id 必填
-     *  string $channel_id 下单渠道 必填
+     *  string $order_channel_name 下单渠道 必填
      *  int $order_booked_begin_time 预约开始时间 必填
      *  int $order_booked_count 预约时长 必填
      *  int $order_booked_end_time 预约结束时间 必填
@@ -219,7 +219,7 @@ class Order extends OrderModel
      *  @param $attributes [
      *  string $order_ip 下单IP地址 必填
      *  integer $order_service_item_id 服务类型 商品id 必填
-     *  string $channel_id 下单渠道 必填
+     *  string $order_channel_name 下单渠道 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id  1系统 2客户 3阿姨 必填
