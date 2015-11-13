@@ -96,6 +96,8 @@ class CouponRuleController extends Controller
 					$newcoupon->couponrule_city_limit=2;
 					$newcoupon->couponrule_city_id=$newdata['city_id'];					
 				}
+				
+				
 				if($newdata['order_typeid']==0){
 				//全国通用优惠券
 					$newcoupon->couponrule_type=1;
@@ -164,6 +166,14 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
+    	//13001003995
+	/* $rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('13001003995','0','3','1');
+    	
+    	var_dump($rty);exit; */
+    	
+    	//$rty=\core\models\operation\OperationOrderChannel::configorderlist('百度直达号');
+    	//var_dump($rty);exit;
+    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

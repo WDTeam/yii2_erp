@@ -4,8 +4,8 @@ namespace boss\controllers\payment;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 /**
  * PaymentCustomerTransRecordLogController implements the CRUD actions for PaymentCustomerTransRecordLog model.
@@ -61,17 +61,17 @@ class PaymentCustomerTransRecordLogController extends BaseAuthController
      * @return mixed
 
     public function actionCreate()
-    {
-        $model = new PaymentCustomerTransRecordLog;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+     * {
+     * $model = new PaymentCustomerTransRecordLog;
+     *
+     * if ($model->load(Yii::$app->request->post()) && $model->save()) {
+     * return $this->redirect(['view', 'id' => $model->id]);
+     * } else {
+     * return $this->render('create', [
+     * 'model' => $model,
+     * ]);
+     * }
+     * }
      */
     /**
      * Updates an existing PaymentCustomerTransRecordLog model.
@@ -80,17 +80,17 @@ class PaymentCustomerTransRecordLogController extends BaseAuthController
      * @return mixed
 
     public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
+     * {
+     * $model = $this->findModel($id);
+     *
+     * if ($model->load(Yii::$app->request->post()) && $model->save()) {
+     * return $this->redirect(['view', 'id' => $model->id]);
+     * } else {
+     * return $this->render('update', [
+     * 'model' => $model,
+     * ]);
+     * }
+     * }
      */
     /**
      * Deletes an existing PaymentCustomerTransRecordLog model.
@@ -99,11 +99,11 @@ class PaymentCustomerTransRecordLogController extends BaseAuthController
      * @return mixed
 
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
+     * {
+     * $this->findModel($id)->delete();
+     *
+     * return $this->redirect(['index']);
+     * }
      */
     /**
      * Finds the PaymentCustomerTransRecordLog model based on its primary key value.

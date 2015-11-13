@@ -100,11 +100,8 @@ class CouponUserinfoController extends Controller {
 					// 2 此手机号码是否有人
 					// 3 目前不考虑不同城市优惠的判断，比喻如果这个手机号是天津的，他所选择的规则是北京地区的，理论上是不容许添加的
 					$dataname = explode ( '|', $dateinfo ['CouponUserinfo'] ['customer_tel'] );
-					
-					// var_dump($dataname);exit;
 					foreach ( $dataname as $usertel ) {
-						$userinfo = Customer::getCustomerInfo ( $usertel );
-						
+						$userinfo = Customer::getCustomerInfo ($usertel);
 						if ($userinfo ['id']) {
 							// 此手机号码是否有人
 							$model->customer_id = $userinfo ['id'];
@@ -134,7 +131,6 @@ class CouponUserinfoController extends Controller {
 							$model->is_disabled = $coupon_rule ['is_disabled'];
 							$model->system_user_id = Yii::$app->user->identity->id;
 							$model->system_user_name = Yii::$app->user->identity->username;
-							;
 							$model->is_used = 0;
 							$model->created_at = time ();
 							$model->updated_at = time ();
@@ -145,7 +141,7 @@ class CouponUserinfoController extends Controller {
 							// 此手机号码无人
 							$modelinfo->customer_id = 0;
 							$modelinfo->customer_tel = $usertel;
-							$model->customer_code ='07'.date('ymdhis'.time()).rand(1111,999999);
+							$modelinfo->customer_code ='07'.date('ymdhis'.time()).rand(1111,999999);
 							$modelinfo->coupon_userinfo_id = 1;
 							$modelinfo->coupon_userinfo_code = '0';
 							$modelinfo->coupon_userinfo_name = '0';
@@ -170,7 +166,6 @@ class CouponUserinfoController extends Controller {
 							$modelinfo->is_disabled = 0;
 							$modelinfo->system_user_id = Yii::$app->user->identity->id;
 							$modelinfo->system_user_name = Yii::$app->user->identity->username;
-							;
 							$modelinfo->is_used = 1;
 							$modelinfo->created_at = time ();
 							$modelinfo->updated_at = time ();

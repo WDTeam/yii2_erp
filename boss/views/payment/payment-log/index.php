@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'id',
+            //['class' => 'yii\grid\SerialColumn'],
+            '_id',
             'payment_log_price',
             'payment_log_shop_name',
             'payment_log_eo_order_id',
