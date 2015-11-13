@@ -165,7 +165,7 @@ class SystemUser extends \dbbase\models\system\SystemUser
             [['password', 'repassword'], 'string', 'min' => 6, 'max' => 30],
             // Unique
             [['username', 'email', 'mobile'], 'unique'],
-            ['mobile', 'integer','min' => 11, 'max' => 12],
+            ['mobile', 'match', 'pattern'=>'/[\d]{11,11}/'],
             // Username
         //             ['username', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
             ['username', 'string', 'min' => 3, 'max' => 30],
