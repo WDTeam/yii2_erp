@@ -110,6 +110,17 @@ class OrderPush extends Order
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
                 OrderPool::addOrderToWorkerPushList($order_id,$v['id']); //把订单添加到接单大厅
                 $result = Yii::$app->jpush->push(["worker_{$v['worker_phone']}"],'',json_encode(["order_code"=>$order->order_code,"msg"=>"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"]));
+                try{
+                    $mongo = \Yii::$app->mongodb;
+                    $collection = $mongo->getCollection('order_jpush_log');
+                    $data = $result;
+                    $data['created_at'] = date('Y-m-d H:i:s');
+                    $data['create_time'] = time();
+                    $data['_SERVER'] = $_SERVER;
+                    $res = $collection->insert($data);
+                }catch(\Exception $e){
+                    \Yii::error($e, 'event\order_jpush_log');
+                }
                 if (isset($result->isOK)) {
                     OrderWorkerRelation::jpushPushSuccess($order_id, $v['id'], 1);
                     $jpush_flag = true;
