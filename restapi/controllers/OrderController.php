@@ -174,7 +174,8 @@ class OrderController extends \restapi\components\Controller
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
-            
+            print_r($order->errors);
+            exit;
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
