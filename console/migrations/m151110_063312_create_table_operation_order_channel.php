@@ -21,8 +21,8 @@ class m151110_063312_create_table_operation_order_channel extends Migration
             'create_time'=>  Schema::TYPE_INTEGER.'(10) DEFAULT NULL COMMENT \'增加时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(1) DEFAULT 0 COMMENT \'0 正常 1 删除\'',
             ], $tableOptions);
-$this->execute("INSERT INTO {{%operation_order_channel}} VALUES ('1', 'Android(版本号)', '1', '1', '1', 'admin', '1447148814', '0');
-INSERT INTO {{%operation_order_channel}} VALUES ('2', 'ios(版本号)', '1', '1', '1', 'admin', '1447148814', '0');
+		$this->createIndex('operation_order_channel_name','{{%operation_order_channel}}','operation_order_channel_name');
+$this->execute("INSERT INTO {{%operation_order_channel}} VALUES ('1', 'android_user5.0.0', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('3', 'Pcweb', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('4', 'mobileweb', '1', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('5', '微信公众号', '1', '1', '1', 'admin', '1447148814', '0');
@@ -47,7 +47,16 @@ INSERT INTO {{%operation_order_channel}} VALUES ('23', '糯米团购', '3', '1',
 INSERT INTO {{%operation_order_channel}} VALUES ('24', '赶集', '3', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('25', '58', '3', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_order_channel}} VALUES ('26', '拉手团购', '3', '1', '1', 'admin', '1447148814', '0');
-INSERT INTO {{%operation_order_channel}} VALUES ('27', 'e家洁老系统', '3', '1', '1', 'admin', '1447148814', '0');"
+INSERT INTO {{%operation_order_channel}} VALUES ('27', 'e家洁老系统', '3', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('28', 'ios_user5.0.0', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('29', 'iOS4.0.3', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('30', 'iOS4.2.2', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('31', 'iOS4.2.2', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('32', 'iOS4.1.1', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('33', 'Android4.0.1', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('34', 'Android4.2.3', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('35', 'Android4.2.2', '1', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_order_channel}} VALUES ('36', 'Android4.2.1', '1', '1', '1', 'admin', '1447148814', '0');"
         );
     }
 

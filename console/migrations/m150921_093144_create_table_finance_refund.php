@@ -38,6 +38,12 @@ class m150921_093144_create_table_finance_refund extends Migration
   'create_time' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'退款申请时间\'' ,
   'is_del' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 正常 1删除\'' ,
         ], $tableOptions);
+		$this->createIndex('finance_refund_code','{{%finance_refund}}','finance_refund_code');
+        $this->createIndex('customer_id','{{%finance_refund}}','customer_id');
+        $this->createIndex('finance_refund_tel','{{%finance_refund}}','finance_refund_tel');
+        $this->createIndex('finance_refund_pay_status','{{%finance_refund}}','finance_refund_pay_status');
+        $this->createIndex('finance_refund_shop_id','{{%finance_refund}}','finance_refund_shop_id');
+        $this->createIndex('finance_refund_city_id','{{%finance_refund}}','finance_refund_city_id');
     }
 
 

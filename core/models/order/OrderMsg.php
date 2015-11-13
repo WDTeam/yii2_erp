@@ -44,7 +44,7 @@ class OrderMsg extends Model
     public static function serviceDone($order)
     {
         try {
-            $customer_msg = "【服务完成】您预约" . date('y年m月d日', $order->order_booked_begin_time) . "的服务，服务时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时，
+            $customer_msg = "【服务完成】您预约" . date('y年m月d日', $order->order_booked_begin_time) . "的服务，服务时长" . $order->order_booked_count . "小时，
                          消费" . $order->order_money . "元。感谢您对ｅ家洁的支持，麻烦您对阿姨的服务进行评价，如有疑问请联系客服：4006767636。";
             Yii::$app->sms->send($order->orderExtCustomer->order_customer_phone, $customer_msg);
 //        $worker_msg = "亲爱的阿姨，{$order->order_code}订单已经完成，您辛苦了！休息一下吧！";

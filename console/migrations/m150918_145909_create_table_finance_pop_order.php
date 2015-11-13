@@ -52,6 +52,11 @@ class m150918_145909_create_table_finance_pop_order extends Migration
 		'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'增加时间\'',
 	    'is_del' => Schema::TYPE_SMALLINT . '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
     			], $tableOptions);
+		$this->createIndex('order_code','{{%finance_pop_order}}','order_code');
+        $this->createIndex('finance_pop_order_code','{{%finance_pop_order}}','finance_pop_order_code');
+        $this->createIndex('finance_order_channel_id','{{%finance_pop_order}}','finance_order_channel_id');
+        $this->createIndex('finance_pop_order_customer_tel','{{%finance_pop_order}}','finance_pop_order_customer_tel');
+        $this->createIndex('finance_pop_order_check_id','{{%finance_pop_order}}','finance_pop_order_check_id');
     }
 
     public function down()
