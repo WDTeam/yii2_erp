@@ -54,6 +54,16 @@ class m151105_101733_create_table_coupon_rule extends Migration
 			'updated_at' 					=> Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'更改时间\'',
 			'is_del' 						=> Schema::TYPE_SMALLINT . '(1) DEFAULT 0 COMMENT \'状态\'',
 		],$tableOptions);
+		$this->createIndex('couponrule_classify','{{%coupon_rule}}','couponrule_classify');
+		$this->createIndex('couponrule_category','{{%coupon_rule}}','couponrule_category');
+		$this->createIndex('couponrule_type','{{%coupon_rule}}','couponrule_type');
+		$this->createIndex('couponrule_service_type_id','{{%coupon_rule}}','couponrule_service_type_id');
+        $this->createIndex('couponrule_city_limit','{{%coupon_rule}}','couponrule_city_limit');
+        $this->createIndex('couponrule_customer_type','{{%coupon_rule}}','couponrule_customer_type');
+        $this->createIndex('couponrule_use_start_time','{{%coupon_rule}}','couponrule_use_start_time');
+        $this->createIndex('couponrule_use_end_time','{{%coupon_rule}}','couponrule_use_end_time');
+        $this->createIndex('couponrule_promote_type','{{%coupon_rule}}','`couponrule_promote_type`');
+        $this->createIndex('is_disabled','{{%coupon_rule}}','`is_disabled`');
     }
 
     public function down(){

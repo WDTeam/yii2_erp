@@ -1036,12 +1036,12 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_identity_id 阿姨身份 1全时2兼职
+     * @param int $worker_identity_type 阿姨身份 1全时2非全时
      * @param int $orderBookBeginTime 待指派订单预约开始时间
      * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id,$worker_identity_id=1,$orderBookBeginTime,$orderBookEndTime){
+    public static function getDistrictFreeWorker($district_id,$worker_identity_type=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
@@ -1055,8 +1055,13 @@ class Worker extends \dbbase\models\worker\Worker
 
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
+            if($worker_identity_type==1){
+                $workerIdentityIdArr = [1];
+            }else{
+                $workerIdentityIdArr = [2,3,4];
+            }
 
-            if($val['info']['worker_identity_id']==$worker_identity_id){
+            if(in_array($val['info']['worker_identity_id'],$workerIdentityIdArr)){
                 $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
                 if(array_diff($orderBookTime,$workerEnabledTime)){
                     continue;
@@ -1090,22 +1095,28 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_identity_id 阿姨身份 1全时2兼职
+     * @param int $worker_identity_type 阿姨身份 1全时2兼职
      * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
      * @throws ErrorException
      */
 
-    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_id=1,$orderBookTimeArr){
+    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_type=1,$orderBookTimeArr){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
         $districtFreeWorkerIdsArr = [];
+        if($worker_identity_type==1){
+            $workerIdentityIdArr = [1];
+        }else{
+            $workerIdentityIdArr = [2,3,4];
+        }
 
         foreach ($districtWorkerResult as $val) {
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
-            if($val['info']['worker_identity_id']==$worker_identity_id){
+
+            if(in_array($val['info']['worker_identity_id'],$workerIdentityIdArr)){
                 $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
                     if($t_val['orderBookBeginTime']>=$t_val['orderBookEndTime']){
