@@ -203,14 +203,14 @@ if(\Yii::$app->user->identity->isNotAdmin()){
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
             'width' => "20%",
-            'template' =>'{order}{view} {auth} {vacation} {block} ',
+            'template' =>'{order}{view} {auth} {vacation} {block} {delete}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
 
             'buttons' => [
                 'order' => function ($url, $model) {
-                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearchIndex[order_worker_phone]='.$model->worker_phone, 'id' => $model->id]), [
+                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearchIndex[order_worker_phone]='.$model->worker_phone]), [
                         'title' =>'订单',
                         'style' => 'margin-right:5%',
                         'data-pjax'=>'0',
@@ -546,14 +546,14 @@ if(\Yii::$app->user->identity->isNotAdmin()){
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
             'width' => "20%",
-            'template' =>'{order}{view} {auth} {vacation} {block} ',
+            'template' =>'{order}{view} {auth} {vacation} {block} {delete}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
 
             'buttons' => [
                 'order' => function ($url, $model) {
-                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearchIndex[order_worker_phone]='.$model->worker_phone, 'id' => $model->id]), [
+                    return Html::a('<span class="btn btn-primary">订单</span>', Yii::$app->urlManager->createUrl(['order/order/?OrderSearchIndex[order_worker_phone]='.$model->worker_phone]), [
                         'title' =>'订单',
                         'style' => 'margin-right:5%',
                         'data-pjax'=>'0',
