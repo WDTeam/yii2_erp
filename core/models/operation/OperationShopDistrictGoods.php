@@ -494,6 +494,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
             $query = new \yii\db\Query();
             $query = $query->select([
                 'osdg.operation_category_name',
+                'osdg.operation_shop_district_goods_name',
                 'oc.id',
                 'oc.operation_category_icon',
                 'oc.operation_category_url',

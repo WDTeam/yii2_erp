@@ -238,7 +238,7 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList = array();
             if ($cityCategoryList && !isset($cityCategoryList['code'])) {
                 foreach ($cityCategoryList as $key => $val) {
-                    if ($val['id'] == 1) continue;
+                    if ($val['operation_shop_district_goods_name'] == "家庭保洁") continue;
                     $itemService['category_id'] = $val['id'];
                     $itemService['category_name'] = $val['operation_category_name'];
                     $itemService['category_icon'] = $val['operation_category_icon'];
@@ -392,6 +392,7 @@ class ConfigureController extends \restapi\components\Controller
         $itemlist = $temp = array();
         if ($itemInfo) {
             foreach ($itemInfo as $key => $val) {
+                if($val['operation_goods_name']=="家庭保洁") continue;
                 $temp['category_id'] = $val['operation_category_id'];
                 $temp['order_service_item_id'] = $val['goods_id'];
                 $temp['order_service_item_name'] = $val['operation_goods_name'];
@@ -416,11 +417,11 @@ class ConfigureController extends \restapi\components\Controller
         }
         $ret = [
             'colour' => $colour,
-            'category_ico' => $categoryInfo['operation_category_icon'],
-            "category_name" => $categoryInfo['operation_category_name'],
+            'category_ico' => $categoryInfo['operation_category_icon']?$categoryInfo['operation_category_icon']:"",
+            "category_name" => $categoryInfo['operation_category_name']?$categoryInfo['operation_category_name']:"",
             "category_english_name" => "",
             "category_condition" => "",
-            "category_price_description" => $categoryInfo['operation_category_price_description'],
+            "category_price_description" => $categoryInfo['operation_category_price_description']?$categoryInfo['operation_category_price_description']:"",
             'item_list' => $itemlist
         ];
         return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);

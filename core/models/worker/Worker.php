@@ -684,6 +684,7 @@ class Worker extends \dbbase\models\worker\Worker
      */
     protected static function generateTimeLine($disabledTimeLine,$serverDurationTime,$beginTime,$timeLineLength){
         $dayTimes = self::getDayTimes();
+        $now_date = date('Y-m-d');
         for($i=0;$i<$timeLineLength;$i++) {
             $time = strtotime("+$i day", $beginTime);
             $date = date('Y-m-d', $time);
@@ -702,9 +703,21 @@ class Worker extends \dbbase\models\worker\Worker
                         break;
                     }
                 }
+                //过滤当天已过时间
+                if($date==$now_date) {
+                    $nowTimeUnits = self::getNowTimes();
+                    foreach ($nowTimeUnits as $n_val) {
+                        $nowTimeKey = array_search($n_val, $dayTimes);
+                        if ($key <= $nowTimeKey && $endKey > $nowTimeKey) {
+                            $isDisabled = 1;
+                            break;
+                        }
+                    }
+                }
+
                 if ($isDisabled == 1) {
                     $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=>false];
-                } else {
+                }else{
                     $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=> true];
                 }
             }
@@ -714,6 +727,21 @@ class Worker extends \dbbase\models\worker\Worker
         return $timeLine;
 
         //var_dump($timeLine);die;
+    }
+
+    private static function getNowTimes(){
+         $now_time  = time();
+         $day_time_units = self::getDayTimes();
+         if($now_time<=strtotime(date('Y-m-d').'08:00')){
+             return [];
+         }elseif($now_time>strtotime(date('Y-m-d').'21:30')){
+             return $day_time_units;
+         }else{
+             $now_time = self::convertDateFormat($now_time);
+             $now_time_unit = date('G:i',$now_time);
+             $now_time_key = array_search($now_time_unit,$day_time_units);
+             return array_slice($day_time_units,0,$now_time_key);
+         }
     }
 
     /**

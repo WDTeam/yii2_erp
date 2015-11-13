@@ -39,7 +39,7 @@ use kartik\daterange\DateRangePicker;
         }elseif($worker_info['worker_is_dimission']!=0){
             $message = '阿姨已离职，排班表不可用！';
         }elseif($worker_info['worker_auth_status']<4){
-            $message = '阿姨当前未试工，排班表不可用！';
+            $message = '阿姨当前还未试工，排班表不可用！';
         }elseif($worker_info['worker_auth_status']==5){
             $message = '阿姨当前试工未通过，排班表不可用！';
         }elseif($worker_info['worker_auth_status']==7){
