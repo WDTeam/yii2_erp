@@ -207,8 +207,11 @@ class Order extends OrderModel
             try {
                    echo 9999;
                 $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
-                
+                var_dump($customer);
+                exit;
                 $customer_balance = $customer['customer_balance'];
+                
+                
             } catch (Exception $e) {
                 echo 000;
                 $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
