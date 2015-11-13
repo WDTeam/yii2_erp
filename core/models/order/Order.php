@@ -605,7 +605,6 @@ class Order extends OrderModel
 
     /**
      * 服务完成
-     * TODO 添加常用阿姨
      * @param $order_id
      * @return bool
      */
@@ -621,6 +620,11 @@ class Order extends OrderModel
         if($result) {
             $transact->commit();
             OrderMsg::serviceDone($order); //发送通知
+            try { //添加常用阿姨
+                Customer::addWorker($order->orderExtCustomer->customer_id, $order->orderExtWorker->worker_id);
+            }catch(Exception $e){
+
+            }
         }else{
             $transact->rollBack();
         }
@@ -822,8 +826,8 @@ class Order extends OrderModel
             'order_lat' => $address['customer_address_latitude'],
             'order_lng' => $address['customer_address_longitude']
         ]);
-
-        if(in_array($this->order_service_item_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+        //判断是否使用订单流程
+        if(in_array($this->order_service_item_name,Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {
             $range = date('G:i', $this->order_booked_begin_time) . '-' . date('G:i', $this->order_booked_end_time);
             $ranges = $this->getThisOrderBookedTimeRangeList();
             if (!in_array($range, $ranges)) {
@@ -893,14 +897,14 @@ class Order extends OrderModel
                 $this->order_pay_money -= $this->order_use_acc_balance;
             }
 
-            if($this->order_pay_money>0){//TODO 硬编码在线支付
+            if($this->order_pay_money>0){
                 $this->setAttributes([
                     'pay_channel_id' => 0,
                     'order_pay_channel_name' => '',
                     'order_pay_channel_type_name' => '在线支付',
                     'pay_channel_type_id' => 1,
                 ]);
-            }else{//TODO 硬编码E家洁支付
+            }else{
                 $this->setAttributes([
                     'pay_channel_id' => 20,
                     'order_pay_channel_name' => '余额支付',
