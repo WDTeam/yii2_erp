@@ -78,21 +78,19 @@ class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
     {
         $data = [];
         foreach ($metas as $condition=>$value){
-            $_meta = WorkerTaskLogmeta::find()->where([
+            WorkerTaskLogmeta::deleteAll([
                 'worker_task_id'=>$this->worker_task_id,
                 'worker_tasklog_id'=>$this->id,
                 'worker_id'=>$this->worker_id,
                 'worker_tasklog_condition'=>$condition,
-            ])->one();
-            if(empty($_meta)){
-                $_meta = new WorkerTaskLogmeta();
-                $_meta->setAttributes([
-                    'worker_task_id'=>$this->worker_task_id,
-                    'worker_tasklog_id'=>$this->id,
-                    'worker_id'=>$this->worker_id,
-                    'worker_tasklog_condition'=>$condition,
-                ]);
-            }
+            ]);
+            $_meta = new WorkerTaskLogmeta();
+            $_meta->setAttributes([
+                'worker_task_id'=>$this->worker_task_id,
+                'worker_tasklog_id'=>$this->id,
+                'worker_id'=>$this->worker_id,
+                'worker_tasklog_condition'=>$condition,
+            ]);
             $_meta->worker_tasklog_value = $value;
             $_meta->save();
             $data[] = $_meta;
