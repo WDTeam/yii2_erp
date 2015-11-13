@@ -173,7 +173,7 @@ class WorkerController extends BaseAuthController
      * @return \yii\web\Response
      */
     public function actionOperateDimission($id){
-        $workerModel = $this->findModel($id);
+        $workerModel = Worker::findModel($id);
         if($workerModel->load(Yii::$app->request->post())){
             $workerModel->worker_dimission_time = time();
             $modifiedAttributes = $workerModel->getDirtyAttributes();
