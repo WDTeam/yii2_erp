@@ -77,6 +77,28 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     }
 
     /**
+     * generate access token for apple checker
+     * @param $phone
+     * @return bool
+     */
+    public static function generateAccessTokenForAppleChecker($phone){
+        $customerAccessToken = new CustomerAccessToken;
+        $customerAccessToken->customer_access_token = md5($phone);
+        $customerAccessToken->customer_access_token_expiration = 365 * 24 * 3600;
+        $customerAccessToken->customer_code_id = 0;
+        $customerAccessToken->customer_code = '';
+        $customerAccessToken->customer_phone = $phone;
+        $customerAccessToken->created_at = time();
+        $customerAccessToken->updated_at = 0;
+        $customerAccessToken->is_del = 0;
+        if(!$customerAccessToken->validate()){
+            return false;
+        }
+        $customerAccessToken->save();
+        return true;
+    }
+
+    /**
      * check access token
      * @param $access_token
      * @return bool
