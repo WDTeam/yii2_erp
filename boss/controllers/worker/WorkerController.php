@@ -1267,7 +1267,8 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-        $a = WorkerVacationApplication::getApplicationList(19075);
+        echo '<pre>';
+        $a = Worker::getDistrictCycleFreeWorker(1,1,[['orderBookBeginTime'=>'1447459200','orderBookEndTime'=>'1447466400']]);
         var_dump($a);die;
         die;
         $city_encode = '北京市';

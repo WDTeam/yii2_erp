@@ -148,8 +148,8 @@ class WorkerForRedis extends Model
             'shop_id'=>$shop_id,
             'worker_phone'=>$worker_phone,
             'worker_name'=>$worker_name,
-            'worker_identity_id'=>$worker_type,
-            'worker_type'=>$worker_identity_id
+            'worker_identity_id'=>$worker_identity_id,
+            'worker_type'=>$worker_type
         ];
         $workerInfo['schedule'] = [];
         $workerInfo['order'] = [];
@@ -186,8 +186,8 @@ class WorkerForRedis extends Model
                 'shop_id'=>$shop_id,
                 'worker_phone'=>$worker_phone,
                 'worker_name'=>$worker_name,
-                'worker_identity_id'=>$worker_type,
-                'worker_type'=>$worker_identity_id
+                'worker_identity_id'=>$worker_identity_id,
+                'worker_type'=>$worker_type
             ];
             $workerInfo = json_encode($workerInfo);
             Yii::$app->redis->executeCommand('set', [self::WORKER_INFO.'_'.$worker_id,$workerInfo]);
