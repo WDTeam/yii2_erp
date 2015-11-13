@@ -22,7 +22,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} city_name 城市
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -119,7 +119,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} platform_version app版本【ios_user4.4】
+     * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -212,12 +212,7 @@ class ConfigureController extends \restapi\components\Controller
             if (!isset($param['platform_version']) || !$param['platform_version']) {
                 return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
-            $platform = explode("_", $param['platform_version']);
-            if(count($platform)!=2){
-                return $this->send(null, 'app版本参数格式错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
-            }
-            $platform_name = $platform[0];
-            $platform_version_name = $platform[1];
+            
             //判断token是否有效
             $isEffect = "0";
             if (isset($param['access_token']) && $param['access_token'] && !CustomerAccessToken::checkAccessToken($param['access_token'])) {
@@ -342,7 +337,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} category_id 服务类型
-     * @apiParam {String} [platform_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -439,7 +434,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -475,7 +470,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -635,7 +630,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionStartPage
      * @apiGroup configure
      *
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
