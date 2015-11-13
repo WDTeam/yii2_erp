@@ -205,7 +205,7 @@ class Order extends OrderModel
         if(!empty($attributes['order_is_use_balance'])) {
          
             try {
-                   echo 9999;
+                   echo 99991;
                 $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
                 echo 077;
                 var_dump($customer);
