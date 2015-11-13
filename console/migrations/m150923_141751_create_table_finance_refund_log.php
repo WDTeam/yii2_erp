@@ -27,6 +27,8 @@ if ($this->db->driverName === 'mysql') {
 	  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
 	   'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
 		 ], $tableOptions);
+		$this->createIndex('finance_order_channel_id','{{%finance_refund_log}}','finance_order_channel_id');
+        $this->createIndex('finance_pay_channel_id','{{%finance_refund_log}}','finance_pay_channel_id');
     }
 
     public function down()
