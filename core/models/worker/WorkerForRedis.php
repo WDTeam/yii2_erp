@@ -118,7 +118,7 @@ class WorkerForRedis extends Model
      * @return mixed
      */
     public static function deleteDistrictToRedis($district_id){
-        if($district_id){
+        if(empty($district_id)){
             return false;
         }
         return Yii::$app->redis->executeCommand('del', [self::DISTRICT_WORKER_RELATION.'_'.$district_id]);
@@ -300,7 +300,6 @@ class WorkerForRedis extends Model
         if(!self::checkWorkerIsEnabled($worker_id)){
             return false;
         }
-
         //添加新的商圈绑定阿姨关系 [1,3,4]
         foreach ((array)$districtIdsArr as $val) {
             //如果商圈不存在，默认添加商圈set，并存储阿姨id
