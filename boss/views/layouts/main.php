@@ -89,6 +89,9 @@ AppAsset::register($this);
                         <p>
                             <?= Yii::t('app', 'Hello, {name}', ['name' => Yii::$app->user->identity->username]) ?>
                         </p>
+                        <p>
+                            <?php echo Yii::$app->user->identity->mobile;?>
+                        </p>
                         <a>
                             <i class="fa fa-circle text-success"></i>
                             <?php echo implode(',', Yii::$app->user->identity->getRolesLabel());?>
