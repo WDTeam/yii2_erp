@@ -2,8 +2,10 @@
 
 namespace boss\controllers\payment;
 
+use boss\components\BaseAuthController;
 use boss\models\payment\PaymentLog;
 use boss\models\payment\PaymentLogSearch;
+
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -12,7 +14,7 @@ use yii\web\NotFoundHttpException;
 /**
  * PaymentLogController implements the CRUD actions for PaymentLog model.
  */
-class PaymentLogController extends Controller
+class PaymentLogController extends BaseAuthController
 {
     public function behaviors()
     {

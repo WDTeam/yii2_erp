@@ -2,20 +2,18 @@
 
 namespace boss\controllers\payment;
 
+use boss\components\BaseAuthController;
 use boss\models\payment\Payment;
 use boss\models\payment\PaymentSearch;
-use boss\components\BaseAuthController;
 
 use core\models\customer\Customer;
-use core\models\finance\FinanceOrderChannel;
 use core\models\payment\CustomerTransRecord;
 use core\models\payment\PaymentCustomerTransRecord;
 
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+
 
 /**
  * PaymentController implements the CRUD actions for Payment model.
@@ -117,19 +115,70 @@ class PaymentController extends BaseAuthController
     public function actionTest()
     {
 
-        //PaymentCustomerTransRecord::analysisRecord(1,0,'order_pay', 1);
-        PaymentCustomerTransRecord::refundRecord(1, 'order_refund',1,['payment_channel_id'=>1,'payment_eo_order_id'=>111111]);
+        //充值
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type = 'payment';
+        //在线支付
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type = 'order_pay';
+        //在线支付+优惠券
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type = 'order_pay';
+        //余额支付
+//        $order_id = 1;
+//        $order_channel_id = 20;
+//        $type = 'order_pay';
+
+//        //服务卡支付
+//        $order_id = 3;
+//        $order_channel_id = 24;
+//        $type = 'order_pay';
+        //现金支付
+//        $order_id = 1;
+//        $order_channel_id = 24;
+//        $type = 'order_pay';
+//        //预付费支付
+//        $order_id = 1;
+//        $order_channel_id = 24;
+//        $type = 'order_pay';
+
+        //余额+在线支付
+//        $order_id = 5;
+//        $order_channel_id = 24;
+//        $type = 'order_pay';
+//        //余额+在线支付+优惠券
+//        $order_id = 6;
+//        $order_channel_id = 24;
+//        $type = 'order_pay';
+//        //余额+优惠券
+//        $order_id = 1212;
+//        $order_channel_id = 24;
+//        $type = 'order_pay';
+        $data = PaymentCustomerTransRecord::analysisRecord($order_id, $order_channel_id, $type, 1);
+        var_dump($data);
+
+        exit;
+        Yii::$app->redis->set('a', '12345');
+        //Yii::$app->cache->set();
+        echo Yii::$app->redis->get('a'), "\n";
+
+        //Yii::$app->cache->set('test1', 'haha..', 5);
+        //echo '1 ', Yii::$app->cache->get('test1'), "\n";
+        //sleep(6);
+        //echo '2 ', Yii::$app->cache->get('test1'), "\n";
+
         exit;
 
         $model = new Payment();
         $model->getPayChannelList();
         exit;
-        $data = Payment::orderRefund(1,1010);
+        $data = Payment::orderRefund(1, 1010);
         dump($data);
         exit;
-        $data = \core\models\payment\Payment::getPayParams(1, 1, 24, 45, ['return_url' => 'http://www.baidu.com']);
-        dump($data);
-        exit;
+
         /**
          * 调用(调起)在线支付,发送给支付接口的数据
          * @param integer $payment_type 支付类型,1普通订单,2周期订单,3充值订单
@@ -141,45 +190,7 @@ class PaymentController extends BaseAuthController
         //$data = \core\models\payment\Payment::getPayParams(2,1,24,'Z681511017247639');
         //dump($data);
         //exit;
-        //充值
-        $order_id = 1;
-        $order_channel_id = 24;
-        $type='payment';
-        //在线支付
-        $order_id = 1;
-        $order_channel_id = 24;
-        $type='order_pay';
-        //余额支付
-        $order_id = 2;
-        $order_channel_id = 24;
-        $type='order_pay';
 
-        //服务卡支付
-        $order_id = 3;
-        $order_channel_id = 24;
-        $type='order_pay';
-        //预付费支付
-        $order_id = 7;
-        $order_channel_id = 24;
-        $type='order_pay';
-        //现金支付
-        $order_id = 4;
-        $order_channel_id = 24;
-        $type='order_pay';
-        //余额+在线支付
-        $order_id = 5;
-        $order_channel_id = 24;
-        $type='order_pay';
-        //余额+在线支付+优惠券
-        $order_id = 6;
-        $order_channel_id = 24;
-        $type='order_pay';
-        //余额+优惠券
-        $order_id = 1212;
-        $order_channel_id = 24;
-        $type='order_pay';
-        $data = PaymentCustomerTransRecord::analysisRecord('1',$order_channel_id,$type,2);
-        var_dump($data);
         exit;
 
         $customerBalance = Customer::getBalanceById(1);
@@ -187,8 +198,8 @@ class PaymentController extends BaseAuthController
         exit;
 
         $attr = [
-            'id'=>45,
-            'address_id'=>9,
+            'id' => 45,
+            'address_id' => 9,
         ];
         $order = \core\models\order\OrderSearch::getOne($attr['id']);
         //dump($order->orderExtWorker->worker_id);exit;
@@ -196,17 +207,17 @@ class PaymentController extends BaseAuthController
         var_dump($data);
         exit;
         $data = [
-            'customer_id'=>1,  //用户ID
-            'order_id'=>1, //订单ID
-            'order_channel_id'=>1, //订单渠道
-            'payment_customer_trans_record_order_channel'=>1,  //订单渠道名称
-            'pay_channel_id'=>1,   //支付渠道
-            'payment_customer_trans_record_pay_channel'=>1,    //支付渠道名称
-            'payment_customer_trans_record_mode'=>1,   //交易方式:1消费,2=充值,3=退款,4=补偿
-            'payment_customer_trans_record_mode_name'=>190,  //交易方式:1消费,2=充值,3=退款,4=补偿
-            'payment_customer_trans_record_order_total_money'=>190,  //订单总额
-            'payment_customer_trans_record_cash'=>190, //现金支付
-            'scenario'=>190
+            'customer_id' => 1,  //用户ID
+            'order_id' => 1, //订单ID
+            'order_channel_id' => 1, //订单渠道
+            'payment_customer_trans_record_order_channel' => 1,  //订单渠道名称
+            'pay_channel_id' => 1,   //支付渠道
+            'payment_customer_trans_record_pay_channel' => 1,    //支付渠道名称
+            'payment_customer_trans_record_mode' => 1,   //交易方式:1消费,2=充值,3=退款,4=补偿
+            'payment_customer_trans_record_mode_name' => 190,  //交易方式:1消费,2=充值,3=退款,4=补偿
+            'payment_customer_trans_record_order_total_money' => 190,  //订单总额
+            'payment_customer_trans_record_cash' => 190, //现金支付
+            'scenario' => 190
         ];
         $d = \core\models\payment\PaymentCustomerTransRecord::createRecord($data);
         dump($d);
@@ -215,12 +226,12 @@ class PaymentController extends BaseAuthController
         dump(unserialize($str));
 
         exit;
-        \core\models\payment\PaymentSearch::getOrderMoney([48,49,50,51]);
+        \core\models\payment\PaymentSearch::getOrderMoney([48, 49, 50, 51]);
 
         exit;
-        var_dump(preg_replace("/(\d+)/",5,"'FULLTIME_WORKER_TIMEOUT' => 1"));
+        var_dump(preg_replace("/(\d+)/", 5, "'FULLTIME_WORKER_TIMEOUT' => 1"));
         exit;
-        $data = \core\models\order\OrderSearch::getWorkerAndOrderAndDoneTime(1,'1445948100','1445948900');
+        $data = \core\models\order\OrderSearch::getWorkerAndOrderAndDoneTime(1, '1445948100', '1445948900');
         dump($data);
         exit;
 
