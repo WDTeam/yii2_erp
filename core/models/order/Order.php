@@ -148,16 +148,16 @@ class Order extends OrderModel
     public function createNew($attributes)
     {
         $attributes_keys = [
-            'order_ip', 'order_service_item_id', 'channel_id',
+            'order_ip', 'order_service_item_id', 'channel_id', 'order_channel_name',
             'order_booked_begin_time', 'order_booked_end_time', 'address_id',
             'customer_id', 'admin_id', 'pay_channel_id', 'order_booked_count',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo', 'order_cs_memo', 'order_flag_sys_assign'
         ];
         $attributes_required = [
-            'order_ip', 'order_service_item_id', 'channel_id',
+            'order_ip', 'order_service_item_id',
             'order_booked_begin_time', 'order_booked_end_time', 'address_id',
-            'customer_id', 'admin_id', 'order_booked_count'
+            'customer_id', 'admin_id', 'order_booked_count','order_channel_name'
         ];
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign']) ? 1 : $attributes['order_flag_sys_assign'];
         foreach ($attributes as $k => $v) {
@@ -247,13 +247,13 @@ class Order extends OrderModel
 
         $attributes_keys = [
             'order_ip', 'order_service_item_id', 'channel_id', 'address_id',
-            'customer_id', 'admin_id', 'pay_channel_id',
+            'customer_id', 'admin_id', 'pay_channel_id','order_channel_name',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo',
             'order_flag_sys_assign', 'order_cs_memo', 'order_flag_change_booked_worker'
         ];
         $attributes_required = [
-            'order_ip', 'order_service_item_id', 'channel_id', 'address_id', 'customer_id', 'admin_id'
+            'order_ip', 'order_service_item_id', 'order_channel_name', 'address_id', 'customer_id', 'admin_id'
         ];
         foreach ($attributes as $k => $v) {
             if (!in_array($k, $attributes_keys)) {
@@ -828,18 +828,25 @@ class Order extends OrderModel
             }
         }
 
-        $channel_name = $this->getOrderChannelName($this->channel_id);
-        if (empty($channel_name)) {
-            $this->addError('order_channel_name', '获取渠道信息失败！');
-            return false;
-        }
-        $channel_type = $this->getOrderChannelType($this->channel_id);
-        if (empty($channel_type)) {
-            $this->addError('order_channel_type_name', '获取渠道分类信息失败！');
-            return false;
-        }
+        $channel = $this->getOrderChannel($this->order_channel_name);
 
-        if (in_array($channel_type['id'], [2, 3]) && $this->channel_id != 20) { //第三方
+        if(!isset($channel['id'])){
+            $channel = [
+              'id'=>0, 'operation_order_channel_type'=>0,'ordertype'=>'其它'
+            ];
+        }
+//        $channel_name = $this->getOrderChannelName($this->channel_id);
+//        if (empty($channel_name)) {
+//            $this->addError('order_channel_name', '获取渠道信息失败！');
+//            return false;
+//        }
+//        $channel_type = $this->getOrderChannelType($this->channel_id);
+//        if (empty($channel_type)) {
+//            $this->addError('order_channel_type_name', '获取渠道分类信息失败！');
+//            return false;
+//        }
+
+        if (in_array($channel['operation_order_channel_type'], [2, 3]) && $this->order_channel_name != '后台下单') { //第三方
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
             $this->order_pay_money -= $this->order_money;
             $this->setAttributes([
@@ -921,9 +928,9 @@ class Order extends OrderModel
             'order_status_boss' => $status_to->order_status_boss,
             'order_status_customer' => $status_to->order_status_customer,
             'order_status_worker' => $status_to->order_status_worker,
-            'order_channel_type_id' => $channel_type['id'],
-            'order_channel_type_name' => $channel_type['name'],
-            'order_channel_name' => $channel_name,
+            'order_channel_type_id' => $channel['operation_order_channel_type'],
+            'order_channel_type_name' => $channel['ordertype'],
+            'channel_id' => $channel['id'],
             'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
             'order_flag_urgent' => 0, //加急 数字越大约紧急
             'order_flag_exception' => 0, //异常标识
@@ -1112,6 +1119,11 @@ class Order extends OrderModel
             'order_customer_need' => $order_customer_need,
         ]);
         return $order->doSave(['OrderExtCustomer']);
+    }
+
+    public function getOrderChannel($name)
+    {
+        return OperationOrderChannel::configorderlist($name);
     }
 
     /**

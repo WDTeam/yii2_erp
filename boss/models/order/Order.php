@@ -124,8 +124,11 @@ class Order extends OrderModel
     public function getOrderChannelList()
     {
         $list = OperationOrderChannel::getorderchannellist(3); //boss 使用的渠道列表
-        unset($list[20]);
-        return ['20'=>'后台下单']+$list;
+        $channels = ['后台下单'=>'后台下单'];
+        foreach($list as $v){
+            $channels[$v] = $v;
+        }
+        return $channels;
     }
 
     public function getEjjPayChannelList()
