@@ -18,11 +18,6 @@ use yii\filters\VerbFilter;
  */
 class OperationSelectedServiceController extends Controller
 {
-    static $jsondata = [
-        'msg' => '',    // 提示消息 失败提示信息
-        'status' => 0, //状态 0: 失败 1：成功 'data' => '',  //数据 
-        ];
-    
     public function behaviors()
     {
         return [
@@ -61,6 +56,9 @@ class OperationSelectedServiceController extends Controller
         $model = new OperationSelectedService;
         $post = Yii::$app->request->post();
 
+
+        //只在创建时验证图片是必须的
+        $model->setScenario('create');
         if ($model->load($post)) {
             $model->selected_service_area_standard = $post['OperationSelectedService']['selected_service_area_standard'];
 
@@ -68,7 +66,6 @@ class OperationSelectedServiceController extends Controller
             $model->uploadImgToQiniu('selected_service_photo');
 
             if($model->save()){
-
                 return $this->redirect(['/operation/operation-selected-service']);
             }
         } else {
@@ -90,7 +87,11 @@ class OperationSelectedServiceController extends Controller
 
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
+            $model->selected_service_area_standard = $post['OperationSelectedService']['selected_service_area_standard'];
             
+            unset($model->selected_service_photo);
+            $model->uploadImgToQiniu('selected_service_photo');
+
             $model->updated_at = time();
             
             if($model->save()){

@@ -1,4 +1,5 @@
 <?php
+
 namespace boss\models\operation;
 
 use Yii;
@@ -13,9 +14,13 @@ use yii\data\ActiveDataProvider;
  * @property string $selected_service_area
  * @property string $selected_service_sub_area
  * @property string $selected_service_standard
+ * @property integer $selected_service_area_standard
  * @property string $selected_service_price
  * @property integer $selected_service_unit
- * @property string $created_at
+ * @property string $selected_service_photo
+ * @property integer $is_softdel
+ * @property integer $created_at
+ * @property integer $updated_at
  * @property string $remark
  */
 class OperationSelectedService extends \core\models\operation\OperationSelectedService
@@ -28,15 +33,13 @@ class OperationSelectedService extends \core\models\operation\OperationSelectedS
     {
         return [
             [['selected_service_scene', 'selected_service_area', 'selected_service_sub_area', 'selected_service_standard', 'selected_service_unit', 'selected_service_area_standard'], 'required'],
-            [['selected_service_goods_id', 'selected_service_unit'], 'integer'],
+            [['selected_service_goods_id', 'selected_service_area_standard', 'selected_service_unit', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
             [['selected_service_price'], 'number'],
-            [['selected_service_area_standard'], 'string'],
-            [['created_at'], 'safe'],
             [['selected_service_scene', 'selected_service_area'], 'string', 'max' => 32],
             [['selected_service_sub_area'], 'string', 'max' => 64],
             [['selected_service_standard'], 'string', 'max' => 128],
             ['selected_service_photo', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
-            [['remark'], 'string', 'max' => 512]
+            ['selected_service_photo', 'required', 'on' => ['create']],
         ];
     }
 
@@ -91,7 +94,6 @@ class OperationSelectedService extends \core\models\operation\OperationSelectedS
             'query' => $query,
         ]);
 
-        //if (!($this->load($params) && $this->validate())) {
         if (!($this->load($params))) {
             return $dataProvider;
         }

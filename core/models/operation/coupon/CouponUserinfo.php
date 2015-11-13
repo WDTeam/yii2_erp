@@ -43,6 +43,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			return $array;
 		} 
 		
+		
 		//检查优惠码是否已经被兑换
 		 $couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
 		if(!empty($couponCustomer)){
@@ -55,6 +56,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		} 
 		
 		$coupon=substr($code,0,3);
+		
 		//查看渠道下面的领取开始时间是不是可以领取
 		$Couponruledate = CouponRule::find()->where(['couponrule_Prefix'=>$coupon])->asArray()->one();
 		if($Couponruledate['id']==''){
@@ -67,6 +69,19 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			
 		}
 		
+		
+		//检查这几个人在此优惠卷已经领取过
+		$couponCustomerinfo=self::find()
+		->where(['coupon_userinfo_id'=>$Couponruledate['coupon_userinfo_id'],'customer_tel'=>$phone])
+		->one();
+		if(!empty($couponCustomerinfo)){
+			$array=[
+			'is_status'=>4012,
+			'msg'=>'优惠码已经被领取或使用',
+			'data'=>false,
+			];
+			return $array;
+		}
 		
 		//从redis查询优惠码是否存在
 		$couponislock=\Yii::$app->redis->SISMEMBER($coupon,$code);//查询优惠券还剩多少();
