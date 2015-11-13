@@ -213,13 +213,13 @@ class PayController extends \restapi\components\Controller
             switch($model->payment_type)
             {
                 case 1 :
-                    $retInfo['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
                     break;
                 case 2:
-                    $retInfo['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
                     break;
                 case 3:
-                    $retInfo['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
                     break;
             }
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePaySuccess);
