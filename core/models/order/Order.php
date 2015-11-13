@@ -207,6 +207,7 @@ class Order extends OrderModel
             try {
                    echo 9999;
                 $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
+                echo 077;
                 var_dump($customer);
                 exit;
                 $customer_balance = $customer['customer_balance'];
