@@ -144,7 +144,6 @@ class Order extends OrderModel
         $post['Order']['admin_id'] = Yii::$app->user->id;
         $post['Order']['order_ip'] = Yii::$app->request->userIP;
         $post['Order']['order_is_use_balance'] = 1; //使用余额
-        $post['Order']['channel_id'] = $post['Order']['channel_id']; //订单渠道
         $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
         //预约时间处理
         if(empty($post['Order']['orderBookedTimeRange'])){
