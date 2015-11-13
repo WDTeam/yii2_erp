@@ -30,21 +30,23 @@ class WorkerSearch extends Worker
 
     public function search($params)
     {
+        if(isset($params['WorkerSearch']['worker_auth_status']) && strpos($params['WorkerSearch']['worker_auth_status'],',')!==false){
+            $params['WorkerSearch']['worker_auth_status'] = explode(',',$params['WorkerSearch']['worker_auth_status']);
+        }
         if (isset($params['WorkerSearch']['worker_vacation_application_approve_status'])) {
-            $query = WorkerVacationApplication::find()->joinWith('worker')->where(['worker_vacation_application_approve_status' => 0]);
+            $query = WorkerVacationApplication::find()->joinWith('worker')->where(['worker_vacation_application_approve_status' => 0])->orderBy('id desc');
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);
             return $dataProvider;
         } else {
-            $query = Worker::findAllQuery([], true)->joinWith('workerStatRelation')->joinWith('workerExtRelation');
+            $query = Worker::findAllQuery([], true)->joinWith('workerStatRelation')->joinWith('workerExtRelation')->orderBy('id desc');
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
             ]);
-            if (!($this->load($params) && $this->validate())) {
+            if (!($this->load($params))) {
                 return $dataProvider;
             }
-
             $query->andFilterWhere([
                 'id' => $this->id,
                 'shop_id' => $this->shop_id,

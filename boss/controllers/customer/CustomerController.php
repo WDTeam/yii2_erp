@@ -41,8 +41,18 @@ class CustomerController extends Controller
     public function actionIndex()
     {
         $searchModel = new CustomerSearch;
-
+        
+//        if(!empty($_REQUEST['CustomerSort'])){
+//            print_r($_REQUEST['CustomerSort']);
+//            exit();
+//        }
         $params = Yii::$app->request->getQueryParams();
+//        $params['CustomerSort'] = [
+//            ['field'=>$field],
+//            ['order'=>$order],
+//        ];
+//        $params['CustomerSort'] = $_REQUEST['CustomerSort'];
+            
         $dataProvider = $searchModel->search($params);
 		//customer count on search
 		$count_on_search = $dataProvider->query->count();
@@ -781,7 +791,7 @@ class CustomerController extends Controller
 
         // $res = \dbbase\models\CustomerBlockLog::addToBlock(17782, '测试');
         // var_dump($res);
-        //$res = \core\models\customer\CustomerCode::generateAndSend('13436939480');
+        //$res = \core\models\customer\CustomerCode::generateAndSend('15623564859');
         //var_dump($res);
 
         // $res = \core\models\customer\CustomerCode::checkCode('18519654001', '9906');
@@ -802,15 +812,27 @@ class CustomerController extends Controller
 		//var_dump($res);
 		//$res = \core\models\customer\CustomerAccessToken::checkSign('18519654001', md5('18519654001'.'pop_to_boss'), 25);
 		//var_dump($res);
-		//$res = \core\models\customer\Customer::getAllRelationally();
-		//$res = \core\models\customer\Customer::addCustomer('15623564857', 20);
+//		$res = \core\models\customer\Customer::operateBalance(144, 90, 'aaaaaaaaaa', 0);
+//		$res = \core\models\customer\Customer::operateBalance(1, 40, 'adfasd', -1);
 		//$res = \core\models\customer\Customer::getWorkersByPhone('13436939482');
-        $res = \core\models\customer\CustomerAccessToken::generateAccessToken('13436939480', '8149', 3);
+//        $res = \core\models\customer\CustomerAddress::addAddress(151, '北京', '北京市', '大兴区', 'SOHO一期2单元908', '测试昵称', '18519654001');
+//        $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
+        //$res = \core\models\customer\CustomerCode::isSendOver('15623564859');
+
+
+//        $res = \core\models\customer\Customer::getCityNameById(150);
+
+//        $res = \core\models\customer\Customer::addWorker(144, 2);
+        //$res= \core\models\customer\Customer::addSrcByChannalId('18519654001', 1);
+//        $res = \core\models\customer\CustomerAccessToken::generateAccessTokenForAppleChecker('18519654001');
+
+
+//        $res = \core\models\customer\CustomerAccessToken::checkSign('18519654003', md5('18519654003pop_to_boss'),1);
+        $res = \core\models\customer\CustomerAccessToken::generateAccessTokenForPop('18519654004', md5('18519654004pop_to_boss'), 1);
 		var_dump($res);
     }
 
     public function actionTestAddress(){
         $addr = CustomerAddress::addAddress(1, '7777', '北京市', '9999', '光华路SOHO一期二单元', 'aaaaa', '18519654001');
-		var_dump($addr);
     }
 }

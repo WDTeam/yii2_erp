@@ -19,7 +19,6 @@ use dbbase\models\Shop;
 use boss\models\worker\Worker;
 use boss\models\worker\WorkerIdentityConfig;
 use boss\models\worker\workerExt;
-
 /**
  * @var yii\web\View $this
  * @var dbbase\models\Worker $model
@@ -104,7 +103,7 @@ $this->title = $model->worker_name;
                 'widgetOptions'=>[
                     'options'=>[
                         'accept' => 'image/*',
-                        'name'=>'worker_photo'
+                        'name'=>'Worker[worker_photo]'
                     ],
                     'pluginOptions' => [
                         'showPreview' => true,
@@ -139,7 +138,7 @@ $this->title = $model->worker_name;
             'worker_phone',
             [
                 'attribute'=>'worker_idcard',
-                'displayOnly' => false
+                'displayOnly' => true
             ],
             [   'attribute' => 'worker_district',
                 'type' => DetailView::INPUT_WIDGET,

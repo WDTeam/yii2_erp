@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\ActiveForm;
 use kartik\tabs\TabsX;
-use core\models\Customer;
+use core\models\Customer\Customer;
 use boss\models\finance\FinancePopOrderSearch;
 /**
  * @var yii\web\View $this

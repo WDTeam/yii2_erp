@@ -143,7 +143,11 @@ class WorkerController extends \restapi\components\Controller
         if (!isset($param['leave_time']) || !$param['leave_time']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403, null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
+        
         try {
+            if(!WorkerVacationApplication::checkWorkerIsApplication($workerID,$param['leave_time'],$vacationType)){
+                return $this->send(null, "不能重复请假", 0, 403, null, "该时段您已请过假，请等待审核");
+            }
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID, $vacationType);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::workerApplyLeaveFailed);
@@ -190,7 +194,7 @@ class WorkerController extends \restapi\components\Controller
      *           {
      *               "leave_type": "请假类型【1休假 2事假】",
      *               "leave_time": "请假时间",
-     *               "leave_status": "请假状态"
+     *               "leave_status": "请假状态【0待审核 1审核通过 2.审核不通过】"
      *           }
      *       ]
      *      }
@@ -227,21 +231,22 @@ class WorkerController extends \restapi\components\Controller
         $pageData = array();
         if ($data['data']) {
             foreach ($data['data'] as $key => $val) {
-                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type'] == 1 ? "休假" : "事假";
+                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type'] ;
                 $pageData[$key]['leave_time'] = date('Y-m-d', $val['worker_vacation_application_start_time']);
-                switch ($val['worker_vacation_application_approve_status']) {
-                    case "0":
-                        $pageData[$key]['leave_status'] = "待审核";
-                        break;
-                    case "1":
-                        $pageData[$key]['leave_status'] = "审核通过";
-                        break;
-                    case "2":
-                        $pageData[$key]['leave_status'] = "审核不通过";
-                        break;
-                    default :
-                        $pageData[$key]['leave_status'] = "未知";
-                }
+                $pageData[$key]['leave_status'] = $val['worker_vacation_application_approve_status'];
+//                switch ($val['worker_vacation_application_approve_status']) {
+//                    case "0":
+//                        $pageData[$key]['leave_status'] = "待审核";
+//                        break;
+//                    case "1":
+//                        $pageData[$key]['leave_status'] = "审核通过";
+//                        break;
+//                    case "2":
+//                        $pageData[$key]['leave_status'] = "审核不通过";
+//                        break;
+//                    default :
+//                        $pageData[$key]['leave_status'] = "未知";
+//                }
             }
         }
         $ret = [
@@ -975,19 +980,13 @@ class WorkerController extends \restapi\components\Controller
      *   "code": 1,
      *   "msg": "操作成功",
      *   "ret": {
-     *       "2015-10-28": true,
-     *       "2015-10-29": true,
-     *       "2015-10-30": false,
-     *       "2015-10-31": false,
-     *       "2015-11-01": false,
-     *       "2015-11-02": true,
-     *       "2015-11-03": true,
-     *       "2015-11-04": true,
-     *       "2015-11-05": true,
-     *       "2015-11-06": false,
-     *       "2015-11-07": false,
-     *       "2015-11-08": false,
-     *       "2015-11-09": true,
+     *       "leave_time": [
+     *       {
+     *           "date": "2015-11-13",
+     *           "enable": false,
+     *           "week": "周五"
+     *       }
+     *      ]
      *   },
      *  "alertMsg": "获取阿姨请假排班表成功"
      * }
@@ -1018,6 +1017,20 @@ class WorkerController extends \restapi\components\Controller
             $ret = WorkerVacationApplication::getApplicationTimeLine($worker_id, $type);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+        }
+        if($ret){
+            $week =[
+              '1'=>'周一',
+              '2'=>'周二', 
+              '3'=>'周三', 
+              '4'=>'周四', 
+              '5'=>'周五', 
+              '6'=>'周六', 
+              '7'=>'周日', 
+            ];
+            foreach($ret as $key=>$val){
+                $ret[$key]['week'] = $week[date('N', strtotime($val['date']))];
+            }
         }
         $leave_time['leave_time'] = $ret;
         return $this->send($leave_time, "获取阿姨请假表成功", 1, 200, null, alertMsgEnum::workerLeaveSuccess);

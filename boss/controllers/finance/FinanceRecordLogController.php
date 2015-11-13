@@ -8,13 +8,12 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use dbbase\models\finance\FinanceRecordLog;
-use boss\models\finance\FinanceRecordLogSearch;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceRecordLog;
 use dbbase\models\finance\FinancePopOrder;
+use boss\models\finance\FinanceRecordLogSearch;
+use boss\components\BaseAuthController;
 
 class FinanceRecordLogController extends BaseAuthController
 {
@@ -37,25 +36,14 @@ class FinanceRecordLogController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new FinanceRecordLogSearch;
-        
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        
-
         //支付渠道数据
-        $ordedata= new FinanceOrderChannel;
-        $ordewhere['is_del']=0;
-        $ordewhere['finance_order_channel_is_lock']=1;
-        $payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
-        foreach ($payatainfo as $errt){
-        	$tyd[]=$errt['id'];
-        	$tydtui[]=$errt['finance_order_channel_name'];
-        }
-        $tyu= array_combine($tyd,$tydtui);
-        
+       $paychanne=\core\models\operation\OperationPayChannel::getpaychannellist('all');
+       
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' =>  $searchModel,
-        	'odrinfo' => $tyu
+        	'odrinfo' => $paychanne
         		
         ]);
     }

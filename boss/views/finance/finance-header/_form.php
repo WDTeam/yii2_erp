@@ -3,10 +3,6 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
-use kartik\datecontrol\DateControl;
-use kartik\widgets\Select2;
-use dbbase\models\finance\FinancePayChannel;
-use dbbase\models\finance\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
  * @var dbbase\models\FinanceHeader $model
@@ -26,10 +22,10 @@ use dbbase\models\finance\FinanceOrderChannel;
     'attributes' => [
   		
 'finance_header_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'当前名称...', 'maxlength'=>100],'class' => 'col-md-2'],
-  'finance_order_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>FinanceOrderChannel::get_order_channel_listes(),'options' => [
+  'finance_order_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>\core\models\operation\OperationOrderChannel::getorderchannellist('all'),'options' => [
      		'prompt' => '请选择下单渠道',
      		],'class' => 'col-md-2'],
-    		'finance_pay_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>FinancePayChannel::get_pay_channel_list(),'options' => [
+    		'finance_pay_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>\core\models\operation\OperationPayChannel::getpaychannellist('all'),'options' => [
     		'prompt' => '请选择支付渠道',
     		],'class' => 'col-md-2'],	
  'finance_uplod_url'=>['type'=> Form::INPUT_FILE, 'options'=>['placeholder'=>'上传exl名称...', 'maxlength'=>100],'class' => 'col-md-2'],

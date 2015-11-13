@@ -23,7 +23,20 @@ class OperationCategory extends \dbbase\models\operation\OperationCategory
         $data = self::find()->select(['operation_category_name'])->where(['id' => $operation_category_id])->one();
         return $data->operation_category_name;
     }
-
+    
+    /**
+     * edit by TianYuxing
+     * 根据服务品类ID获取对应的服务品类详情
+     * @param integer $operation_category_id 服务品类ID
+     * @return array
+     */
+    public static function getCategoryById($operation_category_id){
+        return  self::find()
+                ->select(['operation_category_name','operation_category_icon','operation_category_price_description'])
+                ->where(['id' => $operation_category_id])
+                ->asArray()
+                ->one();
+    }
     public static function getAllCategory()
     {
         return self::getAllData('', 'sort', 'id,operation_category_name');

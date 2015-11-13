@@ -148,6 +148,10 @@ $(document).on("click",".save_address_btn",function(){
         alert('请先选择客户再添加地址！');
         return false;
     }
+    if(detail==""){
+        alert('地址信息不完整！');
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: "/order/order/save-address/?address_id=" + address_id,

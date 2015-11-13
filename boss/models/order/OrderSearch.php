@@ -17,4 +17,13 @@ class OrderSearch extends CoreOrderSearch
     {
         return Order::findOne(['order_code' => $code]);
     }
+
+    /**
+     * TODO 获取开通省份列表
+     * @return array
+     */
+    public function getOnlineProvinceList(){
+        $province_list = OperationCity::find()->select(['province_id','province_name'])->where(['operation_city_is_online'=>1])->groupBy(['province_id'])->all();
+        return ArrayHelper::map($province_list,'province_id','province_name');
+    }
 }
