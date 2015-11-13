@@ -203,7 +203,7 @@ class ConfigureController extends \restapi\components\Controller
             $current_env_url = Yii::$app->params['envUrl'];
 
             if (!isset($param['city_name']) || !$param['city_name']) {
-                $param['city_name'] = "北京市";
+                return $this->send(null, 'city_name参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
             if (!isset($param['platform_version']) || !$param['platform_version']) {
                 return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
