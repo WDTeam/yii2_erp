@@ -33,7 +33,7 @@ class WorkerBlock extends \yii\db\ActiveRecord
     {
         return [
             [['worker_id',  'worker_block_status', 'created_ad', 'updated_ad'], 'integer'],
-            [['worker_id',  'worker_block_status', 'worker_block_start_time', 'worker_block_finish_time'], 'required'],
+            [['worker_id',   'worker_block_start_time', 'worker_block_finish_time'], 'required'],
             [['worker_block_reason'], 'string', 'max' => 255]
         ];
     }
