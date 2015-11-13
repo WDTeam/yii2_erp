@@ -51,7 +51,6 @@ class alertMsgEnum
     //根据地址获取百度地图数据
     const baiduMapSuccess = '获取百度地图数据成功';
     const baiduMapFailed = '获取百度地图数据失败';
-    
     //指定阿姨订单列表
     const worerSuccess = '指定阿姨订单列表';
     //会员余额支付
@@ -318,7 +317,9 @@ class alertMsgEnum
     const orderCityDistrictFaile = "该城市未开通";
     const orderShopDistrictGoodsFaile = "该服务不在当前商圈内";
     const orderShopDistrictGoodsSuccess = "当前商圈包含该服务";
-     const orderCreateFaileChannelId = "数据不完整,订单渠道ID为必填项";
+    const orderCreateFaileChannelId = "数据不完整,订单渠道ID为必填项";
+    const customerPhoneFaile = "对不起，用户手机错误";
+    const orderStartEndTime = "对不起,开始时间不能大于等于结束时间";
     //追加订单
     const orderAppendOrderSuccess = '追加订单成功';
     const orderAppendOrderFaile = '追加订单失败';
@@ -372,8 +373,7 @@ class alertMsgEnum
     const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
     //数据不完整,请输入周期订单号
     const orderGetOrderWorkerNumber = "数据不完整,请输入周期订单号";
-    
-     //数据不完整,请输入订单号
+    //数据不完整,请输入订单号
     const orderGetOrderNumber = "数据不完整,请输入订单号";
     //添加常用地址
     //常用地址添加成功
