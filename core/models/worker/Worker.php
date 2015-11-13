@@ -1641,14 +1641,6 @@ class Worker extends \dbbase\models\worker\Worker
         return $this->hasOne(WorkerSkill::className(),['worker_id'=>'id']);
     }
 
-    /**
-     * 设置worker_district属性
-     */
-    public function getworker_district(){
-        $workerDistrictArr = self::getWorkerDistrict($this->id);
-        var_dump($workerDistrictArr);
-        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
-    }
 
     public function getWorkerVacationApplicationRelation(){
         return $this->hasMany(WorkerVacationApplication::className(),['worker_id'=>'id']);

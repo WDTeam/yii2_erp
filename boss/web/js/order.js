@@ -51,9 +51,9 @@ $(document).on("change","#order-order_booked_count input",function(){
 $(document).on('click','.day',function(){getTimeRange();});
 
 
-$('#order-channel_id input').change(function(){
+$('#order-order_channel_name input').change(function(){
         $('[id^=order_pay_channel_]').hide();
-        if($(this).val()==20){
+        if($(this).val()=='后台下单'){
             $('#order_pay_channel_1').show();
             $('#order_pay_type_1').show();
         }else{

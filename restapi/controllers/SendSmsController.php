@@ -15,7 +15,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionSendV
      * @apiGroup SendSms
      *
-     * @apiParam {String} platform_version 平台版本
+     * @apiParam {String} platform_version      版本号
      * @apiParam {Number} telephone 电话
      * @apiParam {Mixed} message 发送消息
      *
@@ -61,7 +61,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录(赵顺利)
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -109,7 +109,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionSendWorkerMessageCode
      * @apiGroup SendSms
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -134,8 +134,15 @@ class SendSmsController extends \restapi\components\Controller
      */
     public function actionSendWorkerMessageCode()
     {
-        @$phone = Yii::$app->request->get('phone');
-        @$app_version = Yii::$app->request->get('app_version');
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['phone']) || !$param['phone']) {
+            return $this->send(null, "手机号码不能为空", 403, 200, null, alertMsgEnum::sendWorkerCodeFaile);
+        }
+        if (!isset($param['platform_version']) || !$param['platform_version']) {
+            return $this->send(null, "访问源不能为空", 403, 200, null, alertMsgEnum::sendWorkerCodeFaile);
+        }
+        $phone =$param['phone'];
+        $platform_version = $param['platform_version'];
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             $login_info = Worker::checkWorkerLogin($phone);
             $whether_send_code = WorkerCode::whetherSendCode($phone);
@@ -148,6 +155,8 @@ class SendSmsController extends \restapi\components\Controller
                 //验证通过
                 if (!WorkerCode::generateAndSend($phone)) {
                     return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
+                }else{
+                    return $this->send(null, "短信发送成功",1,200,null,alertMsgEnum::sendWorkerCodeSuccess);
                 }
             }else{
                  return $this->send(null, "阿姨不存在或在黑名单或离职或删号", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
@@ -156,7 +165,57 @@ class SendSmsController extends \restapi\components\Controller
             return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
 
         }
-        return $this->send(null, "短信发送成功",1,200,null,alertMsgEnum::sendWorkerCodeSuccess);
+        return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
+    }
+    
+    
+    /**
+     * @api {GET} /send-sms/voice-verify-code  [GET]/send-sms/voice-verify-code
+     * 
+     * @apiDescription  语音验证码发送
+     * @apiName actionVoiceVerifyCode
+     * @apiGroup SendSms
+     * @apiParam {String} phone 手机号
+     * @apiParam {String} platform_version 访问源
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *       {
+     *           "code": 1,
+     *           "msg": "语音验证码发送成功",
+     *           "ret": {},
+     *           "alertMsg": "语音验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636"
+     *        }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"0",
+     *       "msg": "电话号码不符合规则",
+     *       "ret": {},
+     *       "alertMsg": "电话号码不符合规则"
+     *     }
+     */
+    public function actionVoiceVerifyCode()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['phone']) || !$param['phone']) {
+            return $this->send(null, "手机号码不能为空", 403, 200, null, alertMsgEnum::voiceVerifyCodeFail);
+        }
+        if (!isset($param['platform_version']) || !$param['platform_version']) {
+            return $this->send(null, "访问源不能为空", 403, 200, null, alertMsgEnum::voiceVerifyCodeFail);
+        }
+        $phone =$param['phone'];
+        $platform_version = $param['platform_version'];
+        if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
+             return $this->send(null, "语音验证码发送成功",1,200,null,alertMsgEnum::voiceVerifyCodeSuccess);
+            
+        } else {
+            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::voiceVerifyCodeFail);
+
+        }
+        return $this->send(null, "语音验证码发送失败", 0, 403,null,alertMsgEnum::voiceVerifyCodeFail);
+       
     }
 
 }
