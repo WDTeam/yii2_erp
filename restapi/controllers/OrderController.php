@@ -176,7 +176,7 @@ class OrderController extends \restapi\components\Controller
             
             
             $is_success = $order->createNew($attributes);
-               print_r($order);
+               var_dump($order);
             echo 333;
             var_dump($is_success);
             echo 55;
