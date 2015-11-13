@@ -653,14 +653,16 @@ class Order extends OrderModel
 
     /**
      * 订单完成结算
-     * @param $order_id
+     * @param $order_code
+     * @param $payoff_count
      * @param $admin_id
      * @return bool
      */
-    public static function payoffDone($order_id, $admin_id)
+    public static function payoffDone($order_code, $payoff_count, $admin_id)
     {
-        $order = OrderSearch::getOne($order_id);
+        $order = OrderSearch::getOneByCode($order_code);
         $order->admin_id = $admin_id;
+        $order->order_worker_payoff_code = $payoff_count;
         return OrderStatus::_payoffDone($order);
     }
 
