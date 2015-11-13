@@ -1060,7 +1060,6 @@ class Worker extends \dbbase\models\worker\Worker
             }else{
                 $workerIdentityIdArr = [2,3,4];
             }
-
             if(in_array($val['info']['worker_identity_id'],$workerIdentityIdArr)){
                 $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
                 if(array_diff($orderBookTime,$workerEnabledTime)){
