@@ -56,7 +56,7 @@ use boss\models\order\Order;
     ?>
     <div class="row">
         <div class="col-sm-2">
-            <?= $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu input_customer_phone'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
+            <?= $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu input_customer_phone'])->label('客户电话 :', ['class' => 'm_ipone']); ?>
         </div>
         <div class="col-sm-2">
             <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [

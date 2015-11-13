@@ -42,6 +42,11 @@ use dbbase\models\ActiveRecord;
  * @property string $order_cancel_cause_id
  * @property string $order_cancel_cause_detail
  * @property string $order_cancel_cause_memo
+ * @property string $order_checked_code
+ * @property string $order_worker_payoff_code
+ * @property string $order_refund_code
+ * @property string $order_complaint_code
+ * @property string $order_compensate_code
  *
  * @property OrderExtCustomer $orderExtCustomer
  * @property OrderExtFlag $orderExtFlag
@@ -89,6 +94,8 @@ class Order extends ActiveRecord
     public $pay_channel_id;
     public $order_pay_channel_name;
     public $order_pay_flow_num;
+    public $order_pay_code;
+    public $order_balance_code;
     public $order_pay_money;
     public $order_use_acc_balance;
     public $card_id;
@@ -148,6 +155,8 @@ class Order extends ActiveRecord
         'pay_channel_id',
         'order_pay_channel_name',
         'order_pay_flow_num',
+        'order_pay_code',
+        'order_balance_code',
         'order_pay_money',
         'order_use_acc_balance',
         'card_id',
@@ -203,7 +212,7 @@ class Order extends ActiveRecord
                 'city_id', 'address_id', 'district_id', 'order_booked_worker_id','version'], 'integer'],
 
             [['order_unit_money',  'order_booked_count','order_money','order_lat','order_lng'], 'number'],
-            [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
+            [['order_code', 'order_channel_name', 'order_batch_code','order_checked_code','order_worker_payoff_code','order_complaint_code','order_complaint_code','order_compensate_code'], 'string', 'max' => 64],
             [['order_service_type_name','order_service_item_name', 'order_ip','order_channel_type_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo','order_sys_memo','order_cancel_cause_detail','order_cancel_cause_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
@@ -220,6 +229,11 @@ class Order extends ActiveRecord
             'id' => '编号',
             'order_code' => '订单号',
             'order_batch_code' => '周期订单号',
+            'order_checked_code' => '对账单号',
+            'order_refund_code' => '退款单号',
+            'order_complaint_code' => '投诉单号',
+            'order_compensate_code' => '赔偿单号',
+            'order_worker_payoff_code' => '阿姨结算单号',
             'order_parent_id' => '父级id',
             'order_is_parent' => '有无子订单 1有 0无',
             'created_at' => '创建时间',
@@ -288,6 +302,8 @@ class Order extends ActiveRecord
             'pay_channel_id' => '支付渠道id',
             'order_pay_channel_name' => '支付渠道名称',
             'order_pay_flow_num' => '支付流水号',
+            'order_pay_code' => '支付单号',
+            'order_balance_code' => '支付余额单号',
             'order_pay_money' => '支付金额',
             'order_use_acc_balance' => '使用余额',
             'card_id' => '服务卡ID',
@@ -433,6 +449,11 @@ class Order extends ActiveRecord
                 'order_id' => $this->id,
                 'order_code' => $this->order_code,
                 'order_batch_code' => $this->order_batch_code,
+                'order_checked_code' => $this->order_checked_code,
+                'order_refund_code' => $this->order_refund_code,
+                'order_complaint_code' => $this->order_complaint_code,
+                'order_compensate_code' => $this->order_compensate_code,
+                'order_worker_payoff_code' => $this->order_worker_payoff_code,
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'order_created_at' => $this->created_at,

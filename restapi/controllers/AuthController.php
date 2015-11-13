@@ -90,6 +90,9 @@ class AuthController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
+        if(empty($channal_id)){
+            return $this->send(null,"数据库中没有此渠道", 1024, 403, null, alertMsgEnum::bossError);
+        }
         try {
             $checkRet = CustomerCode::checkCode($phone, $verifyCode);
         } catch (\Exception $e) {
