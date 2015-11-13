@@ -36,6 +36,32 @@ class OrderController extends BaseAuthController
 //        return Order::serviceStart(2);
     }
 
+    public function actionServiceDone($id)
+    {
+        return Order::serviceDone($id);
+    }
+
+    public function actionServiceStart($id)
+    {
+        return Order::serviceStart($id);
+    }
+
+    public function actionAcceptDone($id)
+    {
+        return Order::customerAcceptDone($id,2,1);
+    }
+
+    public function actionChecked($id) //code
+    {
+        return Order::checked($id,$id,1);
+    }
+
+    public function actionPayoff($id) //code
+    {
+        return Order::payoffDone($id, $id, 1);
+    }
+
+
     /**
      * 取消订单
      * @return bool
@@ -43,9 +69,7 @@ class OrderController extends BaseAuthController
     public function actionCancelOrder()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        //TODO: Xiaobo
         $admin_id = Yii::$app->user->id;
-
         $params = yii::$app->request->post();
         $order_id = $params['order_id'];
         $cancel_type = $params['cancel_type'];
@@ -366,7 +390,7 @@ class OrderController extends BaseAuthController
             $model->order_booked_count = '2.0'; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
             $model->order_flag_sys_assign = 1;//是否系统指派
-            $model->channel_id = 20;//订单渠道
+            $model->channel_id = '后台下单';//订单渠道
             $model->pay_channel_id = 2;//支付渠道
         }
         return $this->render('create', [
@@ -374,44 +398,44 @@ class OrderController extends BaseAuthController
         ]);
     }
 
-    public function actionCreateBatch()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $attributes = [
-            'order_ip' => Yii::$app->request->userIP,
-            'order_service_item_id' => 1,
-            'order_src_id' => 1,
-            'channel_id' => 20,
-            'address_id' => 1,
-            'customer_id' => 1,
-            'order_customer_phone' => '18001305711',
-            'admin_id' => Yii::$app->user->id,
-            'order_pay_type' => 1,
-            'order_is_use_balance' => 1,
-            'order_booked_worker_id' => 0,
-            'order_customer_need' => 'xxxxx',
-            'order_customer_memo' => 'fffff',
-            'order_flag_sys_assign' => 0,
-        ];
-        $booked_list = [
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400,
-                'order_booked_count' => 2,
-            ],
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400,
-                'order_booked_count' => 2,
-            ],
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400 + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400 + 86400,
-                'order_booked_count' => 2,
-            ],
-        ];
-        return Order::createNewBatch($attributes, $booked_list);
-    }
+//    public function actionCreateBatch()
+//    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        $attributes = [
+//            'order_ip' => Yii::$app->request->userIP,
+//            'order_service_item_id' => 1,
+//            'order_src_id' => 1,
+//            'channel_id' => 20,
+//            'address_id' => 1,
+//            'customer_id' => 1,
+//            'order_customer_phone' => '18001305711',
+//            'admin_id' => Yii::$app->user->id,
+//            'order_pay_type' => 1,
+//            'order_is_use_balance' => 1,
+//            'order_booked_worker_id' => 0,
+//            'order_customer_need' => 'xxxxx',
+//            'order_customer_memo' => 'fffff',
+//            'order_flag_sys_assign' => 0,
+//        ];
+//        $booked_list = [
+//            [
+//                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400,
+//                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400,
+//                'order_booked_count' => 2,
+//            ],
+//            [
+//                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400,
+//                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400,
+//                'order_booked_count' => 2,
+//            ],
+//            [
+//                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400 + 86400,
+//                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400 + 86400,
+//                'order_booked_count' => 2,
+//            ],
+//        ];
+//        return Order::createNewBatch($attributes, $booked_list);
+//    }
 
     /**
      * 查看并编辑订单

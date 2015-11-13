@@ -110,6 +110,7 @@ class server
     public function connectRedis(){
         $this->redis = new Redis();
         $this->redis->connect($this->config['REDIS_SERVER_IP'], $this->config['REDIS_SERVER_PORT']);
+        $this->redis->auth($this->config['REDIS_SERVER_PASSWORD']);
     }
     /*
      * 收到 web客户端 消息

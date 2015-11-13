@@ -105,7 +105,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
 
-        $attributes['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
+        $attributes['order_channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
 
 
         if ($attributes['order_booked_end_time'] <= $attributes['order_booked_begin_time']) {
@@ -174,6 +174,7 @@ class OrderController extends \restapi\components\Controller
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
+            
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -181,12 +182,12 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                $msgErrors = $order->errors;
-                return $this->send($order->errors, '创建订单失败', 1024, 200, null, current(current($msgErrors)));
+//                $msgErrors = $order->errors;
+                return $this->send($order->errors, '创建订单失败', 1024, 200, null, '创建订单失败');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, current(current($msgErrors)));
-        }
+            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败');//current(current($msgErrors)));
+        } 
     }
 
     /**
@@ -246,7 +247,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
         //下单渠道 
-        $args['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
+        //$args['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
@@ -270,9 +271,8 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
-        $attributes['channel_name'] = $args['channel_name']; //家洁
+        $attributes['order_channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "" ;
         $attributes['pay_channel_id'] = 2; //现金支付
-
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
@@ -304,9 +304,9 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} address_longitude 填写地址的精度
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} address_longitude 填写地址的经度
      * @apiParam {String} address_latitude 填写地址的纬度
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} city_name 当前城市名称 
      * @apiParam {String} [address_id] 用户地址ID
      *
@@ -1838,7 +1838,7 @@ class OrderController extends \restapi\components\Controller
             $attributes = array(
                 "order_ip" => $order_ip,
                 "order_service_item_id" => $param['order_service_item_id'],
-                "channel_name" => $param['platform_version'],
+                "order_channel_name" => isset($param['platform_version']) ? $param['platform_version'] : "",
                 "address_id" => $param['address_id'],
                 "customer_id" => $customer->id,
                 "order_customer_phone" => $param['order_customer_phone'],

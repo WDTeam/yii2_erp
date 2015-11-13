@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
 
-                <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList)->label('订单渠道'); ?>
+                <?= $form->field($model, 'order_channel_name')->inline()->radioList($model->orderChannelList)->label('订单渠道'); ?>
                 <div id="order_pay_channel_1" >
                     <?= $form->field($model, 'pay_channel_id')->inline()->radioList($model->ejjPayChannelList)->label('支付方式'); ?>
                     <div style="display: none;" id="order_coupon_code">
