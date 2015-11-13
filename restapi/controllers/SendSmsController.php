@@ -186,7 +186,6 @@ class SendSmsController extends \restapi\components\Controller
      *           "ret": {},
      *           "alertMsg": "语音验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636"
      *        }
-     * @apiError 
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
