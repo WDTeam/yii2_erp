@@ -26,4 +26,18 @@ class WorkerDistrict extends \dbbase\models\worker\WorkerDistrict
         return $this->hasMany(OperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
     }
 
+    /**
+     * 清除指定商圈中所有阿姨
+     * 商圈下线或删除时调用
+     * @param $district_id
+     * @return bool
+     */
+    public static function deleteDistrictWorker($district_id){
+        if(empty($district_id)){
+            return false;
+        }
+        self::deleteAll(['operation_shop_district_id'=>$district_id]);
+        WorkerForRedis::deleteDistrictToRedis($district_id);
+    }
+
 }

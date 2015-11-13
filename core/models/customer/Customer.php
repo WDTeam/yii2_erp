@@ -2,6 +2,7 @@
 namespace core\models\customer;
 
 use Yii;
+use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\helpers\ArrayHelper;
 
@@ -17,7 +18,6 @@ use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;
 use core\models\operation\OperationCity;
-use core\models\finance\FinanceOrderChannel;
 use core\models\operation\OperationOrderChannel;
 
 
@@ -67,7 +67,10 @@ class Customer extends \dbbase\models\customer\Customer
 //				$customerExtScore->is_del = 0;
 //				$customerExtScore->save();
 
-				self::addSrcByChannalId($phone, $channal_id);
+				$add_src_res = self::addSrcByChannalId($phone, $channal_id);
+                if(!$add_src_res){
+                    throw new Exception('新增客户注册来源失败');
+                }
 				
 				$transaction->commit();
 				return true;

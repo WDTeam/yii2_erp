@@ -203,20 +203,17 @@ class ConfigureController extends \restapi\components\Controller
             $current_env_url = Yii::$app->params['envUrl'];
 
             if (!isset($param['city_name']) || !$param['city_name']) {
-                $param['city_name'] = "北京市";
+                return $this->send(null, 'city_name参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
             if (!isset($param['platform_version']) || !$param['platform_version']) {
                 return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
-            //判断来源版
-            $platform_name = "ios";
-            $platform_version_name = "4.0";
-            if (isset($param['platform_version']) && $param['platform_version']) {
-                $platform = explode("_", $param['platform_version']);
-                $platform_name = isset($platform[0]) ? $platform[0] : "ios";
-                $platform_version_name = isset($platform[1]) ? $platform[1] : "4.0";
-
+            $platform = explode("_", $param['platform_version']);
+            if(count($platform)!=2){
+                return $this->send(null, 'app版本参数格式错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
+            $platform_name = $platform[0];
+            $platform_version_name = $platform[1];
             //判断token是否有效
             $isEffect = "0";
             if (isset($param['access_token']) && $param['access_token'] && !CustomerAccessToken::checkAccessToken($param['access_token'])) {
@@ -232,10 +229,11 @@ class ConfigureController extends \restapi\components\Controller
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
             //整理开通的城市
-            $onlineCityList = array();
+            $onlineCityList = $temp = array();
             foreach ($onlineCitys as $key => $val) {
-                $onlineCityList[$key]['city_id'] = $val['city_id'];
-                $onlineCityList[$key]['city_name'] = $val['city_name'];
+                $temp['city_id'] = $val['city_id'];
+                $temp['city_name'] = $val['city_name'];
+                $onlineCityList[] = $temp;
             }
             //整理开通的服务类型
             $serviceCategoryList = array();
@@ -254,14 +252,14 @@ class ConfigureController extends \restapi\components\Controller
             }
 
             //整理焦点图
-//            $pic_list = array();
-//            if (!isset($bannerList['code']) && !empty($bannerList)) {
-//                foreach ($bannerList as $key => $val) {
-//                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
-//                    $pic_list[$key]["link"] = $val['operation_advert_url'];
-//                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
-//                }
-//            }
+            $pic_list = array();
+            if (!isset($bannerList['code']) && !empty($bannerList)) {
+                foreach ($bannerList as $key => $val) {
+                    $pic_list[$key]["img_path"] = $val['operation_advert_picture_text'];
+                    $pic_list[$key]["link"] = $val['operation_advert_url'];
+                    $pic_list[$key]["url_title"] = $val['operation_advert_content_name'];
+                }
+            }
 
             //页首链接
             $header_link = [
@@ -277,23 +275,23 @@ class ConfigureController extends \restapi\components\Controller
                 ],
             ];
             //获取首页轮播图
-            $pic_list = [
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
-                    "url_title" => "标准服务"
-                ],
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-                    "link" => "http://wap.1jiajie.com/pledge.html",
-                    "url_title" => "服务承诺"
-                ],
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-                    "link" => "",
-                    "url_title" => ""
-                ]
-            ];
+//            $pic_list = [
+//                [
+//                    "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+//                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+//                    "url_title" => "标准服务"
+//                ],
+//                [
+//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+//                    "link" => "http://wap.1jiajie.com/pledge.html",
+//                    "url_title" => "服务承诺"
+//                ],
+//                [
+//                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+//                    "link" => "",
+//                    "url_title" => ""
+//                ]
+//            ];
             //服务分类
             $home_order_server = [
                 [
@@ -388,15 +386,16 @@ class ConfigureController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getServiceItemFailed);
         }
-        $itemlist = array();
+        $itemlist = $temp = array();
         if ($itemInfo) {
             foreach ($itemInfo as $key => $val) {
-                $itemlist[$key]['category_id'] = $val['operation_category_id'];
-                $itemlist[$key]['order_service_item_id'] = $val['goods_id'];
-                $itemlist[$key]['order_service_item_name'] = $val['operation_goods_name'];
-                $itemlist[$key]['icon'] = $val['operation_goods_img'] ? $val['operation_goods_img'] : "";
-                $itemlist[$key]['service_item_price'] = $val['operation_goods_price'];
-                $itemlist[$key]['service_item_price_description'] = $val['operation_goods_price_description'];
+                $temp['category_id'] = $val['operation_category_id'];
+                $temp['order_service_item_id'] = $val['goods_id'];
+                $temp['order_service_item_name'] = $val['operation_goods_name'];
+                $temp['icon'] = $val['operation_goods_img'] ? $val['operation_goods_img'] : "";
+                $temp['service_item_price'] = $val['operation_goods_price'];
+                $temp['service_item_price_description'] = $val['operation_goods_price_description'];
+                $itemlist[] = $temp;
             }
         }
         //二级页背景颜色 TODO:后面从数据库中读取
