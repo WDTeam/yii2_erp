@@ -145,7 +145,7 @@ $this->title = $model->worker_name;
                 'widgetOptions' => [
                     'class'=>\kartik\widgets\Select2::className(),
                     'name' => 'worker_district',
-                    'hideSearch' => true,
+                    'hideSearch' => false,
                     'data' => Worker::getDistrictList(),
                     'options' => ['placeholder' => '选择商圈','multiple' => true],
                     'pluginOptions' => [

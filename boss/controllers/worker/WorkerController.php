@@ -382,13 +382,13 @@ class WorkerController extends BaseAuthController
         return $out;
     }
 
-    public function actionShowDistrict($city_id=null,$q=null){
+    public function actionShowDistrict($city_id=null,$name=null){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ''];
         if(empty($city_id)){
             return $out;
         }
-        $data = OperationShopDistrict::getCityShopDistrictList($city_id);
+        $data = OperationShopDistrict::getCityShopDistrictListByNameAndCityId($city_id,$name);
         $new_data = [];
         foreach ((array)$data as $val) {
             $new_data[] = ['id'=>$val['id'],'text'=>$val['operation_shop_district_name']];
@@ -738,9 +738,9 @@ class WorkerController extends BaseAuthController
         $districtList = ArrayHelper::map($districtList,'operation_shop_district_name','id');
         $sexList = ['女'=>0,'男'=>1];
         //自营
-        //$typeList = ['自营'=>1,'非自营'=>2];
+        $typeList = ['自营'=>1,'非自营'=>2];
         //小家政
-        $typeList = ['自有'=>1,'非自有'=>2];
+        //$typeList = ['自有'=>1,'非自有'=>2];
 
         $isHealthList = ['是'=>1,'否'=>0];
         $isInsuranceList= ['是'=>1,'否'=>0];
@@ -768,12 +768,12 @@ class WorkerController extends BaseAuthController
                 $workerArr['worker_idcard'] = $col['D'];
                 //$workerArr['worker_photo'] = $col['E'];
                 //自营
-                //$workerArr['worker_work_city'] = isset($onlineCityList[$col['F']])?$onlineCityList[$col['F']]:0;
+                $workerArr['worker_work_city'] = isset($onlineCityList[$col['F']])?$onlineCityList[$col['F']]:0;
                  //小家政
-                if(stripos($col['F'],'市')===false){
-                    $onlineCity = $col['F'].'市';
-                    $workerArr['worker_work_city'] = isset($onlineCityList[$onlineCity])?$onlineCityList[$onlineCity]:0;
-                }
+//                if(stripos($col['F'],'市')===false){
+//                    $onlineCity = $col['F'].'市';
+//                    $workerArr['worker_work_city'] = isset($onlineCityList[$onlineCity])?$onlineCityList[$onlineCity]:0;
+//                }
                 $workerArr['worker_type'] = $typeList[$col['L']];
                 $workerArr['worker_identity_id'] = $identityConfigArr[$col['M']];
                 $workerArr['worker_is_blacklist'] = $blacklist[$col['AB']];
@@ -790,14 +790,14 @@ class WorkerController extends BaseAuthController
                 $workerExtArr['worker_sex'] = $sexList[$col['O']];
 
                 //自营
-//                $workerExtArr['worker_edu'] = isset($workerEduList[$col['P']])?$workerEduList[$col['P']]:'';
-//                $workerExtArr['worker_is_health'] = intval($col['Q']);
-//                $workerExtArr['worker_is_insurance'] = intval($col['R']);
+                $workerExtArr['worker_edu'] = isset($workerEduList[$col['P']])?$workerEduList[$col['P']]:'';
+                $workerExtArr['worker_is_health'] = intval($col['Q']);
+                $workerExtArr['worker_is_insurance'] = intval($col['R']);
 
                 //小家政
-                $workerExtArr['worker_edu'] = $col['P'];
-                $workerExtArr['worker_is_health'] = $isHealthList[$col['Q']];
-                $workerExtArr['worker_is_insurance'] = $isInsuranceList[$col['R']];
+//                $workerExtArr['worker_edu'] = $col['P'];
+//                $workerExtArr['worker_is_health'] = $isHealthList[$col['Q']];
+//                $workerExtArr['worker_is_insurance'] = $isInsuranceList[$col['R']];
 
 
                 $workerExtArr['worker_source'] = $col['S'];
@@ -869,33 +869,33 @@ class WorkerController extends BaseAuthController
                 $workerDeviceArr['worker_id'] = $worker_id;
 
                 //自营
-//                if($col['G'] && isset($districtList[$col['G']])){
-//                    $batchWorkerDistrict[] = [
-//                        'worker_id'=>$worker_id,
-//                        'operation_shop_district_id'=>$districtList[$col['G']],
-//                        'create_ad'=>time(),
-//                    ];
-//                }
+                if($col['G'] && isset($districtList[$col['G']])){
+                    $batchWorkerDistrict[] = [
+                        'worker_id'=>$worker_id,
+                        'operation_shop_district_id'=>$districtList[$col['G']],
+                        'create_ad'=>time(),
+                    ];
+                }
 
                 //小家政
-                $districtArr = explode('，',$col['G']);
-                if($col['G']){
-                    foreach ((array)$districtArr as $d_val) {
-                        $result = $this->getWorkerDistrict($onlineCity,$onlineCity.$d_val);
-                        foreach ($result as $val) {
-                            $districts[] = $val['operation_shop_district_id'];
-                        }
-                    }
-                    $districts = array_unique($districts);
-                    foreach ($districts as $val) {
-                        $batchWorkerDistrict[] = [
-                            'worker_id'=>$worker_id,
-                            'operation_shop_district_id'=>$val,
-                            'create_ad'=>time(),
-                        ];
-                    }
-                    $districts = [];
-                }
+//                $districtArr = explode('，',$col['G']);
+//                if($col['G']){
+//                    foreach ((array)$districtArr as $d_val) {
+//                        $result = $this->getWorkerDistrict($onlineCity,$onlineCity.$d_val);
+//                        foreach ($result as $val) {
+//                            $districts[] = $val['operation_shop_district_id'];
+//                        }
+//                    }
+//                    $districts = array_unique($districts);
+//                    foreach ($districts as $val) {
+//                        $batchWorkerDistrict[] = [
+//                            'worker_id'=>$worker_id,
+//                            'operation_shop_district_id'=>$val,
+//                            'create_ad'=>time(),
+//                        ];
+//                    }
+//                    $districts = [];
+//                }
 
 
                 $batchWorker[] = $workerArr;
