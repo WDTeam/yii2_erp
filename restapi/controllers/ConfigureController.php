@@ -22,7 +22,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} city_name 城市
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -119,7 +119,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -209,7 +209,7 @@ class ConfigureController extends \restapi\components\Controller
             if (!isset($param['city_name']) || !$param['city_name']) {
                 return $this->send(null, 'city_name参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
-            if (!isset($param['platform_version']) || !$param['platform_version']) {
+            if (!isset($param['order_channel_name']) || !$param['order_channel_name']) {
                 return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
             
@@ -223,7 +223,7 @@ class ConfigureController extends \restapi\components\Controller
                 $onlineCitys = OperationCity::getOnlineCitys();
                 $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
                 //获取banner图
-                //$bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
+                //$bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $order_channel_name_name);
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
@@ -337,7 +337,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} category_id 服务类型
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -435,7 +435,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -471,7 +471,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -631,7 +631,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionStartPage
      * @apiGroup configure
      *
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 平台版本号.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
