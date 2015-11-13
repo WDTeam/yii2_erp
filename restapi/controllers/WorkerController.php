@@ -143,7 +143,11 @@ class WorkerController extends \restapi\components\Controller
         if (!isset($param['leave_time']) || !$param['leave_time']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403, null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
+        
         try {
+            if(!WorkerVacationApplication::checkWorkerIsApplication($workerID,$param['leave_time'],$vacationType)){
+                return $this->send(null, "不能重复请假", 0, 403, null, "该时段您已请过假，请等待审核");
+            }
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID, $vacationType);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::workerApplyLeaveFailed);
@@ -190,7 +194,7 @@ class WorkerController extends \restapi\components\Controller
      *           {
      *               "leave_type": "请假类型【1休假 2事假】",
      *               "leave_time": "请假时间",
-     *               "leave_status": "请假状态"
+     *               "leave_status": "请假状态【0待审核 1审核通过 2.审核不通过】"
      *           }
      *       ]
      *      }
@@ -227,21 +231,22 @@ class WorkerController extends \restapi\components\Controller
         $pageData = array();
         if ($data['data']) {
             foreach ($data['data'] as $key => $val) {
-                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type'] == 1 ? "休假" : "事假";
+                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type'] ;
                 $pageData[$key]['leave_time'] = date('Y-m-d', $val['worker_vacation_application_start_time']);
-                switch ($val['worker_vacation_application_approve_status']) {
-                    case "0":
-                        $pageData[$key]['leave_status'] = "待审核";
-                        break;
-                    case "1":
-                        $pageData[$key]['leave_status'] = "审核通过";
-                        break;
-                    case "2":
-                        $pageData[$key]['leave_status'] = "审核不通过";
-                        break;
-                    default :
-                        $pageData[$key]['leave_status'] = "未知";
-                }
+                $pageData[$key]['leave_status'] = $val['worker_vacation_application_approve_status'];
+//                switch ($val['worker_vacation_application_approve_status']) {
+//                    case "0":
+//                        $pageData[$key]['leave_status'] = "待审核";
+//                        break;
+//                    case "1":
+//                        $pageData[$key]['leave_status'] = "审核通过";
+//                        break;
+//                    case "2":
+//                        $pageData[$key]['leave_status'] = "审核不通过";
+//                        break;
+//                    default :
+//                        $pageData[$key]['leave_status'] = "未知";
+//                }
             }
         }
         $ret = [
