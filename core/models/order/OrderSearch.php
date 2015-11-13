@@ -21,7 +21,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['order_code', 'order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_channel_type_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id'], 'integer'],
+            [['order_code', 'order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_channel_type_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'shop_id', 'district_id', 'city_id'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_channel_name'], 'string', 'max' => 64],
             [['order_customer_phone', 'order_worker_phone'], 'match', 'pattern' => '/^\d{11}$/i', 'message' => '请填写正确的电话号码或格式！(11位数字)'],
@@ -587,7 +587,6 @@ class OrderSearch extends Order
                 'order_booked_end_time' => $this->order_booked_end_time,
                 'address_id' => $this->address_id,
                 'order_booked_worker_id' => $this->order_booked_worker_id,
-                'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'order_batch_code' => $attributes["OrderSearch"]["order_batch_code"],
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
@@ -669,7 +668,6 @@ class OrderSearch extends Order
                 'order_booked_end_time' => $this->order_booked_end_time,
                 'address_id' => $this->address_id,
                 'order_booked_worker_id' => $this->order_booked_worker_id,
-                'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
 
@@ -725,7 +723,6 @@ class OrderSearch extends Order
             'order_booked_end_time' => $this->order_booked_end_time,
             'address_id' => $this->address_id,
             //'order_booked_worker_id' => $this->order_booked_worker_id,
-            'checking_id' => $this->checking_id,
             'order_pop_order_code' => $this->order_pop_order_code,
             'order_customer_phone' => $this->order_customer_phone,
             //'order_worker_phone' => $this->order_worker_phone,
@@ -810,7 +807,6 @@ class OrderSearch extends Order
             'order_booked_end_time' => $this->order_booked_end_time,
             'address_id' => $this->address_id,
             'order_booked_worker_id' => $this->order_booked_worker_id,
-            'checking_id' => $this->checking_id,
 
         ]);
 
