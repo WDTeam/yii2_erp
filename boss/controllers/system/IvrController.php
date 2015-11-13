@@ -31,10 +31,10 @@ class IvrController extends Controller
         if(isset($data['postType']) && $data['postType']==1 && isset($data['press']) && $data['press']==1){
             // code=1表示接单成功
             $result = Order::ivrAssignDone($order_id, $data['telephone']);
+            OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr 成功后也回调一次发送的代码来移除队列
             if($result['status']){
                 return json_encode(['code'=>1]);
             }else{
-                OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
                 return json_encode(['code'=>0]);
             }
         }elseif(isset($data['postType']) && $data['postType']==2){
