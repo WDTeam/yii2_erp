@@ -119,7 +119,7 @@ class OrderDispatcherKpi extends ActiveRecord
                 'dispatcher_kpi_rest_time_avg'=>$kpi_sum_obj->dispatcher_kpi_rest_time_sum/7,
                 'dispatcher_kpi_obtain_count_avg'=>$kpi_sum_obj->dispatcher_kpi_obtain_count_sum/7,
                 'dispatcher_kpi_assigned_count_avg'=>$kpi_sum_obj->dispatcher_kpi_assigned_count_sum/7,
-                'dispatcher_kpi_assigned_rate_avg'=>$kpi_sum_obj->dispatcher_kpi_assigned_count_sum/$kpi_sum_obj->dispatcher_kpi_obtain_count_sum,
+                'dispatcher_kpi_assigned_rate_avg'=>($kpi_sum_obj->dispatcher_kpi_obtain_count_sum>0)?$kpi_sum_obj->dispatcher_kpi_assigned_count_sum/$kpi_sum_obj->dispatcher_kpi_obtain_count_sum:0,
             ];
         }else if($kpi_sum_obj->kpi_count>0){//大于0，小于7
             $avg_kpi=[
@@ -128,7 +128,7 @@ class OrderDispatcherKpi extends ActiveRecord
                 'dispatcher_kpi_rest_time_avg'=>$kpi_sum_obj->dispatcher_kpi_rest_time_sum/$kpi_sum_obj->kpi_count,
                 'dispatcher_kpi_obtain_count_avg'=>$kpi_sum_obj->dispatcher_kpi_obtain_count_sum/$kpi_sum_obj->kpi_count,
                 'dispatcher_kpi_assigned_count_avg'=>$kpi_sum_obj->dispatcher_kpi_assigned_count_sum/$kpi_sum_obj->kpi_count,
-                'dispatcher_kpi_assigned_rate_avg'=>$kpi_sum_obj->dispatcher_kpi_assigned_count_sum/$kpi_sum_obj->dispatcher_kpi_obtain_count_sum,
+                'dispatcher_kpi_assigned_rate_avg'=>($kpi_sum_obj->dispatcher_kpi_obtain_count_sum>0)?$kpi_sum_obj->dispatcher_kpi_assigned_count_sum/$kpi_sum_obj->dispatcher_kpi_obtain_count_sum:0,
             ];
         }else{//等于0
             $avg_kpi=[
