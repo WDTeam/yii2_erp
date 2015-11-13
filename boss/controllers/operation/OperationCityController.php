@@ -601,7 +601,7 @@ class OperationCityController extends BaseAuthController
     public function actionOfflineCity($city_id, $goods_id)
     {
         if (!isset($city_id) || $city_id == '' || !isset($goods_id) || $goods_id == '') {
-            return $this->redirect(['opencity']);
+            return $this->redirect(['operation/operation-shop-district-goods/index']);
         }
 
         $operation_shop_district_goods_status = 2;
@@ -611,7 +611,7 @@ class OperationCityController extends BaseAuthController
         if ($district_nums == 0) {
             OperationCity::setOperationCityIsOffline($city_id);
         }
-        return $this->redirect(['opencity']);
+        return $this->redirect(['operation/operation-shop-district-goods/index']);
     }
 
     private function delSettingCityCaches(){

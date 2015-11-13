@@ -62,7 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'action'   => 'offline'
                         ]),
                         [
-                            'title' => Yii::t('yii', 'Edit'),
+                            'data-pjax'=>"0",
+                            'data-method'=>"post",
+                            'data-confirm'=>"您确定要下线吗？",
+                            'title' => Yii::t('yii', 'Delete'),
                         ]
                     );
                 },

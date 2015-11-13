@@ -42,7 +42,8 @@ class OperationShopDistrictGoodsSearch extends OperationShopDistrictGoods
                 'operation_category_name',
                 'operation_shop_district_goods_name',
                 'count(*) as district_nums'
-            ])->groupBy([
+            ])->where(['operation_shop_district_goods_status' => 1])
+            ->groupBy([
                 'operation_city_id',
                 'operation_goods_id'
             ]),
