@@ -35,13 +35,13 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
-     * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
+     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'2015-10-15 10:10:10'
+     * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'2015-10-15 12:10:10'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
      * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
      * @apiParam {String} address_id 订单地址id
-     * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
      * @apiParam {String} [order_pop_order_code] 第三方订单号
@@ -105,16 +105,14 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
 
-        $attributes['channel_id'] = $args['channel_id'];
-        if (empty($attributes['channel_id'])) {
-            return $this->send(null, "数据不完整,订单渠道ID为必填项", 0, 200, null, alertMsgEnum::orderCreateFaileChannelId);
-        }
+        $attributes['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
+
 
         if ($attributes['order_booked_end_time'] <= $attributes['order_booked_begin_time']) {
             return $this->send(null, "对不起,开始时间不能大于等于结束时间", 0, 200, null, alertMsgEnum::orderStartEndTime);
         }
-        
-         if (empty($args['order_customer_phone']) || !is_numeric($args['order_customer_phone'])) {
+
+        if (empty($args['order_customer_phone']) || !is_numeric($args['order_customer_phone'])) {
             return $this->send(null, "对不起，用户手机错误", 0, 200, null, alertMsgEnum::customerPhoneFaile);
         }
 
@@ -183,11 +181,11 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-
-                return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
+                $msgErrors = $order->errors;
+                return $this->send($order->errors, '创建订单失败', 1024, 200, null, current(current($msgErrors)));
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateFaile);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, current(current($msgErrors)));
         }
     }
 
@@ -200,7 +198,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
-     * @apiParam {String} channel_id 订单来源【1Android(版本号) 2.ios（版本号）3.Pcweb 4.H5 】
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 '1443695400'
      * @apiParam {String} address_id 服务地址ID
      * @apiParam {String} order_customer_need 客户
@@ -247,10 +245,8 @@ class OrderController extends \restapi\components\Controller
         if (!isset($args['order_service_item_id']) || !intval($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
-        //下单渠道
-        if (!isset($args['channel_id']) || !intval($args['channel_id'])) {
-            return $this->send(null, "请输入下单渠道", 0, 200, null, alertMsgEnum::orderChannleIDFaile);
-        }
+        //下单渠道 
+        $args['channel_name'] = isset($args['platform_version']) ? $args['platform_version'] : "";
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
@@ -274,7 +270,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
-        $attributes['channel_id'] = intval($args['channel_id']); //家洁
+        $attributes['channel_name'] = $args['channel_name']; //家洁
         $attributes['pay_channel_id'] = 2; //现金支付
 
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
@@ -291,14 +287,11 @@ class OrderController extends \restapi\components\Controller
             if ($is_success) {
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                $result = $order->errors;
-                if (isset($result['order_service_item_name'])) {
-                    return $this->send($order->errors, '创建订单失败', 0, 200, null, "您所填写的地址商圈不包含该服务");
-                }
-                return $this->send($order->errors, '创建订单失败', 0, 200, null, alertMsgEnum::orderCreateFaile);
+                $msgErrors = $order->errors;
+                return $this->send($order->errors, '创建订单失败', 0, 200, null, current(current($msgErrors)));
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateFaile);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, current(current($msgErrors)));
         }
     }
 
@@ -312,6 +305,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_item_id 服务项目id
      * @apiParam {String} address_longitude 填写地址的精度
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} address_latitude 填写地址的纬度
      * @apiParam {String} city_name 当前城市名称 
      * @apiParam {String} [address_id] 用户地址ID
@@ -358,6 +352,7 @@ class OrderController extends \restapi\components\Controller
         if (!isset($param['city_name']) || !$param['city_name']) {
             return $this->send(null, "城市名称错误", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
+        
         $cityID = OperationCity::getCityId(trim($param['city_name']));
         if (!$cityID) {
             return $this->send(null, "该城市未开通", 0, 200, null, alertMsgEnum::orderCityDistrictFaile);
@@ -389,6 +384,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Orders
      *
      * @apiParam {String} access_token 用户令牌
+     * @apiParam {String} platform_version      版本号 
      * @apiParam {String} [id] 订单id
      * @apiParam {String} [page] 第几页
      * @apiParam {String} [limit] 每页包含订单数
@@ -532,6 +528,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 获得用户各种状态的订单数量 （谢奕）
      *
      * @apiParam {String} access_token 用户令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {int} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
@@ -596,6 +593,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [order_status] 订单状态
      * @apiParam {String} [id] 订单id
      * @apiParam {String} [page] 第几页
@@ -727,6 +725,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [order_status] 订单状态
      * @apiParam {String} [id] 订单id
      * @apiParam {String} [page] 第几页
@@ -857,6 +856,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
@@ -929,6 +929,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [id] 订单id
      *
      *
@@ -966,7 +967,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \OrderSearch();
+        $orderSearch = new OrderSearch();
         $ret = [];
         $arr = array();
         $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
@@ -988,6 +989,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [page] 第几页 从第一页开始
      * @apiParam {String} [limit] 每页包含订单数
      *
@@ -1088,6 +1090,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [page] 第几页 从第一页开始
      * @apiParam {String} [limit] 每页包含订单数
      *
@@ -1183,8 +1186,11 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 查询用户不同状态订单数量(谢奕--缺少周期订单)
      * @apiName StatusOrdersCount
      * @apiGroup Order
+     * 
      * @apiDescription 获得各种状态的订单数量
+     * 
      * @apiParam {String} access_token 订单状态
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
@@ -1273,7 +1279,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} order_id 订单id
      * @apiParam {String} access_token 认证令牌
-     *
+     * @apiParam {String} platform_version      版本号
      * @apiSuccess {Object[]} orders 订单信息.
      * @apiSuccess {Object[]} status_history 该状态订单.
      *
@@ -1387,7 +1393,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [order_cancel_reason] 取消原因
      * @apiParam {String} order_code 订单号
      *
@@ -1487,7 +1493,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token  用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      * @apiParam {int}  order_id 订单号
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      *
@@ -1541,7 +1547,9 @@ class OrderController extends \restapi\components\Controller
      * @api {GET} /order/worker-history-orders [GET]/order/worker-history-orders (0%)
      * @apiName actionWorkerHistoryOrders
      * @apiGroup Order
+     * 
      * @apiDescription 阿姨全部订单月份列表 (赵顺利)
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} access_token    会话id.
      * @apiParam {String} platform_version 平台版本号
      *
@@ -1589,7 +1597,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 阿姨抢单数 (郝建设)
      * @apiParam {String} access_token      阿姨认证
-     * @apiParam {String} [platform_version]  平台版本号
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
      * @apiParam {String} [page]              页面  #leveltype =2 时要传递
      * @apiParam {String} leveltype          判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
@@ -1704,9 +1712,9 @@ class OrderController extends \restapi\components\Controller
                 try {
 
                     #指定阿姨订单数
-                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     #待抢单订单数
-                    $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $args["owr.worker_id"] = $worker->id;
                     $args["oc.customer_id"] = null;
                     $orderSearch = new OrderSearch();
@@ -1747,9 +1755,8 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 创建周期订单(郝建设)
      *
      * @apiParam  {String}  access_token      会话id. 必填 
-     * @apiParam  {String}  [platform_version]  平台版本号
+     * @apiParam {String}   platform_version      版本号
      * @apiParam  {integer} order_service_item_id 服务类型 商品id 必填
-     * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
@@ -1806,10 +1813,7 @@ class OrderController extends \restapi\components\Controller
 //        if (empty($param['order_src_id'])) {
 //            return $this->send(null, "订单来源id不能为空", 0, 200, null, alertMsgEnum::orderSrcIdFaile);
 //        }
-        #判断下单渠道不能为空
-        if (empty($param['channel_id'])) {
-            return $this->send(null, "下单渠道不能为空", 0, 200, null, alertMsgEnum::orderChannelFaile);
-        }
+         
         #判断地址不能为空
         if (empty($param['address_id'])) {
             return $this->send(null, "用户地址不能为空", 0, 200, null, alertMsgEnum::orderAddressFaile);
@@ -1834,7 +1838,7 @@ class OrderController extends \restapi\components\Controller
             $attributes = array(
                 "order_ip" => $order_ip,
                 "order_service_item_id" => $param['order_service_item_id'],
-                "channel_id" => $param['channel_id'],
+                "channel_name" => $param['platform_version'],
                 "address_id" => $param['address_id'],
                 "customer_id" => $customer->id,
                 "order_customer_phone" => $param['order_customer_phone'],
@@ -1891,7 +1895,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单提交 （郝建设 ）
      *
      * @apiParam {String} access_token        阿姨认证
-     * @apiParam {String} [platform_version]  平台版本号
+     * @apiParam {String} platform_version      版本号
      * @apiParam {int}    order_id            订单号
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1978,7 +1982,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token    用户认证
-     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} order_batch_code 周期订单号
      * @apiParam {int}    workerType    江江获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0; 
      * 
@@ -2140,7 +2144,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} id            订单号
      * 
      * @apiSuccessExample Success-Response:

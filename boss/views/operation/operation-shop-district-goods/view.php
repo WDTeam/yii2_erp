@@ -6,11 +6,11 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Operation\OperationShopDistrictGoods $model
+ * @var boss\models\operation\OperationShopDistrictGoods $model
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('operation', 'Operation Shop District Goods'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Operation Shop District Goods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-shop-district-goods-view">
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_shop_district_goods_service_time_slot:ntext',
             'operation_shop_district_goods_service_interval_time:datetime',
             'operation_shop_district_goods_service_estimate_time:datetime',
-            'operation_spec_info:ntext',
+            'operation_spec_info',
             'operation_spec_strategy_unit',
             'operation_shop_district_goods_price',
             'operation_shop_district_goods_balance_price',
@@ -60,6 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_goods_img:ntext',
             'operation_shop_district_goods_app_ico:ntext',
             'operation_shop_district_goods_pc_ico:ntext',
+            'operation_shop_district_goods_status',
+            'is_softdel',
             'created_at',
             'updated_at',
         ],

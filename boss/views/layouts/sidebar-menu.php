@@ -280,7 +280,7 @@ echo Menu::widget(
                                 [
                                     'label' => '已开通城市服务管理',
                                     'url' => [
-                                        'operation/operation-city/opencity'
+                                        'operation/operation-shop-district-goods/index'
                                     ],
                                     'icon' => 'fa fa-angle-right'
                                 ]

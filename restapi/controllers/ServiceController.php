@@ -26,7 +26,7 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} category_id 服务品类id
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -178,7 +178,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiDescription 获取城市首页服务项目信息简介(赵顺利--假数据，未与boss关联)
      *
      * @apiParam {String} city_name 城市
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -298,7 +298,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiDescription 获取城市所以服务类型列表 （赵顺利）
      *
      * @apiParam {String} city_name 城市
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -395,7 +395,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiParam {String} longitude 经度
      * @apiParam {String} latitude 纬度
      * @apiParam {String} goods_id 服务品类id
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -454,7 +454,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiParam {String} city_id 城市
      * @apiParam {String} address_id 地址id
      * @apiParam {String} build_area 建筑面积 传面积类型 1\2; 1是小于100平米的，2是大于100平米的
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} platform_version      版本号
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -522,6 +522,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiGroup service
      * 
      * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} service_type  服务类型
      * @apiParam {String} longitude     当前经度.
      * @apiParam {String} latitude      当前纬度.
@@ -715,6 +716,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiGroup service
      * 
      * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} service_type  服务类型
      * @apiParam {String} longitude     当前经度.
      * @apiParam {String} latitude      当前纬度.
@@ -881,6 +883,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiName actionServerWorkerList
      *
      * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} longitude     当前经度.
      * @apiParam {String} latitude      当前纬度.
      * @apiParam {String} per_page  每页显示多少条.
@@ -974,6 +977,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiDescription 根据地址获取百度地图数据(赵顺利 )
      *
      * @apiParam {String} query 查询关键字
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} location 经纬度
      * @apiParam {Number} radius 半径
      * @apiParam {String} output 输出方式
@@ -1024,6 +1028,7 @@ class ServiceController extends \restapi\components\Controller
      * @apiName actionGetShopDistrictInfo
      *
      * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} platform_version      版本号
      * @apiParam {String} longitude     当前经度.
      * @apiParam {String} latitude      当前纬度.
      *

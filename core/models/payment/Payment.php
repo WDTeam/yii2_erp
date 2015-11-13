@@ -9,7 +9,7 @@ use core\models\order\OrderOtherDict;
 use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
-
+use core\models\payment\PaymentLog;
 
 use Yii;
 use yii\base\Exception;
@@ -18,12 +18,24 @@ class Payment extends \dbbase\models\payment\Payment
 {
 
     const PAYMENT_CODE = '01';
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return '{{%payment}}';
+    }
+
+    /**
+     * 创建支付记录
+     * @param $data 数据
+     */
+    private static function createPyamentLog($data)
+    {
+        //记录日志
+        $obj = new PaymentLog();
+        $obj->insertLog($data);
     }
 
     /**
@@ -50,7 +62,6 @@ class Payment extends \dbbase\models\payment\Payment
         $data = $query->from(self::tableName())->where($condition)->one();
         return $data;
     }
-
 
     /**
      * 调用(调起)在线支付,发送给支付接口的数据
@@ -612,7 +623,7 @@ class Payment extends \dbbase\models\payment\Payment
         }
 
         //记录日志
-        $dataLog = array(
+        $dataLog = [
             'payment_log_price' => $this->toMoney($post['settleAmt'],100,'/'),   //支付金额
             'payment_log_shop_name' => $post['reqReserved'],   //商品名称
             'payment_log_eo_order_id' => $post['orderId'],   //订单ID
@@ -622,11 +633,11 @@ class Payment extends \dbbase\models\payment\Payment
             'pay_channel_id' => 12,  //支付渠道ID
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
-        );
-        try{
-            $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-            $this->trigger('insertLog');
-        }catch(Exception $e){}
+        ];
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
+
         //获取交易ID
         $paymentId = $this->getPaymentId($post['orderId']);
 
@@ -723,8 +734,9 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['out_trade_no']);
@@ -860,8 +872,9 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['out_trade_no']);
@@ -989,8 +1002,8 @@ class Payment extends \dbbase\models\payment\Payment
             'data' => $post //文件数据
         );
 
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['out_trade_no']);
@@ -1088,8 +1101,9 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['order_no']);
@@ -1205,8 +1219,9 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $model->getPaymentId($post['out_trade_no']);
@@ -1299,8 +1314,9 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //实例化模型
         $model = new Payment();
