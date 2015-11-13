@@ -59,7 +59,7 @@ return [
             'class' => 'core\components\ImageHelper',
             'accessKey' => '1i1GI39eRugqiqBjBFnYs-0k8D_hcfhNbFa2QRRy',
             'secretKey' => 'U2dBSWEhnIwdIIwOGV9bDjNungn_Rn90vMnRpuJW',
-            'domain' => '7b1f97.com1.z0.glb.clouddn.com',
+            'domain' => '7xo9wz.com2.z0.glb.qiniucdn.com',
             'bucket' => 'ejiajie-prod'
         ],
         'request' => [
