@@ -19,7 +19,7 @@ return [
         'redis' => [
             'class' => 'yii\redis\Connection',
             'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-            'password' => "deb09fcb1b404eb6:Ejiajie2015dev",
+//            'password' => "deb09fcb1b404eb6:Ejiajie2015dev",
             'port' => 6379,
             'database' => 0,
         ],
