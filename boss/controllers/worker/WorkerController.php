@@ -168,7 +168,7 @@ class WorkerController extends BaseAuthController
                     WorkerForRedis::deleteWorkerToRedis($id);
                 }
             }
-            var_dump($workerModel->errors);die;
+            //var_dump($workerModel->errors);die;
         }
         return $this->redirect(['auth', 'id' => $id]);
     }
