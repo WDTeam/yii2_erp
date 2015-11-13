@@ -980,19 +980,13 @@ class WorkerController extends \restapi\components\Controller
      *   "code": 1,
      *   "msg": "操作成功",
      *   "ret": {
-     *       "2015-10-28": true,
-     *       "2015-10-29": true,
-     *       "2015-10-30": false,
-     *       "2015-10-31": false,
-     *       "2015-11-01": false,
-     *       "2015-11-02": true,
-     *       "2015-11-03": true,
-     *       "2015-11-04": true,
-     *       "2015-11-05": true,
-     *       "2015-11-06": false,
-     *       "2015-11-07": false,
-     *       "2015-11-08": false,
-     *       "2015-11-09": true,
+     *       "leave_time": [
+     *       {
+     *           "date": "2015-11-13",
+     *           "enable": false,
+     *           "week": "周五"
+     *       }
+     *      ]
      *   },
      *  "alertMsg": "获取阿姨请假排班表成功"
      * }

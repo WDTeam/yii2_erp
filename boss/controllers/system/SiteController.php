@@ -80,8 +80,8 @@ class SiteController extends Controller
         	//echo  '11111';exit;
             return $this->goBack();
         } else {
-            $model->username = 'admin';
-            $model->password = 'qwe1234';
+//             $model->username = 'admin';
+//             $model->password = 'qwe1234';
             return $this->render('login', [
                 'model' => $model,
             ]);

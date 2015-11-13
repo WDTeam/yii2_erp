@@ -189,6 +189,9 @@ class OperationGoodsController extends Controller
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
 
+        //只在创建时验证图片是必须的
+        $model->setScenario('create');
+
         if ($model->load($post)) {
             $model->operation_category_ids = $model->operation_category_id;
             $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
@@ -228,7 +231,6 @@ class OperationGoodsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'OperationCategory' => $OperationCategory,
-                //'priceStrategies' => $priceStrategies,
                 'OperationSpec' => $OperationSpec,
             ]);
         }
@@ -266,15 +268,16 @@ class OperationGoodsController extends Controller
             $model->operation_category_ids = $model->operation_category_id;
             $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
             
-            /** 冗余计量单位 **/
+            //冗余计量单位
             $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
             $specinfo = OperationSpec::getSpecInfo($model->operation_spec_info);
             $model->operation_spec_strategy_unit = $specinfo['operation_spec_strategy_unit'];
-            
-             /** 添加商品图片 **/
+
+            //添加商品图片
+            unset($model->operation_goods_img);
             $model->uploadImgToQiniu('operation_goods_img');
 
-            /** 添加个性标签 **/
+            //添加个性标签 
             $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
             $model->operation_tags = serialize($tags);

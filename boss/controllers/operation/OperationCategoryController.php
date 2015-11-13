@@ -69,6 +69,7 @@ class OperationCategoryController extends BaseAuthController
     public function actionCreate()
     {
         $model = new OperationCategory;
+        $model->setScenario('create');
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -94,13 +95,17 @@ class OperationCategoryController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $post = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load($post)) {
+
+            unset($model->operation_category_icon);
 
             $model->uploadImgToQiniu('operation_category_icon');
-            $model->updated_at = time();
 
+            $model->updated_at = time();
             $model->save();
+
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [

@@ -8,6 +8,8 @@ use dosamigos\datetimepicker\DateTimePicker;
 use boss\components\GoodsTypeCascade;
 use kartik\widgets\FileInput;
 
+use boss\models\operation\OperationCommon;
+
 /**
  * @var yii\web\View $this
  * @var boss\models\Operation\OperationGoods $model
@@ -49,6 +51,9 @@ use kartik\widgets\FileInput;
                     'showCaption' => false,
                     'showRemove' => true,
                     'showUpload' => false,
+                    'initialPreview'=>[
+                        OperationCommon::getPhotoShow($model->selected_service_photo)
+                    ],
                 ]
             ])?>
 

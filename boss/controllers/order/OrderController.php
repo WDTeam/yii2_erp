@@ -577,18 +577,19 @@ class OrderController extends BaseAuthController
         $nickname = Yii::$app->request->post('nickname');
         $phone = Yii::$app->request->post('phone');
         $customer_id = Yii::$app->request->post('customer_id');
-        if ($address_id > 0) {
-            //修改
-            $address = CustomerAddress::updateAddress($address_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
-        } else {
-            //添加
-            $address = CustomerAddress::addAddress($customer_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
+        if(!empty($province_name) && !empty($city_name) && !empty($county_name) && !empty($detail)) {
+            if ($address_id > 0) {
+                //修改
+                $address = CustomerAddress::updateAddress($address_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
+            } else {
+                //添加
+                $address = CustomerAddress::addAddress($customer_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
+            }
+            if ($address) {
+                return ['code' => 200, 'data' => $address];
+            }
         }
-        if ($address) {
-            return ['code' => 200, 'data' => $address];
-        } else {
-            return ['code' => 500, 'error' => '保存失败'];
-        }
+        return ['code' => 500, 'error' => '保存失败'];
     }
 
 
