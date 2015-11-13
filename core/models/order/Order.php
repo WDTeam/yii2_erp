@@ -631,7 +631,7 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->$comment_id = $comment_id;
+        $order->comment_id = $comment_id;
         return OrderStatus::_customerAcceptDone($order, ['OrderExtCustomer']);
     }
 
