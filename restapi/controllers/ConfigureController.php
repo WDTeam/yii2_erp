@@ -295,7 +295,7 @@ class ConfigureController extends \restapi\components\Controller
             //服务分类
             $home_order_server = [
                 [
-                    'title' => '单次保洁',
+                    'title' => '单次体验',
                     'introduction' => '新用户第1小时免费',
                     'icon' => $current_env_url . '/statics/images/dancibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/1',
@@ -303,7 +303,7 @@ class ConfigureController extends \restapi\components\Controller
                     'font_colour' => 'ffffff',
                 ],
                 [
-                    'title' => '周期保洁',
+                    'title' => '预约随心',
                     'introduction' => '一次下单 清洁无忧',
                     'icon' => $current_env_url . '/statics/images/zhouqibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/2',
