@@ -81,11 +81,12 @@ class OrderController extends \restapi\components\Controller
     public function actionCreateOrder()
     {
         
+        echo 333;
         $args = Yii::$app->request->post() or $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
-     
+     echo 444;
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
@@ -94,6 +95,7 @@ class OrderController extends \restapi\components\Controller
         if (empty($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
+        echo 555;
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
         if (empty($args['order_booked_begin_time'])) {
@@ -119,6 +121,7 @@ class OrderController extends \restapi\components\Controller
         }
         $attributes['order_booked_count'] = $args['order_booked_count'];
 
+        echo 66666;
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
         } elseif (isset($args['address']) && isset($args['city'])) {
@@ -166,6 +169,8 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_is_use_balance'])) {
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
+        echo 111;
+        exit;
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
