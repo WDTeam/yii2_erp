@@ -246,7 +246,7 @@ class Order extends OrderModel
     {
 
         $attributes_keys = [
-            'order_ip', 'order_service_item_id', 'channel_id', 'address_id',
+            'order_ip', 'order_service_item_id', 'address_id',
             'customer_id', 'admin_id', 'pay_channel_id','order_channel_name',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo',
@@ -300,6 +300,7 @@ class Order extends OrderModel
 
         //在线支付初始化
         $orderExtPay = 0;
+        $channel_id = 0;
         foreach ($booked_list as $v) {
             $order = new Order();
             $booked = [
@@ -318,15 +319,15 @@ class Order extends OrderModel
                     $attributes['order_parent_id'] = $order->id;
                     $attributes['order_is_parent'] = 0;
                     $orderExtPay += $order->orderExtPay->order_pay_money;
+                    $channel_id = $order->channel_id;
                 }
             }
         }
 
         $transact->commit();
-
         if ($orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id'] == self::ORDER_PAY_CHANNEL_CASH) {
             //交易记录
-            if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay', 2)) {
+            if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $channel_id, 'order_pay', 2)) {
                 OrderStatus::_batchPayment($attributes['order_batch_code'], $attributes['admin_id']);
             }
         }
