@@ -28,14 +28,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "platform_version",
-            "description": "<p>用户渠道</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "description": "<p>app版本</p> "
           }
         ]
       }
@@ -208,9 +201,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>app版本</p> "
           }
         ]
       }
@@ -292,9 +285,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>app版本</p> "
           }
         ]
       }
@@ -377,15 +370,22 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "order_booked_begin_time",
-            "description": "<p>服务开始时间 时间戳  如 *'1443695400'</p> "
+            "description": "<p>服务开始时间 时间戳  如 *'2015-10-15 10:10:10'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_booked_end_time",
-            "description": "<p>服务结束时间   时间戳  如 *'1443695400'</p> "
+            "description": "<p>服务结束时间   时间戳  如 *'2015-10-15 12:10:10'</p> "
           },
           {
             "group": "Parameter",
@@ -414,13 +414,6 @@ define({ "api": [
             "optional": false,
             "field": "address_id",
             "description": "<p>订单地址id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "channel_id",
-            "description": "<p>下单渠道</p> "
           },
           {
             "group": "Parameter",
@@ -553,6 +546,13 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "id",
             "description": "<p>订单id</p> "
@@ -641,6 +641,13 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "page",
             "description": "<p>第几页 从第一页开始</p> "
@@ -708,9 +715,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -786,6 +793,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "address_latitude",
             "description": "<p>填写地址的纬度</p> "
           },
@@ -848,9 +862,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -858,13 +872,6 @@ define({ "api": [
             "optional": false,
             "field": "order_service_item_id",
             "description": "<p>服务类型 商品id 必填</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>string</p> ",
-            "optional": false,
-            "field": "channel_id",
-            "description": "<p>下单渠道 必填</p> "
           },
           {
             "group": "Parameter",
@@ -1017,8 +1024,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "channel_id",
-            "description": "<p>订单来源【1Android(版本号) 2.ios（版本号）3.Pcweb 4.H5 】</p> "
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1086,9 +1093,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1164,9 +1171,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1230,9 +1237,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1300,9 +1307,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1359,6 +1366,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>认证令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -1419,6 +1433,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1511,9 +1532,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1568,6 +1589,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1633,15 +1661,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "field": "access_token",
+            "description": "<p>会话id.</p> "
           }
         ]
       }
@@ -1684,6 +1712,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -1811,6 +1846,13 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "id",
             "description": "<p>订单id</p> "
@@ -1902,6 +1944,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -2015,6 +2064,13 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "id",
             "description": "<p>订单id</p> "
@@ -2071,6 +2127,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -2185,7 +2248,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "description": "<p>app版本</p> "
           }
         ]
       }
@@ -2243,9 +2306,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>app版本</p> "
           },
           {
             "group": "Parameter",
@@ -2315,9 +2378,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>app版本</p> "
           },
           {
             "group": "Parameter",
@@ -2485,9 +2548,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -2539,7 +2602,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "platform_version",
-            "description": "<p>平台版本</p> "
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -2614,9 +2677,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -2654,6 +2717,55 @@ define({ "api": [
     "groupTitle": "SendSms"
   },
   {
+    "type": "GET",
+    "url": "/send-sms/voice-verify-code",
+    "title": "[GET]/send-sms/voice-verify-code",
+    "description": "<p>语音验证码发送</p> ",
+    "name": "actionVoiceVerifyCode",
+    "group": "SendSms",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>手机号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>访问源</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"语音验证码发送成功\",\n      \"ret\": {},\n      \"alertMsg\": \"语音验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"电话号码不符合规则\",\n  \"ret\": {},\n  \"alertMsg\": \"电话号码不符合规则\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/SendSmsController.php",
+    "groupTitle": "SendSms"
+  },
+  {
     "type": "POST",
     "url": "/user/add-address",
     "title": "[POST]/user/add-address(100%)",
@@ -2673,9 +2785,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -2780,9 +2892,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -2844,9 +2956,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -2915,9 +3027,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -2990,9 +3102,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3049,9 +3161,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3119,9 +3231,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -3196,9 +3308,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -3276,9 +3388,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3346,9 +3458,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3410,9 +3522,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -3476,9 +3588,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3535,9 +3647,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3616,9 +3728,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3682,9 +3794,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3740,17 +3852,17 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
             "description": "<p>地址id                         如：1</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
           },
           {
             "group": "Parameter",
@@ -3854,9 +3966,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3979,9 +4091,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)       如：android_4.2.2</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -4086,6 +4198,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
           {
             "group": "Parameter",
             "type": "<p>int</p> ",
@@ -5790,9 +5909,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -5856,9 +5975,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -5922,9 +6041,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -5981,9 +6100,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6047,9 +6166,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6126,9 +6245,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6181,6 +6300,13 @@ define({ "api": [
             "optional": false,
             "field": "query",
             "description": "<p>查询关键字</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -6298,9 +6424,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6353,6 +6479,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -6444,9 +6577,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6503,9 +6636,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6558,6 +6691,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
@@ -6650,6 +6790,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "longitude",
             "description": "<p>当前经度.</p> "
           },
@@ -6736,9 +6883,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -6811,6 +6958,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "platform_version",
+            "description": "<p>版本号</p> "
           },
           {
             "group": "Parameter",
