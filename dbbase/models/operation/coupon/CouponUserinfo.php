@@ -46,18 +46,17 @@ class CouponUserinfo extends \yii\db\ActiveRecord
         return '{{%coupon_userinfo}}';
     }
 
-    
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['customer_id','is_disabled','coupon_userinfo_id','system_user_id', 'is_used','is_del'], 'integer'],
+            [['customer_id','is_disabled','couponrule_classify','couponrule_category','couponrule_type','couponrule_service_type_id','couponrule_commodity_id','couponrule_city_limit','couponrule_city_id','couponrule_customer_type','couponrule_promote_type','coupon_userinfo_id','system_user_id', 'is_used','is_del'], 'integer'],
             [['coupon_userinfo_price'], 'number'],
             [['coupon_userinfo_code', 'system_user_name'], 'string', 'max' => 40],
             [['coupon_userinfo_name'], 'string', 'max' => 100],
-            [['order_code'], 'string', 'max' => 64]
+            [['order_code','customer_tel'], 'string', 'max' => 64]
         ];
     }
 

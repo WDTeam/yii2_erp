@@ -10,7 +10,10 @@
 * @author: peak pan 
 * @version:1.0
 */
+
 namespace boss\controllers\operation\coupon;
+
+ini_set('max_execution_time',864000);
 
 use Yii;
 use dbbase\models\operation\coupon\CouponRule;
@@ -44,9 +47,8 @@ class CouponRuleController extends Controller
     
     public function actionIndexceshi()
     {
-       $userinfoceshi= new CouponUserinfoceshi;
-    	
-       /* $datainfo=$userinfoceshi->find()
+       /* $userinfoceshi= new CouponUserinfoceshi;
+       $datainfo=$userinfoceshi->find()
        ->where(['and','city_id is null'])
        ->asArray()
        ->limit(50)
@@ -75,15 +77,14 @@ class CouponRuleController extends Controller
 		    	} */
 		//导入到新表       
        $userinfoceshi= new CouponUserinfoceshi;
+       
        $data=$userinfoceshi->find()
-       ->where(['coupon_userinfo_id'=>1])
+       ->where(['coupon_userinfo_id'=>2])
        ->limit(5)
        ->asArray()
        ->all();
        
-       
     	foreach ($data as $newdata){
-    		
     		$newcoupon=new CouponUserinfo;
     			//领取的优惠券
 				if($newdata['city_id']==0){
@@ -109,8 +110,8 @@ class CouponRuleController extends Controller
 				
     		$newcoupon->coupon_userinfo_code=$newdata['coupon_userinfo_code']?$newdata['coupon_userinfo_code']:'0';
     		$newcoupon->coupon_userinfo_name=$newdata['coupon_userinfo_name']?$newdata['coupon_userinfo_name']:'优惠券';
-    		$newcoupon->coupon_userinfo_gettime=$newdata['couponrule_use_start_time'];//领取时间默认为开始时间
-    		$newcoupon->couponrule_use_start_time=$newdata['couponrule_use_start_time'];
+    		$newcoupon->coupon_userinfo_gettime=$newdata['coupon_userinfo_gettime'];//领取时间默认为开始时间
+    		$newcoupon->couponrule_use_start_time=$newdata['coupon_userinfo_gettime'];
     		$newcoupon->couponrule_use_end_time=$newdata['couponrule_use_end_time'];
     		$newcoupon->coupon_userinfo_price=$newdata['coupon_userinfo_price'];
     		$newcoupon->customer_tel=$newdata['customer_tel'];
@@ -126,7 +127,7 @@ class CouponRuleController extends Controller
     		$newcoupon->couponrule_use_end_days=0;
     		$newcoupon->couponrule_promote_type=1;
     		$newcoupon->couponrule_price=50;
-    		$newcoupon->order_code=0;
+    		$newcoupon->order_code='0';
     		$newcoupon->is_disabled=0;
     		$newcoupon->system_user_id=0;
     		$newcoupon->system_user_name='老数据导入';
@@ -134,7 +135,19 @@ class CouponRuleController extends Controller
     		$newcoupon->created_at=time();
     		$newcoupon->updated_at=time();
     		$newcoupon->is_del=0;
-    		$newcoupon->save();
+    		
+    		//var_dump($newcoupon);exit;
+    		
+    		$islcok=$newcoupon->save();
+    		
+    		var_dump($islcok);exit;
+    		if($islcok){
+    			$userinfoceshi->findOne($newdata['id'])->delete(); 
+    		}else{
+    		//失败记录日志
+    			file_put_contents('log.txt',json_encode($newcoupon)."\n",FILE_APPEND);
+    		}
+    		unset($newcoupon);
     	}
     	
     	
