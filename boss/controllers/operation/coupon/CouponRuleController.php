@@ -171,6 +171,9 @@ class CouponRuleController extends Controller
     	
     	var_dump($rty);exit; */
     	
+    	//$rty=\core\models\operation\OperationOrderChannel::configorderlist('百度直达号');
+    	//var_dump($rty);exit;
+    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
