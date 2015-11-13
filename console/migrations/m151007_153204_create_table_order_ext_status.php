@@ -29,6 +29,8 @@ class m151007_153204_create_table_order_ext_status extends Migration
             'updated_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',
 
         ], $tableOptions);
+
+        $this->createIndex('idx-order_ext_status-order_status_dict_id', '{{%order_ext_status}}', 'order_status_dict_id');
     }
 
     public function down()
