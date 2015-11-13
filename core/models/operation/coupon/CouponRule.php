@@ -87,6 +87,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     	$coupon_code_edit->save();
 
     	$Couponlogobj=new CouponLog;
+    	$Couponlogobj->customer_code=$coupon_code_edit->customer_code;
     	$Couponlogobj->customer_id=0;
     	$Couponlogobj->order_id=$order_code;
     	$Couponlogobj->coupon_id=$couponrule_id;
@@ -110,7 +111,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     		'coupon_userinfo_code'=>$coupon_code_arr['coupon_userinfo_code'],
     		'coupon_userinfo_price'=>$coupon_code_arr['coupon_userinfo_price'],
     		'payment_id'=>$pay_nub,
-    		'transaction_id'=>$Couponlogobj->id
+    		'transaction_id'=>$coupon_code_edit->customer_code
     		];
     		$array=[
     		'is_status'=>1,

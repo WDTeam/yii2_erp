@@ -196,12 +196,11 @@ class FinancePopOrderController extends Controller
     			if($n>1 && !empty($value['A'])){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid,$paychannelid);
     			//var_dump($statusinfo);exit;
-    			
     			$postdate['order_code'] =$statusinfo['order_code']; //系统订单号
+    			$postdate['finance_pop_order_code'] ='02'.date('ymdhis',time()).rand(1111,999999); //系统流水号
     			$postdate['order_status_name'] =$statusinfo['order_status_name']?$statusinfo['order_status_name']:'未知';  //订单状态
     			$postdate['order_money'] =$statusinfo['order_money'];// 订单金额
     			$postdate['finance_status'] =1;// 收款状态 1 未确定 2已确定
-
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
@@ -241,8 +240,6 @@ class FinancePopOrderController extends Controller
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
     		
-    			
-    			
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();

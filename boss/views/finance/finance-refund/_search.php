@@ -13,7 +13,7 @@ use kartik\date\DatePicker;
         'method' => 'get',
     ]); ?>
     <div class='col-md-1'>
-    <?= $form->field($model, 'finance_refund_pop_nub') ?>
+    <?= $form->field($model, 'finance_refund_code') ?>
 	</div> 
     <div class='col-md-1'>
     <?= $form->field($model, 'finance_refund_tel') ?>
