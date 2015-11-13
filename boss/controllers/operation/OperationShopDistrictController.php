@@ -9,6 +9,7 @@ use boss\models\operation\OperationShopDistrictCoordinate;
 use boss\models\operation\OperationShopDistrictGoods;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationArea;
+use boss\models\worker\WorkerDistrict;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -309,6 +310,10 @@ class OperationShopDistrictController extends BaseAuthController
         if (($model = OperationShopDistrict::findOne($id)) !== null) {
             OperationShopDistrictCoordinate::delCoordinateInfo($id);
             OperationShopDistrictGoods::delShopDistrictGoods($id);
+
+            //删除商圈和阿姨的关联关系
+            WorkerDistrict::deleteDistrictWorker($id);
+
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);
