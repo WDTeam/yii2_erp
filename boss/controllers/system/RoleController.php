@@ -83,11 +83,7 @@ class RoleController extends BaseAuthController
             $role->description = $model->description;
             $auth->update($id, $role);
             
-            $perms = (array)$auth->getPermissionsByRole($id);
-            foreach ($perms as $perm){
-                $auth->removeChild($role, $perm);
-            }
-            
+            $auth->removeChildren($role);
             foreach ($model->permissions as $name)
             {
                 $permission = $auth->getPermission($name);
