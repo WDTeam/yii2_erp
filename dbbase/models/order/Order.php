@@ -37,7 +37,6 @@ use dbbase\models\ActiveRecord;
  * @property string $city_id
  * @property string $order_address
  * @property string $order_booked_worker_id
- * @property string $checking_id
  * @property string $order_cs_memo
  * @property string $order_sys_memo
  * @property string $order_cancel_cause_id
@@ -201,7 +200,7 @@ class Order extends ActiveRecord
 
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id',
                 'order_channel_type_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'order_cancel_cause_id',
-                'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
+                'city_id', 'address_id', 'district_id', 'order_booked_worker_id','version'], 'integer'],
 
             [['order_unit_money',  'order_booked_count','order_money','order_lat','order_lng'], 'number'],
             [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
@@ -247,7 +246,6 @@ class Order extends ActiveRecord
             'order_lat' => '纬度',
             'order_lng' => '经度',
             'order_booked_worker_id' => '指定阿姨',
-            'checking_id' => '对账id',
             'order_cs_memo' => '客服备注',
             'order_sys_memo' => '系统备注',
             'order_cancel_cause_id' => '取消原因id',
@@ -461,7 +459,6 @@ class Order extends ActiveRecord
                 'order_lat' => $this->order_lat,
                 'order_lng' => $this->order_lng,
                 'order_booked_worker_id' => $this->order_booked_worker_id,
-                'checking_id' => $this->checking_id,
                 'order_cs_memo' => $this->order_cs_memo,
                 'order_sys_memo' => $this->order_sys_memo,
                 'order_cancel_cause_id' => $this->order_cancel_cause_id,

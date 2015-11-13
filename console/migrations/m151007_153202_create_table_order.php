@@ -51,7 +51,13 @@ class m151007_153202_create_table_order extends Migration
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 
 //===========================对账信息
-            'checking_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'对账id\'',
+            'order_checked_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'对账单编号\'',
+            'order_worker_payoff_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'阿姨结算编号\'',
+            'order_refund_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'退款单编号\'',
+            'order_complaint_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'投诉单编号\'',
+            'order_compensate_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'赔偿单编号\'',
+            'order_compensate_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'赔偿单编号\'',
+
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
             'order_sys_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'系统备注\'',
