@@ -146,6 +146,8 @@ class alertMsgEnum
     const loginFromPopSuccess = '登陆成功';
     //用户登录手机号或验证码不能为空
     const customerLoginDataDefect = '用户名或验证码不能为空';
+    //用户渠道不能为空
+    const customerLoginDataDefectPlatform = '用户渠道不能为空';
     //阿姨登录
     //阿姨登录成功
     const workerLoginSuccess = '登陆成功';

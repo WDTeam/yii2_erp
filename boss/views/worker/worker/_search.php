@@ -74,11 +74,11 @@ use kartik\date\DatePicker;
     </div>
     <?php } ?>
     <div class='col-md-3'>
-        <?php echo $form->field($model, 'worker_identity_id')->widget(Select2::classname(), [
-            'name' => 'worker_identity_id',
+        <?php echo $form->field($model, 'worker_type')->widget(Select2::classname(), [
+            'name' => 'worker_type',
             'hideSearch' => true,
-            'data' => \boss\models\worker\WorkerIdentityConfig::getWorkerIdentityList(),
-            'options' => ['placeholder' => '选择身份...', 'inline' => true],
+            'data' => ['1' => '自有', '2' => '非自有'],
+            'options' => ['placeholder' => '选择类型', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
