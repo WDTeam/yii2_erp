@@ -5,7 +5,8 @@ namespace core\models\customer;
 use Yii;
 use core\models\customer\CustomerCode;
 use core\models\customer\Customer;
-use core\models\finance\FinanceOrderChannel;
+use core\models\operation\OperationOrderChannel;
+use yii\base\Exception;
 
 
 /**
@@ -145,8 +146,11 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 
         
         $key = 'pop_to_boss';
-		$order_channal_info = \dbbase\models\finance\FinanceOrderChannel::get_order_channel_info($channal_id);
-		if($order_channal_info == "未知") return false;
+		$channal_name = OperationOrderChannel::get_post_name($channal_id);
+
+		if($channal_name == '未知'){
+            return false;
+        }
         if (md5($phone.$key) != $sign) {
             return false;
         }
@@ -176,6 +180,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
                 $hasAdded = Customer::addCustomer($phone, $channal_id);
+                if(!$hasAdded){
+                    throw new Exception('新增客户注册来源失败');
+                }
             }
 
             $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
