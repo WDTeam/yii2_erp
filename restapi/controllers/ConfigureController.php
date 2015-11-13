@@ -184,6 +184,10 @@ class ConfigureController extends \restapi\components\Controller
      *         ],
      *         "isBlock": "用户是否为黑名单【1表示黑名单，0表示正常】",
      *         "isEffect": "用户token是否有效【0表示正常，1表示失效】"
+     *          isUpdate: "0", 
+     *          updateContent: "",
+     *          updateUrl: "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
+     *          isShowGiveStar :"0"
      *     }
      * }
      *
@@ -320,6 +324,10 @@ class ConfigureController extends \restapi\components\Controller
                 'server_list' => $serviceCategoryList,
                 'isBlock' => $isBlock,
                 'isEffect' => $isEffect,
+                "isUpdate"=> "0", 
+                "updateContent"=> "",
+                "updateUrl"=>"https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
+                "isShowGiveStar" =>"0"
             ];
             return $this->send($ret, '操作成功', 1, 200, null, alertMsgEnum::getUserInitSuccess);
         } catch (\Exception $e) {
