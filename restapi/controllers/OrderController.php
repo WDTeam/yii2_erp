@@ -187,7 +187,7 @@ class OrderController extends \restapi\components\Controller
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败');//current(current($msgErrors)));
-        }
+        } 
     }
 
     /**
