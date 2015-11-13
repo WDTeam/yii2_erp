@@ -16,14 +16,13 @@ class m151105_101815_create_table_coupon_userinfo extends Migration
             'id' => Schema::TYPE_PK . ' NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
             'customer_id' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0 COMMENT \'客户id\'',
             'customer_tel' => Schema::TYPE_STRING . '(11) NOT NULL DEFAULT 0 COMMENT \'客户手机号\'',
+			'customer_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'\' COMMENT \'流水号\'',
             'coupon_userinfo_id' => Schema::TYPE_INTEGER . '(8) NOT NULL DEFAULT 0 COMMENT \'优惠规则id\'',
             'coupon_userinfo_code' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'\' COMMENT \'优惠码\'',
             'coupon_userinfo_name' => Schema::TYPE_STRING . '(100) NOT NULL DEFAULT \'\' COMMENT \'优惠券名称\'',
             'coupon_userinfo_price' => Schema::TYPE_DECIMAL . '(8,2) DEFAULT 0.00 COMMENT \'优惠券价值\'',
             'coupon_userinfo_gettime' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'领取时间\'',
             'coupon_userinfo_usetime' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'使用时间\'',
-
-
             'couponrule_use_start_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'优惠券的用户可使用的开始时间\'',
             'couponrule_use_end_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'过期时间\'',
 

@@ -463,8 +463,10 @@ class FinancePopOrderController extends Controller
     	$requestModel = Yii::$app->request->post();
 		//$idArr = implode(',',);
     	if(!empty($requestModel) && array_key_exists('ids',$requestModel)){
+    	//财务审核通知订单修改状态	（林洪优）提供
 		//checked($order_id)
 		
+  
     		
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
