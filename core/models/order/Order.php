@@ -167,6 +167,7 @@ class Order extends OrderModel
             'customer_id','admin_id','order_booked_count'
         ];
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign'])?1:$attributes['order_flag_sys_assign'];
+        echo 1111;
         foreach($attributes as $k=>$v){
             if(!in_array($k,$attributes_keys)){
                 unset($attributes[$k]);
@@ -178,6 +179,8 @@ class Order extends OrderModel
                 return false;
             }
         }
+        
+        echo 222;
 
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
@@ -194,6 +197,9 @@ class Order extends OrderModel
             $this->addError('customer_id', '没有获取到用户信息！');
             return false;
         }
+        
+        
+        echo 333;
         $customer_balance = 0;
         //如果客户选择使用余额则去获取客户余额
         if(!empty($attributes['order_is_use_balance'])) {
@@ -205,6 +211,9 @@ class Order extends OrderModel
                 return false;
             }
         }
+        
+        
+        echo 444;
 
         if ($this->_create($attributes,null,$customer_balance)) {
             if( $this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id==self::ORDER_PAY_CHANNEL_CASH ){
@@ -216,6 +225,8 @@ class Order extends OrderModel
                     }
                 }
             }
+            
+            echo 5555;
             return true;
         }
         return false;
