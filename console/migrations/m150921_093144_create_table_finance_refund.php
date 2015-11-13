@@ -12,7 +12,7 @@ class m150921_093144_create_table_finance_refund extends Migration
         }
         $this->createTable('{{%finance_refund}}' , [
   'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'主键id\'' ,
-  'finance_refund_pop_nub' => Schema::TYPE_STRING . '(40)  NOT NULL COMMENT \'第三方订单号\'' ,
+  'finance_refund_code' => Schema::TYPE_STRING . '(64)  NOT NULL COMMENT \'流水号\'' ,
   'customer_id' => Schema::TYPE_STRING . '(10)  NOT NULL COMMENT \'客户id\'' ,
   'finance_refund_tel' => Schema::TYPE_STRING . '(20)  NOT NULL COMMENT \'客户电话\'' ,
   'finance_refund_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'退款金额\'' ,

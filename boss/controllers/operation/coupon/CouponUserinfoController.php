@@ -109,6 +109,7 @@ class CouponUserinfoController extends Controller {
 							// 此手机号码是否有人
 							$model->customer_id = $userinfo ['id'];
 							$model->customer_tel = $usertel;
+							$model->customer_code ='07'.date('ymdhis'.time()).rand(1111,999999);
 							$model->coupon_userinfo_id = $dateinfo ['CouponUserinfo'] ['coupon_rule_name_id'];
 							$model->coupon_userinfo_code = \Yii::$app->redis->SPOP ( $coupon_rule ['couponrule_Prefix'] );
 							$model->coupon_userinfo_name = $coupon_rule ['couponrule_name'];
@@ -144,6 +145,7 @@ class CouponUserinfoController extends Controller {
 							// 此手机号码无人
 							$modelinfo->customer_id = 0;
 							$modelinfo->customer_tel = $usertel;
+							$model->customer_code ='07'.date('ymdhis'.time()).rand(1111,999999);
 							$modelinfo->coupon_userinfo_id = 1;
 							$modelinfo->coupon_userinfo_code = '0';
 							$modelinfo->coupon_userinfo_name = '0';

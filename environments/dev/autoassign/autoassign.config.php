@@ -17,7 +17,7 @@ return [
     /*
      * Redis 服务IP（推荐使用域名）
      */
-    'REDIS_SERVER_IP' => 'dev.boss.1jiajie.com',
+    'REDIS_SERVER_IP' => '101.200.179.70',
     /*
      * Redis 服务PORT
      */

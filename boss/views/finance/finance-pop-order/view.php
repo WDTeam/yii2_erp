@@ -106,6 +106,7 @@ $channel_title=\core\models\operation\OperationOrderChannel::get_post_name($mode
     		'displayOnly' => true,
     		'value'=>'<font color="red">'.$model->finance_pop_order_msg?$model->finance_pop_order_msg:'暂无'.'</font>',
     		],
+    		'finance_pop_order_code',
     		[
     		'attribute' => 'finance_pop_order_info_msg',
     		'type' => DetailView::INPUT_TEXT,

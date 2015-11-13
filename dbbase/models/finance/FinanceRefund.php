@@ -53,7 +53,7 @@ class FinanceRefund extends \yii\db\ActiveRecord
             [['finance_refund_stype', 'create_time'], 'required'],
             [['finance_refund_money', 'finance_refund_discount'], 'number'],
             [['finance_refund_stype','finance_refund_check_id', 'finance_refund_pay_create_time', 'finance_pay_channel_id', 'finance_refund_pay_status', 'finance_order_channel_id', 'finance_refund_worker_id', 'isstatus', 'create_time','finance_refund_county_id','finance_refund_city_id','finance_refund_province_id','finance_refund_shop_id','is_del'], 'integer'],
-            [['finance_refund_pop_nub'], 'string', 'max' => 40],
+            [['finance_refund_code'], 'string', 'max' => 64],
             [['finance_refund_tel', 'finance_refund_worker_tel'], 'string', 'max' => 20],
             [['finance_refund_reason'], 'string', 'max' => 255],
             [['finance_pay_channel_title','finance_refund_check_name', 'finance_refund_pay_flow_num'], 'string', 'max' => 80],
@@ -111,7 +111,7 @@ class FinanceRefund extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('core', '主键id'),
-            'finance_refund_pop_nub' => Yii::t('core', '流水号'),
+            'finance_refund_code' => Yii::t('core', '流水号'),
             'customer_id' => Yii::t('core', '用户ID'),
             'finance_refund_tel' => Yii::t('core', '用户电话'),
             'finance_refund_money' => Yii::t('core', '退款金额'),

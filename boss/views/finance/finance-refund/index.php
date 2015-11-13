@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		},
     		'width' => "80px",
     		],
-    		'finance_refund_pop_nub',
+    		'finance_refund_code',
     		'finance_refund_reason',
     		'finance_refund_tel',
     		[

@@ -111,8 +111,6 @@ class Customer extends \dbbase\models\customer\Customer
         $customerBalance = CustomerExtBalance::find()->where(array(
             'customer_id'=>$customer->id,
             ))->one();
-         print_r($customerBalance);
-                exit;
         // if ($customerBalance == NULL) {
         //     $customer_balance = 0;
         // }

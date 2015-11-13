@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		'format' => 'raw',
     		'label' => '流水号',
     		'value' => function ($dataProvider) {
-    			return $dataProvider->finance_refund_pop_nub;
+    			return $dataProvider->finance_refund_code;
     		},
     		'width' => "80px",
     		],

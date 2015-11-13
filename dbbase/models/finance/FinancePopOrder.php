@@ -139,7 +139,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
             [['finance_record_log_id','finance_order_channel_id', 'finance_pay_channel_id', 'finance_pop_order_worker_uid', 'finance_pop_order_booked_time', 'finance_pop_order_booked_counttime', 'finance_pop_order_coupon_id', 'finance_pop_order_order_type', 'finance_pop_order_status', 'finance_pop_order_finance_isok', 'finance_pop_order_order_time', 'finance_pop_order_pay_time', 'finance_pop_order_pay_status','finance_pop_order_pay_status_type', 'finance_pop_order_check_id', 'finance_pop_order_finance_time', 'create_time', 'is_del'], 'integer'],
             [['finance_pop_order_sum_money', 'finance_pop_order_coupon_count', 'finance_pop_order_discount_pay', 'finance_pop_order_reality_pay'], 'number'],
             [['finance_pop_order_number', 'finance_pop_order_order2', 'finance_pop_order_channel_order'], 'string', 'max' => 40],
-            [['finance_order_channel_title', 'finance_pay_channel_title'], 'string', 'max' => 80],
+            [['finance_order_channel_title','finance_pop_order_code', 'finance_pay_channel_title'], 'string', 'max' => 80],
             [['finance_pop_order_customer_tel'], 'string', 'max' => 20],
             [['finance_pop_order_msg'], 'string', 'max' => 200],
             [['finance_pop_order_pay_title','finance_uplod_url'], 'string', 'max' => 30]
@@ -153,6 +153,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键id'),
+            'finance_pop_order_code' => Yii::t('app', '对账流水'),
             'order_code' => Yii::t('app', '系统订单号'),
             'order_status_name' => Yii::t('app', '系统状态'),
             'order_money' => Yii::t('app', '系统金额'),

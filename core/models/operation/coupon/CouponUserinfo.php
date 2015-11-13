@@ -141,6 +141,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj = new CouponUserinfo;
 		$couponCustomerobj->customer_id = $customer->id;
 		$couponCustomerobj->customer_tel = $customer->customer_phone;
+		$couponCustomerobj->customer_code ='07'.date('ymdhis'.time()).rand(1111,999999);
 		$couponCustomerobj->coupon_userinfo_id = $Couponruledate['id'];
 		$couponCustomerobj->coupon_userinfo_code =$code;
 		$couponCustomerobj->coupon_userinfo_name = $Couponruledate['couponrule_name'];//优惠券名称

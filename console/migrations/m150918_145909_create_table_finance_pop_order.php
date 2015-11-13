@@ -15,6 +15,7 @@ class m150918_145909_create_table_finance_pop_order extends Migration
 			$this->createTable('{{%finance_pop_order}}', [
 		  'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'主键id\'',
 			'order_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'暂无\' COMMENT \'系统订单号\'',
+			'finance_pop_order_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'0\' COMMENT \'系统流水号\'',
 			'order_status_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'无\' COMMENT \'订单状态\'',
 			'order_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT \'0.00\' COMMENT \'系统订单金额\'',
 			'finance_record_log_id' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'账期对应表id\'',

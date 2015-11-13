@@ -56,7 +56,7 @@ class CouponUserinfo extends \yii\db\ActiveRecord
             [['coupon_userinfo_price'], 'number'],
             [['coupon_userinfo_code', 'system_user_name'], 'string', 'max' => 40],
             [['coupon_userinfo_name'], 'string', 'max' => 100],
-            [['order_code','customer_tel'], 'string', 'max' => 64]
+            [['order_code','customer_tel','customer_code'], 'string', 'max' => 64]
         ];
     }
 
@@ -70,6 +70,7 @@ class CouponUserinfo extends \yii\db\ActiveRecord
             'id' => Yii::t('core', '主键'),
             'customer_id' => Yii::t('core', '客户名称'),
             'customer_tel' => Yii::t('core', '客户手机号'),
+        	'customer_code' => Yii::t('core', '流水号'),
             'coupon_userinfo_id' => Yii::t('core', '优惠规则id'),
             'coupon_userinfo_code' => Yii::t('core', '优惠码'),
             'coupon_userinfo_name' => Yii::t('core', '优惠券名称'),

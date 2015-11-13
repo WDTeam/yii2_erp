@@ -43,7 +43,8 @@ class FinanceRefundadd extends FinanceRefund
 	
     
      public function add($order){
-	     	$this->finance_refund_pop_nub='0';
+     		$numb='06'.date('ymdhis',time()).rand(1111,999999);
+	     	$this->finance_refund_code=$numb;
 	     	$this->customer_id=$order->orderExtCustomer->customer_id;
 	     	$this->finance_refund_tel=$order->orderExtCustomer->order_customer_phone;
 	     	$this->finance_refund_money=$order->orderExtPay->order_pay_money;
@@ -68,7 +69,11 @@ class FinanceRefundadd extends FinanceRefund
 	     	$this->isstatus=2;
 	        $this->create_time=time();
 	     	$this->is_del=0;
-			return $this->save();
+			if($this->save()){
+				return  $numb;
+			}else{
+				return  false;
+			}			
 	 
 	 }
     

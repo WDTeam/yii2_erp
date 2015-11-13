@@ -132,6 +132,8 @@ class OrderController extends \restapi\components\Controller
         } else {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
+        
+      
         if (isset($args['order_pop_order_code'])) {
             $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
         }
@@ -162,12 +164,14 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_is_use_balance'])) {
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
+       
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
-
+   
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
+           
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -175,6 +179,7 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
+               
                 return $this->send($order->errors, '创建订单失败', 1024, 200, null, alertMsgEnum::orderCreateFaile);
             }
         } catch (\Exception $e) {
