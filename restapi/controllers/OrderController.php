@@ -1736,7 +1736,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 创建周期订单(郝建设)
      *
-     * @apiParam  {String}  access_token      会话id. 必填 
+     * @apiParam  {String}  access_token      会话id. 必填
      * @apiParam {String}   order_channel_name      订单渠道名称
      * @apiParam  {integer} order_service_item_id 服务类型 商品id 必填
      * @apiParam  {int}     address_id 客户地址id 必填
