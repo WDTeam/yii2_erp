@@ -327,6 +327,7 @@ function timer(){
 function showOrder(){
     timer();
     var order = window.order_data;
+    $("#order_code").html(order.order_code);
     $("#booked_time_range").html(order.booked_time_range);
     $("#order_address").text(order.order.order_address);
     if(order.ext_pay.pay_channel_id==1){ //现金支付
