@@ -2,12 +2,11 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
+
 use kartik\builder\Form;
 use kartik\date\DatePicker;
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 use boss\components\AreaCascade;
-
-
 
 $configdate=CouponRuleSearch::couponconfig();
 $model->couponrule_classify=1;
@@ -27,7 +26,11 @@ $model->couponrule_promote_type=1;
 
 <div class="coupon-rule-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]);  ?>
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL,
+    		'enableAjaxValidation' => true,
+    		'validationUrl'=>Yii::$app->urlManager->createUrl(['operation/coupon/coupon-rule/ajax-info'])
+]); 
+    ?>
     
     		<div class="panel-body">
     		<?php
@@ -35,7 +38,7 @@ $model->couponrule_promote_type=1;
     		 		'model' => $model,
     		 		'form' => $form,
     		 		'columns' => 1,
-    		 		'attributes' => [
+    				'attributes' => [
     				'couponrule_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>' 优惠券名称...', 'maxlength'=>100]],
 'couponrule_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券单价...', 'maxlength'=>8]],		
     		 'couponrule_classify'=>[

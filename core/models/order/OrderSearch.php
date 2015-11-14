@@ -4,10 +4,12 @@ namespace core\models\order;
 
 use dbbase\models\order\OrderExtCustomer;
 use core\models\customer\Customer;
+use core\models\customer\CustomerComment;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use dbbase\models\order\OrderOtherDict;
 
 /**
  * OrderSearch represents the model behind the search form about `dbbase\models\order\Order`.
@@ -62,15 +64,15 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->select('*')
-            ->where(['ow.worker_id' => $worker_id])
-            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            //->createCommand()->getRawSql();
-            ->all();
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->select('*')
+                ->where(['ow.worker_id' => $worker_id])
+                ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+                //->createCommand()->getRawSql();
+                ->all();
         return $data;
     }
 
@@ -92,14 +94,14 @@ class OrderSearch extends Order
         //查询
         $query = new \yii\db\Query();
         $query = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->select('*')
-            ->where(['ow.worker_id' => $worker_id])
-            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->select('*')
+                ->where(['ow.worker_id' => $worker_id])
+                ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+                ->andWhere(['in', 'os.order_status_dict_id', $params]);
         if (!is_null($limit)) {
             $query->limit($limit);
         }
@@ -110,7 +112,6 @@ class OrderSearch extends Order
 
         return $data;
     }
-
 
     /**
      * 通过阿姨ID获取指定月份的完成时间所有订单
@@ -130,14 +131,14 @@ class OrderSearch extends Order
         //查询
         $query = new \yii\db\Query();
         $query = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->select('*')
-            ->where(['ow.worker_id' => $worker_id])
-            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->select('*')
+                ->where(['ow.worker_id' => $worker_id])
+                ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+                ->andWhere(['in', 'os.order_status_dict_id', $params]);
 
         $data = $query->count();
 
@@ -160,14 +161,14 @@ class OrderSearch extends Order
         //查询
         $query = new \yii\db\Query();
         $query = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->select('*')
-            ->where(['ow.worker_id' => $worker_id])
-            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->select('*')
+                ->where(['ow.worker_id' => $worker_id])
+                ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+                ->andWhere(['in', 'os.order_status_dict_id', $params]);
         if (!is_null($limit)) {
             $query->limit($limit);
         }
@@ -195,14 +196,14 @@ class OrderSearch extends Order
         //查询
         $query = new \yii\db\Query();
         $query = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->select('*')
-            ->where(['ow.worker_id' => $worker_id])
-            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in', 'os.order_status_dict_id', $params]);
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->select('*')
+                ->where(['ow.worker_id' => $worker_id])
+                ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+                ->andWhere(['in', 'os.order_status_dict_id', $params]);
 
         $data = $query->count();
 
@@ -229,14 +230,14 @@ class OrderSearch extends Order
         }
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->innerJoin('{{%order_ext_pop}} as opp', 'order.id = opp.order_id')
-            ->select($fields)
-            ->where($condition)
-            ->all();
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->innerJoin('{{%order_ext_pop}} as opp', 'order.id = opp.order_id')
+                ->select($fields)
+                ->where($condition)
+                ->all();
         return $data;
     }
 
@@ -249,18 +250,16 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
-            ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
-            ->select('*')
-            ->where(['id' => $order_id])
-            ->one();
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id')
+                ->innerJoin('{{%order_ext_worker}} as ow', 'order.id = ow.order_id')
+                ->select('*')
+                ->where(['id' => $order_id])
+                ->one();
         $data['customer'] = Customer::getCustomerById($data['customer_id'])->getAttributes();
         return $data;
     }
-
-
 
     /**
      * 根据预约开始时间获取多个阿姨当天订单
@@ -299,26 +298,25 @@ class OrderSearch extends Order
     public static function workerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
         $count = Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
-            ->andWhere(
-                ['or',
-                    [
-                        'and',
-                        ['<=', 'order_booked_begin_time', $booked_begin_time],
-                        ['>=', 'order_booked_end_time', $booked_begin_time]
-                    ],
-                    [
-                        'and',
-                        ['<=', 'order_booked_begin_time', $booked_end_time],
-                        ['>=', 'order_booked_end_time', $booked_end_time]
-                    ],
-                    [
-                        'and',
-                        ['>=', 'order_booked_begin_time', $booked_begin_time],
-                        ['<=', 'order_booked_end_time', $booked_end_time]
-                    ]
-                ]
-
-            )->count();
+                        ->andWhere(
+                                ['or',
+                                    [
+                                        'and',
+                                        ['<=', 'order_booked_begin_time', $booked_begin_time],
+                                        ['>=', 'order_booked_end_time', $booked_begin_time]
+                                    ],
+                                    [
+                                        'and',
+                                        ['<=', 'order_booked_begin_time', $booked_end_time],
+                                        ['>=', 'order_booked_end_time', $booked_end_time]
+                                    ],
+                                    [
+                                        'and',
+                                        ['>=', 'order_booked_begin_time', $booked_begin_time],
+                                        ['<=', 'order_booked_end_time', $booked_end_time]
+                                    ]
+                                ]
+                        )->count();
         return $count;
     }
 
@@ -329,12 +327,12 @@ class OrderSearch extends Order
      */
     public static function customerWaitPayOrderCount($customer_phone)
     {
-        return Order::find()->joinWith(['orderExtCustomer','orderExtStatus'])
-            ->where([
-                'order_customer_phone'=>$customer_phone,
-                'order_status_dict_id'=>OrderStatusDict::ORDER_INIT,
-                'order_service_item_name'=>Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS']
-        ])->count();
+        return Order::find()->joinWith(['orderExtCustomer', 'orderExtStatus'])
+                        ->where([
+                            'order_customer_phone' => $customer_phone,
+                            'order_status_dict_id' => OrderStatusDict::ORDER_INIT,
+                            'order_service_item_name' => Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS']
+                        ])->count();
     }
 
     /**
@@ -422,7 +420,6 @@ class OrderSearch extends Order
         return Order::findAll(['order_parent_id' => $order_id]);
     }
 
-
     /**
      * 获取待服务订单列表
      * @author lin
@@ -431,10 +428,10 @@ class OrderSearch extends Order
     public static function getWaitServiceOrderList()
     {
         return Order::find()->joinWith(['orderExtStatus'])->select(['id', 'order_booked_begin_time'])->where(['order_status_dict_id' => [
-            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
-            OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
-            OrderStatusDict::ORDER_WORKER_BIND_ORDER
-        ]])->asArray()->all();
+                        OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+                        OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+                        OrderStatusDict::ORDER_WORKER_BIND_ORDER
+            ]])->asArray()->all();
     }
 
     /**
@@ -453,13 +450,12 @@ class OrderSearch extends Order
     public static function getWaitSysCommentOrderList()
     {
         return Order::find()->joinWith(['orderExtStatus'])
-            ->where([
-                'order_status_dict_id' => OrderStatusDict::ORDER_SERVICE_DONE
-            ])
-            ->andFilterWhere(['<=', 'order_booked_end_time', strtotime('-1 days')])
-            ->asArray()->all();
+                        ->where([
+                            'order_status_dict_id' => OrderStatusDict::ORDER_SERVICE_DONE
+                        ])
+                        ->andFilterWhere(['<=', 'order_booked_end_time', strtotime('-1 days')])
+                        ->asArray()->all();
     }
-
 
     /**
      * 分页查询带状态订单
@@ -503,7 +499,6 @@ class OrderSearch extends Order
         return $query->count();
     }
 
-
     /**
      * 分页查询阿姨带状态订单数量
      * @param $customer_id
@@ -527,9 +522,9 @@ class OrderSearch extends Order
         $query = new \yii\db\Query();
 
         $query->from('{{%order}} as order')
-            ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
-            ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id');
+                ->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')
+                ->innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')
+                ->innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -582,6 +577,7 @@ class OrderSearch extends Order
                 'order_channel_type_id' => $this->order_channel_type_id,
                 'order_unit_money' => $this->order_unit_money,
                 'order_money' => $this->order_money,
+                'isdel' => 1,
                 'order_booked_count' => $this->order_booked_count,
                 'order_booked_begin_time' => $this->order_booked_begin_time,
                 'order_booked_end_time' => $this->order_booked_end_time,
@@ -590,13 +586,13 @@ class OrderSearch extends Order
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'order_batch_code' => $attributes["OrderSearch"]["order_batch_code"],
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
+                'oc.order_customer_hidden' => 0,
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
         }
         return $dataProvider;
     }
-
 
     /**
      *
@@ -608,8 +604,8 @@ class OrderSearch extends Order
         $query = new \yii\db\Query();
 
         $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os', 'order.id = os.order_id')->
-        innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')->
-        innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id');
+                innerJoin('{{%order_ext_customer}} as oc', 'order.id = oc.order_id')->
+                innerJoin('{{%order_ext_pay}} as op', 'order.id = op.order_id');
 
         if (is_null($not_with_work)) {
             $query->innerJoin('{{%order_ext_worker}} as owr', 'order.id = owr.order_id');
@@ -670,7 +666,6 @@ class OrderSearch extends Order
                 'order_booked_worker_id' => $this->order_booked_worker_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
-
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
@@ -680,7 +675,6 @@ class OrderSearch extends Order
             $query = $query->andFilterWhere([
                 'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
             ]);
-
         }
         return $dataProvider;
     }
@@ -735,8 +729,7 @@ class OrderSearch extends Order
         $query->orFilterWhere(['or', ['order_booked_worker_id' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
 
         //两种特殊状态的订单查询条件是订单服务时间
-        if (isset($this->order_status_dict_id) && is_array($this->order_status_dict_id)
-            && (in_array(-1, $this->order_status_dict_id) || in_array(-2, $this->order_status_dict_id))
+        if (isset($this->order_status_dict_id) && is_array($this->order_status_dict_id) && (in_array(-1, $this->order_status_dict_id) || in_array(-2, $this->order_status_dict_id))
         ) {
             if (in_array(-1, $this->order_status_dict_id)) {
 
@@ -754,11 +747,11 @@ class OrderSearch extends Order
         }
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
-            ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
-            ->andFilterWhere(['like', 'order_channel_type_name', $this->order_channel_type_name])
-            ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
-            ->andFilterWhere(['like', 'order_address', $this->order_address])
-            ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
+                ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
+                ->andFilterWhere(['like', 'order_channel_type_name', $this->order_channel_type_name])
+                ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
+                ->andFilterWhere(['like', 'order_address', $this->order_address])
+                ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
 
         if (!empty($params['created_from']))
             $query->andFilterWhere(['>=', Order::tableName() . '.created_at', strtotime($params['created_from'])]);
@@ -779,8 +772,7 @@ class OrderSearch extends Order
      * @date: 2015-10-23
      * @author: peak pan
      * @return:
-     **/
-
+     * */
     public $finance_record_log_endtime;
 
     public function searchpoplist()
@@ -807,20 +799,108 @@ class OrderSearch extends Order
             'order_booked_end_time' => $this->order_booked_end_time,
             'address_id' => $this->address_id,
             'order_booked_worker_id' => $this->order_booked_worker_id,
-
         ]);
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
-            ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
-            ->andFilterWhere(['between', 'ejj_order.created_at', $this->created_at, $this->finance_record_log_endtime])
-            ->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
-            ->andFilterWhere(['like', 'order_channel_type_name', $this->order_channel_type_name])
-            ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
-            ->andFilterWhere(['like', 'order_address', $this->order_address])
-            ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
+                ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
+                ->andFilterWhere(['between', 'ejj_order.created_at', $this->created_at, $this->finance_record_log_endtime])
+                ->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
+                ->andFilterWhere(['like', 'order_channel_type_name', $this->order_channel_type_name])
+                ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
+                ->andFilterWhere(['like', 'order_address', $this->order_address])
+                ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
 
         return $dataProvider;
     }
-
-
+    
+    /**
+     * 指定时间段内阿姨各个条件完成值
+     * @author CoLee
+     *  条件类型：
+     1=>'取消订单 ',
+     2=>'拒绝订单',
+     3=>'服务老用户',
+     4=>'主动接单',
+     5=>'完成工时',
+     6=>'好评 ',
+     * @param time $start_time
+     * @param time $end_time
+     * @param int $worker_id
+     */
+    public static function getStatistical($start_time, $end_time, $worker_id)
+    {
+        $data = [];
+        //取消订单
+        $sql = "SELECT COUNT(1) FROM {{%order_ext_worker}} AS a
+        LEFT JOIN {{%order_history}} AS b
+        ON a.`order_id`=b.order_id
+        AND b.`order_status_dict_id`=:ORDER_CANCEL
+        WHERE b.`order_status_dict_id`=:ORDER_CANCEL
+        AND b.created_at>={$start_time}
+        AND b.created_at<{$end_time}
+        AND a.worker_id={$worker_id}";
+        $data[1] = (int)\Yii::$app->db->createCommand($sql)
+        ->bindValues(['ORDER_CANCEL'=>OrderStatusDict::ORDER_CANCEL])
+        ->queryScalar();
+        //拒绝订单
+        $num = (int)OrderWorkerRelation::find()
+        ->where([
+            'worker_id'=>$worker_id,
+            'order_worker_relation_status_id'=>OrderOtherDict::NAME_WORKER_REFUSE,
+        ])
+        ->andFilterWhere(['between', 'created_at', $start_time, $end_time])
+        ->count();
+        $data[2] = $num;
+       // 服务老用户,先算总数，
+        $sql = "SELECT COUNT(1) as ct FROM {{%order_ext_worker}} AS a
+        LEFT JOIN {{%order_history}} AS b
+        ON a.`order_id`=b.order_id  AND b.`order_status_dict_id`=11
+        LEFT JOIN ejj_order_ext_customer AS c
+        ON c.`order_id`=a.`order_id`
+        WHERE b.`order_status_dict_id`=:ORDER_SERVICE_DONE
+        AND b.created_at>={$start_time}
+        AND b.created_at<{$end_time}
+        AND a.`worker_id`={$worker_id}
+        GROUP BY c.`comment_id`";
+        $args = (array)\Yii::$app->db->createCommand($sql)
+        ->bindValues(['ORDER_SERVICE_DONE'=>OrderStatusDict::ORDER_SERVICE_DONE])
+        ->queryColumn();
+        $fdl = 0;
+        foreach ($args as $d){
+            if($d>1){
+                $fdl++;
+            }
+        }
+        $division = count($args)==0?1:count($args);
+        $data[3] = (int)(($fdl/$division)*100);
+        //主动接单
+        $sql = "SELECT COUNT(1) FROM {{%order_ext_worker}} AS a
+        LEFT JOIN {{%order_status_history}} AS b
+        ON a.`order_id`=b.`order_id`
+        AND b.order_status_dict_id=:ORDER_WORKER_BIND_ORDER
+        WHERE a.order_worker_assign_type=1
+        AND a.worker_id={$worker_id}
+        AND b.order_status_dict_id=:ORDER_WORKER_BIND_ORDER
+        AND b.`created_at`>={$start_time}
+        AND b.`created_at`<{$end_time}";
+        $data[4] = (int)\Yii::$app->db->createCommand($sql)
+        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
+        ->queryScalar();
+        //完成工时
+        $sql = "SELECT COUNT(1)
+        FROM {{%order_ext_worker}} AS a
+        LEFT JOIN {{%order_history}} AS b ON a.`order_id`=b.order_id
+        LEFT JOIN {{%order}} AS c ON c.`id`=a.`order_id`
+        WHERE b.order_status_dict_id=:ORDER_WORKER_BIND_ORDER
+        AND a.worker_id={$worker_id}
+        AND b.created_at>={$start_time}
+        AND b.created_at<{$end_time}";
+        $data[5] = (int)\Yii::$app->db->createCommand($sql)
+        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
+        ->queryScalar();
+        //好评
+        $data[6] = (int)CustomerComment::getCommentworkercount($worker_id,$start_time,$end_time);
+    
+        return $data;
+    }
 }

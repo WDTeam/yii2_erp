@@ -52,11 +52,31 @@ if(empty($customer_ext_srcs)){
 		$device_name = empty($customer_ext_src) ? '' : empty($customer_ext_src['device_name']) ? '' : $customer_ext_src['device_name'];
 		$device_no = empty($customer_ext_src) ? '' : empty($customer_ext_src['device_no']) ? '' : $customer_ext_src['device_no'];
 
-		$platform_name_str .= $platform_name.'/';
-		$channal_name_str .= $channal_name.'/';
-		$device_name_str .= $device_name.'/';
-		$device_no_str .= $device_no.'/';
+        if(!empty($platform_name)) {
+            $platform_name_str .= $platform_name.'/';
+        }
+        if(!empty($channal_name)) {
+            $channal_name_str .= $channal_name.'/';
+        }
+        if(!empty($device_name)) {
+            $device_name_str .= $device_name.'/';
+        }
+        if(!empty($device_no)) {
+            $device_no_str .= $device_no.'/';
+        }
 	}
+}
+if(empty($platform_name_str)){
+    $platform_name_str = '-';
+}
+if(empty($channal_name_str)){
+    $channal_name_str = '-';
+}
+if(empty($device_name_str)){
+    $device_name_str = '-';
+}
+if(empty($device_no_str)){
+    $device_no_str = '-';
 }
 
 //全部服务地址
@@ -75,7 +95,9 @@ if(!empty($customerAddress)){
 		}
 	}
 }
-
+if(empty($addressStr)){
+    $addressStr = '-';
+}
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
