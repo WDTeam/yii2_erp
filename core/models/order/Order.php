@@ -724,7 +724,9 @@ class Order extends OrderModel
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
             $transact = static::getDb()->beginTransaction();
             $result = OrderStatus::_cancel($order, [], $transact);
-            if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2]) && $order->orderExtPay->pay_channel_id != 20 && $current_status != OrderStatusDict::ORDER_INIT || $current_status == OrderStatusDict::ORDER_INIT && $cause_id == OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE) {
+            //在线支付 和 E家洁支付 非现金的 或者 支付异常的 调用退款接口
+            if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2]) && $order->orderExtPay->pay_channel_id != 20 && $current_status != OrderStatusDict::ORDER_INIT
+                || $current_status == OrderStatusDict::ORDER_INIT && $cause_id == OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE) {
                 //调高峰的退款接口
                 $finance_refund_add = new FinanceRefundadd();
                 $result = $finance_refund_add->add($order);
@@ -752,16 +754,31 @@ class Order extends OrderModel
 
     /**
      * 客户删除订单
-     * @param $order_id
+     * @param $code
      * @param $admin_id
      * @return bool
      */
-    public static function customerDel($order_id, $admin_id = Order::ADMIN_CUSTOMER)
+    public static function customerDel($code, $admin_id = Order::ADMIN_CUSTOMER)
     {
-        $order = OrderSearch::getOne($order_id);
-        $order->order_customer_hidden = 1;
-        $order->admin_id = $admin_id;
-        return $order->doSave(['OrderExtCustomer']);
+        if (substr($code, 0, 1) == 'Z') { //如果是周期订单
+            $orders = OrderSearch::getBatchOrder($code);
+            $transact = static::getDb()->beginTransaction();
+            foreach($orders as $order){
+                $order->order_customer_hidden = 1;
+                $order->admin_id = $admin_id;
+                if(!$order->doSave(['OrderExtCustomer'],$transact)){
+                    $transact->rollBack();
+                    return false;
+                }
+            }
+            $transact->commit();
+            return true;
+        }else {
+            $order = OrderSearch::getOneByCode($code);
+            $order->order_customer_hidden = 1;
+            $order->admin_id = $admin_id;
+            return $order->doSave(['OrderExtCustomer']);
+        }
     }
 
     /**
