@@ -176,8 +176,6 @@ class server
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
         if($cmd == autoassign\ClientCommand::ALL_REDIS_ORDERS){
-            $this->broadcastToSpecifiedClient($server, $fd, 'this handleCommandMessage from connect');
-            echo 'handleCommandMessage message send';
             $orders = $this->getOrders();
             foreach($orders as $key => $order){
                 if ($order['order_id']==null || $order['order_id']=='')
@@ -188,7 +186,7 @@ class server
                 $order['updated_at']=$order['created_at'];
                 $d = json_encode($order);
                 echo 'onConnect;d='.$d;
-                $this->broadcastToSpecifiedClient($server, $fd, $msg);
+                $this->broadcastToSpecifiedClient($server, $fd, $d);
             }
             return;
         }
