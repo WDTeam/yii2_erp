@@ -22,7 +22,7 @@ class OperationPlatform extends \dbbase\models\operation\OperationPlatform
     /**
      * 删除平台信息
      *
-     * @param inter   $operation_platform_id     平台编号
+     * @param integer   $operation_platform_id     平台编号
      */
     public static function updatePlatformStatus($operation_platform_id)
     {

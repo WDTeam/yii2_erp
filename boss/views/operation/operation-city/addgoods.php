@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '添加服务')];
 $form = ActiveForm::begin([
     'type'=>ActiveForm::TYPE_HORIZONTAL,
     'options' => ['enctype' => 'multipart/form-data'],
-    'action' => ['settinggoodsinfo', 'city_id' => $city_id],
+    'action' => ['settinggoodsinfo', 'city_id' => $city_id, 'action' => 'online'],
 ]);
 ?>
     <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
