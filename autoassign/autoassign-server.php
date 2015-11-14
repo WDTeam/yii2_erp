@@ -155,7 +155,7 @@ class server
         $this->ws = $ws;
         $this->fd = $ws->fd;
         $this->data = $ws->data;
-        $this->handleCommandMessage($server, $ws->data);
+        $this->handleCommandMessage($server, $ws->data,$ws->fd);
 
         return;
     }
@@ -171,7 +171,7 @@ class server
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$data, $fd)
+    public function handleCommandMessage($server,$data,$fd)
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
