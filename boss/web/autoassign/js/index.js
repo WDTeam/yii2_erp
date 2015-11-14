@@ -19,11 +19,11 @@ function websocketConnect() {
                 $('#start').html('开始智能派单');
                 $('#start').attr('disabled', true);
                 $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">智能派单已暂停！</font>');
-                getCurrentOrders(0);
             }else{
                 $('#start').attr('disabled', false);
                 $('#start').html('停止智能派单');
                 $('#connectStatus').html('<font color="#41A317">连接成功，智能派单已启动！</font>');
+                getCurrentOrders(0);
             }
         };
         websocket.onclose = function (evt) {
