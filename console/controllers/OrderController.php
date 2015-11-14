@@ -26,7 +26,7 @@ class OrderController extends Controller{
             if($order['order_booked_begin_time']<=time())
             {
                 $res = Order::serviceStart($order['id']);
-                ConsoleHelper::log('订单（ID：%s）开始', [$order['id']]);
+                ConsoleHelper::log('订单（ID：%s）开始，执行%s', [$order['id'],$res?'成功':'失败']);
             }else{
                 ConsoleHelper::log('订单（ID：%s）等待中……，将在%s启动', [$order['id'], date('Y-m-d H:i:s', $order['order_booked_begin_time'])]);
             }
@@ -45,7 +45,7 @@ class OrderController extends Controller{
             if($order['order_booked_end_time']<=time())
             {
                 $res = Order::serviceDone($order['id']);
-                ConsoleHelper::log('订单（ID：%s）结束', [$order['id']]);
+                ConsoleHelper::log('订单（ID：%s）结束，执行%s', [$order['id'],$res?'成功':'失败']);
             }else{
                 ConsoleHelper::log('订单（ID：%s）进行中……，将在%s结束', [$order['id'], date('Y-m-d H:i:s', $order['order_booked_end_time'])]);
             }
@@ -81,29 +81,35 @@ class OrderController extends Controller{
         }
     }
     /**
-     * 定时处理服务状态
+     * 定时处理评价状态
      * @author CoLee
      * 5分钟一次 
      * use: *\/5 * * * * yii order/change-service-status
      */
-    public function actionChangeServiceStatus()
+    public function actionServiceComment()
+    {
+        //订单评论
+        $orders = OrderSearch::getWaitSysCommentOrderList();
+        foreach ($orders as $order){
+           $this->suggest($order);
+        }
+    }
+    //等待开始的订单
+    public function actionServiceStart()
     {
         $waiting_list = OrderSearch::getWaitServiceOrderList();
         ConsoleHelper::log('等待开始的订单总数（%s）', [count($waiting_list)]);
         foreach ($waiting_list as $order){
             $this->serviceStart($order);
         }
-        
+    }
+    //等待结束的订单
+    public function actionServiceDone()
+    {
         $service_list = OrderSearch::getStartServiceOrderList();
         ConsoleHelper::log('等待结束的订单总数（%s）', [count($service_list)]);
         foreach ($service_list as $order){
             $this->serviceDone($order);
-        }
-        
-        //订单评论
-        $orders = OrderSearch::getWaitSysCommentOrderList();
-        foreach ($orders as $order){
-           $this->suggest($order);
         }
     }
 }
