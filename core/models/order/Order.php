@@ -116,7 +116,6 @@ class Order extends OrderModel
     const ADMIN_SYSTEM = 1;
     const ADMIN_CUSTOMER = 2;
     const ADMIN_WORKER = 3;
-    const ORDER_PAY_CHANNEL_CASH = 'PAY_CHANNEL_EJJ_CASH_PAY';
     const ORDER_PAY_CHANNEL_TYPE_POP = 2;
 
     public $pay_channel_key;
@@ -133,6 +132,7 @@ class Order extends OrderModel
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
      *  int $pay_channel_key 支付渠道id
+     *  int $pay_channel_id 支付渠道id
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
@@ -151,7 +151,7 @@ class Order extends OrderModel
         $attributes_keys = [
             'order_ip', 'order_service_item_id', 'channel_id', 'order_channel_name',
             'order_booked_begin_time', 'order_booked_end_time', 'address_id',
-            'customer_id', 'admin_id', 'pay_channel_key', 'order_booked_count',
+            'customer_id', 'admin_id', 'pay_channel_key', 'pay_channel_id', 'order_booked_count',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo', 'order_cs_memo', 'order_flag_sys_assign'
         ];
@@ -175,6 +175,10 @@ class Order extends OrderModel
 
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
+
+        if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
+            $attributes['pay_channel_id'] = OperationPayChannel::$attributes['pay_channel_key'];
+        }
 
         $customer = Customer::getCustomerById($attributes['customer_id']);
         if (!empty($customer)) {
@@ -225,6 +229,7 @@ class Order extends OrderModel
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id  1系统 2客户 3阿姨 必填
      *  int $pay_channel_key 支付渠道分类 必填
+     *  int $pay_channel_id 支付渠道分类 必填
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_customer_need 客户需求
@@ -248,7 +253,7 @@ class Order extends OrderModel
 
         $attributes_keys = [
             'order_ip', 'order_service_item_id', 'address_id',
-            'customer_id', 'admin_id', 'pay_channel_key','order_channel_name',
+            'customer_id', 'admin_id', 'pay_channel_key','pay_channel_id','order_channel_name',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo',
             'order_flag_sys_assign', 'order_cs_memo', 'order_flag_change_booked_worker'
@@ -266,6 +271,11 @@ class Order extends OrderModel
                 return ['status' => false, 'errors' => $v . '为必填项！'];
             }
         }
+
+        if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
+            $attributes['pay_channel_id'] = OperationPayChannel::$attributes['pay_channel_key'];
+        }
+
         $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign']) ? 1 : $attributes['order_flag_sys_assign'];
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
@@ -885,7 +895,7 @@ class Order extends OrderModel
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
             $this->order_pay_money -= $this->order_money;
             $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_3RD_PARTY_COUPON_PAY));
-        } else if (!empty($this->pay_channel_key) && $this->pay_channel_key == self::ORDER_PAY_CHANNEL_CASH) { //现金支付
+        } else if (!empty($this->pay_channel_id) && $this->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) { //现金支付
             $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY));
             $this->order_pay_money -= $this->order_money;
         } else {//如果不传支付渠道就是线上支付
