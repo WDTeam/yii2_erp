@@ -352,6 +352,7 @@ class server
     public function onConnect($server, $fd) {
         echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
         $orders = $this->getOrders();
+        $this->broadcastToSpecifiedClient($server, $fd, 'this message from connect');
         foreach($orders as $key => $order){
             if ($order['order_id']==null || $order['order_id']=='')
             {
