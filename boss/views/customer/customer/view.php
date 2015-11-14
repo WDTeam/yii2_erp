@@ -89,9 +89,14 @@ if(!empty($customerAddress)){
 		    $addressStr .= $address->operation_province_name
 		        .$address->operation_city_name
 		        .$address->operation_area_name
-		        .$address->customer_address_detail
-		        .' | '.$address->customer_address_nickname
-		        .' | '.$address->customer_address_phone . '<br/>';
+		        .$address->customer_address_detail;
+
+            if(!empty($address->customer_address_nickname)){
+                $addressStr .= ' | '.$address->customer_address_nickname;
+            }
+            if(!empty($address->customer_address_phone)){
+                $addressStr .= ' | '.$address->customer_address_phone . '<br/>';
+            }
 		}
 	}
 }
