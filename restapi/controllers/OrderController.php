@@ -170,20 +170,16 @@ class OrderController extends \restapi\components\Controller
 
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
-
+       
         try {
             $order = new Order();
-
-
             $is_success = $order->createNew($attributes);
-            $errors = $order->errors;
-
+            
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
                     "order_code" => $order->order_code
                 );
-
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
                 return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
