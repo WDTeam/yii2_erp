@@ -181,8 +181,8 @@ class Order extends OrderModel
 
         if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
             switch($attributes['pay_channel_key']){
-                case 'PAY_CHANNEL_EJJ_SERVICE_CARD_PAY':
-                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_SERVICE_CARD_PAY;
+                case 'PAY_CHANNEL_EJJ_CASH_PAY':
+                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY;
                     break;
                 default:
                     $this->addError('pay_channel_id', '支付渠道不存在');
@@ -297,8 +297,8 @@ class Order extends OrderModel
 
         if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
             switch($attributes['pay_channel_key']){
-                case 'PAY_CHANNEL_EJJ_SERVICE_CARD_PAY':
-                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_SERVICE_CARD_PAY;
+                case 'PAY_CHANNEL_EJJ_CASH_PAY':
+                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY;
                     break;
                 default:
                     return ['status' => false,'error_code'=>'540201', 'errors' => '支付渠道不存在！'];
