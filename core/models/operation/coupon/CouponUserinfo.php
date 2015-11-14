@@ -16,7 +16,7 @@ namespace core\models\operation\coupon;
 use Yii;
 use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
-
+use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 
 class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 {
@@ -188,6 +188,13 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj->save();
 		
 		if($couponCustomerobj){
+			 if($Couponruledate['couponrule_type']==1){
+			$name='全网优惠券';
+			}elseif ($Couponruledate['couponrule_type']==2){
+			$name=$Couponruledate['couponrule_type_name'].'-'.$Couponruledate['couponrule_service_type_name'];	
+			}else{
+			$name=$Couponruledate['couponrule_type_name'].'-'.$Couponruledate['couponrule_commodity_name'];	
+			}
 			$date=[
 			'id'=>$couponCustomerobj->id,
 			'couponrule_price'=>$Couponruledate['couponrule_price'],
@@ -195,6 +202,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			'couponrule_use_start_time'=>$Couponruledate['couponrule_use_start_time'],
 			'couponrule_use_end_time'=>$Couponruledate['couponrule_use_end_time'],
 			'couponrule_service_type_id'=>$Couponruledate['couponrule_service_type_id'],
+			'couponrule_type_title'=>$name
 			];
 
 			$rt=\Yii::$app->redis->SREM($coupon,$code);
@@ -242,6 +250,27 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 		->asArray()
 		->all();
+		
+		
+		$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
+		$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
+		
+		$configdate=CouponRuleSearch::couponconfig();
+		$goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
+		
+		foreach ($couponCustomer as $key=>$data_customer){
+			
+			if($couponCustomer['couponrule_type']==1){
+				$name[$key]['couponrule_type_title']='全网优惠券';
+			}elseif ($couponCustomer['couponrule_type']==2){
+				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$data_es_name[$couponCustomer['couponrule_service_type_id']];
+			}else{
+				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$goods_data[$couponCustomer['couponrule_service_type_id']];
+			}
+			$couponCustomerdate[]=array_merge_recursive($couponCustomer,$name);
+		}
+		
+		
 		if(empty($couponCustomer)){
 			$array=[
 			'is_status'=>4019,
@@ -253,7 +282,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			$array=[
 			'is_status'=>1,
 			'msg'=>'查询成功',
-			'data'=>$couponCustomer,
+			'data'=>$couponCustomerdate,
 			];
 			return $array;
 		}
@@ -288,10 +317,30 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		->all();
 		
 		$couponCustomer=array_merge_recursive($couponCustomer1,$couponCustomer2);
+		
+		$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
+		$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
+		
+		$configdate=CouponRuleSearch::couponconfig();
+		$goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
+		
+		foreach ($couponCustomer as $key=>$data_customer){
+				
+			if($couponCustomer['couponrule_type']==1){
+				$name[$key]['couponrule_type_title']='全网优惠券';
+			}elseif ($couponCustomer['couponrule_type']==2){
+				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$data_es_name[$couponCustomer['couponrule_service_type_id']];
+			}else{
+				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$goods_data[$couponCustomer['couponrule_service_type_id']];
+			}
+			
+			$couponCustomerdate[]=array_merge_recursive($couponCustomer,$name);
+		}
+		
 		$array=[
 		'is_status'=>1,
 		'msg'=>'查询成功',
-		'data'=>$couponCustomer,
+		'data'=>$couponCustomerdate,
 		];
 		return $array;
 	}
