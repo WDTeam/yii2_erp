@@ -29,7 +29,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户登录token
      * @apiParam {String} [worker_id]  阿姨id
-     * @apiParam {String} platform_version app版本号
+     * @apiParam {String} order_channel_name app版本号
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -104,7 +104,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} leave_time 请假时间，如果请假时间格式为:【2015-09-10】
      * @apiParam {String} leave_type 请假类型  1.休假 2事假
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
@@ -180,7 +180,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
-     * @apiParam {String} platform_version 平台版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -266,7 +266,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -321,7 +321,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} comment_level   评论类型 【1：满意 2：一般 3：差评】
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -399,7 +399,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} per_page    第几页
      * @apiParam {String} page_num   每页显示的数据数量
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -470,7 +470,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -530,7 +530,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -617,7 +617,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -697,7 +697,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -765,7 +765,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -849,7 +849,7 @@ class WorkerController extends \restapi\components\Controller
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} settle_id  账单唯一标识.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -898,7 +898,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token 阿姨登录token
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -965,7 +965,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} type 请假类型
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1037,7 +1037,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token   阿姨登录 token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1124,7 +1124,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1218,7 +1218,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page   第几页
      * @apiParam {String} page_num   每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1312,7 +1312,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} id    任务id
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1431,7 +1431,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} imei            序列号
      * @apiParam {String} tag             阿姨电话号码    
      * @apiParam {int}   status           1:收到通知  2：点击通知          
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiParam  {Object} [data]  数据对象
      * 

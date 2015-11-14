@@ -22,7 +22,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} city_name 城市
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -119,7 +119,7 @@ class ConfigureController extends \restapi\components\Controller
      *
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} [access_token] 用户认证
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -209,7 +209,7 @@ class ConfigureController extends \restapi\components\Controller
             if (!isset($param['city_name']) || !$param['city_name']) {
                 return $this->send(null, 'city_name参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
-            if (!isset($param['platform_version']) || !$param['platform_version']) {
+            if (!isset($param['order_channel_name']) || !$param['order_channel_name']) {
                 return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
             
@@ -223,7 +223,7 @@ class ConfigureController extends \restapi\components\Controller
                 $onlineCitys = OperationCity::getOnlineCitys();
                 $cityCategoryList = OperationShopDistrictGoods::getCityCategory($param['city_name']);
                 //获取banner图
-                //$bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $platform_version_name);
+                //$bannerList = OperationAdvertRelease::getCityAdvertInfo($param['city_name'], $platform_name, $order_channel_name_name);
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::getUserInitFailed);
             }
@@ -238,7 +238,7 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList = array();
             if ($cityCategoryList && !isset($cityCategoryList['code'])) {
                 foreach ($cityCategoryList as $key => $val) {
-                    if ($val['id'] == 1) continue;
+                    if ($val['operation_shop_district_goods_name'] == "家庭保洁") continue;
                     $itemService['category_id'] = $val['id'];
                     $itemService['category_name'] = $val['operation_category_name'];
                     $itemService['category_icon'] = $val['operation_category_icon'];
@@ -337,7 +337,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      * @apiParam {String} city_name 城市名称
      * @apiParam {String} category_id 服务类型
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -392,6 +392,7 @@ class ConfigureController extends \restapi\components\Controller
         $itemlist = $temp = array();
         if ($itemInfo) {
             foreach ($itemInfo as $key => $val) {
+                if($val['operation_goods_name']=="家庭保洁") continue;
                 $temp['category_id'] = $val['operation_category_id'];
                 $temp['order_service_item_id'] = $val['goods_id'];
                 $temp['order_service_item_name'] = $val['operation_goods_name'];
@@ -416,11 +417,11 @@ class ConfigureController extends \restapi\components\Controller
         }
         $ret = [
             'colour' => $colour,
-            'category_ico' => $categoryInfo['operation_category_icon'],
-            "category_name" => $categoryInfo['operation_category_name'],
+            'category_ico' => $categoryInfo['operation_category_icon']?$categoryInfo['operation_category_icon']:"",
+            "category_name" => $categoryInfo['operation_category_name']?$categoryInfo['operation_category_name']:"",
             "category_english_name" => "",
             "category_condition" => "",
-            "category_price_description" => $categoryInfo['operation_category_price_description'],
+            "category_price_description" => $categoryInfo['operation_category_price_description']?$categoryInfo['operation_category_price_description']:"",
             'item_list' => $itemlist
         ];
         return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);
@@ -434,7 +435,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -470,7 +471,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiGroup configure
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -630,7 +631,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionStartPage
      * @apiGroup configure
      *
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK

@@ -20,7 +20,7 @@ class CouponController extends \restapi\components\Controller
      *
      * @apiParam {String} customer_phone 用户手机号
      * @apiParam {String} coupon_code 优惠码
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      *
      * @apiSuccessExample Success-Response:
@@ -112,7 +112,7 @@ class CouponController extends \restapi\components\Controller
      * @apiParam {Strimg} service_type_id 服务类别id
      * @apiParam {Strimg} good_type_id 商品类别id
      * @apiParam {String} city_id  城市
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -188,7 +188,7 @@ class CouponController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} city_id  城市
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *   HTTP/1.1 200 OK
@@ -256,7 +256,7 @@ class CouponController extends \restapi\components\Controller
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -315,7 +315,7 @@ class CouponController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} city_id  城市
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK

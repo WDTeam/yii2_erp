@@ -18,7 +18,7 @@ class PayController extends \restapi\components\Controller
      * @apiGroup Pay
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version app版本
+     * @apiParam {String} order_channel_name 订单渠道名称
      * @apiParam {String} order_id    订单ID.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -71,7 +71,7 @@ class PayController extends \restapi\components\Controller
      * @apiGroup Pay
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} platform_version app版本
+     * @apiParam {String} order_channel_name 订单渠道名称
      * @apiParam {String} payment_type 支付类型:1普通订单,2周期订单,3充值
      * @apiParam {String} channel_id 渠道ID
      *                              1=APP微信,
@@ -209,6 +209,19 @@ class PayController extends \restapi\components\Controller
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
             $retInfo = Payment::getPayParams($model->payment_type, $model->customer_id, $model->channel_id, $model->order_id, $ext_params);
+            //支付类型,1普通订单,2周期订单,3充值订单,(为了支持native跳转,在API层增加重定向地址)
+            switch($model->payment_type)
+            {
+                case 1 :
+                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    break;
+                case 2:
+                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    break;
+                case 3:
+                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    break;
+            }
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePaySuccess);
         }
         return $this->send(null, $model->errors, 0, 403, null, alertMsgEnum::onlinePayFailed);
@@ -221,7 +234,7 @@ class PayController extends \restapi\components\Controller
      * @apiGroup Pay
      *
      * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version app版本
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK

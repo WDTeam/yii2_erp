@@ -15,7 +15,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionSendV
      * @apiGroup SendSms
      *
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      * @apiParam {Number} telephone 电话
      * @apiParam {Mixed} message 发送消息
      *
@@ -61,7 +61,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录(赵顺利)
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -109,7 +109,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionSendWorkerMessageCode
      * @apiGroup SendSms
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} platform_version      版本号
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -138,11 +138,11 @@ class SendSmsController extends \restapi\components\Controller
         if (!isset($param['phone']) || !$param['phone']) {
             return $this->send(null, "手机号码不能为空", 403, 200, null, alertMsgEnum::sendWorkerCodeFaile);
         }
-        if (!isset($param['platform_version']) || !$param['platform_version']) {
-            return $this->send(null, "访问源不能为空", 403, 200, null, alertMsgEnum::sendWorkerCodeFaile);
-        }
+//        if (!isset($param['order_channel_name']) || !$param['order_channel_name']) {
+//            return $this->send(null, "访问源不能为空", 403, 200, null, alertMsgEnum::sendWorkerCodeFaile);
+//        }
         $phone =$param['phone'];
-        $platform_version = $param['platform_version'];
+//        $order_channel_name = $param['order_channel_name'];
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             $login_info = Worker::checkWorkerLogin($phone);
             $whether_send_code = WorkerCode::whetherSendCode($phone);
@@ -176,7 +176,7 @@ class SendSmsController extends \restapi\components\Controller
      * @apiName actionVoiceVerifyCode
      * @apiGroup SendSms
      * @apiParam {String} phone 手机号
-     * @apiParam {String} platform_version 访问源
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -202,11 +202,11 @@ class SendSmsController extends \restapi\components\Controller
         if (!isset($param['phone']) || !$param['phone']) {
             return $this->send(null, "手机号码不能为空", 403, 200, null, alertMsgEnum::voiceVerifyCodeFail);
         }
-        if (!isset($param['platform_version']) || !$param['platform_version']) {
+        if (!isset($param['order_channel_name']) || !$param['order_channel_name']) {
             return $this->send(null, "访问源不能为空", 403, 200, null, alertMsgEnum::voiceVerifyCodeFail);
         }
         $phone =$param['phone'];
-        $platform_version = $param['platform_version'];
+        $order_channel_name = $param['order_channel_name'];
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
              return $this->send(null, "语音验证码发送成功",1,200,null,alertMsgEnum::voiceVerifyCodeSuccess);
             
