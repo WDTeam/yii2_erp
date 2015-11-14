@@ -11,11 +11,12 @@ use yii\helpers\ArrayHelper;
 use core\models\worker\WorkerTaskLog;
 use core\models\worker\WorkerTaskCondition;
 use core\components\ConsoleHelper;
+use core\models\order\OrderSearch;
 class WorkerTaskController extends Controller
 {
     private function getConditionsValues($start_time, $end_time, $worker_id)
     {
-        return WorkerTaskCondition::getConditionsValues($start_time, $end_time, $worker_id);
+        return OrderSearch::getStatistical($start_time, $end_time, $worker_id);
     }
     /**
      * 定时处理已结束的任务周期
