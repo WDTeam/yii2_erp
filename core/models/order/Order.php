@@ -276,7 +276,7 @@ class Order extends OrderModel
             $attributes['pay_channel_id'] = OperationPayChannel::$attributes['pay_channel_key'];
         }
 
-        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign']) ? 1 : $attributes['order_flag_sys_assign'];
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign']) ? 1 : $attributes['order_flag_sys_assign']; //1走系统指派 0人工指派
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
 
@@ -284,6 +284,7 @@ class Order extends OrderModel
             $attributes['order_batch_code'] = OrderTool::createOrderCode('Z');
             $attributes['order_parent_id'] = 0;
             $attributes['order_is_parent'] = 1; //周期订单为父子订单
+            $attributes['order_flag_sys_assign'] = 0; //周期订单只走人工指派
         } else {
             $attributes['order_batch_code'] = OrderTool::createOrderCode('P');
             $attributes['order_parent_id'] = 0;
