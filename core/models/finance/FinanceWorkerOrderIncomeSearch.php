@@ -8,8 +8,7 @@ use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
 
 use core\models\order\Order;
-use core\models\worker\Worker;
-use core\models\finance\FinanceSettleApplySearch;
+use core\models\operation\OperationPayChannel;
 
 use dbbase\models\finance\FinanceWorkerOrderIncome;
 use dbbase\models\order\OrderStatusDict;
@@ -128,7 +127,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
      */
     public function getCashOrderDataProviderBySettleId($settle_id){
         $data = [];
-        $data = self::find()->where(['finance_worker_settle_apply_id'=>$settle_id,'order_pay_type_id'=>OrderExtPay::ORDER_PAY_TYPE_OFF_LINE])->asArray()->all();
+        $data = self::find()->where(['finance_worker_settle_apply_id'=>$settle_id,'order_pay_type_id'=>OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY])->asArray()->all();
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
@@ -136,7 +135,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     
     public function getCashOrderDataProviderFromOrder($worker_id,$finance_worker_settle_apply_starttime,$finance_worker_settle_apply_endtime){
         $data = [];
-        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>OrderExtPay::ORDER_PAY_TYPE_OFF_LINE])->all();
+        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.pay_channel_id'=>OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY])->all();
         $data = $this->getWorkerOrderIncomeArrayFromOrders($orders,$finance_worker_settle_apply_starttime,$finance_worker_settle_apply_endtime);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
@@ -180,9 +179,9 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         $financeWorkerOrderIncomeSearch->order_service_type_name = $order->order_service_type_name;
         $financeWorkerOrderIncomeSearch->channel_id = $order->channel_id;
         $financeWorkerOrderIncomeSearch->order_channel_name = $order->order_channel_name;
-        $financeWorkerOrderIncomeSearch->order_pay_type_id = $order->orderExtPay->order_pay_type;
+        $financeWorkerOrderIncomeSearch->order_pay_type_id = $order->orderExtPay->pay_channel_id;
         $orderExtPay = new OrderExtPay;
-        $financeWorkerOrderIncomeSearch->order_pay_type_des = $orderExtPay->orderPayTypeLabels()[$order->orderExtPay->order_pay_type];
+        $financeWorkerOrderIncomeSearch->order_pay_type_des = OperationPayChannel::get_post_name($order->orderExtPay->pay_channel_id);
         $financeWorkerOrderIncomeSearch->order_booked_begin_time = $order->order_booked_begin_time;
         $financeWorkerOrderIncomeSearch->order_booked_count = $order->order_booked_count;
         $financeWorkerOrderIncomeSearch->order_unit_money = $order->order_unit_money;

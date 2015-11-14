@@ -40,7 +40,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'2015-10-15 12:10:10'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
+     * @apiParam  {int}   pay_channel_key     支付渠道
      * @apiParam {String} address_id 订单地址id
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -117,7 +117,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         #支付渠道
-        $attributes['pay_channel_id'] = isset($args['pay_channel_id']) ? $args['pay_channel_id'] : "";
+        $attributes['pay_channel_key'] = isset($args['pay_channel_key']) ? $args['pay_channel_key'] : "";
 
         $attributes['order_booked_count'] = $args['order_booked_count'];
         if (empty($attributes['order_booked_count'])) {
@@ -274,7 +274,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
-        $attributes['pay_channel_id'] = 2; //现金支付
+        $attributes['pay_channel_key'] = 'PAY_CHANNEL_EJJ_CASH_PAY'; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
@@ -1437,7 +1437,7 @@ class OrderController extends \restapi\components\Controller
 
             $reason = isset($param['order_cancel_reason']) ? $param['order_cancel_reason'] : "";
             $order_cancel_reason = array('临时有事，改约', '信息填写有误，重新下单', '不需要服务了');
-            
+
             if (!in_array($reason, $order_cancel_reason)) {
                 $reason = '其他原因#' . $reason;
             }
@@ -1743,7 +1743,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {int}     order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
+     * @apiParam  {int}     [pay_channel_key]      支付渠道
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
      * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
@@ -1804,7 +1804,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "客户手机不能为空", 0, 200, null, alertMsgEnum::orderCustomerPhoneFaile);
         }
         #支付渠道
-        $attributes['pay_channel_id'] = isset($param['pay_channel_id']) ? $param['pay_channel_id'] : "";
+        $attributes['pay_channel_key'] = isset($param['pay_channel_key']) ? $param['pay_channel_key'] : "";
 
         #判断是否使用余额
         if (empty($param['order_is_use_balance'])) {
@@ -1827,7 +1827,7 @@ class OrderController extends \restapi\components\Controller
                 "customer_id" => $customer->id,
                 "order_customer_phone" => $param['order_customer_phone'],
                 "admin_id" => Order::ADMIN_CUSTOMER,
-                "pay_channel_id" => $param['pay_channel_id'],
+                "pay_channel_key" => $param['pay_channel_key'],
                 "order_is_use_balance" => $param['order_is_use_balance'],
                 //order_booked_worker_id edit by tianyuxing
                 "order_booked_worker_id" => isset($param['order_booked_worker_id']) ? intval($param['order_booked_worker_id']) : 0,
