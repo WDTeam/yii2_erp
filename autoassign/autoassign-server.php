@@ -351,7 +351,7 @@ class server
      */
     public function onConnect($server, $fd) {
         echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
-        $this->broadcastToSpecifiedClient($server, $fd, 'this message from connect');
+        $this->broadcastToSpecifiedClient($this->serv, $fd, 'this message from connect');
         echo 'onConnect message send';
         $orders = $this->getOrders();
         
