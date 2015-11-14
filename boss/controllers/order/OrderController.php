@@ -390,7 +390,7 @@ class OrderController extends BaseAuthController
             $model->order_booked_count = '2.0'; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
             $model->order_flag_sys_assign = 1;//是否系统指派
-            $model->channel_id = '后台下单';//订单渠道
+            $model->order_channel_name = '后台下单';//订单渠道
             $model->pay_channel_id = 2;//支付渠道
         }
         return $this->render('create', [
