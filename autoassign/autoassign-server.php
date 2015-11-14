@@ -352,6 +352,7 @@ class server
     public function onConnect($server, $fd) {
         echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
         $orders = $this->getOrders();
+        $this->broadcastToSpecifiedClient($server, $fd, 'this message from connect');
         foreach($orders as $key => $order){
             if ($order['order_id']==null || $order['order_id']=='')
             {
@@ -360,7 +361,8 @@ class server
             $order = $this->getOrderStatus($order);
             $order['updated_at']=$order['created_at'];
             $d = json_encode($order);
-            $this->broadcast($server,$d);
+            echo 'onConnect;d='.$d;
+            $this->broadcastToSpecifiedClient($server, $fd, $msg);
         }
         return true;
     }
@@ -442,14 +444,20 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
-            //var_dump($clid);
-            try{
+            echo 'clid='.$clid.';msg='.$msg;
+            $this->broadcastToSpecifiedClient($server,$clid, $msg);
+        }
+    }
+    
+    public function broadcastToSpecifiedClient($server,$clid, $msg){
+        try{
+            
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
                 echo date('Y-m-d H:i:s').$ex->getMessage();
             }
-        }
     }
+    
     /**
      * 配置文件操作(查询与修改)
      * 默认没有第三个参数时，按照字符串读取提取''中或""中的内容
