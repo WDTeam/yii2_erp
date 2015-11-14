@@ -164,17 +164,34 @@ class server
      */
     public function onReceive( swoole_server $server, $fd, $from_id, $data ) {
         echo date('Y-m-d H:i:s')." Get Message From Client {$fd}:{$data}\n";
-        $this->handleCommandMessage($server, $data);
+        $this->handleCommandMessage($server, $data, $fd);
         
         return;
     }
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$data)
+    public function handleCommandMessage($server,$data, $fd)
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
+        if($cmd == autoassign\ClientCommand::ALL_REDIS_ORDERS){
+            $this->broadcastToSpecifiedClient($server, $fd, 'this handleCommandMessage from connect');
+            echo 'handleCommandMessage message send';
+            $orders = $this->getOrders();
+            foreach($orders as $key => $order){
+                if ($order['order_id']==null || $order['order_id']=='')
+                {
+                    continue;
+                }
+                $order = $this->getOrderStatus($order);
+                $order['updated_at']=$order['created_at'];
+                $d = json_encode($order);
+                echo 'onConnect;d='.$d;
+                $this->broadcastToSpecifiedClient($server, $fd, $msg);
+            }
+            return;
+        }
         $nextStatus = autoassign\ClientCommand::START;//默认下一步是“开始自动派单”
         $currentStatus = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
         echo 'currentStatus:'.$currentStatus;
@@ -351,21 +368,6 @@ class server
      */
     public function onConnect($server, $fd) {
         echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
-        $this->broadcastToSpecifiedClient($this->serv, $fd, 'this message from connect');
-        echo 'onConnect message send';
-        $orders = $this->getOrders();
-        
-        foreach($orders as $key => $order){
-            if ($order['order_id']==null || $order['order_id']=='')
-            {
-                continue;
-            }
-            $order = $this->getOrderStatus($order);
-            $order['updated_at']=$order['created_at'];
-            $d = json_encode($order);
-            echo 'onConnect;d='.$d;
-            $this->broadcastToSpecifiedClient($server, $fd, $msg);
-        }
         return true;
     }
     /*
