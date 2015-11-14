@@ -29,16 +29,15 @@ use Yii;
  */
 class OperationPayChannel extends \yii\db\ActiveRecord
 {
-	const PAY_CHANNEL_SERVICE= 1; //服务卡支付
-	const PAY_CHANNEL_CASH= 2; //现金支付
- 	const PAY_CHANNEL_ALIPAY= 7; //支付宝支付
-	const PAY_CHANNEL_BAIDU = 8; //百度钱包支付
-	const PAY_CHANNEL_POP_PLAN = 9; //第三方团购预收
-	const PAY_CHANNEL_WEIXI = 10; //微信支付
-	const PAY_CHANNEL_UNIONPAY=12; //银联支付
-	const PAY_CHANNEL_TENPAY=13; //财付通支付
-	const PAY_CHANNEL_SURPLUS=20; //余额支付
-	
+	const PAY_CHANNEL_EJJ_SERVICE_CARD_PAY= 1; //服务卡支付
+	const PAY_CHANNEL_EJJ_CASH_PAY= 2; //现金支付
+ 	const PAY_CHANNEL_ONLINEPAY_ALI_PAY= 7; //支付宝支付
+	const PAY_CHANNEL_ONLINEPAY_BAIDU_PAY = 8; //百度钱包支付
+	const PAY_CHANNEL_3RD_PARTY_COUPON_PAY = 9; //第三方团购预收
+	const PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY = 10; //微信支付
+	const PAY_CHANNEL_ONLINEPAY_UNION_PAY=12; //银联支付
+	const PAY_CHANNEL_ONLINEPAY_CAIFUTONG_PAY=13; //财付通支付
+	const PAY_CHANNEL_EJJ_BALANCE_PAY=20; //余额支付
 	
     /**
      * @inheritdoc
