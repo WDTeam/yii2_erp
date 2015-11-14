@@ -63,13 +63,13 @@ class Payment extends \yii\db\ActiveRecord
         return[
             'default'                => ['id','payment_actual_money','payment_transaction_id','payment_eo_order_id'],
             //支付宝WEB
-            'alipay_web_online_pay' =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','return_url','show_url'],
+            'alipay_web_online_pay' =>  ['payment_type','payment_money','customer_id','customer_phone','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','order_code','order_batch_code','return_url','show_url'],
             //在线支付
-            'online_pay'            =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id'],
+            'online_pay'            =>  ['payment_type','payment_money','customer_id','customer_phone','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','order_code','order_batch_code'],
             //微信在线支付
-            'wx_h5_online_pay'      =>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','openid'],
+            'wx_h5_online_pay'      =>  ['payment_type','payment_money','customer_id','customer_phone','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','order_code','order_batch_code','openid'],
             //直达号在线支付
-            'zhidahao_h5_online_pay'=>  ['payment_type','payment_money','customer_id','partner','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            'zhidahao_h5_online_pay'=>  ['payment_type','payment_money','customer_id','customer_phone','payment_source','payment_channel_id','payment_channel_name','payment_mode','order_id','order_code','order_batch_code','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //在线退款
             'refund'                =>  ['customer_id','order_id','payment_money','payment_actual_money','payment_source','payment_channel_id','payment_channel_name','payment_mode','payment_status','payment_memo','payment_type','admin_id','payment_admin_name','payment_verify'],
         ];

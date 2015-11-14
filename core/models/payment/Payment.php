@@ -114,7 +114,8 @@ class Payment extends \dbbase\models\payment\Payment
                 $order_use_acc_balance = 0;  //使用余额
                 $card_id = 0;
                 $order_use_card_money = 0;   //使用服务卡
-
+                $order_code = 0;
+                $order_batch_code = 0;
                 //判断是普通订单还是周期订单
                 if(count($dataArray) > 1)
                 {
@@ -125,6 +126,8 @@ class Payment extends \dbbase\models\payment\Payment
                         $order_use_acc_balance += $val['order_use_acc_balance'];    //使用余额
                         $card_id = $val['card_id'];    //服务卡号
                         $order_use_card_money += $val['order_use_card_money'];    //使用服务卡
+                        $order_code = $val['order_code'];
+                        $order_batch_code = $val['order_batch_code'];
                     }
                 }
                 else
@@ -134,6 +137,8 @@ class Payment extends \dbbase\models\payment\Payment
                     $order_use_acc_balance = $one['order_use_acc_balance'];    //使用余额
                     $card_id = $one['card_id'];    //服务卡号
                     $order_use_card_money = $one['order_use_card_money'];    //使用服务卡
+                    $order_code = $one['order_code'];
+                    $order_batch_code = $one['order_batch_code'];
                 }
 
                 //判断余额是否和订单余额不一致
@@ -165,11 +170,21 @@ class Payment extends \dbbase\models\payment\Payment
             return ['status'=>0 , 'info'=>'未找到订单支付金额', 'data'=>''];
         }
 
+        //获取用户电话
+        try{
+            $customer_phone = Customer::getCustomerPhoneById($customer_id);
+        }catch(Exception $e){
+            $customer_phone = 0;
+        }
+
         $data = [
             "payment_money" => $pay_money,
             "customer_id" => $customer_id,
+            "customer_phone" => $customer_phone,
             "payment_source" => $channel_id,
             "order_id" => $order_id,
+            "order_code" => $order_code,
+            "order_batch_code" => $order_batch_code,
             'payment_type' => $payment_type,
             'payment_mode' => $payment_mode,
         ];
