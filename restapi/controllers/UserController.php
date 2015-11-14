@@ -130,6 +130,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_channel_name      订单渠道名称
+     * @apiParam {String} [app_version]      版本号
      * 
      * @apiSuccess {Object[]} addresses 用户常用地址数组.
      * @apiSuccessExample Success-Response:
@@ -1619,11 +1620,7 @@ class UserController extends \restapi\components\Controller
             $result = [
                 "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
                 "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-                "content" => [
-                    "省时省力省心",
-                    "固定星级阿姨",
-                    "轻松回归生活"
-                ],
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
                 "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
             ];
         }else{
@@ -1631,11 +1628,7 @@ class UserController extends \restapi\components\Controller
             $result = [
                 "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
                 "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-                "content" => [
-                    "省时省力省心",
-                    "固定星级阿姨",
-                    "轻松回归生活"
-                ],
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
                 "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
             ];
         }
@@ -1701,11 +1694,7 @@ class UserController extends \restapi\components\Controller
             $result = [
                 "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
                 "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-                "content" => [
-                    "省时省力省心",
-                    "固定星级阿姨",
-                    "轻松回归生活"
-                ],
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
                 "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
             ];
         }else{
@@ -1713,11 +1702,7 @@ class UserController extends \restapi\components\Controller
             $result = [
                 "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
                 "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-                "content" => [
-                    "省时省力省心",
-                    "固定星级阿姨",
-                    "轻松回归生活"
-                ],
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
                 "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
             ];
         }
