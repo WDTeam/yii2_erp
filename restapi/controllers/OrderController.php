@@ -1968,7 +1968,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} access_token    用户认证
      * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} order_batch_code 周期订单号
-     * @apiParam {int}    workerType    江江获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0; 
+     * @apiParam {int}    workerType    获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0; 
      * 
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK  workerType 为空
