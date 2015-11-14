@@ -186,7 +186,7 @@ class server
                 $order['updated_at']=$order['created_at'];
                 $d = json_encode($order);
                 echo 'onConnect;d='.$d;
-                $this->broadcastToSpecifiedClient($server, $fd, $d);
+                $this->broadcastToSpecifiedClient($server, $fd, json_encode($d));
             }
             return;
         }
