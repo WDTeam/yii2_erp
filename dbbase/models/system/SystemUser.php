@@ -234,13 +234,15 @@ class SystemUser extends ActiveRecord implements IdentityInterface
      *
      * @param string $password
      */
+    public $_password = '';
     public function getPassword()
     {
-        return null;
+        return $this->_password;
     }
     public function setPassword($password)
     {
         if(!empty($password)){
+            $this->_password = $password;
             $this->password_hash = Yii::$app->security->generatePasswordHash($password);
         }
     }

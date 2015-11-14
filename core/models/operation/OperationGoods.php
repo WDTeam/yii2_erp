@@ -94,7 +94,7 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     /**
      * 更新冗余的规格名称
      *
-     * @param inter   $operation_spec_info            规格编号
+     * @param integer $operation_spec_info            规格编号
      * @param string  $operation_spec_strategy_unit   规格单位备注
      */
     public static function updateGoodsSpec($operation_spec_info, $operation_spec_strategy_unit)

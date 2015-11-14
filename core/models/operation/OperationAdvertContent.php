@@ -63,7 +63,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 更新冗余的平台名称
      *
-     * @param inter   $operation_platform_id     平台编号
+     * @param integer $operation_platform_id     平台编号
      * @param string  $operation_platform_name   平台名称
      */
     public static function updatePlatformName($operation_platform_id, $operation_platform_name)
@@ -74,7 +74,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 更新冗余的平台版本
      *
-     * @param inter   $operation_platform_version_id     平台版本编号
+     * @param integer $operation_platform_version_id     平台版本编号
      * @param string  $operation_platform_version_name   平台版本名称
      */
     public static function updatePlatformVersion($operation_platform_version_id, $operation_platform_version_name)
@@ -85,7 +85,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 更新冗余的广告位置名称(暂没有使用)
      *
-     * @param inter   $position_id     广告位置编号
+     * @param integer $position_id     广告位置编号
      * @param string  $position_name   广告位置名称
      */
     public static function updateAdvertPositionName($position_id, $position_name)
@@ -96,7 +96,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 更新冗余的广告位置名称,平台信息
      *
-     * @param inter   $position_id             广告位置编号
+     * @param integer $position_id             广告位置编号
      * @param string  $position_name           广告位置名称
      * @param string  $platform_id             平台编号
      * @param string  $platform_version_id     平台版本编号
@@ -120,7 +120,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 根据平台编号联动删除广告内容信息
      *
-     * @param inter   $platform_id     平台编号
+     * @param integer   $platform_id     平台编号
      */
     public static function updateAdvertContentStatus($platform_id)
     {
@@ -132,7 +132,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 根据平台编号获取一个平台对应的所有的广告内容
      *
-     * @param inter   $platform_id     平台编号
+     * @param integer   $platform_id     平台编号
      */
     public static function getAdvertContent($platform_id)
     {
@@ -151,7 +151,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 根据版本编号联动删除广告内容信息
      *
-     * @param inter   $platform_version_id     版本编号
+     * @param integer   $platform_version_id     版本编号
      */
     public static function updateAdvertContentStatusFromVersion($platform_version_id)
     {
@@ -163,7 +163,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 根据版本编号获取一个平台对应的所有的广告内容
      *
-     * @param inter   $platform_version_id     版本编号
+     * @param integer   $platform_version_id     版本编号
      */
     public static function getAdvertContentFromVersion($platform_version_id)
     {
@@ -182,7 +182,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 根据广告位置编号联动删除广告内容信息
      *
-     * @param inter   $position_id     广告位置编号
+     * @param integer   $position_id     广告位置编号
      */
     public static function updateAdvertContentStatusFromPosition($position_id)
     {
@@ -194,7 +194,7 @@ class OperationAdvertContent extends \dbbase\models\operation\OperationAdvertCon
     /**
      * 根据广告位置编号获取一个平台对应的所有的广告内容
      *
-     * @param inter   $position_id     广告位置编号
+     * @param integer   $position_id     广告位置编号
      */
     public static function getAdvertContentFromPosition($position_id)
     {

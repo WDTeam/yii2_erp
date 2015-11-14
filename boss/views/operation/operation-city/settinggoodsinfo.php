@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '编辑服务')];
 $form = ActiveForm::begin([
     'type'=>ActiveForm::TYPE_HORIZONTAL,
     'options' => ['enctype' => 'multipart/form-data'],
-    'action' => ['settinggoodsinfo'],
+    'action' => ['settinggoodsinfo', 'city_id' => $city_id, 'action' => 'edit'],
 ]);
 ?>
 

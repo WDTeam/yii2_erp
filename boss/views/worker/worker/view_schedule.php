@@ -27,25 +27,25 @@ use kartik\daterange\DateRangePicker;
     if($workerIsInRedis!==false){
         ?>
         <div class="callout callout-info" style="padding: 9px 30px 1px 15px">
-            <h4  style="font-size:15px">阿姨排班表可用。</h4>
+            <h4  style="font-size:15px">阿姨排班表已激活。</h4>
         </div>
         <?php
     }else{
         $worker_info = Worker::find()->where(['id'=>$worker_id])->asArray()->one();
         if($worker_info['worker_is_block']!=0){
-            $message = '阿姨当前正处于封号中，排班表不可用！';
+            $message = '阿姨当前正处于封号中，排班表未激活！';
         }elseif($worker_info['worker_is_blacklist']!=0){
-            $message = '阿姨被列入黑名单，排班表不可用！';
+            $message = '阿姨被列入黑名单，排班表未激活！';
         }elseif($worker_info['worker_is_dimission']!=0){
-            $message = '阿姨已离职，排班表不可用！';
+            $message = '阿姨已离职，排班表未激活！';
         }elseif($worker_info['worker_auth_status']<4){
-            $message = '阿姨当前还未试工，排班表不可用！';
+            $message = '阿姨当前还未试工，排班表未激活！';
         }elseif($worker_info['worker_auth_status']==5){
-            $message = '阿姨当前试工未通过，排班表不可用！';
+            $message = '阿姨当前试工未通过，排班表未激活！';
         }elseif($worker_info['worker_auth_status']==7){
-            $message = '阿姨当前上岗未通过，排班表不可用！';
+            $message = '阿姨当前上岗未通过，排班表未激活！';
         }else{
-            $message = '未知，请重新保存';
+            $message = '未知错误，请重新保存';
         }
         ?>
         <div class="callout callout-danger" style="padding: 9px 30px 1px 15px">
@@ -58,6 +58,7 @@ use kartik\daterange\DateRangePicker;
     <div style="width: 300px;float: left">
 
     <?php
+        Yii::t('kvdrp', 'Apply123');
         echo DateRangePicker::widget([
             'name'=>'date_range',
             'useWithAddon'=>false,
