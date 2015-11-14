@@ -12,6 +12,7 @@ namespace core\models\order;
 /** core */
 use core\models\finance\FinanceRefundadd;
 use core\models\operation\coupon\CouponRule;
+use core\models\operation\OperationPayChannel;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\operation\OperationShopDistrict;
@@ -115,10 +116,9 @@ class Order extends OrderModel
     const ADMIN_SYSTEM = 1;
     const ADMIN_CUSTOMER = 2;
     const ADMIN_WORKER = 3;
-    const ORDER_PAY_CHANNEL_CASH = 2;
-    const ORDER_PAY_CHANNEL_POP = 9;
     const ORDER_PAY_CHANNEL_TYPE_POP = 2;
 
+    public $pay_channel_key;
     /**
      * 创建新订单
      * @param $attributes [
@@ -131,6 +131,7 @@ class Order extends OrderModel
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id 1系统 2客户 3阿姨 必填
+     *  int $pay_channel_key 支付渠道id
      *  int $pay_channel_id 支付渠道id
      *  int $coupon_id 优惠券id
      *  int $order_is_use_balance 是否使用余额 0否 1是
@@ -150,7 +151,7 @@ class Order extends OrderModel
         $attributes_keys = [
             'order_ip', 'order_service_item_id', 'channel_id', 'order_channel_name',
             'order_booked_begin_time', 'order_booked_end_time', 'address_id',
-            'customer_id', 'admin_id', 'pay_channel_id', 'order_booked_count',
+            'customer_id', 'admin_id', 'pay_channel_key', 'pay_channel_id', 'order_booked_count',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo', 'order_cs_memo', 'order_flag_sys_assign'
         ];
@@ -174,6 +175,10 @@ class Order extends OrderModel
 
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
+
+        if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
+            $attributes['pay_channel_id'] = OperationPayChannel::$attributes['pay_channel_key'];
+        }
 
         $customer = Customer::getCustomerById($attributes['customer_id']);
         if (!empty($customer)) {
@@ -200,7 +205,7 @@ class Order extends OrderModel
         }
 
         if ($this->_create($attributes, null, $customer_balance)) {
-            if ($this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {
+            if ($this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) {
                 if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
                     $order_model = OrderSearch::getOne($this->id);
                     $order_model->admin_id = $attributes['admin_id'];
@@ -223,6 +228,7 @@ class Order extends OrderModel
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
      *  int $admin_id 操作人id  1系统 2客户 3阿姨 必填
+     *  int $pay_channel_key 支付渠道分类 必填
      *  int $pay_channel_id 支付渠道分类 必填
      *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
@@ -247,7 +253,7 @@ class Order extends OrderModel
 
         $attributes_keys = [
             'order_ip', 'order_service_item_id', 'address_id',
-            'customer_id', 'admin_id', 'pay_channel_id','order_channel_name',
+            'customer_id', 'admin_id', 'pay_channel_key','pay_channel_id','order_channel_name',
             'coupon_id', 'order_is_use_balance', 'order_booked_worker_id', 'order_pop_order_code',
             'order_pop_group_buy_code', 'order_pop_order_money', 'order_customer_need', 'order_customer_memo',
             'order_flag_sys_assign', 'order_cs_memo', 'order_flag_change_booked_worker'
@@ -265,7 +271,12 @@ class Order extends OrderModel
                 return ['status' => false, 'errors' => $v . '为必填项！'];
             }
         }
-        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign']) ? 1 : $attributes['order_flag_sys_assign'];
+
+        if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
+            $attributes['pay_channel_id'] = OperationPayChannel::$attributes['pay_channel_key'];
+        }
+
+        $attributes['order_flag_sys_assign'] = !isset($attributes['order_flag_sys_assign']) ? 1 : $attributes['order_flag_sys_assign']; //1走系统指派 0人工指派
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
 
@@ -273,6 +284,7 @@ class Order extends OrderModel
             $attributes['order_batch_code'] = OrderTool::createOrderCode('Z');
             $attributes['order_parent_id'] = 0;
             $attributes['order_is_parent'] = 1; //周期订单为父子订单
+            $attributes['order_flag_sys_assign'] = 0; //周期订单只走人工指派
         } else {
             $attributes['order_batch_code'] = OrderTool::createOrderCode('P');
             $attributes['order_parent_id'] = 0;
@@ -325,7 +337,7 @@ class Order extends OrderModel
         }
 
         $transact->commit();
-        if ($orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id'] == self::ORDER_PAY_CHANNEL_CASH) {
+        if ($orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id'] == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) {
             //交易记录
             if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $channel_id, 'order_pay', 2)) {
                 OrderStatus::_batchPayment($attributes['order_batch_code'], $attributes['admin_id']);
@@ -678,21 +690,45 @@ class Order extends OrderModel
     public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = '')
     {
         $order = OrderSearch::getOne($order_id);
-        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+        if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
+            OrderMsg::cancel($order); //取消订单发送通知
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
      * 取消订单
-     * @param $order_code
+     * @param $code
      * @param $admin_id
      * @param $cause_id
      * @param string $memo
      * @return bool
      */
-    public static function cancelByOrderCode($order_code, $admin_id, $cause_id, $memo = '')
+    public static function cancelByOrderCode($code, $admin_id, $cause_id, $memo = '')
     {
-        $order = OrderSearch::getOneByCode($order_code);
-        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+        if (substr($code, 0, 1) == 'Z') { //如果是周期订单
+            $orders = OrderSearch::getBatchOrder($code);
+            $transact = static::getDb()->beginTransaction();
+            foreach($orders as $order){
+                if(!self::_cancelOrder($order, $admin_id, $cause_id, $memo,$transact)){
+                    $transact->rollBack();
+                    return false;
+                }
+            }
+            $transact->commit();
+            OrderMsg::cancel($order); //取消订单发送通知
+            return true;
+        }else {
+            $order = OrderSearch::getOneByCode($code);
+            if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
+                OrderMsg::cancel($order); //取消订单发送通知
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
 
     /**
@@ -701,9 +737,10 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $cause_id
      * @param $memo
+     * @param $transact
      * @return bool
      */
-    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '')
+    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '',$transact = null)
     {
 
         $order->admin_id = $admin_id;
@@ -722,9 +759,13 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            $transact = static::getDb()->beginTransaction();
+
+            $transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
+
             $result = OrderStatus::_cancel($order, [], $transact);
-            if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2]) && $order->orderExtPay->pay_channel_id != 20 && $current_status != OrderStatusDict::ORDER_INIT || $current_status == OrderStatusDict::ORDER_INIT && $cause_id == OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE) {
+            //在线支付 和 E家洁支付 非现金的 或者 支付异常的 调用退款接口
+            if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2]) && $order->orderExtPay->pay_channel_id != 20 && $current_status != OrderStatusDict::ORDER_INIT
+                || $current_status == OrderStatusDict::ORDER_INIT && $cause_id == OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE) {
                 //调高峰的退款接口
                 $finance_refund_add = new FinanceRefundadd();
                 $result = $finance_refund_add->add($order);
@@ -739,10 +780,11 @@ class Order extends OrderModel
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if ($result) {
-                $transact->commit();
-                OrderMsg::cancel($order); //取消订单发送通知
+                if(empty($transact)){
+                    $transaction->commit();
+                }
             } else {
-                $transact->rollBack();
+                $transaction->rollBack();
             }
             return $result;
         } else {
@@ -752,16 +794,36 @@ class Order extends OrderModel
 
     /**
      * 客户删除订单
-     * @param $order_id
+     * @param $code
      * @param $admin_id
      * @return bool
      */
-    public static function customerDel($order_id, $admin_id = Order::ADMIN_CUSTOMER)
+    public static function customerDel($code, $admin_id = Order::ADMIN_CUSTOMER)
     {
-        $order = OrderSearch::getOne($order_id);
-        $order->order_customer_hidden = 1;
-        $order->admin_id = $admin_id;
-        return $order->doSave(['OrderExtCustomer']);
+        if (substr($code, 0, 1) == 'Z') { //如果是周期订单
+            $orders = OrderSearch::getBatchOrder($code);
+            if(!empty($orders)) {
+                $transact = static::getDb()->beginTransaction();
+                foreach ($orders as $order) {
+                    $order->order_customer_hidden = 1;
+                    $order->admin_id = $admin_id;
+                    if (!$order->doSave(['OrderExtCustomer'], $transact)) {
+                        $transact->rollBack();
+                        return false;
+                    }
+                }
+                $transact->commit();
+                return true;
+            }
+        }else {
+            $order = OrderSearch::getOneByCode($code);
+            if(!empty($order)) {
+                $order->order_customer_hidden = 1;
+                $order->admin_id = $admin_id;
+                return $order->doSave(['OrderExtCustomer']);
+            }
+        }
+        return false;
     }
 
     /**
@@ -838,19 +900,9 @@ class Order extends OrderModel
         if (in_array($channel['operation_order_channel_type'], [2, 3]) && $this->order_channel_name != '后台下单') { //第三方
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
             $this->order_pay_money -= $this->order_money;
-            $this->setAttributes([
-                'pay_channel_id' => self::ORDER_PAY_CHANNEL_POP,
-                'order_pay_channel_name' => '第三方团购预收',
-                'order_pay_channel_type_name' => '第三方团购',
-                'pay_channel_type_id' => 3,
-            ]);
-        } else if (!empty($this->pay_channel_id) && $this->pay_channel_id == self::ORDER_PAY_CHANNEL_CASH) {
-            $this->setAttributes([
-                'pay_channel_id' => self::ORDER_PAY_CHANNEL_CASH,
-                'order_pay_channel_name' => '现金支付',
-                'order_pay_channel_type_name' => 'e家洁',
-                'pay_channel_type_id' => 2,
-            ]);
+            $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_3RD_PARTY_COUPON_PAY));
+        } else if (!empty($this->pay_channel_id) && $this->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) { //现金支付
+            $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY));
             $this->order_pay_money -= $this->order_money;
         } else {//如果不传支付渠道就是线上支付
             if (!empty($this->coupon_id)) {//是否使用了优惠券
@@ -882,12 +934,7 @@ class Order extends OrderModel
                     'pay_channel_type_id' => 1,
                 ]);
             } else {
-                $this->setAttributes([
-                    'pay_channel_id' => 20,
-                    'order_pay_channel_name' => '余额支付',
-                    'order_pay_channel_type_name' => 'e家洁',
-                    'pay_channel_type_id' => 2,
-                ]);
+                $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_EJJ_BALANCE_PAY));
             }
         }
 
@@ -1099,9 +1146,25 @@ class Order extends OrderModel
         return $order->doSave(['OrderExtCustomer']);
     }
 
+    /**
+     * 获取订单渠道 根据名称
+     * @param $name
+     * @return array|bool
+     */
     public function getOrderChannel($name)
     {
         return OperationOrderChannel::configorderlist($name);
+    }
+
+    public function getPayChannel($id)
+    {
+        $type = OperationPayChannel::configpay($id);
+        return [
+            'pay_channel_id' => $id,
+            'order_pay_channel_name' => OperationPayChannel::get_post_name($id),
+            'order_pay_channel_type_name' => isset($type[1])?$type[1]:'未知',
+            'pay_channel_type_id' => isset($type[0])?$type[0]:0,
+        ];
     }
 
     /**

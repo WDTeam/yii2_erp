@@ -29,7 +29,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
     public function rules()
     {
         return [
-            [['id', 'worker_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'worker_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_worker_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_non_order_income'], 'number'],
             [['finance_worker_non_order_income_des'], 'safe'],
         ];
@@ -75,7 +75,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
             'finance_worker_non_order_income_starttime' => $this->finance_worker_non_order_income_starttime,
             'finance_worker_non_order_income_endtime' => $this->finance_worker_non_order_income_endtime,
             'finance_worker_non_order_income_isSettled' => $this->finance_worker_non_order_income_isSettled,
-            'finance_settle_apply_id' => $this->finance_settle_apply_id,
+            'finance_worker_settle_apply_id' => $this->finance_worker_settle_apply_id,
             'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
@@ -88,7 +88,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
     
     public static function getSubsidyDetail($settleApplyId){
         $detail = "";
-        $nonIncomeArr = FinanceWorkerNonOrderIncome::find()->where(['finance_settle_apply_id'=>$settleApplyId])->all();
+        $nonIncomeArr = FinanceWorkerNonOrderIncome::find()->where(['finance_worker_settle_apply_id'=>$settleApplyId])->all();
         foreach($nonIncomeArr as $nonIncome){
             $detail.=$nonIncome->finance_worker_non_order_income_name.':'.$nonIncome->finance_worker_non_order_income.'|';
         }
@@ -135,7 +135,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
     }
     
     public function getTaskDataProviderBySettleId($settle_id){
-        $data = self::find()->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>self::NON_ORDER_INCOME_TASK])->asArray()->all();
+        $data = self::find()->where(['finance_worker_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>self::NON_ORDER_INCOME_TASK])->asArray()->all();
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
@@ -157,7 +157,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
     }
     
-    public static function getCompensateMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+    public static function getCompensateMoney($workerId,$finance_worker_settle_apply_starttime,$finance_worker_settle_apply_endtime){
         $compensateMoney = 0;
         $compensateList = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_worker_settle_apply_starttime, $finance_worker_settle_apply_endtime);
         foreach($compensateList as $compensate){

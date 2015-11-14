@@ -12,7 +12,7 @@ class m151110_063208_create_table_operation_pay_channel extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'支付渠道表\'';
         }
         $this->createTable('{{%operation_pay_channel}}', [
-            'id'=>  Schema::TYPE_PK.'(5) NOT NULL AUTO_INCREMENT COMMENT \'主键id\'',
+            'id'=>  Schema::TYPE_PK.'(4) DEFAULT 0 COMMENT \'id\'',
             'operation_pay_channel_name'=>  Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'支付渠道名称\'',
             'operation_pay_channel_type' => Schema::TYPE_SMALLINT.'(1) DEFAULT 1 COMMENT \'支付渠道类别\'',
             'operation_pay_channel_rate'=>  Schema::TYPE_STRING.'(6) DEFAULT 1 COMMENT \'比率\'',
