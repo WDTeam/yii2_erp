@@ -1438,20 +1438,18 @@ class OrderController extends \restapi\components\Controller
             if (!in_array($reason, $order_cancel_reason)) {
                 $reason = '其他原因#' . $reason;
             }
+
             if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
+
             if (empty($param['order_code'])) {
-                $param['order_code'] = '';
+                $param['order_code'] = $param['order_batch_code'];
             }
-            if (empty($param['order_batch_code'])) {
-                $param['order_batch_code'] = '';
-            }
-
-            $cancelOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
-
+            
+            
             try {
-                $result = Order::cancelByOrderCode($cancelOrderCode, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
+                $result = Order::cancelByOrderCode($param['order_code'], Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
                 if ($result) {
                     return $this->send([1], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                 } else {
@@ -1513,19 +1511,11 @@ class OrderController extends \restapi\components\Controller
             }
 
             if (empty($param['order_code'])) {
-                $param['order_code'] = '';
-            }
-            if (empty($param['order_batch_code'])) {
-                $param['order_batch_code'] = '';
+                $param['order_code'] = $param['order_batch_code'];
             }
 
-            $deleteOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
-
-            if (empty($deleteOrderCode)) {
-                return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
-            }
             try {
-                if (Order::customerDel($deleteOrderCode, 0)) {
+                if (Order::customerDel($param['order_code'], 0)) {
                     return $this->send(null, "删除订单成功", 1, 200, null, alertMsgEnum::orderDeleteSuccess);
                 } else {
                     return $this->send(null, "订单删除失败", 0, 200, null, alertMsgEnum::orderDeleteFaile);
