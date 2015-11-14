@@ -23,13 +23,13 @@ use kartik\daterange\DateRangePicker;
     .switch{margin-left: 10px;}
     .select{background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;}
 </style>
+
 <div class="panel panel-info">
+
     <?php
     if($workerIsInRedis!==false){
         ?>
-        <div class="callout callout-info" style="padding: 9px 30px 1px 15px">
-            <h4  style="font-size:15px">阿姨排班表已激活。</h4>
-        </div>
+
         <?php
     }else{
         $worker_info = Worker::find()->where(['id'=>$worker_id])->asArray()->one();
@@ -46,7 +46,7 @@ use kartik\daterange\DateRangePicker;
         }elseif($worker_info['worker_auth_status']==7){
             $message = '阿姨当前上岗未通过，排班表未激活！';
         }else{
-            $message = '未知错误，请重新保存';
+            $message = '排班表未激活，请重新保存';
         }
         ?>
         <div class="callout callout-danger" style="padding: 9px 30px 1px 15px">
@@ -55,6 +55,21 @@ use kartik\daterange\DateRangePicker;
         <?php
     }
     ?>
+    <div class="box box-solid box-warning">
+
+        <div class="box-body">
+            <div style="clear: both"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表状态说明：</div>
+            <div style="border: 1px solid #DDD;float:left;margin-left:10px;height: 28px;width: 63px;background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%;font-size:15px;padding: 6px 12px;"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间已保存</div>
+            <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 28px;width: 63px;background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间已选中,未保存</div>
+            <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 28px;width: 63px;background: #F3F4F5"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间未选中</div>
+            <div style="clear: both"></div>
+        </div><!-- /.box-body -->
+    </div>
+
 <div class="panel-body">
     <div style="width: 300px;float: left">
 
@@ -76,12 +91,7 @@ use kartik\daterange\DateRangePicker;
     ?>
     </div>
     <button type="button" id='btn-submit' class="btn btn-success" style="float:left;margin-left: 20px;">保存排班表</button>
-    <div style="border: 1px solid #DDD;float:left;margin-left:100px;height: 30px;width: 63px;background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%;font-size:15px;padding: 6px 12px;"></div>
-    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表已保存</div>
-    <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 30px;width: 63px;background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;"></div>
-    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表已选中,未保存</div>
-    <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 30px;width: 63px;background: #F3F4F5"></div>
-    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表未选中</div>
+
     <form id='form' method="post" action="./opeation-schedule?id=<?php echo $worker_id?>">
         <input type="hidden" name="schedule_data">
     </form>
@@ -129,47 +139,6 @@ use kartik\daterange\DateRangePicker;
                     </th>
                 </tr>
             <?php
-            }
-            ?>
-            </tbody>
-            </table>
-        </div>
-        <div class="schedule-info-redis panel-body" style="display: none">
-
-            <table  class=" table table-bordered " style="width: 77%;" "="">
-            <tbody>
-            <?php
-                $schedule_from_redis = \yii\helpers\ArrayHelper::index($schedule_from_redis,'schedule_id');
-                if(isset($schedule_from_redis[$val['id']])){
-                    $weekday = $schedule_from_redis[$val['id']]['worker_schedule_timeline'];
-                    $weekdayIsDisabled = false;
-                }else{
-                    $weekday = [1=>[],2=>[],3=>[],4=>[],5=>[],6=>[],7=>[]];
-                    $weekdayIsDisabled = true;
-                }
-
-            ?>
-            <?php foreach ($weekday as $w_key=>$w_val) {
-                ?>
-                <tr style="height: 36px" class="show-schedule-for-redis">
-                    <th scope="row" weekday="<?= $w_key?>"><?= WorkerSchedule::getWeekdayShow($w_key)?></th>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('8:00',$w_val)){echo 'select';}}?>">8:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('9:00',$w_val)){echo 'select';}}?>">9:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('10:00',$w_val)){echo 'select';}}?>">10:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('11:00',$w_val)){echo 'select';}}?>">11:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('12:00',$w_val)){echo 'select';}}?>">12:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('13:00',$w_val)){echo 'select';}}?>">13:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('14:00',$w_val)){echo 'select';}}?>">14:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('15:00',$w_val)){echo 'select';}}?>">15:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('16:00',$w_val)){echo 'select';}}?>">16:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('17:00',$w_val)){echo 'select';}}?>">17:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('18:00',$w_val)){echo 'select';}}?>">18:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('19:00',$w_val)){echo 'select';}}?>">19:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('20:00',$w_val)){echo 'select';}}?>">20:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('21:00',$w_val)){echo 'select';}}?>">21:00</td>
-                    <td class="<?php if($weekdayIsDisabled){echo 'disabled';}else{if(in_array('22:00',$w_val)){echo 'select';}}?>">22:00</td>
-                </tr>
-                <?php
             }
             ?>
             </tbody>
