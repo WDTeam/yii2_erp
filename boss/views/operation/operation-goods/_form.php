@@ -34,11 +34,11 @@ use boss\models\operation\OperationCommon;
             'form' => $form,
             'columns' => 1,
             'attributes' => [
-                'operation_goods_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'商品名称...', 'maxlength'=>60]],
+                'operation_goods_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'服务项目名称...', 'maxlength'=>20]],
 
-                'operation_goods_introduction'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 服务类型简介...','rows'=> 6]],
+                'operation_goods_introduction'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 服务类型简介...', 'rows'=> 6, 'maxlength'=>100]],
 
-                'operation_goods_english_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务类型英文名称...', 'maxlength'=>60]],
+                'operation_goods_english_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务类型英文名称...', 'maxlength'=>100]],
 
 
                 ]]); ?>
@@ -47,12 +47,12 @@ use boss\models\operation\OperationCommon;
 
                 <?= $form->field($model, 'operation_goods_service_interval_time')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'operation_goods_service_estimate_time')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'operation_goods_service_estimate_time')->textInput(['maxlength' => 4]) ?>
 
 
-                <?= $form->field($model, 'operation_goods_price_description')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'operation_goods_price_description')->textInput(['maxlength' => 40]) ?>
 
-                <?= $form->field($model, 'operation_tags')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'operation_tags')->textInput(['maxlength' => true, 'placeholder' => '每个标签不超过12个字并用分号隔开']) ?>
                 <?= $form->field($model, 'operation_goods_img')->widget(FileInput::classname(), [
                     'options' => ['multiple' => true],
                     'pluginOptions' => [

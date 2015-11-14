@@ -17,7 +17,6 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'payment_log_price') ?>
 

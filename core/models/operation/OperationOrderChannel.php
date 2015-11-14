@@ -108,4 +108,27 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 	}
 	
 	
+	/**
+	 * 订单配置项
+	 * @date: 2015-11-10
+	 * @author: peak pan
+	 * @return:
+	 **/
+	public static  function configorderlist($name)
+	{
+		$configdate=['1' => 'e家洁', '2' => 'POP','3'=>'BOSS'];
+		$data = self::find()->select('id,operation_order_channel_type')->where(['operation_order_channel_name'=>$name])->asArray()->one();
+                if(!empty($data)){
+		$tyu=['id'=>$data['id'],'operation_order_channel_type'=>$data['operation_order_channel_type'],'ordertype'=>
+		$configdate[$data['operation_order_channel_type']]];
+		return $tyu;
+                }else{
+                    return FALSE;
+                }
+	}
+	
+	
+	
+	
+	
 }

@@ -25,7 +25,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} operation_province_name 省 如:北京
      * @apiParam {String} operation_city_name 市名  如:北京市
      * @apiParam {String} operation_area_name 地区名  如:朝阳区
@@ -129,7 +129,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * 
      * @apiSuccess {Object[]} addresses 用户常用地址数组.
      * @apiSuccessExample Success-Response:
@@ -223,7 +223,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token  用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int}    address_id    地址id 
      *
      * @apiSuccessExample Success-Response:
@@ -287,8 +287,8 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int}    address_id 地址id                         如：1
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} [operation_province_name] 省              如：北京
      * @apiParam {String} [operation_city_name] 市名                如：北京市
      * @apiParam {String} [operation_area_name] 地区名（朝阳区）     如：朝阳区
@@ -363,7 +363,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {int}    address_id 地址id                         如：1
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)       如：android_4.2.2
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} [operation_province_name] 省              如：北京
      * @apiParam {String} [operation_city_name] 市名                如：北京市
      * @apiParam {String} [operation_area_name] 地区名（朝阳区）     如：朝阳区
@@ -440,7 +440,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -531,7 +531,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccess {Object} UserMoney 用户当前余额和消费记录对象
      * @apiSuccessExample Success-Response:
@@ -648,7 +648,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -724,6 +724,8 @@ class UserController extends \restapi\components\Controller
      * @apiDescription 用户评价 (郝建设)
      * @apiName actionUserSuggest
      * @apiGroup User
+     * 
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int} order_id       '订单ID'
      * @apiParam {int} order_code       '订单号'
      * @apiParam {String} access_token 用户认证
@@ -841,7 +843,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -932,7 +934,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int} customer_comment_level 级别id
      *
      * @apiSuccessExample Success-Response:
@@ -1004,7 +1006,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1139,7 +1141,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1193,7 +1195,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} longitude 经度
      * @apiParam {String} latitude 纬度
      * @apiParam {int} order_service_type_id 服务id
@@ -1252,7 +1254,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1329,7 +1331,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} weixin_id 微信id
      * @apiParam {String} sign 微信签名
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1406,7 +1408,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token     用户认证
-     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} feedback_content 用户提交的数据
      *
      * @apiSuccessExample Success-Response:
@@ -1472,7 +1474,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1635,7 +1637,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK

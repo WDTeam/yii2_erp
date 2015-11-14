@@ -519,17 +519,33 @@ class WorkerForRedis extends Model
         }
     }
 
+    /**
+     * 获取阿姨排班表
+     * @param $worker_id
+     * @return bool
+     */
     public static function getWorkerSchedule($worker_id){
         $worker =  Yii::$app->redis->executeCommand('get', [self::WORKER_INFO.'_'.$worker_id]);
         if($worker){
             $worker = json_decode($worker,1);
             return $worker['schedule'];
         }else{
-            return false;
+            return [];
         }
 
     }
 
+    public static function checkWorkerIsInRedis($worker_id){
+        if(empty($worker_id)){
+            return false;
+        }
+        $workerInfo = Yii::$app->redis->executeCommand('get',[self::WORKER_INFO.'_'.$worker_id]);
+        if($workerInfo){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 
 }

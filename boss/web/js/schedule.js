@@ -16,12 +16,12 @@ $(document).on('click','.switch',function(){
         $(this).parents('.schedule_content').children('.schedule-info-redis').show();
         $(this).parents('.schedule_content').children('.schedule-info').hide();
         $(this).attr('show_type','schedule-for-redis');
-        $(this).text('切换数据库');
+        $(this).text('切换到数据库');
     }else{
         $(this).parents('.schedule_content').children('.schedule-info-redis').hide();
         $(this).parents('.schedule_content').children('.schedule-info').show();
         $(this).attr('show_type','schedule-for-mysql');
-        $(this).text('切换Redis');
+        $(this).text('切换到缓存');
     }
     console.log($(this).attr('show_type'));
 })
