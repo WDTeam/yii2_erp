@@ -43,7 +43,7 @@ class OrderController extends Controller{
     private function serviceDone($order)
     {
         try{
-            if($order['order_booked_end_time']>=time())
+            if($order['order_booked_end_time']<=time())
             {
                 $res = Order::serviceDone($order['id']);
                 ConsoleHelper::log('订单（ID：%s）结束', [$order['id']]);
