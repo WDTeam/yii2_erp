@@ -12,7 +12,7 @@ use kartik\daterange\DateRangePicker;
  */
 ?>
 <style>
-    td{cursor:pointer}
+    td{cursor:pointer;background: #F3F4F5;}
     tr{margin-bottom: 4px}
     .form-control{line-height:2.0}
     .schedule-date{margin-left: 20px;font-size:14px;width:400px}
@@ -21,7 +21,6 @@ use kartik\daterange\DateRangePicker;
     .actives{background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%}
     .delete{margin-left: 10px;}
     .switch{margin-left: 10px;}
-    .disabled{background: #F3F4F5;}
     .select{background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;}
 </style>
 <div class="panel panel-info">
@@ -78,9 +77,11 @@ use kartik\daterange\DateRangePicker;
     </div>
     <button type="button" id='btn-submit' class="btn btn-success" style="float:left;margin-left: 20px;">保存排班表</button>
     <div style="border: 1px solid #DDD;float:left;margin-left:100px;height: 30px;width: 63px;background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%;font-size:15px;padding: 6px 12px;"></div>
-    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">已保存</div>
+    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表已保存</div>
     <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 30px;width: 63px;background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;"></div>
-    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">已选中</div>
+    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表已选中,未保存</div>
+    <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 30px;width: 63px;background: #F3F4F5"></div>
+    <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表未选中</div>
     <form id='form' method="post" action="./opeation-schedule?id=<?php echo $worker_id?>">
         <input type="hidden" name="schedule_data">
     </form>
