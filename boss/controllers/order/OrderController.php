@@ -335,7 +335,7 @@ class OrderController extends BaseAuthController
         $out = ['results' => ['id' => '', 'text' => '']];
         $condition = '';
         if ($q != null) {
-            $condition = 'name LIKE "%' . $q . '%"';
+            $condition = ['like','name',$q];
         }
         $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
         if($is_mini_boss){
@@ -398,44 +398,44 @@ class OrderController extends BaseAuthController
         ]);
     }
 
-//    public function actionCreateBatch()
-//    {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        $attributes = [
-//            'order_ip' => Yii::$app->request->userIP,
-//            'order_service_item_id' => 1,
-//            'order_src_id' => 1,
-//            'channel_id' => 20,
-//            'address_id' => 1,
-//            'customer_id' => 1,
-//            'order_customer_phone' => '18001305711',
-//            'admin_id' => Yii::$app->user->id,
-//            'order_pay_type' => 1,
-//            'order_is_use_balance' => 1,
-//            'order_booked_worker_id' => 0,
-//            'order_customer_need' => 'xxxxx',
-//            'order_customer_memo' => 'fffff',
-//            'order_flag_sys_assign' => 0,
-//        ];
-//        $booked_list = [
-//            [
-//                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400,
-//                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400,
-//                'order_booked_count' => 2,
-//            ],
-//            [
-//                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400,
-//                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400,
-//                'order_booked_count' => 2,
-//            ],
-//            [
-//                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400 + 86400,
-//                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400 + 86400,
-//                'order_booked_count' => 2,
-//            ],
-//        ];
-//        return Order::createNewBatch($attributes, $booked_list);
-//    }
+    public function actionCreateBatch()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $attributes = [
+            'order_ip' => Yii::$app->request->userIP,
+            'order_service_item_id' => 1,
+            'order_src_id' => 1,
+            'order_channel_name' => '后台下单',
+            'address_id' => 1,
+            'customer_id' => 1,
+            'order_customer_phone' => '18001305711',
+            'admin_id' => Yii::$app->user->id,
+            'order_pay_type' => 1,
+            'order_is_use_balance' => 1,
+            'order_booked_worker_id' => 0,
+            'order_customer_need' => 'xxxxx',
+            'order_customer_memo' => 'fffff',
+            'order_flag_sys_assign' => 0,
+        ];
+        $booked_list = [
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400,
+                'order_booked_count' => 2,
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400,
+                'order_booked_count' => 2,
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400 + 86400,
+                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400 + 86400,
+                'order_booked_count' => 2,
+            ],
+        ];
+        return Order::createNewBatch($attributes, $booked_list);
+    }
 
     /**
      * 查看并编辑订单
