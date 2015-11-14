@@ -749,13 +749,17 @@ class Order extends OrderModel
                 }
             }
             $transact->commit();
-            OrderMsg::cancel($order); //取消订单发送通知
+//            OrderMsg::cancel($order); //取消订单发送通知
             return true;
         }else {
             $order = OrderSearch::getOneByCode($code);
-            if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
-                OrderMsg::cancel($order); //取消订单发送通知
-                return true;
+            if(!empty($order)) {
+                if (self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
+                    OrderMsg::cancel($order); //取消订单发送通知
+                    return true;
+                } else {
+                    return false;
+                }
             }else{
                 return false;
             }
