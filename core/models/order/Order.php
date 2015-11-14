@@ -933,11 +933,15 @@ class Order extends OrderModel
             $channel = ['id'=>0, 'operation_order_channel_type'=>0,'ordertype'=>'其它'];
         }
 
-        if (in_array($channel['operation_order_channel_type'], [2, 3]) && $this->order_channel_name != '后台下单') { //第三方
+        if ($channel['operation_order_channel_type']==2 && $this->order_channel_name != '后台下单') { //第三方团购
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
             $this->order_pay_money -= $this->order_money;
             $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_3RD_PARTY_COUPON_PAY));
-        } else if (!empty($this->pay_channel_id) && $this->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) { //现金支付
+        }else if($channel['operation_order_channel_type']==3){ //第三方对接
+            $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
+            $this->order_pay_money -= $this->order_money;
+            $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_3RD_PARTY_POP_PAY));
+        }else if (!empty($this->pay_channel_id) && $this->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) { //现金支付
             $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY));
             $this->order_pay_money -= $this->order_money;
         } else {//如果不传支付渠道就是线上支付
