@@ -72,7 +72,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		//检查这几个人在此优惠卷已经领取过
 		$couponCustomerinfo=self::find()
-		->where(['coupon_userinfo_id'=>$Couponruledate['coupon_userinfo_id'],'customer_tel'=>$phone])
+		->where(['coupon_userinfo_id'=>$Couponruledate['id'],'customer_tel'=>$phone])
 		->one();
 		if(!empty($couponCustomerinfo)){
 			$array=[

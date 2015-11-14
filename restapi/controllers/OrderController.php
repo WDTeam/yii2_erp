@@ -40,7 +40,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'2015-10-15 12:10:10'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
+     * @apiParam  {int}   pay_channel_key     支付渠道
      * @apiParam {String} address_id 订单地址id
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -117,7 +117,7 @@ class OrderController extends \restapi\components\Controller
         }
 
         #支付渠道
-        $attributes['pay_channel_id'] = isset($args['pay_channel_id']) ? $args['pay_channel_id'] : "";
+        $attributes['pay_channel_key'] = isset($args['pay_channel_key']) ? $args['pay_channel_key'] : "";
 
         $attributes['order_booked_count'] = $args['order_booked_count'];
         if (empty($attributes['order_booked_count'])) {
@@ -274,7 +274,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
-        $attributes['pay_channel_id'] = 2; //现金支付
+        $attributes['pay_channel_key'] = 'PAY_CHANNEL_EJJ_CASH_PAY'; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
@@ -590,7 +590,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/worker-orders [GET] /order/worker-orders(90%)
-     * @apiDescription 查询阿姨订单（谢奕 --已经将后台接口完成,缺少周期订单）
+     * @apiDescription 查询阿姨订单（谢奕）
      * @apiName actionWorkerOrders
      * @apiGroup Order
      *
@@ -722,7 +722,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/worker-service-orders [GET] /order/worker-service-orders(90%)
-     * @apiDescription 查询待服务阿姨订单(谢奕 --已经将后台接口完成,缺少周期订单)
+     * @apiDescription 查询待服务阿姨订单(谢奕)
      * @apiName actionWorkerServiceOrders
      * @apiGroup Order
      *
@@ -852,7 +852,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/worker-orders-count [GET] /order/worker-orders-count(90%)
-     * @apiDescription 查询阿姨订单订单数量 (谢奕 --已经将后台接口完成,缺少周期订单)
+     * @apiDescription 查询阿姨订单订单数量 (谢奕)
      *
      * @apiName actionWorkerOrdersCount
      * @apiGroup Order
@@ -986,7 +986,7 @@ class OrderController extends \restapi\components\Controller
     /**
      * @api {GET} /order/worker-done-orders-history [GET]/order/worker-done-orders-history (90%)
      *
-     * @apiDescription 查询阿姨三个月的完成历史订单 (谢奕 --已经将后台接口完成,缺少周期订单)
+     * @apiDescription 查询阿姨三个月的完成历史订单 (谢奕)
      * @apiName actionWorkerDoneOrdersHistory
      * @apiGroup Order
      *
@@ -1087,7 +1087,7 @@ class OrderController extends \restapi\components\Controller
     /**
      * @api {GET} /order/worker-cancel-orders-history [GET]/order/worker-cancel-orders-history(90%)
      *
-     * @apiDescription 查询阿姨三个月的取消历史订单（谢奕 --已经将后台接口完成,缺少周期订单）
+     * @apiDescription 查询阿姨三个月的取消历史订单（谢奕）
      * @apiName WorkerCancelOrdersHistory
      * @apiGroup Order
      *
@@ -1185,7 +1185,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/status-orders-count [GET]/order/status-orders-count(70%)
-     * @apiDescription 查询用户不同状态订单数量(谢奕--缺少周期订单)
+     * @apiDescription 查询用户不同状态订单数量(谢奕)
      * @apiName StatusOrdersCount
      * @apiGroup Order
      * 
@@ -1274,7 +1274,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/order-status-history [GET] /order/order-status-history(70%)
-     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕/田玉星 --缺少周期订单)
+     * @apiDescription 查询用户某个订单状态历史状态记录(谢奕/田玉星)
      *
      * @apiName actionOrderStatusHistory
      * @apiGroup Order
@@ -1394,10 +1394,11 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionCancelOrder
      * @apiGroup Order
      *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_channel_name      订单渠道名称
-     * @apiParam {String} [order_cancel_reason] 取消原因
-     * @apiParam {String} order_code 订单号
+     * @apiParam {String}   access_token            用户认证
+     * @apiParam {String}   order_channel_name      订单渠道名称
+     * @apiParam {String}   [order_cancel_reason]   取消原因
+     * @apiParam {String}   [order_code]            订单编号   
+     * @apiParam {String}   [order_batch_code]      周期订单号  
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1426,65 +1427,39 @@ class OrderController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_code']) || !$param['order_code']) {
-            return $this->send(null, "验证码或订单号不能为空", 0, 200, null, alertMsgEnum::orderCancelVerifyFaile);
-        }
 
-        $token = $param['access_token'];
-        $orderId = $param['order_code'];
-        $reason = '';
-
-        if (isset($param['order_cancel_reason'])) {
-            $reason = $param['order_cancel_reason'];
-        }
-
-        if (!CustomerAccessToken::checkAccessToken($token)) {
+        if (!CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
-
-        $customer = CustomerAccessToken::getCustomer($token);
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            /**
-             * access_token和订单验证
-             * $customer->id 用户
-             * $order_id     订单号
-             */
-            #  $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
-            #if ($orderValidation) {
-            /**
-             * $order_id订单号
-             * $amdin_id管理员id,没有请填写0
-             * $param['order_cancel_reason'] 取消原因
-             *
-             */
-            $order_cancel_reason = array(
-                '临时有事，改约',
-                '信息填写有误，重新下单',
-                '不需要服务了',
-            );
+
+            $reason = isset($param['order_cancel_reason']) ? $param['order_cancel_reason'] : "";
+            $order_cancel_reason = array('临时有事，改约', '信息填写有误，重新下单', '不需要服务了');
+
             if (!in_array($reason, $order_cancel_reason)) {
                 $reason = '其他原因#' . $reason;
             }
+            if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
+                return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
+            }
+
+            $cancelOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
 
             try {
-
-                $result = Order::cancelByOrderCode($orderId, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-
+                $result = Order::cancelByOrderCode($cancelOrderCode, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
                 if ($result) {
-                    return $this->send([1], $orderId . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
+                    return $this->send([1], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                 } else {
-                    return $this->send(null, $orderId . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
+                    return $this->send(null, $param['order_code'] . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
                 }
             } catch (Exception $e) {
-                return $this->send(null, $orderId . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
+                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
             }
         } else {
-            return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 200, NULL, alertMsgEnum::orderCancelFaile);
+            return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $param['order_code'], 0, 200, NULL, alertMsgEnum::orderCancelFaile);
         }
-//        } else {
-//            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 200, null, alertMsgEnum::orderCancelFaile);
-//        }
     }
 
     /**
@@ -1494,9 +1469,10 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionHidenOrder
      * @apiGroup Order
      *
-     * @apiParam {String} access_token  用户认证
-     * @apiParam {String} order_channel_name      订单渠道名称
-     * @apiParam {int}  order_id 订单号
+     * @apiParam {String} access_token    用户认证
+     * @apiParam {String} order_channel_name    订单渠道名称
+     * @apiParam {int}    [order_code]            订单号  
+     * @apiParam {int}    [order_batch_code]    周期订单号   
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      *
      * @apiSuccessExample Success-Response:
@@ -1504,7 +1480,7 @@ class OrderController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *       "msg": "订单删除成功",
-     *       "alertMsg": "订单取消成功"
+     *       "alertMsg": "订单删除成功"
      *        "ret":{}
      *     }
      *
@@ -1528,13 +1504,18 @@ class OrderController extends \restapi\components\Controller
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
-            /**
-             * access_token和订单验证
-             * $customer->id 用户
-             * $order_id     订单号
-             */
-            try {
-                if (Order::customerDel($param['order_id'], 0)) {
+
+            if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
+                return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
+            }
+
+            $deleteOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
+
+            if (empty($deleteOrderCode)) {
+                return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
+            }
+           try {
+                if (Order::customerDel($deleteOrderCode, 0)) {
                     return $this->send(null, "删除订单成功", 1, 200, null, alertMsgEnum::orderDeleteSuccess);
                 } else {
                     return $this->send(null, "订单删除失败", 0, 200, null, alertMsgEnum::orderDeleteFaile);
@@ -1762,7 +1743,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {int}     order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_id]     支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付
+     * @apiParam  {int}     [pay_channel_key]      支付渠道
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
      * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
@@ -1823,7 +1804,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "客户手机不能为空", 0, 200, null, alertMsgEnum::orderCustomerPhoneFaile);
         }
         #支付渠道
-        $attributes['pay_channel_id'] = isset($param['pay_channel_id']) ? $param['pay_channel_id'] : "";
+        $attributes['pay_channel_key'] = isset($param['pay_channel_key']) ? $param['pay_channel_key'] : "";
 
         #判断是否使用余额
         if (empty($param['order_is_use_balance'])) {
@@ -1846,7 +1827,7 @@ class OrderController extends \restapi\components\Controller
                 "customer_id" => $customer->id,
                 "order_customer_phone" => $param['order_customer_phone'],
                 "admin_id" => Order::ADMIN_CUSTOMER,
-                "pay_channel_id" => $param['pay_channel_id'],
+                "pay_channel_key" => $param['pay_channel_key'],
                 "order_is_use_balance" => $param['order_is_use_balance'],
                 //order_booked_worker_id edit by tianyuxing
                 "order_booked_worker_id" => isset($param['order_booked_worker_id']) ? intval($param['order_booked_worker_id']) : 0,
@@ -1987,7 +1968,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} access_token    用户认证
      * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} order_batch_code 周期订单号
-     * @apiParam {int}    workerType    江江获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0; 
+     * @apiParam {int}    workerType    获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0; 
      * 
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK  workerType 为空

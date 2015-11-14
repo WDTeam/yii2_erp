@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
+use core\models\operation\OperationArea;
+
 
 /**
  * @var yii\web\View $this
@@ -80,7 +82,13 @@ $this->params['breadcrumbs'][] = $this->title;
     		'label' => '地区限制',
     		'value' => function ($dataProvider) {
     			$configdate=CouponRuleSearch::couponconfig();
-    			return $configdate[4][$dataProvider->couponrule_city_limit];
+    			if($dataProvider->couponrule_city_limit==1){
+    				return $configdate[4][$dataProvider->couponrule_city_limit];
+    			}else{
+    				$name=$configdate[4][$dataProvider->couponrule_city_limit].'-'.OperationArea::getAreaname($dataProvider->couponrule_city_id);
+    				return $name;
+    			}
+    			
     		},
     		],
 //            'couponrule_city_id', 

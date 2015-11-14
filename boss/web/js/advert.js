@@ -18,7 +18,19 @@ $('#operationadvertrelease-city_id').change(function(){getPlatforms();});
 $(document).on('click', '.step2 > label > input[type=checkbox]', function(){getPlatformVersions($(this));});
 $(document).on('click', '.platform_versions > label > input[type=checkbox]', function(){getAdverts($(this).parent().parent().attr('platform_id'), $(this).val());});
 $('#saveOrders').click(function(){saveOrders();});
-$('#saveReleaseAdvOrders').click(function(){saveReleaseAdvOrders();});
+
+//保存广告顺序
+$('#saveReleaseAdvOrders').click(function(){
+    saveReleaseAdvOrders();
+});
+
+//上线城市第一步，反选城市名称
+$('#adv_city_reverse').click(function(){
+
+    $("#adv_city_selected").find('input').each(function () {  
+        $(this).prop("checked", !$(this).prop("checked"));  
+    });  
+});
 
 function saveReleaseAdvOrders(){
     var objs = $('.advert_release_orders_input');
@@ -27,7 +39,12 @@ function saveReleaseAdvOrders(){
     for(var i = 0; i < len; i++){
         data[$(objs[i]).attr('id')] = $(objs[i]).val();
     }
-    $.post('/operation/operation-advert-release/save-orders', data, function(t){alert(t);}, 'html');
+    $.post('/operation/operation-advert-release/save-orders', data,
+            function(t){
+                //alert(t);
+                console.log(t);
+            }, 'html');
+    window.location.reload(true);
 }
 
 function saveOrders(){

@@ -28,6 +28,56 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
             'type'=>1,
             'description'=>'管理员',
         ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_developer_admin',
+            'type'=>1,
+            'description'=>'开发工程师管理员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_tester_admin',
+            'type'=>1,
+            'description'=>'测试工程师管理员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_tester',
+            'type'=>1,
+            'description'=>'测试工程师',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_shopmanager_admin',
+            'type'=>1,
+            'description'=>' 家政门店管理员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_order_admin',
+            'type'=>1,
+            'description'=>'订单响应组管理员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_order',
+            'type'=>1,
+            'description'=>'订单响应员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_ordersort_admin',
+            'type'=>1,
+            'description'=>'订单派单组管理员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_ordersort',
+            'type'=>1,
+            'description'=>'订单派单员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_finance_admin',
+            'type'=>1,
+            'description'=>'财务结算管理员',
+        ]);
+        $this->insert('{{%auth_item}}', [
+            'name'=>'group_finance',
+            'type'=>1,
+            'description'=>'财物结算员',
+        ]);
         /**
          * 给角色授权
          */
@@ -53,6 +103,18 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         $this->insert('{{%auth_assignment}}', [
             'item_name'=>'system_group_super_admin',
             'user_id'=>4,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'group_ordersort',
+            'user_id'=>1000,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'group_ordersort',
+            'user_id'=>1001,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'group_ordersort',
+            'user_id'=>1002,
         ]);
     }
 

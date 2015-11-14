@@ -37,10 +37,13 @@ class OperationArea extends CommonOperationArea
     * @return:
     **/
     public static function getAreaname($parent_id){
-    	$data = self::find()->select(['area_name'])->asArray()->where(['parent_id' => $parent_id])->one();
+    	$data = self::find()->select(['area_name'])->asArray()->where(['id' => $parent_id])->one();
     	return $data['area_name'];
     }
 
+    
+    
+    
     
     
     /**

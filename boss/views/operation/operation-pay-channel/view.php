@@ -26,6 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
+    		[
+    		'attribute' => 'id',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>$model->id,
+    		],
             'operation_pay_channel_name',
 			[
 			'format' => 'raw',

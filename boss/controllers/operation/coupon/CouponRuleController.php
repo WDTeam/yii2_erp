@@ -199,6 +199,22 @@ class CouponRuleController extends Controller
 }
     }
 
+    
+    
+    /**
+     * ajax验证 优惠券是否唯一
+     * @return array
+     */
+    public function actionAjaxInfo(){
+    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	   $CouponRuleModel = new CouponRule;
+    		$CouponRuleModel->load(Yii::$app->request->post());
+    		return \yii\bootstrap\ActiveForm::validate($CouponRuleModel,['couponrule_Prefix']);
+    	
+    }
+    
+    
+    
     /**
      * Creates a new CouponRule model.
      * If creation is successful, the browser will be redirected to the 'view' page.

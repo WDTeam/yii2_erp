@@ -60,11 +60,14 @@ class OperationPayChannelController extends BaseAuthController {
 	 */
 	public function actionView($id) {
 		$model = $this->findModel ( $id );
-		
-		if ($model->load ( Yii::$app->request->post () ) && $model->save ()) {
+		if ($model->load ( Yii::$app->request->post () ) ) {
+			$model->system_user_id=Yii::$app->user->id;;
+			$model->system_user_name=Yii::$app->user->identity->username;
+			$model->create_time=time();
+			$model->is_del=0;
+			$model->save ();
 			return $this->redirect ( [ 
-					'view',
-					'id' => $model->id 
+					'index'
 			] );
 		} else {
 			return $this->render ( 'view', [ 
@@ -73,6 +76,8 @@ class OperationPayChannelController extends BaseAuthController {
 		}
 	}
 	
+	
+	
 	/**
 	 * Creates a new OperationPayChannel model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -80,12 +85,21 @@ class OperationPayChannelController extends BaseAuthController {
 	 * @return mixed
 	 */
 	public function actionCreate() {
-		$model = new OperationPayChannel ();
-		
-		if ($model->load ( Yii::$app->request->post () ) && $model->save ()) {
+		$model = new OperationPayChannel;
+		if ($model->load ( Yii::$app->request->post () ) ) {
+			$isdata=OperationPayChannel::find()->where(['id'=>$_POST['OperationPayChannel']['id']])->asArray()->one();
+			if(!empty($isdata)){
+				\Yii::$app->getSession()->setFlash('default','ID已经使用！');
+				return $this->redirect(['index']);
+			}
+			
+			$model->system_user_id=Yii::$app->user->id;;
+			$model->system_user_name=Yii::$app->user->identity->username;
+			$model->create_time=time();
+			$model->is_del=0;
+			$model->save();
 			return $this->redirect ( [ 
-					'view',
-					'id' => $model->id 
+					'index'
 			] );
 		} else {
 			return $this->render ( 'create', [ 
@@ -115,6 +129,20 @@ class OperationPayChannelController extends BaseAuthController {
 			] );
 		}
 	}
+	
+	
+	/**
+	 * ajax验证 优惠券是否唯一
+	 * @return array
+	 */
+	public function actionAjaxInfo(){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$PayChannelModel = new OperationPayChannel;
+		$PayChannelModel->load(Yii::$app->request->post());
+		return \yii\bootstrap\ActiveForm::validate($PayChannelModel,['id']);
+		 
+	}
+	
 	
 	/**
 	 * Deletes an existing OperationPayChannel model.

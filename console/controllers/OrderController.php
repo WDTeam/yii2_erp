@@ -42,7 +42,7 @@ class OrderController extends Controller{
     private function serviceDone($order)
     {
         try{
-            if($order['order_booked_end_time']>=time())
+            if($order['order_booked_end_time']<=time())
             {
                 $res = Order::serviceDone($order['id']);
                 ConsoleHelper::log('订单（ID：%s）结束', [$order['id']]);
@@ -92,7 +92,7 @@ class OrderController extends Controller{
         }
         
         $service_list = OrderSearch::getStartServiceOrderList();
-        echo 'Service Total:'.count($service_list).PHP_EOL;
+        ConsoleHelper::log('等待结束的订单总数（%s）', [count($service_list)]);
         foreach ($service_list as $order){
             $this->serviceDone($order);
         }

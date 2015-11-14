@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <tbody >
             <tr>
                 <td  style="vertical-align:middle;"><?php echo !empty($config['SWOOLE_SERVER_IP'])? $config['SWOOLE_SERVER_IP'].':'.$config['SERVER_LISTEN_PORT'] : ''?></td>
-                <td style="vertical-align:middle;"><?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT '] : ''?></td>
+                <td style="vertical-align:middle;"><?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT'] : ''?></td>
                 <td style="vertical-align:middle;">0 - <?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>分钟</td>
                 <td style="vertical-align:middle;"><?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?> - <?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>分钟</td>
                 <td style="vertical-align:middle;"><div style="display: inline;" id="connectStatus"></div></td>
