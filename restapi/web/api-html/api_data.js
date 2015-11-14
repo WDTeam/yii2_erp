@@ -1322,8 +1322,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": true,
-            "field": "order_id",
-            "description": "<p>订单id</p> "
+            "field": "order_code",
+            "description": "<p>订单号</p> "
           },
           {
             "group": "Parameter",
@@ -2302,78 +2302,6 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "/pay/balance-pay",
-    "title": "[POST] /pay/balance-pay  (100%)",
-    "description": "<p>会员余额支付 (赵顺利)</p> ",
-    "name": "actionBalancePay",
-    "group": "Pay",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_channel_name",
-            "description": "<p>订单渠道名称</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单ID.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"支付成功\",\n     \"ret\":{},\n     \"alertMsg\":\"支付成功\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "OrderIdNotFound",
-            "description": "<p>未找到订单ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":0,\n    \"msg\": \"支付失败\",\n    \"ret\": {},\n    \"alertMsg\": \"支付失败\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/PayController.php",
-    "groupTitle": "Pay"
-  },
-  {
-    "type": "POST",
     "url": "/pay/online-pay",
     "title": "[POST] /pay/online-pay (100%)",
     "description": "<p>在线支付接口(赵顺利100)</p> ",
@@ -2499,7 +2427,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": " {\n     \"channel_id\":\"7\",\n     \"partner\":\"1217983401\",\n     \"access_token\":\"00ca52a593ca85ffdb5256372aa642d2\",\n     \"pay_money\":\"0.01\",\n     \"order_id\":\"0\",\n     \"ext_params\":\n     {\n         \"openid\":\"o7Kvajh91Fmh_KYzhwX0LWZtpMPM\",\n         \"goods_name\":\"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_name\":\"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_mobile\":\"18001305711\",\n         \"goods_name\":\"18001305711\",\n         \"customer_address\":\"%E5%8C%97%E4%BA%AC%E7%9C%81\",\n         \"order_source_url\":\"http://www.baidu.com\",\n         \"page_url\":\"http://www.qq.com\",\n         \"detail\":\n         [\n         {\n             \"item_id\":\"1\",\n             \"cat_id\":\"1\",\n             \"name\":\"寿司\",\n             \"desc\":\"很好吃\",\n             \"price\":\"1\"\n         },\n         ]\n     }\n}",
+          "content": " {\n     \"channel_id\":\"7\",\n     \"access_token\":\"00ca52a593ca85ffdb5256372aa642d2\",\n     \"pay_money\":\"0.01\",\n     \"order_id\":\"0\",\n     \"ext_params\":\n     {\n         \"openid\":\"o7Kvajh91Fmh_KYzhwX0LWZtpMPM\",\n         \"goods_name\":\"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_name\":\"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_mobile\":\"18001305711\",\n         \"goods_name\":\"18001305711\",\n         \"customer_address\":\"%E5%8C%97%E4%BA%AC%E7%9C%81\",\n         \"order_source_url\":\"http://www.baidu.com\",\n         \"page_url\":\"http://www.qq.com\",\n         \"detail\":\n         [\n         {\n             \"item_id\":\"1\",\n             \"cat_id\":\"1\",\n             \"name\":\"寿司\",\n             \"desc\":\"很好吃\",\n             \"price\":\"1\"\n         },\n         ]\n     }\n}",
           "type": "json"
         }
       ]
@@ -5753,7 +5681,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"成功\"\n    \"ret\": {\n        \"city_list\": [\n            {\n                \"city_id\": \"110100\",\n                \"city_name\": \"北京市\"\n            }\n        ],\n        \"header_link\": {\n            \"comment_link\": {\n                \"title\": \"意见反馈\",\n                \"url\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\"\n            },\n            \"phone_link\": {\n                \"title\": \"18210922324\",\n                \"url\": \"\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png\"\n            }\n        },\n        \"pic_list\": [\n            {\n                \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                \"url_title\": \"标准服务\"\n            }\n        ],\n        \"home_order_server\": [\n            {\n                \"title\": \"单次保洁\",\n                \"introduction\": \"新用户第1小时免费\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/dancibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/1\",\n                \"bg_colour\": \"ffb518\",\n                \"font_colour\": \"ffffff\"\n            },\n            {\n                \"title\": \"周期保洁\",\n                \"introduction\": \"一次下单 清洁无忧\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/2\",\n                \"bg_colour\": \"ff8a44\",\n                \"font_colour\": \"ffffff\"\n            }\n        ],\n        \"server_list\": [\n            {\n                \"category_id\": \"2\",\n                \"category_name\": \"保洁任务\",\n                \"category_icon\": \"http://7b1f97.com1.z0.glb.clouddn.com/14468862302219563dbb56de6d3\",\n                \"category_introduction\": \"地板深度保护\",\n                \"category_url\": \"http://www.baidu.com\",\n                \"colour\": \"颜色\",\n                \"category_price_description\": \"价格描述\"\n            }\n        ],\n        \"isBlock\": \"用户是否为黑名单【1表示黑名单，0表示正常】\",\n        \"isEffect\": \"用户token是否有效【0表示正常，1表示失效】\"\n         isUpdate: \"0\", \n         updateContent: \"\",\n         updateUrl: \"https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8\",\n         isShowGiveStar :\"0\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"成功\"\n    \"ret\": {\n        \"city_list\": [\n            {\n                \"city_id\": \"110100\",\n                \"city_name\": \"北京市\"\n            }\n        ],\n        \"header_link\": {\n            \"comment_link\": {\n                \"title\": \"意见反馈\",\n                \"url\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\"\n            },\n            \"phone_link\": {\n                \"title\": \"18210922324\",\n                \"url\": \"\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png\"\n            }\n        },\n        \"pic_list\": [\n            {\n                \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                \"url_title\": \"标准服务\"\n            }\n        ],\n        \"home_order_server\": [\n            {\n                \"title\": \"单次保洁\",\n                \"introduction\": \"新用户第1小时免费\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/dancibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/1\",\n                \"bg_colour\": \"ffb518\",\n                \"font_colour\": \"ffffff\"\n            },\n            {\n                \"title\": \"周期保洁\",\n                \"introduction\": \"一次下单 清洁无忧\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/2\",\n                \"bg_colour\": \"ff8a44\",\n                \"font_colour\": \"ffffff\"\n            }\n        ],\n        \"server_list\": [\n            {\n                \"category_id\": \"2\",\n                \"category_name\": \"保洁任务\",\n                \"category_icon\": \"http://7b1f97.com1.z0.glb.clouddn.com/14468862302219563dbb56de6d3\",\n                \"category_introduction\": \"地板深度保护\",\n                \"category_url\": \"http://www.baidu.com\",\n                \"colour\": \"颜色\",\n                \"category_price_description\": \"价格描述\"\n            }\n        ],\n        \"isBlock\": \"用户是否为黑名单【1表示黑名单，0表示正常】\",\n        \"isEffect\": \"用户token是否有效【0表示正常，1表示失效】\"\n         isUpdate: \"0\",\n         updateContent: \"\",\n         updateUrl: \"https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8\",\n         isShowGiveStar :\"0\",\n        \"black_url_list\":\n             [\n                 \"lib.js\",\n                 \"ejiajie.css\",\n                 \"icon_mob.png\",\n                 \"tlbagui\",\n                 \"tlbaserver\",\n                 \"tlbsserver\"\n             ]\n    }\n}",
           "type": "json"
         }
       ]

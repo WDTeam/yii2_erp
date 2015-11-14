@@ -168,11 +168,8 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-    	//13001003995
-	/* $rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('13001003995','0','3','1');
-    	
-    	var_dump($rty);exit; */
-    	
+	    //$rty=\core\models\operation\OperationPayChannel::configpay(2);
+    	//var_dump($rty);exit;
     	//$rty=\core\models\operation\OperationOrderChannel::configorderlist('百度直达号');
     	//var_dump($rty);exit;
     	
@@ -363,7 +360,7 @@ class CouponRuleController extends Controller
     public function actionExport()
     {
     	if(isset($_GET['id'])){
-    		$datainfo = CouponRule::find()->select('id,couponrule_name,couponrule_use_start_time,couponrule_use_end_time,couponrule_classify,couponrule_price,couponrule_Prefix')->where(['id'=>$_GET['id']])->asArray()->one();
+    		$datainfo = CouponRule::find()->select('id,couponrule_type_name,couponrule_service_type_name,couponrule_commodity_name,couponrule_name,couponrule_use_start_time,couponrule_use_end_time,couponrule_classify,couponrule_price,couponrule_Prefix')->where(['id'=>$_GET['id']])->asArray()->one();
     	}else{
     		\Yii::$app->getSession()->setFlash('default','灰常抱歉,您传入的值不存在！');
     		return $this->redirect(['index']);
@@ -392,7 +389,10 @@ class CouponRuleController extends Controller
     	->setCellValue('B1', '优惠名称')
     	->setCellValue('C1', '可用开始时间')
         ->setCellValue('D1', '可用结束时间')
-        ->setCellValue('E1', '最小金额');
+        ->setCellValue('E1', '最小金额')
+    	 ->setCellValue('F1', '优惠券类型名称')
+    	 ->setCellValue('G1', '服务类别名称')
+    	 ->setCellValue('H1', '如果是商品名称');
     	$i = 2;
     	foreach ($data as $k => $v) {
     		$objPHPExcel->setActiveSheetIndex(0)
@@ -400,7 +400,10 @@ class CouponRuleController extends Controller
     		->setCellValue('B' . $i, $datainfo['couponrule_name'])
     		->setCellValue('C' . $i, date('Y-m-d H:i:s', $datainfo['couponrule_use_start_time']))
             ->setCellValue('D' . $i, date('Y-m-d H:i:s', $datainfo['couponrule_use_end_time']))
-            ->setCellValue('E' . $i, $datainfo['couponrule_price']);
+            ->setCellValue('E' . $i, $datainfo['couponrule_price'])
+    		->setCellValue('F' . $i, $datainfo['couponrule_type_name'])
+    		->setCellValue('G' . $i, $datainfo['couponrule_service_type_name'])
+    		->setCellValue('H' . $i, $datainfo['couponrule_commodity_name']);
     		$i++;
     	}
     	$objPHPExcel->getActiveSheet()->setTitle('优惠券');

@@ -187,7 +187,16 @@ class ConfigureController extends \restapi\components\Controller
      *          isUpdate: "0",
      *          updateContent: "",
      *          updateUrl: "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
-     *          isShowGiveStar :"0"
+     *          isShowGiveStar :"0",
+     *         "black_url_list":
+     *              [
+     *                  "lib.js",
+     *                  "ejiajie.css",
+     *                  "icon_mob.png",
+     *                  "tlbagui",
+     *                  "tlbaserver",
+     *                  "tlbsserver"
+     *              ]
      *     }
      * }
      *
