@@ -183,6 +183,7 @@ class server
                     continue;
                 }
                 $order = $this->getOrderStatus($order);
+                $d['created_at'] = date('Y-m-d H:i:s', $order['created_at']);
                 $order['updated_at']=$order['created_at'];
                 $d = json_encode($order);
                 echo 'onConnect;d='.$d;
@@ -341,11 +342,11 @@ class server
         //echo 'getOrderStatus' . "\n";
 
         if ($order['worker_identity'] == '0') {
-            $order['status'] = '1';
+            $order['status'] = 1;
         } else if ($order['worker_identity'] == '1') {
-            $order['status'] = '2';
+            $order['status'] = 2;
         } else if ($order['worker_identity'] == '2') {
-            $order['status'] = '1001';
+            $order['status'] = 1001;
         }
 
         return $order;
