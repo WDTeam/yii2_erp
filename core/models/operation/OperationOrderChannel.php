@@ -118,10 +118,13 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 	{
 		$configdate=['1' => 'e家洁', '2' => 'POP','3'=>'BOSS'];
 		$data = self::find()->select('id,operation_order_channel_type')->where(['operation_order_channel_name'=>$name])->asArray()->one();
+                if(!empty($data)){
 		$tyu=['id'=>$data['id'],'operation_order_channel_type'=>$data['operation_order_channel_type'],'ordertype'=>
 		$configdate[$data['operation_order_channel_type']]];
 		return $tyu;
-	
+                }else{
+                    return FALSE;
+                }
 	}
 	
 	

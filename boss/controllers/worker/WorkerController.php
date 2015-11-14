@@ -115,7 +115,8 @@ class WorkerController extends BaseAuthController
             ]);
             $schedule = WorkerSchedule::find()->where(['worker_id'=>$workerModel->id])->asArray()->all();
             $scheduleFromRedis = WorkerForRedis::getWorkerSchedule($id);
-            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData,'schedule'=>$schedule,'schedule_from_redis'=>$scheduleFromRedis]);
+            $workerIsInRedis = WorkerForRedis::checkWorkerIsInRedis($id);
+            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData,'schedule'=>$schedule,'schedule_from_redis'=>$scheduleFromRedis,'workerIsInRedis'=>$workerIsInRedis]);
         }
     }
 
@@ -291,6 +292,7 @@ class WorkerController extends BaseAuthController
                 }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==1){
                     $workerModel->worker_auth_status = 4;
                     $workerModel->save();
+                    //初始化阿姨信息
                     WorkerForRedis::initWorkerToRedis($id);
                 }  elseif(isset($param['worker_ontrial_status']) && $param['worker_ontrial_status']==2){
                     $workerModel->worker_auth_status = 5;
@@ -310,7 +312,7 @@ class WorkerController extends BaseAuthController
                 }elseif(isset($param['worker_upgrade_training_status']) && $param['worker_upgrade_training_status']==2){
                     $workerModel->worker_auth_status = 9;
                     $workerModel->save();
-                    WorkerForRedis::deleteWorkerToRedis($id);
+                    WorkerForRedis::initWorkerToRedis($id);
                 }elseif(isset($param['worker_upgrade_training_status']) && $param['worker_upgrade_training_status']==1){
                     $workerModel->worker_auth_status = 10;
                     $workerModel->save();
@@ -1267,8 +1269,9 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
+
         echo '<pre>';
-        $a = Worker::getDistrictCycleFreeWorker(1,1,[['orderBookBeginTime'=>'1447459200','orderBookEndTime'=>'1447466400']]);
+        $a = Worker::countShopWorkerNums(1);
         var_dump($a);die;
         die;
         $city_encode = '北京市';

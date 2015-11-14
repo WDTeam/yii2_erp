@@ -299,6 +299,12 @@ class alertMsgEnum
     const sendWorkerCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     //短信发送成功
     const sendWorkerCodeFaile = '验证码已发失败';
+    //语音验证码发送
+    //语音验证码发送失败
+    const voiceVerifyCodeFail = '语音验证码发送失败';
+    //语音验证码发送成功
+    const voiceVerifyCodeSuccess = '语音验证码发送成功';
+    
     /*
      * 李勇end
      */

@@ -36,6 +36,32 @@ class OrderController extends BaseAuthController
 //        return Order::serviceStart(2);
     }
 
+    public function actionServiceDone($id)
+    {
+        return Order::serviceDone($id);
+    }
+
+    public function actionServiceStart($id)
+    {
+        return Order::serviceStart($id);
+    }
+
+    public function actionAcceptDone($id)
+    {
+        return Order::customerAcceptDone($id,2,1);
+    }
+
+    public function actionChecked($id) //code
+    {
+        return Order::checked($id,$id,1);
+    }
+
+    public function actionPayoff($id) //code
+    {
+        return Order::payoffDone($id, $id, 1);
+    }
+
+
     /**
      * 取消订单
      * @return bool
@@ -43,9 +69,7 @@ class OrderController extends BaseAuthController
     public function actionCancelOrder()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        //TODO: Xiaobo
         $admin_id = Yii::$app->user->id;
-
         $params = yii::$app->request->post();
         $order_id = $params['order_id'];
         $cancel_type = $params['cancel_type'];
@@ -311,7 +335,7 @@ class OrderController extends BaseAuthController
         $out = ['results' => ['id' => '', 'text' => '']];
         $condition = '';
         if ($q != null) {
-            $condition = 'name LIKE "%' . $q . '%"';
+            $condition = ['like','name',$q];
         }
         $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
         if($is_mini_boss){
@@ -366,7 +390,7 @@ class OrderController extends BaseAuthController
             $model->order_booked_count = '2.0'; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
             $model->order_flag_sys_assign = 1;//是否系统指派
-            $model->channel_id = 20;//订单渠道
+            $model->channel_id = '后台下单';//订单渠道
             $model->pay_channel_id = 2;//支付渠道
         }
         return $this->render('create', [
@@ -381,7 +405,7 @@ class OrderController extends BaseAuthController
             'order_ip' => Yii::$app->request->userIP,
             'order_service_item_id' => 1,
             'order_src_id' => 1,
-            'channel_id' => 20,
+            'order_channel_name' => '后台下单',
             'address_id' => 1,
             'customer_id' => 1,
             'order_customer_phone' => '18001305711',

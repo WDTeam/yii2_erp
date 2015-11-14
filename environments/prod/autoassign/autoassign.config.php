@@ -21,7 +21,22 @@ return [
     /*
      * Redis 服务PORT
      */
-    'REDIS_SERVER_PORT ' => 6379,
+    'REDIS_SERVER_PORT' => 6379,
+     /*
+     * Redis 服务password
+     */
+    'REDIS_SERVER_PASSWORD' => '6c55da921a534ba7:Ejiajie2015test',
+    
+    /*
+     * mongodb的URI
+     */
+    'MONGODB_SERVER' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017',
+    
+    /*
+     * mongodb的数据库
+     */
+    'MONGODB_SERVER_DB_NAME' => 'dev_boss_db',
+    
     /*
      * Redis 服务运行状态
      */

@@ -17,11 +17,26 @@ return [
     /*
      * Redis 服务IP（推荐使用域名）
      */
-    'REDIS_SERVER_IP' => '101.200.179.70',
-    /*
+    'REDIS_SERVER_IP' => 'deb09fcb1b404eb6.m.cnbja.kvstore.aliyuncs.com',
+     /*
      * Redis 服务PORT
      */
-    'REDIS_SERVER_PORT ' => 6379,
+    'REDIS_SERVER_PORT' => 6379,
+    /*
+     * Redis 服务password
+     */
+    'REDIS_SERVER_PASSWORD' => 'deb09fcb1b404eb6:Ejiajie2015dev',
+    
+    /*
+     * mongodb的URI
+     */
+    'MONGODB_SERVER' => 'mongodb://dev_boss_db_dbo:dev_boss@dev.boss.1jiajie.com:27017',
+    
+    /*
+     * mongodb的数据库
+     */
+    'MONGODB_SERVER_DB_NAME' => 'dev_boss_db',
+    
     /*
      * Redis 服务运行状态
      */
