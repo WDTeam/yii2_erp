@@ -34,22 +34,22 @@ use kartik\daterange\DateRangePicker;
     }else{
         $worker_info = Worker::find()->where(['id'=>$worker_id])->asArray()->one();
         if($worker_info['worker_is_block']!=0){
-            $message = '阿姨当前正处于封号中，排班表未激活！';
+            $message = '阿姨当前正处于封号中，排班表未保存！';
         }elseif($worker_info['worker_is_blacklist']!=0){
-            $message = '阿姨被列入黑名单，排班表未激活！';
+            $message = '阿姨被列入黑名单，排班表未保存！';
         }elseif($worker_info['worker_is_dimission']!=0){
-            $message = '阿姨已离职，排班表未激活！';
+            $message = '阿姨已离职，排班表未保存！';
         }elseif($worker_info['worker_auth_status']<4){
-            $message = '阿姨当前还未试工，排班表未激活！';
+            $message = '阿姨当前还未试工，排班表未保存！';
         }elseif($worker_info['worker_auth_status']==5){
-            $message = '阿姨当前试工未通过，排班表未激活！';
+            $message = '阿姨当前试工未通过，排班表未保存！';
         }elseif($worker_info['worker_auth_status']==7){
-            $message = '阿姨当前上岗未通过，排班表未激活！';
+            $message = '阿姨当前上岗未通过，排班表未保存！';
         }else{
             $message = '排班表未激活，请重新保存';
         }
         ?>
-        <div class="callout callout-danger" style="padding: 9px 30px 1px 15px">
+        <div class="callout callout-danger" style="padding: 9px 30px 1px 15px;margin:0px 0px 0px">
             <h4 style="font-size:15px"><?=$message?></h4>
         </div>
         <?php
