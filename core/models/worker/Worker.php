@@ -1286,8 +1286,15 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
 
-
-
+    /**
+     * 统计店铺内阿姨总数
+     */
+    public static function countShopWorkerNums($shop_id){
+        if(empty($shop_id)){
+            return false;
+        }
+        return self::find()->where(['isdel'=>0,'shop_id'=>$shop_id])->count();
+    }
 
     /**
      * 上传图片到七牛服务器
