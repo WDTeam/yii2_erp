@@ -88,7 +88,7 @@ class OperationShopDistrictCoordinate extends \dbbase\models\operation\Operation
     /**
      * 删除商圈经纬度
      *
-     * @param inter $operation_shop_district_id    商圈id
+     * @param integer $operation_shop_district_id    商圈id
      */
     public static function delCoordinateInfo($operation_shop_district_id)
     {
