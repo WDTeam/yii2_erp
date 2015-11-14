@@ -360,7 +360,7 @@ class server
             $order = $this->getOrderStatus($order);
             $order['updated_at']=$order['created_at'];
             $d = json_encode($order);
-            $this->broadcast($server,$d);
+            $this->broadcastToSpecifiedClient($server, $fd, $msg);
         }
         return true;
     }
@@ -442,14 +442,18 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
-            //var_dump($clid);
-            try{
+            $this->broadcastToSpecifiedClient($server,$clid, $msg);
+        }
+    }
+    
+    public function broadcastToSpecifiedClient($server,$clid, $msg){
+        try{
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
                 echo date('Y-m-d H:i:s').$ex->getMessage();
             }
-        }
     }
+    
     /**
      * 配置文件操作(查询与修改)
      * 默认没有第三个参数时，按照字符串读取提取''中或""中的内容
