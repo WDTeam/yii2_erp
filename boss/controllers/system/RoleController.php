@@ -54,6 +54,7 @@ class RoleController extends BaseAuthController
     {
         $auth = \Yii::$app->authManager;
         $model = new Auth();
+        $model->type = AuthItem::TYPE_ROLE;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $role = $auth->createRole($model->name);
             $role->description = $model->description;
@@ -79,7 +80,7 @@ class RoleController extends BaseAuthController
         $auth = \Yii::$app->authManager;
         $model = $this->findModel($id);
         $role = $auth->getRole($id);
-
+        
         if ($model->load(Yii::$app->request->post())) {
             $role->description = $model->description;
             $auth->update($id, $role);

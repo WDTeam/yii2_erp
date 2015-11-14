@@ -9,7 +9,6 @@ use core\models\customer\CustomerComment;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\order\OrderOtherDict;
 
 /**
  * OrderSearch represents the model behind the search form about `dbbase\models\order\Order`.
@@ -570,14 +569,13 @@ class OrderSearch extends Order
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
-                'isdel' => $this->isdel,
                 'worker_id' => $this->worker_id,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
                 'order_channel_type_id' => $this->order_channel_type_id,
                 'order_unit_money' => $this->order_unit_money,
                 'order_money' => $this->order_money,
-                'isdel' => 1,
+                'isdel' => 0,
                 'order_booked_count' => $this->order_booked_count,
                 'order_booked_begin_time' => $this->order_booked_begin_time,
                 'order_booked_end_time' => $this->order_booked_end_time,
@@ -903,4 +901,8 @@ class OrderSearch extends Order
     
         return $data;
     }
+    
+    /**
+     * 指定时间内的订单列表
+     */
 }
