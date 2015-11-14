@@ -263,15 +263,15 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			if($data_customer['couponrule_type']==1){
 				$name[$key]['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){
-				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$data_es_name[$couponCustomer['couponrule_service_type_id']];
+				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
 			}else{
-				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$goods_data[$couponCustomer['couponrule_service_type_id']];
+				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
 			}
-			$couponCustomerdate[]=array_merge_recursive($couponCustomer,$name);
+			$couponCustomerdate[]=array_merge_recursive($data_customer,$name);
 		}
 		
 		
-		if(empty($couponCustomer)){
+		if(empty($couponCustomerdate)){
 			$array=[
 			'is_status'=>4019,
 			'msg'=>'暂无数据',
@@ -329,12 +329,11 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			if($data_customer['couponrule_type']==1){
 				$name[$key]['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){
-				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$data_es_name[$couponCustomer['couponrule_service_type_id']];
+				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
 			}else{
-				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$goods_data[$couponCustomer['couponrule_service_type_id']];
+				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
 			}
-			
-			$couponCustomerdate[]=array_merge_recursive($couponCustomer,$name);
+			$couponCustomerdate[]=array_merge_recursive($data_customer,$name);
 		}
 		
 		$array=[
