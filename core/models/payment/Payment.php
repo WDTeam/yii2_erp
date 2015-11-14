@@ -232,37 +232,37 @@ class Payment extends \dbbase\models\payment\Payment
         switch($toid)
         {
             case 1:
-                $channel = 13;//财付通
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_CAIFUTONG_PAY;//财付通
                 break;
             case 2:
-                $channel = 10;//微信后台
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY;//微信后台
                 break;
             case 3:
-                $channel = 8;//百度钱包
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY;//百度钱包
                 break;
             case 4:
-                $channel = 12;//银联后台
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_UNION_PAY;//银联后台
                 break;
             case 5:
-                $channel = 7;//支付宝
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY;//支付宝
                 break;
             case 6:
-                $channel = 7;//支付宝
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY;//支付宝
                 break;
             case 7:
-                $channel = 8;//百度钱包
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY;//百度钱包
                 break;
             case 20:
-                $channel = 20;//余额支付
+                $channel = OperationPayChannel::PAY_CHANNEL_EJJ_BALANCE_PAY;//余额支付
                 break;
             case 21:
                 $channel = 21;//微博
                 break;
             case 23:
-                $channel = 10;//微信后台
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY;//微信后台
                 break;
             case 24:
-                $channel = 7;//支付宝
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY;//支付宝
                 break;
         }
         return $channel;
@@ -630,7 +630,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['queryId'],   //交易流水号
             'payment_log_status_bool' => $post['respMsg'],   //支付状态
             'payment_log_status' => $post['respMsg'],   //支付状态
-            'pay_channel_id' => 12,  //支付渠道ID
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_UNION_PAY,  //支付渠道ID
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         ];
@@ -730,7 +730,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 7,  //支付渠道ID
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY,  //支付渠道ID
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
@@ -868,7 +868,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['trade_no'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 7,  //支付渠道,支付宝
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY,  //支付渠道,支付宝
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
@@ -997,7 +997,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_state'],   //支付状态
             'payment_log_status' => $post['trade_state'],   //支付状态
-            'pay_channel_id' => 13,  //财付通
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_CAIFUTONG_PAY,  //财付通
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
@@ -1097,7 +1097,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['bfb_order_no'],   //交易流水号
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
-            'pay_channel_id' => 8,  //百度钱包
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY,  //百度钱包
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
@@ -1215,10 +1215,12 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
             'payment_log_status_bool' => $post['return_code'],   //支付状态
             'payment_log_status' => $post['return_code'],   //支付状态
-            'pay_channel_id' => 10,  //微信后台
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY,  //微信后台
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
+
+
 
         //记录mongo
         self::createPyamentLog($dataLog);
@@ -1310,7 +1312,7 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['order_id'],   //交易流水号
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
-            'pay_channel_id' => 8,  //百度钱包
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY,  //百度钱包
             'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
