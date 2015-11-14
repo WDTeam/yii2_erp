@@ -801,23 +801,28 @@ class Order extends OrderModel
     {
         if (substr($code, 0, 1) == 'Z') { //如果是周期订单
             $orders = OrderSearch::getBatchOrder($code);
-            $transact = static::getDb()->beginTransaction();
-            foreach($orders as $order){
-                $order->order_customer_hidden = 1;
-                $order->admin_id = $admin_id;
-                if(!$order->doSave(['OrderExtCustomer'],$transact)){
-                    $transact->rollBack();
-                    return false;
+            if(!empty($orders)) {
+                $transact = static::getDb()->beginTransaction();
+                foreach ($orders as $order) {
+                    $order->order_customer_hidden = 1;
+                    $order->admin_id = $admin_id;
+                    if (!$order->doSave(['OrderExtCustomer'], $transact)) {
+                        $transact->rollBack();
+                        return false;
+                    }
                 }
+                $transact->commit();
+                return true;
             }
-            $transact->commit();
-            return true;
         }else {
             $order = OrderSearch::getOneByCode($code);
-            $order->order_customer_hidden = 1;
-            $order->admin_id = $admin_id;
-            return $order->doSave(['OrderExtCustomer']);
+            if(!empty($order)) {
+                $order->order_customer_hidden = 1;
+                $order->admin_id = $admin_id;
+                return $order->doSave(['OrderExtCustomer']);
+            }
         }
+        return false;
     }
 
     /**
