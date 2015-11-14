@@ -260,9 +260,9 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		foreach ($couponCustomer as $key=>$data_customer){
 			
-			if($couponCustomer['couponrule_type']==1){
+			if($data_customer['couponrule_type']==1){
 				$name[$key]['couponrule_type_title']='全网优惠券';
-			}elseif ($couponCustomer['couponrule_type']==2){
+			}elseif ($data_customer['couponrule_type']==2){
 				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$data_es_name[$couponCustomer['couponrule_service_type_id']];
 			}else{
 				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$goods_data[$couponCustomer['couponrule_service_type_id']];
@@ -326,9 +326,9 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		foreach ($couponCustomer as $key=>$data_customer){
 				
-			if($couponCustomer['couponrule_type']==1){
+			if($data_customer['couponrule_type']==1){
 				$name[$key]['couponrule_type_title']='全网优惠券';
-			}elseif ($couponCustomer['couponrule_type']==2){
+			}elseif ($data_customer['couponrule_type']==2){
 				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$data_es_name[$couponCustomer['couponrule_service_type_id']];
 			}else{
 				$name[$key]['couponrule_type_title']=$configdate[3][$couponCustomer['couponrule_type']].'-'.$goods_data[$couponCustomer['couponrule_service_type_id']];
