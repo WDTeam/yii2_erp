@@ -51,6 +51,9 @@ class alertMsgEnum
     //根据地址获取百度地图数据
     const baiduMapSuccess = '获取百度地图数据成功';
     const baiduMapFailed = '获取百度地图数据失败';
+    //根据地址获取百度联想地址数据
+    const baiduSuggestSuccess = '获取百度联想地址数据成功';
+    const baiduSuggestFailed = '获取百度联想地址数据失败';
     //指定阿姨订单列表
     const worerSuccess = '指定阿姨订单列表';
     //会员余额支付

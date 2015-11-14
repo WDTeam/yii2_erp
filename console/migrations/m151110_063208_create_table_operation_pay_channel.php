@@ -32,7 +32,8 @@ INSERT INTO {{%operation_pay_channel}} VALUES ('13', '财付通支付', '1', '1'
 INSERT INTO {{%operation_pay_channel}} VALUES ('1', '服务卡支付', '2', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_pay_channel}} VALUES ('20', '余额支付', '2', '1', '1', 'admin', '1447148814', '0');
 INSERT INTO {{%operation_pay_channel}} VALUES ('2', '现金支付', '2', '1', '1', 'admin', '1447148814', '0');
-INSERT INTO {{%operation_pay_channel}} VALUES ('9', '第三方团购预收', '3', '1', '1', 'admin', '1447148814', '0');"
+INSERT INTO {{%operation_pay_channel}} VALUES ('9', '第三方团购预收', '3', '1', '1', 'admin', '1447148814', '0');
+INSERT INTO {{%operation_pay_channel}} VALUES ('11', '第三方对接预收', '3', '1', '1', 'admin', '1447148814', '0');"
         );
     }
     

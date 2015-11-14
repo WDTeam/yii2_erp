@@ -35,9 +35,11 @@ class OperationPayChannel extends \yii\db\ActiveRecord
 	const PAY_CHANNEL_ONLINEPAY_BAIDU_PAY = 8; //百度钱包支付
 	const PAY_CHANNEL_3RD_PARTY_COUPON_PAY = 9; //第三方团购预收
 	const PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY = 10; //微信支付
+	const PAY_CHANNEL_3RD_PARTY_POP_PAY = 11; //第三方对接预收
 	const PAY_CHANNEL_ONLINEPAY_UNION_PAY=12; //银联支付
 	const PAY_CHANNEL_ONLINEPAY_CAIFUTONG_PAY=13; //财付通支付
 	const PAY_CHANNEL_EJJ_BALANCE_PAY=20; //余额支付
+	
 	
     /**
      * @inheritdoc

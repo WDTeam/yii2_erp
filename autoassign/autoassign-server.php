@@ -342,11 +342,6 @@ class server
     public function getOrders(){
         $orders = $this->redis->zrange($this->config['_REDIS_WAIT_ASSIGN_ORDER_POOL_'],0,-1);
         foreach($orders as $key => $value){
-            // 加锁与解锁
-            if(isset($value['lock']) && $value['lock']){
-                unset($orders[$key]);
-                break;
-            }
             $orders[$key] = (array)json_decode($value);
         }
         return (array)$orders;
@@ -356,6 +351,21 @@ class server
      */
     public function onConnect($server, $fd) {
         echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
+        $this->broadcastToSpecifiedClient($server, $fd, 'this message from connect');
+        echo 'onConnect message send';
+        $orders = $this->getOrders();
+        
+        foreach($orders as $key => $order){
+            if ($order['order_id']==null || $order['order_id']=='')
+            {
+                continue;
+            }
+            $order = $this->getOrderStatus($order);
+            $order['updated_at']=$order['created_at'];
+            $d = json_encode($order);
+            echo 'onConnect;d='.$d;
+            $this->broadcastToSpecifiedClient($server, $fd, $msg);
+        }
         return true;
     }
     /*
@@ -436,14 +446,20 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
-            //var_dump($clid);
-            try{
+            echo 'clid='.$clid.';msg='.$msg;
+            $this->broadcastToSpecifiedClient($server,$clid, $msg);
+        }
+    }
+    
+    public function broadcastToSpecifiedClient($server,$clid, $msg){
+        try{
+            
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
                 echo date('Y-m-d H:i:s').$ex->getMessage();
             }
-        }
     }
+    
     /**
      * 配置文件操作(查询与修改)
      * 默认没有第三个参数时，按照字符串读取提取''中或""中的内容

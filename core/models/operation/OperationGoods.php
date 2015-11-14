@@ -77,6 +77,23 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     }
 
     /**
+    * 生成商品id和name
+    * @date: 2015-11-15
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public static function getAllCategory_goods()
+    {
+    	$date=self::find()->all();
+    	$goodname=\yii\helpers\ArrayHelper::map($date, 'id', 'operation_goods_name');
+    	return $goodname;
+    
+    }
+    
+    
+    
+    /**
      * 上传图片到七牛服务器
      * @param string $field 上传文件字段名
      * @return string $imgUrl 文件URL

@@ -54,7 +54,8 @@ use boss\models\order\Order;
                 总金额：<span><?= Html::encode($model->order_money) ?>元</span><br/>
                 优惠券：<span><?= Html::encode($model->orderExtPay->order_use_coupon_money) ?>元</span><br/>
                 需支付：<span><?= Html::encode($model->orderExtPay->order_pay_money) ?>元</span><br/>
-                支付渠道：<span><?= Html::encode($model->orderExtPay->order_pay_channel_name)?></span>
+                支付渠道：<span><?= !empty($model->orderExtPay->order_pay_channel_name)?Html::encode($model->orderExtPay->order_pay_channel_name):'未知'?></span>
+
             </td>
             <td>
                 <?php

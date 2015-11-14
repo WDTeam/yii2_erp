@@ -51,17 +51,18 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
     /**
      * 根据城市名称，平台名称和平台版本，获取对应位置的广告内容
      *
-     * @param    string  $city_name               城市名称
-     * @param    string  $platform_name           平台名称
-     * @param    string  $platform_version_name   平台版本
-     * @param    string  $position_name           位置
-     * @return   mix     如果没有数据则为string,有数据则为数据
+     * @param   string  $city_name               城市名称
+     * @param   string  $platform_name           平台名称
+     * @param   string  $platform_version_name   平台版本
+     * @param   string  $position_name           位置
+     * @return  array   $result                  结果
      */
     public static function getCityAdvertInfo($city_name, $platform_name, $platform_version_name, $position_name = 'banner')
     {
         if (!isset($city_name) || $city_name == '' || !isset($platform_name) || $platform_name == '' || !isset($platform_version_name) || $platform_version_name=="") {
             return ['code' => self::MISSING_PARAM, 'errmsg' => '参数不正确'];
         }
+
         //北京市--ios--4.4--banner
         $platform_id = OperationPlatformVersion::getPlatformId($platform_name, $platform_version_name);
         if ($platform_id == false) {
@@ -108,53 +109,63 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
      */
     public function saveReleaseAdvOrder($data)
     {
-        $result = 0;
 
         foreach ($data as $id => $orders) {
-            $model = OperationAdvertRelease::findOne($id);
 
-            $city_name = $model->city_name;
-            $starttime = $model->starttime;
-            $endtime = $model->endtime;
+            //没有输入顺序的广告直接过滤掉
+            //if (!isset($orders) || empty($orders)) {
+                //continue;
+            //}
+
+            $model = OperationAdvertRelease::findOne($id);
+            $adv_data = self::getReleaseAdvertInfo($id);
+
+            //当前要插入顺序的广告信息
+            $city_id             = $adv_data['city_id'];
+            $starttime           = $adv_data['starttime'];
+            $endtime             = $adv_data['endtime'];
+            $position_id         = $adv_data['position_id'];
+            $platform_id         = $adv_data['platform_id'];
+            $platform_version_id = $adv_data['platform_version_id'];
 
             //如果没有设置时间，直接保存
             if (($starttime == '' || $starttime == '0000:00:00 00:00:00' || $starttime == null) && ($endtime == '' || $endtime == '0000:00:00 00:00:00' || $endtime == null)) {
                 $model->id = $id;
                 $model->advert_release_order = $orders;
                 $model->save();
-                $result += 1;
 
-            //如果有设置时间，检测时间是否有重叠
+            //如果有设置时间,检测同城市,同位置,同平台,同版本,同排序点的广告时间是否有重叠
             } else {
-                $city_adv_data = OperationAdvertRelease::find()->asArray()->where(['city_id' => $model->city_id, 'advert_release_order' => $orders])->all();
+
+                $repeat_city_adv_data = self::getReleaseAdvertInfo('', $city_id, $position_id, $platform_id, $platform_version_id, $orders, $id);
 
                 //没有同一个位置的广告直接保存
-                if (empty($city_adv_data)) {
+                if (empty($repeat_city_adv_data)) {
                     $model->id = $id;
                     $model->advert_release_order = $orders;
                     $model->save();
-                    $result += 1;
                 } else {
-                    foreach ($city_adv_data as $key => $value) {
-                        if (($orders == $value['advert_release_order']) &&
-                            (($endtime < $value['starttime']) || ($starttime > $value['endtime']))) {
-                            $model->id = $id;
-                            $model->advert_release_order = $orders;
-                            $model->save();
-                            $result += 1;
-                        } elseif ($orders != $value['advert_release_order']) {
-                            $model->id = $id;
-                            $model->advert_release_order = $orders;
-                            $model->save();
-                            $result += 1;
+                    $mark = 0;
+
+                    //没有任何一个广告有重叠，则保存
+                    foreach ($repeat_city_adv_data as $key => $value) {
+                        if (($endtime < $value['starttime']) || ($starttime > $value['endtime'])) {
+                            $mark += 0;
                         } else {
+                            $mark += 1;
                         }
+                    }
+
+                    if ($mark == 0) {
+                        $model->id = $id;
+                        $model->advert_release_order = $orders;
+                        $model->save();
                     }
                 }
             }
         }
 
-        return $result;
+        //return 'info';
     }
 
     /**
@@ -167,5 +178,73 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
         self::deleteAll([
             'advert_content_id' => $advert_content_id,
         ]);
+    }
+
+    /**
+     * 1,根据已发布广告编号获取广告详情
+     * 2,检测同城市,同位置,同平台,同版本,同排序点的广告时间是否有重叠
+     *
+     * @param  integer  $id                   已发布广告编号
+     * @param  integer  $city_id              已发布广告城市编号
+     * @param  integer  $position_id          已发布广告位置编号
+     * @param  integer  $platform_id          已发布广告平台编号
+     * @param  integer  $platform_version_id  已发布广告平台版本编号
+     * @param  integer  $orders               已发布广告位置编号
+     * @param  integer  $except_id            已发布广告编号,检测时不查找自己
+     * @return array    $result  结果
+     */
+    public static function getReleaseAdvertInfo($id = '', $city_id = '', $position_id = '', $platform_id = '', $platform_version_id = '', $orders = '', $except_id = '')
+    {
+        //if (!isset($id) || empty($id) || !is_numeric($id)) {
+            //return ['code' => self::MISSING_PARAM, 'errmsg' => '参数不正确'];
+        //}
+
+        $query = new \yii\db\Query();
+        $query = $query->select([
+            'oar.id',
+            'oar.city_id',
+            'oar.starttime',
+            'oar.endtime',
+            'oar.advert_release_order',
+            'oac.position_id',
+            'oac.platform_id',
+            'oac.platform_version_id',
+        ])
+        ->from('{{%operation_advert_release}} as oar')
+        ->leftJoin('{{%operation_advert_content}} as oac','oar.advert_content_id = oac.id');
+
+        if (($id != '') && is_numeric($id)) {
+            $query->andFilterWhere(['oar.id' => $id]);
+        }
+        if (($city_id != '') && is_numeric($city_id)) {
+            $query->andFilterWhere(['oar.city_id' => $city_id]);
+        }
+        if (($position_id != '') && is_numeric($position_id)) {
+            $query->andFilterWhere(['oac.position_id' => $position_id]);
+        }
+        if (($platform_id != '') && is_numeric($platform_id)) {
+            $query->andFilterWhere(['oac.platform_id' => $platform_id]);
+        }
+        if (($platform_version_id != '') && is_numeric($platform_version_id)) {
+            $query->andFilterWhere(['oac.platform_version_id' => $platform_version_id]);
+        }
+        if (($orders != '') && is_numeric($orders)) {
+            $query->andFilterWhere(['oar.advert_release_order' => $orders]);
+        }
+        if (($except_id != '') && is_numeric($except_id)) {
+            $query->andFilterWhere(['!=', 'oar.id', $except_id]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (($id != '') && is_numeric($id)) {
+            $result = $dataProvider->query->one();
+        } else {
+            $result = $dataProvider->query->all();
+        }
+
+        return $result;
     }
 }

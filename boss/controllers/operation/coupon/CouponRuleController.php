@@ -110,6 +110,8 @@ class CouponRuleController extends Controller
 					$newcoupon->couponrule_commodity_id=$newdata['order_typeid'];
 				}
 				
+				
+				
     		$newcoupon->coupon_userinfo_code=$newdata['coupon_userinfo_code']?$newdata['coupon_userinfo_code']:'0';
     		$newcoupon->coupon_userinfo_name=$newdata['coupon_userinfo_name']?$newdata['coupon_userinfo_name']:'优惠券';
     		$newcoupon->coupon_userinfo_gettime=$newdata['coupon_userinfo_gettime'];//领取时间默认为开始时间
@@ -166,11 +168,8 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-    	//13001003995
-	/* $rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('13001003995','0','3','1');
-    	
-    	var_dump($rty);exit; */
-    	
+	    //$rty=\core\models\operation\OperationPayChannel::configpay(2);
+    	//var_dump($rty);exit;
     	//$rty=\core\models\operation\OperationOrderChannel::configorderlist('百度直达号');
     	//var_dump($rty);exit;
     	
@@ -231,7 +230,7 @@ class CouponRuleController extends Controller
         		//一码一用
            	$unm=$dateinfo['CouponRule']['couponrule_code_num'];//一码一用数量
            	$name=strtolower($dateinfo['CouponRule']['couponrule_Prefix']);//一码一用前缀
-           	
+
            	if(\Yii::$app->redis->EXISTS($name)=='0'){
                /***
                 * 判断rdeis里面是否有此key值 （虽然数据库做了唯一，但是为了异常，这里再次判断）
@@ -259,8 +258,37 @@ class CouponRuleController extends Controller
 		    $model->couponrule_price_sum=$dateinfo['CouponRule']['couponrule_price']*$dateinfo['CouponRule']['couponrule_code_num']; 
 		    }
 		    
-		    $model->couponrule_service_type_name='服务类别名称1';
-		    $model->couponrule_commodity_name='商品优惠券名称1';
+		 
+		    
+		    if($dateinfo['CouponRule']['couponrule_type']==1){
+		    //全网优惠券	
+		    	$model->couponrule_type_name='全网优惠券';
+		    	$model->couponrule_service_type_id=0;
+		    	$model->couponrule_service_type_name='0';
+		    	$model->couponrule_commodity_id=0;
+		    	$model->couponrule_commodity_name='0';
+		    	
+		    	
+		    }elseif ($dateinfo['CouponRule']['couponrule_type']==2){
+		    // 类别券	
+		    	$model->couponrule_type_name='类别优惠券';
+		    	$model->couponrule_service_type_id=$dateinfo['CouponRule']['couponrule_service_type_id'];
+		    	$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
+		    	$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
+		    	$model->couponrule_service_type_name=$data_es_name[$dateinfo['CouponRule']['couponrule_service_type_id']];
+		    	$model->couponrule_commodity_id=0;
+		    	$model->couponrule_commodity_name='0';
+		    }else{
+		    // 商品券	
+		    	$model->couponrule_type_name='商品优惠券';
+		    	$model->couponrule_service_type_id=0;
+		    	$model->couponrule_service_type_name='0';
+		    	$model->couponrule_commodity_id=$dateinfo['CouponRule']['couponrule_commodity_id'];
+		        $goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
+		    	$model->couponrule_commodity_name=$goods_data[$dateinfo['CouponRule']['couponrule_commodity_id']];	
+		    }
+		    
+		    
 		    
 		    $model->couponrule_city_id=  $dateinfo['CouponRule']['city_id'];$model->couponrule_city_name=\core\models\operation\OperationArea::getAreaname($dateinfo['CouponRule']['city_id']);
 		    $model->couponrule_promote_type_name=$Couponrule[6][$dateinfo['CouponRule']['couponrule_promote_type']];
@@ -332,7 +360,7 @@ class CouponRuleController extends Controller
     public function actionExport()
     {
     	if(isset($_GET['id'])){
-    		$datainfo = CouponRule::find()->select('id,couponrule_name,couponrule_use_start_time,couponrule_use_end_time,couponrule_classify,couponrule_price,couponrule_Prefix')->where(['id'=>$_GET['id']])->asArray()->one();
+    		$datainfo = CouponRule::find()->select('id,couponrule_type_name,couponrule_service_type_name,couponrule_commodity_name,couponrule_name,couponrule_use_start_time,couponrule_use_end_time,couponrule_classify,couponrule_price,couponrule_Prefix')->where(['id'=>$_GET['id']])->asArray()->one();
     	}else{
     		\Yii::$app->getSession()->setFlash('default','灰常抱歉,您传入的值不存在！');
     		return $this->redirect(['index']);
@@ -361,7 +389,10 @@ class CouponRuleController extends Controller
     	->setCellValue('B1', '优惠名称')
     	->setCellValue('C1', '可用开始时间')
         ->setCellValue('D1', '可用结束时间')
-        ->setCellValue('E1', '最小金额');
+        ->setCellValue('E1', '最小金额')
+    	 ->setCellValue('F1', '优惠券类型名称')
+    	 ->setCellValue('G1', '服务类别名称')
+    	 ->setCellValue('H1', '如果是商品名称');
     	$i = 2;
     	foreach ($data as $k => $v) {
     		$objPHPExcel->setActiveSheetIndex(0)
@@ -369,7 +400,10 @@ class CouponRuleController extends Controller
     		->setCellValue('B' . $i, $datainfo['couponrule_name'])
     		->setCellValue('C' . $i, date('Y-m-d H:i:s', $datainfo['couponrule_use_start_time']))
             ->setCellValue('D' . $i, date('Y-m-d H:i:s', $datainfo['couponrule_use_end_time']))
-            ->setCellValue('E' . $i, $datainfo['couponrule_price']);
+            ->setCellValue('E' . $i, $datainfo['couponrule_price'])
+    		->setCellValue('F' . $i, $datainfo['couponrule_type_name'])
+    		->setCellValue('G' . $i, $datainfo['couponrule_service_type_name'])
+    		->setCellValue('H' . $i, $datainfo['couponrule_commodity_name']);
     		$i++;
     	}
     	$objPHPExcel->getActiveSheet()->setTitle('优惠券');
