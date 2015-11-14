@@ -577,7 +577,7 @@ class OrderSearch extends Order
                 'order_channel_type_id' => $this->order_channel_type_id,
                 'order_unit_money' => $this->order_unit_money,
                 'order_money' => $this->order_money,
-                'isdel' => 0,
+                'isdel' => 1,
                 'order_booked_count' => $this->order_booked_count,
                 'order_booked_begin_time' => $this->order_booked_begin_time,
                 'order_booked_end_time' => $this->order_booked_end_time,
@@ -586,6 +586,7 @@ class OrderSearch extends Order
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'order_batch_code' => $attributes["OrderSearch"]["order_batch_code"],
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
+                'oc.order_customer_hidden' => 1,
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
