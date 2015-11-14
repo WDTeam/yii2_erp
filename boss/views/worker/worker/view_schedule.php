@@ -60,12 +60,12 @@ use kartik\daterange\DateRangePicker;
         <div class="box-body">
             <div style="clear: both"></div>
             <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表状态说明：</div>
-            <div style="border: 1px solid #DDD;float:left;margin-left:10px;height: 30px;width: 63px;background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%;font-size:15px;padding: 6px 12px;"></div>
-            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">时间已保存</div>
-            <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 30px;width: 63px;background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;"></div>
-            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">时间已选中,未保存</div>
-            <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 30px;width: 63px;background: #F3F4F5"></div>
-            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">时间未选中</div>
+            <div style="border: 1px solid #DDD;float:left;margin-left:10px;height: 28px;width: 63px;background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%;font-size:15px;padding: 6px 12px;"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间已保存</div>
+            <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 28px;width: 63px;background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间已选中,未保存</div>
+            <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 28px;width: 63px;background: #F3F4F5"></div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间未选中</div>
             <div style="clear: both"></div>
         </div><!-- /.box-body -->
     </div>
