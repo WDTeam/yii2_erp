@@ -61,12 +61,12 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         $this->insert('{{%auth_item}}', [
             'name'=>'group_ordersort_admin',
             'type'=>1,
-            'description'=>'订单排单组管理员',
+            'description'=>'订单派单组管理员',
         ]);
         $this->insert('{{%auth_item}}', [
             'name'=>'group_ordersort',
             'type'=>1,
-            'description'=>'订单排单员',
+            'description'=>'订单派单员',
         ]);
         $this->insert('{{%auth_item}}', [
             'name'=>'group_finance_admin',
@@ -103,6 +103,18 @@ class m150922_111616_insert_init_data_to_rbac extends Migration
         $this->insert('{{%auth_assignment}}', [
             'item_name'=>'system_group_super_admin',
             'user_id'=>4,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'group_ordersort',
+            'user_id'=>1000,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'group_ordersort',
+            'user_id'=>1001,
+        ]);
+        $this->insert('{{%auth_assignment}}', [
+            'item_name'=>'group_ordersort',
+            'user_id'=>1002,
         ]);
     }
 
