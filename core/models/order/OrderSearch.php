@@ -448,12 +448,16 @@ class OrderSearch extends Order
      */
     public static function getWaitSysCommentOrderList()
     {
-        return Order::find()->joinWith(['orderExtStatus'])
-                        ->where([
-                            'order_status_dict_id' => OrderStatusDict::ORDER_SERVICE_DONE
-                        ])
-                        ->andFilterWhere(['<=', 'order_booked_end_time', strtotime('-1 days')])
-                        ->asArray()->all();
+        return Order::find()->joinWith([
+            'orderExtStatus', 
+            'orderExtWorker',
+            'orderExtCustomer'
+        ])
+        ->where([
+            'order_status_dict_id' => OrderStatusDict::ORDER_SERVICE_DONE
+        ])
+        ->andFilterWhere(['<=', 'order_booked_end_time', strtotime('-1 days')])
+        ->asArray()->all();
     }
 
     /**

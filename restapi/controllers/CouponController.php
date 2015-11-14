@@ -63,11 +63,11 @@ class CouponController extends \restapi\components\Controller
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
        //兑换优惠码
-//        try{
+        try{
             $exchange_coupon=CouponUserinfo::generateCouponByCode($customer_phone,$coupon_code);
-//        }catch (\Exception $e) {
-//            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
-//        }
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        }
         if($exchange_coupon["is_status"]==4011){
             //此手机号未被注册
             return $this->send(null, "此手机号未被注册,请您先注册登录后再兑换优惠券。", 0,403,null,alertMsgEnum::exchangeCouponNoCustomer);
