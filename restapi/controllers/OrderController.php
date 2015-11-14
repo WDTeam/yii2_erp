@@ -1447,13 +1447,16 @@ class OrderController extends \restapi\components\Controller
                 $param['order_code'] = $param['order_batch_code'];
             }
             
-            
+            print_r($param);
+
             try {
                 $result = Order::cancelByOrderCode($param['order_code'], Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-                if ($result) {
+                var_dump($result);
+                exit;
+                if ($result['error_code']) {
                     return $this->send([1], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                 } else {
-                    return $this->send(null, $param['order_code'] . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
+                    return $this->send(null, $reason['msg'], 0, 200, null, alertMsgEnum::orderCancelFaile.'['.$reason['error_code'].']');
                 }
             } catch (Exception $e) {
                 return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
@@ -2069,19 +2072,22 @@ class OrderController extends \restapi\components\Controller
         try {
             $orderSearch = new OrderSearch();
             $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
-
             if (count($order) > 0) {
-                $r_order = array();
+                $r_order = [];
                 if (!$param['workerType']) {
-                    $arr = array();
                     foreach ($order as $key => $val) {
-                        if ($val['order_parent_id']) {
-                            $arr[$key] = $val;
-                        } else {
+                        if ($val['order_parent_id'] == 0) {
                             $r_order = $val;
+                            $index = $key;
                         }
                     }
-                    $r_order['sub_order'] = $arr;
+                    //判断是否批量订单，如果是批量订单，取出当前第一个数组，当主订单
+                    if (empty($r_order)) {
+                        $r_order = $order[0];
+                        $index = 0;
+                    }
+                    unset($order[$index]);
+                    $r_order['sub_order'] = array_merge($order, []);
                 } else {
                     foreach ($order as $k => $v) {
                         if ($v['order_pay_type'] == 1) {
@@ -2092,7 +2098,6 @@ class OrderController extends \restapi\components\Controller
                         if ($v['order_parent_id'] == 0) {
                             $r_order['order_id'] = $v['id'];
                         }
-
                         @$r_order['order_money'] += $v['order_money'];
                         $r_order['order_channel_name'] = $v['order_channel_name'];
                         $r_order['order_service_type_name'] = $v['order_service_type_name'];
@@ -2112,6 +2117,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['times'][$k]["order_code"] = $v['order_code'];
                     }
                 }
+
                 return $this->send($r_order, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
                 return $this->send(null, "操作失败", 0, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);

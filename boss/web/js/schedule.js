@@ -2,7 +2,6 @@
 
 $(document).on('click','td',function(){
     //console.log($(this).hasClass('success'));
-
     if($(this).hasClass('select')==true){
         $(this).removeClass('select');
     }else if($(this).hasClass('actives')==true){
@@ -44,8 +43,31 @@ $(document).on('click','.applyBtn',function(){
      留个验证时间不能重复的口
      */
     var date_range = $('input[name=date_range]').val();
+
     if(!date_range){
         alert('请选择时间');
+        return false;
+    }
+    var date = '';
+    $('.schedule-date').each(function(){
+        date = $(this).attr('date')+','+date;
+    });
+    var allow_add = true;
+    $.ajax({
+        url:'ajax-check-schedule-date',
+        data:{'add_date':date_range,'date_list':date},
+        async : false,
+        success:function(status){
+            if(status==false){
+                allow_add = false;
+            }else{
+                allow_add = true;
+            }
+        },
+        dataType:'json'
+    });
+    if(allow_add==false){
+        alert('此时间段已设置，请重新选择')
         return false;
     }
     var schedule_date = '<div date="'+date_range+'" class="schedule-date">工作日期：'+date_range+
@@ -88,3 +110,4 @@ $('#btn-submit').on('click',function(){
 $(document).on('onload',function(){
     $('.applyBtn').html('添加时间');
 })
+
