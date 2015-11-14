@@ -40,7 +40,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'2015-10-15 12:10:10'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_booked_count 服务时长
-     * @apiParam  {int}     [pay_channel_key]     支付渠道
+     * @apiParam  {int}   pay_channel_key     支付渠道
      * @apiParam {String} address_id 订单地址id
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
@@ -274,7 +274,7 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
         $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
-        $attributes['pay_channel_key'] = 2; //现金支付
+        $attributes['pay_channel_key'] = 'PAY_CHANNEL_EJJ_CASH_PAY'; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         //创建订单
