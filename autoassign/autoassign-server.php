@@ -38,7 +38,7 @@ class server
         $this->config = $config;
         $this->connectMongodb();//捕获了初始化异常，不影响主流程
         $this->recordMessageByMongodb('自动指派服务启动中');
-        $this->recordMessageByMongodb($this->config);
+        $this->recordMessageByMongodb('MONGODB_SERVER='.$this->config['MONGODB_SERVER'].';MONGODB_SERVER_DB_NAME='.$this->config['MONGODB_SERVER_DB_NAME'].';SWOOLE_SERVER_IP='.$this->config['SWOOLE_SERVER_IP'].';SERVER_LISTEN_PORT='.$this->config['SERVER_LISTEN_PORT']);
         $this->connectRedis();
         $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
         $this->saveStatus(null);
