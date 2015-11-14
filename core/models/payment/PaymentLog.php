@@ -2,7 +2,7 @@
 
 namespace core\models\payment;
 
-use core\models\finance\FinancePayChannel;
+use core\models\operation\OperationPayChannel;
 
 use Yii;
 use yii\base\Exception;
@@ -29,25 +29,22 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
      * 日志记录
      * @param array $param
      */
-    public function insertLog($param)
+    public function insertLog($data)
     {
-        $param->data['payment_log_status'] = $this->statusBool($param->data['payment_log_status']);
+        //转换中文数据
+        $data['payment_log_status_bool'] = $this->statusBool($data['payment_log_status']);
+        try{
+        $data['pay_channel_name'] = !empty($data['pay_channel_id']) ? OperationPayChannel::get_post_name($data['pay_channel_id']) : '未找到渠道';
+        }catch(Exception $e){}
         //写入文本日志
         $writeLog = array(
-            'data' => $param->data['data']
+            'data' => $data
         );
+        $this->writeTextLog($writeLog);
 
-        $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
-        $this->trigger('writeTextLog');
-
-        //渠道名称
-        try{
-            $param->data['pay_channel_name'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
-        }catch(Exception $e){
-            $param->data['pay_channel_name'] = '未找到渠道';
-        }
         //写入mongo数据库日志
-        $this->mogonInsert($param->data);
+        $this->payment_log_data = $data;
+        $this->trigger(self::EVENT_MONGO_INSERT);
     }
 
     /**
@@ -56,17 +53,17 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
      * @param $filename 文件名称
      * @param $data 写入数据
      */
-    public function writeTextLog($param)
+    public function writeTextLog($data)
     {
         //创建目录
-        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/boss_log/pay/'.date('Ym',time()).'/';
+        $path = !empty($data['path']) ? $data['path'] : '/tmp/boss_log/pay/'.date('Ym',time()).'/';
         is_dir($path) || mkdir($path,0777,true);
 
         //文件名称
-        $filename = !empty($param->data['filename']) ? $param->data['filename'] : date('Y-m-d',time()).'.log';
+        $filename = !empty($data['filename']) ? $data['filename'] : date('Y-m-d',time()).'.log';
         //写入数据
         $fullFileName = rtrim($path,'/').'/'.$filename;
-        file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
+        file_put_contents($fullFileName,serialize($data['data']).'||',FILE_APPEND);
     }
 
     /**
@@ -83,8 +80,7 @@ class PaymentLog extends \dbbase\models\payment\PaymentLog
             'Success!',   //银联
             'SUCCESS',//微信
         ];
-        $status = in_array($statusString,$statusArr) ? 1 : 0 ;
-        return $status;
+        return in_array($statusString,$statusArr) ? 1 : 0 ;
     }
 
 }

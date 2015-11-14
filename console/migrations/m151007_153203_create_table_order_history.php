@@ -92,7 +92,9 @@ class m151007_153203_create_table_order_history extends Migration
             'pay_channel_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'支付渠道id\'',
             'order_pay_channel_name' => Schema::TYPE_STRING.'(128)  DEFAULT \'\' COMMENT \'支付渠道名称\'',
             'order_pay_flow_num' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'支付流水号\'',
+            'order_pay_code' => Schema::TYPE_STRING . '(64) DEFAULT NULL COMMENT \'支付单号\'',
             'order_pay_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'支付金额\'',
+            'order_balance_code' => Schema::TYPE_STRING . '(64) DEFAULT NULL COMMENT \'余额支付单号\'',
             'order_use_acc_balance' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用余额\'',
             'card_id' => Schema::TYPE_INTEGER . '(11) unsigned  DEFAULT 0 COMMENT \'服务卡ID\'',
             'order_use_card_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'使用服务卡金额\'',
@@ -115,7 +117,11 @@ class m151007_153203_create_table_order_history extends Migration
             'order_worker_assign_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'接单时间\'',
 
 //===========================对账信息
-            'checking_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'对账id\'',
+            'order_checked_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'对账单编号\'',
+            'order_worker_payoff_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'阿姨结算编号\'',
+            'order_refund_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'退款单编号\'',
+            'order_complaint_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'投诉单编号\'',
+            'order_compensate_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'赔偿单编号\'',
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
             'order_sys_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'系统备注\'',

@@ -33,6 +33,9 @@ class SystemUserController extends BaseAuthController
     
     public function beforeAction($action)
     {
+        if($action->id=='update-profile'){
+            return true;
+        }
         $name = $this->id.'/'.$action->id;
         $auth = Yii::$app->authManager;
         $perm = $auth->getPermission($name);
@@ -68,6 +71,7 @@ class SystemUserController extends BaseAuthController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveRoles();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('view', ['model' => $model]);
@@ -84,6 +88,7 @@ class SystemUserController extends BaseAuthController
         $model = new SystemUser;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveRoles();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -102,7 +107,7 @@ class SystemUserController extends BaseAuthController
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            RbacHelper::updateConfigVersion();
+            $model->saveRoles();
             return $this->redirect(['view', 'id' => $model->id]);
         }else {
             return $this->render('update', [
@@ -179,6 +184,21 @@ class SystemUserController extends BaseAuthController
         return $this->render('bind_shop',[
             'model'=>$model,
             'shops'=>$shops,
+        ]);
+    }
+    /**
+     * 修改个人资料
+     */
+    public function actionUpdateProfile()
+    {
+        $id = \Yii::$app->user->id;
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            \Yii::$app->session->setFlash('default', '修改成功');
+            return $this->redirect(['update-profile', 'id' => $model->id]);
+        }
+        return $this->render('update_profile', [
+            'model' => $model,
         ]);
     }
 }

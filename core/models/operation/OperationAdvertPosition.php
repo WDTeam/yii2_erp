@@ -72,7 +72,7 @@ class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPo
     /**
      * 更新冗余的平台名称
      *
-     * @param inter   $operation_platform_id     平台编号
+     * @param integer $operation_platform_id     平台编号
      * @param string  $operation_platform_name   平台名称
      */
     public static function updatePlatformName($operation_platform_id, $operation_platform_name)
@@ -83,7 +83,7 @@ class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPo
     /**
      * 更新冗余的平台版本
      *
-     * @param inter   $operation_platform_version_id     平台版本编号
+     * @param integer $operation_platform_version_id     平台版本编号
      * @param string  $operation_platform_version_name   平台版本名称
      */
     public static function updatePlatformVersion($operation_platform_version_id, $operation_platform_version_name)
@@ -94,7 +94,7 @@ class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPo
     /**
      * 根据平台编号联动删除广告位置信息
      *
-     * @param inter   $operation_platform_id     平台编号
+     * @param integer   $operation_platform_id     平台编号
      */
     public static function updateAdvertPositionStatus($operation_platform_id)
     {
@@ -106,7 +106,7 @@ class OperationAdvertPosition extends \dbbase\models\operation\OperationAdvertPo
     /**
      * 根据版本编号联动删除广告位置信息
      *
-     * @param inter   $operation_platform_version_id     版本编号
+     * @param integer   $operation_platform_version_id     版本编号
      */
     public static function updateAdvertPositionStatusFromVersion($operation_platform_version_id)
     {

@@ -11,11 +11,12 @@ use yii\helpers\ArrayHelper;
 use core\models\worker\WorkerTaskLog;
 use core\models\worker\WorkerTaskCondition;
 use core\components\ConsoleHelper;
+use core\models\order\OrderSearch;
 class WorkerTaskController extends Controller
 {
     private function getConditionsValues($start_time, $end_time, $worker_id)
     {
-        return WorkerTaskCondition::getConditionsValues($start_time, $end_time, $worker_id);
+        return OrderSearch::getStatistical($start_time, $end_time, $worker_id);
     }
     /**
      * 定时处理已结束的任务周期
@@ -33,7 +34,7 @@ class WorkerTaskController extends Controller
         ->where('worker_task_is_done is NULL or worker_task_is_done=0')
 //         ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
         ->all();
-        ConsoleHelper::log('所有未完成的任务（%s）个', [count($tasks)]);
+        ConsoleHelper::log('所有阿姨未完成的任务（%s）个', [count($tasks)]);
         foreach ($tasks as $task){
             try{
                 $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
@@ -52,7 +53,8 @@ class WorkerTaskController extends Controller
                     ]);
                 }
             }catch(\Exception $e){
-                echo 'has error';
+                var_dump($e);
+                ConsoleHelper::log('阿姨（%s）任务（%s）出错', [$task->worker_id, $task->worker_task_id]);
             }
         }
 //         * 3、自动生成阿姨任务记录，有则取，无则建.

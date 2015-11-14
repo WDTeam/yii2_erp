@@ -25,7 +25,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} operation_province_name 省 如:北京
      * @apiParam {String} operation_city_name 市名  如:北京市
      * @apiParam {String} operation_area_name 地区名  如:朝阳区
@@ -129,7 +129,8 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
+     * @apiParam {String} [app_version]      版本号
      * 
      * @apiSuccess {Object[]} addresses 用户常用地址数组.
      * @apiSuccessExample Success-Response:
@@ -223,7 +224,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token  用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int}    address_id    地址id 
      *
      * @apiSuccessExample Success-Response:
@@ -287,8 +288,8 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int}    address_id 地址id                         如：1
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} [operation_province_name] 省              如：北京
      * @apiParam {String} [operation_city_name] 市名                如：北京市
      * @apiParam {String} [operation_area_name] 地区名（朝阳区）     如：朝阳区
@@ -363,7 +364,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {int}    address_id 地址id                         如：1
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)       如：android_4.2.2
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} [operation_province_name] 省              如：北京
      * @apiParam {String} [operation_city_name] 市名                如：北京市
      * @apiParam {String} [operation_area_name] 地区名（朝阳区）     如：朝阳区
@@ -440,7 +441,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -531,7 +532,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccess {Object} UserMoney 用户当前余额和消费记录对象
      * @apiSuccessExample Success-Response:
@@ -648,7 +649,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -724,6 +725,8 @@ class UserController extends \restapi\components\Controller
      * @apiDescription 用户评价 (郝建设)
      * @apiName actionUserSuggest
      * @apiGroup User
+     * 
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int} order_id       '订单ID'
      * @apiParam {int} order_code       '订单号'
      * @apiParam {String} access_token 用户认证
@@ -841,7 +844,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -932,7 +935,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {int} customer_comment_level 级别id
      *
      * @apiSuccessExample Success-Response:
@@ -1004,7 +1007,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1139,7 +1142,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1193,7 +1196,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} longitude 经度
      * @apiParam {String} latitude 纬度
      * @apiParam {int} order_service_type_id 服务id
@@ -1252,7 +1255,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1329,7 +1332,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} weixin_id 微信id
      * @apiParam {String} sign 微信签名
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1406,7 +1409,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token     用户认证
-     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      * @apiParam {String} feedback_content 用户提交的数据
      *
      * @apiSuccessExample Success-Response:
@@ -1472,7 +1475,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1564,7 +1567,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/share_weibo [GET] /user/share_weibo （100%）
+     * @api {POST} /user/share-weibo [POST] /user/share-weibo （100%）
      *
      * @apiDescription  分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）
      * @apiName actionShareWeibo
@@ -1605,21 +1608,30 @@ class UserController extends \restapi\components\Controller
     public function actionShareWeibo()
     {
 
-        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->POST() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
+            $access_token="";
+        }else{
+            $access_token=$param['access_token'];
         }
         $result = array();
-        $result = [
-            "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
-            "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-            "content" => [
-                "省时省力省心",
-                "固定星级阿姨",
-                "轻松回归生活"
-            ],
-            "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
-        ];
+        if(empty($access_token)){
+            //无token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }else{
+            //有token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }
         if (!empty($result)) {
             return $this->send($result, "分享微博成功", 1, 200, null, alertMsgEnum::shareWeiboSuccess);
         } else {
@@ -1628,14 +1640,14 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/share-friends [GET] /user/share-friends （100%）
+     * @api {POST} /user/share-friends [POST] /user/share-friends （100%）
      *
      * @apiDescription  分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）
      * @apiName actionShareFriends
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name      订单渠道名称
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1669,21 +1681,32 @@ class UserController extends \restapi\components\Controller
     public function actionShareFriends()
     {
 
-        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->POST() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //用户等不等录都能分享，但是返回的数据不同
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
+            $access_token="";
+        }else{
+            $access_token=$param['access_token'];
         }
         $result = array();
-        $result = [
-            "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
-            "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-            "content" => [
-                "省时省力省心",
-                "固定星级阿姨",
-                "轻松回归生活"
-            ],
-            "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
-        ];
+        if(empty($access_token)){
+            //无token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }else{
+            //有token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" =>"省时省力省心,固定星级阿姨,轻松回归生活",
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }
+        
         if (!empty($result)) {
             return $this->send($result, "分享朋友圈成功", 1, 200, null, alertMsgEnum::shareFriendsSuccess);
         } else {

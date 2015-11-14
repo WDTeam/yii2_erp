@@ -1,10 +1,15 @@
 <?php
 /**
 * 优惠券规则控制器
-* @date: 2015-11-7
-* @author: peak pan
-* @return:
-**/
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace core\models\operation\coupon;
 
@@ -82,6 +87,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     	$coupon_code_edit->save();
 
     	$Couponlogobj=new CouponLog;
+    	$Couponlogobj->customer_code=$coupon_code_edit->customer_code;
     	$Couponlogobj->customer_id=0;
     	$Couponlogobj->order_id=$order_code;
     	$Couponlogobj->coupon_id=$couponrule_id;
@@ -105,7 +111,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     		'coupon_userinfo_code'=>$coupon_code_arr['coupon_userinfo_code'],
     		'coupon_userinfo_price'=>$coupon_code_arr['coupon_userinfo_price'],
     		'payment_id'=>$pay_nub,
-    		'transaction_id'=>$Couponlogobj->id
+    		'transaction_id'=>$coupon_code_edit->customer_code
     		];
     		$array=[
     		'is_status'=>1,
@@ -139,20 +145,23 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 
     
 	/**
-	* 根据客户id  ，服务类别 获取用户可以使用的优惠券的list，如果是过期或不可用就不显示   
+	* 根据客户电话,服务类别 获取用户可以使用的优惠券的list，如果是过期或不可用就不显示   
 	* 林红优使用
 	* @date: 2015-11-7
 	* @author: peak pan
 	* @return:
 	**/
     
-	public static function getAbleCouponByCateId($customer_tel, $cate_id){
+	public static function getAbleCouponByCateId($customer_tel, $cate_id,$commodity_id){
 		$able_coupons = CouponUserinfo::find()
 			->select(['id', 'customer_id','customer_tel', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price', 'coupon_userinfo_code as coupon_code'])
 			->where(['customer_tel'=>$customer_tel,'is_used'=>0,'is_del'=>0,'is_disabled'=>0])
 			->andWhere(['<', 'couponrule_use_start_time', time()])
 			->andWhere(['>', 'couponrule_use_end_time', time()])
-			->andWhere(['or', ['and', 'couponrule_type=1', 'couponrule_service_type_id='.$cate_id], ['couponrule_type'=>0]])
+			->andWhere(['or', ['and', 'couponrule_type=2', 'couponrule_service_type_id='.$cate_id], ['couponrule_type'=>1],['and', 'couponrule_type=3', 'couponrule_commodity_id='.$commodity_id]
+
+
+])
 			->asArray()
 			->all();
 	 if(empty($able_coupons)){

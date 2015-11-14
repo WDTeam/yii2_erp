@@ -2,12 +2,11 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
+
 use kartik\builder\Form;
 use kartik\date\DatePicker;
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 use boss\components\AreaCascade;
-
-
 
 $configdate=CouponRuleSearch::couponconfig();
 $model->couponrule_classify=1;
@@ -27,7 +26,11 @@ $model->couponrule_promote_type=1;
 
 <div class="coupon-rule-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]);  ?>
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL,
+    		'enableAjaxValidation' => true,
+    		'validationUrl'=>Yii::$app->urlManager->createUrl(['operation/coupon/coupon-rule/ajax-info'])
+]); 
+    ?>
     
     		<div class="panel-body">
     		<?php
@@ -35,7 +38,7 @@ $model->couponrule_promote_type=1;
     		 		'model' => $model,
     		 		'form' => $form,
     		 		'columns' => 1,
-    		 		'attributes' => [
+    				'attributes' => [
     				'couponrule_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>' 优惠券名称...', 'maxlength'=>100]],
 'couponrule_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠券单价...', 'maxlength'=>8]],		
     		 'couponrule_classify'=>[
@@ -45,7 +48,7 @@ $model->couponrule_promote_type=1;
     		'couponrule_channelname'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'渠道名称(主要使用到一码多用分渠道发)...', 'maxlength'=>80]],
              'couponrule_code_max_customer_num'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'一码多用单个优惠码最大使用人数限制...']],
     				
-				'couponrule_Prefix'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码前缀...', 'maxlength'=>20]],	
+				'couponrule_Prefix'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码前缀...', 'maxlength'=>3]],	
     			'couponrule_code_num'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'优惠码个数...']],
     		'couponrule_category'=>[
     		'type'=> Form::INPUT_RADIO_LIST,

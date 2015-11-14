@@ -189,6 +189,9 @@ class OperationGoodsController extends Controller
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
 
+        //只在创建时验证图片是必须的
+        $model->setScenario('create');
+
         if ($model->load($post)) {
             $model->operation_category_ids = $model->operation_category_id;
             $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
@@ -228,7 +231,6 @@ class OperationGoodsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'OperationCategory' => $OperationCategory,
-                //'priceStrategies' => $priceStrategies,
                 'OperationSpec' => $OperationSpec,
             ]);
         }
@@ -263,18 +265,22 @@ class OperationGoodsController extends Controller
             $model->operation_tags = implode(';', unserialize($model->operation_tags));
         }
         if ($model->load($post)) {
+
+            //品类信息
             $model->operation_category_ids = $model->operation_category_id;
-            $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
+            $category_name = OperationCategory::getCategoryName($model->operation_category_id);
+            $model->operation_category_name = $category_name;
             
-            /** 冗余计量单位 **/
+            //冗余计量单位
             $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
             $specinfo = OperationSpec::getSpecInfo($model->operation_spec_info);
             $model->operation_spec_strategy_unit = $specinfo['operation_spec_strategy_unit'];
-            
-             /** 添加商品图片 **/
+
+            //添加商品图片
+            unset($model->operation_goods_img);
             $model->uploadImgToQiniu('operation_goods_img');
 
-            /** 添加个性标签 **/
+            //添加个性标签 
             $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
             $model->operation_tags = serialize($tags);
@@ -283,11 +289,11 @@ class OperationGoodsController extends Controller
             
             if ($model->save()) {
 
-                //关联修改上线商品表冗余的商品名称
-                $goodsInfo = OperationShopDistrictGoods::updateGoodsName($id, $post['OperationGoods']['operation_goods_name']);
+                //关联修改上线服务项目表冗余的项目信息
+                OperationShopDistrictGoods::updateGoodsInfo($id, $post['OperationGoods']['operation_goods_name'], $post['OperationGoods']['operation_category_id'], $category_name);
 
-                return $this->redirect(['/operation/operation-category']);
             }
+            return $this->redirect(['/operation/operation-category']);
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
             foreach((array)$OperationCategorydata as $key => $value){ $OperationCategory[$value['id']] = $value['operation_category_name']; }

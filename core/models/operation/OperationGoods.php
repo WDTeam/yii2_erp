@@ -5,7 +5,7 @@ namespace core\models\operation;
 use Yii;
 use boss\models\operation\OperationShopDistrictGoods;
 use yii\web\UploadedFile;
-use crazyfd\qiniu\Qiniu;
+
 
 /**
  * This is the model class for table "{{%operation_goods}}".
@@ -82,12 +82,11 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
      * @return string $imgUrl 文件URL
      */
     public function uploadImgToQiniu($field){
-        $qiniu = new Qiniu();
         $fileinfo = UploadedFile::getInstance($this, $field);
         if(!empty($fileinfo)){
             $key = time().mt_rand('1000', '9999').uniqid();
-            $qiniu->uploadFile($fileinfo->tempName, $key);
-            $imgUrl = $qiniu->getLink($key);
+            \Yii::$app->imageHelper->uploadFile($fileinfo->tempName, $key);
+            $imgUrl = \Yii::$app->imageHelper->getLink($key);
             $this->$field = $imgUrl;
         }
     }
@@ -95,7 +94,7 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     /**
      * 更新冗余的规格名称
      *
-     * @param inter   $operation_spec_info            规格编号
+     * @param integer $operation_spec_info            规格编号
      * @param string  $operation_spec_strategy_unit   规格单位备注
      */
     public static function updateGoodsSpec($operation_spec_info, $operation_spec_strategy_unit)

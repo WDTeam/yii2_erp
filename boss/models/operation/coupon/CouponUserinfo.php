@@ -17,6 +17,7 @@ class CouponUserinfo extends CouponUserinfoModel
         return [
             [['id', 'customer_id', 'coupon_userinfo_id', 'coupon_userinfo_gettime', 'coupon_userinfo_usetime', 'couponrule_use_end_time', 'system_user_id', 'is_used', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_tel', 'coupon_userinfo_code', 'coupon_userinfo_name', 'order_code', 'system_user_name'], 'safe'],
+            ['customer_code', 'string'],
             [['coupon_userinfo_price'], 'number'],
         ];
     }

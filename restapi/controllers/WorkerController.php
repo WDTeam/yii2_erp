@@ -29,6 +29,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户登录token
      * @apiParam {String} [worker_id]  阿姨id
+     * @apiParam {String} order_channel_name app版本号
      *
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
@@ -101,9 +102,9 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} [platform_version] 平台版本号.
      * @apiParam {String} leave_time 请假时间，如果请假时间格式为:【2015-09-10】
      * @apiParam {String} leave_type 请假类型  1.休假 2事假
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
@@ -143,7 +144,11 @@ class WorkerController extends \restapi\components\Controller
         if (!isset($param['leave_time']) || !$param['leave_time']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403, null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
+        
         try {
+            if(!WorkerVacationApplication::checkWorkerIsApplication($workerID,$param['leave_time'],$vacationType)){
+                return $this->send(null, "不能重复请假", 0, 403, null, "该时段您已请过假，请等待审核");
+            }
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID, $vacationType);
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::workerApplyLeaveFailed);
@@ -175,7 +180,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -190,7 +195,7 @@ class WorkerController extends \restapi\components\Controller
      *           {
      *               "leave_type": "请假类型【1休假 2事假】",
      *               "leave_time": "请假时间",
-     *               "leave_status": "请假状态"
+     *               "leave_status": "请假状态【0待审核 1成功 2.失败】"
      *           }
      *       ]
      *      }
@@ -227,21 +232,22 @@ class WorkerController extends \restapi\components\Controller
         $pageData = array();
         if ($data['data']) {
             foreach ($data['data'] as $key => $val) {
-                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type'] == 1 ? "休假" : "事假";
+                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type'] ;
                 $pageData[$key]['leave_time'] = date('Y-m-d', $val['worker_vacation_application_start_time']);
-                switch ($val['worker_vacation_application_approve_status']) {
-                    case "0":
-                        $pageData[$key]['leave_status'] = "待审核";
-                        break;
-                    case "1":
-                        $pageData[$key]['leave_status'] = "审核通过";
-                        break;
-                    case "2":
-                        $pageData[$key]['leave_status'] = "审核不通过";
-                        break;
-                    default :
-                        $pageData[$key]['leave_status'] = "未知";
-                }
+                $pageData[$key]['leave_status'] = $val['worker_vacation_application_approve_status'];
+//                switch ($val['worker_vacation_application_approve_status']) {
+//                    case "0":
+//                        $pageData[$key]['leave_status'] = "待审核";
+//                        break;
+//                    case "1":
+//                        $pageData[$key]['leave_status'] = "审核通过";
+//                        break;
+//                    case "2":
+//                        $pageData[$key]['leave_status'] = "审核不通过";
+//                        break;
+//                    default :
+//                        $pageData[$key]['leave_status'] = "未知";
+//                }
             }
         }
         $ret = [
@@ -260,7 +266,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token.
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -315,7 +321,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} comment_level   评论类型 【1：满意 2：一般 3：差评】
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -393,7 +399,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} per_page    第几页
      * @apiParam {String} page_num   每页显示的数据数量
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -464,7 +470,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -524,7 +530,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -611,7 +617,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条.
-     * @apiParam {String} [platform_version] 平台版本号
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -691,7 +697,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -759,7 +765,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} settle_id  账单唯一标识
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -843,7 +849,7 @@ class WorkerController extends \restapi\components\Controller
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} settle_id  账单唯一标识.
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -892,6 +898,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token 阿姨登录token
+     * @apiParam {String} order_channel_name 订单渠道名称.
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -950,15 +957,6 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/system-news  [GET] /worker/system-news(0%)
-     * @apiDescription 消息通知中心 （田玉星）
-     * @apiName actionSystemNews
-     * @apiGroup Worker
-     * @apiParam {String} access_token    阿姨登录token.
-     * @apiParam {String} [platform_version] 平台版本号.
-     */
-
-    /**
      * @api {GET} /worker/worker-leave [GET] /worker/worker-leave(100%)
      * 
      * @apiDescription  查看请假情况（李勇）
@@ -967,7 +965,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} type 请假类型
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -975,19 +973,13 @@ class WorkerController extends \restapi\components\Controller
      *   "code": 1,
      *   "msg": "操作成功",
      *   "ret": {
-     *       "2015-10-28": true,
-     *       "2015-10-29": true,
-     *       "2015-10-30": false,
-     *       "2015-10-31": false,
-     *       "2015-11-01": false,
-     *       "2015-11-02": true,
-     *       "2015-11-03": true,
-     *       "2015-11-04": true,
-     *       "2015-11-05": true,
-     *       "2015-11-06": false,
-     *       "2015-11-07": false,
-     *       "2015-11-08": false,
-     *       "2015-11-09": true,
+     *       "leave_time": [
+     *       {
+     *           "date": "2015-11-13",
+     *           "enable": false,
+     *           "week": "周五"
+     *       }
+     *      ]
      *   },
      *  "alertMsg": "获取阿姨请假排班表成功"
      * }
@@ -1019,6 +1011,20 @@ class WorkerController extends \restapi\components\Controller
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
+        if($ret){
+            $week =[
+              '1'=>'周一',
+              '2'=>'周二', 
+              '3'=>'周三', 
+              '4'=>'周四', 
+              '5'=>'周五', 
+              '6'=>'周六', 
+              '7'=>'周日', 
+            ];
+            foreach($ret as $key=>$val){
+                $ret[$key]['week'] = $week[date('N', strtotime($val['date']))];
+            }
+        }
         $leave_time['leave_time'] = $ret;
         return $this->send($leave_time, "获取阿姨请假表成功", 1, 200, null, alertMsgEnum::workerLeaveSuccess);
     }
@@ -1031,7 +1037,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token   阿姨登录 token.
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1118,7 +1124,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1212,7 +1218,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page   第几页
      * @apiParam {String} page_num   每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1306,7 +1312,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} id    任务id
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1425,7 +1431,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} imei            序列号
      * @apiParam {String} tag             阿姨电话号码    
      * @apiParam {int}   status           1:收到通知  2：点击通知          
-     * @apiParam {String} [platform_version] 平台版本号.
+     * @apiParam {String} order_channel_name 订单渠道名称.
      *
      * @apiParam  {Object} [data]  数据对象
      * 

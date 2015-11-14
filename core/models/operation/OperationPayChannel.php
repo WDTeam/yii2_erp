@@ -1,7 +1,7 @@
 <?php
 
 /**
-* 控制器  支付渠道
+* 控制器对接  支付渠道
 * ==========================
 * 北京一家洁 版权所有 2015-2018 
 * ----------------------------
@@ -93,6 +93,7 @@ class OperationPayChannel extends \dbbase\models\operation\OperationPayChannel
 		$array=[$data['operation_pay_channel_type'],$configdate[$data['operation_pay_channel_type']]];
 		return $array;	
 	}
+	
 	
 	
 	

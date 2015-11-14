@@ -11,20 +11,17 @@ use kartik\grid\GridView;
 use kartik\date\DatePicker;
 use boss\components\AreaCascade;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 
 use core\models\customer\Customer;
 use core\models\customer\CustomerExtSrc;
 use core\models\customer\CustomerAddress;
-use core\models\order\OrderSearch;
 use core\models\customer\CustomerComment;
 use core\models\customer\CustomerExtScore;
-use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerBlockLog;
-
-//use core\models\operation\coupon\Coupon;
-//use core\models\operation\coupon\CouponCustomer;
-//use core\models\operation\coupon\CouponCode;
+use core\models\order\OrderSearch;
+use core\models\operation\coupon\CouponRule;
 
 /**
  * @var yii\web\View $this
@@ -50,16 +47,36 @@ if(empty($customer_ext_srcs)){
 	$device_no_str = '-';
 }else{
 	foreach($customer_ext_srcs as $customer_ext_src){
-		$platform_name= empty($customer_ext_src) ? '-' : empty($customer_ext_src['platform_name']) ? '-' : $customer_ext_src['platform_name']; 
-		$channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
-		$device_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_name']) ? '-' : $customer_ext_src['device_name']; 
-		$device_no = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_no']) ? '-' : $customer_ext_src['device_no']; 
+		$platform_name= empty($customer_ext_src) ? '' : empty($customer_ext_src['platform_name']) ? '' : $customer_ext_src['platform_name'];
+		$channal_name = empty($customer_ext_src) ? '' : empty($customer_ext_src['channal_name']) ? '' : $customer_ext_src['channal_name'];
+		$device_name = empty($customer_ext_src) ? '' : empty($customer_ext_src['device_name']) ? '' : $customer_ext_src['device_name'];
+		$device_no = empty($customer_ext_src) ? '' : empty($customer_ext_src['device_no']) ? '' : $customer_ext_src['device_no'];
 
-		$platform_name_str .= $platform_name.'/';
-		$channal_name_str .= $channal_name.'/';
-		$device_name_str .= $device_name.'/';
-		$device_no_str .= $device_no.'/';
+        if(!empty($platform_name)) {
+            $platform_name_str .= $platform_name.'/';
+        }
+        if(!empty($channal_name)) {
+            $channal_name_str .= $channal_name.'/';
+        }
+        if(!empty($device_name)) {
+            $device_name_str .= $device_name.'/';
+        }
+        if(!empty($device_no)) {
+            $device_no_str .= $device_no.'/';
+        }
 	}
+}
+if(empty($platform_name_str)){
+    $platform_name_str = '-';
+}
+if(empty($channal_name_str)){
+    $channal_name_str = '-';
+}
+if(empty($device_name_str)){
+    $device_name_str = '-';
+}
+if(empty($device_no_str)){
+    $device_no_str = '-';
 }
 
 //全部服务地址
@@ -72,13 +89,20 @@ if(!empty($customerAddress)){
 		    $addressStr .= $address->operation_province_name
 		        .$address->operation_city_name
 		        .$address->operation_area_name
-		        .$address->customer_address_detail
-		        .' | '.$address->customer_address_nickname
-		        .' | '.$address->customer_address_phone . '<br/>';
+		        .$address->customer_address_detail;
+
+            if(!empty($address->customer_address_nickname)){
+                $addressStr .= ' | '.$address->customer_address_nickname;
+            }
+            if(!empty($address->customer_address_phone)){
+                $addressStr .= ' | '.$address->customer_address_phone . '<br/>';
+            }
 		}
 	}
 }
-
+if(empty($addressStr)){
+    $addressStr = '-';
+}
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
@@ -110,7 +134,12 @@ if(empty($customer_workers_res['customer_workers'])){
 }
 foreach ($customer_workers_res['customer_workers'] as $key => $worker)
 {
-	$worker_names .= $worker['worker_name'].'/';
+    if(!empty($worker['worker_name'])){
+        $worker_names .= $worker['worker_name'].'/';
+    }
+}
+if(empty($worker_names)){
+    $worker_names = '-';
 }
 
 echo DetailView::widget([
@@ -143,7 +172,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'城市',
             'format'=>'raw',
-            'value'=>$model->operation_city_name,
+            'value'=>empty($model->operation_city_name) ? '-' : $model->operation_city_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -206,7 +235,7 @@ echo DetailView::widget([
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
-    'enableEditMode'=>true,
+    'enableEditMode'=>false,
 ]); 
 
 // echo DetailView::widget([
@@ -297,54 +326,47 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
-        
     ],
     'enableEditMode'=>false,
 ]);
 
-//$res = \core\models\operation\coupon\CouponRule::getcustomerlist_l($model->customer_phone);
-//$query = null;
-//if($res['is_status']==1){
-//    $query = $res['data'];
-//}
-//$couponCustomerProvider = new ActiveDataProvider([
-//	'query' =>$query,
-//]);
-//if($res['is_status'] == 1){
-//	echo GridView::widget([
-//		'dataProvider' => $couponCustomerProvider,
-//
-//		'columns'=>[
-//		    [
-//		        'format' => 'raw',
-//		        'label' => '类别',
-//		        'value' => function($couponCustomerProvider){
-//                    $couponrule_type = $couponCustomerProvider['couponrule_type'];
-//					return $couponrule_type;
-//				},
-//		        'width' => "80px",
-//		    ],
-//		    [
-//		        'format' => 'raw',
-//		        'label' => '金额',
-//		        'value' => function($couponCustomerProvider){
-//                    $couponrule_price = $couponCustomerProvider['couponrule_price'];
-//                    return $couponrule_price;
-//				},
-//		        'width' => "80px",
-//		    ],
-//		    [
-//		        'format' => 'raw',
-//		        'label' => '到期日',
-//		        'value' => function($couponCustomerProvider){
-//                    $couponrule_use_end_time = $couponCustomerProvider['couponrule_use_end_time'];
-//                    return $couponrule_use_end_time;
-//				},
-//		        'width' => "80px",
-//		    ],
-//		],
-//	]);
-//}
+$res = CouponRule::getcustomerlist_l($model->customer_phone);
+if($res['is_status'] == 1){
+    $data = array();
+    $data = $res['data'];
+    $provider = new ArrayDataProvider([
+        'allModels' => $data,
+    ]);
+	echo GridView::widget([
+		'dataProvider' => $provider,
+		'columns'=>[
+		    [
+		        'format' => 'raw',
+		        'label' => '类别',
+		        'value' => function($provider){
+                    return $provider['couponrule_type'];
+				},
+		        'width' => "80px",
+		    ],
+		    [
+		        'format' => 'raw',
+		        'label' => '金额',
+		        'value' => function($provider){
+                    return $provider['couponrule_price'];
+				},
+		        'width' => "80px",
+		    ],
+		    [
+		        'format' => 'raw',
+		        'label' => '到期日',
+		        'value' => function($provider){
+                    return date('Y-m-d H:i:s', $provider['couponrule_use_end_time']);
+				},
+		        'width' => "80px",
+		    ],
+		],
+	]);
+}
 
 $customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find()->where(['customer_id'=>$model->id])->orderBy('created_at desc')]);
 if((int)($customerBlockLogProvider->query->count()) > 0){

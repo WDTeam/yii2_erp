@@ -287,17 +287,18 @@ class OperationCityController extends BaseAuthController
             ]);
         } else {
             return $this->redirect([
-                'opencity',
+                'operation/operation-shop-district-goods/index',
             ]);
         }
     }
 
     /**
-     * 设置服务并开通该城市
+     * 设置服务项目并开通该城市和编辑服务项目共用
      *
-     * @param $city_id
-     * @param $goods_id
-     * @return string
+     * @param  integer   $city_id     上线的城市编号
+     * @param  integer   $goods_id    服务项目编号
+     * @param  string    $action      表明动作
+     * @return view
      */
     public function actionSettinggoodsinfo($city_id = '', $goods_id = '', $action = ''){
 
@@ -305,313 +306,43 @@ class OperationCityController extends BaseAuthController
         $goodsInfo = OperationGoods::getGoodsInfo($goods_id);
 
         if (!isset($post) || empty($post)) {
-            return $this->redirect(['opencity']);
+            return $this->redirect(['operation/operation-shop-district-goods/index']);
         } else {
-            OperationShopDistrictGoods::saveOnlineCity($post);
-
             if ($city_id == '') {
                 $city_id = $post['city_id'];
             }
-            //设置开通城市状态
-            OperationCity::setoperation_city_is_online($city_id);
-            return $this->redirect(['opencity']);
-        }
-    }
 
-    
-    /**
-     * 选择品类与品类下边商品
-     * @return type
-     */
-    public function actionCategoryshop(){
-        $cache = Yii::$app->cache;
-        $post = Yii::$app->request->post();
-        if(empty($post)){
-            $categoryinfo = OperationCategory::getCategoryList();
-            $categorylist = array();
-            foreach((array)$categoryinfo as $key => $value){
-                $categorylist[$value['id'].'-'.$value['operation_category_name']] = $value['operation_category_name'];
+            $user_action = ['online', 'edit'];
+
+            //用户操作只能是上线或是编辑
+            if (in_array($action, $user_action)) {
+                OperationShopDistrictGoods::saveOnlineCity($post, $action);
+
+                //设置开通城市状态
+                OperationCity::setoperation_city_is_online($city_id);
             }
-            $addCityGoods = $cache->get('addCityGoods'); //查看当前操作是否为城市添加商品
-            $editCityGoods = $cache->get('editCityGoods'); //查看当前操作是否为城市编辑商品
-            $categorylistall = $cache->get("categorylist");  //服务品类
-            $releasecity_info = $cache->get("releasecity_info");   //城市信息
-            $city_id = $cache->get('city_id');
-            $city_name = $cache->get('city_name');
-            return $this->render('categoryshop', [
-                    'categorylist' => $categorylist,
-                    'categorylistall' => $categorylistall,
-                    'addCityGoods' => $addCityGoods,
-                    'releasecity_info' => $releasecity_info,
-                    'editCityGoods' => $editCityGoods,
-                    'city_id' => $city_id,
-                    'city_name' => $city_name,
-                ]);
-        }else{
-            $categorylist = $post['categorylist'];
-            $categorygoods = $post['categorygoods'];
-            foreach((array)$categorygoods as $key => $value){
-                $goodid = explode('-', $value);
-                $goodid = $goodid[0];
-                $goodscontent = OperationGoods::getGoodsInfo($goodid);
-                $cache->set("goodsinfo".$goodid, $goodscontent);
-            }
-            $cache->set("categorylist", $categorylist);
-            $cache->set("categorygoods", $categorygoods);
-            return $this->redirect(['getcityshopdistrict']);
+            return $this->redirect(['operation/operation-shop-district-goods/index']);
         }
     }
     
-    /**
-     * 添加城市下边的商品
-     */
-    public function actionCategoryshopadd($city_id){
-        $cache = Yii::$app->cache;
-        $city_name = OperationCity::getCityName($city_id);
-        $cache->set('city_id', $city_id);
-        $cache->set('city_name', $city_name);
-        $cache->set("releasecity_info", $city_id.'-'.$city_name);
-        $cache->set('addCityGoods', 'success');
-        //如果是添加商品就将编辑商品的状态删除
-        $cache->delete('editCityGoods');
-        return $this->redirect(['categoryshop']);
-    }
-    
-    /**
-     * 编辑城市下边的商品
-     */
-    public function actionCategoryshopedit($city_id, $goods_id){
-        $cache = Yii::$app->cache;
-        $city_name = OperationCity::getCityName($city_id);
-        $cache->set("releasecity_info", $city_id.'-'.$city_name);
-        $cache->set('editCityGoods', 'success');
-        //如果是编辑商品就将添加商品的状态删除
-        $cache->delete('addCityGoods');
-        /**服务品类**/
-        $goodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
-        $categorylist[] = $goodsinfo[0]['operation_category_id'].'-'.$goodsinfo[0]['operation_category_name'];
-        $cache->set("categorylist", $categorylist);
-        /**服务品类**/
-        
-        /**编辑服务详细 **/
-        $categorygoods = $goodsinfo[0]['operation_goods_id'].'-'.$goodsinfo[0]['operation_shop_district_goods_name'];
-        $cache->set("categorygoods", $categorygoods);
-        /**编辑服务详细 **/
-        
-        /**服务详情**/
-        $goodscontent = OperationGoods::getGoodsInfo($goods_id);
-        $cache->set("goodsinfo".$goods_id, $goodscontent);
-        /**服务详情**/
-        
-        /**选中商圈**/
-        foreach((array)$goodsinfo as $key => $value){
-            $shopdistrict[] = $value['operation_shop_district_id'].'-'.$value['operation_shop_district_name'];  //设置选中的商圈
-            $goods_info['goodids'][] = $value['operation_goods_id'];
-            $goods_info['goodnames'][] = $value['operation_shop_district_goods_name'];
-            $goods_info['operation_goods_market_price'][] = $value['operation_shop_district_goods_market_price'];
-            $goods_info['operation_goods_price'][] = $value['operation_shop_district_goods_price'];
-            $goods_info['operation_goods_lowest_consume'][] = $value['operation_shop_district_goods_lowest_consume'];
-            $goods_info['operation_goods_start_time'][] = $value['operation_shop_district_goods_start_time'];
-            $goods_info['operation_goods_end_time'][] = $value['operation_shop_district_goods_end_time']; $shopdistrictgoods['shopdistrictid'][] = $value['operation_shop_district_id'];
-            $shopdistrictgoods['operation_goods_market_price'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_market_price'];
-            $shopdistrictgoods['operation_goods_price'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_price'];
-            $shopdistrictgoods['operation_goods_lowest_consume'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_lowest_consume'];
-            $shopdistrictgoods['operation_goods_start_time'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_start_time'];
-            $shopdistrictgoods['operation_goods_end_time'][$value['operation_shop_district_id']] = $value['operation_shop_district_goods_end_time'];
-        }
-        $cache->set("shopdistrict", $shopdistrict);
-        
-        /**选中商圈服务详细**/
-        
-        $cache->set('settinggoodsinfo', $goods_info);
-        $cache->set('settinghopdistrictgoods', $shopdistrictgoods);
-        /**选中商圈服务详细**/
-        
-        return $this->redirect(['getcityshopdistrict']);
-    }
-
-
-    /**
-     * ajax品类下边的商品
-     * @return type
-     */
-    public function actionGetcategorygoods(){
-        $categoryid = Yii::$app->request->post('categoryid');
-        $city_id = Yii::$app->request->post('city_id');
-        $categorygoods = OperationGoods::getCategoryGoodsInfo($categoryid, $city_id);
-        $categorygoodsall = [];
-        $arr = [];
-        $arr[] = $categoryid;
-        $arr[] = $categorygoods;
-        $arr[] = $categorygoodsall;
-        echo json_encode($arr);
-        //return $this->renderAjax('categorygoods', [
-            //'categoryid' => $categoryid,
-            //'categorygoods' => $categorygoods,
-            //'categorygoodsall' => $categorygoodsall,
-        //]);
-    }
-    
-    
-    /**
-     * 商圈列表
-     * @param type $city_id
-     * @return type
-     */
-    public function actionGetcityshopdistrict(){
-        $cache = Yii::$app->cache;
-        $releasecity_info = $cache->get("releasecity_info");
-        $city_id = explode('-', $releasecity_info);
-        $city_id = $city_id[0];
-        if($releasecity_info){
-            $post = Yii::$app->request->post();
-            if(empty($post)){
-                $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-                $shopdistrictinfo = [];
-                foreach((array)$shopdistrict as $key => $value){
-                    $shopdistrictinfo[$value['id'].'-'.$value['operation_shop_district_name']] = $value['operation_shop_district_name'];
-                }
-                $shopdistrictall = $cache->get("shopdistrict");
-                
-                $addCityGoods = $cache->get('addCityGoods'); //查看当前操作是否为城市添加商品
-                $editCityGoods = $cache->get('editCityGoods'); //查看当前操作是否为城市编辑商品
-                $releasecity_info = $cache->get("releasecity_info");   //城市信息
-                $city_id = $cache->get('city_id');
-                $city_name = $cache->get('city_name');
-                return $this->render('shopdistrict', [
-                    'shopdistrict' => $shopdistrictinfo,
-                    'shopdistrictall' => $shopdistrictall,
-                    'addCityGoods' => $addCityGoods,
-                    'releasecity_info' => $releasecity_info,
-                    'editCityGoods' => $editCityGoods,
-                    'city_id' => $city_id,
-                    'city_name' => $city_name,
-                ]);
-            }else{
-                $shopdistrict = $post['shopdistrict'];
-                $cache->set("shopdistrict", $shopdistrict);
-                return $this->redirect(['settinggoods']);
-            }
-        }else{
-            return $this->redirect(['release']);
-        }
-    }
-    
-    /**
-     * 设置商品
-     * @return type
-     */
-    public function actionSettinggoods(){
-        $cache = Yii::$app->cache;
-        $post = Yii::$app->request->post();
-        if(empty($post)){
-            $cache = Yii::$app->cache;
-            $goodslist = $cache->get("categorygoods");
-            $goodslist = OperationGoods::getGoodsList($goodslist);
-            $settinggoodsinfo = $cache->get('settinggoodsinfo');
-            $settinghopdistrictgoods = $cache->get('settinghopdistrictgoods');
-            $shopdistrictall = $cache->get("shopdistrict");
-            $addCityGoods = $cache->get('addCityGoods'); //查看当前操作是否为城市添加商品
-            $editCityGoods = $cache->get('editCityGoods'); //查看当前操作是否为城市编辑商品
-            $releasecity_info = $cache->get("releasecity_info");   //城市信息
-            $city_id = $cache->get('city_id');
-            $city_name = $cache->get('city_name');
-            return $this->render('settinggoods', [
-                'goodslist' => $goodslist,
-                'settinggoodsinfo' => $settinggoodsinfo,
-                'settinghopdistrictgoods' => $settinghopdistrictgoods,
-                'shopdistrictall' => $shopdistrictall,
-                'addCityGoods' => $addCityGoods,
-                'releasecity_info' => $releasecity_info,
-                'editCityGoods' => $editCityGoods,
-                'city_id' => $city_id,
-                'city_name' => $city_name,
-            ]);
-        }else{
-            $cache->set('settinggoodsinfo', $post['goodinfo']);
-            $cache->set('settinghopdistrictgoods', $post['shopdistrictgoods']);
-            return $this->redirect(['releaseconfirm']);
-        }
-    }
-    
-    //开通城市确认页面
-    public function actionReleaseconfirm(){
-        $post = Yii::$app->request->post();
-        //开通城市
-        $cache = Yii::$app->cache;
-        $cityinfo = explode('-', $cache->get("releasecity_info"));
-        $cityid = $cityinfo[0];
-        $cityname = $cityinfo[1];
-
-        //设置商圈
-        $shopdistrictinfo = $cache->get("shopdistrict");
-        
-        //服务品类
-        $categorylist = $cache->get("categorylist");
-        //商品
-        $goodsinfo = $cache->get('settinggoodsinfo');
-        //商圈商品价格设置
-        $settinghopdistrictgoods = $cache->get('settinghopdistrictgoods');
-
-        if(empty($post)){
-            $addCityGoods = $cache->get('addCityGoods'); //查看当前操作是否为城市添加商品
-            $editCityGoods = $cache->get('editCityGoods'); //查看当前操作是否为城市编辑商品
-            $releasecity_info = $cache->get("releasecity_info");   //城市信息
-            $city_id = $cache->get('city_id');
-            $city_name = $cache->get('city_name');
-            return $this->render('releaseconfirm', [
-                        'cityname' => $cityname,
-                        'shopdistrictinfo' => $shopdistrictinfo,
-                        'settinghopdistrictgoods' => $settinghopdistrictgoods,
-                        'categorylist' => $categorylist,
-                        'goodsinfo' => $goodsinfo,
-                        'addCityGoods' => $addCityGoods,
-                        'releasecity_info' => $releasecity_info,
-                        'editCityGoods' => $editCityGoods,
-                        'city_id' => $city_id,
-                        'city_name' => $city_name,
-                    ]);
-        }else{
-            /** 商品属性**/
-            $goodsids = $goodsinfo['goodids'];
-            foreach((array)$goodsids as $key => $value){
-                $goodsinfo['goodscontent'][$value] = $cache->get('goodsinfo'.$value);
-            }
-            /** 商品属性**/
-            /**  插入商圈商品信息 **/
-            OperationShopDistrictGoods::handleReleaseCity($cityinfo, $shopdistrictinfo, $goodsinfo, $settinghopdistrictgoods);
-            /**  插入商圈商品信息 **/
-            
-            $this->delSettingCityCaches();
-            
-            $addCityGoods = $cache->get('addCityGoods'); //查看当前操作是否为城市添加商品
-            $editCityGoods = $cache->get('editCityGoods'); //查看当前操作是否为城市编辑商品
-            if($addCityGoods != 'success' && $editCityGoods != 'success'){
-                /**城市设为开通城市**/
-                OperationCity::setoperation_city_is_online($cityid);
-            }
-            
-            return $this->redirect(['index']);
-        }
-    }
-
     /**
      * 下线城市下的服务项目
      */
     public function actionOfflineCity($city_id, $goods_id)
     {
         if (!isset($city_id) || $city_id == '' || !isset($goods_id) || $goods_id == '') {
-            return $this->redirect(['opencity']);
+            return $this->redirect(['operation/operation-shop-district-goods/index']);
         }
 
         $operation_shop_district_goods_status = 2;
         OperationShopDistrictGoods::updateShopDistrictGoodsStatus($goods_id, $city_id, $operation_shop_district_goods_status);
  
+        //如果城市下没有上线的服务项目，城市状态设置为下线
         $district_nums = OperationShopDistrictGoods::getCityGoodsOnlineNum($city_id);
         if ($district_nums == 0) {
             OperationCity::setOperationCityIsOffline($city_id);
         }
-        return $this->redirect(['opencity']);
+        return $this->redirect(['operation/operation-shop-district-goods/index']);
     }
 
     private function delSettingCityCaches(){

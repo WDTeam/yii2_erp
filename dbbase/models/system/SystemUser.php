@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
 use dbbase\models\ActiveRecord;
+use boss\components\RbacHelper;
 
 /**
  * User model
@@ -39,14 +40,16 @@ class SystemUser extends ActiveRecord implements IdentityInterface
             $this->_roles = [$roles];
         }
     }
-    public function saveRoles($roles)
+    public function saveRoles()
     {
+        $roles = $this->_roles;
         $auth = \Yii::$app->authManager;
-        $auth->revokeAll($this->id);
         if(!empty($roles)){
+            $auth->revokeAll($this->id);
             foreach ($roles as $role){
                 $auth->assign($auth->getRole($role), $this->id);
             }
+            RbacHelper::updateConfigVersion();
             return $auth->getRolesByUser($this->id);
         }else{
             return [];
@@ -59,11 +62,6 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     public function getRolesLabel()
     {
         return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'description');
-    }
-    public function afterSave($insert, $changedAttributes)
-    {
-        $this->saveRoles($this->_roles);
-        parent::afterSave($insert, $changedAttributes);
     }
 
     /**
@@ -94,9 +92,9 @@ class SystemUser extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
-            ['roles', 'default', 'value' => self::ROLE_USER],
-            ['roles', 'in', 'range' => [self::ROLE_USER]],
             ['mobile', 'string'],
+            ['mobile', 'unique'],
+            ['mobile', 'required'],
             ['classify', 'integer'],
         ];
     }
@@ -148,7 +146,17 @@ class SystemUser extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        if(trim($username)=='admin'){
+            return static::findOne([
+                'username' => $username, 
+                'status' => self::STATUS_ACTIVE
+                
+            ]);
+        }
+        return static::findOne([
+            'mobile' => $username, 
+            'status' => self::STATUS_ACTIVE
+        ]);
     }
 
     /**
@@ -226,13 +234,15 @@ class SystemUser extends ActiveRecord implements IdentityInterface
      *
      * @param string $password
      */
+    public $_password = '';
     public function getPassword()
     {
-        return null;
+        return $this->_password;
     }
     public function setPassword($password)
     {
         if(!empty($password)){
+            $this->_password = $password;
             $this->password_hash = Yii::$app->security->generatePasswordHash($password);
         }
     }

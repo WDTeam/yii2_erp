@@ -1,16 +1,29 @@
 <?php
+/**
+* 控制器   对账查询MODELE
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/ 
 
 namespace boss\models\finance;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+
 use dbbase\models\finance\FinancePopOrder;
 use dbbase\models\finance\FinanceHeader;
-use core\models\Customer;
+
+use core\models\Customer\Customer;
 use core\models\order\Order;
 use core\models\worker\Worker;
-use dbbase\models\finance\FinanceOrderChannel;
+
 /**
  * FinancePopOrderSearch represents the model behind the search form about `dbbase\models\FinancePopOrder`.
  */
@@ -20,7 +33,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     {
         return [
             [['id','finance_record_log_id', 'finance_order_channel_id', 'finance_pay_channel_id', 'finance_pop_order_worker_uid','finance_pop_order_status','finance_pop_order_booked_time', 'finance_pop_order_booked_counttime', 'finance_pop_order_coupon_id', 'finance_pop_order_order_type', 'finance_pop_order_finance_isok', 'finance_pop_order_order_time', 'finance_pop_order_pay_time', 'finance_pop_order_pay_status', 'finance_pop_order_check_id', 'finance_pop_order_finance_time', 'create_time', 'is_del'], 'integer'],
-            [['finance_record_log_id','order_code','order_status_name','order_money','finance_order_channel_statuspayment','finance_order_channel_endpayment','finance_pop_order_number', 'finance_order_channel_title', 'finance_pay_channel_title', 'finance_pop_order_customer_tel', 'finance_pop_order_order2', 'finance_pop_order_channel_order', 'finance_pop_order_pay_title'], 'safe'],
+            [['finance_record_log_id','order_code','finance_pop_order_code','order_status_name','order_money','finance_order_channel_statuspayment','finance_order_channel_endpayment','finance_pop_order_number', 'finance_order_channel_title', 'finance_pay_channel_title', 'finance_pop_order_customer_tel', 'finance_pop_order_order2', 'finance_pop_order_channel_order', 'finance_pop_order_pay_title'], 'safe'],
             [['finance_pop_order_sum_money', 'finance_pop_order_coupon_count', 'finance_pop_order_discount_pay', 'finance_pop_order_reality_pay','finance_pop_order_pay_status_type'], 'number'],
         ];
     }
@@ -437,31 +450,29 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$dateinfo[]=$rtyy;
     	}
     	
-    	
     	//查找对账比例
     	if($channelid=='0'){
     		//如果是本身对账
-    		$channel_rate['finance_order_channel_rate']='1';
+    		$channel_rate='1';
     	}else {
     		//第三方对账
-    		$channel_rate=FinanceOrderChannel::find()->select(['finance_order_channel_rate'])
-    		->andWhere(['id' => $channelid])
-    		->asArray()->one();
+    		$channel_rate=\core\models\operation\OperationOrderChannel::getchannel_rate($channelid);
+    		
     	}
 
     
     	if($channelid==8){
     		//美团对账
-    		$orderdateinfo=$this->get_beautifulgroupon($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_beautifulgroupon($hder_info,$dateinfo,$channelid,$channel_rate);
     		return $orderdateinfo; 
     	}elseif ($paychannelid==7){
     		//支付宝对账   百度钱包 
-    		$orderdateinfo=$this->get_baidupay($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_baidupay($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     		
     	}elseif ($paychannelid==10){
     		//微信后台	
-    		$orderdateinfo=$this->get_weixin($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_weixin($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     		
     	}elseif ($channelid==22){
@@ -470,25 +481,25 @@ class FinancePopOrderSearch extends FinancePopOrder
     		return $orderdateinfo;
     	}elseif ($paychannelid==12){
     		//银联后台
-    		$orderdateinfo=$this->get_infipay($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_infipay($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     		
     	}elseif ($paychannelid==8){
     		//百度钱包
-    		$orderdateinfo=$this->get_baidupay($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_baidupay($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     		
     	}elseif ($channelid==12){
     		//大众点评成功 
-    		$orderdateinfo=$this->get_jd($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_jd($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     	}elseif ($channelid==10){
     		//京东到家
-    		$orderdateinfo=$this->get_jd($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_jd($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     	}else{
     		//其他对账
-    		$orderdateinfo=$this->get_jd($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate['finance_order_channel_rate']);
+    		$orderdateinfo=$this->get_jd($hder_info,$dateinfo,$channelid,$paychannelid,$channel_rate);
     		return $orderdateinfo;
     		
     	}
@@ -887,7 +898,7 @@ class FinancePopOrderSearch extends FinancePopOrder
      	//手续费	
      	$decrease=0;
      	//查询存在
-		$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+		$alinfo_es=\core\models\payment\Payment::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
      			 
      	 if($alinfo_es){
      			 //充值订单存在 开始比对金额
@@ -1104,7 +1115,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     		if($getorder_money >=1000){
     			//查询胜强的充值表
     			//查询存在
-    			$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    			$alinfo_es=\core\models\payment\Payment::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
     	
     	
     			/* 	 if($alinfo_es){
@@ -1519,6 +1530,7 @@ class FinancePopOrderSearch extends FinancePopOrder
         $query->orderBy(['id'=>SORT_DESC]);
         $query->andFilterWhere([
             'id' => $this->id,
+        	'finance_pop_order_code' => $this->finance_pop_order_code,
         	'finance_record_log_id' => $this->finance_record_log_id,
             'finance_order_channel_id' => $this->finance_order_channel_id,
             'finance_pay_channel_id' => $this->finance_pay_channel_id,

@@ -93,4 +93,16 @@ class OperationShopDistrict extends \dbbase\models\operation\OperationShopDistri
             }
         }
     }
+
+    public static function getCityShopDistrictListByNameAndCityId($city_id,$name){
+        $condition = '1=1';
+        if($city_id){
+            $condition .= ' and operation_city_id='.$city_id;
+        }
+        if($name){
+            $condition .=" and operation_shop_district_name like'%$name%'";
+        }
+        return self::find()->asArray()->where($condition)->all();
+
+    }
 }

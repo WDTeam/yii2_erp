@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- end -->
 <input id="srvIsSuspend" name="srvIsSuspend" value="<?php echo $srvIsSuspend ? 'true':'false' ?>" hidden />
 <div class="container">
-    <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>"  />
-             <input id="serverport" class="form-control" style="width:30%;" name="serverport" type = "hidden" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" />
+    <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($config['SWOOLE_SERVER_IP'])? $config['SWOOLE_SERVER_IP']: ''?>"  />
+             <input id="serverport" class="form-control" style="width:30%;" name="serverport" type = "hidden" value="<?php echo !empty($config['SERVER_LISTEN_PORT'])? $config['SERVER_LISTEN_PORT'] : ''?>" />
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <tbody >
             <tr>
                 <td  style="vertical-align:middle;"><?php echo !empty($config['SWOOLE_SERVER_IP'])? $config['SWOOLE_SERVER_IP'].':'.$config['SERVER_LISTEN_PORT'] : ''?></td>
-                <td style="vertical-align:middle;"><?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT '] : ''?></td>
+                <td style="vertical-align:middle;"><?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT'] : ''?></td>
                 <td style="vertical-align:middle;">0 - <?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>分钟</td>
                 <td style="vertical-align:middle;"><?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?> - <?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>分钟</td>
                 <td style="vertical-align:middle;"><div style="display: inline;" id="connectStatus"></div></td>

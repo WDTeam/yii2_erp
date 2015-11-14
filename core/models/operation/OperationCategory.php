@@ -4,7 +4,6 @@ namespace core\models\operation;
 
 use Yii;
 use yii\web\UploadedFile;
-use crazyfd\qiniu\Qiniu;
 
 /**
  * This is the model class for table "{{%operation_category}}".
@@ -16,13 +15,31 @@ use crazyfd\qiniu\Qiniu;
  */
 class OperationCategory extends \dbbase\models\operation\OperationCategory
 {
-    public static function getCategoryList($operation_category_parent_id = 0, $orderby = '', $select = null){
+    public static function getCategoryList($operation_category_parent_id = 0, $orderby = '', $select = null)
+    {
         return self::getAllData(['operation_category_parent_id' => $operation_category_parent_id], '', $select);
     }
 
-    public static function getCategoryName($operation_category_id){
+    public static function getCategoryName($operation_category_id)
+    {
         $data = self::find()->select(['operation_category_name'])->where(['id' => $operation_category_id])->one();
         return $data->operation_category_name;
+    }
+    
+    /**
+     * edit by TianYuxing
+     * 根据服务品类ID获取对应的服务品类详情
+     *
+     * @param  integer $operation_category_id 服务品类ID
+     * @return array
+     */
+    public static function getCategoryById($operation_category_id)
+    {
+        return  self::find()
+                ->select(['operation_category_name','operation_category_icon','operation_category_price_description'])
+                ->where(['id' => $operation_category_id])
+                ->asArray()
+                ->one();
     }
 
     public static function getAllCategory()
@@ -37,12 +54,11 @@ class OperationCategory extends \dbbase\models\operation\OperationCategory
      * @return string $imgUrl 文件URL
      */
     public function uploadImgToQiniu($field){
-        $qiniu = new Qiniu();
         $fileinfo = UploadedFile::getInstance($this, $field);
-        if(!empty($fileinfo)){
+        if (!empty($fileinfo)) {
             $key = time().mt_rand('1000', '9999').uniqid();
-            $qiniu->uploadFile($fileinfo->tempName, $key);
-            $imgUrl = $qiniu->getLink($key);
+            \Yii::$app->imageHelper->uploadFile($fileinfo->tempName, $key);
+            $imgUrl = \Yii::$app->imageHelper->getLink($key);
             $this->$field = $imgUrl;
         }
     }

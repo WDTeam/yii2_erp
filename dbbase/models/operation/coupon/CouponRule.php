@@ -1,4 +1,15 @@
 <?php
+/**
+* 优惠券规则数据库映射关系 
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace dbbase\models\operation\coupon;
 
@@ -61,13 +72,15 @@ class CouponRule extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['couponrule_Prefix'],'unique','message'=>'{attribute}{value}已被使用'],
+            [['couponrule_Prefix'],'string','min' => 3],
             [['couponrule_classify', 'couponrule_category', 'couponrule_type', 'couponrule_service_type_id', 'couponrule_commodity_id', 'couponrule_city_limit', 'couponrule_city_id', 'couponrule_use_end_days', 'couponrule_promote_type', 'couponrule_code_num', 'couponrule_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
             [['couponrule_order_min_price', 'couponrule_price'], 'number'],
             [['couponrule_name','couponrule_category_name', 'couponrule_type_name', 'couponrule_service_type_name', 'couponrule_commodity_name', 'couponrule_customer_type_name'], 'string', 'max' => 100],
-            [['couponrule_channelname'], 'string', 'max' => 80],
+            [['couponrule_channelname'], 'string', 'max' => 80],           
             [['couponrule_city_name', 'couponrule_promote_type_name'], 'string', 'max' => 60],
             [['couponrule_code', 'system_user_name'], 'string', 'max' => 40],
-            [['couponrule_Prefix'], 'string', 'max' => 20]
+            [['couponrule_Prefix'], 'string', 'max' => 3]
         ];
     }
 

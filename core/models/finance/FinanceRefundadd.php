@@ -1,4 +1,15 @@
 <?php
+/**
+* 退款控制器api对接
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace core\models\finance;
 
@@ -32,7 +43,8 @@ class FinanceRefundadd extends FinanceRefund
 	
     
      public function add($order){
-	     	$this->finance_refund_pop_nub='0';
+     		$numb='06'.date('ymdhis',time()).rand(1111,999999);
+	     	$this->finance_refund_code=$numb;
 	     	$this->customer_id=$order->orderExtCustomer->customer_id;
 	     	$this->finance_refund_tel=$order->orderExtCustomer->order_customer_phone;
 	     	$this->finance_refund_money=$order->orderExtPay->order_pay_money;
@@ -57,7 +69,11 @@ class FinanceRefundadd extends FinanceRefund
 	     	$this->isstatus=2;
 	        $this->create_time=time();
 	     	$this->is_del=0;
-			return $this->save();
+			if($this->save()){
+				return  $numb;
+			}else{
+				return  false;
+			}			
 	 
 	 }
     

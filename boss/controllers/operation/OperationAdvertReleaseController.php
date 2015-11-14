@@ -255,11 +255,12 @@ class OperationAdvertReleaseController extends BaseAuthController
         $model = new OperationAdvertRelease();
         $result = $model->saveReleaseAdvOrder($data);
 
-        if ($result > 0) {
-            return '有' . $result . '次保存成功!';
-        } else {
-            return '排序没有变化!';
-        }
+        //print_r($resutl);
+        //if ($result > 0) {
+            //return '有' . $result . '次保存成功!';
+        //} else {
+            //return '排序没有变化!';
+        //}
     }
 
     /**

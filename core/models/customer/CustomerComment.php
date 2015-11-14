@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 评价api接口
  * ==========================
@@ -18,6 +17,7 @@ use Yii;
 use core\models\comment\CustomerCommentTag;
 use core\models\comment\CustomerCommentLevel;
 use core\models\order\OrderComplaint;
+use core\models\order\Order;
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -186,8 +186,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 }
 				//通知订单 ，改变订单状态
 		if(!isset($array['adminid'])){$array['adminid']=0;}
-		
-             //  Order::customerAcceptDone($array['order_id'],$array['adminid']); 
+              Order::customerAcceptDone($array['order_id'],$array['adminid'],$customerComment->id); 
                 
                 if ($array['customer_comment_level'] == '3') {
                     //如果是差评 通知投诉接口

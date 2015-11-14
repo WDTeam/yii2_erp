@@ -68,6 +68,24 @@ class m150921_090403_create_table_system_user extends Migration
             'classify'=>2,
             'status'=>1
         ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>1000,
+            'username'=>'王雪',
+            'mobile'=>'13426026663',
+            'status'=>1
+        ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>1001,
+            'username'=>'宋艳伟',
+            'mobile'=>'18610640702',
+            'status'=>1
+        ]);
+        $this->insert('{{%system_user}}', [
+            'id'=>1002,
+            'username'=>'康月华',
+            'mobile'=>'13811433187',
+            'status'=>1
+        ]);
     }
 
     public function down()

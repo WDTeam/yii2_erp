@@ -1,6 +1,6 @@
 <?php
 /**
-* API 使用控制器
+* 优惠券用户管理API控制器
 * ==========================
 * 北京一家洁 版权所有 2015-2018 
 * ----------------------------
@@ -43,6 +43,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			return $array;
 		} 
 		
+		
 		//检查优惠码是否已经被兑换
 		 $couponCustomer=self::find()->where(['coupon_userinfo_code'=>$code])->one();
 		if(!empty($couponCustomer)){
@@ -55,6 +56,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		} 
 		
 		$coupon=substr($code,0,3);
+		
 		//查看渠道下面的领取开始时间是不是可以领取
 		$Couponruledate = CouponRule::find()->where(['couponrule_Prefix'=>$coupon])->asArray()->one();
 		if($Couponruledate['id']==''){
@@ -67,6 +69,19 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			
 		}
 		
+		
+		//检查这几个人在此优惠卷已经领取过
+		$couponCustomerinfo=self::find()
+		->where(['coupon_userinfo_id'=>$Couponruledate['id'],'customer_tel'=>$phone])
+		->one();
+		if(!empty($couponCustomerinfo)){
+			$array=[
+			'is_status'=>4012,
+			'msg'=>'优惠码已经被领取或使用',
+			'data'=>false,
+			];
+			return $array;
+		}
 		
 		//从redis查询优惠码是否存在
 		$couponislock=\Yii::$app->redis->SISMEMBER($coupon,$code);//查询优惠券还剩多少();
@@ -126,6 +141,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj = new CouponUserinfo;
 		$couponCustomerobj->customer_id = $customer->id;
 		$couponCustomerobj->customer_tel = $customer->customer_phone;
+		$couponCustomerobj->customer_code ='07'.date('ymdhis'.time()).rand(1111,999999);
 		$couponCustomerobj->coupon_userinfo_id = $Couponruledate['id'];
 		$couponCustomerobj->coupon_userinfo_code =$code;
 		$couponCustomerobj->coupon_userinfo_name = $Couponruledate['couponrule_name'];//优惠券名称
@@ -291,11 +307,11 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	$now_time=time();
 	$couponCustomer = self::find()
 	->select('sum(coupon_userinfo_price) as suminfo')
-	->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=1',"couponrule_city_id=$city_id"], 'couponrule_city_limit=0'],['or', ['or','couponrule_type!=0'], 'couponrule_type=0']] )
+	->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1'],['or', ['or','couponrule_type!=1'], 'couponrule_type=1']] )
 	->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
 	->asArray()
 	->one();
-
+	
 	if(empty($couponCustomer)){
 		
 		$array=[

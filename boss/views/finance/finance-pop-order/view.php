@@ -2,8 +2,7 @@
 use yii\helpers\Html;
 
 use kartik\detail\DetailView;
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\finance\FinancePayChannel;
+
 use core\models\Customer\Customer;
 use core\models\system\SystemUser;
 
@@ -25,14 +24,8 @@ if(isset($userinfo->customer_name)){$username=$userinfo->customer_name;}else{$us
 $admininfo=SystemUser::findIdentity($model->finance_pop_order_check_id);
 
 if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
-$order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id);
 
-if(isset($order_channel_info->finance_order_channel_name)){
-	$channel_title=$order_channel_info->finance_order_channel_name;
-}else{
-	$channel_title='未知';
-}
-
+$channel_title=\core\models\operation\OperationOrderChannel::get_post_name($model->finance_order_channel_id);
 
 ?>
 <div class="finance-pop-order-view">
@@ -66,7 +59,7 @@ if(isset($order_channel_info->finance_order_channel_name)){
     		'attribute' => 'finance_pay_channel_title',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
-    		'value'=> FinancePayChannel::get_pay_channel_info($model->finance_pay_channel_id) ,
+    		'value'=>\core\models\operation\OperationPayChannel::get_post_name($model->finance_pay_channel_id) ,
     		],
             'finance_pop_order_customer_tel',
     		[
@@ -113,6 +106,7 @@ if(isset($order_channel_info->finance_order_channel_name)){
     		'displayOnly' => true,
     		'value'=>'<font color="red">'.$model->finance_pop_order_msg?$model->finance_pop_order_msg:'暂无'.'</font>',
     		],
+    		'finance_pop_order_code',
     		[
     		'attribute' => 'finance_pop_order_info_msg',
     		'type' => DetailView::INPUT_TEXT,

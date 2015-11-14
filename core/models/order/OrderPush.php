@@ -19,6 +19,7 @@ class OrderPush extends Order
 {
 
     const WAIT_IVR_PUSH_ORDERS_POOL = 'WAIT_IVR_PUSH_ORDERS_POOL';
+    const WAIT_IVR_PUSH_ORDERS_POOL_RECORD = 'WAIT_IVR_PUSH_ORDERS_POOL_RECORD';
     const PUSH_ORDER_LOCK = 'PUSH_ORDER_LOCK';
 
     /**
@@ -101,16 +102,18 @@ class OrderPush extends Order
         }
         
         $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS);
+        $wait_ivr_worker_list = Yii::$app->redis->executeCommand('lRange', [self::WAIT_IVR_PUSH_ORDERS_POOL_RECORD . '_' . $order_id, 0,-1]);
         foreach ($workers as $v) {
-            if (!in_array($v['id'], $is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
+            if (!in_array($v['id'], $wait_ivr_worker_list)) { //判断该阿姨有没有推送过该订单，防止重复推送。
                 //把该推送ivr的阿姨放入该订单的队列中
                 Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id, json_encode(['id' => $v['id'], 'worker_phone' => $v['worker_phone']])]);
+                Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL_RECORD . '_' . $order_id, $v['id']]);
                 $ivr_flag = true;
             }
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
                 OrderPool::addOrderToWorkerPushList($order_id,$v['id']); //把订单添加到接单大厅
                 $result = Yii::$app->jpush->push(["worker_{$v['worker_phone']}"],'',json_encode(["order_code"=>$order->order_code,"msg"=>"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"]));
-                if (isset($result->isOK)) {
+                if (isset($result->isOk)) {
                     OrderWorkerRelation::jpushPushSuccess($order_id, $v['id'], 1);
                     $jpush_flag = true;
                 }else{
@@ -156,6 +159,7 @@ class OrderPush extends Order
         } else {
             //移除该订单的队列
             Yii::$app->redis->executeCommand('del', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]);
+            Yii::$app->redis->executeCommand('del', [self::WAIT_IVR_PUSH_ORDERS_POOL_RECORD . '_' . $order_id]);
         }
     }
 

@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-    		'finance_refund_pop_nub',
+    		'finance_refund_code',
     		'finance_refund_tel',
     		'finance_refund_money',
     		[

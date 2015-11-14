@@ -51,6 +51,8 @@ class alertMsgEnum
     //根据地址获取百度地图数据
     const baiduMapSuccess = '获取百度地图数据成功';
     const baiduMapFailed = '获取百度地图数据失败';
+    //指定阿姨订单列表
+    const worerSuccess = '指定阿姨订单列表';
     //会员余额支付
     const balancePaySuccess = '余额支付成功';
     const balancePayFailed = '余额支付失败';
@@ -143,6 +145,8 @@ class alertMsgEnum
     const loginFromPopSuccess = '登陆成功';
     //用户登录手机号或验证码不能为空
     const customerLoginDataDefect = '用户名或验证码不能为空';
+    //用户渠道不能为空
+    const customerLoginDataDefectPlatform = '用户渠道不能为空';
     //阿姨登录
     //阿姨登录成功
     const workerLoginSuccess = '登陆成功';
@@ -295,6 +299,12 @@ class alertMsgEnum
     const sendWorkerCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     //短信发送成功
     const sendWorkerCodeFaile = '验证码已发失败';
+    //语音验证码发送
+    //语音验证码发送失败
+    const voiceVerifyCodeFail = '语音验证码发送失败';
+    //语音验证码发送成功
+    const voiceVerifyCodeSuccess = '语音验证码发送成功';
+    
     /*
      * 李勇end
      */
@@ -313,7 +323,9 @@ class alertMsgEnum
     const orderCityDistrictFaile = "该城市未开通";
     const orderShopDistrictGoodsFaile = "该服务不在当前商圈内";
     const orderShopDistrictGoodsSuccess = "当前商圈包含该服务";
-     const orderCreateFaileChannelId = "数据不完整,订单渠道ID为必填项";
+    const orderCreateFaileChannelId = "数据不完整,订单渠道为必填项";
+    const customerPhoneFaile = "对不起，用户手机错误";
+    const orderStartEndTime = "对不起,开始时间不能大于等于结束时间";
     //追加订单
     const orderAppendOrderSuccess = '追加订单成功';
     const orderAppendOrderFaile = '追加订单失败';
@@ -367,8 +379,7 @@ class alertMsgEnum
     const orderGetOrderWorkerFaile = "获取阿姨周期订单失败";
     //数据不完整,请输入周期订单号
     const orderGetOrderWorkerNumber = "数据不完整,请输入周期订单号";
-    
-     //数据不完整,请输入订单号
+    //数据不完整,请输入订单号
     const orderGetOrderNumber = "数据不完整,请输入订单号";
     //添加常用地址
     //常用地址添加成功

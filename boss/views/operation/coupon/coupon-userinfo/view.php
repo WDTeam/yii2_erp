@@ -184,6 +184,12 @@ $this->params['breadcrumbs'][] = $this->title;
     		'displayOnly' => true,
     		'value'=>$model->is_used==0?'否':'是',
     		],
+    		[
+    		'attribute' => 'customer_code',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>$model->customer_code,
+    		],
     			
         ],
         'deleteOptions'=>[

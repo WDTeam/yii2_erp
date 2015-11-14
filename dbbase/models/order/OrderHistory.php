@@ -74,6 +74,8 @@ use dbbase\models\ActiveRecord;
  * @property string $pay_channel_id
  * @property string $order_pay_channel_name
  * @property string $order_pay_flow_num
+ * @property string $order_pay_code
+ * @property string $order_balance_code
  * @property string $order_pay_money
  * @property string $order_use_acc_balance
  * @property string $card_id
@@ -93,7 +95,11 @@ use dbbase\models\ActiveRecord;
  * @property integer $order_worker_assign_time
  * @property string $shop_id
  * @property string $order_worker_shop_name
- * @property string $checking_id
+ * @property string $order_checked_code
+ * @property string $order_worker_payoff_code
+ * @property string $order_refund_code
+ * @property string $order_complaint_code
+ * @property string $order_compensate_code
  * @property string $order_cs_memo
  * @property string $order_sys_memo
  * @property string $order_cancel_cause_id
@@ -123,14 +129,15 @@ class OrderHistory extends ActiveRecord
                 'order_service_type_id','order_service_item_id', 'order_channel_type_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time',
                 'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
                  'pay_channel_id','pay_channel_type_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type',
-                'order_worker_assign_time', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
+                'order_worker_assign_time', 'shop_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money', 'order_booked_count','order_lat','order_lng'], 'number'],
-            [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
+            [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name',
+                'order_checked_code','order_worker_payoff_code','order_complaint_code','order_complaint_code','order_compensate_code'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name','order_status_boss','order_status_customer','order_status_worker', 'order_service_type_name', 'order_service_item_name',
                 'order_channel_type_name', 'order_ip','order_pay_channel_name','order_pay_channel_type_name'], 'string', 'max' => 128],
-            [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo',
+            [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num','order_pay_code','order_balance_code', 'order_cs_memo','order_sys_memo',
                 'order_worker_memo', 'order_worker_shop_name','order_cancel_cause_detail','order_cancel_cause_memo','order_code'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
         ];
@@ -209,6 +216,8 @@ class OrderHistory extends ActiveRecord
             'pay_channel_id' => '支付渠道id',
             'order_pay_channel_name' => '支付渠道名称',
             'order_pay_flow_num' => '支付流水号',
+            'order_pay_code' => '支付单号',
+            'order_balance_code' => '余额支付单号',
             'order_pay_money' => '支付金额',
             'order_use_acc_balance' => '使用余额',
             'card_id' => '服务卡ID',
@@ -228,7 +237,11 @@ class OrderHistory extends ActiveRecord
             'order_worker_assign_time' => '接单时间',
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
-            'checking_id' => '对账id',
+            'order_checked_code' => '对账单号',
+            'order_refund_code' => '退款单号',
+            'order_complaint_code' => '投诉单号',
+            'order_compensate_code' => '赔偿单号',
+            'order_worker_payoff_code' => '阿姨结算单号',
             'order_cs_memo' => '客服备注',
             'order_sys_memo' => '系统备注',
             'order_cancel_cause_id' => '取消原因id',

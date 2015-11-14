@@ -41,7 +41,6 @@ use yii\helpers\ArrayHelper;
  */
 class Worker extends \core\models\worker\Worker
 {
-    public $worker_district;
     /**
      * @inheritdoc
      */
@@ -114,11 +113,11 @@ class Worker extends \core\models\worker\Worker
         $workerParams = isset($params['WorkerSearch'])?$params['WorkerSearch']:[];
         if($btnCate==0 && !isset($params['WorkerSearch'])){
             return 'btn-success-selected';
-        }elseif($btnCate==1 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==0){
+        }elseif($btnCate==1 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']=='1,2'){
             return 'btn-success-selected';
-        }elseif($btnCate==2 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==2){
+        }elseif($btnCate==2 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']=='5,6'){
             return 'btn-success-selected';
-        }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==3){
+        }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']=='7,8'){
             return 'btn-success-selected';
         }elseif($btnCate==4 && isset($workerParams['worker_identity_id']) && $workerParams['worker_identity_id']==1){
             return 'btn-success-selected';
@@ -216,16 +215,13 @@ class Worker extends \core\models\worker\Worker
     /**
      * 设置worker_district属性
      */
-//    public function getworker_district(){
-//        $workerDistrictArr = self::getWorkerDistrict($this->id);
-//        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
-//    }
-    /**
-     * 设置worker_district属性
-     */
-//    public function setworker_district(){
-//        return 1;
-//    }
+    public function getworker_district(){
+        $workerDistrictArr = self::getWorkerDistrict($this->id);
+        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
+    }
 
+    public function setworker_district(){
+        return 1;
+    }
 
 }

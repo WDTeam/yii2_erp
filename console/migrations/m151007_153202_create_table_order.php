@@ -36,6 +36,7 @@ class m151007_153202_create_table_order extends Migration
             'order_channel_type_name' => Schema::TYPE_STRING . '(128)  DEFAULT \'\' COMMENT \'订单渠道分类名称\'',
             'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'订单渠道ID\'',
             'order_channel_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'订单渠道名称\'',
+
 //===============================服务信息
             'order_unit_money'=>Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'订单单位价格\'',
             'order_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'订单金额\'',
@@ -51,7 +52,12 @@ class m151007_153202_create_table_order extends Migration
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 
 //===========================对账信息
-            'checking_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'对账id\'',
+            'order_checked_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'对账单编号\'',
+            'order_worker_payoff_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'阿姨结算编号\'',
+            'order_refund_code' => Schema::TYPE_STRING.'(64)  DEFAULT NULL COMMENT \'退款单编号\'',
+            'order_complaint_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'投诉单编号\'',
+            'order_compensate_code' => Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'赔偿单编号\'',
+
 //===========================其他信息
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
             'order_sys_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'系统备注\'',
@@ -64,6 +70,13 @@ class m151007_153202_create_table_order extends Migration
         $this->createIndex('idx-order-order_code', '{{%order}}', 'order_code',true);
         $this->createIndex('idx-order-order_parent_id', '{{%order}}', 'order_parent_id');
         $this->createIndex('idx-order-isdel', '{{%order}}', 'isdel');
+        $this->createIndex('idx-order-order_batch_code', '{{%order}}', 'order_batch_code');
+        $this->createIndex('idx-order-created_at', '{{%order}}', 'created_at');
+        $this->createIndex('idx-order-district_id', '{{%order}}', 'district_id');
+        $this->createIndex('idx-order-city_id', '{{%order}}', 'city_id');
+        $this->createIndex('idx-order-order_service_type_id', '{{%order}}', 'order_service_type_id');
+        $this->createIndex('idx-order-channel_id', '{{%order}}', 'channel_id');
+        $this->createIndex('idx-order-order_booked_begin_time', '{{%order}}', 'order_booked_begin_time');
     }
 
     public function down()

@@ -1,4 +1,15 @@
 <?php
+/**
+* 退款扩展控制器 
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace core\models\finance;
 
@@ -8,7 +19,7 @@ use Yii;
  * This is the model class for table "{{%finance_refund}}".
  *
  * @property integer $id
- * @property string $finance_refund_pop_nub
+ * @property string $finance_refund_code
  * @property string $finance_refund_tel
  * @property string $finance_refund_money
  * @property integer $finance_refund_stype
@@ -48,7 +59,7 @@ class FinanceRefund extends \dbbase\models\finance\FinanceRefund
             [['finance_refund_stype', 'finance_refund_pay_create_time', 'finance_pay_channel_id', 'finance_refund_pay_status', 'finance_order_channel_id', 'isstatus', 'create_time', 'is_del'], 'integer'],
             [['finance_refund_tel'], 'string', 'max' => 20],
             [['finance_refund_reason'], 'string', 'max' => 255],
-            [['finance_pay_channel_title', 'finance_refund_pay_flow_num'], 'string', 'max' => 80],
+            [['finance_pay_channel_title','finance_refund_code', 'finance_refund_pay_flow_num'], 'string', 'max' => 80],
             [['finance_order_channel_title'], 'string', 'max' => 30]
         ];
     }
@@ -60,7 +71,7 @@ class FinanceRefund extends \dbbase\models\finance\FinanceRefund
     {
         return [
             'id' => Yii::t('core', '主键id'),
-            'finance_refund_pop_nub' => Yii::t('core', '第三方订单号'),
+            'finance_refund_code' => Yii::t('core', '流水号'),
             'customer_id' => Yii::t('core', '用户ID'),
             'finance_refund_tel' => Yii::t('core', '用户电话'),
             'finance_refund_money' => Yii::t('core', '退款金额'),

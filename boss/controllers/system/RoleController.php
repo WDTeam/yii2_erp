@@ -41,8 +41,9 @@ class RoleController extends BaseAuthController
     {
         Url::remember();
         $searchModel = new AuthSearch();
+        $searchModel->load(Yii::$app->request->get());
         $searchModel->type = Auth::TYPE_ROLE;
-        $dataProvider = $searchModel->search(Yii::$app->request->get(), Auth::TYPE_ROLE);
+        $dataProvider = $searchModel->search();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -53,7 +54,8 @@ class RoleController extends BaseAuthController
     {
         $auth = \Yii::$app->authManager;
         $model = new Auth();
-        if ($model->load(Yii::$app->request->post())) {
+        $model->type = AuthItem::TYPE_ROLE;
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $role = $auth->createRole($model->name);
             $role->description = $model->description;
             $auth->add($role);
@@ -78,16 +80,12 @@ class RoleController extends BaseAuthController
         $auth = \Yii::$app->authManager;
         $model = $this->findModel($id);
         $role = $auth->getRole($id);
-
+        
         if ($model->load(Yii::$app->request->post())) {
             $role->description = $model->description;
             $auth->update($id, $role);
             
-            $perms = (array)$auth->getPermissionsByRole($id);
-            foreach ($perms as $perm){
-                $auth->removeChild($role, $perm);
-            }
-            
+            $auth->removeChildren($role);
             foreach ($model->permissions as $name)
             {
                 $permission = $auth->getPermission($name);

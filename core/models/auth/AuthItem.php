@@ -54,7 +54,6 @@ class AuthItem extends \yii\db\ActiveRecord
         }
         $super = $auth->getRole(self::SYSTEM_ROLE_SUPER_ADMIN);
         $admin = $auth->getRole(self::SYSTEM_ROLE_ADMIN);
-        var_dump($admin->name);
         $has = $auth->hasChild($super, $admin);
         if(empty($has)){
             $auth->addChild($super, $admin);
@@ -84,10 +83,12 @@ class AuthItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['name', 'unique'],
             [['name', 'type', 'description'], 'required'],
             [['type', 'created_at', 'updated_at'], 'integer'],
             [['description', 'data'], 'string'],
-            [['name', 'rule_name'], 'string', 'max' => 64]
+            [['name', 'rule_name'], 'string', 'max' => 64],
+            ['permissions', 'safe'],
         ];
     }
 

@@ -9,7 +9,7 @@ use core\models\order\OrderOtherDict;
 use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
-
+use core\models\payment\PaymentLog;
 
 use Yii;
 use yii\base\Exception;
@@ -18,12 +18,24 @@ class Payment extends \dbbase\models\payment\Payment
 {
 
     const PAYMENT_CODE = '01';
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return '{{%payment}}';
+    }
+
+    /**
+     * 创建支付记录
+     * @param $data 数据
+     */
+    private static function createPyamentLog($data)
+    {
+        //记录日志
+        $obj = new PaymentLog();
+        $obj->insertLog($data);
     }
 
     /**
@@ -50,7 +62,6 @@ class Payment extends \dbbase\models\payment\Payment
         $data = $query->from(self::tableName())->where($condition)->one();
         return $data;
     }
-
 
     /**
      * 调用(调起)在线支付,发送给支付接口的数据
@@ -221,37 +232,37 @@ class Payment extends \dbbase\models\payment\Payment
         switch($toid)
         {
             case 1:
-                $channel = 13;//财付通
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_CAIFUTONG_PAY;//财付通
                 break;
             case 2:
-                $channel = 10;//微信后台
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY;//微信后台
                 break;
             case 3:
-                $channel = 8;//百度钱包
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY;//百度钱包
                 break;
             case 4:
-                $channel = 12;//银联后台
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_UNION_PAY;//银联后台
                 break;
             case 5:
-                $channel = 7;//支付宝
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY;//支付宝
                 break;
             case 6:
-                $channel = 7;//支付宝
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY;//支付宝
                 break;
             case 7:
-                $channel = 8;//百度钱包
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY;//百度钱包
                 break;
             case 20:
-                $channel = 20;//余额支付
+                $channel = OperationPayChannel::PAY_CHANNEL_EJJ_BALANCE_PAY;//余额支付
                 break;
             case 21:
                 $channel = 21;//微博
                 break;
             case 23:
-                $channel = 10;//微信后台
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY;//微信后台
                 break;
             case 24:
-                $channel = 7;//支付宝
+                $channel = OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY;//支付宝
                 break;
         }
         return $channel;
@@ -612,20 +623,20 @@ class Payment extends \dbbase\models\payment\Payment
         }
 
         //记录日志
-        $dataLog = array(
+        $dataLog = [
             'payment_log_price' => $this->toMoney($post['settleAmt'],100,'/'),   //支付金额
             'payment_log_shop_name' => $post['reqReserved'],   //商品名称
             'payment_log_eo_order_id' => $post['orderId'],   //订单ID
             'payment_log_transaction_id' => $post['queryId'],   //交易流水号
             'payment_log_status_bool' => $post['respMsg'],   //支付状态
             'payment_log_status' => $post['respMsg'],   //支付状态
-            'pay_channel_id' => 12,  //支付渠道ID
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_UNION_PAY,  //支付渠道ID
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
-        );
+        ];
 
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['orderId']);
@@ -719,12 +730,13 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 7,  //支付渠道ID
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY,  //支付渠道ID
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['out_trade_no']);
@@ -856,12 +868,13 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['trade_no'],   //交易流水号
             'payment_log_status_bool' => $post['trade_status'],   //支付状态
             'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 7,  //支付渠道,支付宝
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_ALI_PAY,  //支付渠道,支付宝
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['out_trade_no']);
@@ -984,13 +997,13 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
             'payment_log_status_bool' => $post['trade_state'],   //支付状态
             'payment_log_status' => $post['trade_state'],   //支付状态
-            'pay_channel_id' => 13,  //财付通
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_CAIFUTONG_PAY,  //财付通
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
 
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['out_trade_no']);
@@ -1084,12 +1097,13 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['bfb_order_no'],   //交易流水号
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
-            'pay_channel_id' => 8,  //百度钱包
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY,  //百度钱包
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $this->getPaymentId($post['order_no']);
@@ -1201,12 +1215,15 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
             'payment_log_status_bool' => $post['return_code'],   //支付状态
             'payment_log_status' => $post['return_code'],   //支付状态
-            'pay_channel_id' => 10,  //微信后台
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_WEIXIN_PAY,  //微信后台
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //获取交易ID
         $paymentId = $model->getPaymentId($post['out_trade_no']);
@@ -1295,12 +1312,13 @@ class Payment extends \dbbase\models\payment\Payment
             'payment_log_transaction_id' => $post['order_id'],   //交易流水号
             'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
-            'pay_channel_id' => 8,  //百度钱包
-            'payment_log_json_aggregation' => json_encode($post),
+            'pay_channel_id' => OperationPayChannel::PAY_CHANNEL_ONLINEPAY_BAIDU_PAY,  //百度钱包
+            'payment_log_json_aggregation' => serialize($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
-        $this->trigger('insertLog');
+
+        //记录mongo
+        self::createPyamentLog($dataLog);
 
         //实例化模型
         $model = new Payment();

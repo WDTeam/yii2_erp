@@ -105,9 +105,30 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
      */
     public static function getApplicationList($worker_id,$page=1,$pageNum=10){
         $start = ($page-1)*$pageNum;
-        $result = self::find()->where(['worker_id'=>$worker_id])->offset($start)->limit($pageNum)->asArray()->all();
+        $result = self::find()->where(['worker_id'=>$worker_id])->offset($start)->limit($pageNum)->orderBy('id desc')->asArray()->all();
         $data = ['page'=>$page,'pageNum'=>$pageNum,'data'=>$result];
         return $data;
+    }
+
+    /**
+     * 检查阿姨是否请假
+     * @param $worker_id 阿姨id
+     * @param $vacationDate 阿姨请假日期
+     * @param $vacationType 阿姨请假类型 1休假 2事假
+     * @return bool true 可用 false 不可用
+     * @return array
+     */
+    public static function checkWorkerIsApplication($worker_id,$vacationDate,$vacationType){
+        $condition['worker_vacation_application_start_time'] = strtotime($vacationDate);
+        $condition['worker_id'] = $worker_id;
+        $condition['worker_vacation_application_type'] = $vacationType;
+        $condition['worker_vacation_application_approve_status'] = [0,1];
+        $result = self::find()->where($condition)->asArray()->one();
+        if($result){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     /**
@@ -130,7 +151,6 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
         }else{
             return fasle;
         }
-
     }
 
     public function getWorker(){

@@ -118,7 +118,7 @@ use core\models\worker\WorkerIdentityConfig;
             <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => '输入阿姨身份证号...', 'maxlength' => 20]); ?>
             <?= $form->field($worker, 'worker_district')->widget(Select2::classname(), [
                 'name' => 'worker_district',
-                'hideSearch' => true,
+                'hideSearch' => false,
                 'data' => Worker::getDistrictList(),
                 'options' => ['placeholder' => '选择阿姨商圈','multiple' => true],
                 'pluginOptions' => [

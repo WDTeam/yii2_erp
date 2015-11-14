@@ -14,21 +14,20 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use dbbase\models\finance\FinancePopOrder;
-use boss\models\finance\FinancePopOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\finance\FinanceHeader;
+
+use boss\models\finance\FinancePopOrderSearch;
 use boss\models\finance\FinanceRecordLogSearch;
-use boss\models\finance\FinanceOrderChannelSearch;
+
+use dbbase\models\finance\FinanceHeader;
+use dbbase\models\finance\FinanceRecordLog;
+use dbbase\models\finance\FinancePopOrder;
+
 use core\models\order\OrderSearch;
 use core\models\payment\PaymentSearch;
-use dbbase\models\finance\FinanceRecordLog;
-use crazyfd\qiniu\Qiniu;
-use dbbase\models\finance\FinancePayChannel;
 use core\models\order\Order;
 
 /**
@@ -60,13 +59,7 @@ class FinancePopOrderController extends Controller
     public function actionIndexredis()
     {
     	
-    	echo sprintf("%'.06d\n", 1);  exit;
-    	
-    
-    	
-    	
-    	
-    	
+    	//echo sprintf("%'.06d\n", 1);  exit;
     	//\Yii::$app->redis->SADD($name,$datainfo);
     	
     	//exit;
@@ -202,18 +195,17 @@ class FinancePopOrderController extends Controller
     			if($n>1 && !empty($value['A'])){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid,$paychannelid);
     			//var_dump($statusinfo);exit;
-    			
     			$postdate['order_code'] =$statusinfo['order_code']; //系统订单号
+    			$postdate['finance_pop_order_code'] ='02'.date('ymdhis',time()).rand(1111,999999); //系统流水号
     			$postdate['order_status_name'] =$statusinfo['order_status_name']?$statusinfo['order_status_name']:'未知';  //订单状态
     			$postdate['order_money'] =$statusinfo['order_money'];// 订单金额
     			$postdate['finance_status'] =1;// 收款状态 1 未确定 2已确定
-
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
-    			$postdate['finance_order_channel_title'] =FinanceOrderChannel::getOrderChannelByName($channelid);
+    			$postdate['finance_order_channel_title'] =\core\models\operation\OperationOrderChannel::get_post_name($channelid);
     			$postdate['finance_pay_channel_id'] =$paychannelid=='0'?$statusinfo['pay_channel_id']:$paychannelid;
-    			$postdate['finance_pay_channel_title'] =$paychannelid=='0'?$statusinfo['order_pay_channel_name']:FinancePayChannel::getPayChannelByName($postdate['finance_pay_channel_id']);
+    			$postdate['finance_pay_channel_title'] =$paychannelid=='0'?$statusinfo['order_pay_channel_name']:\core\models\operation\OperationPayChannel::get_post_name($postdate['finance_pay_channel_id']);
     			$postdate['finance_pop_order_customer_tel'] =$statusinfo['order_customer_phone'];
     			$postdate['finance_pop_order_worker_uid'] =$statusinfo['worker_id'];
     			$postdate['finance_pop_order_booked_time'] =$statusinfo['order_booked_begin_time'];
@@ -247,8 +239,6 @@ class FinancePopOrderController extends Controller
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
     		
-    			
-    			
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
@@ -265,10 +255,7 @@ class FinancePopOrderController extends Controller
     		//收款渠道id
     		$customer_info->finance_pay_channel_id=$channelid;
     		
-    		//$modelPay = new FinancePayChannelSearch;
-    		$modelesr= new FinanceOrderChannelSearch;
-    		$ordername=$modelesr->searchfind(array('id'=>$channelid),'finance_order_channel_name');
-    		
+    		$ordername=\core\models\operation\OperationOrderChannel::get_post_name($channelid);
     		
     		//收款渠道名称
     		$customer_info->finance_pay_channel_name=$ordername;
@@ -475,9 +462,6 @@ class FinancePopOrderController extends Controller
     	$requestModel = Yii::$app->request->post();
 		//$idArr = implode(',',);
     	if(!empty($requestModel) && array_key_exists('ids',$requestModel)){
-		//checked($order_id)
-		
-    		
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
 			if(isset($model->order_code)){
@@ -490,6 +474,10 @@ class FinancePopOrderController extends Controller
 			$model->finance_pop_order_finance_time=time();
 			$model->finance_pop_order_pay_status='1';
 			$model->save();
+			
+			//财务审核通知订单修改状态	（林洪优）提供
+			Order::checked($model->order_code,$model->finance_pop_order_code,Yii::$app->user->id);
+
 		}
 		}else{
 			\Yii::$app->getSession()->setFlash('default','请选择需要处理的数据！');

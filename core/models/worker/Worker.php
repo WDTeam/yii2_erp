@@ -32,7 +32,7 @@ use core\models\customer\CustomerWorker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
 use core\models\operation\OperationArea;
-use crazyfd\qiniu\Qiniu;
+
 
 /**
  * This is the model class for table "{{%worker}}".
@@ -684,6 +684,7 @@ class Worker extends \dbbase\models\worker\Worker
      */
     protected static function generateTimeLine($disabledTimeLine,$serverDurationTime,$beginTime,$timeLineLength){
         $dayTimes = self::getDayTimes();
+        $now_date = date('Y-m-d');
         for($i=0;$i<$timeLineLength;$i++) {
             $time = strtotime("+$i day", $beginTime);
             $date = date('Y-m-d', $time);
@@ -702,9 +703,21 @@ class Worker extends \dbbase\models\worker\Worker
                         break;
                     }
                 }
+                //过滤当天已过时间
+                if($date==$now_date) {
+                    $nowTimeUnits = self::getNowTimes();
+                    foreach ($nowTimeUnits as $n_val) {
+                        $nowTimeKey = array_search($n_val, $dayTimes);
+                        if ($key <= $nowTimeKey && $endKey > $nowTimeKey) {
+                            $isDisabled = 1;
+                            break;
+                        }
+                    }
+                }
+
                 if ($isDisabled == 1) {
                     $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=>false];
-                } else {
+                }else{
                     $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=> true];
                 }
             }
@@ -714,6 +727,21 @@ class Worker extends \dbbase\models\worker\Worker
         return $timeLine;
 
         //var_dump($timeLine);die;
+    }
+
+    private static function getNowTimes(){
+         $now_time  = time();
+         $day_time_units = self::getDayTimes();
+         if($now_time<=strtotime(date('Y-m-d').'08:00')){
+             return [];
+         }elseif($now_time>strtotime(date('Y-m-d').'21:30')){
+             return $day_time_units;
+         }else{
+             $now_time = self::convertDateFormat($now_time);
+             $now_time_unit = date('G:i',$now_time);
+             $now_time_key = array_search($now_time_unit,$day_time_units);
+             return array_slice($day_time_units,0,$now_time_key);
+         }
     }
 
     /**
@@ -1036,12 +1064,12 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_identity_id 阿姨身份 1全时2兼职
+     * @param int $worker_identity_type 阿姨身份 1全时2非全时
      * @param int $orderBookBeginTime 待指派订单预约开始时间
      * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id,$worker_identity_id=1,$orderBookBeginTime,$orderBookEndTime){
+    public static function getDistrictFreeWorker($district_id,$worker_identity_type=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
@@ -1055,8 +1083,12 @@ class Worker extends \dbbase\models\worker\Worker
 
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
-
-            if($val['info']['worker_identity_id']==$worker_identity_id){
+            if($worker_identity_type==1){
+                $workerIdentityIdArr = [1];
+            }else{
+                $workerIdentityIdArr = [2,3,4];
+            }
+            if(in_array($val['info']['worker_identity_id'],$workerIdentityIdArr)){
                 $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
                 if(array_diff($orderBookTime,$workerEnabledTime)){
                     continue;
@@ -1090,22 +1122,28 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
-     * @param int $worker_identity_id 阿姨身份 1全时2兼职
+     * @param int $worker_identity_type 阿姨身份 1全时2兼职
      * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
      * @throws ErrorException
      */
 
-    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_id=1,$orderBookTimeArr){
+    public static function getDistrictCycleFreeWorker($district_id,$worker_identity_type=1,$orderBookTimeArr){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
         $districtFreeWorkerIdsArr = [];
+        if($worker_identity_type==1){
+            $workerIdentityIdArr = [1];
+        }else{
+            $workerIdentityIdArr = [2,3,4];
+        }
 
         foreach ($districtWorkerResult as $val) {
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
-            if($val['info']['worker_identity_id']==$worker_identity_id){
+
+            if(in_array($val['info']['worker_identity_id'],$workerIdentityIdArr)){
                 $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
                     if($t_val['orderBookBeginTime']>=$t_val['orderBookEndTime']){
@@ -1248,8 +1286,15 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
 
-
-
+    /**
+     * 统计店铺内阿姨总数
+     */
+    public static function countShopWorkerNums($shop_id){
+        if(empty($shop_id)){
+            return false;
+        }
+        return self::find()->where(['isdel'=>0,'shop_id'=>$shop_id])->count();
+    }
 
     /**
      * 上传图片到七牛服务器
@@ -1257,12 +1302,11 @@ class Worker extends \dbbase\models\worker\Worker
      * @return string $imgUrl 文件URL
      */
     public function uploadImgToQiniu($field){
-        $qiniu = new Qiniu();
         $fileinfo = UploadedFile::getInstance($this, $field);
         if(!empty($fileinfo)){
             $key = time().mt_rand('1000', '9999').uniqid();
-            $qiniu->uploadFile($fileinfo->tempName, $key);
-            $imgUrl = $qiniu->getLink($key);
+            \Yii::$app->imageHelper->uploadFile($fileinfo->tempName, $key);
+            $imgUrl = \Yii::$app->imageHelper->getLink($key);
             $this->$field = $imgUrl;
         }
     }
@@ -1498,15 +1542,25 @@ class Worker extends \dbbase\models\worker\Worker
             case 0:
                 return '新录入';
             case 1:
-                return '已审核';
+                return '审核不通过';
             case 2:
-                return '通过基础培训';
+                return '已审核';
             case 3:
-                return '已试工';
+                return '已基础培训';
             case 4:
-                return '已上岗';
+                return '基础培训通过';
             case 5:
-                return '通过晋升培训';
+                return '试工不通过';
+            case 6:
+                return '已试工';
+            case 7:
+                return '上岗不通过';
+            case 8:
+                return '已上岗';
+            case 9:
+                return '晋升培训不通过';
+            case 10:
+                return '已晋升培训';
         }
        /* if($worker_auth_status==1){
             return '通过';
@@ -1622,13 +1676,6 @@ class Worker extends \dbbase\models\worker\Worker
         return $this->hasOne(WorkerSkill::className(),['worker_id'=>'id']);
     }
 
-    /**
-     * 设置worker_district属性
-     */
-    public function getworker_district(){
-        $workerDistrictArr = self::getWorkerDistrict($this->id);
-        return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
-    }
 
     public function getWorkerVacationApplicationRelation(){
         return $this->hasMany(WorkerVacationApplication::className(),['worker_id'=>'id']);

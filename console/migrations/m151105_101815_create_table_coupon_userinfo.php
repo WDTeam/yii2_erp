@@ -16,14 +16,13 @@ class m151105_101815_create_table_coupon_userinfo extends Migration
             'id' => Schema::TYPE_PK . ' NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
             'customer_id' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0 COMMENT \'客户id\'',
             'customer_tel' => Schema::TYPE_STRING . '(11) NOT NULL DEFAULT 0 COMMENT \'客户手机号\'',
+			'customer_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'\' COMMENT \'流水号\'',
             'coupon_userinfo_id' => Schema::TYPE_INTEGER . '(8) NOT NULL DEFAULT 0 COMMENT \'优惠规则id\'',
             'coupon_userinfo_code' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'\' COMMENT \'优惠码\'',
             'coupon_userinfo_name' => Schema::TYPE_STRING . '(100) NOT NULL DEFAULT \'\' COMMENT \'优惠券名称\'',
             'coupon_userinfo_price' => Schema::TYPE_DECIMAL . '(8,2) DEFAULT 0.00 COMMENT \'优惠券价值\'',
             'coupon_userinfo_gettime' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'领取时间\'',
             'coupon_userinfo_usetime' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'使用时间\'',
-
-
             'couponrule_use_start_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'优惠券的用户可使用的开始时间\'',
             'couponrule_use_end_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'过期时间\'',
 
@@ -39,8 +38,6 @@ class m151105_101815_create_table_coupon_userinfo extends Migration
             'couponrule_promote_type' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'优惠券优惠类型1为立减2为满减3为每减\'',
             'couponrule_order_min_price' => Schema::TYPE_DECIMAL . '(8,2) DEFAULT \'0.00\' COMMENT \'最小金额\'',
             'couponrule_price' => Schema::TYPE_DECIMAL . '(8,2) DEFAULT \'0.00\' COMMENT \'满减或每减时订单最小金额\'',
-
-
             'order_code' => Schema::TYPE_STRING . '(64) DEFAULT 0 COMMENT \'如果已经使用订单号\'',
             'is_disabled' => Schema::TYPE_BOOLEAN . '(1) DEFAULT 0 COMMENT \'是否禁用\'',
             'system_user_id' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'绑定人id\'',
@@ -50,6 +47,18 @@ class m151105_101815_create_table_coupon_userinfo extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',
             'is_del' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',
         ], $tableOptions);
+		$this->createIndex('customer_tel','{{%coupon_userinfo}}','customer_tel');
+        $this->createIndex('coupon_userinfo_id','{{%coupon_userinfo}}','coupon_userinfo_id');
+        $this->createIndex('coupon_userinfo_code','{{%coupon_userinfo}}','coupon_userinfo_code');
+        $this->createIndex('couponrule_use_start_time','{{%coupon_userinfo}}','couponrule_use_start_time');
+        $this->createIndex('couponrule_use_end_time','{{%coupon_userinfo}}','couponrule_use_end_time');
+        $this->createIndex('couponrule_classify','{{%coupon_userinfo}}','couponrule_classify');
+        $this->createIndex('couponrule_category','{{%coupon_userinfo}}','couponrule_category');
+		$this->createIndex('couponrule_type','{{%coupon_userinfo}}','couponrule_type');
+		$this->createIndex('couponrule_promote_type','{{%coupon_userinfo}}','couponrule_promote_type');
+		$this->createIndex('is_disabled','{{%coupon_userinfo}}','is_disabled');
+		$this->createIndex('is_used','{{%coupon_userinfo}}','is_used');
+
     }
 
     public function safeDown()

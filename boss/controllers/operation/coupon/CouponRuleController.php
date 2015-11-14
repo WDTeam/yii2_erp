@@ -1,6 +1,19 @@
 <?php
+/**
+* 控制器 优惠券规则
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace boss\controllers\operation\coupon;
+
+ini_set('max_execution_time',864000);
 
 use Yii;
 use dbbase\models\operation\coupon\CouponRule;
@@ -12,6 +25,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 
 use	dbbase\models\operation\CouponUserinfoceshi;
+use	dbbase\models\operation\coupon\CouponUserinfo;
 /**
  * CouponRuleController implements the CRUD actions for CouponRule model.
  */
@@ -33,9 +47,8 @@ class CouponRuleController extends Controller
     
     public function actionIndexceshi()
     {
-       $userinfoceshi= new CouponUserinfoceshi;
-    	
-       /* $datainfo=$userinfoceshi->find()
+       /* $userinfoceshi= new CouponUserinfoceshi;
+       $datainfo=$userinfoceshi->find()
        ->where(['and','city_id is null'])
        ->asArray()
        ->limit(50)
@@ -50,40 +63,98 @@ class CouponRuleController extends Controller
       } */
       
       // SELECT * from ejj_coupon_userinfoceshi  group by order_type order by id desc
-       $userinfoceshi= new CouponUserinfoceshi;
+     /*   $userinfoceshi= new CouponUserinfoceshi;
        $datainfo=$userinfoceshi->find()
        ->groupBy('order_type')
        ->limit(1)
        ->asArray()
+       ->all(); */
+		  /*  $googsdata=['通用'=>0,'洗衣'=>23,'洗鞋'=>25,'空调清洗'=>10,'杀虫'=>33,'地板抛光打蜡'=>19,'石材结晶保养'=>22,'地毯保养'=>18,'饮水机清洗'=>14,'擦玻璃'=>5,'厨房高温保洁'=>3,'卫生间保洁'=>4,'洗衣机清洗'=>15,'油烟机清洗'=>9,'窗帘清洗'=>34,'家庭保洁'=>1]; 
+		     $rty='';
+		    	foreach ($datainfo as $typedata){
+		    		$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
+					echo "UPDATE ejj_coupon_userinfoceshi SET order_typeid='".$googsdata[$typedata['order_type']]."' where order_type='".$typedata['order_type']."';<br>";
+		    	} */
+		//导入到新表       
+       $userinfoceshi= new CouponUserinfoceshi;
+       
+       $data=$userinfoceshi->find()
+       ->where(['coupon_userinfo_id'=>2])
+       ->limit(5)
+       ->asArray()
        ->all();
        
-   $googsdata=[
-				'通用'=>0,
-				'洗衣'=>23,
-				'洗鞋'=>25,
-				'空调清洗'=>10,
-				'杀虫'=>33,
-				'地板抛光打蜡'=>19,
-				'石材结晶保养'=>22,
-				'地毯保养'=>18,
-				'饮水机清洗'=>14,
-				'擦玻璃'=>5,
-				'厨房高温保洁'=>3,
-				'卫生间保洁'=>4,
-				'洗衣机清洗'=>15,
-				'油烟机清洗'=>9,
-				'窗帘清洗'=>34,
-				'家庭保洁'=>1]; 
-     $rty='';
-    	foreach ($datainfo as $typedata){
-    		$saveinfo=$userinfoceshi->find()->where(['order_type'=>$typedata['order_type']])->one();
-			echo "UPDATE ejj_coupon_userinfoceshi SET order_typeid='".$googsdata[$typedata['order_type']]."' where order_type='".$typedata['order_type']."';<br>";
+    	foreach ($data as $newdata){
+    		$newcoupon=new CouponUserinfo;
+    			//领取的优惠券
+				if($newdata['city_id']==0){
+					//全网优惠券
+					$newcoupon->couponrule_city_limit=1;
+					$newcoupon->couponrule_city_id=0;
+				}else{
+					//地区优惠券
+					$newcoupon->couponrule_city_limit=2;
+					$newcoupon->couponrule_city_id=$newdata['city_id'];					
+				}
+				
+				
+				if($newdata['order_typeid']==0){
+				//全国通用优惠券
+					$newcoupon->couponrule_type=1;
+					$newcoupon->couponrule_service_type_id=0;
+					$newcoupon->couponrule_commodity_id=0;
+				}else{
+					//不是全网优惠券 对应老数据就是商品优惠券，老数据没有，类别优惠券
+					$newcoupon->couponrule_type=3;
+					$newcoupon->couponrule_service_type_id=0;
+					$newcoupon->couponrule_commodity_id=$newdata['order_typeid'];
+				}
+				
+    		$newcoupon->coupon_userinfo_code=$newdata['coupon_userinfo_code']?$newdata['coupon_userinfo_code']:'0';
+    		$newcoupon->coupon_userinfo_name=$newdata['coupon_userinfo_name']?$newdata['coupon_userinfo_name']:'优惠券';
+    		$newcoupon->coupon_userinfo_gettime=$newdata['coupon_userinfo_gettime'];//领取时间默认为开始时间
+    		$newcoupon->couponrule_use_start_time=$newdata['coupon_userinfo_gettime'];
+    		$newcoupon->couponrule_use_end_time=$newdata['couponrule_use_end_time'];
+    		$newcoupon->coupon_userinfo_price=$newdata['coupon_userinfo_price'];
+    		$newcoupon->customer_tel=$newdata['customer_tel'];
+    		///////////////////////////////////////////
+    		
+    		$newcoupon->couponrule_order_min_price=0;
+    		$newcoupon->customer_id=0;
+    		$newcoupon->coupon_userinfo_id=0;
+    		$newcoupon->coupon_userinfo_usetime=0;
+    		$newcoupon->couponrule_classify=1;
+    		$newcoupon->couponrule_category=1;
+    		$newcoupon->couponrule_customer_type=1;
+    		$newcoupon->couponrule_use_end_days=0;
+    		$newcoupon->couponrule_promote_type=1;
+    		$newcoupon->couponrule_price=50;
+    		$newcoupon->order_code='0';
+    		$newcoupon->is_disabled=0;
+    		$newcoupon->system_user_id=0;
+    		$newcoupon->system_user_name='老数据导入';
+    		$newcoupon->is_used=0;
+    		$newcoupon->created_at=time();
+    		$newcoupon->updated_at=time();
+    		$newcoupon->is_del=0;
+    		
+    		//var_dump($newcoupon);exit;
+    		
+    		$islcok=$newcoupon->save();
+    		
+    		var_dump($islcok);exit;
+    		if($islcok){
+    			$userinfoceshi->findOne($newdata['id'])->delete(); 
+    		}else{
+    		//失败记录日志
+    			file_put_contents('log.txt',json_encode($newcoupon)."\n",FILE_APPEND);
+    		}
+    		unset($newcoupon);
     	}
+    	
+    	
        
-      
-       
-       
-    	//var_dump('11');exit;
+    	var_dump('11');exit;
     	
     	
     	
@@ -95,6 +166,14 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
+    	//13001003995
+	/* $rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerCouponList('13001003995','0','3','1');
+    	
+    	var_dump($rty);exit; */
+    	
+    	//$rty=\core\models\operation\OperationOrderChannel::configorderlist('百度直达号');
+    	//var_dump($rty);exit;
+    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -120,6 +199,22 @@ class CouponRuleController extends Controller
 }
     }
 
+    
+    
+    /**
+     * ajax验证 优惠券是否唯一
+     * @return array
+     */
+    public function actionAjaxInfo(){
+    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	   $CouponRuleModel = new CouponRule;
+    		$CouponRuleModel->load(Yii::$app->request->post());
+    		return \yii\bootstrap\ActiveForm::validate($CouponRuleModel,['couponrule_Prefix']);
+    	
+    }
+    
+    
+    
     /**
      * Creates a new CouponRule model.
      * If creation is successful, the browser will be redirected to the 'view' page.

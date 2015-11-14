@@ -22,6 +22,8 @@ class server
     private $fd;
     private $data;
     private $redis;
+    private $mongo = null;
+    private $mongo_autoassign_log = null;
     private $isServerSuspend = false;
     private $isWorkerTaskRunning = false;
     private $config;
@@ -34,6 +36,9 @@ class server
     public function __construct($config) {
         echo date('Y-m-d H:i:s')." 自动指派服务启动中";
         $this->config = $config;
+        $this->connectMongodb();//捕获了初始化异常，不影响主流程
+        $this->recordMessageByMongodb('自动指派服务启动中');
+        $this->recordMessageByMongodb('MONGODB_SERVER='.$this->config['MONGODB_SERVER'].';MONGODB_SERVER_DB_NAME='.$this->config['MONGODB_SERVER_DB_NAME'].';SWOOLE_SERVER_IP='.$this->config['SWOOLE_SERVER_IP'].';SERVER_LISTEN_PORT='.$this->config['SERVER_LISTEN_PORT']);
         $this->connectRedis();
         $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
         $this->saveStatus(null);
@@ -59,7 +64,7 @@ class server
         $this->serv->on('Receive', array($this, 'onReceive'));
                 
         echo "==>初始化完成";
-        
+        $this->recordMessageByMongodb('swoole初始化完成');
         //开启 
         $this->serv->start();
     }
@@ -68,9 +73,9 @@ class server
      */
     public function onStart($server) {
         echo "==>已启动\n";
+        $this->recordMessageByMongodb('onStart执行');
         echo date('Y-m-d H:i:s')." 主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
         cli_set_process_title($this->config['SERVER_MASTER_PROCESS_ID']);
-        //$this->update_config(CONFIG_PATH, 'FULLTIME_WORKER_TIMEOUT', 226);
     }
 
     /*
@@ -80,10 +85,11 @@ class server
         //echo 'onWorkStart ID:=' . $worker_id . "\n";
         cli_set_process_title($this->config['SERVER_WORKER_PROCESS_ID'] . $worker_id);
         echo "worker_id ".$worker_id." is start";
+        $this->recordMessageByMongodb("worker_id ".$worker_id." is start");
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
-            echo date('Y-m-d H:i:s').' 工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n"; 
+            echo date('Y-m-d H:i:s').' 工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n";
             $this->config = require(CONFIG_PATH);
             $this->startTimer($server);
         }
@@ -93,8 +99,6 @@ class server
      */
     function onWorkerStop($server, $worker_id) {
         echo date('Y-m-d H:i:s').' Worker Stop && Reload...'."\n";
-        //opcache_reset(); //zend_opcache的      
-        //apc, xcache, eacc等其他方式，请调用相关函数  
     }
 
     /*
@@ -110,7 +114,38 @@ class server
     public function connectRedis(){
         $this->redis = new Redis();
         $this->redis->connect($this->config['REDIS_SERVER_IP'], $this->config['REDIS_SERVER_PORT']);
+        $this->redis->auth($this->config['REDIS_SERVER_PASSWORD']);
+        $this->recordMessageByMongodb('redis成功启动;'.'redis的ip和端口为:'.$this->config['REDIS_SERVER_IP'].':'.$this->config['REDIS_SERVER_PORT']);
     }
+    
+    /*
+     * 连接Mongodb
+     */
+    public function connectMongodb(){
+        try{
+            $this->mongo = new MongoClient($this->config['MONGODB_SERVER'].'/'.$this->config['MONGODB_SERVER_DB_NAME']);
+            if(isset($this->mongo)){
+                $db = $this->mongo->selectDB($this->config['MONGODB_SERVER_DB_NAME']);
+                if(isset($db)){
+                    $this->mongo_autoassign_log = $db->selectCollection("autoassign_log");
+                }
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
+    }
+    
+    /*
+     * 通过mongodb记录日志，如果mongodb没有初始化成功，则不记录
+     */
+    public function recordMessageByMongodb($message){
+        if(isset($this->mongo_autoassign_log)){
+            $data['message'] = $message;
+            $data['create_time'] = date("Y-m-d h:i:s");
+            $this->mongo_autoassign_log->insert($data);
+        }
+    }
+    
     /*
      * 收到 web客户端 消息
      */
@@ -188,7 +223,6 @@ class server
     public function startTimer($server) {
         echo date('Y-m-d H:i:s').' 启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
         $this->serv = $server;
-
         $this->timer_id = $server->tick($this->config['TIMER_INTERVAL'] * 1000, function ($id) {
             $this->saveStatus($this->serv);
             $this->processOrders($this->serv);
@@ -220,18 +254,15 @@ class server
         {
             return;
         }
-       
         $this->isWorkerTaskRunning = true;
         echo date('Y-m-d H:i:s').' 正在获取订单===>';
         //取得订单启动任务foreach orders
         $orders = $this->getOrders();
-        //var_dump($orders);
         $count = count($orders);
         $n = 0;
         if ($count>0)
         {
             echo '有 '.$count.' 个订单待指派'."\n";
-            //var_dump($orders);
         }else{
             echo "没有待指派订单\n";
         }
@@ -243,11 +274,6 @@ class server
             }
             
             $order = $this->getOrderStatus($order);
-
-//            $d = $order;
-//            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-//            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
-//            $d = json_encode($d);
             
             /*
              * TODO: 张旭刚
@@ -259,6 +285,7 @@ class server
              */
             
             echo date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中==>";
+            $this->recordMessageByMongodb(date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中");
             $isOK = false;
             
             $timerDiff = time() - (int)($order['assign_start_time']);
@@ -343,7 +370,7 @@ class server
         }
     }
     /*
-     * 多线程任务
+     * 耗时任务在taskworker中执行
      */
     public function onTask($server, $task_id, $from_id, $data) {
         //echo 'onTask'."\n";
@@ -355,20 +382,9 @@ class server
         echo '$from_id is '.$from_id.'; task_id is '.$task_id." called"."</br>";
         //return $this->taskOrder($data, $server);
         echo '当前任务订单数据为:'.$data;
-        if (empty($data['lock']))
-        {
-            $this->lockOrder($data);//加入状态锁
-            return $this->taskOrder($server, $data);
-        }
+        return $this->taskOrder($server, $data);
     }
-    /*
-     * 锁订单，避免重复处理
-     */
-    public function lockOrder($order){
-        //echo 'lockOrder';
-        $order['lock'] = true;
-        $this->redis->zadd($order);
-    }
+    
     /*
      * 调用 BOSS API 指派阿姨
      */
@@ -378,6 +394,7 @@ class server
         try {
             $result = @file_get_contents($url);
             echo '指派结果为:'.$result;
+            $this->recordMessageByMongodb('指派结果为:'.$result);
             $d = json_decode($result,true);
             if(isset($d['order_code'])){
                 $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);

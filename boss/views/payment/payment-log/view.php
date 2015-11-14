@@ -29,12 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+            '_id',
             'payment_log_price',
             'payment_log_shop_name',
             'payment_log_status_bool',
             'payment_log_eo_order_id',
             'payment_log_transaction_id',
+
             [
                 'attribute' => 'payment_log_status',
                 'value' => !empty($model->payment_log_status) ? '成功' : '失败',
@@ -42,6 +43,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'pay_channel_id',
             'pay_channel_name',
             'payment_log_json_aggregation',
+            [
+                'attribute' => 'data',
+                'value' => json_encode($model->data),
+            ],
+            [
+                'attribute' => '_SERVER',
+                'value' => json_encode($model->_SERVER),
+            ],
             'created_at',
             [
                 'attribute' => 'create_time',
@@ -56,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>false,
     ]) ?>
 
 </div>

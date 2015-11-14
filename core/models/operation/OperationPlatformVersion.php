@@ -49,7 +49,7 @@ class OperationPlatformVersion extends \dbbase\models\operation\OperationPlatfor
     /**
      * 更新冗余的平台名称
      *
-     * @param inter   $operation_platform_id     平台编号
+     * @param integer $operation_platform_id     平台编号
      * @param string  $operation_platform_name   平台名称
      */
     public static function updatePlatformName($operation_platform_id, $operation_platform_name)
@@ -60,7 +60,7 @@ class OperationPlatformVersion extends \dbbase\models\operation\OperationPlatfor
     /**
      * 联动删除平台信息
      *
-     * @param inter   $operation_platform_id     平台编号
+     * @param integer   $operation_platform_id     平台编号
      */
     public static function updatePlatformStatus($operation_platform_id)
     {

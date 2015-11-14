@@ -6,6 +6,8 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\widgets\FileInput;
 
+use boss\models\operation\OperationCommon;
+
 /**
  * @var yii\web\View $this
  * @var dbbase\models\OperationCategory $model
@@ -47,7 +49,7 @@ use kartik\widgets\FileInput;
                     'type' => Form::INPUT_TEXT,
                     'options' => [
                         'placeholder' => '输入服务品类跳转地址...',
-                        'maxlength'=>50
+                        'maxlength'=>258
                     ]
                 ],
                 'operation_category_introduction' => [
@@ -61,13 +63,18 @@ use kartik\widgets\FileInput;
 
             ]); ?>
             <?= $form->field($model, 'operation_category_icon')->widget(FileInput::classname(), [
-                'options' => ['multiple' => true],
+                'options' => [
+                    'multiple' => true,
+                ],
                 'pluginOptions' => [
                     'previewFileType' => 'any',
                     'showPreview' => true,
                     'showCaption' => false,
                     'showRemove' => true,
                     'showUpload' => false,
+                    'initialPreview'=>[
+                        OperationCommon::getPhotoShow($model->operation_category_icon)
+                    ],
                 ]
             ])?>
         </div>

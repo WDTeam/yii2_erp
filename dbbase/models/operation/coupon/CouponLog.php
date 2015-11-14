@@ -1,4 +1,15 @@
 <?php
+/**
+* 优惠券日志数据库映射关系 
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-11-12
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace dbbase\models\operation\coupon;
 
@@ -41,7 +52,7 @@ class CouponLog extends \yii\db\ActiveRecord
             [['customer_id', 'order_id', 'coupon_id', 'coupon_code_id', 'coupon_log_type', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['coupon_price', 'coupon_log_price'], 'number'],
             [['coupon_log_type', 'coupon_log_type_name', 'coupon_log_price', 'created_at', 'updated_at'], 'required'],
-            [['coupon_code', 'coupon_name', 'coupon_log_type_name'], 'string', 'max' => 255]
+            [['coupon_code', 'coupon_name', 'coupon_log_type_name','customer_code'], 'string', 'max' => 255]
         ];
     }
 
@@ -52,6 +63,7 @@ class CouponLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('common', '主键'),
+            'customer_code' => Yii::t('common', '流水号'),
             'customer_id' => Yii::t('common', '客户id'),
             'order_id' => Yii::t('common', '订单id'),
             'coupon_id' => Yii::t('common', '优惠规则id'),

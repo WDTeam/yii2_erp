@@ -26,9 +26,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -201,9 +201,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -285,9 +285,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -370,15 +370,22 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "order_booked_begin_time",
-            "description": "<p>服务开始时间 时间戳  如 *'1443695400'</p> "
+            "description": "<p>服务开始时间 时间戳  如 *'2015-10-15 10:10:10'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_booked_end_time",
-            "description": "<p>服务结束时间   时间戳  如 *'1443695400'</p> "
+            "description": "<p>服务结束时间   时间戳  如 *'2015-10-15 12:10:10'</p> "
           },
           {
             "group": "Parameter",
@@ -391,15 +398,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #不给予后台传递,用来作为支付渠道的判断标示</p> "
+            "field": "order_booked_count",
+            "description": "<p>服务时长</p> "
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
-            "field": "order_booked_count",
-            "description": "<p>服务时长</p> "
+            "field": "pay_channel_key",
+            "description": "<p>支付渠道</p> "
           },
           {
             "group": "Parameter",
@@ -407,13 +414,6 @@ define({ "api": [
             "optional": false,
             "field": "address_id",
             "description": "<p>订单地址id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "channel_id",
-            "description": "<p>下单渠道</p> "
           },
           {
             "group": "Parameter",
@@ -503,7 +503,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   8\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":\"订单id\",\n   \"order_code\":\"订单号\"\n  }\n \"alertMsg\": \"创建订单成功,请重新登录\"\n }",
           "type": "json"
         }
       ]
@@ -542,6 +542,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>订单状态</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -618,7 +625,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-cancel-orders-history",
     "title": "[GET]/order/worker-cancel-orders-history(90%)",
-    "description": "<p>查询阿姨三个月的取消历史订单（谢奕 --已经将后台接口完成,缺少周期订单）</p> ",
+    "description": "<p>查询阿姨三个月的取消历史订单（谢奕）</p> ",
     "name": "WorkerCancelOrdersHistory",
     "group": "Order",
     "parameter": {
@@ -630,6 +637,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -701,9 +715,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -715,9 +729,16 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "order_code",
-            "description": "<p>订单号</p> "
+            "description": "<p>订单编号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "order_batch_code",
+            "description": "<p>周期订单号</p> "
           }
         ]
       }
@@ -773,7 +794,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "address_longitude",
-            "description": "<p>填写地址的精度</p> "
+            "description": "<p>填写地址的经度</p> "
           },
           {
             "group": "Parameter",
@@ -781,6 +802,13 @@ define({ "api": [
             "optional": false,
             "field": "address_latitude",
             "description": "<p>填写地址的纬度</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -841,9 +869,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -851,13 +879,6 @@ define({ "api": [
             "optional": false,
             "field": "order_service_item_id",
             "description": "<p>服务类型 商品id 必填</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>string</p> ",
-            "optional": false,
-            "field": "channel_id",
-            "description": "<p>下单渠道 必填</p> "
           },
           {
             "group": "Parameter",
@@ -877,13 +898,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": false,
-            "field": "order_pay_type",
-            "description": "<p>支付方式 1现金 2线上 3第三方 必填 #改字段用于标示支付渠道</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": false,
             "field": "order_is_use_balance",
             "description": "<p>是否使用余额 0否 1是 必填</p> "
           },
@@ -893,6 +907,13 @@ define({ "api": [
             "optional": false,
             "field": "order_booked_count",
             "description": "<p>服务时长</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "pay_channel_key",
+            "description": "<p>支付渠道</p> "
           },
           {
             "group": "Parameter",
@@ -1010,8 +1031,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "channel_id",
-            "description": "<p>订单来源【1Android(版本号) 2.ios（版本号）3.Pcweb 4.H5 】</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1041,7 +1062,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   8//订单ID\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n   \"id\":\"订单id\",\n   \"order_code\":\"订单号\"\n  }\n \"alertMsg\": \"创建订单成功\"\n }",
           "type": "json"
         }
       ]
@@ -1079,9 +1100,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1095,7 +1116,7 @@ define({ "api": [
             "type": "<p>int</p> ",
             "optional": false,
             "field": "workerType",
-            "description": "<p>江江获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0;</p> "
+            "description": "<p>获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0;</p> "
           }
         ]
       }
@@ -1157,9 +1178,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1175,7 +1196,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"0\",\n  \"order_is_parent\": 0,\n  \"created_at\": \"1446041297\",\n  \"updated_at\": \"1446041297\",\n  \"isdel\": 0,\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n    \"address_id\": \"1\",\n    \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n},\n\"alertMsg\": \"操作成功\"\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"父级id\",\n  \"order_is_parent\": 有无子订单 1有 0无,\n  \"created_at\": \"1446041297\", 创建时间\n  \"updated_at\": \"1446041297\", 修改时间\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n  \"address_id\": \"1\",\n  \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n },\n\"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1224,8 +1245,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1293,16 +1314,23 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>int</p> ",
-            "optional": false,
+            "optional": true,
             "field": "order_id",
-            "description": "<p>订单号</p> "
+            "description": "<p>订单id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "order_batch_code",
+            "description": "<p>周期订单号</p> "
           }
         ]
       }
@@ -1311,7 +1339,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单删除成功\",\n  \"alertMsg\": \"订单取消成功\"\n   \"ret\":{}\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单删除成功\",\n  \"alertMsg\": \"订单删除成功\"\n   \"ret\":{}\n}",
           "type": "json"
         }
       ]
@@ -1333,7 +1361,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/order-status-history",
     "title": "[GET] /order/order-status-history(70%)",
-    "description": "<p>查询用户某个订单状态历史状态记录(谢奕/田玉星 --缺少周期订单)</p> ",
+    "description": "<p>查询用户某个订单状态历史状态记录(谢奕/田玉星)</p> ",
     "name": "actionOrderStatusHistory",
     "group": "Order",
     "parameter": {
@@ -1352,6 +1380,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>认证令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -1412,6 +1447,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1504,9 +1546,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1533,6 +1575,11 @@ define({ "api": [
           "title": "Error-Response:",
           "content": "HTTP/1.1 200 OK\n{\n   \"code\": 401,\n   \"msg\": \"用户无效,请先登录\",\n   \"ret\": {},\n   \"alertMsg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 0,\n   \"msg\": \"阿姨抢单提交失败\",\n   \"ret\": {\n   \"id\": [\n     \"阿姨服务时间冲突！\" 或  \"订单正在进行人工指派！\"  或  \"订单已经指派阿姨！\"\n    ]\n   },\n   \"alertMsg\": \"阿姨服务时间冲突！\" 或  \"订单正在进行人工指派！\"  或  \"订单已经指派阿姨！\"\n}",
+          "type": "json"
         }
       ]
     },
@@ -1544,7 +1591,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-done-orders-history",
     "title": "[GET]/order/worker-done-orders-history (90%)",
-    "description": "<p>查询阿姨三个月的完成历史订单 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "description": "<p>查询阿姨三个月的完成历史订单 (谢奕)</p> ",
     "name": "actionWorkerDoneOrdersHistory",
     "group": "Order",
     "parameter": {
@@ -1556,6 +1603,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1621,15 +1675,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "field": "access_token",
+            "description": "<p>会话id.</p> "
           }
         ]
       }
@@ -1660,7 +1714,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-orders",
     "title": "[GET] /order/worker-orders(90%)",
-    "description": "<p>查询阿姨订单（谢奕 --已经将后台接口完成,缺少周期订单）</p> ",
+    "description": "<p>查询阿姨订单（谢奕）</p> ",
     "name": "actionWorkerOrders",
     "group": "Order",
     "parameter": {
@@ -1672,6 +1726,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1783,7 +1844,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-orders-count",
     "title": "[GET] /order/worker-orders-count(90%)",
-    "description": "<p>查询阿姨订单订单数量 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "description": "<p>查询阿姨订单订单数量 (谢奕)</p> ",
     "name": "actionWorkerOrdersCount",
     "group": "Order",
     "parameter": {
@@ -1795,6 +1856,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1878,7 +1946,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-service-orders",
     "title": "[GET] /order/worker-service-orders(90%)",
-    "description": "<p>查询待服务阿姨订单(谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "description": "<p>查询待服务阿姨订单(谢奕)</p> ",
     "name": "actionWorkerServiceOrders",
     "group": "Order",
     "parameter": {
@@ -1890,6 +1958,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -1965,7 +2040,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n     \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n     {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n       }\n      ]\n     }\n \"alertMsg\": \"操作成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n {\n  \"code\": \"1\",\n  \"msg\": \"操作成功\",\n  \"ret\": {\n     \"limit\": \"1\",\n     \"page_total\": 4,\n     \"offset\": 0,\n     \"orders\": [\n     {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",#开始时间\n         \"updated_at\": \"1445347126\",#结束时间\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n       }\n      ]\n     }\n \"alertMsg\": \"操作成功\"\n}",
           "type": "json"
         }
       ]
@@ -1999,6 +2074,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2059,6 +2141,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2134,7 +2223,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n     \"limit\": \"1\",\n      \"page_total\": 4,\n      \"offset\": 0,\n      \"orders\": [\n       {\n         \"id\": \"2\",\n         \"order_code\": \"339710\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n          \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_pay_type\": \"支付方式\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n          }\n   ]\n },\n\"alertMsg\": \"操作成功\"\n }",
+          "content": " HTTP/1.1 200 OK\n {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n     \"limit\": \"1\",\n      \"page_total\": 4,\n      \"offset\": 0,\n      \"orders\": [\n       {\n         \"id\": \"订单id\",\n         \"order_code\": \"订单号\",\n         \"order_parent_id\": \"0\",\n         \"order_is_parent\": \"0\",\n         \"created_at\": \"1445347126\",\n         \"updated_at\": \"1445347126\",\n         \"isdel\": \"0\",\n         \"ver\": \"3\",\n         \"version\": \"3\",\n         \"order_ip\": \"58.135.77.96\",\n         \"order_service_type_id\": \"1\",\n          \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_src_id\": \"1\",\n         \"order_src_name\": \"BOSS\",\n         \"channel_id\": \"20\",\n         \"order_channel_name\": \"后台下单\",\n         \"order_unit_money\": \"20.00\",\n         \"order_money\": \"40.00\",\n         \"order_pay_type\": \"支付方式\",\n         \"order_booked_count\": \"120\",\n         \"order_booked_begin_time\": \"1446249600\",\n         \"order_booked_end_time\": \"1446256800\",\n         \"address_id\": \"397\",\n         \"district_id\": \"3\",\n         \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n         \"order_booked_worker_id\": \"0\",\n         \"checking_id\": \"0\",\n         \"order_cs_memo\": \"\",\n         \"order_id\": \"2\",\n         \"order_before_status_dict_id\": \"2\",\n         \"order_before_status_name\": \"已支付\",\n         \"order_status_dict_id\": \"3\",\n         \"order_status_name\": \"已开始智能指派\"\n          }\n   ]\n },\n\"alertMsg\": \"操作成功\"\n }",
           "type": "json"
         }
       ]
@@ -2172,8 +2261,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -2231,9 +2320,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2303,9 +2392,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2473,9 +2562,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -2526,8 +2615,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2602,9 +2691,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -2642,6 +2731,55 @@ define({ "api": [
     "groupTitle": "SendSms"
   },
   {
+    "type": "GET",
+    "url": "/send-sms/voice-verify-code",
+    "title": "[GET]/send-sms/voice-verify-code",
+    "description": "<p>语音验证码发送</p> ",
+    "name": "actionVoiceVerifyCode",
+    "group": "SendSms",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>手机号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"语音验证码发送成功\",\n      \"ret\": {},\n      \"alertMsg\": \"语音验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"电话号码不符合规则\",\n  \"ret\": {},\n  \"alertMsg\": \"电话号码不符合规则\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/SendSmsController.php",
+    "groupTitle": "SendSms"
+  },
+  {
     "type": "POST",
     "url": "/user/add-address",
     "title": "[POST]/user/add-address(100%)",
@@ -2661,9 +2799,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2750,70 +2888,6 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-money-score-coupon",
-    "title": "[GET] /user/get-money-score-coupon （100%）",
-    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
-    "name": "actionCoupons",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 moeny Not Found\n{\n  \"code\": 0,\n  \"msg\": \"获取用户余额系统错误\",\n  \"ret\": {},\n \"alertMeg\": \"获取用户余额系统错误\"\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
     "url": "/user/default-address",
     "title": "[GET] /user/default-address(100%)",
     "description": "<p>获取默认地址(赵顺利)</p> ",
@@ -2832,9 +2906,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -2896,9 +2970,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -2967,9 +3041,16 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3042,9 +3123,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3101,9 +3182,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3171,9 +3252,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -3248,9 +3329,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -3328,9 +3409,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3379,6 +3460,70 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
+    "type": "GET",
+    "url": "/user/get-money-score-coupon",
+    "title": "[GET] /user/get-money-score-coupon （100%）",
+    "description": "<p>个人中心获取用户的账户余额、积分、优惠券数（李勇）</p> ",
+    "name": "actionGetMoneyScoreCoupon",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取个人中心信息成功\",\n\"ret\": \n    {\n        \"money\": \"客户余额\",\n        \"score\": \"用户积分数\",\n        \"coupon\": \"优惠券数量\"\n    },\n\"msg\": \"获取个人中心信息成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 moeny Not Found\n{\n  \"code\": 0,\n  \"msg\": \"获取用户余额系统错误\",\n  \"ret\": {},\n \"alertMeg\": \"获取用户余额系统错误\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "POST",
     "url": "/user/get-user-feedback",
     "title": "[POST] /user/get-user-feedback （100%）",
@@ -3398,9 +3543,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -3464,9 +3609,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3523,9 +3668,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3604,9 +3749,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3670,9 +3815,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -3728,17 +3873,17 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          },
+          {
+            "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
             "description": "<p>地址id                         如：1</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
           },
           {
             "group": "Parameter",
@@ -3823,6 +3968,124 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
+    "type": "POST",
+    "url": "/user/share-friends",
+    "title": "[POST] /user/share-friends （100%）",
+    "description": "<p>分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
+    "name": "actionShareFriends",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"分享朋友圈成功\",\n      \"ret\": {\n          \"image\": \"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png\",\n          \"title\": \"品质生活 从e家洁开始  周期下单 情节无忧\",\n          \"content\": [\n              \"省时省力省心\",\n              \"固定星级阿姨\",\n              \"轻松回归生活\"\n          ],\n          \"url\": \"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1\"\n      },\n      \"alertMsg\": \"分享朋友圈成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "POST",
+    "url": "/user/share-weibo",
+    "title": "[POST] /user/share-weibo （100%）",
+    "description": "<p>分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
+    "name": "actionShareWeibo",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "  HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"分享微博成功\",\n      \"ret\": {\n          \"image\": \"http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png\",\n          \"title\": \"品质生活 从e家洁开始  周期下单 情节无忧\",\n          \"content\": [\n              \"省时省力省心\",\n              \"固定星级阿姨\",\n              \"轻松回归生活\"\n          ],\n          \"url\": \"http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1\"\n      },\n      \"alertMsg\": \"分享微博成功\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 Not Found\n  {\n     \"code\": 401,\n     \"msg\": \"用户认证已经过期,请重新登录\",\n     \"ret\": {},\n     \"alertMsg\": \"用户认证已经过期,请重新登录\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "PUT",
     "url": "/user/update-address",
     "title": "[PUT] /user/update-address(100%)",
@@ -3849,9 +4112,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)       如：android_4.2.2</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -3956,6 +4219,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          },
           {
             "group": "Parameter",
             "type": "<p>int</p> ",
@@ -4130,9 +4400,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4203,9 +4473,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4248,6 +4518,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4315,9 +4592,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4378,9 +4655,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4441,9 +4718,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -4452,7 +4729,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取阿姨请假历史记录成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"请假类型【1休假 2事假】\",\n              \"leave_time\": \"请假时间\",\n              \"leave_status\": \"请假状态\"\n          }\n      ]\n     }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取阿姨请假历史记录成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"请假类型【1休假 2事假】\",\n              \"leave_time\": \"请假时间\",\n              \"leave_status\": \"请假状态【0待审核 1成功 2.失败】\"\n          }\n      ]\n     }\n  }",
           "type": "json"
         }
       ]
@@ -4490,9 +4767,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4560,9 +4837,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4609,9 +4886,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4679,9 +4956,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4749,9 +5026,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4798,13 +5075,6 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
             "optional": false,
             "field": "leave_time",
             "description": "<p>请假时间，如果请假时间格式为:【2015-09-10】</p> "
@@ -4815,6 +5085,13 @@ define({ "api": [
             "optional": false,
             "field": "leave_type",
             "description": "<p>请假类型  1.休假 2事假</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -4882,9 +5159,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           },
           {
             "group": "Parameter",
@@ -4920,37 +5197,6 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/worker/system-news",
-    "title": "[GET] /worker/system-news(0%)",
-    "description": "<p>消息通知中心 （田玉星）</p> ",
-    "name": "actionSystemNews",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨登录token.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "GET",
     "url": "/worker/task-doing",
     "title": "[GET] /worker/task-doing(100%)",
     "description": "<p>获得进行中的任务列表（李勇）</p> ",
@@ -4969,9 +5215,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5032,9 +5278,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5095,9 +5341,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5161,9 +5407,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5213,6 +5459,13 @@ define({ "api": [
             "optional": true,
             "field": "worker_id",
             "description": "<p>阿姨id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>app版本号</p> "
           }
         ]
       }
@@ -5266,9 +5519,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5277,7 +5530,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"2015-10-28\": true,\n      \"2015-10-29\": true,\n      \"2015-10-30\": false,\n      \"2015-10-31\": false,\n      \"2015-11-01\": false,\n      \"2015-11-02\": true,\n      \"2015-11-03\": true,\n      \"2015-11-04\": true,\n      \"2015-11-05\": true,\n      \"2015-11-06\": false,\n      \"2015-11-07\": false,\n      \"2015-11-08\": false,\n      \"2015-11-09\": true,\n  },\n \"alertMsg\": \"获取阿姨请假排班表成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"leave_time\": [\n      {\n          \"date\": \"2015-11-13\",\n          \"enable\": false,\n          \"week\": \"周五\"\n      }\n     ]\n  },\n \"alertMsg\": \"获取阿姨请假排班表成功\"\n}",
           "type": "json"
         }
       ]
@@ -5315,9 +5568,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5381,9 +5634,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5392,7 +5645,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n            \"colour\": \"dfffrf\",\n            \"category_ico\": \"\",\n            \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"code\": 1,\n     \"msg\": \"获取数据成功\",\n     \"alertMsg\": \"获取服务类型详情成功\",\n      \"ret\": [\n          \"colour\": \"背景颜色\",\n          \"category_ico\": \"服务品类图标\",\n          \"category_name\": \"服务品类名称\",\n          \"category_english_name\": \"服务品类英文名\",\n          \"category_condition\": \"服务品类条件\",\n          \"category_price_description\": \"服务品类描述\",\n           \"item_list\": [\n                {\n                    \"category_id\": \"分类ID\",\n                    \"order_service_item_id\": \"商品ID\",\n                    \"order_service_item_name\": \"商品名称\",\n                    \"icon\": \"商品图标\",\n                    \"service_item_price\": \"商品价格\",\n                    \"service_item_price_description\": \"商品价格描述\"\n                }\n          ]\n }",
           "type": "json"
         }
       ]
@@ -5424,8 +5677,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5490,8 +5743,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "platform_version",
-            "description": "<p>app版本【ios_user4.4】</p> "
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5500,7 +5753,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"成功\"\n    \"ret\": {\n        \"city_list\": [\n            {\n                \"city_id\": \"110100\",\n                \"city_name\": \"北京市\"\n            }\n        ],\n        \"header_link\": {\n            \"comment_link\": {\n                \"title\": \"意见反馈\",\n                \"url\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\"\n            },\n            \"phone_link\": {\n                \"title\": \"18210922324\",\n                \"url\": \"\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png\"\n            }\n        },\n        \"pic_list\": [\n            {\n                \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                \"url_title\": \"标准服务\"\n            }\n        ],\n        \"home_order_server\": [\n            {\n                \"title\": \"单次保洁\",\n                \"introduction\": \"新用户第1小时免费\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/dancibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/1\",\n                \"bg_colour\": \"ffb518\",\n                \"font_colour\": \"ffffff\"\n            },\n            {\n                \"title\": \"周期保洁\",\n                \"introduction\": \"一次下单 清洁无忧\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/2\",\n                \"bg_colour\": \"ff8a44\",\n                \"font_colour\": \"ffffff\"\n            }\n        ],\n        \"server_list\": [\n            {\n                \"category_id\": \"2\",\n                \"category_name\": \"保洁任务\",\n                \"category_icon\": \"http://7b1f97.com1.z0.glb.clouddn.com/14468862302219563dbb56de6d3\",\n                \"category_introduction\": \"地板深度保护\",\n                \"category_url\": \"http://www.baidu.com\",\n                \"colour\": \"颜色\",\n                \"category_price_description\": \"价格描述\"\n            }\n        ],\n        \"isBlock\": \"用户是否为黑名单【1表示黑名单，0表示正常】\",\n        \"isEffect\": \"用户token是否有效【0表示正常，1表示失效】\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n    \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"成功\"\n    \"ret\": {\n        \"city_list\": [\n            {\n                \"city_id\": \"110100\",\n                \"city_name\": \"北京市\"\n            }\n        ],\n        \"header_link\": {\n            \"comment_link\": {\n                \"title\": \"意见反馈\",\n                \"url\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png\"\n            },\n            \"phone_link\": {\n                \"title\": \"18210922324\",\n                \"url\": \"\",\n                \"img\": \"http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png\"\n            }\n        },\n        \"pic_list\": [\n            {\n                \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                \"url_title\": \"标准服务\"\n            }\n        ],\n        \"home_order_server\": [\n            {\n                \"title\": \"单次保洁\",\n                \"introduction\": \"新用户第1小时免费\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/dancibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/1\",\n                \"bg_colour\": \"ffb518\",\n                \"font_colour\": \"ffffff\"\n            },\n            {\n                \"title\": \"周期保洁\",\n                \"introduction\": \"一次下单 清洁无忧\",\n                \"icon\": \"http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png\",\n                \"url\": \"http://dev.m2.1jiajie.com/#/order/createOnceOrder/2\",\n                \"bg_colour\": \"ff8a44\",\n                \"font_colour\": \"ffffff\"\n            }\n        ],\n        \"server_list\": [\n            {\n                \"category_id\": \"2\",\n                \"category_name\": \"保洁任务\",\n                \"category_icon\": \"http://7b1f97.com1.z0.glb.clouddn.com/14468862302219563dbb56de6d3\",\n                \"category_introduction\": \"地板深度保护\",\n                \"category_url\": \"http://www.baidu.com\",\n                \"colour\": \"颜色\",\n                \"category_price_description\": \"价格描述\"\n            }\n        ],\n        \"isBlock\": \"用户是否为黑名单【1表示黑名单，0表示正常】\",\n        \"isEffect\": \"用户token是否有效【0表示正常，1表示失效】\"\n         isUpdate: \"0\", \n         updateContent: \"\",\n         updateUrl: \"https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8\",\n         isShowGiveStar :\"0\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -5538,9 +5791,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5597,9 +5850,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称.</p> "
           }
         ]
       }
@@ -5677,9 +5930,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -5743,9 +5996,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -5809,9 +6062,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -5868,9 +6121,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -5934,9 +6187,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -6013,9 +6266,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -6068,6 +6321,13 @@ define({ "api": [
             "optional": false,
             "field": "query",
             "description": "<p>查询关键字</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -6185,9 +6445,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -6240,6 +6500,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -6331,9 +6598,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -6390,9 +6657,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -6445,6 +6712,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",
@@ -6537,6 +6811,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "longitude",
             "description": "<p>当前经度.</p> "
           },
@@ -6623,9 +6904,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           }
         ]
       }
@@ -6698,6 +6979,13 @@ define({ "api": [
             "optional": false,
             "field": "access_token",
             "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
           },
           {
             "group": "Parameter",

@@ -51,9 +51,9 @@ $(document).on("change","#order-order_booked_count input",function(){
 $(document).on('click','.day',function(){getTimeRange();});
 
 
-$('#order-channel_id input').change(function(){
+$('#order-order_channel_name input').change(function(){
         $('[id^=order_pay_channel_]').hide();
-        if($(this).val()==20){
+        if($(this).val()=='后台下单'){
             $('#order_pay_channel_1').show();
             $('#order_pay_type_1').show();
         }else{
@@ -146,6 +146,10 @@ $(document).on("click",".save_address_btn",function(){
     var customer_id = $('#order-customer_id').val();
     if(address_id==0 && customer_id==''){
         alert('请先选择客户再添加地址！');
+        return false;
+    }
+    if(detail==""){
+        alert('地址信息不完整！');
         return false;
     }
     $.ajax({

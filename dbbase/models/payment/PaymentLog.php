@@ -2,8 +2,6 @@
 
 namespace dbbase\models\payment;
 
-use dbbase\models\finance\FinancePayChannel;
-
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
@@ -24,6 +22,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class PaymentLog extends \yii\db\ActiveRecord
 {
+    public $payment_log_data = [];
+    const EVENT_MONGO_INSERT = 'pyamentLogInsert';
+
     /**
      * @inheritdoc
      */
@@ -48,30 +49,6 @@ class PaymentLog extends \yii\db\ActiveRecord
             [['pay_channel_name'], 'string', 'max' => 20]
         ];
     }
-
-    public function doSave($param)
-    {
-        $this->attributes = $param->data;
-        $this->save(false);
-    }
-
-    /**
-     * 插入mogon
-     * @param $data
-     */
-    public function mogonInsert($data)
-    {
-        try{
-            $mongo = \Yii::$app->mongodb;
-            $collection = $mongo->getCollection('payment_log');
-            $data['created_at'] = date('Y-m-d H:i:s');
-            $data['create_time'] = time();
-            return $collection->insert($data);
-        }catch(Exception $e){
-
-        }
-    }
-
 
     /**
      * 自动处理创建时间和修改时间

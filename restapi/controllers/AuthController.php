@@ -4,6 +4,7 @@ namespace restapi\controllers;
 use Yii;
 use \core\models\customer\CustomerCode;
 use \core\models\customer\CustomerAccessToken;
+use \core\models\operation\OperationOrderChannel;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerCode;
@@ -21,7 +22,7 @@ class AuthController extends \restapi\components\Controller
      *
      * @apiParam {String} phone 用户电话号码
      * @apiParam {String} verify_code 短信验证码
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccess {Object} user 用户信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
@@ -77,8 +78,20 @@ class AuthController extends \restapi\components\Controller
         if (!isset($param['phone']) || !$param['phone'] || !isset($param['verify_code']) || !$param['verify_code']) {
             return $this->send(null, "用户手机号或验证码不能为空", 403, 200, null, alertMsgEnum::customerLoginDataDefect);
         }
+        if (!isset($param['order_channel_name']) || !$param['order_channel_name'] ) {
+            return $this->send(null, "用户渠道不能为空", 403, 200, null, alertMsgEnum::customerLoginDataDefectPlatform);
+        }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
+        $order_channel_name = $param['order_channel_name'];
+        try {
+            $channal_id=OperationOrderChannel::get_post_id($order_channel_name);
+        } catch (\Exception $e) {
+            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+        }
+        if(empty($channal_id)){
+            return $this->send(null,"数据库中没有此渠道", 1024, 403, null, alertMsgEnum::bossError);
+        }
         try {
             $checkRet = CustomerCode::checkCode($phone, $verifyCode);
         } catch (\Exception $e) {
@@ -86,7 +99,7 @@ class AuthController extends \restapi\components\Controller
         }
         if ($checkRet) {
             try {
-                $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
+                $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode,$channal_id);
             } catch (\Exception $e) {
                 return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
             }
@@ -122,6 +135,7 @@ class AuthController extends \restapi\components\Controller
      *
      * @apiSuccess {Object} user 用户信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
+     * 
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -194,7 +208,7 @@ class AuthController extends \restapi\components\Controller
      *
      * @apiParam {String} phone 阿姨电话号码
      * @apiParam {String} verify_code 短信验证码
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccess {Object} user 阿姨信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
@@ -316,7 +330,7 @@ class AuthController extends \restapi\components\Controller
      * @apiParam {String} phone 用户电话号码
      * @apiParam {String} verify_code 短信验证码
      * @apiParam {String} weixin_id 微信id
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_channel_name 订单渠道名称
      *
      * @apiSuccess {Object} user 用户信息.
      * @apiSuccess {String} access_token 访问令牌字符串.

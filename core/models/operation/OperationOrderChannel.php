@@ -1,6 +1,6 @@
 <?php
 /**
-* 控制器  订单渠道
+* 控制器 对接 订单渠道
 * ==========================
 * 北京一家洁 版权所有 2015-2018 
 * ----------------------------
@@ -42,6 +42,20 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 		
 	}
 	
+	
+	/**
+	* 获取订单渠道的比例
+	* @date: 2015-11-12
+	* @author: peak pan
+	* @return:
+	**/
+	public static function getchannel_rate($channelid){
+	
+		$data = self::find()->where(['id'=>$channelid]);
+		$data = $data->select('operation_order_channel_rate')->asArray()->one();
+		return $data['operation_order_channel_rate'];
+	
+	}
 	
 	
 	/**
@@ -92,6 +106,29 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 		return $array;
 		
 	}
+	
+	
+	/**
+	 * 订单配置项
+	 * @date: 2015-11-10
+	 * @author: peak pan
+	 * @return:
+	 **/
+	public static  function configorderlist($name)
+	{
+		$configdate=['1' => 'e家洁', '2' => 'POP','3'=>'BOSS'];
+		$data = self::find()->select('id,operation_order_channel_type')->where(['operation_order_channel_name'=>$name])->asArray()->one();
+                if(!empty($data)){
+		$tyu=['id'=>$data['id'],'operation_order_channel_type'=>$data['operation_order_channel_type'],'ordertype'=>
+		$configdate[$data['operation_order_channel_type']]];
+		return $tyu;
+                }else{
+                    return FALSE;
+                }
+	}
+	
+	
+	
 	
 	
 }

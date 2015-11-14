@@ -3,14 +3,13 @@
 namespace boss\controllers\finance;
 
 use Yii;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use PHPExcel;
+use PHPExcel_IOFactory;
 use dbbase\models\finance\FinanceRefund;
 use boss\models\finance\FinanceRefundSearch;
 use boss\components\BaseAuthController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use dbbase\models\finance\FinanceOrderChannel;
-use PHPExcel;
-use PHPExcel_IOFactory;
 use core\models\shop\Shop;
 use core\models\payment\Payment;
 
@@ -155,7 +154,7 @@ class FinanceRefundController extends BaseAuthController
 
         if ($requestModel['edit'] == 'baksite') {
             //退款
-            if (!isset($model->finance_refund_pop_nub) || !isset($model->customer_id)) {
+            if (!isset($model->finance_refund_code) || !isset($model->customer_id)) {
                 \Yii::$app->getSession()->setFlash('default', '充值记录查询无此记录,退款失败！');
                 return $this->redirect(['index', 'id' => $requestModel['id']]);
             }

@@ -38,7 +38,7 @@ $this->title = Yii::t('app', 'Add Service');
 if($action == 'success'){
     $this->params['breadcrumbs'][] = ['label' => $city_name];
 }else {
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '编辑') . $city_name, 'url' => ['opencity']];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '编辑') . $city_name, 'url' => ['operation/operation-shop-district-goods/index']];
 }
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '编辑服务')];
 ?>
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '编辑服务')];
 $form = ActiveForm::begin([
     'type'=>ActiveForm::TYPE_HORIZONTAL,
     'options' => ['enctype' => 'multipart/form-data'],
-    'action' => ['settinggoodsinfo'],
+    'action' => ['settinggoodsinfo', 'city_id' => $city_id, 'action' => 'edit'],
 ]);
 ?>
 

@@ -15,6 +15,7 @@ class m150918_145909_create_table_finance_pop_order extends Migration
 			$this->createTable('{{%finance_pop_order}}', [
 		  'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'主键id\'',
 			'order_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'暂无\' COMMENT \'系统订单号\'',
+			'finance_pop_order_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'0\' COMMENT \'系统流水号\'',
 			'order_status_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'无\' COMMENT \'订单状态\'',
 			'order_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT \'0.00\' COMMENT \'系统订单金额\'',
 			'finance_record_log_id' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'账期对应表id\'',
@@ -51,6 +52,11 @@ class m150918_145909_create_table_finance_pop_order extends Migration
 		'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'增加时间\'',
 	    'is_del' => Schema::TYPE_SMALLINT . '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
     			], $tableOptions);
+		$this->createIndex('order_code','{{%finance_pop_order}}','order_code');
+        $this->createIndex('finance_pop_order_code','{{%finance_pop_order}}','finance_pop_order_code');
+        $this->createIndex('finance_order_channel_id','{{%finance_pop_order}}','finance_order_channel_id');
+        $this->createIndex('finance_pop_order_customer_tel','{{%finance_pop_order}}','finance_pop_order_customer_tel');
+        $this->createIndex('finance_pop_order_check_id','{{%finance_pop_order}}','finance_pop_order_check_id');
     }
 
     public function down()

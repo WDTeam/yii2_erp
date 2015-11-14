@@ -6,7 +6,6 @@ use core\models\payment\Payment;
 use core\models\customer\Customer;
 use core\models\operation\coupon\CouponRule;
 use core\models\order\OrderSearch;
-use core\models\finance\FinancePayChannel;
 use core\models\operation\OperationPayChannel;
 
 use dbbase\models\payment\PaymentCustomerTransRecordLog;
@@ -17,6 +16,8 @@ use yii\behaviors\TimestampBehavior;
 class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerTransRecord
 {
 
+
+
     /**
      * 根据用户ID返回消费记录
      * @param $customer_id
@@ -26,6 +27,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     {
         return PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->asArray()->all();
     }
+
     /**
      * 创建交易记录
      * @param $data 数据
@@ -33,9 +35,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     private static function createPyamentTransRecordLog($data)
     {
         //记录日志
-        $obj = new self;
-        $obj->on('insertLog',[new PaymentCustomerTransRecordLog(),'insertLog'],$data);
-        $obj->trigger('insertLog');
+        $obj = new PaymentCustomerTransRecordLog();
+        $obj->insertLog($data);
     }
 
     /**
@@ -63,6 +64,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'customer_id',
                 'order_customer_phone',
                 'pay_channel_id',
+                'order_pay_channel_name',
                 'order_pay_money',
                 'order_use_acc_balance',
                 'card_id',
@@ -123,18 +125,23 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             //组装数据
             $transRecord['admin_id'] = !empty(Yii::$app->user->id) ? Yii::$app->user->id : '0';             //管理员ID
             $transRecord['admin_name'] = !empty(Yii::$app->user->identity->username) ? Yii::$app->user->identity->username : 'system';           //管理员名称
+
             $transRecord['order_code'] = $data['order_code'];           //订单编号
             $transRecord['order_batch_code'] = $data['order_batch_code'];           //周期订单编号
+
             $transRecord["payment_customer_trans_record_mode"] = 1;      //交易方式:1消费,2=充值,3=退款,4=赔偿
+
             $transRecord["payment_customer_trans_record_service_card_on"] = $data['card_id'];                   //服务卡号
             $transRecord["payment_customer_trans_record_service_card_pay"] = $data['order_use_card_money'];     //服务卡支付
+
             $transRecord["payment_customer_trans_record_coupon_id"] = !empty($data['coupon_id']) ? $data['coupon_id'] : '';    //优惠券ID
             $transRecord["payment_customer_trans_record_coupon_code"] = !empty($data['order_use_coupon_code']) ? $data['order_use_coupon_code'] : '';//优惠券编码
             $transRecord["payment_customer_trans_record_coupon_money"] = $data['order_use_coupon_money'];    //优惠券金额
+
             $transRecord["payment_customer_trans_record_online_balance_pay"] = $data['order_use_acc_balance'];    //余额支付
             $transRecord["payment_customer_trans_record_order_total_money"] = $data['order_money'];               //订单总额
             $transRecord["payment_customer_trans_record_pre_pay"] = $data['order_pop_order_money'];    //预付费
-            $transRecord['payment_customer_trans_record_cash'] = ($data['pay_channel_id'] == 2) ? $data['order_money'] : 0;   //现金支付
+            $transRecord['payment_customer_trans_record_cash'] = ($data['pay_channel_id'] == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) ? $data['order_money'] : 0;   //现金支付
             $transRecord['payment_customer_trans_record_online_pay'] = !empty($payment_data['payment_actual_money']) ? $payment_data['payment_actual_money'] : $data['order_pay_money'];    //在线支付
             $transRecord['order_channel_id'] = $data['channel_id'];   //订单渠道
             $transRecord['payment_customer_trans_record_order_channel'] = $data['order_channel_name'];   //订单渠道名称
@@ -162,18 +169,14 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $transRecord['customer_id'] = $data['customer_id'];     //用户ID
         $transRecord['customer_phone'] = $data['order_customer_phone'];     //用户手机号码
         $transRecord['order_id'] = $data['order_id'];           //订单ID
-        $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : 0;   //	支付渠道
-        $transRecord['payment_customer_trans_record_pay_channel'] = !empty($payment_data['payment_channel_name']) ? $payment_data['payment_channel_name'] : 0;; //	支付渠道名称
+        $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : $data['pay_channel_id'];   //	支付渠道
+        $transRecord['payment_customer_trans_record_pay_channel'] = !empty($payment_data['payment_channel_name']) ? $payment_data['payment_channel_name'] : $data['order_pay_channel_name']; //	支付渠道名称
         $transRecord['payment_customer_trans_record_mode_name'] = self::getCustomerTransRecordModeByName($transRecord['payment_customer_trans_record_mode']); //	交易方式名称
         $transRecord['payment_customer_trans_record_transaction_id'] = !empty($payment_data['payment_transaction_id']) ? $payment_data['payment_transaction_id'] : 0; //交易流水号
         $transRecord['payment_customer_trans_record_eo_order_id'] = !empty($payment_data['payment_eo_order_id']) ? $payment_data['payment_eo_order_id'] : 0; //商户订单号
 
         //创建记录日志
-        try {
-            self::createPyamentTransRecordLog($transRecord);
-        } catch (Exception $e) {
-            //创建记录日志失败
-        }
+        self::createPyamentTransRecordLog($transRecord);
 
         //根据条件筛选
         if( !empty($scenario) )
@@ -223,7 +226,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             return false;
             //exit('没有此条件');
         }
-        //dump($transRecord);
+
+
         return $status;
     }
 
@@ -254,7 +258,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $transRecord['payment_customer_trans_record_order_channel'] = $orderInfo['order_channel_name']; //	订单渠道名称
 
         //支付渠道
-        $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : 20;   //	支付渠道
+        $transRecord['pay_channel_id'] = !empty($payment_data['payment_channel_id']) ? $payment_data['payment_channel_id'] : OperationPayChannel::PAY_CHANNEL_EJJ_BALANCE_PAY;   //	支付渠道
         $transRecord['payment_customer_trans_record_pay_channel'] = OperationPayChannel::get_post_name($transRecord['pay_channel_id']); //	支付渠道名称
 
         //交易方式
@@ -299,11 +303,8 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         $transRecord['payment_customer_trans_record_eo_order_id'] = self::createOutTradeNo('00', $order_id);
 
         //创建记录日志
-        try {
-            self::createPyamentTransRecordLog($transRecord);
-        } catch (Exception $e) {
-            //创建记录日志失败
-        }
+        self::createPyamentTransRecordLog($transRecord);
+
         //执行退款
         $model = new PaymentCustomerTransRecord();
         return $model->refundSource($transRecord);
@@ -550,7 +551,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
     private function onlineBalancePay($data)
     {
         //支付渠道
-        $data['pay_channel_id'] = 20;   //支付渠道
+        $data['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_BALANCE_PAY;   //支付渠道
         $data['payment_customer_trans_record_pay_channel'] = OperationPayChannel::get_post_name($data['pay_channel_id']); //	支付渠道名称
 
         //保留两位小数

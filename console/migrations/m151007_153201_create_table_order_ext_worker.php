@@ -35,6 +35,7 @@ class m151007_153201_create_table_order_ext_worker extends Migration
 
         $this->createIndex('idx-order_ext_worker-worker_id', '{{%order_ext_worker}}', 'worker_id');
         $this->createIndex('idx-order_ext_worker-order_worker_phone', '{{%order_ext_worker}}', 'order_worker_phone');
+        $this->createIndex('idx-order_ext_worker-shop_id', '{{%order_ext_worker}}', 'shop_id');
     }
 
     public function down()

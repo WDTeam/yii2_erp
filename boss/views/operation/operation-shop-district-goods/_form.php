@@ -7,7 +7,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Operation\OperationShopDistrictGoods $model
+ * @var boss\models\operation\OperationShopDistrictGoods $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -43,7 +43,7 @@ use kartik\datecontrol\DateControl;
 
 'operation_shop_district_goods_service_time_slot'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 可服务时间段（序列化方式存储）...','rows'=> 6]], 
 
-'operation_spec_info'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 序列化存储规格...','rows'=> 6]], 
+'operation_spec_info'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 序列化存储规格...']], 
 
 'operation_shop_district_goods_price_description'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 价格备注...','rows'=> 6]], 
 
@@ -69,7 +69,7 @@ use kartik\datecontrol\DateControl;
 
 'operation_shop_district_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 商圈名称...', 'maxlength'=>60]], 
 
-'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称（所属分类名称冗余）...', 'maxlength'=>60]], 
+'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称...', 'maxlength'=>60]], 
 
 'operation_shop_district_goods_english_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务类型英文名称...', 'maxlength'=>60]], 
 

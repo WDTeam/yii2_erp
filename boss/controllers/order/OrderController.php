@@ -36,6 +36,32 @@ class OrderController extends BaseAuthController
 //        return Order::serviceStart(2);
     }
 
+    public function actionServiceDone($id)
+    {
+        return Order::serviceDone($id);
+    }
+
+    public function actionServiceStart($id)
+    {
+        return Order::serviceStart($id);
+    }
+
+    public function actionAcceptDone($id)
+    {
+        return Order::customerAcceptDone($id,2,1);
+    }
+
+    public function actionChecked($id) //code
+    {
+        return Order::checked($id,$id,1);
+    }
+
+    public function actionPayoff($id) //code
+    {
+        return Order::payoffDone($id, $id, 1);
+    }
+
+
     /**
      * 取消订单
      * @return bool
@@ -43,9 +69,7 @@ class OrderController extends BaseAuthController
     public function actionCancelOrder()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        //TODO: Xiaobo
         $admin_id = Yii::$app->user->id;
-
         $params = yii::$app->request->post();
         $order_id = $params['order_id'];
         $cancel_type = $params['cancel_type'];
@@ -93,6 +117,12 @@ class OrderController extends BaseAuthController
             }
         }
         return $address;
+    }
+
+    public function actionGetAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return CustomerAddress::getAddress($id);
     }
 
     /**
@@ -305,7 +335,7 @@ class OrderController extends BaseAuthController
         $out = ['results' => ['id' => '', 'text' => '']];
         $condition = '';
         if ($q != null) {
-            $condition = 'name LIKE "%' . $q . '%"';
+            $condition = ['like','name',$q];
         }
         $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
         if($is_mini_boss){
@@ -360,7 +390,7 @@ class OrderController extends BaseAuthController
             $model->order_booked_count = '2.0'; //服务时长初始值2小时
             $model->order_booked_worker_id = 0; //不指定阿姨
             $model->order_flag_sys_assign = 1;//是否系统指派
-            $model->channel_id = 20;//订单渠道
+            $model->channel_id = '后台下单';//订单渠道
             $model->pay_channel_id = 2;//支付渠道
         }
         return $this->render('create', [
@@ -368,6 +398,12 @@ class OrderController extends BaseAuthController
         ]);
     }
 
+    public function actionCreateTest(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order = new \core\models\order\Order();
+        $order->createNew([]);
+        return $order->errors;
+    }
     public function actionCreateBatch()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -375,12 +411,11 @@ class OrderController extends BaseAuthController
             'order_ip' => Yii::$app->request->userIP,
             'order_service_item_id' => 1,
             'order_src_id' => 1,
-            'channel_id' => 20,
+            'order_channel_name' => '后台下单',
             'address_id' => 1,
             'customer_id' => 1,
             'order_customer_phone' => '18001305711',
             'admin_id' => Yii::$app->user->id,
-            'order_pay_type' => 1,
             'order_is_use_balance' => 1,
             'order_booked_worker_id' => 0,
             'order_customer_need' => 'xxxxx',
@@ -414,58 +449,81 @@ class OrderController extends BaseAuthController
      */
     public function actionEdit($id)
     {
-
         $model = OrderSearch::getOneByCode($id);
-        $post = Yii::$app->request->post();
-        $model['admin_id'] = Yii::$app->user->id;
-
         $history = [];
-
         $createRecord = OrderStatusHistory::find()->where([
             'order_id' => $model->id,
             'order_status_dict_id' => OrderStatusDict::ORDER_INIT,
         ])->one();
         $history['creator_name'] = SystemUser::findOne(['id' => $createRecord['admin_id']])['username'];
-
         $payRecord = OrderStatusHistory::find()->where([
             'order_id' => $model->id,
             'order_status_dict_id' => OrderStatusDict::ORDER_WAIT_ASSIGN,
         ])->one();
         $history['pay_time'] = $payRecord ? date('Y-m-d H:i:s', $payRecord['created_at']) : null;
-
-        if ($model->load($post)) {
-            $post['Order']['admin_id'] = Yii::$app->user->id;
-            $post['Order']['order_ip'] = Yii::$app->request->userIP;
-            $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need'])) ? implode(',', $post['Order']['order_customer_need']) : ''; //客户需求
-
-            //预约时间处理
-            $time = explode('-', $post['Order']['orderBookedTimeRange']);
-            $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'] . ' ' . $time[0] . ':00');
-            $post['Order']['order_booked_end_time'] = strtotime(($time[1] == '24:00') ? date('Y-m-d H:i:s', strtotime($post['Order']['orderBookedDate'] . '00:00:00 +1 days')) : $post['Order']['orderBookedDate'] . ' ' . $time[1] . ':00');
-
-            if ($model->update($post)) {
-                return $this->redirect(['edit', 'id' => $model->id]);
-            }
-        }
-
         return $this->render('edit', ['model' => $model, 'history' => $history]);
     }
 
     /**
-     * ajax编辑订单
+     * ajax修改预约时间
      * @return array
      */
-    public function actionModify()
+    public function actionUpdateBookedTime($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $attr = Yii::$app->request->post();
-        $order = OrderSearch::getOne($attr['id']);
-        if ($order->modify($attr)) {
-            return ['status' => 1, 'info' => '修改成功'];
-        } else {
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['order_booked_time_range']) && isset($post['order_booked_date'])) {
+            $time = explode('-', $post['order_booked_time_range']);
+            $begin_time = strtotime($post['order_booked_date'] . ' ' . $time[0] . ':00');
+            $end_time = strtotime(($time[1] == '24:00') ? date('Y-m-d H:i:s', strtotime($post['order_booked_date'] . '00:00:00 +1 days')) : $post['order_booked_date'] . ' ' . $time[1] . ':00');
+            if (Order::updateBookedTime($order_code, $post['worker_id'], $begin_time, $end_time, $admin_id)) {
+                return ['status' => 1, 'info' => '修改成功'];
+            } else {
+                return ['status' => 0, 'info' => '修改失败'];
+            }
+        }else{
             return ['status' => 0, 'info' => '修改失败'];
         }
 
+    }
+
+    public function actionUpdateOrderAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['address_id'])) {
+            $order = Order::updateAddress($order_code, $post['address_id'], $post['address_detail'],$admin_id);
+            if(isset($order->errors['order_address'])) {
+                return ['status' => 2, 'info' => '修改失败','address_error'=>$order->errors['order_address']];
+            }else if ($order->hasErrors()) {
+                return ['status' => 0, 'info' => '修改失败','errors'=>$order->errors];
+            } else {
+                return ['status' => 1, 'info' => '修改成功','address'=>$order->order_address];
+            }
+        }else{
+            return ['status' => 3, 'info' => '修改失败'];
+        }
+    }
+
+    public function actionUpdateCustomerNeed($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post = Yii::$app->request->post();
+        $admin_id = Yii::$app->user->id;
+        $order_code = $id;
+        if(isset($post['order_customer_memo'])&&isset($post['order_cs_memo'])&&isset($post['order_customer_need'])) {
+            if(Order::updateCustomerNeed($order_code, $post['order_customer_memo'], $post['order_cs_memo'],$post['order_customer_need'],$admin_id)){
+                return ['status' => 1, 'info' => '修改成功'];
+            }else{
+                return ['status' => 0, 'info' => '修改失败'];
+            }
+        }else{
+            return ['status' => 3, 'info' => '修改失败'];
+        }
     }
 
 
@@ -548,18 +606,19 @@ class OrderController extends BaseAuthController
         $nickname = Yii::$app->request->post('nickname');
         $phone = Yii::$app->request->post('phone');
         $customer_id = Yii::$app->request->post('customer_id');
-        if ($address_id > 0) {
-            //修改
-            $address = CustomerAddress::updateAddress($address_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
-        } else {
-            //添加
-            $address = CustomerAddress::addAddress($customer_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
+        if(!empty($province_name) && !empty($city_name) && !empty($county_name) && !empty($detail)) {
+            if ($address_id > 0) {
+                //修改
+                $address = CustomerAddress::updateAddress($address_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
+            } else {
+                //添加
+                $address = CustomerAddress::addAddress($customer_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
+            }
+            if ($address) {
+                return ['code' => 200, 'data' => $address];
+            }
         }
-        if ($address) {
-            return ['code' => 200, 'data' => $address];
-        } else {
-            return ['code' => 500, 'error' => '保存失败'];
-        }
+        return ['code' => 500, 'error' => '保存失败'];
     }
 
 

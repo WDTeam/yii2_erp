@@ -22,6 +22,8 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\InputWidget;
+use core\models\system\SystemUser;
+use core\models\auth\AuthItem;
 
 class ShopSelect extends InputWidget
 {
@@ -45,15 +47,25 @@ class ShopSelect extends InputWidget
      */
     public function getShopManagerArray()
     {
-        $models = ShopManager::find()->select(['id','name'])
-        ->where('(isdel is NULL or isdel=0) AND id>1')->all();
+        $query = ShopManager::find()->select(['id','name'])
+        ->where('(isdel is NULL or isdel=0) AND id>1');
+        if(!\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN)){
+            $shop_manager_ids = \Yii::$app->user->identity->getShopManagerIds();
+            $query->andFilterWhere(['in','id', $shop_manager_ids]);
+        }
+        $models = $query->all();
         return ArrayHelper::map($models, 'id', 'name');
     }
     public function getShopArray()
     {
         $manager_id = (int)$this->model->getAttribute($this->shop_manager_id);
-        $models = Shop::find()->select(['id','name'])
-            ->where('(isdel is NULL OR isdel=0) AND shop_manager_id='.$manager_id)->all();
+        $query = Shop::find()->select(['id','name'])
+            ->where('(isdel is NULL OR isdel=0) AND shop_manager_id='.$manager_id);
+        if(!\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN)){
+            $shop_ids = \Yii::$app->user->identity->getShopIds();
+            $query->andFilterWhere(['in','id', $shop_ids]);
+        }
+        $models = $query->all();
         return ArrayHelper::map($models, 'id', 'name');
     }
     public function run()
