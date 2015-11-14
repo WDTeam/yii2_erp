@@ -173,22 +173,23 @@ class OrderController extends \restapi\components\Controller
 
         try {
             $order = new Order();
+
+
             $is_success = $order->createNew($attributes);
+            $errors = $order->errors;
 
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
                     "order_code" => $order->order_code
                 );
+
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                foreach ($order->errors as $val) {
-                    $values = $val[0];
-                }
-                return $this->send($order->errors, '创建订单失败', 1024, 200, null, $values);
+                return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, $values); //current(current($msgErrors)));
+            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
         }
     }
 
@@ -1514,7 +1515,7 @@ class OrderController extends \restapi\components\Controller
             if (empty($deleteOrderCode)) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
-           try {
+            try {
                 if (Order::customerDel($deleteOrderCode, 0)) {
                     return $this->send(null, "删除订单成功", 1, 200, null, alertMsgEnum::orderDeleteSuccess);
                 } else {

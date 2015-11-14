@@ -398,6 +398,12 @@ class OrderController extends BaseAuthController
         ]);
     }
 
+    public function actionCreateTest(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order = new \core\models\order\Order();
+        $order->createNew([]);
+        return $order->errors;
+    }
     public function actionCreateBatch()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
