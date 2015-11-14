@@ -26,6 +26,7 @@ class OrderController extends Controller{
             if($order['order_booked_begin_time']<=time())
             {
                 $res = Order::serviceStart($order['id']);
+                var_dump($res);
                 ConsoleHelper::log('订单（ID：%s）开始', [$order['id']]);
             }else{
                 ConsoleHelper::log('订单（ID：%s）等待中……，将在%s启动', [$order['id'], date('Y-m-d H:i:s', $order['order_booked_begin_time'])]);
@@ -92,7 +93,7 @@ class OrderController extends Controller{
         }
         
         $service_list = OrderSearch::getStartServiceOrderList();
-        echo 'Service Total:'.count($service_list).PHP_EOL;
+        ConsoleHelper::log('等待结束的订单总数（%s）', [count($service_list)]);
         foreach ($service_list as $order){
             $this->serviceDone($order);
         }
