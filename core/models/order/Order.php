@@ -753,6 +753,7 @@ class Order extends OrderModel
         if (in_array($current_status, [  //只有在以下状态下才可以取消订单
                     OrderStatusDict::ORDER_INIT,
                     OrderStatusDict::ORDER_WAIT_ASSIGN,
+                    OrderStatusDict::ORDER_SYS_ASSIGN_START,
                     OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
                     OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,

@@ -410,7 +410,6 @@ class OrderController extends BaseAuthController
             'customer_id' => 1,
             'order_customer_phone' => '18001305711',
             'admin_id' => Yii::$app->user->id,
-            'order_pay_type' => 1,
             'order_is_use_balance' => 1,
             'order_booked_worker_id' => 0,
             'order_customer_need' => 'xxxxx',
