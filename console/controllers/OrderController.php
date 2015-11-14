@@ -57,23 +57,26 @@ class OrderController extends Controller{
      * 评价订单
      * @author CoLee
      * @param unknown $order
+     * $order['worker_id'] 未定义，请检查错误
      */
     private function suggest($order)
     {
-//         var_dump($order);exit;
         try{
             CustomerComment::autoaddUserSuggest([
                 'order_id'=>$order['id'],
-                'worker_id'=>$order['worker_id'],
-                'customer_id'=>$order['customer_id'],
-                'worker_tel'=>$order['order_worker_phone'],
+                'worker_id'=>$order['orderExtWorker']['worker_id'],
+                'customer_id'=>$order['orderExtCustomer']['customer_id'],
+                'worker_tel'=>$order['orderExtWorker']['order_worker_phone'],
                 'operation_shop_district_id'=>$order['district_id'],
                 'province_id'=>0,
                 'city_id'=>$order['city_id'],
                 'county_id'=>0,
-                'customer_comment_phone'=>$order['order_customer_phone'],
+                'customer_comment_phone'=>$order['orderExtCustomer']['order_customer_phone'],
             ]);
+            ConsoleHelper::log('订单（ID：%s）自动评价成功了', [$order['id']]);
         }catch(\Exception $e){
+            var_dump($e);
+            \Yii::error($e);
             ConsoleHelper::log('订单（ID：%s）自动评价失败了', [$order['id']]);
         }
     }
