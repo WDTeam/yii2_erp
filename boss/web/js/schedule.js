@@ -2,13 +2,13 @@
 
 $(document).on('click','td',function(){
     //console.log($(this).hasClass('success'));
-    if($(this).parent('tr').hasClass('show-schedule-for-redis')==true){
-        return false;
-    }
-    if($(this).hasClass('success')==true){
-        $(this).removeClass('success');
+
+    if($(this).hasClass('select')==true){
+        $(this).removeClass('select');
+    }else if($(this).hasClass('actives')==true){
+        $(this).removeClass('actives');
     }else{
-        $(this).addClass('success');
+        $(this).addClass('select');
     }
 });
 $(document).on('click','.switch',function(){
@@ -30,15 +30,15 @@ $(document).on('change','input[type=checkbox]',function(){
         return false;
     }
     if($(this).is(':checked')){
-        $(this).parent().siblings('td').attr('class','success')
+        $(this).parent().siblings('td').attr('class','select')
     }else{
-        $(this).parent().siblings('td').removeClass('success')
+        $(this).parent().siblings('td').removeClass('select')
     }
 });
 $(document).on('click','.delete',function(){
     $(this).parents('.schedule_content').remove();
 });
-$('#btn-add').on('click',function(){
+$(document).on('click','.applyBtn',function(){
     /*
      留个验证时间不能重复的口
      */
@@ -65,7 +65,11 @@ $('#btn-submit').on('click',function(){
             timeline_arr = {};
             i=0;
             $(this).children('td').each(function(){
-                if($(this).hasClass('success')){
+                if($(this).hasClass('select')){
+                    timeline_arr[i] = $(this).html();
+                    i++;
+                }
+                if($(this).hasClass('actives')){
                     timeline_arr[i] = $(this).html();
                     i++;
                 }
@@ -80,3 +84,6 @@ $('#btn-submit').on('click',function(){
     $('input[name=schedule_data]').val(schedule_json);
     $('#form').submit();
 });
+$(document).on('onload',function(){
+    $('.applyBtn').html('添加时间');
+})
