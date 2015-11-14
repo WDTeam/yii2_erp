@@ -26,6 +26,17 @@ return [
      * Redis 服务password
      */
     'REDIS_SERVER_PASSWORD' => '6c55da921a534ba7:Ejiajie2015test',
+    
+    /*
+     * mongodb的URI
+     */
+    'MONGODB_SERVER' => 'mongodb://test_boss_db_dbo:test_boss@test.boss.1jiajie.com:27017',
+    
+    /*
+     * mongodb的数据库
+     */
+    'MONGODB_SERVER_DB_NAME' => 'test_boss_db',
+    
     /*
      * Redis 服务运行状态
      */

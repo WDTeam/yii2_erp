@@ -269,8 +269,7 @@ class Shop extends \dbbase\models\shop\Shop
     public static function runCalculateWorkerCount($shop_id)
     {
         $model = self::findById($shop_id);
-        $number = Worker::find()->where(['shop_id'=>$shop_id])->count();
-        $model->worker_count = $number;
+        $model->worker_count = (int)Worker::countShopWorkerNums($shop_id);
         if($model->save()){
             $shop_manager = ShopManager::findOne($model->shop_manager_id);
             $count = self::find()->select(['SUM(worker_count)'])

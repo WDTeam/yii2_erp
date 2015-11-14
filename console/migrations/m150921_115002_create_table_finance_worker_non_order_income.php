@@ -24,7 +24,7 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
             'finance_worker_non_order_income_starttime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值\'',
             'finance_worker_non_order_income_endtime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值\'',
             'finance_worker_non_order_income_isSettled' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否已结算，0为未结算，1为已结算\'',
-            'finance_settle_apply_id' => Schema::TYPE_INTEGER. '(10)  COMMENT \'结算申请Id\'',
+            'finance_worker_settle_apply_id' => Schema::TYPE_INTEGER. '(10)  COMMENT \'结算申请Id\'',
             'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 1 COMMENT \'是否被删除，0为启用，1为删除\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'结算时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',

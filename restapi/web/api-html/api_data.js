@@ -404,9 +404,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>int</p> ",
-            "optional": true,
-            "field": "pay_channel_id",
-            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
+            "optional": false,
+            "field": "pay_channel_key",
+            "description": "<p>支付渠道</p> "
           },
           {
             "group": "Parameter",
@@ -625,7 +625,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-cancel-orders-history",
     "title": "[GET]/order/worker-cancel-orders-history(90%)",
-    "description": "<p>查询阿姨三个月的取消历史订单（谢奕 --已经将后台接口完成,缺少周期订单）</p> ",
+    "description": "<p>查询阿姨三个月的取消历史订单（谢奕）</p> ",
     "name": "WorkerCancelOrdersHistory",
     "group": "Order",
     "parameter": {
@@ -729,9 +729,16 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "order_code",
-            "description": "<p>订单号</p> "
+            "description": "<p>订单编号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "order_batch_code",
+            "description": "<p>周期订单号</p> "
           }
         ]
       }
@@ -905,8 +912,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>int</p> ",
             "optional": true,
-            "field": "pay_channel_id",
-            "description": "<p>支付渠道id 1服务卡支付,2现金支付,7支付宝支付,8百度钱包支付,9第三方团购预收,10微信支付,12银联支付,13财付通支付,20余额支付</p> "
+            "field": "pay_channel_key",
+            "description": "<p>支付渠道</p> "
           },
           {
             "group": "Parameter",
@@ -1109,7 +1116,7 @@ define({ "api": [
             "type": "<p>int</p> ",
             "optional": false,
             "field": "workerType",
-            "description": "<p>江江获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0;</p> "
+            "description": "<p>获取周期订单传递的表示 workerType=1; 不适用改字段 workerType=0;</p> "
           }
         ]
       }
@@ -1314,9 +1321,16 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>int</p> ",
-            "optional": false,
+            "optional": true,
             "field": "order_id",
-            "description": "<p>订单号</p> "
+            "description": "<p>订单id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "order_batch_code",
+            "description": "<p>周期订单号</p> "
           }
         ]
       }
@@ -1325,7 +1339,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单删除成功\",\n  \"alertMsg\": \"订单取消成功\"\n   \"ret\":{}\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"订单删除成功\",\n  \"alertMsg\": \"订单删除成功\"\n   \"ret\":{}\n}",
           "type": "json"
         }
       ]
@@ -1347,7 +1361,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/order-status-history",
     "title": "[GET] /order/order-status-history(70%)",
-    "description": "<p>查询用户某个订单状态历史状态记录(谢奕/田玉星 --缺少周期订单)</p> ",
+    "description": "<p>查询用户某个订单状态历史状态记录(谢奕/田玉星)</p> ",
     "name": "actionOrderStatusHistory",
     "group": "Order",
     "parameter": {
@@ -1577,7 +1591,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-done-orders-history",
     "title": "[GET]/order/worker-done-orders-history (90%)",
-    "description": "<p>查询阿姨三个月的完成历史订单 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "description": "<p>查询阿姨三个月的完成历史订单 (谢奕)</p> ",
     "name": "actionWorkerDoneOrdersHistory",
     "group": "Order",
     "parameter": {
@@ -1700,7 +1714,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-orders",
     "title": "[GET] /order/worker-orders(90%)",
-    "description": "<p>查询阿姨订单（谢奕 --已经将后台接口完成,缺少周期订单）</p> ",
+    "description": "<p>查询阿姨订单（谢奕）</p> ",
     "name": "actionWorkerOrders",
     "group": "Order",
     "parameter": {
@@ -1830,7 +1844,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-orders-count",
     "title": "[GET] /order/worker-orders-count(90%)",
-    "description": "<p>查询阿姨订单订单数量 (谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "description": "<p>查询阿姨订单订单数量 (谢奕)</p> ",
     "name": "actionWorkerOrdersCount",
     "group": "Order",
     "parameter": {
@@ -1932,7 +1946,7 @@ define({ "api": [
     "type": "GET",
     "url": "/order/worker-service-orders",
     "title": "[GET] /order/worker-service-orders(90%)",
-    "description": "<p>查询待服务阿姨订单(谢奕 --已经将后台接口完成,缺少周期订单)</p> ",
+    "description": "<p>查询待服务阿姨订单(谢奕)</p> ",
     "name": "actionWorkerServiceOrders",
     "group": "Order",
     "parameter": {
@@ -3030,6 +3044,13 @@ define({ "api": [
             "optional": false,
             "field": "order_channel_name",
             "description": "<p>订单渠道名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>版本号</p> "
           }
         ]
       }
@@ -3947,9 +3968,9 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
-    "type": "GET",
+    "type": "POST",
     "url": "/user/share-friends",
-    "title": "[GET] /user/share-friends （100%）",
+    "title": "[POST] /user/share-friends （100%）",
     "description": "<p>分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
     "name": "actionShareFriends",
     "group": "User",
@@ -4006,9 +4027,9 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
-    "type": "GET",
-    "url": "/user/share_weibo",
-    "title": "[GET] /user/share_weibo （100%）",
+    "type": "POST",
+    "url": "/user/share-weibo",
+    "title": "[POST] /user/share-weibo （100%）",
     "description": "<p>分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）</p> ",
     "name": "actionShareWeibo",
     "group": "User",
