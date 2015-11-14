@@ -170,11 +170,11 @@ class OrderController extends \restapi\components\Controller
 
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
-       
+
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
-            
+
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -1441,6 +1441,12 @@ class OrderController extends \restapi\components\Controller
             if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
+            if (empty($param['order_code'])) {
+                $param['order_code'] = '';
+            }
+            if (empty($param['order_batch_code'])) {
+                $param['order_batch_code'] = '';
+            }
 
             $cancelOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
 
@@ -1504,6 +1510,13 @@ class OrderController extends \restapi\components\Controller
 
             if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
+            }
+
+            if (empty($param['order_code'])) {
+                $param['order_code'] = '';
+            }
+            if (empty($param['order_batch_code'])) {
+                $param['order_batch_code'] = '';
             }
 
             $deleteOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
