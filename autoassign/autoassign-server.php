@@ -360,6 +360,7 @@ class server
             $order = $this->getOrderStatus($order);
             $order['updated_at']=$order['created_at'];
             $d = json_encode($order);
+            echo 'onConnect;d='.$d;
             $this->broadcastToSpecifiedClient($server, $fd, $msg);
         }
         return true;
@@ -442,12 +443,14 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
+            echo 'clid='.$clid.';msg='.$msg;
             $this->broadcastToSpecifiedClient($server,$clid, $msg);
         }
     }
     
     public function broadcastToSpecifiedClient($server,$clid, $msg){
         try{
+            
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
                 echo date('Y-m-d H:i:s').$ex->getMessage();
