@@ -6341,6 +6341,77 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/service/baidu-map",
+    "title": "[GET]/service/baidu-suggest（100%）",
+    "group": "service",
+    "name": "actionBaiduSuggest",
+    "description": "<p>根据地址获取百度联想地址数据(赵顺利 )</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "query",
+            "description": "<p>查询关键字</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_channel_name",
+            "description": "<p>订单渠道名称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "ak",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/service/baidu-suggest"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"\",\n    \"ret\":\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "queryNotSupportFound",
+            "description": "<p>关键字不能为空.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"关键字不能为空\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
     "url": "/service/cleaning-task",
     "title": "[GET] /service/cleaning-task（100%）",
     "group": "service",
