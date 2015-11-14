@@ -81,14 +81,11 @@ $(document).ready(function($){
             data: {order_id: operating_order_id,order_code:operating_order_code, cancel_type: cancelDetailType, cancel_note: cancelNote},
             dataType:"json",
             success: function (msg) {
-                if(msg){
-                	//alert('22');
+                if(msg.status){
                 	alert('取消订单成功！');
-                	//$("#HBox").hide();
-                	//$("#HOverlay").hide();
                 	window.location.reload();
                 }else{
-                    alert('取消订单失败！');
+                    alert('取消订单失败！错误代码：['+msg.error_code+']');
                 }
             }
         });		

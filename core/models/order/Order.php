@@ -738,11 +738,14 @@ class Order extends OrderModel
     public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = '')
     {
         $order = OrderSearch::getOne($order_id);
-        if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
-            OrderMsg::cancel($order); //取消订单发送通知
-            return true;
+        if(!empty($order)) {
+            $result = self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+            if ($result['status']) {
+                OrderMsg::cancel($order); //取消订单发送通知
+            }
+            return $result;
         }else{
-            return false;
+            return ['status'=>false,'error_code'=>'541801','msg'=>'没有找到订单'];
         }
     }
 
@@ -761,26 +764,28 @@ class Order extends OrderModel
             $orders = OrderSearch::getBatchOrder($code);
             $transact = static::getDb()->beginTransaction();
             foreach($orders as $order){
-                if(!self::_cancelOrder($order, $admin_id, $cause_id, $memo,$transact)){
+                $result = self::_cancelOrder($order, $admin_id, $cause_id, $memo,$transact);
+                if(!$result['status']){
                     $transact->rollBack();
-                    return false;
+                    return $result;
                 }
             }
             $transact->commit();
 //            OrderMsg::cancel($order); //取消订单发送通知
-            return true;
-        }else {
+            return ['status'=>true];
+        }else if(!empty($code)) {
             $order = OrderSearch::getOneByCode($code);
             if(!empty($order)) {
-                if (self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
+                $result = self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+                if ($result['status']) {
                     OrderMsg::cancel($order); //取消订单发送通知
-                    return true;
-                } else {
-                    return false;
                 }
+                return $result;
             }else{
-                return false;
+                return ['status'=>false,'error_code'=>'541801','msg'=>'没有找到订单'];
             }
+        }else{
+            return ['status'=>false,'error_code'=>'541802','msg'=>'没有订单编号！'];
         }
     }
 
@@ -824,6 +829,10 @@ class Order extends OrderModel
                 //调高峰的退款接口
                 $finance_refund_add = new FinanceRefundadd();
                 $result = $finance_refund_add->add($order);
+                if(!$result){
+                    $transaction->rollBack();
+                    return ['status'=>false,'error_code'=>'541904','msg'=>'退款异常，取消失败！'];
+                }
                 if (in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
                             OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
                             OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
@@ -833,17 +842,22 @@ class Order extends OrderModel
                 }
             } elseif ($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP) {
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
+                if(!$result){
+                    $transaction->rollBack();
+                    return ['status'=>false,'error_code'=>'541903','msg'=>'第三方订单同步失败！'];
+                }
             }
             if ($result) {
                 if(empty($transact)){
                     $transaction->commit();
                 }
+                return ['status'=>true];
             } else {
                 $transaction->rollBack();
+                return ['status'=>false,'error_code'=>'541902','msg'=>json_encode($order->errors)];
             }
-            return $result;
         } else {
-            return false;
+            return ['status'=>false,'error_code'=>'541901','msg'=>$order->orderExtStatus->order_status_name.'状态不可以取消订单'];
         }
     }
 

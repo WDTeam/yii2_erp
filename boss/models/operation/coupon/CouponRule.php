@@ -49,8 +49,6 @@ class CouponRule extends CouponRuleModel
     	
     	$data=OperationCategory::getAllCategory();
     	$data=ArrayHelper::map($data, 'id', 'operation_category_name');
-    	
-    	
     	return [
     	'1'=>['1'=>'一码一用','2'=>'一码多用'],
     	'2'=>['1'=>'优惠券','2'=>'赔付券'],
