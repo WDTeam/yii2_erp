@@ -1471,7 +1471,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    用户认证
      * @apiParam {String} order_channel_name    订单渠道名称
-     * @apiParam {int}    [order_id]            订单id    
+     * @apiParam {int}    [order_code]            订单号  
      * @apiParam {int}    [order_batch_code]    周期订单号   
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      *
@@ -1505,16 +1505,16 @@ class OrderController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
 
-            if (!isset($param['order_id']) && !isset($param['order_batch_code'])) {
+            if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
 
-            $deleteOrderCode = isset($param['order_id']) ? $param['order_id'] : $param['order_batch_code'];
+            $deleteOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
 
             if (empty($deleteOrderCode)) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
-            try {
+           try {
                 if (Order::customerDel($deleteOrderCode, 0)) {
                     return $this->send(null, "删除订单成功", 1, 200, null, alertMsgEnum::orderDeleteSuccess);
                 } else {
