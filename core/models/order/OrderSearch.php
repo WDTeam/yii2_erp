@@ -569,7 +569,6 @@ class OrderSearch extends Order
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
-                'isdel' => $this->isdel,
                 'worker_id' => $this->worker_id,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
