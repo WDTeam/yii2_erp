@@ -23,6 +23,7 @@ class server
     private $data;
     private $redis;
     private $mongo = null;
+    private $mongo_autoassign_log = null;
     private $isServerSuspend = false;
     private $isWorkerTaskRunning = false;
     private $config;
@@ -124,6 +125,12 @@ class server
     public function connectMongodb(){
         try{
             $this->mongo = new MongoClient($this->config['MONGODB_SERVER'].'/'.$this->config['MONGODB_SERVER_DB_NAME']);
+            if(isset($this->mongo)){
+                $db = $this->mongo->selectDB($this->config['MONGODB_SERVER_DB_NAME']);
+                if(isset($db)){
+                    $this->mongo_autoassign_log = $db->selectCollection("autoassign_log");
+                }
+            }
         }catch(Exception $e){
             echo $e->getMessage();
         }
@@ -133,12 +140,10 @@ class server
      * 通过mongodb记录日志，如果mongodb没有初始化成功，则不记录
      */
     public function recordMessageByMongodb($message){
-        if(isset($this->mongo)){
-            $db = $this->mongo->selectDB($this->config['MONGODB_SERVER_DB_NAME']);
-            $autoassign_log = $db->selectCollection("autoassign_log");
+        if(isset($this->mongo_autoassign_log)){
             $data['message'] = $message;
             $data['create_time'] = date("Y-m-d h:i:s");
-            $autoassign_log->insert($data);
+            $this->mongo_autoassign_log->insert($data);
         }
     }
     
