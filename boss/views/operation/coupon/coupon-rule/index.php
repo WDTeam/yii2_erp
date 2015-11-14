@@ -69,7 +69,19 @@ $this->params['breadcrumbs'][] = $this->title;
     		'label' => '优惠券类别',
     		'value' => function ($dataProvider) {
     			$configdate=CouponRuleSearch::couponconfig();
-    			return $configdate[3][$dataProvider->couponrule_type];
+    			$name_dateinfo=$configdate[3][$dataProvider->couponrule_type];
+    			if($dataProvider->couponrule_type==1){
+    				return $name_dateinfo;
+    			}elseif($dataProvider->couponrule_type==2){
+    				$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
+    				$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
+    				$name=$configdate[3][$dataProvider->couponrule_type].'-'.$data_es_name[$dataProvider->couponrule_service_type_id];
+    				return $name;
+    			}else{
+    				$goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
+    				$name=$configdate[3][$dataProvider->couponrule_type].'-'.$goods_data[$dataProvider->couponrule_commodity_id];
+    				return $name;
+    			}
     		},
     		],
 //            'couponrule_type_name', 
