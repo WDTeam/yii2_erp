@@ -265,8 +265,11 @@ class OperationGoodsController extends Controller
             $model->operation_tags = implode(';', unserialize($model->operation_tags));
         }
         if ($model->load($post)) {
+
+            //品类信息
             $model->operation_category_ids = $model->operation_category_id;
-            $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
+            $category_name = OperationCategory::getCategoryName($model->operation_category_id);
+            $model->operation_category_name = $category_name;
             
             //冗余计量单位
             $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
@@ -286,11 +289,11 @@ class OperationGoodsController extends Controller
             
             if ($model->save()) {
 
-                //关联修改上线商品表冗余的商品名称
-                $goodsInfo = OperationShopDistrictGoods::updateGoodsName($id, $post['OperationGoods']['operation_goods_name']);
+                //关联修改上线服务项目表冗余的项目信息
+                OperationShopDistrictGoods::updateGoodsInfo($id, $post['OperationGoods']['operation_goods_name'], $post['OperationGoods']['operation_category_id'], $category_name);
 
-                return $this->redirect(['/operation/operation-category']);
             }
+            return $this->redirect(['/operation/operation-category']);
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
             foreach((array)$OperationCategorydata as $key => $value){ $OperationCategory[$value['id']] = $value['operation_category_name']; }

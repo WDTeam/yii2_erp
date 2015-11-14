@@ -160,7 +160,7 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
     /**
      * 联动删除已发布广告信息
      *
-     * @param inter   $advert_content_id     广告内容编号
+     * @param integer   $advert_content_id     广告内容编号
      */
     public static function updateAdvertReleaseStatus($advert_content_id)
     {
