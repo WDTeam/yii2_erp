@@ -72,6 +72,8 @@ class CouponRule extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['couponrule_Prefix'],'unique','message'=>'{attribute}{value}已被使用'],
+            [['couponrule_Prefix'],'string','min' => 3],
             [['couponrule_classify', 'couponrule_category', 'couponrule_type', 'couponrule_service_type_id', 'couponrule_commodity_id', 'couponrule_city_limit', 'couponrule_city_id', 'couponrule_use_end_days', 'couponrule_promote_type', 'couponrule_code_num', 'couponrule_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
             [['couponrule_order_min_price', 'couponrule_price'], 'number'],
             [['couponrule_name','couponrule_category_name', 'couponrule_type_name', 'couponrule_service_type_name', 'couponrule_commodity_name', 'couponrule_customer_type_name'], 'string', 'max' => 100],

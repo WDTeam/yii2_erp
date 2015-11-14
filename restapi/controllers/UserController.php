@@ -1566,7 +1566,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/share_weibo [GET] /user/share_weibo （100%）
+     * @api {POST} /user/share-weibo [POST] /user/share-weibo （100%）
      *
      * @apiDescription  分享微博（boss无配置，暂时返回假数据2015.11.12）（李勇）
      * @apiName actionShareWeibo
@@ -1607,21 +1607,38 @@ class UserController extends \restapi\components\Controller
     public function actionShareWeibo()
     {
 
-        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->POST() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
+            $access_token="";
+        }else{
+            $access_token=$param['access_token'];
         }
         $result = array();
-        $result = [
-            "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
-            "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-            "content" => [
-                "省时省力省心",
-                "固定星级阿姨",
-                "轻松回归生活"
-            ],
-            "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
-        ];
+        if(empty($access_token)){
+            //无token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" => [
+                    "省时省力省心",
+                    "固定星级阿姨",
+                    "轻松回归生活"
+                ],
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }else{
+            //有token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" => [
+                    "省时省力省心",
+                    "固定星级阿姨",
+                    "轻松回归生活"
+                ],
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }
         if (!empty($result)) {
             return $this->send($result, "分享微博成功", 1, 200, null, alertMsgEnum::shareWeiboSuccess);
         } else {
@@ -1630,7 +1647,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /user/share-friends [GET] /user/share-friends （100%）
+     * @api {POST} /user/share-friends [POST] /user/share-friends （100%）
      *
      * @apiDescription  分享朋友圈（boss无配置，暂时返回假数据2015.11.12）（李勇）
      * @apiName actionShareFriends
@@ -1671,21 +1688,40 @@ class UserController extends \restapi\components\Controller
     public function actionShareFriends()
     {
 
-        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->POST() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //用户等不等录都能分享，但是返回的数据不同
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::customerLoginFailed);
+            $access_token="";
+        }else{
+            $access_token=$param['access_token'];
         }
         $result = array();
-        $result = [
-            "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
-            "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
-            "content" => [
-                "省时省力省心",
-                "固定星级阿姨",
-                "轻松回归生活"
-            ],
-            "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
-        ];
+        if(empty($access_token)){
+            //无token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" => [
+                    "省时省力省心",
+                    "固定星级阿姨",
+                    "轻松回归生活"
+                ],
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }else{
+            //有token返回数据
+            $result = [
+                "image" => "http://webapi2.1jiajie.com/app/images/app_sharefriend_20151112.png",
+                "title" => "品质生活 从e家洁开始  周期下单 情节无忧",
+                "content" => [
+                    "省时省力省心",
+                    "固定星级阿姨",
+                    "轻松回归生活"
+                ],
+                "url" => "http://wap.1jiajie.com/wap_theme_activity/haopingfx/index.php?from=timeline&isappinstalled=1"
+            ];
+        }
+        
         if (!empty($result)) {
             return $this->send($result, "分享朋友圈成功", 1, 200, null, alertMsgEnum::shareFriendsSuccess);
         } else {

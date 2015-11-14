@@ -51,8 +51,8 @@ class OperationOrderChannel extends \dbbase\models\operation\OperationOrderChann
 	**/
 	public static function getchannel_rate($channelid){
 	
-		$data = self::find();
-		$data = $data->select('operation_order_channel_rate')->asArray()->all();
+		$data = self::find()->where(['id'=>$channelid]);
+		$data = $data->select('operation_order_channel_rate')->asArray()->one();
 		return $data['operation_order_channel_rate'];
 	
 	}
