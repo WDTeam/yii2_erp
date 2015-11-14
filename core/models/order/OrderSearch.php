@@ -826,7 +826,7 @@ class OrderSearch extends Order
      * @param time $end_time
      * @param int $worker_id
      */
-    public function getStatistical($start_time, $end_time, $worker_id)
+    public static function getStatistical($start_time, $end_time, $worker_id)
     {
         $data = [];
         //取消订单
@@ -847,10 +847,10 @@ class OrderSearch extends Order
             'worker_id'=>$worker_id,
             'order_worker_relation_status_id'=>OrderOtherDict::NAME_WORKER_REFUSE,
         ])
-        ->andFilterWhere(['between', $start_time, $end_time])
+        ->andFilterWhere(['between', 'created_at', $start_time, $end_time])
         ->count();
         $data[2] = $num;
-        //服务老用户,先算总数，
+       // 服务老用户,先算总数，
         $sql = "SELECT COUNT(1) as ct FROM {{%order_ext_worker}} AS a
         LEFT JOIN {{%order_history}} AS b
         ON a.`order_id`=b.order_id  AND b.`order_status_dict_id`=11
@@ -862,7 +862,7 @@ class OrderSearch extends Order
         AND a.`worker_id`={$worker_id}
         GROUP BY c.`comment_id`";
         $args = (array)\Yii::$app->db->createCommand($sql)
-        ->bindValues(['ORDER_CANCEL'=>OrderStatusDict::ORDER_SERVICE_DONE])
+        ->bindValues(['ORDER_SERVICE_DONE'=>OrderStatusDict::ORDER_SERVICE_DONE])
         ->queryColumn();
         $fdl = 0;
         foreach ($args as $d){
@@ -883,7 +883,7 @@ class OrderSearch extends Order
         AND b.`created_at`>={$start_time}
         AND b.`created_at`<{$end_time}";
         $data[4] = (int)\Yii::$app->db->createCommand($sql)
-        ->bindValues(['ORDER_CANCEL'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
+        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
         ->queryScalar();
         //完成工时
         $sql = "SELECT COUNT(1)
@@ -895,7 +895,7 @@ class OrderSearch extends Order
         AND b.created_at>={$start_time}
         AND b.created_at<{$end_time}";
         $data[5] = (int)\Yii::$app->db->createCommand($sql)
-        ->bindValues(['ORDER_CANCEL'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
+        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
         ->queryScalar();
         //好评
         $data[6] = (int)CustomerComment::getCommentworkercount($worker_id,$start_time,$end_time);
