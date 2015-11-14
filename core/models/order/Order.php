@@ -678,21 +678,45 @@ class Order extends OrderModel
     public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = '')
     {
         $order = OrderSearch::getOne($order_id);
-        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+        if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
+            OrderMsg::cancel($order); //取消订单发送通知
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
      * 取消订单
-     * @param $order_code
+     * @param $code
      * @param $admin_id
      * @param $cause_id
      * @param string $memo
      * @return bool
      */
-    public static function cancelByOrderCode($order_code, $admin_id, $cause_id, $memo = '')
+    public static function cancelByOrderCode($code, $admin_id, $cause_id, $memo = '')
     {
-        $order = OrderSearch::getOneByCode($order_code);
-        return self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+        if (substr($code, 0, 1) == 'Z') { //如果是周期订单
+            $orders = OrderSearch::getBatchOrder($code);
+            $transact = static::getDb()->beginTransaction();
+            foreach($orders as $order){
+                if(!self::_cancelOrder($order, $admin_id, $cause_id, $memo,$transact)){
+                    $transact->rollBack();
+                    return false;
+                }
+            }
+            $transact->commit();
+            OrderMsg::cancel($order); //取消订单发送通知
+            return true;
+        }else {
+            $order = OrderSearch::getOneByCode($code);
+            if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
+                OrderMsg::cancel($order); //取消订单发送通知
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
 
     /**
@@ -701,9 +725,10 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $cause_id
      * @param $memo
+     * @param $transact
      * @return bool
      */
-    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '')
+    private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '',$transact = null)
     {
 
         $order->admin_id = $admin_id;
@@ -722,7 +747,9 @@ class Order extends OrderModel
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])) {
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
-            $transact = static::getDb()->beginTransaction();
+
+            $transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
+
             $result = OrderStatus::_cancel($order, [], $transact);
             //在线支付 和 E家洁支付 非现金的 或者 支付异常的 调用退款接口
             if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2]) && $order->orderExtPay->pay_channel_id != 20 && $current_status != OrderStatusDict::ORDER_INIT
@@ -741,10 +768,11 @@ class Order extends OrderModel
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
             }
             if ($result) {
-                $transact->commit();
-                OrderMsg::cancel($order); //取消订单发送通知
+                if(empty($transact)){
+                    $transaction->commit();
+                }
             } else {
-                $transact->rollBack();
+                $transaction->rollBack();
             }
             return $result;
         } else {
