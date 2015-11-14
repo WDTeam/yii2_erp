@@ -187,6 +187,7 @@ class Order extends OrderModel
                 default:
                     $this->addError('pay_channel_id', '支付渠道不存在');
                     $this->addError('error_code','540201');
+                    return false;
                     break;
             }
 
