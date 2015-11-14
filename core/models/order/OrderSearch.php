@@ -576,7 +576,7 @@ class OrderSearch extends Order
                 'order_channel_type_id' => $this->order_channel_type_id,
                 'order_unit_money' => $this->order_unit_money,
                 'order_money' => $this->order_money,
-                'isdel' => 1,
+                'isdel' => 0,
                 'order_booked_count' => $this->order_booked_count,
                 'order_booked_begin_time' => $this->order_booked_begin_time,
                 'order_booked_end_time' => $this->order_booked_end_time,
