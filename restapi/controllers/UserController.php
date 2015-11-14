@@ -130,6 +130,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_channel_name      订单渠道名称
+     * @apiParam {String} [app_version]      版本号
      * 
      * @apiSuccess {Object[]} addresses 用户常用地址数组.
      * @apiSuccessExample Success-Response:
