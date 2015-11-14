@@ -34,22 +34,22 @@ use kartik\daterange\DateRangePicker;
     }else{
         $worker_info = Worker::find()->where(['id'=>$worker_id])->asArray()->one();
         if($worker_info['worker_is_block']!=0){
-            $message = '阿姨当前正处于封号中，排班表未激活！';
+            $message = '阿姨当前正处于封号中，排班表未保存！';
         }elseif($worker_info['worker_is_blacklist']!=0){
-            $message = '阿姨被列入黑名单，排班表未激活！';
+            $message = '阿姨被列入黑名单，排班表未保存！';
         }elseif($worker_info['worker_is_dimission']!=0){
-            $message = '阿姨已离职，排班表未激活！';
+            $message = '阿姨已离职，排班表未保存！';
         }elseif($worker_info['worker_auth_status']<4){
-            $message = '阿姨当前还未试工，排班表未激活！';
+            $message = '阿姨当前还未试工，排班表未保存！';
         }elseif($worker_info['worker_auth_status']==5){
-            $message = '阿姨当前试工未通过，排班表未激活！';
+            $message = '阿姨当前试工未通过，排班表未保存！';
         }elseif($worker_info['worker_auth_status']==7){
-            $message = '阿姨当前上岗未通过，排班表未激活！';
+            $message = '阿姨当前上岗未通过，排班表未保存！';
         }else{
             $message = '排班表未激活，请重新保存';
         }
         ?>
-        <div class="callout callout-danger" style="padding: 9px 30px 1px 15px">
+        <div class="callout callout-danger" style="padding: 9px 30px 1px 15px;margin:0px 0px 0px">
             <h4 style="font-size:15px"><?=$message?></h4>
         </div>
         <?php
@@ -61,11 +61,11 @@ use kartik\daterange\DateRangePicker;
             <div style="clear: both"></div>
             <div style="float:left;margin-left:10px;margin-top:4px;font-size: 15px;color:rgb(132, 131, 131)">排班表状态说明：</div>
             <div style="border: 1px solid #DDD;float:left;margin-left:10px;height: 28px;width: 63px;background: rgba(246, 162, 2, 0.62) none repeat scroll 0% 0%;font-size:15px;padding: 6px 12px;"></div>
-            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间已保存</div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">排班表已保存</div>
             <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 28px;width: 63px;background: rgba(177, 209, 228, 0.77) none repeat scroll 0% 0%;"></div>
-            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间已选中,未保存</div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">排班表已选中,未保存</div>
             <div style="border: 1px solid #DDD;float:left;margin-left:15px;height: 28px;width: 63px;background: #F3F4F5"></div>
-            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">时间未选中</div>
+            <div style="float:left;margin-left:10px;margin-top:4px;font-size: 13px;color:rgb(132, 131, 131)">排班表未选中</div>
             <div style="clear: both"></div>
         </div><!-- /.box-body -->
     </div>
