@@ -9,7 +9,6 @@ use core\models\customer\CustomerComment;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use dbbase\models\order\OrderOtherDict;
 
 /**
  * OrderSearch represents the model behind the search form about `dbbase\models\order\Order`.
