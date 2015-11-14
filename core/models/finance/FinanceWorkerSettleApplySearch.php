@@ -266,11 +266,11 @@ class FinanceWorkerSettleApplySearch extends FinanceWorkerSettleApply
            foreach($orders as $order){
                $apply_man_hour += $order->order_booked_count;
                $apply_order_money += $order->order_money;
-              if(!empty($order->orderExtPay) && ($order->orderExtPay->order_pay_type == 1)){
+              if(!empty($order->orderExtPay) && ($order->orderExtPay->pay_channel_id == 2)){
                   $order_cash_count++;
                   $order_cash_money += $order->order_money;
               }
-              if(!empty($order->orderExtPay) && ($order->orderExtPay->order_pay_type != 1)){
+              if(!empty($order->orderExtPay) && ($order->orderExtPay->pay_channel_id != 2)){
                   $order_noncash_count++;
                   $order_money_except_cash += $order->order_money;
               }
