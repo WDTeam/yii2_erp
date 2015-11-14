@@ -110,6 +110,8 @@ class CouponRuleController extends Controller
 					$newcoupon->couponrule_commodity_id=$newdata['order_typeid'];
 				}
 				
+				
+				
     		$newcoupon->coupon_userinfo_code=$newdata['coupon_userinfo_code']?$newdata['coupon_userinfo_code']:'0';
     		$newcoupon->coupon_userinfo_name=$newdata['coupon_userinfo_name']?$newdata['coupon_userinfo_name']:'优惠券';
     		$newcoupon->coupon_userinfo_gettime=$newdata['coupon_userinfo_gettime'];//领取时间默认为开始时间
@@ -231,7 +233,7 @@ class CouponRuleController extends Controller
         		//一码一用
            	$unm=$dateinfo['CouponRule']['couponrule_code_num'];//一码一用数量
            	$name=strtolower($dateinfo['CouponRule']['couponrule_Prefix']);//一码一用前缀
-           	
+
            	if(\Yii::$app->redis->EXISTS($name)=='0'){
                /***
                 * 判断rdeis里面是否有此key值 （虽然数据库做了唯一，但是为了异常，这里再次判断）
@@ -259,8 +261,37 @@ class CouponRuleController extends Controller
 		    $model->couponrule_price_sum=$dateinfo['CouponRule']['couponrule_price']*$dateinfo['CouponRule']['couponrule_code_num']; 
 		    }
 		    
-		    $model->couponrule_service_type_name='服务类别名称1';
-		    $model->couponrule_commodity_name='商品优惠券名称1';
+		 
+		    
+		    if($dateinfo['CouponRule']['couponrule_type']==1){
+		    //全网优惠券	
+		    	$model->couponrule_type_name='全网优惠券';
+		    	$model->couponrule_service_type_id=0;
+		    	$model->couponrule_service_type_name='0';
+		    	$model->couponrule_commodity_id=0;
+		    	$model->couponrule_commodity_name='0';
+		    	
+		    	
+		    }elseif ($dateinfo['CouponRule']['couponrule_type']==2){
+		    // 类别券	
+		    	$model->couponrule_type_name='类别优惠券';
+		    	$model->couponrule_service_type_id=$dateinfo['CouponRule']['couponrule_service_type_id'];
+		    	$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
+		    	$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
+		    	$model->couponrule_service_type_name=$data_es_name[$dateinfo['CouponRule']['couponrule_service_type_id']];
+		    	$model->couponrule_commodity_id=0;
+		    	$model->couponrule_commodity_name='0';
+		    }else{
+		    // 商品券	
+		    	$model->couponrule_type_name='商品优惠券';
+		    	$model->couponrule_service_type_id=0;
+		    	$model->couponrule_service_type_name='0';
+		    	$model->couponrule_commodity_id=$dateinfo['CouponRule']['couponrule_commodity_id'];
+		        $goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
+		    	$model->couponrule_commodity_name=$goods_data[$dateinfo['CouponRule']['couponrule_commodity_id']];	
+		    }
+		    
+		    
 		    
 		    $model->couponrule_city_id=  $dateinfo['CouponRule']['city_id'];$model->couponrule_city_name=\core\models\operation\OperationArea::getAreaname($dateinfo['CouponRule']['city_id']);
 		    $model->couponrule_promote_type_name=$Couponrule[6][$dateinfo['CouponRule']['couponrule_promote_type']];
