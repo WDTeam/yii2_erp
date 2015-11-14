@@ -33,6 +33,7 @@ $(document).on('change','input[type=checkbox]',function(){
         $(this).parent().siblings('td').attr('class','select')
     }else{
         $(this).parent().siblings('td').removeClass('select')
+        $(this).parent().siblings('td').removeClass('actives')
     }
 });
 $(document).on('click','.delete',function(){
