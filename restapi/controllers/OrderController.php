@@ -1505,7 +1505,7 @@ class OrderController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
 
-            if (!isset($param['order_id']) && !isset($param['order_batch_code'])) {
+            if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
 
