@@ -261,13 +261,14 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		foreach ($couponCustomer as $key=>$data_customer){
 			
 			if($data_customer['couponrule_type']==1){
-				$name[$key]['couponrule_type_title']='全网优惠券';
+				$name['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){
-				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
+				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
 			}else{
-				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
+				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
 			}
 			$couponCustomerdate[]=array_merge_recursive($data_customer,$name);
+			unset($name);
 		}
 		
 		
@@ -327,13 +328,14 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		foreach ($couponCustomer as $key=>$data_customer){
 				
 			if($data_customer['couponrule_type']==1){
-				$name[$key]['couponrule_type_title']='全网优惠券';
+				$name['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){
-				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
+				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
 			}else{
-				$name[$key]['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
+				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
 			}
 			$couponCustomerdate[]=array_merge_recursive($data_customer,$name);
+			unset($name);
 		}
 		
 		$array=[
