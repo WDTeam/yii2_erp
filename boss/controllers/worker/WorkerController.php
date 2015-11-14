@@ -1269,8 +1269,9 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
+
         echo '<pre>';
-        $a = Worker::getWorkerTimeLine(3,1);
+        $a = Worker::countShopWorkerNums(1);
         var_dump($a);die;
         die;
         $city_encode = '北京市';
