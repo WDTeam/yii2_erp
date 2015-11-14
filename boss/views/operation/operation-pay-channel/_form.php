@@ -12,12 +12,18 @@ $model->operation_pay_channel_type=1;
 
 <div class="operation-pay-channel-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL,'enableAjaxValidation' => true,
+    		'validationUrl'=>Yii::$app->urlManager->createUrl(['operation/operation-pay-channel/ajax-info'])
+]);  
+    echo Form::widget([
 
     'model' => $model,
     'form' => $form,
     'columns' => 1,
     'attributes' => [
+    		'id'=>[
+				'type'=>Form::INPUT_TEXT,
+    		],
     		'operation_pay_channel_type'=>['type'=> Form::INPUT_RADIO_LIST,
     		'items'=>OperationPayChannelSearch::configorder(),'options'=>[]],
 'operation_pay_channel_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'支付渠道名称...', 'maxlength'=>50]], 

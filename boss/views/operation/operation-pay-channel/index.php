@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+    		'id',
     		[
     		'format' => 'raw',
     		'label' => '订单渠道类别',
@@ -39,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'create_time:datetime', 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {update}',
+                'template' =>'{update}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-pay-channel/view','id' => $model->id,'edit'=>'t']), [
