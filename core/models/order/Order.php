@@ -187,7 +187,7 @@ class Order extends OrderModel
                     break;
                 default:
                     $this->addError('pay_channel_id', '支付渠道不存在');
-                    $this->addError('error_code','540201');
+                    $this->addError('error_code','540110');
                     return false;
                     break;
             }
@@ -200,12 +200,12 @@ class Order extends OrderModel
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
             if (OrderSearch::customerWaitPayOrderCount($customer->customer_phone) > 0) {
                 $this->addError('customer_id', '存在待支付订单，请先支付再下单！');
-                $this->addError('error_code','540301');
+                $this->addError('error_code','540111');
                 return false;
             }
         } else {
             $this->addError('customer_id', '没有获取到用户信息！');
-            $this->addError('error_code','540401');
+            $this->addError('error_code','540112');
             return false;
         }
         $customer_balance = 0;
@@ -216,7 +216,7 @@ class Order extends OrderModel
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
                 $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
-                $this->addError('error_code','540501');
+                $this->addError('error_code','540113');
                 return false;
             }
         }
@@ -226,7 +226,7 @@ class Order extends OrderModel
                 try {
                     $paymentCustomerTransRecord = PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay');
                 }catch (Exception $e){
-                    $this->addError('error_code','540601');
+                    $this->addError('error_code','540114');
                 }
                 if ($paymentCustomerTransRecord) {
                     $order_model = OrderSearch::getOne($this->id);
@@ -234,11 +234,13 @@ class Order extends OrderModel
                     if (in_array($this->order_service_item_name, Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
+                }else{
+                    $this->addError('error_code','540115');
                 }
             }
             return true;
         }else{
-            $this->addError('error_code','540701');
+            $this->addError('error_code','540116');
             return false;
         }
     }
@@ -291,9 +293,11 @@ class Order extends OrderModel
                 unset($attributes[$k]);
             }
         }
+        $error_code = 0;
         foreach ($attributes_required as $v) {
+            $error_code++;
             if (!isset($attributes[$v])) {
-                return ['status' => false, 'errors' => $v . '为必填项！'];
+                return ['status' => false,'error_code'=>'54020'+$error_code, 'msg' => $v . '为必填项！']; //540201 540202 540203 540204 540205 540206
             }
         }
 
@@ -303,7 +307,7 @@ class Order extends OrderModel
                     $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY;
                     break;
                 default:
-                    return ['status' => false,'error_code'=>'540201', 'errors' => '支付渠道不存在！'];
+                    return ['status' => false,'error_code'=>'540207', 'msg' => '支付渠道不存在！'];
                     break;
             }
 
@@ -329,7 +333,7 @@ class Order extends OrderModel
             $attributes['order_customer_phone'] = $customer->customer_phone;
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
         } else {
-            return ['status' => false, 'errors' => '没有获取到用户信息！'];
+            return ['status' => false,'error_code'=>'540208', 'msg' => '没有获取到用户信息！'];
         }
 
         $customer_balance = 0;
@@ -339,7 +343,7 @@ class Order extends OrderModel
                 $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
-                return ['status' => false, 'errors' => '创建时获客户余额信息失败！'];
+                return ['status' => false,'error_code'=>'540209', 'msg' => '创建时获客户余额信息失败！'];
             }
         }
 
@@ -357,7 +361,7 @@ class Order extends OrderModel
             if (!$order->_create($attributes + $booked, $transact, $customer_balance)) {
                 $transact->rollBack();
 
-                return ['status' => false, 'errors' => $order->errors];
+                return ['status' => false,'error_code'=>'540210', 'msg' => json_encode($order->errors)];
             } else {
                 if ($attributes['order_parent_id'] == 0 && $attributes['order_is_parent'] == 1) {
                     //第一个订单为父订单其余为子订单
@@ -372,8 +376,15 @@ class Order extends OrderModel
         $transact->commit();
         if ($orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id'] == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) {
             //交易记录
-            if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $channel_id, 'order_pay', 2)) {
+            try {
+                $paymentCustomerTransRecord = PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $channel_id, 'order_pay', 2);
+            }catch (Exception $e){
+                return ['status' => false,'error_code'=>'540211', 'msg' => '交易记录插入异常！'];
+            }
+            if ($paymentCustomerTransRecord) {
                 OrderStatus::_batchPayment($attributes['order_batch_code'], $attributes['admin_id']);
+            }else{
+                return ['status' => false,'error_code'=>'540211', 'msg' => '交易记录插入失败！'];
             }
         }
         return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
