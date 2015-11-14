@@ -43,6 +43,7 @@ class CouponUserinfoController extends Controller {
 	 * @return mixed
 	 */
 	public function actionIndex() {
+		
 		$searchModel = new CouponUserinfoSearch ();
 		$dataProvider = $searchModel->search ( Yii::$app->request->getQueryParams () );
 		
