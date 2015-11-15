@@ -132,6 +132,7 @@ $this->title = $model->worker_name;
                         'placeholder' => '选择招聘来源',
                     ]
                 ],
+                'value'=>WorkerExt::getWorkerSourceShow($model->workerExtRelation->worker_source),
                 'label'=>'招聘来源'
             ],
             'worker_name',

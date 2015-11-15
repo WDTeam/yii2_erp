@@ -49,7 +49,7 @@ class WorkerExt extends \yii\db\ActiveRecord
             [['worker_age','worker_sex','worker_source','worker_bank_name','worker_bank_from','worker_bank_area','worker_bank_card','worker_live_province', 'worker_live_city', 'worker_live_area'],'required'],
             [['worker_edu'], 'string', 'max' => 30],
             ['worker_bank_card', 'match','pattern'=>'/^[0-9]{16}|(0-9){19}$/','message'=>'银行卡号必须16位或19位数字'],
-            [['worker_source', 'worker_live_street'], 'string', 'max' => 50],
+            [['worker_live_street'], 'string', 'max' => 50],
             [['worker_bank_name'], 'string', 'max' => 10],
             [['worker_bank_from','worker_bank_area'], 'string', 'max' => 50],
             ['worker_height','number','min'=>100,'max'=>200],
