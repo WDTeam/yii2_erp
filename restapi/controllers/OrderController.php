@@ -169,7 +169,6 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_is_use_balance'])) {
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
-
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
@@ -552,13 +551,13 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionOrdersCount()
     {
-      
+
         $args = Yii::$app->request->get() or $args = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (!isset($args['access_token']) || !$args['access_token']) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
-        
+
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
@@ -2183,6 +2182,10 @@ class OrderController extends \restapi\components\Controller
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+
+        if (empty($param['id'])) {
+            return $this->send(null, "订单号不能为空！", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
         try {
             $order = OrderSearch::getOne($param['id'])->getAttributes();
