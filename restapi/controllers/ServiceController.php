@@ -966,8 +966,11 @@ class ServiceController extends \restapi\components\Controller
         if (empty($worker_list['data'])) {
             return $this->send(null, "没有可用阿姨", 0, 403, null, alertMsgEnum::serverWorkerListFail);
         } else {
-            if(!$worker_list['data']['worker_photo']){
-                $worker_list['data']['worker_photo'] = "http://webapi2.1jiajie.com/app/images/aunt_icon20151115.png";
+            foreach($worker_list['data'] as $key=>$val){
+                if(!$val['worker_photo']){
+                    $worker_list['data'][$key]['worker_photo'] = "http://webapi2.1jiajie.com/app/images/aunt_icon20151115.png";
+                }
+                if(!$val['updated_at']) $worker_list['data'][$key]['updated_at'] = "";
             }
             return $this->send($worker_list, "获取周期服务可用阿姨列表成功", 1, 200, null, alertMsgEnum::serverWorkerListSuccess);
         }
