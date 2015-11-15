@@ -286,7 +286,7 @@ class ConfigureController extends \restapi\components\Controller
             $pic_list = [
                 [
                     "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-                    "link" => "",
+                    "link" => "http://www.baidu.com",
                     "url_title" => "标准服务"
                 ],
                 [
