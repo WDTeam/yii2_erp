@@ -142,7 +142,11 @@ class SystemUser extends \dbbase\models\system\SystemUser
      */
     public static function getArrayRole()
     {
-        return ArrayHelper::map(\Yii::$app->authManager->getRoles(), 'name', 'description');
+        $res = ArrayHelper::map(\Yii::$app->authManager->getRoles(), 'name', 'description');
+        if(!\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_SUPER_ADMIN)){
+            unset($res[AuthItem::SYSTEM_ROLE_SUPER_ADMIN]);
+        }
+        return $res;
     }
     public function getRoleLabel()
     {

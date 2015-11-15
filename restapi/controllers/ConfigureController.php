@@ -273,13 +273,13 @@ class ConfigureController extends \restapi\components\Controller
             $header_link = [
                 'comment_link' => [
                     'title' => '意见反馈',
-                    'url' => $current_env_url . '/statics/images/MyView_FeedBack.png',
-                    'img' => $current_env_url . '/statics/images/MyView_FeedBack.png',
+                    'url' => $current_env_url . '/statics/images/fankui.png',
+                    'img' => $current_env_url . '/statics/images/fankui.png',
                 ],
                 'phone_link' => [
                     'title' => '400-6767-636',
                     'url' => '',
-                    'img' => $current_env_url . '/statics/images/MyView_Tel.png',
+                    'img' => $current_env_url . '/statics/images/phone.png',
                 ],
             ];
             //获取首页轮播图

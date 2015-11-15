@@ -46,8 +46,11 @@ class SystemUser extends ActiveRecord implements IdentityInterface
         $auth = \Yii::$app->authManager;
         if(!empty($roles)){
             $auth->revokeAll($this->id);
-            foreach ($roles as $role){
-                $auth->assign($auth->getRole($role), $this->id);
+            foreach ($roles as $role_name){
+                $role = $auth->getRole($role_name);
+                if(!empty($role)){
+                    $auth->assign($role, $this->id);
+                }
             }
             RbacHelper::updateConfigVersion();
             return $auth->getRolesByUser($this->id);
