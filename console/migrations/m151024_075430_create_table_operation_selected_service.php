@@ -9,6 +9,9 @@ class m151024_075430_create_table_operation_selected_service extends Migration
 
     public function safeUp()
     {
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
+        $this->execute($sql);
+
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'精品保洁\'';
@@ -22,7 +25,7 @@ class m151024_075430_create_table_operation_selected_service extends Migration
             'selected_service_sub_area' => Schema::TYPE_STRING . '(64) NOT NULL COMMENT \'子区域\'',
             'selected_service_standard' => Schema::TYPE_STRING . '(128) NOT NULL COMMENT \'标准\'',
             'selected_service_area_standard' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'面积标准,1:100平米以下;2:100平米以上\'',
-            'selected_service_price' => 'decimal(19,2) NOT NULL COMMENT \'价格\'',
+            'selected_service_price' => 'decimal(10,2) NOT NULL COMMENT \'价格\'',
             'selected_service_unit' => Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'单位时间，分钟\'',
             'selected_service_photo' => Schema::TYPE_STRING . '(150)  DEFAULT \'\' COMMENT \'商品头像地址\'',
             'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',

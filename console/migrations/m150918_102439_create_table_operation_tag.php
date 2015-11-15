@@ -5,13 +5,18 @@ use yii\db\Migration;
 
 class m150918_102439_create_table_operation_tag extends Migration
 {
+    const TB_NAME = '{{%operation_tag}}';
+
     public function up()
     {
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
+        $this->execute($sql);
+
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'标签表\'';
         }
-        $this->createTable('{{%operation_tag}}', [
+        $this->createTable(self::TB_NAME, [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'编号\'' ,
             'operation_tag_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'标签名称\'',
             'operation_applicable_scope_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 1 COMMENT \'适用范围编号\'',
@@ -24,7 +29,7 @@ class m150918_102439_create_table_operation_tag extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%operation_tag}}');
+        $this->dropTable(self::TB_NAME);
 
         return true;
     }
