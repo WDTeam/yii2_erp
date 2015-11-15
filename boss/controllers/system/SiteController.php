@@ -6,6 +6,7 @@ use yii\filters\AccessControl;
 use boss\models\system\LoginForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use boss\components\RbacHelper;
 
 /**
  * Site controller
