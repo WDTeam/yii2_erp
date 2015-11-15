@@ -30,7 +30,7 @@ class CouponRule extends CouponRuleModel
     
     public static function getcouponcode($key,$sum=10)
     {
-    	$date=\Yii::$app->redis->SRANDMEMBER('ces',$sum);
+    	$date=\Yii::$app->redis->SRANDMEMBER($key,$sum);
     	$tyu='';
     	foreach ($date as $tyutyu){
     		$tyu.=$tyutyu.' ';

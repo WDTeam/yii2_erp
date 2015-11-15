@@ -5,15 +5,18 @@ use yii\db\Migration;
 
 class m150926_035532_create_table_operation_advert_position extends Migration
 {
+    const TB_NAME = '{{%operation_advert_position}}';
+
     public function up()
     {
-        $sql = 'DROP TABLE IF EXISTS {{%operation_advert_position}}';
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
         $this->execute($sql);
+
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'广告位置表\'';
         }
-        $this->createTable('{{%operation_advert_position}}', [
+        $this->createTable(self::TB_NAME, [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
             'operation_advert_position_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'位置名称\'',
             'operation_platform_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'平台编号\'',
@@ -32,7 +35,7 @@ class m150926_035532_create_table_operation_advert_position extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%operation_advert_position}}');
+        $this->dropTable(self::TB_NAME);
 
         return true;
     }
