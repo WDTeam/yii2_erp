@@ -6,6 +6,7 @@ use boss\components\BaseAuthController;
 use boss\models\operation\OperationCategory;
 use boss\models\operation\OperationCategorySearch;
 use boss\models\operation\OperationShopDistrictGoods;
+use boss\models\operation\OperationGoods;
 
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -108,7 +109,10 @@ class OperationCategoryController extends BaseAuthController
             if ($model->save()) {
 
                 //关联修改上线商品表冗余的服务品类名称
-                $goodsInfo = OperationShopDistrictGoods::updateCategoryName($id, $post['OperationCategory']['operation_category_name']);
+                OperationShopDistrictGoods::updateCategoryName($id, $post['OperationCategory']['operation_category_name']);
+
+                //关联修改服务项目表冗余的服务品类名称
+                OperationGoods::updateCategoryName($id, $post['OperationCategory']['operation_category_name']);
             }
 
             return $this->redirect(['index']);
