@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-use boss\models\operation\OperationCommon;
-
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationAdvertContent */
 
