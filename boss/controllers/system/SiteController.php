@@ -30,7 +30,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
 
-        if(\Yii::$app->user->identity->isNotAdmin()){
+        if(\Yii::$app->user->can('group_shopmanager_admin')){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');
