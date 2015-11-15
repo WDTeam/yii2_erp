@@ -273,13 +273,13 @@ class ConfigureController extends \restapi\components\Controller
             $header_link = [
                 'comment_link' => [
                     'title' => '意见反馈',
-                    'url' => $current_env_url . '/statics/images/MyView_FeedBack.png',
-                    'img' => $current_env_url . '/statics/images/MyView_FeedBack.png',
+                    'url' => $current_env_url . '/statics/images/fankui.png',
+                    'img' => $current_env_url . '/statics/images/fankui.png',
                 ],
                 'phone_link' => [
                     'title' => '400-6767-636',
                     'url' => '',
-                    'img' => $current_env_url . '/statics/images/MyView_Tel.png',
+                    'img' => $current_env_url . '/statics/images/phone.png',
                 ],
             ];
             //获取首页轮播图
@@ -303,15 +303,15 @@ class ConfigureController extends \restapi\components\Controller
             //服务分类
             $home_order_server = [
                 [
-                    'title' => '单次体验',
-                    'introduction' => '新用户第1小时免费',
+                    'title' => '单次保洁',
+                    'introduction' => '单次体验 预约随心',
                     'icon' => $current_env_url . '/statics/images/dancibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/1',
                     'bg_colour' => 'ffb518',
                     'font_colour' => 'ffffff',
                 ],
                 [
-                    'title' => '预约随心',
+                    'title' => '周期保洁',
                     'introduction' => '一次下单 清洁无忧',
                     'icon' => $current_env_url . '/statics/images/zhouqibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/2',

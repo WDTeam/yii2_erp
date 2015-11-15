@@ -144,17 +144,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'type' => DetailView::INPUT_HIDDEN,
             ],
             [
-                'attribute' => 'audit_status',
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'name'=>'audit_status',
-                    'class'=>\kartik\widgets\Select2::className(),
-                    'data' => Shop::$audit_statuses,
-                    'hideSearch' => true,
-                    'options'=>[
-                        'placeholder' => '选择状态',
-                    ]
-                ],
+                'label' => '审核状态',
+//                 'type' => DetailView::INPUT_WIDGET,
+//                 'widgetOptions' => [
+//                     'name'=>'audit_status',
+//                     'class'=>\kartik\widgets\Select2::className(),
+//                     'data' => Shop::$audit_statuses,
+//                     'hideSearch' => true,
+//                     'options'=>[
+//                         'placeholder' => '选择状态',
+//                     ]
+//                 ],
                 'format'=>'raw',
                 'value'=>'<div class="col-md-2">'.Shop::$audit_statuses[(int)$model->audit_status].'</div>'.
                 '<div class="col-md-6">最后审核时间:'.date('Y-m-d H:i:s', $model->getLastAuditStatus()->created_at).'</div>',
@@ -214,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'enableEditMode'=>true,
     ]) ?>
-    
+    <?php if(!Yii::$app->user->identity->isNotAdmin()){?>
     <div class="panel panel-info">
     <?php $form = ActiveForm::begin([
         'action' => ['set-audit-status', 'id'=>$model->id],
@@ -232,4 +232,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     <?php ActiveForm::end(); ?>
     </div>
+    <?php }?>
 </div>

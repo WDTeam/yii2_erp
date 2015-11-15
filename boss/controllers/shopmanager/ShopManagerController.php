@@ -16,6 +16,7 @@ use yii\base\Widget;
 use yii\web\UploadedFile;
 use yii\web\HttpException;
 use yii\web\BadRequestHttpException;
+use core\models\shop\ShopCustomeRelation;
 
 /**
  * ShopManagerController implements the CRUD actions for ShopManager model.
@@ -108,6 +109,12 @@ class ShopManagerController extends BaseAuthController
             
             
             if($model->save()){
+                $ref = new ShopCustomeRelation();
+                $ref->system_user_id = \Yii::$app->user->id;
+                $ref->shop_manager_id = $model->id;
+                $ref->stype = ShopCustomeRelation::TYPE_STYPE_SHOPMANAGER;
+                $ref->save();
+                
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

@@ -247,4 +247,13 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
 
         return $result;
     }
+
+    /**
+     * 设置已发布广告的状态
+     */
+    public static function setAdvertStatus()
+    {
+        self::updateAll(['status' => self::ADVERT_ONLINE], ['<=', 'starttime', date('Y-m-d H:i:s')]);
+        self::updateAll(['status' => self::ADVERT_OFFLINE], ['<=', 'endtime', date('Y-m-d H:i:s')]);
+    }
 }

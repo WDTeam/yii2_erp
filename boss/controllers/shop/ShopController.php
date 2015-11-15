@@ -10,6 +10,8 @@ use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
+use yii\base\Object;
+use core\models\shop\ShopCustomeRelation;
 
 /**
  * ShopController implements the CRUD actions for Shop model.
@@ -88,7 +90,15 @@ class ShopController extends BaseAuthController
         $model = new Shop;
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            
+            $ref = new ShopCustomeRelation();
+            $ref->system_user_id = \Yii::$app->user->id;
+            $ref->shopid = $model->id;
+            $ref->shop_manager_id = $model->shop_manager_id;
+            $ref->stype = ShopCustomeRelation::TYPE_STYPE_SHOP;
+            $ref->save();
+            
+            return $this->redirect(['index', 'id' => $model->id]);
         } else {
             $model->is_blacklist = 0;
             return $this->render('create', [
