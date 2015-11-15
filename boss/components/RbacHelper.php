@@ -21,12 +21,12 @@ class RbacHelper extends Component
     {
         $_menus = self::getMenus();
         $cver = \Yii::$app->cache->get(self::CONFIG_VERSION);
-        $sver = \Yii::$app->session->get(self::CONFIG_VERSION.\Yii::$app->session->id);
+        $sver = \Yii::$app->cache->get(self::CONFIG_VERSION.\Yii::$app->session->id);
         if(empty($_menus) || $cver!=$sver){
             $menus = self::recursiveInitMenu($menus);
             $cver = \Yii::$app->cache->get(self::CONFIG_VERSION);
-            \Yii::$app->session->set(self::CONFIG_VERSION.\Yii::$app->session->id, $cver);
-            \Yii::$app->session->set(self::CACHE_MENU.\Yii::$app->session->id, $menus);
+            \Yii::$app->cache->set(self::CONFIG_VERSION.\Yii::$app->session->id, $cver);
+            \Yii::$app->cache->set(self::CACHE_MENU.\Yii::$app->session->id, $menus);
             return $menus;
         }
         return $_menus;
@@ -40,7 +40,7 @@ class RbacHelper extends Component
         $_menus = self::getTopMenus();
         if(empty($_menus)){
             $menus = self::recursiveInitMenu($menus);
-            \Yii::$app->session->set(self::CACHE_TOP_MENU.\Yii::$app->session->id, $menus);
+            \Yii::$app->cache->set(self::CACHE_TOP_MENU.\Yii::$app->session->id, $menus);
             return $menus;
         }
         return $_menus;
@@ -83,11 +83,11 @@ class RbacHelper extends Component
      */
     public static function getMenus()
     {
-        return \Yii::$app->session->get(self::CACHE_MENU.\Yii::$app->session->id);
+        return \Yii::$app->cache->get(self::CACHE_MENU.\Yii::$app->session->id);
     }
     public static function getTopMenus()
     {
-        return \Yii::$app->session->get(self::CACHE_TOP_MENU.\Yii::$app->session->id);
+        return \Yii::$app->cache->get(self::CACHE_TOP_MENU.\Yii::$app->session->id);
     }
     /**
      * 权限修改时调用此方法
