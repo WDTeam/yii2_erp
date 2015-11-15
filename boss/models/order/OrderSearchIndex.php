@@ -48,7 +48,7 @@ class OrderSearchIndex extends Order
     {
         $query = OrderSearchIndex::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay', 'bookedWorker'])
             ->orderBy(['id' => SORT_DESC]);
-        if (!empty(Yii::$app->user->identity->shopIds)) {
+        if (Yii::$app->user->identity->isNotAdmin()) {
             $query->where(['orderExtWorker.shop_id' => Yii::$app->user->identity->shopIds]);
         }
         $dataProvider = new ActiveDataProvider([

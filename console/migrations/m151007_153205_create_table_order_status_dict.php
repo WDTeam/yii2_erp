@@ -40,7 +40,7 @@ class m151007_153205_create_table_order_status_dict extends Migration
                 [11, '已完成服务','服务完成','服务完成请评价','待评价',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [12, '已完成评价','客户已确认','评价已完成','已完成',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [13, '已完成结算','工人已结算','评价已完成','已完成',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [14, '已取消','已取消','已关闭','已取消',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [14, '已取消','已取消','已取消','已取消',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [15, '已归档','已归档','已删除','已删除',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
             ]
         );

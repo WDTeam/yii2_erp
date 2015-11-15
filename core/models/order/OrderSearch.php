@@ -533,8 +533,8 @@ class OrderSearch extends Order
             'query' => $query,
         ]);
 
-         #$query = $query->select(['*']);
-         $query = $query->select('id,order_code,order_batch_code,order_parent_id,order_is_parent,order_service_type_id,order_service_type_name,order_service_item_id,order_service_item_name,order_channel_type_id,order_channel_type_name,channel_id,order_channel_name,order_unit_money,order_money,order_booked_count,order_booked_begin_time,order_booked_end_time,order_address,order_lat,order_lng,order_booked_worker_id,pay_channel_type_id,order_pay_channel_type_name,pay_channel_id,order_customer_phone,order_pay_money,order_cs_memo');
+         $query = $query->select(['*']);
+         #$query = $query->select('id,order_code,order_batch_code,order_parent_id,order_is_parent,order_service_type_id,order_service_type_name,order_service_item_id,order_service_item_name,order_channel_type_id,order_channel_type_name,channel_id,order_channel_name,order_unit_money,order_money,order_booked_count,order_booked_begin_time,order_booked_end_time,order_address,order_lat,order_lng,order_booked_worker_id,pay_channel_type_id,order_pay_channel_type_name,pay_channel_id,order_customer_phone,order_pay_money,order_cs_memo');
         if (!is_null($from) && is_numeric($from)) {
             $query->andFilterWhere(['>', 'order_booked_begin_time', $from]);
         }
