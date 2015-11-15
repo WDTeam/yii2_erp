@@ -6,6 +6,7 @@ use yii\filters\AccessControl;
 use boss\models\system\LoginForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use boss\components\RbacHelper;
 
 /**
  * Site controller
@@ -30,7 +31,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
 
-        if(\Yii::$app->user->identity->isNotAdmin()){
+        if(\Yii::$app->user->can('group_shopmanager_admin')||\Yii::$app->user->can('system_group_shop_manger')){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');

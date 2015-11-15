@@ -367,9 +367,9 @@ class Order extends OrderModel
                     //第一个订单为父订单其余为子订单
                     $attributes['order_parent_id'] = $order->id;
                     $attributes['order_is_parent'] = 0;
-                    $orderExtPay += $order->orderExtPay->order_pay_money;
-                    $channel_id = $order->channel_id;
                 }
+                $channel_id = $order->channel_id;
+                $orderExtPay += $order->orderExtPay->order_pay_money;
             }
         }
 
