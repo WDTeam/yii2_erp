@@ -2086,7 +2086,8 @@ class OrderController extends \restapi\components\Controller
                     $r_order['sub_order'] = array_merge($order, []);
                 } else {
                     foreach ($order as $k => $v) {
-                        if ($v['pay_channel_id'] == 1) {
+                        #是否现金支付
+                        if ($v['pay_channel_id'] == 2) {
                             @$r_order['worker_money'] += $v['order_money'];
                         } else {
                             @$r_order['worker_money'] = 0;
