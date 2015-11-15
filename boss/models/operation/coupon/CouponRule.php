@@ -23,11 +23,6 @@ class CouponRule extends CouponRuleModel
         ];
     }
 
-    
-    
-    
-   
-    
     public static function getcouponcode($key,$sum=10)
     {
     	$date=\Yii::$app->redis->SRANDMEMBER($key,$sum);
