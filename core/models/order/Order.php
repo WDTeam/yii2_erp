@@ -225,17 +225,17 @@ class Order extends OrderModel
             if ($this->order_pay_money == 0 || $this->orderExtPay->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) {
                 try {
                     $paymentCustomerTransRecord = PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay');
+                    if ($paymentCustomerTransRecord) {
+                        $order_model = OrderSearch::getOne($this->id);
+                        $order_model->admin_id = $attributes['admin_id'];
+                        if (in_array($this->order_service_item_name, Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+                            OrderStatus::_payment($order_model, ['OrderExtPay']);
+                        }
+                    }else{
+                        $this->addError('error_code','540115');
+                    }
                 }catch (Exception $e){
                     $this->addError('error_code','540114');
-                }
-                if ($paymentCustomerTransRecord) {
-                    $order_model = OrderSearch::getOne($this->id);
-                    $order_model->admin_id = $attributes['admin_id'];
-                    if (in_array($this->order_service_item_name, Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                }else{
-                    $this->addError('error_code','540115');
                 }
             }
             return true;
