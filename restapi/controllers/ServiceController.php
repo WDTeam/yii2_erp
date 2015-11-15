@@ -1021,6 +1021,49 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
+     * @api {GET} /service/baidu-map [GET]/service/baidu-suggest（100%）
+     * @apiGroup service
+     * @apiName actionBaiduSuggest
+     * @apiDescription 根据地址获取百度联想地址数据(赵顺利 )
+     *
+     * @apiParam {String} query 查询关键字
+     * @apiParam {String} order_channel_name   订单渠道名称
+     * @apiParam {String} ak
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/service/baidu-suggest
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "1",
+     *      "msg": "",
+     *      "ret":
+     *  }
+     *
+     * @apiError queryNotSupportFound 关键字不能为空.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"0",
+     *       "msg": "关键字不能为空"
+     *     }
+     */
+    public function actionBaiduSuggest()
+    {
+        $params = Yii::$app->request->get();
+
+        if (empty($params) || empty($params['query']) || empty($params['ak'])) {
+            return $this->send(null, '参数不完成', '0', '403', null, alertMsgEnum::baiduSuggestFailed);
+        }
+        $url = "http://api.map.baidu.com/place/v2/suggestion?region=全国&output=json&query=" . $params['query']
+            . '&ak=' . $params['ak'];
+
+        $date = file_get_contents($url);
+
+        return $this->send(json_decode($date), '操作成功', '0', '200', null, alertMsgEnum::baiduSuggestSuccess);
+    }
+
+    /**
      * @api {GET} /service/get-shop-district-info [GET] /service/get-shop-district-info（100%）
      * 
      * @apiDescription 根据经纬度获取商圈信息（李勇）

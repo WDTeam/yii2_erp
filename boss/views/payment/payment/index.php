@@ -22,8 +22,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'customer_id',
             [
+                'attribute' => 'customer_phone',
+                'label' => '用户手机号码',
+                'options' => ['width'=>80],
+            ],
+            [
                 'attribute' => 'order_id',
+                'label' => 'E家洁订单ID',
+                'options' => ['width'=>80],
+            ],
+            [
+                'attribute' => 'order_code',
                 'label' => 'E家洁订单号',
+                'options' => ['width'=>80],
+            ],
+            [
+                'attribute' => 'order_batch_code',
+                'label' => 'E家洁周期订单号',
                 'options' => ['width'=>80],
             ],
             [

@@ -90,7 +90,6 @@ class server
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
             echo date('Y-m-d H:i:s').' 工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n";
-            $this->recordMessageByMongodb(date('Y-m-d H:i:s').' 工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n");
             $this->config = require(CONFIG_PATH);
             $this->startTimer($server);
         }
@@ -156,7 +155,7 @@ class server
         $this->ws = $ws;
         $this->fd = $ws->fd;
         $this->data = $ws->data;
-        $this->handleCommandMessage($server, $ws->data);
+        $this->handleCommandMessage($server, $ws->data,$ws->fd);
 
         return;
     }
@@ -165,17 +164,33 @@ class server
      */
     public function onReceive( swoole_server $server, $fd, $from_id, $data ) {
         echo date('Y-m-d H:i:s')." Get Message From Client {$fd}:{$data}\n";
-        $this->handleCommandMessage($server, $data);
+        $this->handleCommandMessage($server, $data, $fd);
         
         return;
     }
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$data)
+    public function handleCommandMessage($server,$data,$fd)
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
+        if($cmd == autoassign\ClientCommand::ALL_REDIS_ORDERS){
+            $orders = $this->getOrders();
+            foreach($orders as $key => $order){
+                if ($order['order_id']==null || $order['order_id']=='')
+                {
+                    continue;
+                }
+                $order = $this->getOrderStatus($order);
+                $order['created_at'] = date('Y-m-d H:i:s', $order['created_at']);
+                $order['updated_at']=$order['created_at'];
+                $d = json_encode($order);
+                echo 'onConnect;d='.$d;
+                $this->broadcastToSpecifiedClient($server, $fd, json_encode($d));
+            }
+            return;
+        }
         $nextStatus = autoassign\ClientCommand::START;//默认下一步是“开始自动派单”
         $currentStatus = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
         echo 'currentStatus:'.$currentStatus;
@@ -223,7 +238,6 @@ class server
      */
     public function startTimer($server) {
         echo date('Y-m-d H:i:s').' 启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
-        $this->recordMessageByMongodb(date('Y-m-d H:i:s').' 启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n");
         $this->serv = $server;
         $this->timer_id = $server->tick($this->config['TIMER_INTERVAL'] * 1000, function ($id) {
             $this->saveStatus($this->serv);
@@ -258,7 +272,6 @@ class server
         }
         $this->isWorkerTaskRunning = true;
         echo date('Y-m-d H:i:s').' 正在获取订单===>';
-        $this->recordMessageByMongodb(date('Y-m-d H:i:s').' 正在获取订单');
         //取得订单启动任务foreach orders
         $orders = $this->getOrders();
         $count = count($orders);
@@ -266,10 +279,8 @@ class server
         if ($count>0)
         {
             echo '有 '.$count.' 个订单待指派'."\n";
-            $this->recordMessageByMongodb('有 '.$count.' 个订单待指派');
         }else{
             echo "没有待指派订单\n";
-            $this->recordMessageByMongodb("没有待指派订单");
         }
         foreach($orders as $key => $order){
             
@@ -296,24 +307,20 @@ class server
             $timerDiff = time() - (int)($order['assign_start_time']);
 
             echo '已过 '.$timerDiff.' 秒 ==>';
-            $this->recordMessageByMongodb(date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中,".'已过 '.$timerDiff.' 秒 ==>');
             
             if ( ($timerDiff < $this->config['FULLTIME_WORKER_TIMEOUT'] *60) && ($order['worker_identity']=='0'))
             {
                 echo 'Order_ID:'.$order['order_id']." 0-5分钟，指派全职阿姨\n";
-                $this->recordMessageByMongodb('Order_ID:'.$order['order_id']." 0-5分钟，指派全职阿姨");
                 $isOK = true;
             }
             else if ( ($timerDiff > $this->config['FULLTIME_WORKER_TIMEOUT']*60 && $timerDiff < $this->config['FREETIME_WORKER_TIMEOUT']*60 ) && ( $order['worker_identity']=='1' ))
             {
                 echo 'Order_ID:'.$order['order_id']." 5-10分钟，指派兼职阿姨\n";
-                $this->recordMessageByMongodb('Order_ID:'.$order['order_id']." 5-10分钟，指派兼职阿姨");
                 $isOK = true;
             }
             else if ( $timerDiff > $this->config['SYSTEM_ASSIGN_TIMEOUT'] *60 )
             {
                 echo 'Order_ID:'.$order['order_id']." 超过15分钟，转人工指派\n";
-                $this->recordMessageByMongodb('Order_ID:'.$order['order_id']." 超过15分钟，转人工指派");
                 $isOK = true;
             }
             if ($isOK)
@@ -335,11 +342,11 @@ class server
         //echo 'getOrderStatus' . "\n";
 
         if ($order['worker_identity'] == '0') {
-            $order['status'] = '1';
+            $order['status'] = 1;
         } else if ($order['worker_identity'] == '1') {
-            $order['status'] = '2';
+            $order['status'] = 2;
         } else if ($order['worker_identity'] == '2') {
-            $order['status'] = '1001';
+            $order['status'] = 1001;
         }
 
         return $order;
@@ -351,11 +358,6 @@ class server
     public function getOrders(){
         $orders = $this->redis->zrange($this->config['_REDIS_WAIT_ASSIGN_ORDER_POOL_'],0,-1);
         foreach($orders as $key => $value){
-            // 加锁与解锁
-            if(isset($value['lock']) && $value['lock']){
-                unset($orders[$key]);
-                break;
-            }
             $orders[$key] = (array)json_decode($value);
         }
         return (array)$orders;
@@ -391,7 +393,6 @@ class server
         echo '$from_id is '.$from_id.'; task_id is '.$task_id." called"."</br>";
         //return $this->taskOrder($data, $server);
         echo '当前任务订单数据为:'.$data;
-        $this->recordMessageByMongodb($data);
         return $this->taskOrder($server, $data);
     }
     
@@ -400,7 +401,6 @@ class server
      */
     public function taskOrder($server, $data) {
         echo date('Y-m-d H:i:s') . ' 请求API' . $this->config['BOSS_API_URL'] . $data['order_id'] . "\n";
-        $this->recordMessageByMongodb(date('Y-m-d H:i:s') . ' 请求API' . $this->config['BOSS_API_URL'] . $data['order_id']);
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
@@ -447,14 +447,20 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
-            //var_dump($clid);
-            try{
+            echo 'clid='.$clid.';msg='.$msg;
+            $this->broadcastToSpecifiedClient($server,$clid, $msg);
+        }
+    }
+    
+    public function broadcastToSpecifiedClient($server,$clid, $msg){
+        try{
+            
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
                 echo date('Y-m-d H:i:s').$ex->getMessage();
             }
-        }
     }
+    
     /**
      * 配置文件操作(查询与修改)
      * 默认没有第三个参数时，按照字符串读取提取''中或""中的内容
