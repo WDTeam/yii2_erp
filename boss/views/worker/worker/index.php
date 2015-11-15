@@ -629,8 +629,8 @@ if(\Yii::$app->user->identity->isNotAdmin()){
         Html::a('<i class="glyphicon" ></i>上岗 '.Worker::CountWorkerStatus([7,8]), ['index?WorkerSearch[worker_auth_status]=7,8'], ['class' => 'btn '.Worker::setBtnCss(3), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>全时 '.Worker::CountWorkerIdentity(1), ['index?WorkerSearch[worker_identity_id]=1'], ['class' => 'btn '.Worker::setBtnCss(4), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerIdentity(2), ['index?WorkerSearch[worker_identity_id]=2'], ['class' => 'btn '.Worker::setBtnCss(5), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerIdentity(3), ['index?WorkerSearch[worker_identity_id]=3'], ['class' => 'btn '.Worker::setBtnCss(6), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountWorkerIdentity(4), ['index?WorkerSearch[worker_identity_id]=4'], ['class' => 'btn '.Worker::setBtnCss(7), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountWorkerIdentity(3), ['index?WorkerSearch[worker_identity_id]=3'], ['class' => 'btn '.Worker::setBtnCss(6), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerIdentity(4), ['index?WorkerSearch[worker_identity_id]=4'], ['class' => 'btn '.Worker::setBtnCss(7), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::setBtnCss(8), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::setBtnCss(9), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::setBtnCss(10), 'style' => 'margin-right:10px']).

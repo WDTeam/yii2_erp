@@ -10,11 +10,33 @@ return [
 
         'db' => [
             'class' => 'yii\db\Connection',
+            // 配置主服务器
             'dsn' => 'mysql:host=rds5xj38g9e2x5v32lm1.mysql.rds.aliyuncs.com;dbname=pro_boss_db',
             'username' => 'pro_boss_db_dbo',
             'password' => 'pro_boss',
             'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
+
+            // 配置从服务器
+            'slaveConfig' => [
+                'username' => 'pro_boss_db_dbo',
+                'password' => 'pro_boss',
+                'tablePrefix' => 'ejj_',
+                'charset' => 'utf8',
+                'attributes' => [
+                    // use a smaller connection timeout
+                    PDO::ATTR_TIMEOUT => 10,
+                ],
+            ],
+            // 配置从服务器组
+            'slaves' => [
+                ['dsn' => 'mysql:host=rds64d3tw8io6vr69rj1.mysql.rds.aliyuncs.com;dbname=pro_boss_db',],
+            ],
+
+        ],
+        //配置session到redis
+        'session' => [
+            'class' => 'yii\redis\Session',
         ],
         'redis' => [
             'class' => 'yii\redis\Connection',

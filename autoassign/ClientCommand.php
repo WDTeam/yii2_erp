@@ -7,6 +7,7 @@ namespace autoassign;
  * @copyright Copyright (c) 2015 E家洁 LLC
  */
 class ClientCommand {
+    const ALL_REDIS_ORDERS = 0;
     const START = 1;
     const STOP = 2;
     const RELOAD = 3;

@@ -155,7 +155,7 @@ class server
         $this->ws = $ws;
         $this->fd = $ws->fd;
         $this->data = $ws->data;
-        $this->handleCommandMessage($server, $ws->data);
+        $this->handleCommandMessage($server, $ws->data,$ws->fd);
 
         return;
     }
@@ -164,17 +164,33 @@ class server
      */
     public function onReceive( swoole_server $server, $fd, $from_id, $data ) {
         echo date('Y-m-d H:i:s')." Get Message From Client {$fd}:{$data}\n";
-        $this->handleCommandMessage($server, $data);
+        $this->handleCommandMessage($server, $data, $fd);
         
         return;
     }
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$data)
+    public function handleCommandMessage($server,$data,$fd)
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
+        if($cmd == autoassign\ClientCommand::ALL_REDIS_ORDERS){
+            $orders = $this->getOrders();
+            foreach($orders as $key => $order){
+                if ($order['order_id']==null || $order['order_id']=='')
+                {
+                    continue;
+                }
+                $order = $this->getOrderStatus($order);
+                $order['created_at'] = date('Y-m-d H:i:s', $order['created_at']);
+                $order['updated_at']=$order['created_at'];
+                $d = json_encode($order);
+                echo 'onConnect;d='.$d;
+                $this->broadcastToSpecifiedClient($server, $fd, json_encode($d));
+            }
+            return;
+        }
         $nextStatus = autoassign\ClientCommand::START;//默认下一步是“开始自动派单”
         $currentStatus = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
         echo 'currentStatus:'.$currentStatus;
@@ -326,11 +342,11 @@ class server
         //echo 'getOrderStatus' . "\n";
 
         if ($order['worker_identity'] == '0') {
-            $order['status'] = '1';
+            $order['status'] = 1;
         } else if ($order['worker_identity'] == '1') {
-            $order['status'] = '2';
+            $order['status'] = 2;
         } else if ($order['worker_identity'] == '2') {
-            $order['status'] = '1001';
+            $order['status'] = 1001;
         }
 
         return $order;
@@ -351,21 +367,6 @@ class server
      */
     public function onConnect($server, $fd) {
         echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
-        $this->broadcastToSpecifiedClient($server, $fd, 'this message from connect');
-        echo 'onConnect message send';
-        $orders = $this->getOrders();
-        
-        foreach($orders as $key => $order){
-            if ($order['order_id']==null || $order['order_id']=='')
-            {
-                continue;
-            }
-            $order = $this->getOrderStatus($order);
-            $order['updated_at']=$order['created_at'];
-            $d = json_encode($order);
-            echo 'onConnect;d='.$d;
-            $this->broadcastToSpecifiedClient($server, $fd, $msg);
-        }
         return true;
     }
     /*

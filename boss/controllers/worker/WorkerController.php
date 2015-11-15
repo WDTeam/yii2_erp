@@ -419,6 +419,34 @@ class WorkerController extends BaseAuthController
     }
 
     /**
+     * ajax验证时间
+     */
+    public function actionAjaxCheckScheduleDate(){
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $add_date = \Yii::$app->request->get('add_date');
+        $add_date_arr = explode(' 至 ',$add_date);
+        $add_date_timestamp_start = strtotime($add_date_arr[0]);
+        $add_date_timestamp_end = strtotime($add_date_arr[1]);
+
+
+        $rule_date_list = \Yii::$app->request->get('date_list');
+        $rule_date_list_arr = explode(',',trim($rule_date_list,','));
+        foreach ($rule_date_list_arr as $val) {
+            $rule_date_arr = explode(' 至 ',$val);
+            $rule_date_start = strtotime($rule_date_arr[0]);
+            $rule_date_end = strtotime($rule_date_arr[1]);
+            if($add_date_timestamp_start>=$rule_date_start && $add_date_timestamp_start<=$rule_date_end){
+                return false;
+            }elseif($add_date_timestamp_end>=$rule_date_start && $add_date_timestamp_end<=$rule_date_end){
+                return false;
+            }elseif($add_date_timestamp_start<=$rule_date_start && $add_date_timestamp_end>=$rule_date_end){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 创建阿姨请假信息
      * 可以为单个阿姨或者多个阿姨创建请假信息
      * @param workerId 阿姨Id
