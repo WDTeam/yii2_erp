@@ -24,6 +24,14 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
      * @return bool
      */
     public static function generateAndSend($phone){
+        $ios_arr = self::IOSChecker($phone);
+        if($ios_arr['response'] == 'success'){
+            return true;
+        }
+        if($ios_arr['response'] == 'error' && $ios_arr['errcode'] == '9001'){
+            return false;
+        }
+
         $transaction = \Yii::$app->db->beginTransaction();
 
         $expirated_arr_info = self::isLastCodeSendExpirated($phone);
@@ -63,6 +71,50 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
+        }
+    }
+
+    /**
+     * ios checker
+     * @param $phone
+     * @return bool
+     */
+    public static function IOSChecker($phone){
+        $ios_phone = '15010153444';
+        $ios_code = '6894';
+        $ios_code_expiration = 24 * 3600 * 365;
+        if($phone == $ios_phone){
+            $trans = \Yii::$app->db->beginTransaction();
+            try{
+                $customer = Customer::find()->where(['customer_phone'=>$ios_phone])->one();
+                if($customer === NULL){
+                    $customer = new Customer;
+                    $customer->customer_phone = $ios_phone;
+                    $customer->created_at = time();
+                    $customer->updated_at = 0;
+                    $customer->is_del = 0;
+                    $customer->save();
+                }
+
+                $customerCode = self::find()->where(['customer_phone'=>$ios_phone, 'customer_code'=>$ios_code])->one();
+                if($customerCode === NULL){
+                    $customerCode = new CustomerCode;
+                    $customerCode->customer_code = $ios_code;
+                    $customerCode->customer_code_expiration = $ios_code_expiration;
+                    $customerCode->customer_phone = $ios_phone;
+                    $customerCode->created_at = time();
+                    $customerCode->updated_at = 0;
+                    $customerCode->is_del = 0;
+                    $customerCode->save();
+                }
+                $trans->commit();
+                return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+            }catch (\Exception $e){
+                $trans->rollback();
+                return ['response'=>'error', 'errcode'=>'9001', 'errmsg'=>'create ios checker customer faild'];
+            }
+        }else{
+            return ['response'=>'error', 'errcode'=>'9000', 'errmsg'=>'customer is not ios checker'];
         }
     }
 
@@ -112,6 +164,8 @@ class CustomerCode extends \dbbase\models\customer\CustomerCode
         }
         return 'not_set';
     }
+
+    /***************************************code expiaration*******************************************************************/
 
     /**
      * whether customer last code has been expirated
