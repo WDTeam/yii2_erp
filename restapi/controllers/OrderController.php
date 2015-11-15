@@ -1449,14 +1449,14 @@ class OrderController extends \restapi\components\Controller
             
             try {
                 $result = Order::cancelByOrderCode($param['order_code'], Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-               
-                if ($result['error_code']) {
+              
+                if ($result['status']) {
                     return $this->send([1], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                 } else {
-                    return $this->send(null, $reason['msg'], 0, 200, null, alertMsgEnum::orderCancelFaile.'['.$reason['error_code'].']');
+                    return $this->send(null, $result['msg'], 0, 200, null, alertMsgEnum::orderCancelFaile.'['.$result['error_code'].']');
                 }
             } catch (Exception $e) {
-                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile.'['.$reason['error_code'].']');
+                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile.'['.$result['error_code'].']');
             }
         } else {
             return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $param['order_code'], 0, 200, NULL, alertMsgEnum::orderCancelFaile);
