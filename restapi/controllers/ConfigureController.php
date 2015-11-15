@@ -247,7 +247,7 @@ class ConfigureController extends \restapi\components\Controller
             $serviceCategoryList = array();
             if ($cityCategoryList && !isset($cityCategoryList['code'])) {
                 foreach ($cityCategoryList as $key => $val) {
-                    if ($val['operation_shop_district_goods_name'] == "家庭保洁") continue;
+                    if ($val['category_name'] == "基础保洁") continue;
                     $itemService['category_id'] = $val['id'];
                     $itemService['category_name'] = $val['operation_category_name'];
                     $itemService['category_icon'] = $val['operation_category_icon'];
@@ -273,7 +273,7 @@ class ConfigureController extends \restapi\components\Controller
             $header_link = [
                 'comment_link' => [
                     'title' => '意见反馈',
-                    'url' => $current_env_url . '/statics/images/fankui.png',
+                    'url' => $current_env_url . '/#/personalCenter/feedback',
                     'img' => $current_env_url . '/statics/images/fankui.png',
                 ],
                 'phone_link' => [
@@ -286,12 +286,12 @@ class ConfigureController extends \restapi\components\Controller
             $pic_list = [
                 [
                     "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-                    "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                    "link" => "",
                     "url_title" => "标准服务"
                 ],
                 [
                     "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-                    "link" => "http://wap.1jiajie.com/pledge.html",
+                    "link" => "",
                     "url_title" => "服务承诺"
                 ],
                 [
@@ -408,7 +408,7 @@ class ConfigureController extends \restapi\components\Controller
         $itemlist = $temp = array();
         if ($itemInfo) {
             foreach ($itemInfo as $key => $val) {
-                if ($val['operation_goods_name'] == "家庭保洁") continue;
+                //if ($val['operation_goods_name'] == "家庭保洁") continue;
                 $temp['category_id'] = $val['operation_category_id'];
                 $temp['order_service_item_id'] = $val['goods_id'];
                 $temp['order_service_item_name'] = $val['operation_goods_name'];
