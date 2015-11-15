@@ -5,13 +5,18 @@ use yii\db\Migration;
 
 class m150923_052037_create_table_operation_area extends Migration
 {
+    const TB_NAME = '{{%operation_area}}';
+
     public function up()
     {
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
+        $this->execute($sql);
+
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'行政区域表（省市县乡镇）\'';
         }
-        $this->createTable('{{%operation_area}}', [
+        $this->createTable(self::TB_NAME, [
             'id' => Schema::TYPE_PK . '  COMMENT \'编号\'' ,
             'area_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'区域名称\'',
             'parent_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'父名称\'',
@@ -29,7 +34,7 @@ class m150923_052037_create_table_operation_area extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%operation_area}}');
+        $this->dropTable(self::TB_NAME);
 
         return true;
     }

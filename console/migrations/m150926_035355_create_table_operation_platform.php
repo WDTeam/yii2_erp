@@ -5,10 +5,13 @@ use yii\db\Migration;
 
 class m150926_035355_create_table_operation_platform extends Migration
 {
+    const TB_NAME = '{{%operation_platform}}';
+
     public function up()
     {
-        $sql = 'DROP TABLE IF EXISTS {{%operation_platform}}';
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
         $this->execute($sql);
+
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'广告平台表\'';
@@ -24,7 +27,7 @@ class m150926_035355_create_table_operation_platform extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%operation_platform}}');
+        $this->dropTable(self::TB_NAME);
 
         return true;
     }

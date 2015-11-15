@@ -5,8 +5,10 @@ use yii\db\Migration;
 
 class m150918_075847_create_table_operation_category extends Migration
 {
+    const TB_NAME = '{{%operation_category}}';
+
     public function up(){
-        $sql = 'DROP TABLE IF EXISTS {{%operation_category}}';
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
         $this->execute($sql);
 
         $tableOptions = null;
@@ -32,7 +34,7 @@ class m150918_075847_create_table_operation_category extends Migration
     }
 
     public function down(){
-        $this->dropTable('{{%operation_category}}');
+        $this->dropTable(self::TB_NAME);
 
         return true;
     }
