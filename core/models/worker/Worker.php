@@ -1061,6 +1061,7 @@ class Worker extends \dbbase\models\worker\Worker
             Yii::$app->redis->executeCommand('set', [WorkerForRedis::WORKER_INFO.'_'.$worker_id,$workerInfo]);
         }
     }
+
     /**
      * 获取商圈中 所有可用阿姨
      * @param int $district_id 商圈id
@@ -1101,6 +1102,52 @@ class Worker extends \dbbase\models\worker\Worker
             }
         }
         $districtFreeWorker = self::getWorkerDetailListByIds($districtFreeWorkerIdsArr);
+        return $districtFreeWorker;
+    }
+
+
+    /**
+     * 获取商圈中 所有可用阿姨(自动指派调用)
+     * @param int $district_id 商圈id
+     * @param int $worker_identity_type 阿姨身份 1全时2非全时
+     * @param int $orderBookBeginTime 待指派订单预约开始时间
+     * @param int $orderBookEndTime 待指派订单预约结束时间
+     * @return array freeWorkerArr 所有可用阿姨列表
+     */
+    public static function getDistrictFreeWorkerForAutoAssign($district_id,$worker_identity_type=1,$orderBookBeginTime,$orderBookEndTime){
+
+        $districtWorkerResult = self::getDistrictAllWorker($district_id);
+
+        $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
+        //开始时间大于等于结束时间
+        if($orderBookBeginTime>=$orderBookEndTime){
+            return [];
+        }
+        //$districtFreeWorkerIdsArr = [];
+        $districtFreeWorker = [];
+        foreach ($districtWorkerResult as $val) {
+
+            $schedule = isset($val['schedule'])?$val['schedule']:[];
+            $orderInfo = isset($val['order'])?$val['order']:[];
+            if($worker_identity_type==1){
+                $workerIdentityIdArr = [1];
+            }else{
+                $workerIdentityIdArr = [2,3,4];
+            }
+            if(in_array($val['info']['worker_identity_id'],$workerIdentityIdArr)){
+                $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
+                if(array_diff($orderBookTime,$workerEnabledTime)){
+                    continue;
+                }
+                $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($orderBookBeginTime,$orderInfo);
+                if(array_intersect($orderBookTime,$workerHaveBookedTime)){
+                    continue;
+                }
+                $val['info']['id'] = $val['info']['worker_id'];
+                $districtFreeWorker[] = $val['info'];
+            }
+        }
+        //$districtFreeWorker = self::getWorkerDetailListByIds($districtFreeWorkerIdsArr);
         return $districtFreeWorker;
     }
 
