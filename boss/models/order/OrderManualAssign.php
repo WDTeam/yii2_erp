@@ -150,7 +150,7 @@ class OrderManualAssign extends OrderManualAssignModel
             if ($order->order_booked_worker_id > 0) {
                 $worker_list = Worker::getWorkerStatInfo($order->order_booked_worker_id);
                 if (!empty($worker_list)) {
-                    $workers = Order::assignWorkerFormat($order, [$worker_list]);
+                    $workers = self::_formatWorker($order, [$worker_list]);
                 }
             }
             return
