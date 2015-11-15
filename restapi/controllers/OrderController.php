@@ -176,12 +176,7 @@ class OrderController extends \restapi\components\Controller
             $order = new Order();
             $is_success = $order->createNew($attributes);
 
-            $code = implode(',', $order->errors['error_code']);
-            if ($code == 540111) {
-                $errorMsg = '您有未支付订单,请您先支付或取消再创建新订单';
-            } else {
-                $errorMsg = '创建订单失败';
-            }
+
 
             if ($is_success) {
                 $ret = array(
@@ -190,7 +185,15 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, $errorMsg . '[' . implode(',', $order->errors['error_code']) . ']');
+                $arrayError = $order->errors;
+                $code = implode(',', $arrayError['error_code']);
+                if ($code == 540111) {
+                    $errorMsg = '您有未支付订单,请您先支付或取消再创建新订单';
+                } else {
+                    $errorMsg = '创建订单失败';
+                }
+
+                return $this->send($arrayError['error_code'], '创建订单失败', 1024, 200, null, $errorMsg . '[' . implode(',', $arrayError['error_code']) . ']');
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
@@ -282,17 +285,17 @@ class OrderController extends \restapi\components\Controller
                 "id" => $order->id,
                 "order_code" => $order->order_code
             );
-            $code = implode(',', $order->errors['error_code']);
-            if ($code == 540111) {
-                $errorMsg = '您有未支付订单,请您先支付或取消再创建新订单';
-            } else {
-                $errorMsg = '创建订单失败';
-            }
-
             if ($is_success) {
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, $errorMsg . '[' . implode(',', $order->errors['error_code']) . ']');
+                $arrayError = $order->errors;
+                $code = implode(',', $arrayError['error_code']);
+                if ($code == 540111) {
+                    $errorMsg = '您有未支付订单,请您先支付或取消再创建新订单';
+                } else {
+                    $errorMsg = '创建订单失败';
+                }
+                return $this->send($arrayError['error_code'], '创建订单失败', 1024, 200, null, '创建订单失败[' . implode(',', $arrayError['error_code']) . ']');
             }
         } catch (\Exception $e) {
             return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
