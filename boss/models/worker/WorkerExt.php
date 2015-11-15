@@ -35,4 +35,8 @@ class WorkerExt extends \core\models\worker\WorkerExt
             return $worker_height.' cm';
         }
     }
+    public static function getWorkerSourceShow($workerSource){
+        $sourceConfig = ['1'=>'蓝领招聘','2'=>'家政公司','3'=>'直营门店','4'=>'阿姨推荐'];
+        return $sourceConfig[$workerSource];
+    }
 }
