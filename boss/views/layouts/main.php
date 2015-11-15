@@ -32,7 +32,7 @@ AppAsset::register($this);
     <header class="header">
         <?php echo Html::a('', Yii::$app->homeUrl, [
             'class'=>'logo',
-            'style'=>\Yii::$app->user->identity->isNotAdmin()?"background-image: url('/adminlte/img/logo_partner.png');
+            'style'=>\Yii::$app->user->can('group_shopmanager_admin')?"background-image: url('/adminlte/img/logo_partner.png');
                 background-size:inherit":'',
         ]);?>
         <!-- Header Navbar: style can be found in header.less -->
