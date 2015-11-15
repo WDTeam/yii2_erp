@@ -41,7 +41,7 @@ class OrderPush extends Order
                 $workers[] = Worker::getWorkerInfo($order->order_booked_worker_id);
             }elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_FULL_TIME_WORKER_SYS_ASSIGN_TIME']) {
                 //获取全职阿姨
-                $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
+                $workers = Worker::getDistrictFreeWorkerForAutoAssign($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 \Yii::getLogger()->log("获取的全职阿姨数量为:".count($workers), Logger::LEVEL_ERROR,'core');
                 foreach ($workers as $w){
                     \Yii::getLogger()->log("获取的全职阿姨为:".$w['id'].','.$w['worker_phone'], Logger::LEVEL_ERROR,'core');
@@ -50,11 +50,11 @@ class OrderPush extends Order
                 $push_status = $full_time;
                 if (empty($workers)) {
                     //没有全职阿姨 获取兼职阿姨
-                    $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
+                    $workers = Worker::getDistrictFreeWorkerForAutoAssign($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                     $push_status = $part_time;
                 }
             } elseif (time() - $order->orderExtStatus->updated_at < Yii::$app->params['order']['ORDER_PART_TIME_WORKER_SYS_ASSIGN_TIME']) {
-                $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
+                $workers = Worker::getDistrictFreeWorkerForAutoAssign($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $part_time;
             }
             if (!empty($workers)) {
