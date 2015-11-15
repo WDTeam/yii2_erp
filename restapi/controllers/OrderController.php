@@ -169,7 +169,6 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_is_use_balance'])) {
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
-
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
@@ -275,14 +274,15 @@ class OrderController extends \restapi\components\Controller
                 "id" => $order->id,
                 "order_code" => $order->order_code
             );
+
             if ($is_success) {
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
                 $msgErrors = $order->errors;
-                return $this->send($order->errors, '创建订单失败', 0, 200, null, current(current($msgErrors)));
+                return $this->send($order->errors, '创建订单失败', 0, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403, null, current(current($msgErrors)));
+            return $this->send(null, $e->getMessage(), 1024, 403, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
         }
     }
 
@@ -516,7 +516,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiName actionOrdersCount
      * @apiGroup Order
-     * @apiDescription 获得用户各种状态的订单数量 （谢奕）
+     * @apiDescription 获得用户各种状态的订单数量 （谢奕）周期订单作为一个订单来统计[当前逻辑]
      *
      * @apiParam {String} access_token 用户令牌
      * @apiParam {String} order_channel_name      订单渠道名称
@@ -551,10 +551,14 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionOrdersCount()
     {
-        $args = Yii::$app->request->get();
 
-        @$token = $args["access_token"];
-        $user = CustomerAccessToken::getCustomer($token);
+        $args = Yii::$app->request->get() or $args = json_decode(Yii::$app->request->getRawBody(), true);
+
+        if (!isset($args['access_token']) || !$args['access_token']) {
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+
+        $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
@@ -2075,7 +2079,7 @@ class OrderController extends \restapi\components\Controller
                     $r_order['sub_order'] = array_merge($order, []);
                 } else {
                     foreach ($order as $k => $v) {
-                        if ($v['order_pay_type'] == 1) {
+                        if ($v['pay_channel_id'] == 1) {
                             @$r_order['worker_money'] += $v['order_money'];
                         } else {
                             @$r_order['worker_money'] = 0;
@@ -2087,7 +2091,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_channel_name'] = $v['order_channel_name'];
                         $r_order['order_service_type_name'] = $v['order_service_type_name'];
                         $r_order['order_service_item_name'] = $v['order_service_item_name'];
-                        $r_order['order_pay_type'] = $v['order_pay_type'];
+                        $r_order['pay_channel_id'] = $v['pay_channel_id'];
                         $r_order["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['order_cs_memo'] = $v['order_cs_memo'];
                         $r_order['order_lat'] = $v['order_lat'];
@@ -2095,7 +2099,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_address'] = $v['order_address'];
                         $r_order["order_batch_code"] = $v['order_batch_code'];
                         $r_order['times'][$k]["order_booked_begin_time"] = $v['order_booked_begin_time'];
-                        $r_order['times'][$k]["order_pay_type"] = $v['order_pay_type'];
+                        $r_order['times'][$k]["order_pay_type"] = $v['pay_channel_id'];
                         $r_order['times'][$k]["order_booked_end_time"] = $v['order_booked_end_time'];
                         $r_order['times'][$k]["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['times'][$k]["id"] = $v['id'];
@@ -2178,6 +2182,10 @@ class OrderController extends \restapi\components\Controller
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+
+        if (empty($param['id'])) {
+            return $this->send(null, "订单号不能为空！", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
         try {
             $order = OrderSearch::getOne($param['id'])->getAttributes();
