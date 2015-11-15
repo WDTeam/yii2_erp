@@ -320,6 +320,7 @@ class ConfigureController extends \restapi\components\Controller
                 "icon_mob.png",
                 "tlbagui",
                 "tlbaserver",
+                "tlbsgui",
                 "tlbsserver"];
             $ret = [
                 'city_list' => $onlineCityList,

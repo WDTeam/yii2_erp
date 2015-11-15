@@ -2086,7 +2086,8 @@ class OrderController extends \restapi\components\Controller
                     $r_order['sub_order'] = array_merge($order, []);
                 } else {
                     foreach ($order as $k => $v) {
-                        if ($v['pay_channel_id'] == 1) {
+                        #是否现金支付
+                        if ($v['pay_channel_id'] == 2) {
                             @$r_order['worker_money'] += $v['order_money'];
                         } else {
                             @$r_order['worker_money'] = 0;
@@ -2106,7 +2107,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_address'] = $v['order_address'];
                         $r_order["order_batch_code"] = $v['order_batch_code'];
                         $r_order['times'][$k]["order_booked_begin_time"] = $v['order_booked_begin_time'];
-                        $r_order['times'][$k]["order_pay_type"] = $v['pay_channel_id'];
+                        $r_order['times'][$k]["pay_channel_id"] = $v['pay_channel_id'];
                         $r_order['times'][$k]["order_booked_end_time"] = $v['order_booked_end_time'];
                         $r_order['times'][$k]["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['times'][$k]["id"] = $v['id'];
