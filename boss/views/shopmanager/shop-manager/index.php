@@ -120,14 +120,9 @@ $columns[] = [
 ];
 ?>
 <div class="shop-manager-index">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 小家政搜索</h3>
-        </div>
-        <div class="panel-body">
-            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
-        </div>
-    </div>
+    <?php if(!Yii::$app->user->identity->isNotAdmin()){
+        echo $this->render('_search', ['model' => $searchModel]);
+    }?>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,

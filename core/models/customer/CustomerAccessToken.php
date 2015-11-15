@@ -32,6 +32,7 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
      * @return bool|string
      */
     public static function generateAccessToken($phone, $code, $channal_id=0){
+
         $check_code = CustomerCode::checkCode($phone, $code);
         if ($check_code == false) {
             return $check_code;
@@ -43,6 +44,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
             if ($customer == NULL) {
                 $hasAdded = Customer::addCustomer($phone, $channal_id);
+//                if(!$hasAdded){
+//                    throw new Exception('创建新客户失败');
+//                }
             }
 
             $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
@@ -75,28 +79,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             $transaction->rollback();
             return false;
         }
-    }
-
-    /**
-     * generate access token for apple checker
-     * @param $phone
-     * @return bool
-     */
-    public static function generateAccessTokenForAppleChecker($phone){
-        $customerAccessToken = new CustomerAccessToken;
-        $customerAccessToken->customer_access_token = md5($phone);
-        $customerAccessToken->customer_access_token_expiration = 365 * 24 * 3600;
-        $customerAccessToken->customer_code_id = 0;
-        $customerAccessToken->customer_code = '';
-        $customerAccessToken->customer_phone = $phone;
-        $customerAccessToken->created_at = time();
-        $customerAccessToken->updated_at = 0;
-        $customerAccessToken->is_del = 0;
-        if(!$customerAccessToken->validate()){
-            return false;
-        }
-        $customerAccessToken->save();
-        return true;
     }
 
     /**
