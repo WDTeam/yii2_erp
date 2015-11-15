@@ -120,7 +120,9 @@ $columns[] = [
 ];
 ?>
 <div class="shop-manager-index">
-    <?php if(!Yii::$app->user->identity->isNotAdmin()){
+    <?php 
+    $is_admin = !Yii::$app->user->identity->isNotAdmin();
+    if($is_admin){
         echo $this->render('_search', ['model' => $searchModel]);
     }?>
     <?php Pjax::begin(); echo GridView::widget([
@@ -145,7 +147,7 @@ $columns[] = [
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before' =>$this->render('_index_links', ['model' => $searchModel]),
+            'before' =>$is_admin?$this->render('_index_links', ['model' => $searchModel]):false,
 //             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
 //                 ['index'],
 //                 ['class' => 'btn btn-info']),
