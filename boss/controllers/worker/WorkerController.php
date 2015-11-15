@@ -1296,12 +1296,6 @@ class WorkerController extends BaseAuthController
 
     }
 
-    /**
-     * 初始化redis数据
-     */
-    public function actionInitWorkerForRedis(){
-        WorkerForRedis::initAllWorkerToRedis();
-    }
 
     public function getWorkerDistrict($city_encode,$detail_encode){
         $detail_encode = urlencode($detail_encode);
@@ -1318,7 +1312,8 @@ class WorkerController extends BaseAuthController
     public function actionTest(){
 
         echo '<pre>';
-        $a = Worker::getDistrictFreeWorkerForAutoAssign(3,2,144763200011,1447639200);
+        //$a = Worker::getDistrictFreeWorkerForAutoAssign(10,1,1447632000,1447639200);
+        $a = Worker::getWorkerTimeLine(10,1);
         var_dump($a);die;
         die;
         $city_encode = '北京市';

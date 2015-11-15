@@ -77,7 +77,7 @@ class WorkerController extends \restapi\components\Controller
             if (!empty($workerInfo)) {
                 //籍贯、身份证
                 $ret = [
-                    "worker_photo" => $workerInfo['worker_photo'],
+                    "worker_photo" => $workerInfo['worker_photo']?$workerInfo['worker_photo']:"http://webapi2.1jiajie.com/app/images/aunt_icon20151115.png",
                     "worker_name" => $workerInfo['worker_name'],
                     "worker_age" => $workerInfo['worker_age'],
                     "worker_idcard" => $workerInfo['worker_idcard'], //身份证
@@ -946,7 +946,7 @@ class WorkerController extends \restapi\components\Controller
         $ret = [
             "worker_name" => $workerInfo['worker_name'],
             "worker_phone" => $workerInfo['worker_phone'],
-            "worker_photo" => $workerInfo['worker_photo'],
+            "worker_photo" => $workerInfo['worker_photo']?$workerInfo['worker_photo']:"http://webapi2.1jiajie.com/app/images/aunt_icon20151115.png",
             "worker_identity_description" => $workerInfo['worker_identity_description'], //身份
             "worker_identity_id" => $workerInfo['worker_identity_id'], //身份类型
             "worker_type" => $workerInfo["worker_type"],
