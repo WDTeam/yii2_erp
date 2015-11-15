@@ -14,7 +14,12 @@ class m150918_111413_create_table_payment extends Migration
         $this->createTable('{{%payment}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
+            'customer_phone' => Schema::TYPE_STRING . '(11) COMMENT \'用户电话\'' ,
+
             'order_id' => Schema::TYPE_STRING . '(30) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_code' => Schema::TYPE_STRING . '(64) COMMENT \'订单编号\'' ,
+            'order_batch_code' => Schema::TYPE_STRING . '(64) COMMENT \'周期订单编号\'' ,
+
             'payment_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 NOT NULL COMMENT \'发起充值/交易金额\'' ,
             'payment_actual_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 NOT NULL COMMENT \'实际充值/交易金额\'' ,
             'payment_source' => Schema::TYPE_BOOLEAN . '(3) unsigned DEFAULT 0 NOT NULL COMMENT \'来源渠道\'',
@@ -39,7 +44,10 @@ class m150918_111413_create_table_payment extends Migration
         ], $tableOptions);
 
         $this->createIndex('customer_id','{{%payment}}','customer_id');
+        $this->createIndex('customer_phone','{{%payment}}','customer_phone');
         $this->createIndex('order_id','{{%payment}}','order_id');
+        $this->createIndex('order_code','{{%payment}}','order_code');
+        $this->createIndex('order_batch_code','{{%payment}}','order_batch_code');
         $this->createIndex('payment_source','{{%payment}}','payment_source');
         $this->createIndex('payment_mode','{{%payment}}','payment_mode');
         $this->createIndex('payment_status','{{%payment}}','payment_status');

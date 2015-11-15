@@ -23,6 +23,7 @@ function websocketConnect() {
                 $('#start').attr('disabled', false);
                 $('#start').html('停止智能派单');
                 $('#connectStatus').html('<font color="#41A317">连接成功，智能派单已启动！</font>');
+                getCurrentOrders(0);
             }
         };
         websocket.onclose = function (evt) {
@@ -106,6 +107,10 @@ function getStatus(status){
             case 1001 : return '系统派单失败转人工处理'; break;
         }
     }
+}
+
+function getCurrentOrders(cmd){
+    websocket.send(cmd);
 }
 
 function execCommand(cmd){

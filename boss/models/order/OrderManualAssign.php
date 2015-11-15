@@ -205,7 +205,7 @@ class OrderManualAssign extends OrderManualAssignModel
                 $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
             }
             //获取阿姨跟订单的关系
-            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order->id, $worker_ids);
+            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIdsForManualAssign($order->id, $worker_ids);
             foreach ($order_worker_relations as $v) {
                 $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
                 $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;

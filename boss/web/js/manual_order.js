@@ -327,25 +327,28 @@ function timer(){
 function showOrder(){
     timer();
     var order = window.order_data;
+    $("#order_code").html(order.order_code);
     $("#booked_time_range").html(order.booked_time_range);
     $("#order_address").text(order.order.order_address);
-    if(order.ext_pay.order_pay_type==1){
+    if(order.ext_pay.pay_channel_id==1){ //现金支付
         $("#must_pay_info").text('需收取'+order.order.order_money+'元');
         $("#pay_info").text('总金额'+order.order.order_money+'元');
-    }else if(order.ext_pay.order_pay_type==2){
+    }else if(order.ext_pay.pay_channel_type_id==1 || order.ext_pay.pay_channel_type_id==2){ //在线支付
         $("#must_pay_info").text('需收取'+(order.order.order_money - order.ext_pay.order_pay_money - order.ext_pay.order_money -
         order.ext_pay.order_use_acc_balance - order.ext_pay.order_use_acc_balance - order.ext_pay.order_use_card_money -
         order.ext_pay.order_use_promotion_money)+'元');
         $("#pay_info").text('总金额'+order.order.order_money+'元，线上支付'+order.ext_pay.order_pay_money+'元，优惠券'+order.ext_pay.order_money+'元，余额支付'+order.ext_pay.order_use_acc_balance+'元，服务卡支付'+order.ext_pay.order_use_card_money
         +'元，促销金额'+order.ext_pay.order_use_promotion_money+'元');
-    }else{
+    }else{ //第三方支付
         $("#must_pay_info").text('需收取'+(order.order.order_money-order.ext_pop.order_pop_order_money-order.ext_pop.order_pop_operation_money)+'元');
         $("#pay_info").text('总金额'+order.order.order_money+'元，预付款'+order.ext_pop.order_pop_order_money+'元，渠道运营费'+order.ext_pop.order_pop_operation_money+'元');
     }
     $("#order_customer_need").text('用户需求：'+order.ext_customer.order_customer_need);
     $("#order_customer_memo").text('用户备注：'+order.ext_customer.order_customer_memo);
     $("#order_cs_memo").text('客服备注：'+order.order.order_cs_memo);
-    $("#order_check_worker").text('是否可更换阿姨：'+(order.ext_flag.order_flag_check_booked_worker ? '是' : '否' ));
+    if(order.order_is_parent == 1) {
+        $("#order_check_worker").text('是否可更换阿姨：' + (order.ext_flag.order_flag_check_booked_worker ? '是' : '否' ));
+    }
 }
 
 function sec2time(time){

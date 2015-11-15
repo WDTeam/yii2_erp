@@ -144,6 +144,7 @@ class Order extends OrderModel
      *  string $order_flag_sys_assign 是否系统指派
      *  string $order_cs_memo 客服备注
      * ]
+     * @code 01
      * @return bool
      */
     public function createNew($attributes)
@@ -181,12 +182,12 @@ class Order extends OrderModel
 
         if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
             switch($attributes['pay_channel_key']){
-                case 'PAY_CHANNEL_EJJ_SERVICE_CARD_PAY':
-                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_SERVICE_CARD_PAY;
+                case 'PAY_CHANNEL_EJJ_CASH_PAY':
+                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY;
                     break;
                 default:
                     $this->addError('pay_channel_id', '支付渠道不存在');
-                    $this->addError('error_code','540201');
+                    $this->addError('error_code','540110');
                     return false;
                     break;
             }
@@ -199,12 +200,12 @@ class Order extends OrderModel
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
             if (OrderSearch::customerWaitPayOrderCount($customer->customer_phone) > 0) {
                 $this->addError('customer_id', '存在待支付订单，请先支付再下单！');
-                $this->addError('error_code','540301');
+                $this->addError('error_code','540111');
                 return false;
             }
         } else {
             $this->addError('customer_id', '没有获取到用户信息！');
-            $this->addError('error_code','540401');
+            $this->addError('error_code','540112');
             return false;
         }
         $customer_balance = 0;
@@ -215,7 +216,7 @@ class Order extends OrderModel
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
                 $this->addError('order_use_acc_balance', '创建时获客户余额信息失败！');
-                $this->addError('error_code','540501');
+                $this->addError('error_code','540113');
                 return false;
             }
         }
@@ -225,7 +226,7 @@ class Order extends OrderModel
                 try {
                     $paymentCustomerTransRecord = PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay');
                 }catch (Exception $e){
-                    $this->addError('error_code','540601');
+                    $this->addError('error_code','540114');
                 }
                 if ($paymentCustomerTransRecord) {
                     $order_model = OrderSearch::getOne($this->id);
@@ -233,11 +234,13 @@ class Order extends OrderModel
                     if (in_array($this->order_service_item_name, Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
+                }else{
+                    $this->addError('error_code','540115');
                 }
             }
             return true;
         }else{
-            $this->addError('error_code','540701');
+            $this->addError('error_code','540116');
             return false;
         }
     }
@@ -269,6 +272,7 @@ class Order extends OrderModel
      *          int $coupon_id 优惠券id
      *      ]
      * ]
+     * @code 02
      * @return array
      */
     public static function createNewBatch($attributes, $booked_list)
@@ -289,19 +293,21 @@ class Order extends OrderModel
                 unset($attributes[$k]);
             }
         }
+        $error_code = 0;
         foreach ($attributes_required as $v) {
+            $error_code++;
             if (!isset($attributes[$v])) {
-                return ['status' => false, 'errors' => $v . '为必填项！'];
+                return ['status' => false,'error_code'=>'54020'+$error_code, 'msg' => $v . '为必填项！']; //540201 540202 540203 540204 540205 540206
             }
         }
 
         if(isset($attributes['pay_channel_key']) && !empty($attributes['pay_channel_key'])) {
             switch($attributes['pay_channel_key']){
-                case 'PAY_CHANNEL_EJJ_SERVICE_CARD_PAY':
-                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_SERVICE_CARD_PAY;
+                case 'PAY_CHANNEL_EJJ_CASH_PAY':
+                    $attributes['pay_channel_id'] = OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY;
                     break;
                 default:
-                    return ['status' => false,'error_code'=>'540201', 'errors' => '支付渠道不存在！'];
+                    return ['status' => false,'error_code'=>'540207', 'msg' => '支付渠道不存在！'];
                     break;
             }
 
@@ -327,7 +333,7 @@ class Order extends OrderModel
             $attributes['order_customer_phone'] = $customer->customer_phone;
             $attributes['customer_is_vip'] = $customer->customer_is_vip;
         } else {
-            return ['status' => false, 'errors' => '没有获取到用户信息！'];
+            return ['status' => false,'error_code'=>'540208', 'msg' => '没有获取到用户信息！'];
         }
 
         $customer_balance = 0;
@@ -337,7 +343,7 @@ class Order extends OrderModel
                 $customer = Customer::getCustomerInfo($attributes['order_customer_phone']);
                 $customer_balance = $customer['customer_balance'];
             } catch (Exception $e) {
-                return ['status' => false, 'errors' => '创建时获客户余额信息失败！'];
+                return ['status' => false,'error_code'=>'540209', 'msg' => '创建时获客户余额信息失败！'];
             }
         }
 
@@ -355,7 +361,7 @@ class Order extends OrderModel
             if (!$order->_create($attributes + $booked, $transact, $customer_balance)) {
                 $transact->rollBack();
 
-                return ['status' => false, 'errors' => $order->errors];
+                return ['status' => false,'error_code'=>'540210', 'msg' => json_encode($order->errors)];
             } else {
                 if ($attributes['order_parent_id'] == 0 && $attributes['order_is_parent'] == 1) {
                     //第一个订单为父订单其余为子订单
@@ -370,8 +376,15 @@ class Order extends OrderModel
         $transact->commit();
         if ($orderExtPay == 0 || isset($attributes['pay_channel_id']) && $attributes['pay_channel_id'] == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) {
             //交易记录
-            if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $channel_id, 'order_pay', 2)) {
+            try {
+                $paymentCustomerTransRecord = PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $channel_id, 'order_pay', 2);
+            }catch (Exception $e){
+                return ['status' => false,'error_code'=>'540211', 'msg' => '交易记录插入异常！'];
+            }
+            if ($paymentCustomerTransRecord) {
                 OrderStatus::_batchPayment($attributes['order_batch_code'], $attributes['admin_id']);
+            }else{
+                return ['status' => false,'error_code'=>'540211', 'msg' => '交易记录插入失败！'];
             }
         }
         return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
@@ -384,6 +397,7 @@ class Order extends OrderModel
      * @param $pay_channel_id int  支付渠道id
      * @param $order_pay_channel_name string 支付渠道名称
      * @param $order_pay_flow_num string 支付流水号
+     * @code 03
      * @return bool
      */
     public static function isPaymentOnline($order_id, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num)
@@ -405,6 +419,7 @@ class Order extends OrderModel
      * @param $pay_channel_id int  支付渠道id
      * @param $order_pay_channel_name string 支付渠道名称
      * @param $order_pay_flow_num string 支付流水号
+     * @code 04
      * @return bool
      */
     public static function isBatchPaymentOnline($batch_code, $pay_channel_id, $order_pay_channel_name, $order_pay_flow_num)
@@ -415,6 +430,7 @@ class Order extends OrderModel
     /**
      * 智能指派失败
      * @param $order_id
+     * @code 05
      * @return bool
      */
     public static function sysAssignUndone($order_id)
@@ -435,6 +451,7 @@ class Order extends OrderModel
      * ivr指派成功 阿姨接单
      * @param $order_id
      * @param $worker_phone
+     * @code 06
      * @return array
      */
     public static function ivrAssignDone($order_id, $worker_phone)
@@ -448,6 +465,7 @@ class Order extends OrderModel
      * 系统指派成功 阿姨接单
      * @param $order_id
      * @param $worker_id
+     * @code 07
      * @return array
      */
     public static function sysAssignDone($order_id, $worker_id)
@@ -461,6 +479,7 @@ class Order extends OrderModel
      * 人工指派失败
      * @param $order_id
      * @param $admin_id
+     * @code 08
      * @return array|bool
      */
     public static function manualAssignUndone($order_id, $admin_id = Order::ADMIN_SYSTEM)
@@ -517,7 +536,8 @@ class Order extends OrderModel
      * @param $order_id
      * @param $worker_id
      * @param $admin_id
-     *  @param bool $is_cs
+     * @param bool $is_cs
+     * @code 09
      * @return array
      */
     public static function manualAssignDone($order_id, $worker_id, $admin_id, $is_cs = false)
@@ -533,6 +553,7 @@ class Order extends OrderModel
      * @param $worker
      * @param $admin_id
      * @param $assign_type
+     * @code 10
      * @return array
      */
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
@@ -599,6 +620,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $assign_type
      * @param $transact
+     * @code 11
      * @return bool
      */
     private static function _assignDone(&$order, $worker, $admin_id, $assign_type, $transact)
@@ -627,6 +649,7 @@ class Order extends OrderModel
     /**
      * 开始服务
      * @param $order_id
+     * @code 12
      * @return bool
      */
     public static function serviceStart($order_id)
@@ -639,6 +662,7 @@ class Order extends OrderModel
     /**
      * 服务完成
      * @param $order_id
+     * @code 13
      * @return bool
      */
     public static function serviceDone($order_id)
@@ -669,6 +693,7 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $comment_id
+     * @code 14
      * @return bool
      */
     public static function customerAcceptDone($order_id, $admin_id = Order::ADMIN_CUSTOMER, $comment_id)
@@ -684,6 +709,7 @@ class Order extends OrderModel
      * @param $order_code
      * @param $checked_code
      * @param $admin_id
+     * @code 15
      * @return bool
      */
     public static function checked($order_code,$checked_code,$admin_id)
@@ -700,6 +726,7 @@ class Order extends OrderModel
      * @param $order_code
      * @param $payoff_count
      * @param $admin_id
+     * @code 16
      * @return bool
      */
     public static function payoffDone($order_code, $payoff_count, $admin_id)
@@ -716,16 +743,20 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $cause_id
      * @param string $memo
+     * @code 17
      * @return bool
      */
     public static function cancelByOrderId($order_id, $admin_id, $cause_id, $memo = '')
     {
         $order = OrderSearch::getOne($order_id);
-        if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
-            OrderMsg::cancel($order); //取消订单发送通知
-            return true;
+        if(!empty($order)) {
+            $result = self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+            if ($result['status']) {
+                OrderMsg::cancel($order); //取消订单发送通知
+            }
+            return $result;
         }else{
-            return false;
+            return ['status'=>false,'error_code'=>'541801','msg'=>'没有找到订单'];
         }
     }
 
@@ -735,6 +766,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @param $cause_id
      * @param string $memo
+     * @code 18
      * @return bool
      */
     public static function cancelByOrderCode($code, $admin_id, $cause_id, $memo = '')
@@ -743,22 +775,28 @@ class Order extends OrderModel
             $orders = OrderSearch::getBatchOrder($code);
             $transact = static::getDb()->beginTransaction();
             foreach($orders as $order){
-                if(!self::_cancelOrder($order, $admin_id, $cause_id, $memo,$transact)){
+                $result = self::_cancelOrder($order, $admin_id, $cause_id, $memo,$transact);
+                if(!$result['status']){
                     $transact->rollBack();
-                    return false;
+                    return $result;
                 }
             }
             $transact->commit();
-            OrderMsg::cancel($order); //取消订单发送通知
-            return true;
-        }else {
+//            OrderMsg::cancel($order); //取消订单发送通知
+            return ['status'=>true];
+        }else if(!empty($code)) {
             $order = OrderSearch::getOneByCode($code);
-            if(self::_cancelOrder($order, $admin_id, $cause_id, $memo)) {
-                OrderMsg::cancel($order); //取消订单发送通知
-                return true;
+            if(!empty($order)) {
+                $result = self::_cancelOrder($order, $admin_id, $cause_id, $memo);
+                if ($result['status']) {
+                    OrderMsg::cancel($order); //取消订单发送通知
+                }
+                return $result;
             }else{
-                return false;
+                return ['status'=>false,'error_code'=>'541801','msg'=>'没有找到订单'];
             }
+        }else{
+            return ['status'=>false,'error_code'=>'541802','msg'=>'没有订单编号！'];
         }
     }
 
@@ -769,6 +807,7 @@ class Order extends OrderModel
      * @param $cause_id
      * @param $memo
      * @param $transact
+     * @code 19
      * @return bool
      */
     private static function _cancelOrder($order, $admin_id, $cause_id, $memo = '',$transact = null)
@@ -801,6 +840,10 @@ class Order extends OrderModel
                 //调高峰的退款接口
                 $finance_refund_add = new FinanceRefundadd();
                 $result = $finance_refund_add->add($order);
+                if(!$result){
+                    $transaction->rollBack();
+                    return ['status'=>false,'error_code'=>'541904','msg'=>'退款异常，取消失败！'];
+                }
                 if (in_array($current_status, [  //如果处于以下状态则去除排班表中占用的时间
                             OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
                             OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
@@ -810,17 +853,22 @@ class Order extends OrderModel
                 }
             } elseif ($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP) {
                 $result = OrderPop::cancelToPop($order); //第三方同步失败则取消失败
+                if(!$result){
+                    $transaction->rollBack();
+                    return ['status'=>false,'error_code'=>'541903','msg'=>'第三方订单同步失败！'];
+                }
             }
             if ($result) {
                 if(empty($transact)){
                     $transaction->commit();
                 }
+                return ['status'=>true];
             } else {
                 $transaction->rollBack();
+                return ['status'=>false,'error_code'=>'541902','msg'=>json_encode($order->errors)];
             }
-            return $result;
         } else {
-            return false;
+            return ['status'=>false,'error_code'=>'541901','msg'=>$order->orderExtStatus->order_status_name.'状态不可以取消订单'];
         }
     }
 
@@ -828,6 +876,7 @@ class Order extends OrderModel
      * 客户删除订单
      * @param $code
      * @param $admin_id
+     * @code 20
      * @return bool
      */
     public static function customerDel($code, $admin_id = Order::ADMIN_CUSTOMER)
@@ -863,6 +912,7 @@ class Order extends OrderModel
      * @param $attributes
      * @param $transact
      * @param $customer_balance 客户余额
+     * @code 21
      * @return bool
      */
     private function _create($attributes, $transact = null, &$customer_balance)
@@ -878,14 +928,14 @@ class Order extends OrderModel
             $address = CustomerAddress::getAddress($this->address_id);
         } catch (Exception $e) {
             $this->addError('order_address', '创建时获取地址异常！');
-            $this->addError('error_code', '541001');
+            $this->addError('error_code', '542101');
             return false;
         }
         try {
             $goods = self::getGoods($address['customer_address_longitude'], $address['customer_address_latitude'], $attributes['order_service_item_id']);
         } catch (Exception $e) {
             $this->addError('order_service_item_name', '创建时获商品信息异常！');
-            $this->addError('error_code', '541101');
+            $this->addError('error_code', '542102');
             return false;
         }
         if (empty($goods)) {
@@ -893,7 +943,7 @@ class Order extends OrderModel
             return false;
         } elseif ($goods['code'] >= 500) {
             $this->addError('order_service_item_name', $goods['msg']);
-            $this->addError('error_code', '541201');
+            $this->addError('error_code', '542103');
             return false;
         } else {
             $goods = $goods['data'];
@@ -922,7 +972,7 @@ class Order extends OrderModel
             $ranges = $this->getThisOrderBookedTimeRangeList();
             if (!in_array($range, $ranges)) {
                 $this->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
-                $this->addError('error_code', '541301');
+                $this->addError('error_code', '542104');
                 return false;
             }
         }
@@ -933,11 +983,15 @@ class Order extends OrderModel
             $channel = ['id'=>0, 'operation_order_channel_type'=>0,'ordertype'=>'其它'];
         }
 
-        if (in_array($channel['operation_order_channel_type'], [2, 3]) && $this->order_channel_name != '后台下单') { //第三方
+        if ($channel['operation_order_channel_type']==3 && $this->order_channel_name != '后台下单') { //第三方团购 订单渠道
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
             $this->order_pay_money -= $this->order_money;
             $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_3RD_PARTY_COUPON_PAY));
-        } else if (!empty($this->pay_channel_id) && $this->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) { //现金支付
+        }else if($channel['operation_order_channel_type']==2){ //第三方对接 订单渠道
+            $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
+            $this->order_pay_money -= $this->order_money;
+            $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_3RD_PARTY_POP_PAY));
+        }else if (!empty($this->pay_channel_id) && $this->pay_channel_id == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) { //现金支付 支付渠道
             $this->setAttributes($this->getPayChannel(OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY));
             $this->order_pay_money -= $this->order_money;
         } else {//如果不传支付渠道就是线上支付
@@ -949,7 +1003,7 @@ class Order extends OrderModel
                     $this->order_pay_money -= $this->order_use_coupon_money;
                 } else {
                     $this->addError('coupon_id', '获取优惠券信息失败！');
-                    $this->addError('error_code', '541401');
+                    $this->addError('error_code', '542105');
                     return false;
                 }
             }
@@ -1021,6 +1075,7 @@ class Order extends OrderModel
      * @param $begin_time
      * @param $end_time
      * @param $admin_id
+     * @code 22
      * @return bool
      */
     public static function updateBookedTime($order_code, $worker_id, $begin_time, $end_time, $admin_id)
@@ -1086,6 +1141,7 @@ class Order extends OrderModel
      * @param $address_id
      * @param $address_detail
      * @param $admin_id
+     * @code 23
      * @return null|static
      */
     public static function updateAddress($order_code, $address_id, $address_detail, $admin_id)
@@ -1168,6 +1224,7 @@ class Order extends OrderModel
      * @param $order_cs_memo
      * @param $order_customer_need
      * @param $admin_id
+     * @code 24
      * @return bool
      */
     public static function updateCustomerNeed($order_code, $order_customer_memo, $order_cs_memo, $order_customer_need, $admin_id)
@@ -1186,6 +1243,7 @@ class Order extends OrderModel
     /**
      * 获取订单渠道 根据名称
      * @param $name
+     * @code 25
      * @return array|bool
      */
     public function getOrderChannel($name)
@@ -1193,6 +1251,11 @@ class Order extends OrderModel
         return OperationOrderChannel::configorderlist($name);
     }
 
+    /**
+     * @param $id
+     * @code 26
+     * @return array
+     */
     public function getPayChannel($id)
     {
         $type = OperationPayChannel::configpay($id);
@@ -1207,6 +1270,7 @@ class Order extends OrderModel
     /**
      * 获取订单渠道
      * @param int $channel_id
+     * @code 27
      * @return array|bool
      */
     public function getOrderChannelName($channel_id = 0)
@@ -1217,6 +1281,7 @@ class Order extends OrderModel
     /**
      * 获取渠道分类
      * @param int $channel_id
+     * @code 28
      * @return array
      */
     public function getOrderChannelType($channel_id = 0)
@@ -1234,6 +1299,7 @@ class Order extends OrderModel
      * @param $longitude
      * @param $latitude
      * @param int $goods_id
+     * @code 29
      * @return array
      */
     public static function getGoods($longitude, $latitude, $goods_id = 0)
@@ -1261,6 +1327,7 @@ class Order extends OrderModel
     /**
      * 获取优惠券
      * @param $id
+     * @code 30
      * @return mixed
      */
     public static function getCouponById($id)
@@ -1275,6 +1342,7 @@ class Order extends OrderModel
     /**
      * 获取服务卡
      * @param $id
+     * @code 31
      * @return mixed
      */
     public function getCardById($id)

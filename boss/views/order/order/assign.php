@@ -96,6 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-bordered">
                     <tr>
                         <td width="500">
+                            <h5 class="col-sm-12" id="order_code"></h5>
                             <h5 class="col-sm-12" id="booked_time_range"></h5>
                             <h5 class="col-sm-12" id="order_address"></h5>
                         </td>
