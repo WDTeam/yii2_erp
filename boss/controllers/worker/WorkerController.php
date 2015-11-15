@@ -1311,7 +1311,7 @@ class WorkerController extends BaseAuthController
     public function actionTest(){
 
         echo '<pre>';
-        $a = Worker::countShopWorkerNums(1);
+        $a = Worker::getDistrictFreeWorkerForAutoAssign(3,2,1447632000,1447639200);
         var_dump($a);die;
         die;
         $city_encode = '北京市';
