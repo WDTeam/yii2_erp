@@ -191,9 +191,9 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	 * @return:
 	 **/
 
-	public static function getCouponBasicInfoById($customer_tel){
+	public static function getCouponBasicInfoById($id){
 	
-		if($customer_tel==0){
+		if($id==0){
 			$array=[
 			'is_status'=>1,
 			'msg'=>'亲,请传入规则id',
@@ -203,8 +203,8 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		}
 		
 		$coupon = CouponUserinfo::find()
-		->select(['customer_tel', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price'])
-		->where(['customer_tel'=>$customer_tel])
+		->select(['id','customer_tel', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price'])
+		->where(['id'=>$id])
 		->asArray()
 		->one();
 	

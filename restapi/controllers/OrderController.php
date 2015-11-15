@@ -95,18 +95,18 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
         #开始时间
-        $attributes['order_booked_begin_time'] = strtotime($args['order_booked_begin_time']);
-        if (empty($attributes['order_booked_begin_time'])) {
+        if (empty($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
+        $attributes['order_booked_begin_time'] = strtotime($args['order_booked_begin_time']);
+
         #结束时间
-        $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
-        if (empty($attributes['order_booked_end_time'])) {
+        if (empty($args['order_booked_end_time'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
+        $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
 
         $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
-
 
         if ($attributes['order_booked_end_time'] <= $attributes['order_booked_begin_time']) {
             return $this->send(null, "对不起,开始时间不能大于等于结束时间", 0, 200, null, alertMsgEnum::orderStartEndTime);
@@ -119,10 +119,12 @@ class OrderController extends \restapi\components\Controller
         #支付渠道
         $attributes['pay_channel_key'] = isset($args['pay_channel_key']) ? $args['pay_channel_key'] : "";
 
-        $attributes['order_booked_count'] = $args['order_booked_count'];
-        if (empty($attributes['order_booked_count'])) {
+        #服务时长
+        if (empty($args['order_booked_count'])) {
             return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
+        $attributes['order_booked_count'] = $args['order_booked_count'];
+
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -167,13 +169,18 @@ class OrderController extends \restapi\components\Controller
         if (isset($args['order_is_use_balance'])) {
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
-
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = Order::ADMIN_CUSTOMER;
 
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
+
+            if (implode(',', $order->errors['error_code']) == 540111) {
+                $errorMsg = '您有未支付订单,请您先支付或取消再创建新订单';
+            } else {
+                $errorMsg = '创建订单失败';
+            }
 
             if ($is_success) {
                 $ret = array(
@@ -182,10 +189,10 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
+                return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, $errorMsg . '[' . implode(',', $order->errors['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
+            return $this->send(null, $e->getMessage(), 1024, 200, null, $errorMsg . '[' . implode(',', $order->errors['error_code']) . ']');
         }
     }
 
@@ -245,8 +252,7 @@ class OrderController extends \restapi\components\Controller
         if (!isset($args['order_service_item_id']) || !intval($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
-        //下单渠道 
-        //$args['channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
+
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
@@ -255,22 +261,14 @@ class OrderController extends \restapi\components\Controller
         if (!isset($args['address_id']) || !intval($args['address_id'])) {
             return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-//        try {
-//            $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
-//        } catch (\Exception $e) {
-//            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderAddressIdFaile);
-//        }
-//        if (!empty($model)) {
+
         $attributes['address_id'] = intval($args['address_id']);
-//        } else {
-//            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-//        }
         $attributes['customer_id'] = $user->id; //登录用户ID
         $attributes['order_service_item_id'] = intval($args['order_service_item_id']); //服务品类ID
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
-        $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
+        $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : ""; //下单渠道 
         $attributes['pay_channel_key'] = 'PAY_CHANNEL_EJJ_CASH_PAY'; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
@@ -283,14 +281,15 @@ class OrderController extends \restapi\components\Controller
                 "id" => $order->id,
                 "order_code" => $order->order_code
             );
+
             if ($is_success) {
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
                 $msgErrors = $order->errors;
-                return $this->send($order->errors, '创建订单失败', 0, 200, null, current(current($msgErrors)));
+                return $this->send($order->errors, '创建订单失败', 0, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403, null, current(current($msgErrors)));
+            return $this->send(null, $e->getMessage(), 1024, 403, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
         }
     }
 
@@ -524,7 +523,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiName actionOrdersCount
      * @apiGroup Order
-     * @apiDescription 获得用户各种状态的订单数量 （谢奕）
+     * @apiDescription 获得用户各种状态的订单数量 （谢奕）周期订单作为一个订单来统计[当前逻辑]
      *
      * @apiParam {String} access_token 用户令牌
      * @apiParam {String} order_channel_name      订单渠道名称
@@ -559,10 +558,14 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionOrdersCount()
     {
-        $args = Yii::$app->request->get();
 
-        @$token = $args["access_token"];
-        $user = CustomerAccessToken::getCustomer($token);
+        $args = Yii::$app->request->get() or $args = json_decode(Yii::$app->request->getRawBody(), true);
+
+        if (!isset($args['access_token']) || !$args['access_token']) {
+            return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+
+        $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 401, 200, null, alertMsgEnum::userLoginFailed);
         }
@@ -1446,20 +1449,17 @@ class OrderController extends \restapi\components\Controller
             if (empty($param['order_code'])) {
                 $param['order_code'] = $param['order_batch_code'];
             }
-            
-            print_r($param);
 
             try {
                 $result = Order::cancelByOrderCode($param['order_code'], Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-                var_dump($result);
-                exit;
-                if ($result['error_code']) {
-                    return $this->send([1], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
+
+                if ($result['status']) {
+                    return $this->send([$result['status']], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                 } else {
-                    return $this->send(null, $reason['msg'], 0, 200, null, alertMsgEnum::orderCancelFaile.'['.$reason['error_code'].']');
+                    return $this->send(null, $result['msg'], 0, 200, null, alertMsgEnum::orderCancelFaile . '[' . $result['error_code'] . ']');
                 }
             } catch (Exception $e) {
-                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
+                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile . '[' . $result['error_code'] . ']');
             }
         } else {
             return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $param['order_code'], 0, 200, NULL, alertMsgEnum::orderCancelFaile);
@@ -2086,7 +2086,7 @@ class OrderController extends \restapi\components\Controller
                     $r_order['sub_order'] = array_merge($order, []);
                 } else {
                     foreach ($order as $k => $v) {
-                        if ($v['order_pay_type'] == 1) {
+                        if ($v['pay_channel_id'] == 1) {
                             @$r_order['worker_money'] += $v['order_money'];
                         } else {
                             @$r_order['worker_money'] = 0;
@@ -2098,7 +2098,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_channel_name'] = $v['order_channel_name'];
                         $r_order['order_service_type_name'] = $v['order_service_type_name'];
                         $r_order['order_service_item_name'] = $v['order_service_item_name'];
-                        $r_order['order_pay_type'] = $v['order_pay_type'];
+                        $r_order['pay_channel_id'] = $v['pay_channel_id'];
                         $r_order["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['order_cs_memo'] = $v['order_cs_memo'];
                         $r_order['order_lat'] = $v['order_lat'];
@@ -2106,7 +2106,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['order_address'] = $v['order_address'];
                         $r_order["order_batch_code"] = $v['order_batch_code'];
                         $r_order['times'][$k]["order_booked_begin_time"] = $v['order_booked_begin_time'];
-                        $r_order['times'][$k]["order_pay_type"] = $v['order_pay_type'];
+                        $r_order['times'][$k]["order_pay_type"] = $v['pay_channel_id'];
                         $r_order['times'][$k]["order_booked_end_time"] = $v['order_booked_end_time'];
                         $r_order['times'][$k]["long_time"] = ($v['order_booked_end_time'] - $v['order_booked_begin_time']) % 86400 / 3600;
                         $r_order['times'][$k]["id"] = $v['id'];
@@ -2189,6 +2189,10 @@ class OrderController extends \restapi\components\Controller
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 200, null, alertMsgEnum::userLoginFailed);
+        }
+
+        if (empty($param['id'])) {
+            return $this->send(null, "订单号不能为空！", 0, 200, null, alertMsgEnum::orderExistFaile);
         }
         try {
             $order = OrderSearch::getOne($param['id'])->getAttributes();

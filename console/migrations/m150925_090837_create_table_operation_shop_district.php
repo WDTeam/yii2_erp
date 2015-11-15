@@ -5,12 +5,17 @@ use yii\db\Migration;
 
 class m150925_090837_create_table_operation_shop_district extends Migration
 {
+    const TB_NAME = '{{%operation_shop_district}}';
+
     public function up(){
+        $sql = 'DROP TABLE IF EXISTS ' . self::TB_NAME;
+        $this->execute($sql);
+
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'城市商圈表\'';
         }
-        $this->createTable('{{%operation_shop_district}}', [
+        $this->createTable(self::TB_NAME, [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
             'operation_shop_district_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'商圈名称\'',
             'operation_city_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'城市编号\'',
@@ -27,7 +32,7 @@ class m150925_090837_create_table_operation_shop_district extends Migration
     }
 
     public function down(){
-        $this->dropTable('{{%operation_shop_district}}');
+        $this->dropTable(self::TB_NAME);
 
         return true;
     }

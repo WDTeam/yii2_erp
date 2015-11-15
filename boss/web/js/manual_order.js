@@ -327,17 +327,17 @@ function timer(){
 function showOrder(){
     timer();
     var order = window.order_data;
-    $("#order_code").html(order.order_code);
+    $("#order_code").html("订单编号："+order.order.order_code);
     $("#booked_time_range").html(order.booked_time_range);
     $("#order_address").text(order.order.order_address);
-    if(order.ext_pay.pay_channel_id==1){ //现金支付
+    if(order.ext_pay.pay_channel_id==2){ //现金支付
         $("#must_pay_info").text('需收取'+order.order.order_money+'元');
         $("#pay_info").text('总金额'+order.order.order_money+'元');
     }else if(order.ext_pay.pay_channel_type_id==1 || order.ext_pay.pay_channel_type_id==2){ //在线支付
-        $("#must_pay_info").text('需收取'+(order.order.order_money - order.ext_pay.order_pay_money - order.ext_pay.order_money -
-        order.ext_pay.order_use_acc_balance - order.ext_pay.order_use_acc_balance - order.ext_pay.order_use_card_money -
+        $("#must_pay_info").text('需收取'+(order.order.order_money - order.ext_pay.order_pay_money - order.ext_pay.order_use_coupon_money -
+        order.ext_pay.order_use_acc_balance - order.ext_pay.order_use_card_money -
         order.ext_pay.order_use_promotion_money)+'元');
-        $("#pay_info").text('总金额'+order.order.order_money+'元，线上支付'+order.ext_pay.order_pay_money+'元，优惠券'+order.ext_pay.order_money+'元，余额支付'+order.ext_pay.order_use_acc_balance+'元，服务卡支付'+order.ext_pay.order_use_card_money
+        $("#pay_info").text('总金额'+order.order.order_money+'元，线上支付'+order.ext_pay.order_pay_money+'元，优惠券'+order.ext_pay.order_use_coupon_money+'元，余额支付'+order.ext_pay.order_use_acc_balance+'元，服务卡支付'+order.ext_pay.order_use_card_money
         +'元，促销金额'+order.ext_pay.order_use_promotion_money+'元');
     }else{ //第三方支付
         $("#must_pay_info").text('需收取'+(order.order.order_money-order.ext_pop.order_pop_order_money-order.ext_pop.order_pop_operation_money)+'元');
