@@ -95,18 +95,18 @@ class OrderController extends \restapi\components\Controller
         $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
         #开始时间
-        $attributes['order_booked_begin_time'] = strtotime($args['order_booked_begin_time']);
-        if (empty($attributes['order_booked_begin_time'])) {
+        if (empty($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
         }
+        $attributes['order_booked_begin_time'] = strtotime($args['order_booked_begin_time']);
+
         #结束时间
-        $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
-        if (empty($attributes['order_booked_end_time'])) {
+        if (empty($args['order_booked_end_time'])) {
             return $this->send(null, "数据不完整,请输入完成时间", 0, 200, null, alertMsgEnum::orderBookedEndTimeFaile);
         }
+        $attributes['order_booked_end_time'] = strtotime($args['order_booked_end_time']);
 
         $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
-
 
         if ($attributes['order_booked_end_time'] <= $attributes['order_booked_begin_time']) {
             return $this->send(null, "对不起,开始时间不能大于等于结束时间", 0, 200, null, alertMsgEnum::orderStartEndTime);
@@ -119,10 +119,12 @@ class OrderController extends \restapi\components\Controller
         #支付渠道
         $attributes['pay_channel_key'] = isset($args['pay_channel_key']) ? $args['pay_channel_key'] : "";
 
-        $attributes['order_booked_count'] = $args['order_booked_count'];
-        if (empty($attributes['order_booked_count'])) {
+        #服务时长
+        if (empty($args['order_booked_count'])) {
             return $this->send(null, "数据不完整,请输入服务时长", 0, 200, null, alertMsgEnum::orderPayTypeFaile);
         }
+        $attributes['order_booked_count'] = $args['order_booked_count'];
+
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -174,7 +176,6 @@ class OrderController extends \restapi\components\Controller
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
-
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -245,8 +246,7 @@ class OrderController extends \restapi\components\Controller
         if (!isset($args['order_service_item_id']) || !intval($args['order_service_item_id'])) {
             return $this->send(null, "请输入服务项目id", 0, 200, null, alertMsgEnum::orderServiceItemIdFaile);
         }
-        //下单渠道 
-        //$args['channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
+
         //服务开始时间/阿姨上门时间
         if (!isset($args['order_booked_begin_time']) || !$args['order_booked_begin_time']) {
             return $this->send(null, "数据不完整,请输入初始时间", 0, 200, null, alertMsgEnum::orderBookedBeginTimeFaile);
@@ -255,22 +255,14 @@ class OrderController extends \restapi\components\Controller
         if (!isset($args['address_id']) || !intval($args['address_id'])) {
             return $this->send(null, "数据不完整,请输入常用地址ID", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
         }
-//        try {
-//            $model = CustomerAddress::addAddressForPop($user->id, $user->customer_phone, $args['city_name'], $args['address']);
-//        } catch (\Exception $e) {
-//            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderAddressIdFaile);
-//        }
-//        if (!empty($model)) {
+
         $attributes['address_id'] = intval($args['address_id']);
-//        } else {
-//            return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0, 200, null, alertMsgEnum::orderAddressIdFaile);
-//        }
         $attributes['customer_id'] = $user->id; //登录用户ID
         $attributes['order_service_item_id'] = intval($args['order_service_item_id']); //服务品类ID
         $attributes['order_booked_begin_time'] = intval($args['order_booked_begin_time']);
         $attributes['order_booked_end_time'] = $attributes['order_booked_begin_time'] + 10800; //服务结束时间
         $attributes['order_booked_count'] = 3; //服务时长
-        $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : "";
+        $attributes['order_channel_name'] = isset($args['order_channel_name']) ? $args['order_channel_name'] : ""; //下单渠道 
         $attributes['pay_channel_key'] = 'PAY_CHANNEL_EJJ_CASH_PAY'; //现金支付
         $attributes['order_customer_need'] = isset($args['order_customer_need']) ? $args['order_customer_need'] : ""; //客户需求
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
