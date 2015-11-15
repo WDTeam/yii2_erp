@@ -64,9 +64,14 @@ use core\models\finance\FinanceWorkerSettleApplySearch;
         ?>
     </div>
     <input type="hidden" name="isExport" id = "isExport" value="0"/>
-    <div class='col-md-2' style="margin-top: 22px;">
+    <div class='col-md-1' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+        
+    </div>
+    <div class='col-md-1' style="margin-top: 22px;">
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+    </div>
+    <div class='col-md-1' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', '导出报表'), ['class' => 'btn btn-default','id'=>'export',]) ?>
     </div>
     <?php ActiveForm::end(); ?>
