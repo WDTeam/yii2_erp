@@ -30,42 +30,6 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
     const ROLE_USER = 10;
-    
-    private $_roles = [];
-    public function setRoles($roles)
-    {
-        if(is_array($roles)){
-            $this->_roles = $roles;
-        }else{
-            $this->_roles = [$roles];
-        }
-    }
-    public function saveRoles()
-    {
-        $roles = $this->_roles;
-        $auth = \Yii::$app->authManager;
-        if(!empty($roles)){
-            $auth->revokeAll($this->id);
-            foreach ($roles as $role_name){
-                $role = $auth->getRole($role_name);
-                if(!empty($role)){
-                    $auth->assign($role, $this->id);
-                }
-            }
-            RbacHelper::updateConfigVersion();
-            return $auth->getRolesByUser($this->id);
-        }else{
-            return [];
-        }
-    }
-    public function getRoles()
-    {
-        return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'name');
-    }
-    public function getRolesLabel()
-    {
-        return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'description');
-    }
 
     /**
      * @inheritdoc

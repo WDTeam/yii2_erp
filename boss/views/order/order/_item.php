@@ -27,7 +27,9 @@ use boss\models\order\Order;
 <div class="m_tab">
     <table cellspacing="0" cellpadding="0" border="1">
         <tr class="first">
-            <th colspan="5">订单编号：<?= Html::encode($model->order_code) ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <th colspan="5">
+                订单编号：<?= Html::encode($model->order_code) ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <?= !empty($model->order_batch_code)?"批号：".Html::encode($model->order_batch_code)."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;":""; ?>
                 服务项目：<?= Html::encode($model->order_service_item_name) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul>
                 <?php

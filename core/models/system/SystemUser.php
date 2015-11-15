@@ -8,6 +8,7 @@ use core\models\shop\Shop;
 use core\models\shop\ShopManager;
 use core\models\auth\AuthItem;
 use yii\base\Object;
+use boss\components\RbacHelper;
 class SystemUser extends \dbbase\models\system\SystemUser
 {
     public $repassword;
@@ -25,6 +26,49 @@ class SystemUser extends \dbbase\models\system\SystemUser
 //             self::CLASSIFY_MINIBOSS=>'MINI BOSS 用户'
 //         ];
 //     }
+
+
+    private $_roles = [];
+    public function setRoles($roles)
+    {
+        if(is_array($roles)){
+            $this->_roles = $roles;
+        }else{
+            $this->_roles = [$roles];
+        }
+    }
+    /**
+     * 权限保存
+     * 
+     * @return multitype:\yii\rbac\Role |multitype:
+     */
+    public function saveRoles()
+    {
+        $_has_roles = array_keys(self::getArrayRole());
+        $roles= array_intersect($this->_roles, $_has_roles);
+        $auth = \Yii::$app->authManager;
+        if(!empty($roles)){
+            $auth->revokeAll($this->id);
+            foreach ($roles as $role_name){
+                $role = $auth->getRole($role_name);
+                if(!empty($role)){
+                    $auth->assign($role, $this->id);
+                }
+            }
+            RbacHelper::updateConfigVersion();
+            return $auth->getRolesByUser($this->id);
+        }else{
+            return [];
+        }
+    }
+    public function getRoles()
+    {
+        return ArrayHelper::map(\Yii::$app->authManager->getRolesByUser($this->id), 'name', 'name');
+    }
+    public function getRolesLabel()
+    {
+        return ArrayHelper::map(\Yii::$app->authManager->getRolesByUser($this->id), 'name', 'description');
+    }
     /**
      * 保存SHOP IDS
      */
