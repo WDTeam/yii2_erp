@@ -29,7 +29,7 @@ class OperationPayChannelSearch extends OperationPayChannel
      **/
     public static  function configorder()
     {
-    	return ['1' => '在线支付', '2' => 'e家洁','3'=>'第三方团购'];
+    	return ['1' => '在线支付', '2' => 'e家洁','3'=>'第三方'];
     }
     
     

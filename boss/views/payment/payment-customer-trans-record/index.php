@@ -39,8 +39,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'用户ID',
             ],
             [
+                'attribute' => 'customer_phone',
+                'label'=>'用户手机号码',
+            ],
+            [
                 'attribute' => 'order_id',
                 'label'=>'E家洁订单号',
+            ],
+            [
+                'attribute' => 'order_code',
+                'label'=>'E家洁订单编号',
+            ],
+            [
+                'attribute' => 'order_batch_code',
+                'label'=>'E家洁周期订单号',
             ],
             [
                 'attribute' => 'payment_customer_trans_record_order_channel',

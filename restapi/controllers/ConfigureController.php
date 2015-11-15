@@ -184,10 +184,19 @@ class ConfigureController extends \restapi\components\Controller
      *         ],
      *         "isBlock": "用户是否为黑名单【1表示黑名单，0表示正常】",
      *         "isEffect": "用户token是否有效【0表示正常，1表示失效】"
-     *          isUpdate: "0", 
+     *          isUpdate: "0",
      *          updateContent: "",
      *          updateUrl: "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
-     *          isShowGiveStar :"0"
+     *          isShowGiveStar :"0",
+     *         "black_url_list":
+     *              [
+     *                  "lib.js",
+     *                  "ejiajie.css",
+     *                  "icon_mob.png",
+     *                  "tlbagui",
+     *                  "tlbaserver",
+     *                  "tlbsserver"
+     *              ]
      *     }
      * }
      *
@@ -212,7 +221,7 @@ class ConfigureController extends \restapi\components\Controller
             if (!isset($param['order_channel_name']) || !$param['order_channel_name']) {
                 return $this->send(null, 'app版本参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
             }
-            
+
             //判断token是否有效
             $isEffect = "0";
             if (isset($param['access_token']) && $param['access_token'] && !CustomerAccessToken::checkAccessToken($param['access_token'])) {
@@ -294,15 +303,15 @@ class ConfigureController extends \restapi\components\Controller
             //服务分类
             $home_order_server = [
                 [
-                    'title' => '单次体验',
-                    'introduction' => '新用户第1小时免费',
+                    'title' => '单次保洁',
+                    'introduction' => '单次体验 预约随心',
                     'icon' => $current_env_url . '/statics/images/dancibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/1',
                     'bg_colour' => 'ffb518',
                     'font_colour' => 'ffffff',
                 ],
                 [
-                    'title' => '预约随心',
+                    'title' => '周期保洁',
                     'introduction' => '一次下单 清洁无忧',
                     'icon' => $current_env_url . '/statics/images/zhouqibaojie.png',
                     'url' => $current_env_url . '/#/order/createOnceOrder/2',
@@ -311,6 +320,12 @@ class ConfigureController extends \restapi\components\Controller
                 ]
             ];
             $isBlock = "0";
+            $black_url_list = ["lib.js",
+                "ejiajie.css",
+                "icon_mob.png",
+                "tlbagui",
+                "tlbaserver",
+                "tlbsserver"];
             $ret = [
                 'city_list' => $onlineCityList,
                 'header_link' => $header_link,
@@ -319,10 +334,11 @@ class ConfigureController extends \restapi\components\Controller
                 'server_list' => $serviceCategoryList,
                 'isBlock' => $isBlock,
                 'isEffect' => $isEffect,
-                "isUpdate"=> "0", // 0 代表不升级 1 代表升级  2 强制升级
-                "updateContent"=> "",
-                "updateUrl"=>"https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
-                "isShowGiveStar" =>"0"
+                "isUpdate" => "0", // 0 代表不升级 1 代表升级  2 强制升级
+                "updateContent" => "",
+                "updateUrl" => "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
+                "isShowGiveStar" => "0",
+                "black_url_list" => $black_url_list
             ];
             return $this->send($ret, '操作成功', 1, 200, null, alertMsgEnum::getUserInitSuccess);
         } catch (\Exception $e) {
@@ -392,7 +408,7 @@ class ConfigureController extends \restapi\components\Controller
         $itemlist = $temp = array();
         if ($itemInfo) {
             foreach ($itemInfo as $key => $val) {
-                if($val['operation_goods_name']=="家庭保洁") continue;
+                if ($val['operation_goods_name'] == "家庭保洁") continue;
                 $temp['category_id'] = $val['operation_category_id'];
                 $temp['order_service_item_id'] = $val['goods_id'];
                 $temp['order_service_item_name'] = $val['operation_goods_name'];
@@ -417,11 +433,11 @@ class ConfigureController extends \restapi\components\Controller
         }
         $ret = [
             'colour' => $colour,
-            'category_ico' => $categoryInfo['operation_category_icon']?$categoryInfo['operation_category_icon']:"",
-            "category_name" => $categoryInfo['operation_category_name']?$categoryInfo['operation_category_name']:"",
+            'category_ico' => $categoryInfo['operation_category_icon'] ? $categoryInfo['operation_category_icon'] : "",
+            "category_name" => $categoryInfo['operation_category_name'] ? $categoryInfo['operation_category_name'] : "",
             "category_english_name" => "",
             "category_condition" => "",
-            "category_price_description" => $categoryInfo['operation_category_price_description']?$categoryInfo['operation_category_price_description']:"",
+            "category_price_description" => $categoryInfo['operation_category_price_description'] ? $categoryInfo['operation_category_price_description'] : "",
             'item_list' => $itemlist
         ];
         return $this->send($ret, '获取数据成功', 1, 200, null, alertMsgEnum::getServiceItemSuccess);

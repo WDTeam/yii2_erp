@@ -55,10 +55,10 @@ use boss\models\order\Order;
     ]);
     ?>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <?= $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu input_customer_phone'])->label('客户电话 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
                 'initValueText' => '门店:', // set the initial display text
                 'options' => ['placeholder' => '选择门店', 'class' => 'm_ipu'],
@@ -77,7 +77,7 @@ use boss\models\order\Order;
                 ],
             ])->label('门店:', ['class' => 'm_ipone', 'style' => 'line-height:35px']); ?>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <div class="form-group" style="width: auto;">
                 <label class="m_ipone">下单时间:</label>
                 <input name="<?= $search_class_name ?>[created_from]" type="text" class="Wdate" id="d412"
@@ -90,10 +90,10 @@ use boss\models\order\Order;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <?= $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <?= $form->field($searchModel, 'district_id')->widget(Select2::classname(), [
                 'name' => 'worker_district',
                 'hideSearch' => true,
@@ -106,7 +106,7 @@ use boss\models\order\Order;
                 ],
             ])->label('商圈:', ['class' => 'm_ipone', 'style' => 'line-height:35px']); ?>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <div class="form-group" style="width: auto;">
                 <label class="m_ipone">服务时间:</label>
                 <input name="<?= $search_class_name ?>[booked_from]" type="text" class="Wdate" id="d412"
@@ -119,13 +119,13 @@ use boss\models\order\Order;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
         <?= $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
         <?= $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
         <?= Html::submitButton('搜索', ['class' => 'btn btn-primary button-search']) ?>
         </div>
     </div>

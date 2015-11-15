@@ -182,13 +182,10 @@ class OrderController extends \restapi\components\Controller
                 );
                 return $this->send($ret, '创建订单成功', 1, 200, null, alertMsgEnum::orderCreateSuccess);
             } else {
-                foreach ($order->errors as $val) {
-                    $values = $val[0];
-                }
-                return $this->send($order->errors, '创建订单失败', 1024, 200, null, $values);
+                return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, $values); //current(current($msgErrors)));
+            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
         }
     }
 
@@ -1441,21 +1438,25 @@ class OrderController extends \restapi\components\Controller
             if (!in_array($reason, $order_cancel_reason)) {
                 $reason = '其他原因#' . $reason;
             }
+
             if (!isset($param['order_code']) && !isset($param['order_batch_code'])) {
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
 
-            $cancelOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
-
+            if (empty($param['order_code'])) {
+                $param['order_code'] = $param['order_batch_code'];
+            }
+            
             try {
-                $result = Order::cancelByOrderCode($cancelOrderCode, Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
-                if ($result) {
+                $result = Order::cancelByOrderCode($param['order_code'], Order::ADMIN_CUSTOMER, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, $reason);
+              
+                if ($result['status']) {
                     return $this->send([1], $param['order_code'] . "订单取消成功", 1, 200, null, alertMsgEnum::orderCancelSuccess);
                 } else {
-                    return $this->send(null, $param['order_code'] . "订单取消失败", 0, 200, null, alertMsgEnum::orderCancelFaile);
+                    return $this->send(null, $result['msg'], 0, 200, null, alertMsgEnum::orderCancelFaile.'['.$result['error_code'].']');
                 }
             } catch (Exception $e) {
-                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile);
+                return $this->send(null, $param['order_code'] . "订单取消异常:" . $e, 1024, 200, null, alertMsgEnum::orderCancelFaile.'['.$result['error_code'].']');
             }
         } else {
             return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $param['order_code'], 0, 200, NULL, alertMsgEnum::orderCancelFaile);
@@ -1509,13 +1510,12 @@ class OrderController extends \restapi\components\Controller
                 return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
             }
 
-            $deleteOrderCode = isset($param['order_code']) ? $param['order_code'] : $param['order_batch_code'];
-
-            if (empty($deleteOrderCode)) {
-                return $this->send(null, "缺少必要参数:订单编号或者周期订单号", 0, 200, null, '缺少必要参数:订单编号或者周期订单号');
+            if (empty($param['order_code'])) {
+                $param['order_code'] = $param['order_batch_code'];
             }
-           try {
-                if (Order::customerDel($deleteOrderCode, 0)) {
+
+            try {
+                if (Order::customerDel($param['order_code'], 0)) {
                     return $this->send(null, "删除订单成功", 1, 200, null, alertMsgEnum::orderDeleteSuccess);
                 } else {
                     return $this->send(null, "订单删除失败", 0, 200, null, alertMsgEnum::orderDeleteFaile);
@@ -1736,7 +1736,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 创建周期订单(郝建设)
      *
-     * @apiParam  {String}  access_token      会话id. 必填 
+     * @apiParam  {String}  access_token      会话id. 必填
      * @apiParam {String}   order_channel_name      订单渠道名称
      * @apiParam  {integer} order_service_item_id 服务类型 商品id 必填
      * @apiParam  {int}     address_id 客户地址id 必填
@@ -1857,11 +1857,7 @@ class OrderController extends \restapi\components\Controller
                 if ($createOrder['status'] == 1) {
                     return $this->send($createOrder['batch_code'], "添加成功", 1, 200, null, alertMsgEnum::orderCreateRecursiveOrderSuccess);
                 } else {
-                    $err = array();
-                    foreach ($createOrder['errors'] as $key => $val) {
-                        $err[$key] = $val[0];
-                    }
-                    return $this->send($err, "创建周期订单失败", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+                    return $this->send(null, "创建周期订单失败！错误编号：[{$createOrder['error_code']}]", 0, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
@@ -2069,19 +2065,22 @@ class OrderController extends \restapi\components\Controller
         try {
             $orderSearch = new OrderSearch();
             $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
-
             if (count($order) > 0) {
-                $r_order = array();
+                $r_order = [];
                 if (!$param['workerType']) {
-                    $arr = array();
                     foreach ($order as $key => $val) {
-                        if ($val['order_parent_id']) {
-                            $arr[$key] = $val;
-                        } else {
+                        if ($val['order_parent_id'] == 0) {
                             $r_order = $val;
+                            $index = $key;
                         }
                     }
-                    $r_order['sub_order'] = $arr;
+                    //判断是否批量订单，如果是批量订单，取出当前第一个数组，当主订单
+                    if (empty($r_order)) {
+                        $r_order = $order[0];
+                        $index = 0;
+                    }
+                    unset($order[$index]);
+                    $r_order['sub_order'] = array_merge($order, []);
                 } else {
                     foreach ($order as $k => $v) {
                         if ($v['order_pay_type'] == 1) {
@@ -2092,7 +2091,6 @@ class OrderController extends \restapi\components\Controller
                         if ($v['order_parent_id'] == 0) {
                             $r_order['order_id'] = $v['id'];
                         }
-
                         @$r_order['order_money'] += $v['order_money'];
                         $r_order['order_channel_name'] = $v['order_channel_name'];
                         $r_order['order_service_type_name'] = $v['order_service_type_name'];
@@ -2112,6 +2110,7 @@ class OrderController extends \restapi\components\Controller
                         $r_order['times'][$k]["order_code"] = $v['order_code'];
                     }
                 }
+
                 return $this->send($r_order, "操作成功", 1, 200, null, alertMsgEnum::checkTaskSuccess);
             } else {
                 return $this->send(null, "操作失败", 0, 200, null, alertMsgEnum::orderGetOrderWorkerFaile);

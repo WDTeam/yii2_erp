@@ -155,7 +155,7 @@ class server
         $this->ws = $ws;
         $this->fd = $ws->fd;
         $this->data = $ws->data;
-        $this->handleCommandMessage($server, $ws->data);
+        $this->handleCommandMessage($server, $ws->data,$ws->fd);
 
         return;
     }
@@ -164,17 +164,33 @@ class server
      */
     public function onReceive( swoole_server $server, $fd, $from_id, $data ) {
         echo date('Y-m-d H:i:s')." Get Message From Client {$fd}:{$data}\n";
-        $this->handleCommandMessage($server, $data);
+        $this->handleCommandMessage($server, $data, $fd);
         
         return;
     }
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$data)
+    public function handleCommandMessage($server,$data,$fd)
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
+        if($cmd == autoassign\ClientCommand::ALL_REDIS_ORDERS){
+            $orders = $this->getOrders();
+            foreach($orders as $key => $order){
+                if ($order['order_id']==null || $order['order_id']=='')
+                {
+                    continue;
+                }
+                $order = $this->getOrderStatus($order);
+                $order['created_at'] = date('Y-m-d H:i:s', $order['created_at']);
+                $order['updated_at']=$order['created_at'];
+                $d = json_encode($order);
+                echo 'onConnect;d='.$d;
+                $this->broadcastToSpecifiedClient($server, $fd, json_encode($d));
+            }
+            return;
+        }
         $nextStatus = autoassign\ClientCommand::START;//默认下一步是“开始自动派单”
         $currentStatus = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
         echo 'currentStatus:'.$currentStatus;
@@ -326,11 +342,11 @@ class server
         //echo 'getOrderStatus' . "\n";
 
         if ($order['worker_identity'] == '0') {
-            $order['status'] = '1';
+            $order['status'] = 1;
         } else if ($order['worker_identity'] == '1') {
-            $order['status'] = '2';
+            $order['status'] = 2;
         } else if ($order['worker_identity'] == '2') {
-            $order['status'] = '1001';
+            $order['status'] = 1001;
         }
 
         return $order;
@@ -342,11 +358,6 @@ class server
     public function getOrders(){
         $orders = $this->redis->zrange($this->config['_REDIS_WAIT_ASSIGN_ORDER_POOL_'],0,-1);
         foreach($orders as $key => $value){
-            // 加锁与解锁
-            if(isset($value['lock']) && $value['lock']){
-                unset($orders[$key]);
-                break;
-            }
             $orders[$key] = (array)json_decode($value);
         }
         return (array)$orders;
@@ -436,14 +447,20 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
-            //var_dump($clid);
-            try{
+            echo 'clid='.$clid.';msg='.$msg;
+            $this->broadcastToSpecifiedClient($server,$clid, $msg);
+        }
+    }
+    
+    public function broadcastToSpecifiedClient($server,$clid, $msg){
+        try{
+            
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
                 echo date('Y-m-d H:i:s').$ex->getMessage();
             }
-        }
     }
+    
     /**
      * 配置文件操作(查询与修改)
      * 默认没有第三个参数时，按照字符串读取提取''中或""中的内容

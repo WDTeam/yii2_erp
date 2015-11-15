@@ -12,59 +12,6 @@ class PayController extends \restapi\components\Controller
 {
 
     /**
-     * @api {POST} /pay/balance-pay [POST] /pay/balance-pay  (100%)
-     * @apiDescription 会员余额支付 (赵顺利)
-     * @apiName actionBalancePay
-     * @apiGroup Pay
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_channel_name 订单渠道名称
-     * @apiParam {String} order_id    订单ID.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "1",
-     *      "msg":"支付成功",
-     *      "ret":{},
-     *      "alertMsg":"支付成功",
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     * @apiError OrderIdNotFound 未找到订单ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":0,
-     *      "msg": "支付失败",
-     *      "ret": {},
-     *      "alertMsg": "支付失败",
-     *  }
-     *
-     */
-    public function actionBalancePay()
-    {
-        $params = Yii::$app->request->post() or
-                $params = json_decode(Yii::$app->request->rawBody, true);
-
-        if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::balancePayFailed);
-        }
-        $customer = CustomerAccessToken::getCustomer($params['access_token']);
-        $date = [
-            'customer_id' => $customer->id,
-            'order_id' => $params['order_id'],
-        ];
-
-        if (empty(Payment::balancePay($date))) {
-            return $this->send(null, "支付失败", 0, 403, null, alertMsgEnum::balancePayFailed);
-        }
-
-        return $this->send(null, "支付成功", 1, 200, null, alertMsgEnum::balancePaySuccess);
-    }
-
-    /**
      * @api {POST} /pay/online-pay [POST] /pay/online-pay (100%)
      * @apiDescription 在线支付接口(赵顺利100)
      * @apiName actionOnlinePay
@@ -101,7 +48,6 @@ class PayController extends \restapi\components\Controller
      * @apiParamExample {json} Request-Example:
      *  {
      *      "channel_id":"7",
-     *      "partner":"1217983401",
      *      "access_token":"00ca52a593ca85ffdb5256372aa642d2",
      *      "pay_money":"0.01",
      *      "order_id":"0",
@@ -175,8 +121,7 @@ class PayController extends \restapi\components\Controller
     {
         $model = new PayParam();
         $name = $model->formName();
-        $data[$name] = Yii::$app->request->post() or
-                $data[$name] = json_decode(Yii::$app->request->rawBody, true);
+        $data[$name] = Yii::$app->request->post() or $data[$name] = json_decode(Yii::$app->request->rawBody, true);
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 401, 403, null, alertMsgEnum::onlinePayFailed);
         }
@@ -210,19 +155,22 @@ class PayController extends \restapi\components\Controller
         if ($model->load($data) && $model->validate()) {
             $retInfo = Payment::getPayParams($model->payment_type, $model->customer_id, $model->channel_id, $model->order_id, $ext_params);
             //支付类型,1普通订单,2周期订单,3充值订单,(为了支持native跳转,在API层增加重定向地址)
-            switch($model->payment_type)
-            {
+            switch ($model->payment_type) {
                 case 1 :
-                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    $retInfo['data']['redirect'] = 'http://' . $_SERVER['HTTP_HOST'] . '/#/order/index?clientIndex=2';
                     break;
                 case 2:
-                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    $retInfo['data']['redirect'] = 'http://' . $_SERVER['HTTP_HOST'] . '/#/order/index?clientIndex=2';
                     break;
                 case 3:
-                    $retInfo['data']['redirect'] = 'http://'.$_SERVER['HTTP_HOST'].'/#/order/index?clientIndex=2';
+                    $retInfo['data']['redirect'] = 'http://' . $_SERVER['HTTP_HOST'] . '/#/order/index?clientIndex=2';
                     break;
             }
-            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::onlinePaySuccess);
+
+            if ($retInfo['status']) {
+                return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'], 200, null, alertMsgEnum::orderCreateSuccess);
+            }
+            return $this->send(null, $retInfo['info'], 0, 403, null, alertMsgEnum::onlinePayFailed);
         }
         return $this->send(null, $model->errors, 0, 403, null, alertMsgEnum::onlinePayFailed);
     }
