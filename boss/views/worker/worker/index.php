@@ -203,7 +203,7 @@ if(\Yii::$app->user->identity->isNotAdmin()){
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
             'width' => "20%",
-            'template' =>'{order}{view} {auth} {vacation} {block} ',
+            'template' =>'{order}{view} {auth} {vacation} {block} {delete}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
@@ -546,7 +546,7 @@ if(\Yii::$app->user->identity->isNotAdmin()){
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
             'width' => "20%",
-            'template' =>'{order}{view} {auth} {vacation} {block}',
+            'template' =>'{order}{view} {auth} {vacation} {block} {delete}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],

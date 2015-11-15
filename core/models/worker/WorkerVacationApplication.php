@@ -29,7 +29,7 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
 
         $noWeekday = [0,6,5];
         $timeLine = [];
-        for($i=0;$i<14;$i++){
+        for($i=1;$i<15;$i++){
             $time = strtotime("+$i day");
             $date = date('Y-m-d',$time);
             $week = (int)date("W",$time);
@@ -83,7 +83,7 @@ class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationAppl
         }
 
         $condition = "(worker_vacation_start_time > $startTime and worker_vacation_start_time < $endTime) or (worker_vacation_finish_time <$startTime and worker_vacation_finish_time >$endTime )";
-        $vacationTimeResult = WorkerVacation::find()->select('worker_vacation_start_time,worker_vacation_finish_time')->AndWhere(['worker_id'=>$worker_id])->AndWhere(['worker_vacation_type'=>$vacationType])->AndWhere($condition)->asArray()->all();
+        $vacationTimeResult = WorkerVacation::find()->select('worker_vacation_start_time,worker_vacation_finish_time')->AndWhere(['worker_id'=>$worker_id])->AndWhere($condition)->asArray()->all();
         $weekArr = [];
         foreach($vacationTimeResult as $val){
             $startWeek = (int)date('W',$val['worker_vacation_start_time']);
