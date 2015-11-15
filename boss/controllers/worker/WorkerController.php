@@ -1310,39 +1310,38 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-
         echo '<pre>';
+
         //$a = Worker::getDistrictFreeWorkerForAutoAssign(10,1,1447632000,1447639200);
-        $a = Worker::getWorkerTimeLine(10,1);
-        var_dump($a);die;
-        die;
-        $city_encode = '北京市';
-        $detail_encode = urlencode('北京市东城区东直门');
-        $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
-        $address_decode = json_decode($address_encode, true);
-        $longitude = $address_decode['result']['location']['lng'];
-        $latitude = $address_decode['result']['location']['lat'];
-        //$ShopDistrictInfo = \core\models\operation\OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
-        $where = '`operation_shop_district_coordinate_start_longitude` <= '.$longitude.' AND '.$longitude.' <= `operation_shop_district_coordinate_end_longitude`'.' AND `operation_shop_district_coordinate_start_latitude` >= '.$latitude.' AND `operation_shop_district_coordinate_end_latitude` <='.$latitude;
-        $ShopDistrictInfo = \core\models\operation\OperationShopDistrictCoordinate::find()->select(['id', 'operation_shop_district_id', 'operation_shop_district_name', 'operation_city_id', 'operation_city_name', 'operation_area_id', 'operation_area_name'])->asArray()->where($where)->all();
+//        WorkerForRedis::operateWorkerOrderInfoToRedis(1918,1,1,1,1447761600,1447765200);
+//        WorkerForRedis::operateWorkerOrderInfoToRedis(2891,1,1,2,1447761600,1447765200);
+        //$a = Worker::getWorkerTimeLine(1,1);
+        $a = Worker::getWorkerTimeLine(1,1);
 
-        var_dump($ShopDistrictInfo);
+        var_dump($a);
         die;
-        echo '<pre>';
-//        $a = Worker::findAllModel(['isdel'=>0],true);
-//        var_dump($a);
-        //var_dump(Worker::getWorkerDetailInfo(19077));die;
+        //$a = $this->getWorkerDistrict('北京市','北京市光华路 ');
         //echo '星期1 8:00 10:00';
+        /*
+         * 1918
+         * 10:00-14:00
+         * 9:00-13:00
+         *
+         * 14:00-15:00
+         * 16:00-17:00
+         * 2891
+         * 9:00-13:00
+         * 10:00-14:00
+         * 11:00-15:00
+         * 16:00-20:00
+         * */
         //echo date('Y-m-d H:i',1446253200);
         //echo '<br>';
         //echo date('Y-m-d H:i',1446264000);
         //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
-        //var_dump($a);die;
-        $a = Worker::getDistrictCycleFreeWorker(1,1,[['orderBookBeginTime'=>'1446253200','orderBookEndTime'=>'1446264000']]);
-        print_r($a);
+        //$a = Worker::getDistrictCycleFreeWorker(1,1,[['orderBookBeginTime'=>'1446253200','orderBookEndTime'=>'1446264000']]);
         //$a = Worker::operateWorkerOrderInfoToRedis(1,1,1,2,1446434010,1446434010);
-        die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);
 //        $workerInfo = [
 //            'info'=>[
@@ -1362,8 +1361,8 @@ class WorkerController extends BaseAuthController
 //                [
 //                    'order_id'=>1,
 //                    'order_booked_count'=>3,
-//                    'order_booked_begin_time'=>'14087655',
-//                    'order_booked_end_time'=>'14087655',
+//                    'order_booked_begin_time'=>'1447765500',
+//                    'order_booked_end_time'=>'1447765500',
 //                ],
 //                [
 //                    'order_id'=>2,

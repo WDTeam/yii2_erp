@@ -133,7 +133,6 @@ use kartik\daterange\DateRangePicker;
                     <td class="<?php if(@in_array('19:00',$weekday_redis[$w_key])){echo 'actives';}else{if(in_array('19:00',$w_val)){echo 'select';}}?>">19:00</td>
                     <td class="<?php if(@in_array('20:00',$weekday_redis[$w_key])){echo 'actives';}else{if(in_array('20:00',$w_val)){echo 'select';}}?>">20:00</td>
                     <td class="<?php if(@in_array('21:00',$weekday_redis[$w_key])){echo 'actives';}else{if(in_array('21:00',$w_val)){echo 'select';}}?>">21:00</td>
-                    <td class="<?php if(@in_array('22:00',$weekday_redis[$w_key])){echo 'actives';}else{if(in_array('22:00',$w_val)){echo 'select';}}?>">22:00</td>
                     <th>
                         <input id="blankCheckbox" value="option1" <?php if(count($w_val)==15){echo 'checked';}?> aria-label="..." type="checkbox">
                     </th>
@@ -175,7 +174,6 @@ use kartik\daterange\DateRangePicker;
         <td class="select">19:00</td>
         <td class="select">20:00</td>
         <td class="select">21:00</td>
-        <td class="select">22:00</td>
         <th>
             <input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="...">
         </th>
@@ -196,7 +194,6 @@ use kartik\daterange\DateRangePicker;
         <td class="select">19:00</td>
         <td class="select">20:00</td>
         <td class="select">21:00</td>
-        <td class="select">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
@@ -215,7 +212,6 @@ use kartik\daterange\DateRangePicker;
         <td class="select">19:00</td>
         <td class="select">20:00</td>
         <td class="select">21:00</td>
-        <td class="select">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
@@ -234,7 +230,6 @@ use kartik\daterange\DateRangePicker;
         <td class="select">19:00</td>
         <td class="select">20:00</td>
         <td class="select">21:00</td>
-        <td class="select">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
@@ -253,7 +248,6 @@ use kartik\daterange\DateRangePicker;
         <td  class="select">19:00</td>
         <td  class="select">20:00</td>
         <td  class="select">21:00</td>
-        <td  class="select">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
@@ -272,7 +266,6 @@ use kartik\daterange\DateRangePicker;
         <td  class="select">19:00</td>
         <td  class="select">20:00</td>
         <td  class="select">21:00</td>
-        <td  class="select">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     <tr>
@@ -291,7 +284,6 @@ use kartik\daterange\DateRangePicker;
         <td  class="select">19:00</td>
         <td  class="select">20:00</td>
         <td  class="select">21:00</td>
-        <td  class="select">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" checked value="option1" aria-label="..."></th>
     </tr>
     </tbody>
