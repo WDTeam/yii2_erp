@@ -175,9 +175,6 @@ class OrderController extends \restapi\components\Controller
         try {
             $order = new Order();
             $is_success = $order->createNew($attributes);
-
-
-
             if ($is_success) {
                 $ret = array(
                     "id" => $order->id,
@@ -193,10 +190,10 @@ class OrderController extends \restapi\components\Controller
                     $errorMsg = '创建订单失败';
                 }
 
-                return $this->send($arrayError['error_code'], '创建订单失败', 1024, 200, null, $errorMsg . '[' . implode(',', $arrayError['error_code']) . ']');
+                return $this->send($arrayError['error_code'], '创建订单失败', 0, 200, null, $errorMsg . '[' . implode(',', $arrayError['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败.');
         }
     }
 
@@ -295,10 +292,10 @@ class OrderController extends \restapi\components\Controller
                 } else {
                     $errorMsg = '创建订单失败';
                 }
-                return $this->send($arrayError['error_code'], '创建订单失败', 1024, 200, null, '创建订单失败[' . implode(',', $arrayError['error_code']) . ']');
+                return $this->send($arrayError['error_code'], '创建订单失败', 0, 200, null, '创建订单失败[' . implode(',', $arrayError['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::orderCreateRecursiveOrderFaile);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, '创建订单失败.');
         }
     }
 
