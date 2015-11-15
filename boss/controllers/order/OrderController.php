@@ -29,37 +29,37 @@ use Yii;
  */
 class OrderController extends BaseAuthController
 {
-    public function actionTest()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::cancelByOrderCode('101511045457209', 1, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, '测试');
-//        return Order::serviceStart(2);
-    }
-
-    public function actionServiceDone($id)
-    {
-        return Order::serviceDone($id);
-    }
-
-    public function actionServiceStart($id)
-    {
-        return Order::serviceStart($id);
-    }
-
-    public function actionAcceptDone($id)
-    {
-        return Order::customerAcceptDone($id,2,1);
-    }
-
-    public function actionChecked($id) //code
-    {
-        return Order::checked($id,$id,1);
-    }
-
-    public function actionPayoff($id) //code
-    {
-        return Order::payoffDone($id, $id, 1);
-    }
+//    public function actionTest()
+//    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        return Order::cancelByOrderCode('101511045457209', 1, OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_OTHER_CAUSE, '测试');
+////        return Order::serviceStart(2);
+//    }
+//
+//    public function actionServiceDone($id)
+//    {
+//        return Order::serviceDone($id);
+//    }
+//
+//    public function actionServiceStart($id)
+//    {
+//        return Order::serviceStart($id);
+//    }
+//
+//    public function actionAcceptDone($id)
+//    {
+//        return Order::customerAcceptDone($id,2,1);
+//    }
+//
+//    public function actionChecked($id) //code
+//    {
+//        return Order::checked($id,$id,1);
+//    }
+//
+//    public function actionPayoff($id) //code
+//    {
+//        return Order::payoffDone($id, $id, 1);
+//    }
 
 
     /**
@@ -400,44 +400,44 @@ class OrderController extends BaseAuthController
         $order->createNew([]);
         return $order->errors;
     }
-    public function actionCreateBatch()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $attributes = [
-            'order_ip' => Yii::$app->request->userIP,
-            'order_service_item_id' => 1,
-            'order_src_id' => 1,
-            'order_channel_name' => '后台下单',
-            'pay_channel_key' => 'PAY_CHANNEL_EJJ_CASH_PAY',
-            'address_id' => 1,
-            'customer_id' => 1,
-            'order_customer_phone' => '18001305711',
-            'admin_id' => Yii::$app->user->id,
-            'order_is_use_balance' => 1,
-            'order_booked_worker_id' => 3,
-            'order_customer_need' => 'xxxxx',
-            'order_customer_memo' => 'fffff',
-            'order_flag_sys_assign' => 0,
-        ];
-        $booked_list = [
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400,
-                'order_booked_count' => 2,
-            ],
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400,
-                'order_booked_count' => 2,
-            ],
-            [
-                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00:00')) + 86400 + 86400 + 86400,
-                'order_booked_end_time' => strtotime(date('Y-m-d 13:00:00')) + 86400 + 86400 + 86400,
-                'order_booked_count' => 2,
-            ],
-        ];
-        return Order::createNewBatch($attributes, $booked_list);
-    }
+//    public function actionCreateBatch()
+//    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        $attributes = [
+//            'order_ip' => Yii::$app->request->userIP,
+//            'order_service_item_id' => 1,
+//            'order_src_id' => 1,
+//            'order_channel_name' => '后台下单',
+////            'pay_channel_key' => 'PAY_CHANNEL_EJJ_CASH_PAY',
+//            'address_id' => 1,
+//            'customer_id' => 1,
+//            'order_customer_phone' => '18001305711',
+//            'admin_id' => Yii::$app->user->id,
+//            'order_is_use_balance' => 1,
+////            'order_booked_worker_id' => 3,
+//            'order_customer_need' => 'xxxxx',
+//            'order_customer_memo' => 'fffff',
+//            'order_flag_sys_assign' => 0,
+//        ];
+//        $booked_list = [
+//            [
+//                'order_booked_begin_time' => strtotime(date('Y-m-d 08:00:00')) + 86400,
+//                'order_booked_end_time' => strtotime(date('Y-m-d 10:00:00')) + 86400,
+//                'order_booked_count' => 2,
+//            ],
+//            [
+//                'order_booked_begin_time' => strtotime(date('Y-m-d 08:00:00')) + 86400 + 86400,
+//                'order_booked_end_time' => strtotime(date('Y-m-d 10:00:00')) + 86400 + 86400,
+//                'order_booked_count' => 2,
+//            ],
+//            [
+//                'order_booked_begin_time' => strtotime(date('Y-m-d 08:00:00')) + 86400 + 86400 + 86400,
+//                'order_booked_end_time' => strtotime(date('Y-m-d 10:00:00')) + 86400 + 86400 + 86400,
+//                'order_booked_count' => 2,
+//            ],
+//        ];
+//        return Order::createNewBatch($attributes, $booked_list);
+//    }
 
     /**
      * 查看并编辑订单
