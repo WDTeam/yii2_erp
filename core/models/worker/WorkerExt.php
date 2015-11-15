@@ -41,9 +41,13 @@ class WorkerExt extends \dbbase\models\worker\WorkerExt
      * 获取阿姨来源配置
      */
     public static function getSourceConfigList(){
-        return ['蓝领招聘'=>'蓝领招聘','小家政'=>'小家政','直营门店'=>'直营门店','阿姨推荐'=>'阿姨推荐'];
+        return ['1'=>'蓝领招聘','2'=>'家政公司','3'=>'直营门店','4'=>'阿姨推荐'];
     }
 
+    public static function getWorkerSourceShow($workerSource){
+        $sourceConfig = ['1'=>'蓝领招聘','2'=>'家政公司','3'=>'直营门店','4'=>'阿姨推荐'];
+        return $sourceConfig[$workerSource];
+    }
 
     public function setProvince_id($id){
         $this->worker_live_province = $id;

@@ -367,9 +367,9 @@ class Order extends OrderModel
                     //第一个订单为父订单其余为子订单
                     $attributes['order_parent_id'] = $order->id;
                     $attributes['order_is_parent'] = 0;
-                    $orderExtPay += $order->orderExtPay->order_pay_money;
-                    $channel_id = $order->channel_id;
                 }
+                $channel_id = $order->channel_id;
+                $orderExtPay += $order->orderExtPay->order_pay_money;
             }
         }
 
@@ -835,7 +835,9 @@ class Order extends OrderModel
 
             $result = OrderStatus::_cancel($order, [], $transact);
             //在线支付 和 E家洁支付 非现金的 或者 支付异常的 调用退款接口
-            if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2]) && $order->orderExtPay->pay_channel_id != 20 && $current_status != OrderStatusDict::ORDER_INIT
+            if ($result && in_array($order->orderExtPay->pay_channel_type_id, [1, 2])
+                && $order->orderExtPay->pay_channel_id != OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY
+                && $current_status != OrderStatusDict::ORDER_INIT
                 || $current_status == OrderStatusDict::ORDER_INIT && $cause_id == OrderOtherDict::NAME_CANCEL_ORDER_CUSTOMER_PAY_FAILURE) {
                 //调高峰的退款接口
                 $finance_refund_add = new FinanceRefundadd();

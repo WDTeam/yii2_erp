@@ -31,6 +31,7 @@ class PayController extends \restapi\components\Controller
      *                              20=后台支付（未实现）,
      *                              21=微博支付（未实现）,
      *                              23=微信native,
+     *                              24=支付宝wap,
      * @apiParam {String} order_id 订单ID,根据支付类型判断发送订单号(普通订单:order.id,周期订单:order.order_batch_code,充值:待定)
      *
      * @apiParam {Object} [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）

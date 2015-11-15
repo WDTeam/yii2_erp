@@ -775,7 +775,7 @@ class WorkerController extends BaseAuthController
         $batchWorkerDistrict = [];
         $workerEduList = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
         $lastWorkerId = Worker::find()->limit(1)->orderBy('id desc')->asArray()->one();
-
+        $workerSourceList = ['蓝领招聘'=>1,'小家政'=>2,'直营门店'=>3,'阿姨推荐'=>4];
         if(empty($lastWorkerId)){
             $worker_id = 0;
         }else{
@@ -831,8 +831,7 @@ class WorkerController extends BaseAuthController
                     $workerExtArr['worker_is_insurance'] = intval($col['R']);
                 }
 
-
-                $workerExtArr['worker_source'] = $col['S'];
+                $workerExtArr['worker_source'] = isset($workerSourceList[$col['S']])?$workerSourceList[$col['S']]:0;
                 $workerExtArr['worker_bank_name'] = $col['T'];
                 $workerExtArr['worker_bank_from'] = $col['U'];
                 $workerExtArr['worker_bank_area'] = $col['V'];
@@ -939,6 +938,11 @@ class WorkerController extends BaseAuthController
                     }
                 }
 
+                $workerScheduleArr['worker_id'] = $worker_id;
+                $workerScheduleArr['worker_schedule_start_date'] = 1446307200;
+                $workerScheduleArr['worker_schedule_end_date'] = 1483113600;
+                $workerScheduleArr['worker_schedule_timeline'] = '{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}';
+                $workerScheduleArr['created_ad'] = time();
 
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
@@ -946,6 +950,7 @@ class WorkerController extends BaseAuthController
                 $batchWorkerStat[] = $workerStatArr;
                 $batchWorkerAuth[] = $workerAuthArr;
                 $batchWorkerBlockArr[] = $workerBlockArr;
+                $batchWorkerScheduleArr[] = $workerScheduleArr;
                 //Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type'],$workerArr['worker_identity_id']);
             }
 
@@ -959,6 +964,8 @@ class WorkerController extends BaseAuthController
             $connectionNew->createCommand()->batchInsert('{{%worker_stat}}',$workerStatColumns, $batchWorkerStat)->execute();
             $workerAuthColumns = array_keys($workerAuthArr);
             $connectionNew->createCommand()->batchInsert('{{%worker_auth}}',$workerAuthColumns, $batchWorkerAuth)->execute();
+            $workerScheduleColumns = array_keys($workerScheduleArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_schedule}}',$workerScheduleColumns, $batchWorkerScheduleArr)->execute();
             if($batchWorkerDistrict){
                 $connectionNew->createCommand()->batchInsert('{{%worker_district}}',['worker_id','operation_shop_district_id','created_ad'], $batchWorkerDistrict)->execute();
             }
@@ -1289,12 +1296,6 @@ class WorkerController extends BaseAuthController
 
     }
 
-    /**
-     * 初始化redis数据
-     */
-    public function actionInitWorkerForRedis(){
-        //WorkerForRedis::initAllWorkerToRedis();
-    }
 
     public function getWorkerDistrict($city_encode,$detail_encode){
         $detail_encode = urlencode($detail_encode);
@@ -1311,7 +1312,8 @@ class WorkerController extends BaseAuthController
     public function actionTest(){
 
         echo '<pre>';
-        $a = Worker::countShopWorkerNums(1);
+        //$a = Worker::getDistrictFreeWorkerForAutoAssign(10,1,1447632000,1447639200);
+        $a = Worker::getWorkerTimeLine(10,1);
         var_dump($a);die;
         die;
         $city_encode = '北京市';

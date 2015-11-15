@@ -8,8 +8,10 @@
 namespace boss\models\order;
 
 use core\models\customer\Customer;
+use core\models\operation\OperationPayChannel;
 use core\models\order\OrderManualAssign as OrderManualAssignModel;
 use core\models\order\OrderWorkerRelation;
+use core\models\worker\Worker;
 use Yii;
 
 class OrderManualAssign extends OrderManualAssignModel
@@ -134,7 +136,7 @@ class OrderManualAssign extends OrderManualAssignModel
                 $orders = OrderSearch::getChildOrder($order->id);
                 foreach ($orders as $child) {
                     $order->order_money += $child->order_money;
-                    if ($ext_pay->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE) {
+                    if (in_array($ext_pay->pay_channel_type_id,[1,2]) && $ext_pay->pay_channel_id != OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY) {
                         $ext_pay->order_pay_money += $child->orderExtPay->order_pay_money;
                         $ext_pay->order_use_acc_balance += $child->orderExtPay->order_use_acc_balance;
                         $ext_pay->order_use_card_money += $child->orderExtPay->order_use_card_money;

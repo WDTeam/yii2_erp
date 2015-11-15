@@ -91,8 +91,6 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     
     }
     
-    
-    
     /**
      * 上传图片到七牛服务器
      * @param string $field 上传文件字段名
@@ -117,5 +115,16 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     public static function updateGoodsSpec($operation_spec_info, $operation_spec_strategy_unit)
     {
         self::updateAll(['operation_spec_strategy_unit' => $operation_spec_strategy_unit], 'operation_spec_info = ' . $operation_spec_info);
+    }
+
+    /**
+     * 更新冗余的服务品类名称
+     *
+     * @param integer   $operation_category_id      服务品类编号
+     * @param string    $operation_category_name    服务品类名称
+     */
+    public static function updateCategoryName($operation_category_id, $operation_category_name)
+    {
+        self::updateAll(['operation_category_name' => $operation_category_name], 'operation_category_id= ' . $operation_category_id);
     }
 }
