@@ -183,6 +183,10 @@ class OrderController extends \restapi\components\Controller
 //                $errorMsg = '创建订单失败';
 //            }
 
+            print_r($order->errors);
+            var_dump($order->errors);
+            exit;
+            
             if (!is_array($order->errors)) {
                 $error = '';
             } else {
