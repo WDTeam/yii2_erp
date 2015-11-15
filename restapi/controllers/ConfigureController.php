@@ -330,7 +330,7 @@ class ConfigureController extends \restapi\components\Controller
                 'server_list' => $serviceCategoryList,
                 'isBlock' => $isBlock,
                 'isEffect' => $isEffect,
-                "isUpdate" => "0", // 0 代表不升级 1 代表升级  2 强制升级
+                "isUpdate" => "2", // 0 代表不升级 1 代表升级  2 强制升级
                 "updateContent" => "",
                 "updateUrl" => "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
                 "isShowGiveStar" => "0",
