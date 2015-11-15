@@ -293,11 +293,6 @@ class ConfigureController extends \restapi\components\Controller
                     "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
                     "link" => "",
                     "url_title" => "服务承诺"
-                ],
-                [
-                    "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-                    "link" => "",
-                    "url_title" => ""
                 ]
             ];
             //服务分类
