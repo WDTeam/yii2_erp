@@ -192,7 +192,7 @@ class OrderController extends \restapi\components\Controller
                 return $this->send($order->errors['error_code'], '创建订单失败', 1024, 200, null, $errorMsg . '[' . implode(',', $order->errors['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, $errorMsg . '[' . implode(',', $order->errors['error_code']) . ']');
+            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败[' . implode(',', $order->errors['error_code']) . ']');
         }
     }
 
