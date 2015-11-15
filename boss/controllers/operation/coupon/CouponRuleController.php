@@ -168,11 +168,6 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
-	    //$rty=\core\models\operation\OperationPayChannel::configpay(2);
-    	//var_dump($rty);exit;
-    	//$rty=\core\models\operation\OperationOrderChannel::configorderlist('百度直达号');
-    	//var_dump($rty);exit;
-    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
