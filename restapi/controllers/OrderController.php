@@ -193,7 +193,7 @@ class OrderController extends \restapi\components\Controller
                 return $this->send($arrayError['error_code'], '创建订单失败', 0, 200, null, $errorMsg . '[' . implode(',', $arrayError['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败.');
+            return $this->send(null, $e->getMessage(), 1024, 200, null, '创建订单失败');
         }
     }
 
@@ -295,7 +295,7 @@ class OrderController extends \restapi\components\Controller
                 return $this->send($arrayError['error_code'], '创建订单失败', 0, 200, null, '创建订单失败[' . implode(',', $arrayError['error_code']) . ']');
             }
         } catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403, null, '创建订单失败.');
+            return $this->send(null, $e->getMessage(), 1024, 403, null, '创建订单失败');
         }
     }
 
