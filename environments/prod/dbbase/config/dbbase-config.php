@@ -16,23 +16,6 @@ return [
             'password' => 'pro_boss',
             'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
-
-            // 配置从服务器
-            'slaveConfig' => [
-                'username' => 'pro_boss_db_dbo',
-                'password' => 'pro_boss',
-                'tablePrefix' => 'ejj_',
-                'charset' => 'utf8',
-                'attributes' => [
-                    // use a smaller connection timeout
-                    PDO::ATTR_TIMEOUT => 10,
-                ],
-            ],
-            // 配置从服务器组
-            'slaves' => [
-                ['dsn' => 'mysql:host=rds64d3tw8io6vr69rj1.mysql.rds.aliyuncs.com;dbname=pro_boss_db',],
-            ],
-
         ],
         //配置session到redis
         'session' => [
@@ -284,7 +267,7 @@ return [
             'allowNegative' => false,
         ],
         "order_pop" => [
-            'api_url' => 'http://pop.1jiajie.com/'
+            'api_url' => 'http://test.1jiajie.com/ejj-pop-api/web/'
         ],
         'order' => [
             'MANUAL_ASSIGN_lONG_TIME' => 900,
