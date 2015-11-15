@@ -31,13 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'operation_advert_content_name',
-//            'operation_city_id',
-//            'operation_city_name',
-            'operation_advert_start_time:date',
-            'operation_advert_end_time:date',
-            'operation_advert_online_time:date',
-            'operation_advert_offline_time:date',
-            'operation_advert_picture_text',
+            [
+                'attribute'=>'operation_advert_picture_text',
+                'format' => ['image',['width'=>'30','height'=>'30',]],
+                'value' => $model->operation_advert_picture_text
+            ],
             'operation_advert_url:url',
             'created_at:datetime',
             'updated_at:datetime',
