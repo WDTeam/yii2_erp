@@ -183,7 +183,7 @@ class server
                     continue;
                 }
                 $order = $this->getOrderStatus($order);
-                $order['created_at'] = date('Y-m-d H:i:s', $order['created_at']);
+                $d['created_at'] = date('Y-m-d H:i:s', $order['created_at']);
                 $order['updated_at']=$order['created_at'];
                 $d = json_encode($order);
                 echo 'onConnect;d='.$d;
