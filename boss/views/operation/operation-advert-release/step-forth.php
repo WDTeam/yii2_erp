@@ -3,6 +3,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
+use kartik\builder\Form;
+use kartik\datecontrol\DateControl;
+use kartik\datecontrol\Module;
+use dosamigos\datetimepicker\DateTimePicker;
+
 $this->title = Yii::t('app', '第四步：选择广告完成发布');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Release'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -64,6 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php
                                 echo Html::textInput('advert[starttime][]');
                             ?> 格式：2015-10-01 08:20:25
+
                             <?php
                                 //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
                                 //echo DatePicker::widget([
@@ -106,3 +112,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=Html::submitButton('发布', ['class' => 'btn btn-success form-control']) ?>
 </div>
 <?php ActiveForm::end(); ?>
+
+<div class="control-group">
+    <label class="control-label">DateTime Picking</label>
+    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+        <input size="16" type="text" value="" readonly>
+        <span class="add-on"><i class="icon-remove"></i></span>
+        <span class="add-on"><i class="icon-th"></i></span>
+    </div>
+    <input type="hidden" id="dtp_input1" value="" /><br/>
+</div>
+<?php $this->beginBlock('myjs') ?>
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+<?php $this->endBlock() ?>
+<?php $this->registerJs($this->blocks['myjs'],['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']], \yii\web\View::POS_END); ?>
+
