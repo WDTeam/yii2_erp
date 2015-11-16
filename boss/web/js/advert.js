@@ -42,7 +42,7 @@ function saveReleaseAdvOrders(){
     $.post('/operation/operation-advert-release/save-orders', data,
             function(t){
                 //alert(t);
-                console.log(t);
+                //console.log(t);
             }, 'html');
     window.location.reload(true);
 }

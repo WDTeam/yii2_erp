@@ -3,47 +3,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
-use kartik\builder\Form;
-use kartik\datecontrol\DateControl;
-use kartik\datecontrol\Module;
-use dosamigos\datetimepicker\DateTimePicker;
+use dosamigos\datetimepicker\DateTimePickerAsset;
+
+DateTimePickerAsset::register($this);
 
 $this->title = Yii::t('app', '第四步：选择广告完成发布');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Release'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-//if(!empty($versions)){
-//    echo '<div class="step3_versions_'.$platform['id'].'">';
-//    echo '<label class="control-label" for="operationadvertrelease-city_id">'.$platform['operation_platform_name'].'：</label>';
-//    echo Html::checkboxList('OperationAdvertRelease[version_id][]', null, $versions, ['platform_id' => $platform['id'], 'class' => 'platform_versions']);
-//    echo '<div>';
-//}
 ?>
 <?php $form = ActiveForm::begin(); ?>
 <label class="control-label" for="operationadvertrelease-city_id"><?php echo $this->title?></label>
-<?php //foreach($data as $k => $value){?>
-<?php //if(!empty($value['adverts'])){?>
-<!--<div class="panel panel-body panel-default">
-    <h1 class="panel-title">
-        <?php //echo $value['platform']['operation_platform_name']?>
-        <?php //echo isset($value['version']) ? $value['version']['operation_platform_version_name'] : '';?>：
-    </h1>
-    <div class="panel-body">
-        <ul class="list-group">
-            <?php //foreach($value['adverts'] as $key => $v){?>
-            <li class="list-group-item list-group-item-info">
-                <label>
-                <?php //echo Html::checkbox('advert[]', false, ['value' => $v['id']]);?>
-                <?php //echo $v['position_name'].':'.$v['operation_advert_content_name']?>
-                </label>
-            </li>
-            <?php //}?>
-        </ul>
-    </div>
-    <h1 class="panel-footer"></h1>
-</div>-->
-<?php //}?>
-<?php //}?>
 
 <div class="panel panel-body panel-default">
     <h1 class="panel-title">可发布的广告：</h1>
@@ -62,43 +32,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tbody>
                 <?php foreach($data as $k => $v){?>
                     <tr>
-                        <td><?php echo Html::checkbox('advert[id][]', false, ['value' => $v['id']]);?></td>
+                        <td>
+                            <?php echo Html::checkbox('advert['. $k .'][id]', false, ['value' => $v['id']]);?>
+                        </td>
                         <td><?php echo $v['position_name'];?></td>
                         <td><?php echo $v['operation_advert_content_name'];?></td>
                         <td>
-                            <?php
-                                echo Html::textInput('advert[starttime][]');
-                            ?> 格式：2015-10-01 08:20:25
-
-                            <?php
-                                //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
-                                //echo DatePicker::widget([
-                                //'name' => 'OperationAdvertContent[operation_advert_start_time]',
-                                //'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-                                //'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_start_time) : '',
-                                //'pluginOptions' => [
-                                    //'autoclose'=>true,
-                                    //'format' => 'yyyy-mm-dd'
-                                //]
-                            //]);
-                            ?>
+                            <div class="control-group">
+                                <div class="form-controls input-append date form_datetime"
+ data-link-field="<?php echo $v['id'] . '_starttime';?>">
+                                    <input size="26" type="text" value="" readonly>
+                                    <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                                </div>
+                                <input type="hidden" id="<?php echo $v['id'] . '_starttime';?>" value="" name="advert[<?php echo $k ?>][starttime]" /><br/>
+                            </div>
                         </td>
                         <td>
-                            <?php
-                                echo Html::textInput('advert[endtime][]');
-                            ?> 格式：2015-10-01 08:20:25
-                            <?php
-                                //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_end_time'].'</label>';
-                                //echo DatePicker::widget([
-                                //'name' => 'OperationAdvertContent[operation_advert_end_time]',
-                                //'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-                                //'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_end_time) : '',
-                                //'pluginOptions' => [
-                                    //'autoclose'=>true,
-                                    //'format' => 'yyyy-mm-dd'
-                                //]
-                            //]);
-                            ?>
+                            <div class="control-group">
+                                <div class="form-controls input-append date form_datetime" data-link-field="<?php echo $v['id'] . '_endtime';?>">
+                                    <input size="26" type="text" value="" readonly>
+                                    <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                                </div>
+                                <input type="hidden" id="<?php echo $v['id'] . '_endtime';?>" value="" name="advert[<?php echo $k ?>][endtime]" /><br/>
+                            </div>
                         </td>
                     </tr>
                 <?php }?>
@@ -113,26 +71,27 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?php ActiveForm::end(); ?>
 
-<div class="control-group">
-    <label class="control-label">DateTime Picking</label>
-    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-        <input size="16" type="text" value="" readonly>
-        <span class="add-on"><i class="icon-remove"></i></span>
-        <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    <input type="hidden" id="dtp_input1" value="" /><br/>
-</div>
 <?php $this->beginBlock('myjs') ?>
+
+    var myDate = new Date();            //当前时间
+    var year   = myDate.getFullYear();  //当前年份
+    var month  = myDate.getMonth() + 1; //当前月份
+    var day    = myDate.getDate();      //当前日
+
+    var mytime = year + '-' + month + '-' + day;
+
     $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
+        format:         'yyyy-mm-dd hh:ii:ss',
+        language:       'zh-CN',
+        weekStart:      1,
+        todayBtn:       1,
+		autoclose:      1,
 		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 1
+		startView:      2,
+		forceParse:     0,
+        showMeridian:   1,
+        startDate :     mytime
     });
 <?php $this->endBlock() ?>
-<?php $this->registerJs($this->blocks['myjs'],['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']], \yii\web\View::POS_END); ?>
+<?php $this->registerJs($this->blocks['myjs'], \yii\web\View::POS_END); ?>
 

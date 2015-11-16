@@ -3,7 +3,6 @@
 namespace core\models\operation;
 
 use Yii;
-use boss\models\operation\OperationShopDistrictGoods;
 use yii\web\UploadedFile;
 
 
