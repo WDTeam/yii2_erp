@@ -106,6 +106,7 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
             if(!$customerAccessToken->validate()){
                 return false;
             }else{
+                $customerAccessToken->save();
                 return $customerAccessToken->customer_access_token;
             }
         }else{
