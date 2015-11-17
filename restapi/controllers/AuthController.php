@@ -204,7 +204,7 @@ class AuthController extends \restapi\components\Controller
             return $this->send(null, "用户名,签名或渠道id错误", 0, 403, null, alertMsgEnum::loginFromPopFail);
         }
     }
-
+ 
     /**
      * @api {POST} /auth/worker-login [POST] /auth/worker-login（李勇100%)
      * @apiDescription 阿姨登录（李勇）
@@ -418,6 +418,6 @@ class AuthController extends \restapi\components\Controller
         }
     }
 
-}
+} 
 
 ?>

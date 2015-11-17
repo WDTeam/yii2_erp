@@ -150,7 +150,7 @@ $this->title = $model->worker_name;
                     'data' => Worker::getDistrictList(),
                     'options' => ['placeholder' => '选择商圈','multiple' => true],
                     'pluginOptions' => [
-                        'tags' => true,
+                        'tags' => false,
                         'maximumInputLength' => 10,
                         'ajax' => [
                             'url' => Url::to(['show-district']),
