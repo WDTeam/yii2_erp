@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 
 $this->title = $this->title = Yii::t('app', 'Look').Yii::t('app', 'Platform').Yii::t('app', 'Version');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['/operation/operation-platform/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform').Yii::t('app' ,'Version'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform').Yii::t('app' ,'Version'), 'url' => ['index', 'platform_id' => $platform_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-platform-version-view">
@@ -29,8 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-//            'operation_platform_id',
             'operation_platform_name',
             'operation_platform_version_name',
             ['attribute' => 'created_at', 'value' => empty($model->created_at)? '' : date('Y-m-d H:i:s', $model->created_at)],
