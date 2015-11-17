@@ -8,20 +8,18 @@ $config = [
     ],
     'controllerNamespace' => 'restapi\controllers',
     'modules' => [
-//         'user' => [
-//             'class' => 'api\modules\user\Module',
-//         ],
+
     ],
     'components' => [
         'urlManager' => [
             'enablePrettyUrl' => true,
-//            'enableStrictParsing' => true,
+
             'showScriptName' => false,
             'rules' => [
                 'v<version:\d>/<controller:\w+>/<id:\d+>' => '<controller>/view',
                 'v<version:\d>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 'v<version:\d>/<controller:\S+>/<action:\S+>' => '<controller>/<action>',
-                //'v<version:\d>/<controller:\S+>' => '<controller>',
+
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'user-info',
@@ -73,38 +71,23 @@ $config = [
             'viewPath' => 'dbbase/mail',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.163.com',
-                'username' => 'linuu90@163.com',
-                'password' => 'uu801272',
+                'host' => 'corp.1jiajie.com',
+                'username' => 'boss-dev@corp.1jiajie.com',
+                'password' => '1jiajie@corp.com',
                 'port' => '25',
                 'encryption' => 'tls',
 
             ],
             'messageConfig' => [
                 'charset' => 'UTF-8',
-                'from' => ['linuu90@163.com' => 'APIForDevelopLocalhost']
+                'from' => ['boss-dev@corp.1jiajie.com' => 'APIForDevelopLocalhost']
             ],
         ],
     ]
 ];
 
-//local environment GII is available
-$config['bootstrap'][] = 'debug';
-$config['modules']['debug'] = [
-    'class' => 'yii\debug\Module',
-    'on beforeAction' => function ($event) {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-    },
-];
-$config['bootstrap'][] = 'gii';
-$config['modules']['gii'] = [
-    'class' => 'yii\gii\Module',
-    'on beforeAction' => function ($event) {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-    },
-];
 $config['params']['apiPopKey'] = 'pop-to-boss';
 $config['params']['apiSecretKey'] = 'pop-to-boss';
 //配置不同环境不同的URL
-$config['params']['envUrl'] = 'http://local.m2.1jiajie.com';
+$config['params']['envUrl'] = 'http://dev.m2.1jiajie.com';
 return $config;
