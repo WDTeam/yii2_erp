@@ -880,8 +880,8 @@ class OrderSearch extends Order
         $sql = "SELECT COUNT(1) FROM {{%order_ext_worker}} AS a
         WHERE a.order_worker_assign_type in (3,4)
         AND a.worker_id={$worker_id}
-        AND a.`created_at`>={$start_time}
-        AND a.`created_at`<{$end_time}";
+        AND a.`order_worker_assign_time`>={$start_time}
+        AND a.`order_worker_assign_time`<{$end_time}";
         $data[4] = (int)\Yii::$app->db->createCommand($sql)
         ->queryScalar();
         //完成工时
