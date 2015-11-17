@@ -324,7 +324,16 @@ class SystemUser extends \dbbase\models\system\SystemUser
      */
     public function isNotAdmin()
     {
-        return !\Yii::$app->user->can(AuthItem::SYSTEM_ROLE_ADMIN);
+        $auth = \Yii::$app->authManager;
+        return !$auth->checkAccess($this->id, AuthItem::SYSTEM_ROLE_ADMIN);
+    }
+    /**
+     * 小家政组
+     */
+    public function isMiNiBoss()
+    {
+        $auth = \Yii::$app->authManager;
+        return $auth->checkAccess($this->id, 'system_group_shop_manger') || $auth->checkAccess($this->id, 'group_shopmanager_admin');
     }
     
     

@@ -48,9 +48,7 @@ $shops = Yii::$app->user->identity->getShopList();
                         <div class="row text-left-padding">
                             <span>办公地址：</span><span>光华路soho</span>
                         </div>
-                        <div class="row text-left-padding">
-                            <span>门店数量：</span><span>10000</span>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -60,34 +58,10 @@ $shops = Yii::$app->user->identity->getShopList();
                 </div>
                 <div class="row bor-der min-heigh">
                     <div class="col-md-12">
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
-                        <div class="row text-right-padding">
-                            <div class="col-md-8"><span>标签</span></div>
-                            <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div>
-                        </div>
+<!--                         <div class="row text-right-padding"> -->
+<!--                             <div class="col-md-8"><span>无</span></div> -->
+<!--                             <div class="col-md-4"><span>2015-10-13 &nbsp; 10:11</span></div> -->
+<!--                         </div> -->
                     </div>
                 </div>
             </div>
