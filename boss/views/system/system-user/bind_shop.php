@@ -11,35 +11,34 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'System Users'), 'url
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="system-user-bing-shop">
+<?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title"><?php echo $model->username;?></h3>
         </div>
-        <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
-        <div class="panel-body" style="padding:20px 30px;">
-            <?php foreach ($shops as $city){?>
-            <div class="form-group field-shopmanager-name">
-                <h3>
-                    <label style="padding-right:20px;"><?php echo $city['city_name'];?></label>
-                    <label style="font-size: 14px;">
-                        <input type="checkbox" onclick="$('#shopIds_<?php echo $city['city_id'];?> input').prop('checked',this.checked)" />
-                        <span>全选</span>
-                    </label>
-                </h3>
-                <div id="shopIds_<?php echo $city['city_id'];?>">
+        <?php foreach ($shops as $city){?>
+        <div class="panel-heading" style="overflow:hidden">
+            <h3 class="panel-title col-md-3">
+                <?php echo $city['city_name'];?>
+            </h3>
+            <label class="col-md-1">
+                <input type="checkbox" onclick="$('#shopIds_<?php echo $city['city_id'];?> input').prop('checked',this.checked)" />
+                <span>全选</span>
+            </label>
+        </div>
+        <div class="panel-body" style="padding:20px 30px 100px;">
+            <div id="shopIds_<?php echo $city['city_id'];?>" class="form-group field-shopmanager-name">
                 <?php foreach ($city['items'] as $id=>$item){?>
-                    <label title="<?php echo $item;?>" style="display: inline-block; width:210px;white-space:nowrap; overflow:hidden">
+                    <label title="<?php echo $item;?>" class="col-md-3" style="white-space:nowrap; overflow:hidden">
                     <?php echo Html::checkbox('SystemUser[shopIds][]', in_array($id, $model->shopIds),[
                         'value'=>$id
                     ]);?>
                     <span><?php echo $item;?></span>
                     </label>
                 <?php }?>
-                </div>
             </div>
-            <hr/>
-            <?php }?>
         </div>
+        <?php }?>
         <div class="panel-footer">
             <div class="form-group">
                 <div class="col-sm-offset-0 col-sm-12">
@@ -47,6 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-        <?php ActiveForm::end(); ?>
     </div>
+<?php ActiveForm::end(); ?>
 </div>
