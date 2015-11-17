@@ -87,7 +87,8 @@ class OperationAdvertReleaseController extends BaseAuthController
             }
         } else {
 
-            $citys = OperationCity::find()->all();
+            $citys = OperationCity::find()->where(['operation_city_is_online' => 1])->all();
+
             //$c = ['选择要发布的城市'];
             $c = [];
             foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
