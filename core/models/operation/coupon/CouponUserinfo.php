@@ -328,7 +328,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		
 		if(empty($couponCustomer)){
 		$array=[
-		'is_status'=>0,
+		'is_status'=>1,
 		'msg'=>'查询成功',
 		'data'=>[],
 		];
