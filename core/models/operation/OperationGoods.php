@@ -4,6 +4,7 @@ namespace core\models\operation;
 
 use Yii;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 
 /**
@@ -125,5 +126,41 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     public static function updateCategoryName($operation_category_id, $operation_category_name)
     {
         self::updateAll(['operation_category_name' => $operation_category_name], 'operation_category_id= ' . $operation_category_id);
+    }
+
+    /**
+     * 在创建和更新服务项目时，检查服务项目是否重复
+     *
+     * @param   array   $data   服务品类编号，服务项目名称，
+     * @return  array   判断结果
+     */
+    public static function validateGoodsrepeat($data)
+    {
+        $query = new \yii\db\Query();
+        $query = $query->select([
+            'id',
+            'operation_goods_name'
+        ])
+        ->from('{{%operation_goods}}')
+        ->andFilterWhere([
+            'operation_category_id' => $data['category_id'],
+            'operation_goods_name'  => $data['goods_name']
+        ]);
+
+        if (isset($data['id']) && is_numeric($data['id'])) {
+            $query->andFilterWhere(['!=', 'id', $data['id']]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $result = $dataProvider->query->one();
+
+        if (isset($result['id']) && count($result) > 0) {
+            return ['code' => 200, 'errmsg' => '该品类下此商品已经增加！'];
+        } else {
+            return ['code' => 0, 'errmsg' => '可以增加！'];
+        }
     }
 }

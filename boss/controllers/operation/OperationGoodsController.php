@@ -331,6 +331,19 @@ class OperationGoodsController extends Controller
     }
 
     /**
+     * 在创建和更新时，ajax检查服务项目是否重复
+     */
+    public function actionValidateGoodsRepeat()
+    {
+        $data = Yii::$app->request->post();
+
+        if (isset($data['category_id']) && $data['category_id'] != '' && isset($data['goods_name']) && $data['goods_name'] != '') {
+            $result = OperationGoods::validateGoodsrepeat($data);
+            echo json_encode($result, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
      * Finds the OperationGoods model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
