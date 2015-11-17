@@ -122,7 +122,7 @@ use core\models\worker\WorkerIdentityConfig;
                 'data' => Worker::getDistrictList(),
                 'options' => ['placeholder' => '选择阿姨商圈','multiple' => true],
                 'pluginOptions' => [
-                    'tags' => true,
+                    'tags' => false,
                     'maximumInputLength' => 10,
                     'ajax' => [
                         'url' => Url::to(['show-district']),

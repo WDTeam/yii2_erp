@@ -55,7 +55,7 @@ use boss\models\order\Order;
     ]);
     ?>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="form-group field-ordersearchindex-order_worker_assign_type">
                 <label for="ordersearchindex-order_worker_assign_type" class="m_ipone">订单来自:</label>
                 <select name="OrderSearchIndex[order_worker_assign_type]" class="m_ipu" id="ordersearchindex-order_worker_assign_type">
@@ -67,7 +67,7 @@ use boss\models\order\Order;
                 <div class="help-block"></div>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="form-group" style="width: auto;">
                 <label class="m_ipone">接单时间:</label>
                 <input name="<?= $search_class_name ?>[assign_from]" type="text" class="Wdate" id="d412"
@@ -78,7 +78,7 @@ use boss\models\order\Order;
                        value="<?= isset($searchParas[$search_class_name]['assign_to']) ? Html::encode($searchParas[$search_class_name]['assign_to']) : '' ?>"/>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <?php
             echo $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
                 'initValueText' => [0=>'门店:'], // set the initial display text
@@ -102,10 +102,10 @@ use boss\models\order\Order;
 
     </div>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <?= $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="form-group" style="width: auto;">
                 <label class="m_ipone">服务时间:</label>
                 <input name="<?= $search_class_name ?>[booked_from]" type="text" class="Wdate" id="d412"
@@ -116,10 +116,10 @@ use boss\models\order\Order;
                        value="<?= isset($searchParas[$search_class_name]['booked_to']) ? Html::encode($searchParas[$search_class_name]['booked_to']) : '' ?>"/>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
         <?= $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1">
         <?= Html::submitButton('搜索', ['class' => 'btn btn-primary button-search']) ?>
         </div>
     </div>

@@ -248,8 +248,9 @@ class WorkerController extends BaseAuthController
         //添加阿姨
         }else{
             //$workerModel = Worker::findAll(['isdel'=>0]);
-            $workerModel = new Worker(['isdel'=>0]);
+            $workerModel = new Worker();
             $workerModel->load(Yii::$app->request->post());
+            $workerModel->isdel = 0;
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
         }
     }
@@ -387,9 +388,9 @@ class WorkerController extends BaseAuthController
     public function actionShowDistrict($city_id=null,$name=null){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ''];
-        if(empty($city_id)){
-            return $out;
-        }
+//        if(empty($city_id)){
+//            return $out;
+//        }
         $data = OperationShopDistrict::getCityShopDistrictListByNameAndCityId($city_id,$name);
         $new_data = [];
         foreach ((array)$data as $val) {
@@ -899,16 +900,6 @@ class WorkerController extends BaseAuthController
 
                 $workerDeviceArr['worker_id'] = $worker_id;
 
-//                //自营
-//                if($col['G'] && isset($districtList[$col['G']])){
-//                    $batchWorkerDistrict[] = [
-//                        'worker_id'=>$worker_id,
-//                        'operation_shop_district_id'=>$districtList[$col['G']],
-//                        'create_ad'=>time(),
-//                    ];
-//                }
-
-                //小家政
                 $districtArr = explode('，',$col['G']);
                 if($col['G']){
                     foreach ((array)$districtArr as $d_val) {
@@ -941,7 +932,7 @@ class WorkerController extends BaseAuthController
                 $workerScheduleArr['worker_id'] = $worker_id;
                 $workerScheduleArr['worker_schedule_start_date'] = 1446307200;
                 $workerScheduleArr['worker_schedule_end_date'] = 1483113600;
-                $workerScheduleArr['worker_schedule_timeline'] = '{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}';
+                $workerScheduleArr['worker_schedule_timeline'] = '{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"]}';
                 $workerScheduleArr['created_ad'] = time();
 
                 $batchWorker[] = $workerArr;
@@ -974,178 +965,6 @@ class WorkerController extends BaseAuthController
         }
     }
 
-    public function insertWorkerDataBak($workerInfo){
-        $operationArea = new OperationArea();
-        $connectionNew =  \Yii::$app->db;
-        $shopArr = Shop::find()->asArray()->all();
-        $shopArr = ArrayHelper::map($shopArr,'name','id');
-//        $identityConfigArr = WorkerIdentityConfig::find()->asArray()->all();
-//        $identityConfigArr = ArrayHelper::map($identityConfigArr,'worker_identity_name','id');
-        $onlineCityList = OperationCity::getCityOnlineInfoList();
-        $onlineCityList =  ArrayHelper::map($onlineCityList,'city_name','city_id');
-        $onlineCityList = ['上海市'=>310100,'北京市'=>110100,'深圳市'=>440300];
-        $districtList = OperationShopDistrict::getCityShopDistrictList();
-        $districtList = ArrayHelper::map($districtList,'operation_shop_district_name','id');
-        $sexList = ['女'=>0,'男'=>1];
-        $typeList = ['自营'=>1,'非自营'=>2];
-        $isHealthList = ['是'=>1,'否'=>0];
-        $isInsuranceList= ['是'=>1,'否'=>0];
-        $blockList= ['是'=>1,'否'=>0];
-        $blacklist = [''=>0,'是'=>1,'否'=>0];
-        $batchWorkerDistrict = [];
-        $workerEduList = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
-        $identityConfigArr = ['全职全日'=>1,'兼职'=>2];
-        $lastWorkerId = Worker::find()->limit(1)->orderBy('id desc')->asArray()->one();
-
-        if(empty($lastWorkerId)){
-            $worker_id = 0;
-        }else{
-            $worker_id = $lastWorkerId['id'];
-        }
-        if($workerInfo){
-            foreach($workerInfo as $key=>$col){
-                if($key<2){
-                    continue;
-                }
-                if($col['K']!='自营'){
-                    continue;
-                }
-                if($col['L']!='全职全日' && $col['L']!='兼职'){
-                    continue;
-                }
-                $worker_id++;
-                $workerArr['id'] = $worker_id;
-                $workerArr['worker_name'] = $col['B'];
-                $workerArr['shop_id'] = isset($shopArr[$col['C']])?$shopArr[$col['C']]:'';
-                $workerArr['worker_phone'] = $col['D'];
-                $workerArr['worker_idcard'] = $col['E'];
-                //$workerArr['worker_photo'] = $col['E'];
-
-                $worker_work_city = $col['G'].'市';
-                $workerArr['worker_work_city'] = isset($onlineCityList[$worker_work_city])?$onlineCityList[$worker_work_city]:0;
-                $workerArr['worker_type'] = $typeList[$col['K']];
-                $workerArr['worker_identity_id'] = $identityConfigArr[$col['L']];
-//                $workerArr['worker_is_blacklist'] = $blacklist[$col['AB']];
-//                $workerArr['worker_blacklist_time'] = strtotime($col['AC']);
-//                $workerArr['worker_blacklist_reason'] = trim($col['AD']);
-                $workerArr['worker_auth_status'] = 8;
-                if($col['AX']=='0000-00-00 00:00:00'){
-                    $workerArr['created_ad'] = strtotime($col['AX']);
-                }else{
-                    $workerArr['created_ad'] = '';
-                }
-
-                $workerExtArr['worker_id'] = $worker_id;
-                $workerExtArr['worker_age'] = intval($col['O']);
-                $workerExtArr['worker_sex'] = $sexList[$col['P']];
-                //$workerExtArr['worker_edu'] = isset($workerEduList[$col['Q']])?$workerEduList[$col['Q']]:'';
-                $workerExtArr['worker_edu'] = $col['Q'];
-                $workerExtArr['worker_is_health'] = intval(['R']);
-                $workerExtArr['worker_is_insurance'] = intval($col['S']);
-                $workerExtArr['worker_source'] = $col['U'];
-                $workerExtArr['worker_bank_name'] = $col['V'];
-                $workerExtArr['worker_bank_from'] = $col['W'];
-                $workerExtArr['worker_bank_area'] = $col['X'];
-                $workerExtArr['worker_bank_card'] = $col['Y'];
-//                if($col['K']){
-//                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$col['H']])->asArray()->one();
-//                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$col['I']])->asArray()->one();
-//                    $areaResult = $operationArea->find()->select('id')->where(['area_name'=>$col['J']])->asArray()->one();
-//                    $workerExtArr['worker_live_province'] = $provinceResult['id'];
-//                    $workerExtArr['worker_live_city'] = $cityResult['id'];
-//                    $workerExtArr['worker_live_area'] = $areaResult['id'];
-//                    $workerExtArr['worker_live_street'] = $col['K'];
-//                }
-//                if($col['K']){
-//                    $areaArr = explode(':#:',$col['K']);
-//                    if(strpos($areaArr[0],'市')!==false){
-//                        $areaArr[0] = str_replace('市','',$areaArr[0]);
-//                    }
-//                    $provinceResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[0]])->asArray()->one();
-//                    $cityResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[1]])->asArray()->one();
-//                    $areaResult = $operationArea->find()->select('id')->where(['area_name'=>$areaArr[2]])->asArray()->one();
-//                    $workerExtArr['worker_live_province'] = $provinceResult['id'];
-//                    $workerExtArr['worker_live_city'] = $cityResult['id'];
-//                    $workerExtArr['worker_live_area'] = $areaResult['id'];
-//                    $workerExtArr['worker_live_street'] = $areaArr[3];
-//                }else{
-//                    $workerExtArr['worker_live_province'] = '';
-//                    $workerExtArr['worker_live_city'] = '';
-//                    $workerExtArr['worker_live_area'] = '';
-//                    $workerExtArr['worker_live_street'] = '';
-//                }
-
-
-
-
-                $workerStatArr['worker_id'] = $worker_id;
-                $workerStatArr['worker_stat_order_num'] =  intval($col['AL']);
-//                $workerStatArr['worker_stat_order_money'] = intval($col['AH']);
-//                $workerStatArr['worker_stat_order_refuse'] = intval($col['AF']);
-//                $workerStatArr['worker_stat_order_complaint'] = intval($col['AG']);
-//                $workerStatArr['worker_stat_sale_cards'] = intval($col['AI']);
-//                $workerStatArr['worker_stat_comment_good'] = intval($col['AJ']);
-//                $workerStatArr['worker_stat_comment_normal'] = intval($col['AK']);
-//                $workerStatArr['worker_stat_comment_bad'] = intval($col['AL']);
-
-                $workerBlockArr['worker_id'] = $worker_id;
-                $time = time();
-//                $workerBlockArr['worker_block_start_time'] = strtotime($col['Y']);
-//                $workerBlockArr['worker_block_finish_time'] = strtotime($col['Z']);
-//                $workerBlockArr['created_ad'] = time();
-//                if($workerBlockArr['worker_block_start_time']<$time && $workerBlockArr['worker_block_finish_time']>=$time){
-//                    $workerBlockArr['worker_block_status'] = 1;
-//                    $workerArr['worker_is_block'] = 1;
-//                }else{
-//                    $workerBlockArr['worker_block_status'] = 0;
-//                    $workerArr['worker_is_block'] = 0;
-//                }
-//                $workerBlockArr['worker_block_reason'] = trim($col['AA']);
-
-                $workerAuthArr['worker_id'] = $worker_id;
-                $workerAuthArr['worker_auth_status'] = 1;
-                $workerAuthArr['worker_basic_training_status'] = 1;
-                $workerAuthArr['worker_ontrial_status'] = 1;
-                $workerAuthArr['worker_onboard_status'] = 1;
-
-                $workerDeviceArr['worker_id'] = $worker_id;
-
-//                $districtArr = explode(',',$col['G']);
-//                if($col['G']){
-//                    foreach ((array)$districtArr as $d_val) {
-//                        $batchWorkerDistrict[] = [
-//                            'worker_id'=>$worker_id,
-//                            'operation_shop_district_id'=>$districtList[$d_val],
-//                            'create_ad'=>time(),
-//                        ];
-//                    }
-//                }
-                $batchWorker[] = $workerArr;
-                $batchWorkerExt[] = $workerExtArr;
-                $batchWorkerDevice[] = $workerDeviceArr;
-                $batchWorkerStat[] = $workerStatArr;
-                $batchWorkerAuth[] = $workerAuthArr;
-                $batchWorkerBlockArr[] = $workerBlockArr;
-                //Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type'],$workerArr['worker_identity_id']);
-            }
-            $workerColumns = array_keys($workerArr);
-            $connectionNew->createCommand()->batchInsert('{{%worker}}',$workerColumns, $batchWorker)->execute();
-            $workerExtColumns = array_keys($workerExtArr);
-            $connectionNew->createCommand()->batchInsert('{{%worker_ext}}',$workerExtColumns, $batchWorkerExt)->execute();
-            $workerDeviceColumns = array_keys($workerDeviceArr);
-            $connectionNew->createCommand()->batchInsert('{{%worker_device}}',$workerDeviceColumns, $batchWorkerDevice)->execute();
-            $workerStatColumns = array_keys($workerStatArr);
-            $connectionNew->createCommand()->batchInsert('{{%worker_stat}}',$workerStatColumns, $batchWorkerStat)->execute();
-            $workerAuthColumns = array_keys($workerAuthArr);
-            $connectionNew->createCommand()->batchInsert('{{%worker_auth}}',$workerAuthColumns, $batchWorkerAuth)->execute();
-            if($batchWorkerDistrict){
-                $connectionNew->createCommand()->batchInsert('{{%worker_district}}',['worker_id','operation_shop_district_id','created_ad'], $batchWorkerDistrict)->execute();
-            }
-            $workerBlockColumns = array_keys($workerBlockArr);
-            $connectionNew->createCommand()->batchInsert('{{%worker_block}}',$workerBlockColumns, $batchWorkerBlockArr)->execute();
-            //WorkerForRedis::initAllWorkerToRedis();
-        }
-    }
 
     /**
      * 从老数据库中 导入阿姨数据 到新系统数据库中
@@ -1310,16 +1129,12 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-        echo '<pre>';
-
-        //$a = Worker::getDistrictFreeWorkerForAutoAssign(10,1,1447632000,1447639200);
-//        WorkerForRedis::operateWorkerOrderInfoToRedis(1918,1,1,1,1447761600,1447765200);
+        //$a = Worker::getDistrictCycleFreeWorker(8,2,[['orderBookBeginTime'=>'1447765200','orderBookEndTime'=>'1447768800']]);
+        //$a = Worker::getDistrictFreeWorkerForAutoAssign(8,1,1447765200,1447768800);
+        //WorkerForRedis::operateWorkerOrderInfoToRedis(17,2,1,1,1447668800,1447754400);
 //        WorkerForRedis::operateWorkerOrderInfoToRedis(2891,1,1,2,1447761600,1447765200);
+        //$a = Worker::getWorkerTimeLine(8,1);
         //$a = Worker::getWorkerTimeLine(1,1);
-        $a = Worker::getWorkerTimeLine(1,1);
-
-        var_dump($a);
-        die;
         //$a = $this->getWorkerDistrict('北京市','北京市光华路 ');
         //echo '星期1 8:00 10:00';
         /*
