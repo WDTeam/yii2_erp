@@ -56,7 +56,7 @@ class JPush extends Component
             'result'=>ArrayHelper::toArray($result),
         ];
         $this->trigger(self::EVENT_PUSH_AFTER);
-        return $result;
+        return isset($result->isOk) && $result->isOk==true;
     }
     /**
      * 复杂应用完整信息push
