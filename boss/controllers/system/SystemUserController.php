@@ -13,6 +13,7 @@ use yii\web\ForbiddenHttpException;
 use core\models\shop\ShopManager;
 use yii\helpers\ArrayHelper;
 use core\models\shop\Shop;
+use core\models\operation\OperationArea;
 
 /**
  * SystemUserController implements the CRUD actions for SystemUser model.
@@ -154,14 +155,24 @@ class SystemUserController extends BaseAuthController
             return $this->refresh();
         }
         $shop_managers = ShopManager::find()
-        ->select(['id','name'])
+        ->select(['id','name', 'city_id'])
         ->where('isdel=0 or isdel is null')
         ->asArray()->all();
-        $shop_managers = ArrayHelper::map($shop_managers, 'id', 'name');
+        
+        $city_ids = ArrayHelper::map($shop_managers, 'id', 'city_id');
+        $citys = OperationArea::getCityListByIds($city_ids);
+        $citys = ArrayHelper::map($citys, 'id', 'area_name');
+        
+        $datas = [];
+        foreach ($shop_managers as $key=>$shop_manager){
+            $datas[$shop_manager['city_id']]['city_id'] = $shop_manager['city_id'];
+            $datas[$shop_manager['city_id']]['city_name'] = $citys[$shop_manager['city_id']];
+            $datas[$shop_manager['city_id']]['items'][$shop_manager['id']] = $shop_manager['name'];
+        }
         
         return $this->render('bind_shop_manager',[
             'model'=>$model,
-            'shop_managers'=>$shop_managers,
+            'shop_managers'=>$datas,
         ]);
     }
     /**
@@ -176,14 +187,24 @@ class SystemUserController extends BaseAuthController
         }
 
         $shops = Shop::find()
-        ->select(['id','name'])
+        ->select(['id','name', 'city_id'])
         ->where('isdel=0 or isdel is null')
         ->asArray()->all();
-        $shops = ArrayHelper::map($shops, 'id', 'name');
+        
+        $city_ids = ArrayHelper::map($shops, 'id', 'city_id');
+        $citys = OperationArea::getCityListByIds($city_ids);
+        $citys = ArrayHelper::map($citys, 'id', 'area_name');
+        
+        $datas = [];
+        foreach ($shops as $key=>$shop){
+            $datas[$shop['city_id']]['city_id'] = $shop['city_id'];
+            $datas[$shop['city_id']]['city_name'] = $citys[$shop['city_id']];
+            $datas[$shop['city_id']]['items'][$shop['id']] = $shop['name'];
+        }
     
         return $this->render('bind_shop',[
             'model'=>$model,
-            'shops'=>$shops,
+            'shops'=>$datas,
         ]);
     }
     /**

@@ -17,19 +17,28 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
         <div class="panel-body" style="padding:20px 30px;">
+            <?php foreach ($shop_managers as $city){?>
             <div class="form-group field-shopmanager-name">
-                <label>选择门店:</label>
-                <?php echo Select2::widget([
-                    'model'=>$model,
-                    'attribute'=>'shopManagerIds',
-                    'data'=>$shop_managers,
-                    'hideSearch'=>false,
-                    'options'=>[
-                        'multiple'=>true,
-                        'placeholder'=>'请选择小家政……'
-                    ],
-                ]);?>
+                <h3>
+                    <label style="padding-right:20px;"><?php echo $city['city_name'];?></label>
+                    <label style="font-size: 14px;">
+                        <input type="checkbox" onclick="$('#shopManagerIds_<?php echo $city['city_id'];?> input').prop('checked',this.checked)" />
+                        <span>全选</span>
+                    </label>
+                </h3>
+                <div id="shopManagerIds_<?php echo $city['city_id'];?>">
+                <?php foreach ($city['items'] as $id=>$item){?>
+                    <label title="<?php echo $item;?>" style="display: inline-block; width:210px;white-space:nowrap; overflow:hidden">
+                    <?php echo Html::checkbox('SystemUser[shopManagerIds][]', in_array($id, $model->shopManagerIds),[
+                        'value'=>$id
+                    ]);?>
+                    <span><?php echo $item;?></span>
+                    </label>
+                <?php }?>
+                </div>
             </div>
+            <hr/>
+            <?php }?>
         </div>
         <div class="panel-footer">
             <div class="form-group">

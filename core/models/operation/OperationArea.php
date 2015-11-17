@@ -74,4 +74,15 @@ class OperationArea extends CommonOperationArea
         $where = ['parent_id' => $parent_id];
         return self::getAllData($where);
     }
+    
+    /**
+     * 通过city_ids获取城市列表
+     * @author CoLee
+     */
+    public static function getCityListByIds($city_ids)
+    {
+        return self::find()
+        ->andFilterWhere(['in', 'id', $city_ids])
+        ->asArray()->all();
+    }
 }
