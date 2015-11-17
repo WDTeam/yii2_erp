@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 $this->title = '城市名称: ' . ' ' . $model->city_name;
 $this->params['breadcrumbs'][] = ['label' => '更新发布时间', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->city_name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->city_name, 'url' => ['view', 'city_id' => $model->city_id]];
 $this->params['breadcrumbs'][] = '更新';
 ?>
 <div class="operation-advert-release-update">

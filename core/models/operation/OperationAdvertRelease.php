@@ -256,4 +256,72 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
         self::updateAll(['status' => self::ADVERT_ONLINE], ['<=', 'starttime', date('Y-m-d H:i:s')]);
         self::updateAll(['status' => self::ADVERT_OFFLINE], ['<=', 'endtime', date('Y-m-d H:i:s')]);
     }
+
+    /**
+     * 在修改已发布广告上下线时间和状态时要检测广告位顺序
+     *
+     * @param   integer   $id       已发布广告编号
+     * @param   integer   $city_id  城市编号
+     * @param   array     $data     状态和上线时间
+     * @return  array     $result
+     */
+    public static function updateReleaseAdvInfo($id, $city_id, $data)
+    {
+        $model = OperationAdvertRelease::findOne($id);
+        $adv_data = self::getReleaseAdvertInfo($id);
+
+        //当前要更新的广告信息
+        $position_id         = $adv_data['position_id'];
+        $platform_id         = $adv_data['platform_id'];
+        $platform_version_id = $adv_data['platform_version_id'];
+        $advert_release_order = $adv_data['advert_release_order'];
+
+        //如果没有设置时间，直接保存
+        if (($data['starttime'] == '' || $data['starttime'] == '0000:00:00 00:00:00' || $data['starttime'] == null) && ($data['endtime'] == '' || $data['endtime'] == '0000:00:00 00:00:00' || $data['endtime'] == null)) {
+            $model->id = $id;
+            $model->status = $data['status'];
+            $model->save();
+
+            return ['code' => 200, 'errmsg' => '修改成功!'];
+
+        //如果有设置时间,检测同城市,同位置,同平台,同版本,同排序点的广告时间是否有重叠
+        } else {
+
+            //如果没有设置顺序，直接保存
+            if ($advert_release_order == '' || $advert_release_order == 0) {
+                $model->id = $id;
+                $model->status = $data['status'];
+                $model->starttime = $data['starttime'];
+                $model->endtime = $data['endtime'];
+                $model->save();
+
+                return ['code' => 200, 'errmsg' => '修改成功!'];
+            } else {
+
+                $repeat_city_adv_data = self::getReleaseAdvertInfo('', $city_id, $position_id, $platform_id, $platform_version_id, $advert_release_order, $id);
+                $mark = 0;
+
+                //没有任何一个广告有重叠，则保存
+                foreach ($repeat_city_adv_data as $key => $value) {
+                    if (($data['endtime'] < $value['starttime']) || ($data['starttime'] > $value['endtime'])) {
+                        $mark += 0;
+                    } else {
+                        $mark += 1;
+                    }
+                }
+
+                if ($mark == 0) {
+                    $model->id = $id;
+                    $model->status = $data['status'];
+                    $model->starttime = $data['starttime'];
+                    $model->endtime = $data['endtime'];
+                    $model->save();
+
+                    return ['code' => 200, 'errmsg' => '修改成功!'];
+                } else {
+                    return $result = ['code' => 0, 'errmsg' => '修改失败，同时段位置顺序有重复'];
+                }
+            }
+        }
+    }
 }
