@@ -155,7 +155,6 @@ class CouponRuleController extends Controller
     	//$rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList('13501268242','1');
       	//var_dump($rty);exit;
     	
-    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

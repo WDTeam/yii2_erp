@@ -106,15 +106,16 @@ function saveParams(){
          //alert("msg:"+msg);
       }
    });
-
-   $.ajax({
-      type: "GET",
-      url: "/order/order/get-wait-manual-assign-count",
-      dataType:'json',
-      success:function(msg){
-         $('#nonAss').text(msg);
-      }
-   });
+   if($('#nonAss').length > 0) {
+      $.ajax({
+         type: "GET",
+         url: "/order/order/get-wait-manual-assign-count",
+         dataType: 'json',
+         success: function (msg) {
+            $('#nonAss').text(msg);
+         }
+      });
+   }
 }
 
 //初始化今日派单
