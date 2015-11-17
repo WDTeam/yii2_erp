@@ -1,4 +1,5 @@
 <?php
+
 namespace restapi\controllers;
 
 use Yii;
@@ -8,9 +9,10 @@ use \core\models\customer\CustomerAccessToken;
 use core\models\operation\coupon\CouponUserinfo;
 use \restapi\models\LoginCustomer;
 use \restapi\models\alertMsgEnum;
+
 class CouponController extends \restapi\components\Controller
 {
-    
+
     /**
      * @api {POST} /coupon/exchange-coupon [POST] /coupon/exchange-coupon（100%）
      * 
@@ -57,47 +59,47 @@ class CouponController extends \restapi\components\Controller
     public function actionExchangeCoupon()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['coupon_code']) || !$param['coupon_code']||!isset($param['customer_phone']) || !$param['customer_phone']) {
-            return $this->send(null, "优惠码或手机号不能为空", 0, 403,null,alertMsgEnum::exchangeCouponDataDefect);
+        if (!isset($param['coupon_code']) || !$param['coupon_code'] || !isset($param['customer_phone']) || !$param['customer_phone']) {
+            return $this->send(null, "优惠码或手机号不能为空", 0, 403, null, alertMsgEnum::exchangeCouponDataDefect);
         }
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
-       //兑换优惠码
-        try{
-            $exchange_coupon=CouponUserinfo::generateCouponByCode($customer_phone,$coupon_code);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        //兑换优惠码
+        try {
+            $exchange_coupon = CouponUserinfo::generateCouponByCode($customer_phone, $coupon_code);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        if($exchange_coupon["is_status"]==4011){
+        if ($exchange_coupon["is_status"] == 4011) {
             //此手机号未被注册
-            return $this->send(null, "此手机号未被注册,请您先注册登录后再兑换优惠券。", 0,403,null,alertMsgEnum::exchangeCouponNoCustomer);
-        }elseif($exchange_coupon["is_status"]==4012){
+            return $this->send(null, "此手机号未被注册,请您先注册登录后再兑换优惠券。", 0, 403, null, alertMsgEnum::exchangeCouponNoCustomer);
+        } elseif ($exchange_coupon["is_status"] == 4012) {
             //优惠码已经被领取或使用
-            return $this->send(null, "优惠码已经被领取或使用", 0,403,null,alertMsgEnum::exchangeCouponIsUsed);
-        }elseif($exchange_coupon["is_status"]==4013){
+            return $this->send(null, "优惠码已经被领取或使用", 0, 403, null, alertMsgEnum::exchangeCouponIsUsed);
+        } elseif ($exchange_coupon["is_status"] == 4013) {
             //优惠券不存在
-            return $this->send(null, "优惠券不存在", 0,403,null,alertMsgEnum::exchangeCouponNotExist);
-        }elseif($exchange_coupon["is_status"]==4014){
+            return $this->send(null, "优惠券不存在", 0, 403, null, alertMsgEnum::exchangeCouponNotExist);
+        } elseif ($exchange_coupon["is_status"] == 4014) {
             //优惠券不可用
-            return $this->send(null, "优惠券不可用", 0,403,null,alertMsgEnum::exchangeCouponUnuse);
-        }elseif($exchange_coupon["is_status"]==4015){
+            return $this->send(null, "优惠券不可用", 0, 403, null, alertMsgEnum::exchangeCouponUnuse);
+        } elseif ($exchange_coupon["is_status"] == 4015) {
             //优惠券兑换时间已过期
-            return $this->send(null, "优惠券兑换时间已过期", 0,403,null,alertMsgEnum::exchangeCouponIsOver);
-        }elseif($exchange_coupon["is_status"]==4016){
+            return $this->send(null, "优惠券兑换时间已过期", 0, 403, null, alertMsgEnum::exchangeCouponIsOver);
+        } elseif ($exchange_coupon["is_status"] == 4016) {
             //优惠券已删除
-            return $this->send(null, "优惠券已删除", 0,403,null,alertMsgEnum::exchangeCouponFailIsdel);
-        }elseif($exchange_coupon["is_status"]==4017){
+            return $this->send(null, "优惠券已删除", 0, 403, null, alertMsgEnum::exchangeCouponFailIsdel);
+        } elseif ($exchange_coupon["is_status"] == 4017) {
             //优惠券已禁用
-            return $this->send(null, "优惠券已禁用", 0,403,null,alertMsgEnum::exchangeCouponDisable);
-        }elseif($exchange_coupon["is_status"]==4018){
+            return $this->send(null, "优惠券已禁用", 0, 403, null, alertMsgEnum::exchangeCouponDisable);
+        } elseif ($exchange_coupon["is_status"] == 4018) {
             //数据库写入失败
-            return $this->send(null, "数据库写入失败", 0,403,null,alertMsgEnum::exchangeCouponFail);
-        }elseif($exchange_coupon["is_status"]==4020){
+            return $this->send(null, "数据库写入失败", 0, 403, null, alertMsgEnum::exchangeCouponFail);
+        } elseif ($exchange_coupon["is_status"] == 4020) {
             //输入的优惠码有误
-            return $this->send(null, "输入的优惠码有误", 0,403,null,alertMsgEnum::exchangeCouponErrorCoupon);
-        }elseif($exchange_coupon["is_status"]==1){
+            return $this->send(null, "输入的优惠码有误", 0, 403, null, alertMsgEnum::exchangeCouponErrorCoupon);
+        } elseif ($exchange_coupon["is_status"] == 1) {
             //兑换成功
-            return $this->send($exchange_coupon, "兑换成功", 1,200,null,alertMsgEnum::exchangeCouponSuccess);
+            return $this->send($exchange_coupon, "兑换成功", 1, 200, null, alertMsgEnum::exchangeCouponSuccess);
         }
     }
 
@@ -149,37 +151,37 @@ class CouponController extends \restapi\components\Controller
     public function actionCoupons()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-         //检测用户是否登录
-        $checkResult =LoginCustomer::checkCustomerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 401, 403,null,alertMsgEnum::customerLoginFailed);
-        } 
-        if ( !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "请选择城市", 0, 403,null,alertMsgEnum::couponsCityNoChoice);
+        //检测用户是否登录
+        $checkResult = LoginCustomer::checkCustomerLogin($param);
+        if (!$checkResult['code']) {
+            return $this->send(null, $checkResult['msg'], 401, 403, null, alertMsgEnum::customerLoginFailed);
         }
-        if ( !isset($param['service_type_id']) || !$param['service_type_id']) {
-            return $this->send(null, "请选择服务类别id", 0, 403,null,alertMsgEnum::couponsCityNoService);
-        } 
-        if ( !isset($param['good_type_id']) || !$param['good_type_id']) {
-            return $this->send(null, "请选择商品类别id", 0, 403,null,alertMsgEnum::couponsCityNoGood);
+        if (!isset($param['city_id']) || !$param['city_id']) {
+            return $this->send(null, "请选择城市", 0, 403, null, alertMsgEnum::couponsCityNoChoice);
+        }
+        if (!isset($param['service_type_id']) || !$param['service_type_id']) {
+            return $this->send(null, "请选择服务类别id", 0, 403, null, alertMsgEnum::couponsCityNoService);
+        }
+        if (!isset($param['good_type_id']) || !$param['good_type_id']) {
+            return $this->send(null, "请选择商品类别id", 0, 403, null, alertMsgEnum::couponsCityNoGood);
         }
         $city_id = $param['city_id'];
         $service_type_id = $param['service_type_id'];
         $good_type_id = $param['good_type_id'];
         //获取该用户该城市的优惠券列表
-        try{
-            $coupons=CouponUserinfo::GetCustomerCouponList($checkResult['customer_phone'],$city_id,$service_type_id,$good_type_id);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        try {
+            $coupons = CouponUserinfo::GetCustomerCouponList($checkResult['customer_phone'], $city_id, $service_type_id, $good_type_id);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        if ($coupons["is_status"]==1) {
-            return $this->send($coupons["data"], "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsSuccess);
+        if ($coupons["is_status"] == 1) {
+            return $this->send($coupons["data"], "获取优惠券列表成功", 1, 200, null, alertMsgEnum::couponsSuccess);
         } else {
-            return $this->send(null, "优惠券列表为空", 0, 403,null,alertMsgEnum::couponsFail);
+            return $this->send(null, "优惠券列表为空", 0, 403, null, alertMsgEnum::couponsFail);
         }
-        
     }
-     /**
+
+    /**
      * @api {GET} /coupon/coupons-over-due  [GET] /coupon/coupons-over-due（100%）
      *
      * @apiDescription 获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券）（李勇）
@@ -225,30 +227,29 @@ class CouponController extends \restapi\components\Controller
     public function actionCouponsOverDue()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-         //检测用户是否登录
-        $checkResult =LoginCustomer::checkCustomerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 401, 403,null,alertMsgEnum::customerLoginFailed);
-        } 
-        if ( !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "城市id不能为空", 0, 403,null,alertMsgEnum::couponsOverDueNoChoice);
+        //检测用户是否登录
+        $checkResult = LoginCustomer::checkCustomerLogin($param);
+        if (!$checkResult['code']) {
+            return $this->send(null, $checkResult['msg'], 401, 403, null, alertMsgEnum::customerLoginFailed);
+        }
+        if (!isset($param['city_id']) || !$param['city_id']) {
+            return $this->send(null, "城市id不能为空", 0, 403, null, alertMsgEnum::couponsOverDueNoChoice);
         }
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠券列表
-        try{
-            $coupons=CouponUserinfo::GetCustomerDueCouponList($checkResult['customer_phone'],$city_id);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        try {
+            $coupons = CouponUserinfo::GetCustomerDueCouponList($checkResult['customer_phone'], $city_id);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        if ($coupons["is_status"]==1) {
-            return $this->send($coupons["data"], "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsOverDueSuccess);
+        if ($coupons["is_status"] == 1) {
+            return $this->send($coupons["data"], "获取优惠券列表成功", 1, 200, null, alertMsgEnum::couponsOverDueSuccess);
         } else {
-            return $this->send(null, "优惠券列表为空", 0, 403,null,alertMsgEnum::couponsOverDueFail);
+            return $this->send(null, "优惠券列表为空", 0, 403, null, alertMsgEnum::couponsOverDueFail);
         }
-        
     }
-    
-     /**
+
+    /**
      * @api {GET} /coupon/get-coupon-count {GET} /coupon/get-coupon-count（100%）
      *
      * @apiDescription 获取用户优惠券数量（李勇）
@@ -289,23 +290,22 @@ class CouponController extends \restapi\components\Controller
         }
         //检测用户是否登录
         $checkResult = LoginCustomer::checkCustomerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'],401, 403,null,alertMsgEnum::customerLoginFailed);
+        if (!$checkResult['code']) {
+            return $this->send(null, $checkResult['msg'], 401, 403, null, alertMsgEnum::customerLoginFailed);
         }
-        try{
-            $CouponCount=CouponUserinfo::CouponCount($checkResult['customer_phone']);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        try {
+            $CouponCount = CouponUserinfo::CouponCount($checkResult['customer_phone']);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        if($CouponCount["is_status"]==1){
+        if ($CouponCount["is_status"] == 1) {
             $ret['couponCount'] = $CouponCount["data"];
-            return $this->send($ret, "获取用户优惠券数量成功", 1, 200,null,alertMsgEnum::getCouponCountSuccess);
-        }else{
-            return $this->send(null, "获取用户优惠券数量失败", 0, 403,null,alertMsgEnum::getCouponCountFail);
+            return $this->send($ret, "获取用户优惠券数量成功", 1, 200, null, alertMsgEnum::getCouponCountSuccess);
+        } else {
+            return $this->send(null, "获取用户优惠券数量失败", 0, 403, null, alertMsgEnum::getCouponCountFail);
         }
-        
     }
-    
+
     /**
      * @api {GET} /coupon/get-customer-coupon-total {GET} /coupon/get-customer-coupon-total（100%）
      *
@@ -343,27 +343,82 @@ class CouponController extends \restapi\components\Controller
     public function actionGetCustomerCouponTotal()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-         //检测用户是否登录
-        $checkResult =LoginCustomer::checkCustomerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 401, 403,null,alertMsgEnum::customerLoginFailed);
-        } 
-        if ( !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "城市id不能为空", 0, 403,null,alertMsgEnum::couponsOverDueNoChoice);
+        //检测用户是否登录
+        $checkResult = LoginCustomer::checkCustomerLogin($param);
+        if (!$checkResult['code']) {
+            return $this->send(null, $checkResult['msg'], 401, 403, null, alertMsgEnum::customerLoginFailed);
+        }
+        if (!isset($param['city_id']) || !$param['city_id']) {
+            return $this->send(null, "城市id不能为空", 0, 403, null, alertMsgEnum::couponsOverDueNoChoice);
         }
         $city_id = $param['city_id'];
-        try{
-            $CouponTotal=CouponUserinfo::GetCustomerCouponTotal($checkResult['customer_phone'],$city_id);
-        }catch (\Exception $e) {
-            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::bossError);
+        try {
+            $CouponTotal = CouponUserinfo::GetCustomerCouponTotal($checkResult['customer_phone'], $city_id);
+        } catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        if($CouponTotal["is_status"]==1){
+        if ($CouponTotal["is_status"] == 1) {
             $ret['couponTotal'] = $CouponTotal["data"];
-            return $this->send($ret, "获取用户优惠券总额成功", 1, 200,null,alertMsgEnum::getCustomerCouponTotalSuccess);
-        }else{
-            return $this->send(null, "获取用户优惠券总额失败", 0, 403,null,alertMsgEnum::getCustomerCouponTotalFail);
+            return $this->send($ret, "获取用户优惠券总额成功", 1, 200, null, alertMsgEnum::getCustomerCouponTotalSuccess);
+        } else {
+            return $this->send(null, "获取用户优惠券总额失败", 0, 403, null, alertMsgEnum::getCustomerCouponTotalFail);
         }
-        
     }
+
+    /**
+     * @api {GET} /coupon/app-coupons {GET} /coupon/app-coupons（100%）
+     *
+     * @apiDescription 获取用户优惠券假数据 
+     * @apiName actionAppCoupons
+     * @apiGroup coupon
+     * 
+     * @return string 
+     */
+    public function actionAppCoupons()
+    {
+        $strint = '{
+                    code: 1,
+                    msg: "操作成功",
+                    ret: {
+                    coupons:[
+                            { "id": "1",
+                                                  "coupon_userinfo_name": "优惠券名称",
+                                                  "coupon_userinfo_price": "1.01",
+                                                  "couponrule_use_start_time": "1990-05-03",
+                                                  "couponrule_use_end_time": "1990-05-04",
+                                                  "couponrule_type": "1",
+                                                  "couponrule_service_type_id": "1",
+                                                  "couponrule_commodity_id": "1"
+                                          "coupon_overdue":"0"
+                            },
+                            { "id": "2",
+                                                  "coupon_userinfo_name": "优惠券名称",
+                                                  "coupon_userinfo_price": "2.00",
+                                                  "couponrule_use_start_time": "1990-05-06",
+                                                  "couponrule_use_end_time": "1990-05-07",
+                                                  "couponrule_type": "2",
+                                                  "couponrule_service_type_id": "2",
+                                                  "couponrule_commodity_id": "2"
+                                          "coupon_overdue":"0"
+                            },
+                                  { "id": "3",
+                                                  "coupon_userinfo_name": "优惠券名称",
+                                                  "coupon_userinfo_price": "3.00",
+                                                  "couponrule_use_start_time": "1990-05-08",
+                                                  "couponrule_use_end_time": "1990-05-09",
+                                                  "couponrule_type": "3",
+                                                  "couponrule_service_type_id": "3",
+                                                  "couponrule_commodity_id": "3"
+                                          "coupon_overdue":"1"
+                            }
+                                  ]
+                    },
+                    alertMsg: "操作成功"
+                  }';
+
+        return $strint;
+    }
+
 }
+
 ?>
