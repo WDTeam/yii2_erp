@@ -324,10 +324,16 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		->orderBy(['coupon_userinfo_price'=>SORT_DESC,'couponrule_use_end_time'=>SORT_ASC,])
 		->asArray()
 		->all();
-		
-		
-		
 		$couponCustomer=array_merge_recursive($couponCustomer1,$couponCustomer2);
+		
+		if(empty($couponCustomer)){
+		$array=[
+		'is_status'=>0,
+		'msg'=>'查询成功',
+		'data'=>[],
+		];
+		return $array; 
+		}
 		
 		$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
 		$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
@@ -336,10 +342,8 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
 		
 		
-		//var_dump($couponCustomer);exit;
-		
 		foreach ($couponCustomer as $key=>$data_customer){
-				
+			
 		if($data_customer['couponrule_type']==1){
 				$name['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){

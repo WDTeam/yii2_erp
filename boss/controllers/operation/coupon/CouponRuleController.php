@@ -152,8 +152,8 @@ class CouponRuleController extends Controller
     public function actionIndex()
     {
     	//退款退优惠券18964831206
-    	//$rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList('18964831206','1');
-       //	var_dump($rty);exit;
+    	//$rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList('13501268242','1');
+      	//var_dump($rty);exit;
     	
     	
         $searchModel = new CouponRuleSearch;
