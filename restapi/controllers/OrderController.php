@@ -837,6 +837,7 @@ class OrderController extends \restapi\components\Controller
         $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
         $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
         $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
+        $arr[] = OrderStatusDict::ORDER_SERVICE_START;
         $args["owr.worker_id"] = $worker->id;
         if ($limit <= 0) {
             $limit = 1;
