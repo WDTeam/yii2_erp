@@ -887,7 +887,7 @@ class OrderSearch extends Order
         AND b.`created_at`>={$start_time}
         AND b.`created_at`<{$end_time}";
         $data[4] = (int)\Yii::$app->db->createCommand($sql)
-        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
+        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_SYS_ASSIGN_DONE])
         ->queryScalar();
         //完成工时
         $sql = "SELECT COUNT(1)
