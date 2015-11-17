@@ -33,7 +33,7 @@ class AuthItem extends \yii\db\ActiveRecord
     const SYSTEM_ROLE_SUPER_ADMIN = 'system_group_super_admin';
     const SYSTEM_ROLE_ADMIN = 'system_group_admin';
     const SYSTEM_ROLE_SHOP_MANAGER = 'system_group_shop_manger';
-    const SYSTEM_ROLE_MINIBOSS = 'system_group_miniboss';
+    const SYSTEM_ROLE_MINIBOSS = 'group_shopmanager_admin';
     
     public static function addDefaultRoles()
     {
@@ -41,7 +41,7 @@ class AuthItem extends \yii\db\ActiveRecord
             self::SYSTEM_ROLE_SUPER_ADMIN=>'超级管理员',
             self::SYSTEM_ROLE_ADMIN=>'普通管理员',
             self::SYSTEM_ROLE_SHOP_MANAGER=>'小家政老板',
-            self::SYSTEM_ROLE_MINIBOSS=>'MiNiBoss组',
+            self::SYSTEM_ROLE_MINIBOSS=>'家政门店管理员',
         ];
         $auth = \Yii::$app->authManager;
         foreach ($roles as $name=>$description){
@@ -137,10 +137,10 @@ class AuthItem extends \yii\db\ActiveRecord
         $name = $this->name;
         $description = $this->description;
         $des = [
-            self::SYSTEM_ROLE_SUPER_ADMIN=>$description.'（拥有所有权限）',
-            self::SYSTEM_ROLE_ADMIN=>$description.'（除权限外的后台管理）',
-            self::SYSTEM_ROLE_SHOP_MANAGER=>$description.'（只能管理自己的家政门店）',
-            self::SYSTEM_ROLE_MINIBOSS=>$description.'（只能管理自己的数据）',
+            self::SYSTEM_ROLE_SUPER_ADMIN=>$description,
+            self::SYSTEM_ROLE_ADMIN=>$description,
+            self::SYSTEM_ROLE_SHOP_MANAGER=>$description,
+            self::SYSTEM_ROLE_MINIBOSS=>$description,
         ];
         if(isset($des[$name])){
             return $des[$name];

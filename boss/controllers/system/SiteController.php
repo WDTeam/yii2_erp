@@ -31,7 +31,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
 
-        if(\Yii::$app->user->can('group_shopmanager_admin')||\Yii::$app->user->can('system_group_shop_manger')){
+        if(\Yii::$app->user->identity->isMiNiBoss()){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');
