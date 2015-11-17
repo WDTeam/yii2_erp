@@ -170,8 +170,6 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$couponCustomerobj->couponrule_price=$Couponruledate['couponrule_price'];
 		$couponCustomerobj->is_disabled=$Couponruledate['is_disabled'];
 
-
-		
 		$couponCustomerobj->order_code ='0';
 		$couponCustomerobj->system_user_id = $customer->id;
 		$couponCustomerobj->system_user_name = '用户自对';
@@ -263,9 +261,18 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 			if($data_customer['couponrule_type']==1){
 				$name['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){
-				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
+				
+				if($data_customer['couponrule_service_type_id']==0){
+					$name['couponrule_type_title']=$data_customer['coupon_userinfo_name'];
+				}else{
+					$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];	
+				}
 			}else{
-				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
+				if($data_customer['couponrule_service_type_id']==0){
+					$name['couponrule_type_title']=$data_customer['coupon_userinfo_name'];
+				}else{
+					$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
+				}
 			}
 			$couponCustomerdate[]=array_merge_recursive($data_customer,$name);
 			unset($name);
@@ -307,6 +314,7 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		->select(['id','customer_tel','coupon_userinfo_name','coupon_userinfo_price','couponrule_use_start_time','couponrule_use_end_time','couponrule_type','couponrule_service_type_id','couponrule_commodity_id'])
 		->where(['and',"couponrule_use_end_time>$newtime",'is_del=0','is_used=0',"customer_tel=$customer_tel", ['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1']] )
 		->orderBy(['couponrule_use_end_time'=>SORT_ASC,'coupon_userinfo_price'=>SORT_DESC])
+		//->createCommand()->getRawSql();
 		->asArray()
 		->all();
 		
@@ -316,8 +324,16 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		->orderBy(['coupon_userinfo_price'=>SORT_DESC,'couponrule_use_end_time'=>SORT_ASC,])
 		->asArray()
 		->all();
-		
 		$couponCustomer=array_merge_recursive($couponCustomer1,$couponCustomer2);
+		
+		if(empty($couponCustomer)){
+		$array=[
+		'is_status'=>1,
+		'msg'=>'查询成功',
+		'data'=>[],
+		];
+		return $array; 
+		}
 		
 		$data_info_name=\core\models\operation\OperationCategory::getAllCategory();
 		$data_es_name=\yii\helpers\ArrayHelper::map($data_info_name, 'id', 'operation_category_name');
@@ -325,15 +341,26 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 		$configdate=CouponRuleSearch::couponconfig();
 		$goods_data=\core\models\operation\OperationGoods::getAllCategory_goods();
 		
+		
 		foreach ($couponCustomer as $key=>$data_customer){
-				
-			if($data_customer['couponrule_type']==1){
+			
+		if($data_customer['couponrule_type']==1){
 				$name['couponrule_type_title']='全网优惠券';
 			}elseif ($data_customer['couponrule_type']==2){
-				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];
+				
+				if($data_customer['couponrule_service_type_id']==0){
+					$name['couponrule_type_title']=$data_customer['coupon_userinfo_name'];
+				}else{
+					$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$data_es_name[$data_customer['couponrule_service_type_id']];	
+				}
 			}else{
-				$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
-			}
+				
+				if($data_customer['couponrule_service_type_id']==0){
+					$name['couponrule_type_title']=$data_customer['coupon_userinfo_name'];
+				}else{
+					$name['couponrule_type_title']=$configdate[3][$data_customer['couponrule_type']].'-'.$goods_data[$data_customer['couponrule_service_type_id']];
+				}
+			} 
 			$couponCustomerdate[]=array_merge_recursive($data_customer,$name);
 			unset($name);
 		}
@@ -436,10 +463,6 @@ class CouponUserinfo extends \dbbase\models\operation\coupon\CouponUserinfo
 	}
 	
 
-	
-	
-	
-	
 	
 	/**
 	* 验证优惠码是否绑定用户

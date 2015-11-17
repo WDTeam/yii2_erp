@@ -37,6 +37,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 {
+    const PAYMENT_TRANS_TECORD_PREFIX = 'PAYMENT_TRANS_RECORD_CUSTOMER_';
+
     /**
      * @inheritdoc
      */
@@ -65,6 +67,11 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
      */
     protected function doSave()
     {
+        try{
+            //删除缓存
+            $cacheId = PaymentCustomerTransRecord::PAYMENT_TRANS_TECORD_PREFIX.$this->customer_id;
+            Yii::$app->redis->executeCommand('del', [$cacheId]);
+        }catch(Exception $e){}
         return $this->save(false);
     }
 

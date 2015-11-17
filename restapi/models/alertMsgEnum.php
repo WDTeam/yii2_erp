@@ -33,6 +33,7 @@ class alertMsgEnum
     //微信用户登录
     const uesrWeiXinLoginSuccess = '用户登录成功';
     const uesrWeiXinLoginFailed = '用户登录失败';
+    const uesrWeiXinLoginNot = '对不起！您传递的渠道名称没有对应项';
     //依据城市和服务品类 获取服务商品列表
     const getGoodsesSuccess = '获取服务商品成功';
     const getGoodsesFailed = '获取服务商品失败';

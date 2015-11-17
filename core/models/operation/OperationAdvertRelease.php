@@ -284,7 +284,7 @@ class OperationAdvertRelease extends \dbbase\models\operation\OperationAdvertRel
 
             return ['code' => 200, 'errmsg' => '修改成功!'];
 
-        //如果有设置时间,检测同城市,同位置,同平台,同版本,同排序点的广告时间是否有重叠
+            //如果有设置时间,检测同城市,同位置,同平台,同版本,同排序点的广告时间是否有重叠
         } else {
 
             //如果没有设置顺序，直接保存

@@ -87,7 +87,8 @@ class OperationAdvertReleaseController extends BaseAuthController
             }
         } else {
 
-            $citys = OperationCity::find()->all();
+            $citys = OperationCity::find()->where(['operation_city_is_online' => 1])->all();
+
             //$c = ['选择要发布的城市'];
             $c = [];
             foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
@@ -176,7 +177,6 @@ class OperationAdvertReleaseController extends BaseAuthController
                 //城市数据
                 $cache = Yii::$app->cache;
                 $citys = $cache->get('__CITY_INFO__');
-
                 $model = new OperationAdvertRelease();
                 foreach ($citys as $k => $city) {
                     foreach ($post['advert'] as $key => $val) {
@@ -244,6 +244,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     public function actionUpdate($id, $city_id)
     {
         $model = $this->findModel($id);
+
         $post = Yii::$app->request->post();
 
         if ($model->load($post)) {
@@ -279,8 +280,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     /**
      * 保存同一个城市里广告的顺序
      */
-    public function actionSaveOrders()
-    {
+    public function actionSaveOrders(){
         $data = Yii::$app->request->post();
 
         $model = new OperationAdvertRelease();

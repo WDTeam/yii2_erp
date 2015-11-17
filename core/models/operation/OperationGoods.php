@@ -2,8 +2,11 @@
 
 namespace core\models\operation;
 
+use core\models\operation\OperationShopDistrictGoods;
+
 use Yii;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 
 /**
@@ -45,7 +48,7 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
         $d = array();
         foreach((array)$data as $key => $value){
             //查找该商品是否在该城市存在，如不存在则返回
-//            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
+            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
 //            if(empty($goodsstatus)){
                 $d[$value['id'].'-'.$value['operation_goods_name']] = $value['operation_goods_name'];
 //            }
@@ -84,10 +87,17 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     
     public static function getAllCategory_goods()
     {
-    	$date=self::find()->all();
-    	$goodname=\yii\helpers\ArrayHelper::map($date, 'id', 'operation_goods_name');
-    	return $goodname;
-    
+    	$cacheName = 'getAllCategory_goods';
+    	//判断是否存在缓存
+    	$cache=Yii::$app->cache->get($cacheName);
+    	if($cache){
+    		return $cache;
+    	} else{
+    		$date=self::find()->all();
+    		$goodname=\yii\helpers\ArrayHelper::map($date, 'id', 'operation_goods_name');
+    		Yii::$app->cache->set($cacheName,$goodname,180);
+    		return  $goodname;
+    	}
     }
     
     /**
@@ -125,5 +135,41 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     public static function updateCategoryName($operation_category_id, $operation_category_name)
     {
         self::updateAll(['operation_category_name' => $operation_category_name], 'operation_category_id= ' . $operation_category_id);
+    }
+
+    /**
+     * 在创建和更新服务项目时，检查服务项目是否重复
+     *
+     * @param   array   $data   服务品类编号，服务项目名称，
+     * @return  array   判断结果
+     */
+    public static function validateGoodsrepeat($data)
+    {
+        $query = new \yii\db\Query();
+        $query = $query->select([
+            'id',
+            'operation_goods_name'
+        ])
+        ->from('{{%operation_goods}}')
+        ->andFilterWhere([
+            'operation_category_id' => $data['category_id'],
+            'operation_goods_name'  => $data['goods_name']
+        ]);
+
+        if (isset($data['id']) && is_numeric($data['id'])) {
+            $query->andFilterWhere(['!=', 'id', $data['id']]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $result = $dataProvider->query->one();
+
+        if (isset($result['id']) && count($result) > 0) {
+            return ['code' => 200, 'errmsg' => '该品类下此商品已经增加！'];
+        } else {
+            return ['code' => 0, 'errmsg' => '可以增加！'];
+        }
     }
 }

@@ -159,8 +159,6 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 			->andWhere(['<', 'couponrule_use_start_time', time()])
 			->andWhere(['>', 'couponrule_use_end_time', time()])
 			->andWhere(['or', ['and', 'couponrule_type=2', 'couponrule_service_type_id='.$cate_id], ['couponrule_type'=>1],['and', 'couponrule_type=3', 'couponrule_commodity_id='.$commodity_id]
-
-
 ])
 			->asArray()
 			->all();
@@ -182,6 +180,53 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		
 	}
 
+	/**
+	* 优惠券退款使用   
+	* 潘高峰
+	* @date: 2015-11-16
+	* @author: peak pan
+	* @return:
+	**/
+	
+	public static function get_status_save($tel,$order_code){
+		if($tel==0){
+			$array=[
+			'is_status'=>1,
+			'msg'=>'亲,参数有误',
+			'data'=>'',
+			];
+			return $array;
+		}
+	
+		$coupon_code=new CouponUserinfo;
+		
+		$coupon_code_edit=$coupon_code->find()->where(['customer_tel'=>$tel,'order_code'=>$order_code,'is_used'=>1])->one();
+		if(isset($coupon_code_edit->id)){
+			$coupon_code_save=$coupon_code->findOne($coupon_code_edit->id);
+			$coupon_code_save->coupon_userinfo_usetime=0;
+			$coupon_code_save->is_used=0;
+			$coupon_code_save->order_code='0';
+			$coupon_code_save->updated_at=time();
+			$datasave=$coupon_code_save->save();
+			if(!$datasave){ 
+			//记录日志	
+			$newcoupon=date('Y-m-d H:i:s',time()).'优惠券退款失败 原因记录有误';
+			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND);
+			}else{
+			$newcoupon=date('Y-m-d H:i:s',time()).'优惠券退款成功电话是'.$tel.'订单号是'.$order_code;
+			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND);
+			}
+		}else{
+			//无此优惠券
+			$newcoupon=date('Y-m-d H:i:s',time()).'无此优惠券'.$tel.'订单号是'.$order_code;
+			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND);
+			return true;
+		}
+	}
+	
+	
+	
+	
 	
 	/**
 	 * 根据规则id获取单个优惠券的规则详情  
@@ -240,7 +285,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		$now_time=time();
 		$coupon = CouponUserinfo::find()
 		->select('id,coupon_userinfo_price')
-		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel",['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1'],
+		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel","customer_code=$coupon_code",['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1'],
 				['or',['and','couponrule_type=2',"couponrule_service_type_id=$couponrule_service_type_id"],
 				['and','couponrule_type=3',"couponrule_commodity_id=$couponrule_commodity_id"], 'couponrule_type=1']] )
 		->asArray()
@@ -292,62 +337,4 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 	}
 	
 	
-	
-    /**
-    * 根据客户的uid 开始使用优惠券     （ 应该是领取优惠券吗）
-    * @date: 2015-11-7
-    * @author: peak pan
-    * @return:
-    **/
-	
-	public static function useCoupon($coupon_customer_id){
-		
-		$couponCustomer = CouponUserinfo::findOne($coupon_customer_id);
-		if($couponCustomer === NULL){
-			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
-		}
-		if($couponCustomer->is_used == 1){
-			return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'优惠券已经使用'];
-		}
-		
-		
-		$couponCustomer->is_used = 1;
-		$couponCustomer->coupon_userinfo_usetime = time();
-		
-		if(!$couponCustomer->validate()){
-			return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'使用优惠券失败'];
-		}
-		
-		$couponCustomer->save();
-		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
-	}
-
-	
-	/**
-	* 根据客户的uid优惠券退换
-	* @date: 2015-11-7
-	* @author: peak pan
-	* @return:
-	**/
-	
-	public static function backCoupon($coupon_customer_id){
-		$couponCustomer = CouponUserinfo::findOne($coupon_customer_id);
-		
-		if($couponCustomer === NULL){
-			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
-		}
-		if($couponCustomer->is_used == 0){
-			return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
-		}
-		$couponCustomer->is_used = 0;
-		$couponCustomer->updated_at = time();
-		if(!$couponCustomer->validate()){
-			return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'退还优惠券失败'];
-		}
-		$couponCustomer->save();
-		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>'退还成功'];
-	}
-
-
-		
 }

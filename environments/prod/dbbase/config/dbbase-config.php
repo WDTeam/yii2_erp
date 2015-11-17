@@ -53,8 +53,8 @@ return [
          */
         'ivr' => [
             'class' => 'dbbase\components\Ivr',
-            'app_id' => '5000058',
-            'token' => '57b62a3462b52a1413a4e1934a60d983',
+            'app_id' => '5000030',
+            'token' => 'b8af09ef7d0cc774928fcfb49cda05ed',
             'redirect_uri' => 'system/ivr/callback'
         ],
         /**

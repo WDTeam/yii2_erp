@@ -5,7 +5,8 @@ namespace boss\controllers\operation;
 use boss\components\BaseAuthController;
 use boss\models\operation\OperationCategory;
 use boss\models\operation\OperationCategorySearch;
-use boss\models\operation\OperationShopDistrictGoods;
+
+use \core\models\operation\OperationShopDistrictGoods;
 use boss\models\operation\OperationGoods;
 
 use Yii;

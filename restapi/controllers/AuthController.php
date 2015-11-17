@@ -1,4 +1,5 @@
 <?php
+
 namespace restapi\controllers;
 
 use Yii;
@@ -13,6 +14,7 @@ use core\models\worker\WorkerIdentityConfig;
 
 class AuthController extends \restapi\components\Controller
 {
+
     /**
      * @api {POST} /auth/login Login [POST] /auth/login Login（100%）
      *
@@ -78,34 +80,34 @@ class AuthController extends \restapi\components\Controller
         if (!isset($param['phone']) || !$param['phone'] || !isset($param['verify_code']) || !$param['verify_code']) {
             return $this->send(null, "用户手机号或验证码不能为空", 403, 200, null, alertMsgEnum::customerLoginDataDefect);
         }
-        if (!isset($param['order_channel_name']) || !$param['order_channel_name'] ) {
+        if (!isset($param['order_channel_name']) || !$param['order_channel_name']) {
             return $this->send(null, "用户渠道不能为空", 403, 200, null, alertMsgEnum::customerLoginDataDefectPlatform);
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
         $order_channel_name = $param['order_channel_name'];
         try {
-            $channal_id=OperationOrderChannel::get_post_id($order_channel_name);
+            $channal_id = OperationOrderChannel::get_post_id($order_channel_name);
         } catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
-        if(empty($channal_id)){
-            return $this->send(null,"数据库中没有此渠道", 1024, 403, null, alertMsgEnum::bossError);
+        if (empty($channal_id)) {
+            return $this->send(null, "数据库中没有此渠道", 1024, 403, null, alertMsgEnum::bossError);
         }
         try {
-            if($phone == "15010153444"){
+            if ($phone == "15010153444") {
                 $checkRet = true;
-            }else {
+            } else {
                 $checkRet = CustomerCode::checkCode($phone, $verifyCode);
             }
         } catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if ($checkRet) {
             try {
-                $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode,$channal_id);
+                $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode, $channal_id);
             } catch (\Exception $e) {
-                return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
             }
             if (empty($token)) {
                 return $this->send(null, "生成token错误", 0, 403, null, alertMsgEnum::customerLoginFail);
@@ -113,14 +115,13 @@ class AuthController extends \restapi\components\Controller
                 try {
                     $user = CustomerAccessToken::getCustomer($token);
                 } catch (\Exception $e) {
-                    return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+                    return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
                 }
                 $ret = [
                     "user" => $user,
                     "access_token" => $token
                 ];
                 return $this->send($ret, "登陆成功", 1, 200, null, alertMsgEnum::customerLoginSuccess);
-
             }
         } else {
             return $this->send(null, "用户名或验证码错误", 0, 403, null, alertMsgEnum::customerLoginFail);
@@ -168,7 +169,7 @@ class AuthController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['phone']) || !$param['phone'] || !isset($param['sign']) || !$param['sign'] || !isset($param['channel_id']) || !$param['channel_id']) {
-            return $this->send(null, "用户名,签名,渠道id不能为空", 0, 403,null,alertMsgEnum::loginFromPopNoPhone);
+            return $this->send(null, "用户名,签名,渠道id不能为空", 0, 403, null, alertMsgEnum::loginFromPopNoPhone);
         }
         $phone = $param['phone'];
         $sign = $param['sign'];
@@ -176,34 +177,34 @@ class AuthController extends \restapi\components\Controller
         try {
             $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_id);
         } catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if ($checkRet) {
             try {
                 $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_id);
             } catch (\Exception $e) {
-                return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
             }
-            if($token['response'] == 'error'){
-                    return $this->send(null, $token['errmsg'], 0, 403,null,alertMsgEnum::loginFromPopFail);
-            }else{
+            if ($token['response'] == 'error') {
+                return $this->send(null, $token['errmsg'], 0, 403, null, alertMsgEnum::loginFromPopFail);
+            } else {
                 $access_token = $token['access_token'];
                 try {
                     $user = CustomerAccessToken::getCustomer($access_token);
                 } catch (\Exception $e) {
-                    return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+                    return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
                 }
                 $ret = [
                     "user" => $user,
                     "access_token" => $access_token
                 ];
-                return $this->send($ret, "登陆成功",1, 200,null,alertMsgEnum::loginFromPopSuccess);
+                return $this->send($ret, "登陆成功", 1, 200, null, alertMsgEnum::loginFromPopSuccess);
             }
         } else {
-            return $this->send(null, "用户名,签名或渠道id错误", 0, 403,null,alertMsgEnum::loginFromPopFail);
+            return $this->send(null, "用户名,签名或渠道id错误", 0, 403, null, alertMsgEnum::loginFromPopFail);
         }
     }
-
+ 
     /**
      * @api {POST} /auth/worker-login [POST] /auth/worker-login（李勇100%)
      * @apiDescription 阿姨登录（李勇）
@@ -219,7 +220,7 @@ class AuthController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *       "code": 1,
      *       "msg": "登陆成功",
      *       "ret": {
@@ -300,13 +301,13 @@ class AuthController extends \restapi\components\Controller
         try {
             $checkRet = WorkerCode::checkCode($phone, $verify_code);
         } catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
         }
         if ($checkRet) {
             try {
                 $token = WorkerAccessToken::generateAccessToken($phone, $verify_code);
             } catch (\Exception $e) {
-                return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
+                return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::bossError);
             }
             if (empty($token)) {
                 return $this->send(null, "生成token错误", 0, 403, null, alertMsgEnum::workerLoginFail);
@@ -319,7 +320,6 @@ class AuthController extends \restapi\components\Controller
                 ];
                 return $this->send($ret, "登陆成功", 1, 200, null, alertMsgEnum::workerLoginSuccess);
             }
-
         } else {
             return $this->send(null, "用户名或验证码错误", 0, 403, null, alertMsgEnum::workerLoginFail);
         }
@@ -387,32 +387,37 @@ class AuthController extends \restapi\components\Controller
     public function actionWeixinLogin()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (empty($param['phone']) || empty($param['verify_code']) || empty($param['weixin_id'])) {
+        if (empty($param['phone']) || empty($param['verify_code']) || empty($param['weixin_id']) || empty($param['order_channel_name'])) {
             return $this->send(null, "参数不完整，登录失败。", 0, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
         $weixin_id = $param['weixin_id'];
 
+        #订单渠道名称
+        if ($param['order_channel_name']) {
+            $channal_id = OperationOrderChannel::get_post_id($param['order_channel_name']);
+            if (empty($channal_id)) {
+                return $this->send(null, "对不起！您传递的渠道名称没有对应项", 0, 403, null, alertMsgEnum::uesrWeiXinLoginNot);
+            }
+        }
+
         try {
-            $date = CustomerAccessToken::createWeixinCustomer($phone, $verifyCode, $weixin_id);
-            if($date['errcode']=='0')
-            {
+            $date = CustomerAccessToken::createWeixinCustomer($phone, $verifyCode, $weixin_id, $channal_id);
+            if ($date['errcode'] == '0') {
                 $ret = [
                     "user" => $date['customer'],
                     "access_token" => $date['access_token']
                 ];
                 return $this->send($ret, "登陆成功", 1, 200, null, alertMsgEnum::uesrWeiXinLoginSuccess);
-            }
-            else
-            {
+            } else {
                 return $this->send(null, $date['errmsg'], 0, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
             }
         } catch (\Exception $e) {
-            return $this->send(null,$e->getMessage(), 1024, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
+            return $this->send(null, $e->getMessage(), 1024, 403, null, alertMsgEnum::uesrWeiXinLoginFailed);
         }
     }
 
-}
+} 
 
 ?>

@@ -12,6 +12,7 @@ use boss\components\RbacHelper;
  * ],
  * ]);
  */
+ 
 $menuItemsMain = RbacHelper::topMenu([
     [
         'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '系统设置'),

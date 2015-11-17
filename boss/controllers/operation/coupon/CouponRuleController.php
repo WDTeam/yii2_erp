@@ -13,8 +13,6 @@
 
 namespace boss\controllers\operation\coupon;
 
-ini_set('max_execution_time',864000);
-
 use Yii;
 use dbbase\models\operation\coupon\CouponRule;
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
@@ -47,6 +45,7 @@ class CouponRuleController extends Controller
     
     public function actionIndexceshi()
     {
+    	ini_set('max_execution_time',864000);
        /* $userinfoceshi= new CouponUserinfoceshi;
        $datainfo=$userinfoceshi->find()
        ->where(['and','city_id is null'])
@@ -83,7 +82,6 @@ class CouponRuleController extends Controller
        ->limit(5)
        ->asArray()
        ->all();
-       
     	foreach ($data as $newdata){
     		$newcoupon=new CouponUserinfo;
     			//领取的优惠券
@@ -96,8 +94,6 @@ class CouponRuleController extends Controller
 					$newcoupon->couponrule_city_limit=2;
 					$newcoupon->couponrule_city_id=$newdata['city_id'];					
 				}
-				
-				
 				if($newdata['order_typeid']==0){
 				//全国通用优惠券
 					$newcoupon->couponrule_type=1;
@@ -109,9 +105,6 @@ class CouponRuleController extends Controller
 					$newcoupon->couponrule_service_type_id=0;
 					$newcoupon->couponrule_commodity_id=$newdata['order_typeid'];
 				}
-				
-				
-				
     		$newcoupon->coupon_userinfo_code=$newdata['coupon_userinfo_code']?$newdata['coupon_userinfo_code']:'0';
     		$newcoupon->coupon_userinfo_name=$newdata['coupon_userinfo_name']?$newdata['coupon_userinfo_name']:'优惠券';
     		$newcoupon->coupon_userinfo_gettime=$newdata['coupon_userinfo_gettime'];//领取时间默认为开始时间
@@ -120,7 +113,6 @@ class CouponRuleController extends Controller
     		$newcoupon->coupon_userinfo_price=$newdata['coupon_userinfo_price'];
     		$newcoupon->customer_tel=$newdata['customer_tel'];
     		///////////////////////////////////////////
-    		
     		$newcoupon->couponrule_order_min_price=0;
     		$newcoupon->customer_id=0;
     		$newcoupon->coupon_userinfo_id=0;
@@ -139,9 +131,6 @@ class CouponRuleController extends Controller
     		$newcoupon->created_at=time();
     		$newcoupon->updated_at=time();
     		$newcoupon->is_del=0;
-    		
-    		//var_dump($newcoupon);exit;
-    		
     		$islcok=$newcoupon->save();
     		
     		var_dump($islcok);exit;
@@ -153,13 +142,7 @@ class CouponRuleController extends Controller
     		}
     		unset($newcoupon);
     	}
-    	
-    	
-       
-    	var_dump('11');exit;
-    	
-    	
-    	
+    	var_dump('11');exit;	
     }
     
     /**
@@ -168,6 +151,10 @@ class CouponRuleController extends Controller
      */
     public function actionIndex()
     {
+    	//退款退优惠券18964831206
+    	//$rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList('13501268242','1');
+      	//var_dump($rty);exit;
+    	
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 

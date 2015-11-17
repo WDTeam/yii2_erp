@@ -1,0 +1,24 @@
+天润语音播报阿姨派单数据平台登录
+data.vlink.cn
+ejiajie
+密码ejiajie2015
+开账号没有费用，最多测试有通讯费
+
+旧系统
+'app_id'=>'5000005',
+'token'=>'9e4225742aba3b33b2d0576223933a76',
+
+prod:
+appId=5000030
+token=b8af09ef7d0cc774928fcfb49cda05ed
+cb: https://boss.1jiajie.com/ivr/callback
+
+test
+appId=5000040
+token=8578b07ba71ff7dfd6ddeca95d69828c
+cb: http://test.boss.1jiajie.com/ivr/callback
+
+dev
+appId=5000058
+token=57b62a3462b52a1413a4e1934a60d983
+cb: http://dev.boss.1jiajie.com/ivr/callback

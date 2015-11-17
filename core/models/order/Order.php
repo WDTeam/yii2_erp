@@ -240,7 +240,6 @@ class Order extends OrderModel
             }
             return true;
         }else{
-            $this->addError('error_code','540116');
             return false;
         }
     }
@@ -514,7 +513,7 @@ class Order extends OrderModel
                 foreach ($orders as $order) {
                     $order->order_flag_lock = 0;
                     $order->admin_id = $admin_id;
-                    $result = OrderStatus::_payment($order, ['OrderExtFlag'], $transact);
+                    $result = OrderStatus::_updateToWaitManualAssign($order, ['OrderExtFlag'], $transact);
                     if (!$result) {
                         $transact->rollBack();
                         return $result;
@@ -525,8 +524,7 @@ class Order extends OrderModel
             } else {
                 $order->order_flag_lock = 0;
                 $order->admin_id = $admin_id;
-                $order->order_flag_sys_assign = 0;
-                return OrderStatus::_payment($order, ['OrderExtFlag']);
+                return OrderStatus::_updateToWaitManualAssign($order, ['OrderExtFlag']);
             }
         }
     }
@@ -571,10 +569,13 @@ class Order extends OrderModel
         }
         if ($order->orderExtFlag->order_flag_lock > 0 && $order->orderExtFlag->order_flag_lock != $admin_id && time() - $order->orderExtFlag->order_flag_lock_time < Order::MANUAL_ASSIGN_lONG_TIME) {
             $order->addError('id', '订单正在进行人工指派！');
+            $order->addError('error_code', '541001');
         } elseif ($conflict > 0) {
             $order->addError('id', '阿姨服务时间冲突！');
+            $order->addError('error_code', '541002');
         } elseif ($order->orderExtWorker->worker_id > 0) {
             $order->addError('id', '订单已经指派阿姨！');
+            $order->addError('error_code', '541003');
         } else {
             $transact = static::getDb()->beginTransaction();
             $result = self::_assignDone($order, $worker, $admin_id, $assign_type, $transact);
@@ -586,6 +587,7 @@ class Order extends OrderModel
                     $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
                     $orderids[] = $child->id;
                     if (!$result) {
+                        $order->addError('error_code', '541004'); //周期订单指派失败
                         break;
                     }
                     //处理阿姨排班表
@@ -595,6 +597,10 @@ class Order extends OrderModel
 
             if ($result && $order->order_channel_type_id == self::ORDER_PAY_CHANNEL_TYPE_POP) {
                 $result = OrderPop::assignDoneToPop($order); //第三方同步失败则取消失败
+                if(!$result){
+                    $order->addError('id', '第三方同步失败！');
+                    $order->addError('error_code', '541005');
+                }
             }
 
             if ($result) {
@@ -604,6 +610,7 @@ class Order extends OrderModel
                 OrderMsg::assignDone($order->id); //指派成功发送通知
             } else {
                 $transact->rollBack();
+                $order->addError('error_code', '541006'); //指派失败
                 foreach ($orderids as $orderid) {
                     //失败后删除阿姨的订单信息
                     WorkerForRedis::deleteWorkerOrderInfoToRedis($worker['id'], $orderid);
@@ -942,10 +949,11 @@ class Order extends OrderModel
         }
         if (empty($goods)) {
             $this->addError('order_service_item_name', '创建时获商品信息失败！');
+            $this->addError('error_code', '542103');
             return false;
         } elseif ($goods['code'] >= 500) {
             $this->addError('order_service_item_name', $goods['msg']);
-            $this->addError('error_code', '542103');
+            $this->addError('error_code', '542104');
             return false;
         } else {
             $goods = $goods['data'];
@@ -974,7 +982,7 @@ class Order extends OrderModel
             $ranges = $this->getThisOrderBookedTimeRangeList();
             if (!in_array($range, $ranges)) {
                 $this->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
-                $this->addError('error_code', '542104');
+                $this->addError('error_code', '542105');
                 return false;
             }
         }
@@ -1005,7 +1013,7 @@ class Order extends OrderModel
                     $this->order_pay_money -= $this->order_use_coupon_money;
                 } else {
                     $this->addError('coupon_id', '获取优惠券信息失败！');
-                    $this->addError('error_code', '542105');
+                    $this->addError('error_code', '542106');
                     return false;
                 }
             }
@@ -1067,7 +1075,13 @@ class Order extends OrderModel
             'isdel' => 0,
         ]);
 
-        return $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+        $result = $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+        if($result){
+            return true;
+        }else{
+            $this->addError('error_code', '542107');
+            return false;
+        }
     }
 
     /**

@@ -91,19 +91,19 @@ class FinanceHeader extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('boss', '主键'),
-            'finance_header_key' => Yii::t('boss', '对应栏位'),
-			'finance_header_title' => Yii::t('boss', '当前名称'),
-			'finance_header_name' => Yii::t('boss', '表头名称'),
-			'finance_header_where' => Yii::t('boss', '比对字段名称'),
-			'finance_order_channel_id' => Yii::t('boss', '订单渠道id'),
-            'finance_order_channel_name' => Yii::t('boss', '订单渠道名称'),
-            'finance_pay_channel_id' => Yii::t('boss', '支付渠道id'),
-            'finance_pay_channel_name' => Yii::t('boss', '支付渠道名称'),
-			'create_time' => Yii::t('boss', '创建时间'),
-			'finance_header_where' => Yii::t('boss', '比对字段'),
-			'finance_uplod_url' => Yii::t('boss', '上传xls'),
-			'is_del' => Yii::t('boss', '0 正常 1 删除'),
+            'id' => Yii::t('app', '主键'),
+            'finance_header_key' => Yii::t('app', '对应栏位'),
+			'finance_header_title' => Yii::t('app', '当前名称'),
+			'finance_header_name' => Yii::t('app', '表头名称'),
+			'finance_header_where' => Yii::t('app', '比对字段名称'),
+			'finance_order_channel_id' => Yii::t('app', '订单渠道id'),
+            'finance_order_channel_name' => Yii::t('app', '订单渠道名称'),
+            'finance_pay_channel_id' => Yii::t('app', '支付渠道id'),
+            'finance_pay_channel_name' => Yii::t('app', '支付渠道名称'),
+			'create_time' => Yii::t('app', '创建时间'),
+			'finance_header_where' => Yii::t('app', '比对字段'),
+			'finance_uplod_url' => Yii::t('app', '上传xls'),
+			'is_del' => Yii::t('app', '0 正常 1 删除'),
 			
         ];
     }
