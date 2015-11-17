@@ -532,9 +532,13 @@ class OrderController extends BaseAuthController
     {
         $kpiModel = new OrderDispatcherKpi();
         $model = $kpiModel->queryHistoricalKpi(yii::$app->user->id,strtotime(date('y-m-d')));
-        $model->non_assign_order_count = OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
+        if(!$is_mini_boss) {
+            $model->non_assign_order_count = OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
+        }
         return $this->render('assign', [
-            'model' => $model
+            'model' => $model,
+            'is_mini_boss' => $is_mini_boss
         ]);
     }
 
