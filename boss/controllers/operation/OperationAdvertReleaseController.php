@@ -160,27 +160,47 @@ class OperationAdvertReleaseController extends BaseAuthController
     public function actionStepForth()
     {
         $post = Yii::$app->request->post();
-        if ($post){
-            if (!empty($post['advert']) && isset($post['advert']['id'])) {
+        if ($post) {
+
+            //检测是否选择了要发布的广告
+            $mark = 0;
+            foreach ($post['advert'] as $k => $v) {
+                if (isset($v['id']) && $v['id'] > 0) {
+                    $mark += 1;
+                } else {
+                    $mark += 0;
+                }
+            }
+            if (!empty($post['advert']) && $mark > 0) {
+
+                //城市数据
                 $cache = Yii::$app->cache;
                 $citys = $cache->get('__CITY_INFO__');
                 $model = new OperationAdvertRelease();
-                foreach($citys as $k => $city){
-                    $data = [
-                        '_csrf' => $post['_csrf'],
-                        'OperationAdvertRelease' => [
-                            'advert_content_id' => $post['advert']['id'][0],
-                            'city_id' => $city['city_id'],
-                            'city_name' => $city['city_name'],
-                            'starttime' => $post['advert']['starttime'][0],
-                            'endtime' => $post['advert']['endtime'][0],
-                            'created_at' => time(),
-                            'updated_at' => time()
-                        ]
-                    ];
-                    $_model = clone $model;
-                    $_model->load($data);
-                    $_model->save();
+                foreach ($citys as $k => $city) {
+                    foreach ($post['advert'] as $key => $val) {
+                        if (!isset($val['id']) || $val['id'] == '') {
+                            continue;
+                        }
+
+                        //广告数据
+                        $data = [
+                            '_csrf' => $post['_csrf'],
+                            'OperationAdvertRelease' => [
+                                'city_id'   => $city['city_id'],
+                                'city_name' => $city['city_name'],
+                                'advert_content_id' => $val['id'],
+                                'starttime' => $val['starttime'] ? $val['starttime'] : '',
+                                'endtime'   => $val['endtime'] ? $val['endtime'] : '',
+                                'created_at' => time(),
+                                'updated_at' => time()
+                            ]
+                        ];
+
+                        $_model = clone $model;
+                        $_model->load($data);
+                        $_model->save();
+                    }
                 }
                 return $this->redirect(['index']);
             } else {
@@ -224,8 +244,18 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'city_id' => $city_id]);
+        $post = Yii::$app->request->post();
+
+        if ($model->load($post)) {
+            $result = OperationAdvertRelease::updateReleaseAdvInfo($id, $city_id, $post['OperationAdvertRelease']);
+            if ($result['code'] == 200) {
+                return $this->redirect(['view', 'city_id' => $city_id]);
+            } else {
+                \Yii::$app->getSession()->setFlash('default', $result['errmsg']);
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
