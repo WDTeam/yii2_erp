@@ -153,13 +153,7 @@ class CouponRuleController extends Controller
     		}
     		unset($newcoupon);
     	}
-    	
-    	
-       
     	var_dump('11');exit;
-    	
-    	
-    	
     }
     
     /**
