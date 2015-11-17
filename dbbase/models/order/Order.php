@@ -447,6 +447,10 @@ class Order extends ActiveRecord
             }
             $OrderHistory->setAttributes([
                 'order_id' => $this->id,
+                'order_created_at' => $this->created_at,
+                'order_isdel' => $this->isdel,
+                'order_ver' => $this->version,
+
                 'order_code' => $this->order_code,
                 'order_batch_code' => $this->order_batch_code,
                 'order_checked_code' => $this->order_checked_code,
@@ -456,9 +460,6 @@ class Order extends ActiveRecord
                 'order_worker_payoff_code' => $this->order_worker_payoff_code,
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
-                'order_created_at' => $this->created_at,
-                'order_isdel' => $this->isdel,
-                'order_ver' => $this->version,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
                 'order_service_type_name' => $this->order_service_type_name,
@@ -534,8 +535,6 @@ class Order extends ActiveRecord
             'boss\models\order\Order',
             'boss\models\order\OrderSearch',
             'boss\models\order\OrderSearchIndex',
-            'boss\models\AutoOrderSerach',
-            'boss\models\ManualOrderSerach'
         ])){
             echo '非法调用！';
             exit(0);
