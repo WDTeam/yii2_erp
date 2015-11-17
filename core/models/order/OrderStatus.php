@@ -60,6 +60,19 @@ class OrderStatus extends Order
         return false;
     }
 
+    /**
+     * 变更为待人工指派的状态
+     * @param $order
+     * @param array $must_models
+     * @param null $transact
+     */
+    protected static function _updateToWaitManualAssign(&$order, $must_models = [], $transact = null)
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
+        $order->order_flag_sys_assign = 0; //待指派只走人工指派
+        self::_statusChange($order, $status, $must_models, $transact);
+    }
+
 
     /**
      * 批量支付接口
