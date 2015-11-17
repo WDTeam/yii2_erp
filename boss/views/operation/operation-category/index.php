@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'update' => function ($url, $model) {
-                        if (!empty($model['goods_id'])) {
+                        if (!empty($model['goods_id']) && $model['goods_id'] != 1) {
                             return Html::a(
                                 '<span class="btn btn-primary">编辑服务项目</span>',
                                 Yii::$app->urlManager->createUrl([
@@ -74,19 +74,21 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'edit' => function ($url, $model) {
-                        return Html::a(
-                            '<span class="btn btn-primary">编辑服务品类</span>',
-                            Yii::$app->urlManager->createUrl([
-                                '/operation/operation-category/update',
-                                'id' => $model['id'],
-                            ]),
-                            [
-                                'title' => Yii::t('yii', 'Edit'),
-                            ]
-                        );
+                        if (!empty($model['id']) && $model['id'] != 1) {
+                            return Html::a(
+                                '<span class="btn btn-primary">编辑服务品类</span>',
+                                Yii::$app->urlManager->createUrl([
+                                    '/operation/operation-category/update',
+                                    'id' => $model['id'],
+                                ]),
+                                [
+                                    'title' => Yii::t('yii', 'Edit'),
+                                ]
+                            );
+                        }
                     },
                     'delete' => function ($url, $model) {
-                        if (!empty($model['goods_id'])) {
+                        if (!empty($model['goods_id']) && $model['goods_id'] != 1) {
                             return Html::a(
                                 '<span class="btn btn-primary">删除服务项目</span>',
                                 Yii::$app->urlManager->createUrl([
