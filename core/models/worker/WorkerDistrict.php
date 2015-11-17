@@ -6,6 +6,8 @@ use dbbase\models\Shop;
 use Yii;
 use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
+use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "{{%worker_district}}".
  *
@@ -24,6 +26,18 @@ class WorkerDistrict extends \dbbase\models\worker\WorkerDistrict
      */
     public function getDistrict(){
         return $this->hasMany(OperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
+    }
+
+    public static function getDistrictWorkerIds($district_id){
+        if(empty($district_id)){
+            return [];
+        }
+        $result = self::find()->where(['operation_shop_district_id'=>$district_id])->asArray()->all();
+        if($result){
+            return ArrayHelper::getColumn($result,'worker_id');
+        }else{
+            return [];
+        }
     }
 
     /**

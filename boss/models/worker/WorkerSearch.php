@@ -2,6 +2,7 @@
 
 namespace boss\models\worker;
 
+use core\models\worker\WorkerDistrict;
 use core\models\worker\WorkerVacationApplication;
 use Yii;
 use yii\base\Model;
@@ -13,6 +14,8 @@ use boss\models\worker\Worker;
  */
 class WorkerSearch extends Worker
 {
+
+
     public function rules()
     {
         return [
@@ -30,6 +33,14 @@ class WorkerSearch extends Worker
 
     public function search($params)
     {
+        if($params['WorkerSearch']['worker_district']){
+            $workerIdsArr = WorkerDistrict::getDistrictWorkerIds($params['WorkerSearch']['worker_district']);
+            if($workerIdsArr){
+                $params['WorkerSearch']['id'] = $workerIdsArr;
+            }else{
+                $params['WorkerSearch']['id'] = 0;
+            }
+        }
         if(isset($params['WorkerSearch']['worker_auth_status']) && strpos($params['WorkerSearch']['worker_auth_status'],',')!==false){
             $params['WorkerSearch']['worker_auth_status'] = explode(',',$params['WorkerSearch']['worker_auth_status']);
         }
@@ -52,8 +63,6 @@ class WorkerSearch extends Worker
                 'shop_id' => $this->shop_id,
                 'worker_level' => $this->worker_level,
                 'worker_auth_status' => $this->worker_auth_status,
-                //            'worker_ontrial_status' => $this->worker_ontrial_status,
-                //            'worker_onboard_status' => $this->worker_onboard_status,
                 'worker_work_city' => $this->worker_work_city,
                 'worker_work_area' => $this->worker_work_area,
                 'worker_work_lng' => $this->worker_work_lng,
@@ -67,7 +76,6 @@ class WorkerSearch extends Worker
                 'created_ad' => $this->created_ad,
                 'updated_ad' => $this->updated_ad,
             ]);
-
             $query->andFilterWhere(['like', 'worker_name', $this->worker_name])
                 ->andFilterWhere(['like', 'worker_phone', $this->worker_phone])
                 ->andFilterWhere(['like', 'worker_idcard', $this->worker_idcard])
@@ -76,5 +84,11 @@ class WorkerSearch extends Worker
                 ->andFilterWhere(['like', 'worker_work_street', $this->worker_work_street]);
             return $dataProvider;
         }
+    }
+    //设置商圈搜索框的默认值
+    public function getworker_district()
+    {
+        $search = Yii::$app->request->get('WorkerSearch');
+        return isset($search['worker_district'])?$search['worker_district']:'';
     }
 }
