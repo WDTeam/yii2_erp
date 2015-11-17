@@ -33,7 +33,7 @@ class WorkerSearch extends Worker
 
     public function search($params)
     {
-        if($params['WorkerSearch']['worker_district']){
+        if(isset($params['WorkerSearch']['worker_district']) && $params['WorkerSearch']['worker_district']){
             $workerIdsArr = WorkerDistrict::getDistrictWorkerIds($params['WorkerSearch']['worker_district']);
             if($workerIdsArr){
                 $params['WorkerSearch']['id'] = $workerIdsArr;
