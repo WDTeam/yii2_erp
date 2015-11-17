@@ -558,7 +558,8 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id = Yii::$app->request->post('order_id');
         $worker_id = Yii::$app->request->post('worker_id');
-        return Order::manualAssignDone($order_id, $worker_id, Yii::$app->user->id, true);
+        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        return Order::manualAssignDone($order_id, $worker_id, Yii::$app->user->id, !$is_mini_boss);
     }
 
     /**

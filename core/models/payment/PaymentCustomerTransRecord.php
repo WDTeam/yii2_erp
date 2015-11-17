@@ -16,7 +16,15 @@ use yii\behaviors\TimestampBehavior;
 class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerTransRecord
 {
 
-
+    /**
+     * 更新redis缓存
+     * @param $cacheId  缓存名称ID
+     * @param $cacheData    缓存数据
+     */
+    private static function updateRedisCache($cacheId, $cacheData)
+    {
+        Yii::$app->redis->executeCommand('set', [$cacheId,serialize($cacheData)]);
+    }
 
     /**
      * 根据用户ID返回消费记录
@@ -25,7 +33,23 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
      */
     public static function getCustomerPaymentTransRecord($customer_id)
     {
-        return PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->asArray()->all();
+        //如果redis存在数据并且没有链接失败,取redis
+        $cacheId = PaymentCustomerTransRecord::PAYMENT_TRANS_TECORD_PREFIX.$customer_id;
+        try{
+            //取redis数据
+            $data = Yii::$app->redis->executeCommand('get', [$cacheId]);
+            if(!empty($data)){
+                return unserialize($data);
+            }else{
+                //取数据库数据,更新redis缓存
+                $data = PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->orderBy('id DESC')->asArray()->all();
+                self::updateRedisCache($cacheId, $data);
+            }
+        }catch(Exception $e){
+            //取数据库数据
+            $data = PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->orderBy('id DESC')->asArray()->all();
+        }
+        return $data;
     }
 
     /**
@@ -566,10 +590,13 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         {
             //获取优惠券信息
             $customerCoupon = CouponRule::get_couponinfo($data['customer_phone'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
-            $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID
-            $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['data']['coupon_userinfo_code'];   //优惠券CODE
-            $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['data']['coupon_userinfo_price'];   //优惠券金额
-            $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['data']['transaction_id'];   //优惠券交易流水号
+            if(!empty($customerCoupon['data']['coupon_userinfo_id']) && !empty($customerCoupon['data']['coupon_userinfo_code']) && !empty($customerCoupon['data']['transaction_id']))
+            {
+                $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID
+                $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['data']['coupon_userinfo_code'];   //优惠券CODE
+                $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['data']['coupon_userinfo_price'];   //优惠券金额
+                $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['data']['transaction_id'];   //优惠券交易流水号
+            }
         }
 
         //获取扣除余额后的详细信息
@@ -705,10 +732,13 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         {
             //获取优惠券信息
             $customerCoupon = CouponRule::get_couponinfo($data['customer_phone'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
-            $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['coupon_userinfo_id'];   //优惠券ID
-            $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['coupon_userinfo_code'];   //优惠券CODE
-            $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['coupon_userinfo_price'];   //优惠券金额
-            $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['transaction_id'];   //优惠券交易流水号
+            if(!empty($customerCoupon['data']['coupon_userinfo_id']) && !empty($customerCoupon['data']['coupon_userinfo_code']) && !empty($customerCoupon['data']['transaction_id']))
+            {
+                $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID
+                $data['payment_customer_trans_record_coupon_code'] = $customerCoupon['data']['coupon_userinfo_code'];   //优惠券CODE
+                $data['payment_customer_trans_record_coupon_money'] = $customerCoupon['data']['coupon_userinfo_price'];   //优惠券金额
+                $data['payment_customer_trans_record_coupon_transaction_id'] = $customerCoupon['data']['transaction_id'];   //优惠券交易流水号
+            }
         }
 
 

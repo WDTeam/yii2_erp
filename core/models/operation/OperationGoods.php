@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use boss\models\operation\OperationShopDistrictGoods;
+use core\models\operation\OperationShopDistrictGoods;
 use yii\web\UploadedFile;
 
 
@@ -46,7 +46,7 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
         $d = array();
         foreach((array)$data as $key => $value){
             //查找该商品是否在该城市存在，如不存在则返回
-//            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
+            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
 //            if(empty($goodsstatus)){
                 $d[$value['id'].'-'.$value['operation_goods_name']] = $value['operation_goods_name'];
 //            }
@@ -85,10 +85,17 @@ class OperationGoods extends \dbbase\models\operation\OperationGoods
     
     public static function getAllCategory_goods()
     {
-    	$date=self::find()->all();
-    	$goodname=\yii\helpers\ArrayHelper::map($date, 'id', 'operation_goods_name');
-    	return $goodname;
-    
+    	$cacheName = 'getAllCategory_goods';
+    	//判断是否存在缓存
+    	$cache=Yii::$app->cache->get($cacheName);
+    	if($cache){
+    		return $cache;
+    	} else{
+    		$date=self::find()->all();
+    		$goodname=\yii\helpers\ArrayHelper::map($date, 'id', 'operation_goods_name');
+    		Yii::$app->cache->set($cacheName,$goodname,180);
+    		return  $goodname;
+    	}
     }
     
     /**

@@ -44,8 +44,16 @@ class OperationCategory extends \dbbase\models\operation\OperationCategory
 
     public static function getAllCategory()
     {
-        return self::getAllData('', 'sort', 'id,operation_category_name');
-
+    	$cacheName = 'getAllCategory';
+    	//判断是否存在缓存
+    	$cache=Yii::$app->cache->get($cacheName);
+    	 if($cache){
+    	 return $cache;
+    	} else{
+    		$name=self::getAllData('', 'sort', 'id,operation_category_name');
+    		Yii::$app->cache->set($cacheName,$name,180);
+    		return  $name;
+    	}
     }
 
     /**

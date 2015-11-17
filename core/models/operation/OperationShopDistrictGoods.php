@@ -271,7 +271,7 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
         if (isset($city_name) && $city_name != '') {
             $query = new \yii\db\Query();
             $query = $query->select([
-                'osdg.operation_category_name',
+                'oc.operation_category_name',
                 'osdg.operation_shop_district_goods_name',
                 'oc.id',
                 'oc.operation_category_icon',
