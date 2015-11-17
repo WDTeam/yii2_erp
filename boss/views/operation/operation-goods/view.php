@@ -34,6 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_tags:ntext',
             'created_at:datetime',
             'updated_at:datetime',
+            [
+                'attribute'=>'operation_goods_img',
+                'format' => ['image',['width'=>'40','height'=>'40',]],
+                'value' => $model->operation_goods_img
+            ],
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
