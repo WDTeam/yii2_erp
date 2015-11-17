@@ -16,7 +16,15 @@ use yii\behaviors\TimestampBehavior;
 class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerTransRecord
 {
 
-
+    /**
+     * 更新redis缓存
+     * @param $cacheId  缓存名称ID
+     * @param $cacheData    缓存数据
+     */
+    private static function updateRedisCache($cacheId, $cacheData)
+    {
+        Yii::$app->redis->executeCommand('set', [$cacheId,serialize($cacheData)]);
+    }
 
     /**
      * 根据用户ID返回消费记录
@@ -25,7 +33,23 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
      */
     public static function getCustomerPaymentTransRecord($customer_id)
     {
-        return PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->asArray()->all();
+        //如果redis存在数据并且没有链接失败,取redis
+        $cacheId = PaymentCustomerTransRecord::PAYMENT_TRANS_TECORD_PREFIX.$customer_id;
+        try{
+            //取redis数据
+            $data = Yii::$app->redis->executeCommand('get', [$cacheId]);
+            if(!empty($data)){
+                return unserialize($data);
+            }else{
+                //取数据库数据,更新redis缓存
+                $data = PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->orderBy('id DESC')->asArray()->all();
+                self::updateRedisCache($cacheId, $data);
+            }
+        }catch(Exception $e){
+            //取数据库数据
+            $data = PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->orderBy('id DESC')->asArray()->all();
+        }
+        return $data;
     }
 
     /**
