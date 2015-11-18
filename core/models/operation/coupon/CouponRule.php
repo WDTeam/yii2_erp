@@ -129,8 +129,6 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     		return $array;
     	}
 
-    	
-    	return $array;
     	}else{
     	//优惠券数据不匹配
     	$array=[
@@ -285,12 +283,11 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		$now_time=time();
 		$coupon = CouponUserinfo::find()
 		->select('id,coupon_userinfo_price')
-		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel","customer_code=$coupon_code",['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1'],
+		->where(['and',"couponrule_use_end_time>$now_time",'is_del=0','is_used=0',"customer_tel=$customer_tel","coupon_userinfo_code='$coupon_code'",['or', ['and','couponrule_city_limit=2',"couponrule_city_id=$city_id"], 'couponrule_city_limit=1'],
 				['or',['and','couponrule_type=2',"couponrule_service_type_id=$couponrule_service_type_id"],
 				['and','couponrule_type=3',"couponrule_commodity_id=$couponrule_commodity_id"], 'couponrule_type=1']] )
 		->asArray()
 		->one();
-	
 		if(empty($coupon)){
 			return false;
 		}else{

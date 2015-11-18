@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
     		
-    		
     		'finance_refund_pay_flow_num',
     		'finance_refund_money',
     		[
@@ -50,6 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
     		},
     		'width' => "80px",
     		],
+    		'order_use_acc_balance',
+    		'order_use_card_money',
+    		'order_use_promotion_money',
     		'finance_order_channel_title',
     		'finance_pay_channel_title',
     		[

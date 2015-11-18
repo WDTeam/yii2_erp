@@ -589,7 +589,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
         {
             //获取优惠券信息
-            $customerCoupon = CouponRule::get_couponinfo($data['customer_phone'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_phone'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_code']);
             if(!empty($customerCoupon['data']['coupon_userinfo_id']) && !empty($customerCoupon['data']['coupon_userinfo_code']) && !empty($customerCoupon['data']['transaction_id']))
             {
                 $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID
@@ -731,7 +731,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         if( !empty($data['payment_customer_trans_record_coupon_id']) && !empty($data['payment_customer_trans_record_coupon_money']) && $data['payment_customer_trans_record_coupon_money'] > 0 )
         {
             //获取优惠券信息
-            $customerCoupon = CouponRule::get_couponinfo($data['customer_phone'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_id']);
+            $customerCoupon = CouponRule::get_couponinfo($data['customer_phone'], $data['payment_customer_trans_record_coupon_id'], $data['payment_customer_trans_record_coupon_money'], $data['payment_customer_trans_record_eo_order_id'], $data['order_code']);
             if(!empty($customerCoupon['data']['coupon_userinfo_id']) && !empty($customerCoupon['data']['coupon_userinfo_code']) && !empty($customerCoupon['data']['transaction_id']))
             {
                 $data['payment_customer_trans_record_coupon_id'] = $customerCoupon['data']['coupon_userinfo_id'];   //优惠券ID

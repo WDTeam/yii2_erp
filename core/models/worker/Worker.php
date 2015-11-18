@@ -1389,9 +1389,9 @@ class Worker extends \dbbase\models\worker\Worker
      * @return string $shopName 店铺名称
      */
     public static function getShopName($shop_id=0){
-        if(empty($shop_id)) return '';
-        $shop = Shop::findOne($shop_id);
-        return $shop['name'];
+        if($shop_id && $shop = Shop::findOne($shop_id)){
+           return $shop['name'];
+        }
     }
 
     /*

@@ -112,18 +112,22 @@ class OrderManualAssign extends Model
             ])->orderBy(['order_booked_begin_time' => SORT_ASC])->one();
             if (!empty($order)) {
                 //获取到订单后加锁并置为已开始人工派单的状态
-                if ($order->order_is_parent == 1) {
-                    $result = OrderStatus::batchManualAssignStart($order->order_batch_code, $admin_id, true);
-                } else {
-                    $order->order_flag_lock = $admin_id;
-                    $order->order_flag_lock_time = time(); //加锁时间
-                    $order->order_flag_send = $order->orderExtFlag->order_flag_send + 2; //指派时先标记是谁指派不了 1客服指派不了 2小家政指派不了
-                    $order->admin_id = $admin_id;
-                    $result = OrderStatus::manualAssignStart($order, ['OrderExtFlag']);
-                }
-                if ($result) {
-                    OrderPool::remOrderForWorkerPushList($order->id); //从接单大厅中删除此订单
-                    $result_order = Order::findOne($order->id);
+
+                $workers = self::getCanAssignWorkerList($order);
+                if(!isset($workers['code']) && count($workers)>0) { //如果小家政有可接单阿姨
+                    if ($order->order_is_parent == 1) {
+                        $result = OrderStatus::batchManualAssignStart($order->order_batch_code, $admin_id, true);
+                    } else {
+                            $order->order_flag_lock = $admin_id;
+                            $order->order_flag_lock_time = time(); //加锁时间
+                            $order->order_flag_send = $order->orderExtFlag->order_flag_send + 2; //指派时先标记是谁指派不了 1客服指派不了 2小家政指派不了
+                            $order->admin_id = $admin_id;
+                            $result = OrderStatus::manualAssignStart($order, ['OrderExtFlag']);
+                    }
+                    if ($result) {
+                        OrderPool::remOrderForWorkerPushList($order->id); //从接单大厅中删除此订单
+                        $result_order = Order::findOne($order->id);
+                    }
                 }
             }
         }

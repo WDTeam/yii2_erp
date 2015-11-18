@@ -247,10 +247,8 @@ class WorkerController extends BaseAuthController
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
         //添加阿姨
         }else{
-            //$workerModel = Worker::findAll(['isdel'=>0]);
             $workerModel = new Worker();
             $workerModel->load(Yii::$app->request->post());
-            $workerModel->isdel = 0;
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
         }
     }
