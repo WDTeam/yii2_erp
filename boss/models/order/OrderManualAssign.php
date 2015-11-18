@@ -10,6 +10,7 @@ namespace boss\models\order;
 use core\models\customer\Customer;
 use core\models\operation\OperationPayChannel;
 use core\models\order\OrderManualAssign as OrderManualAssignModel;
+use core\models\order\OrderSearch;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
@@ -29,6 +30,11 @@ class OrderManualAssign extends OrderManualAssignModel
         return self::_formatOrder($order);
     }
 
+    public static function getAssignOrderByCode($order_code)
+    {
+        $order = OrderSearch::getOneByCode($order_code);
+        return self::_formatOrder($order);
+    }
     /**
      * 获取待小家政指派的订单
      * 订单状态为系统指派失败的订单

@@ -42,6 +42,22 @@ class OrderWorkerRelation extends OrderWorkerRelationModel
     }
 
     /**
+     * 取消指派
+     * @param $order_id
+     * @param $worker_id
+     * @param $admin_id
+     * @param $memo
+     * @return bool
+     */
+    public static function workerCancel($order_id,$worker_id,$admin_id,$memo)
+    {
+        //修改阿姨拒单率拒绝订单数量
+        WorkerStat::updateWorkerStatRefuseNum($worker_id,1);
+        $status = OrderOtherDict::NAME_CANCEL_ASSIGN;
+        return self::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,$admin_id);
+    }
+
+    /**
      * IVR已推送
      * @param $order_id
      * @param $worker_id

@@ -543,6 +543,31 @@ class OrderController extends BaseAuthController
     }
 
     /**
+     * 指派阿姨和改派阿姨
+     * @param $id
+     * @return string
+     */
+    public function actionAssignWorker($id)
+    {
+        $model = OrderManualAssign::getAssignOrderByCode($id);
+        if(in_array($model['order']->orderExtStatus->order_status_dict_id,[
+            OrderStatusDict::ORDER_WAIT_ASSIGN,
+            OrderStatusDict::ORDER_SYS_ASSIGN_START,
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER,
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER,
+        ])) {
+            return $this->render('assign-worker', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
      * 不能指派
      * @return array|bool
      */
@@ -576,6 +601,18 @@ class OrderController extends BaseAuthController
         $worker_id = Yii::$app->request->post('worker_id');
         $memo = Yii::$app->request->post('memo');
         return OrderWorkerRelation::workerRefuse($order_id, $worker_id, Yii::$app->user->id, $memo);
+    }
+
+    /**
+     * 取消指派
+     * @return bool
+     */
+    public function actionWorkerCancel()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+        $worker_id = Yii::$app->request->post('worker_id');
+        $memo = Yii::$app->request->post('memo');
+        return Order::cancelAssign($order_id,$worker_id,Yii::$app->user->id,$memo);
     }
 
     /**
