@@ -33,7 +33,7 @@ class OperationAdvertContent extends \core\models\operation\OperationAdvertConte
             [['operation_advert_picture_text', 'operation_advert_url'], 'string', 'max' => 255],
             [['operation_advert_content_name'], 'required'],
             [['position_id'], 'integer', 'min' => 1],
-            ['operation_advert_picture_text', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
+            ['operation_advert_picture_text', 'image', 'extensions' => ['png', 'jpg', 'gif'], 'maxHeight' => 1024, 'maxWidth' => 1024, 'maxSize' => 1024*1024*2],
             ['operation_advert_picture_text', 'required', 'on' => ['create']],
         ];
     }

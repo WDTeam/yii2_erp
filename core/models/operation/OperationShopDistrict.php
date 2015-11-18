@@ -65,6 +65,7 @@ class OperationShopDistrict extends \dbbase\models\operation\OperationShopDistri
                 $model->operation_city_name = $city_name;
                 $model->operation_area_id = $values['operation_area_id'];
                 $model->operation_area_name = $values['operation_area_name'];
+                $model->created_at = time();
 
                 $model->insert();
                 $insert_id = $model->id;
@@ -86,6 +87,7 @@ class OperationShopDistrict extends \dbbase\models\operation\OperationShopDistri
                         $coordinateModel->operation_shop_district_coordinate_start_latitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_start_latitude'];
                         $coordinateModel->operation_shop_district_coordinate_end_longitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_end_longitude'];
                         $coordinateModel->operation_shop_district_coordinate_end_latitude = $v['l_n_t'][$i]['operation_shop_district_coordinate_end_latitude'];
+                        $coordinateModel->created_at = time();
 
                         $coordinateModel->insert();
                     }

@@ -126,6 +126,12 @@ class OperationShopDistrictGoods extends \dbbase\models\operation\OperationShopD
                     $model->operation_spec_info = $operation_spec_info;
                     $model->operation_spec_strategy_unit = $operation_spec_strategy_unit;
 
+                    if ($user_action == 'edit') {
+                        $model->updated_at = time();
+                    } elseif ($user_action == 'online') {
+                        $model->created_at = time();
+                    }
+
                     $model->insert();
                 }
             }
