@@ -151,7 +151,6 @@ class FinanceRefundController extends BaseAuthController
     {
         $requestModel = Yii::$app->request->get();
         $model = FinanceRefund::findOne($requestModel['id']);
-
         if ($requestModel['edit'] == 'baksite') {
             //退款
             if (!isset($model->finance_refund_code) || !isset($model->customer_id)) {
@@ -159,13 +158,18 @@ class FinanceRefundController extends BaseAuthController
                 return $this->redirect(['index', 'id' => $requestModel['id']]);
             }
             //通知胜强退款(订单ID,用户ID)
-            $s = Payment::orderRefund($model->finance_refund_pay_flow_num, $model->customer_id);
+            $s = Payment::orderRefund($model->order_id, $model->customer_id);
+            
+            
             if ($s['status'] == 1) {
                 //成功
                 $model->isstatus = '4';
                 //退款成功后，退还优惠券
                \core\models\operation\coupon\CouponRule::get_status_save($model->finance_refund_tel,$model->finance_refund_pay_flow_num);
             
+               
+               
+               
             } else {
                 //失败就回滚
                 $model->isstatus = '2';
