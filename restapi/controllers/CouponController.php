@@ -368,55 +368,58 @@ class CouponController extends \restapi\components\Controller
     /**
      * @api {GET} /coupon/app-coupons {GET} /coupon/app-coupons（100%）
      *
-     * @apiDescription 获取用户优惠券假数据 
+     * @apiDescription 获取用户优惠券 [假数据 ] (郝建设)
      * @apiName actionAppCoupons
      * @apiGroup coupon
      * 
      * @return string 
      */
     public function actionAppCoupons()
-    {
-        $strint = '{
-                    code: 1,
-                    msg: "操作成功",
-                    ret: {
-                    coupons:[
-                            { "id": "1",
-                                                  "coupon_userinfo_name": "优惠券名称",
-                                                  "coupon_userinfo_price": "1.01",
-                                                  "couponrule_use_start_time": "1990-05-03",
-                                                  "couponrule_use_end_time": "1990-05-04",
-                                                  "couponrule_type": "1",
-                                                  "couponrule_service_type_id": "1",
-                                                  "couponrule_commodity_id": "1"
-                                          "coupon_overdue":"0"
-                            },
-                            { "id": "2",
-                                                  "coupon_userinfo_name": "优惠券名称",
-                                                  "coupon_userinfo_price": "2.00",
-                                                  "couponrule_use_start_time": "1990-05-06",
-                                                  "couponrule_use_end_time": "1990-05-07",
-                                                  "couponrule_type": "2",
-                                                  "couponrule_service_type_id": "2",
-                                                  "couponrule_commodity_id": "2"
-                                          "coupon_overdue":"0"
-                            },
-                                  { "id": "3",
-                                                  "coupon_userinfo_name": "优惠券名称",
-                                                  "coupon_userinfo_price": "3.00",
-                                                  "couponrule_use_start_time": "1990-05-08",
-                                                  "couponrule_use_end_time": "1990-05-09",
-                                                  "couponrule_type": "3",
-                                                  "couponrule_service_type_id": "3",
-                                                  "couponrule_commodity_id": "3"
-                                          "coupon_overdue":"1"
-                            }
-                                  ]
-                    },
-                    alertMsg: "操作成功"
-                  }';
-
-        return $strint;
+    { 
+        $array = array(
+            'code' => 1,
+            'msg' => '操作成功',
+            'alertMsg' => "操作成功",
+            'coupon_introduce' => "www.baidu.com",
+            'ret' => array(
+                'coupons' => array(
+                    0 => array(
+                        "coupon_id" => "1",
+                        "coupon_userinfo_name" => "小波波1",
+                        "coupon_userinfo_price" => "1.01",
+                        "couponrule_use_start_time" => "1990-05-03",
+                        "couponrule_use_end_time" => "1990-05-04",
+                        "couponrule_type" => "1",
+                        "couponrule_service_type_id" => "1",
+                        "couponrule_commodity_id" => "1",
+                        "is_coupon_expires" => "0"
+                    ),
+                    1 => array(
+                        "coupon_id" => "2",
+                        "coupon_userinfo_name" => "小波波2",
+                        "coupon_userinfo_price" => "2.00",
+                        "couponrule_use_start_time" => "1990-05-06",
+                        "couponrule_use_end_time" => "1990-05-07",
+                        "couponrule_type" => "2",
+                        "couponrule_service_type_id" => "2",
+                        "couponrule_commodity_id" => "2",
+                        "is_coupon_expires" => "0"
+                    ),
+                    3 => array(
+                        "coupon_id" => "3",
+                        "coupon_userinfo_name" => "小波波3",
+                        "coupon_userinfo_price" => "3.00",
+                        "couponrule_use_start_time" => "1990-05-08",
+                        "couponrule_use_end_time" => "1990-05-09",
+                        "couponrule_type" => "3",
+                        "couponrule_service_type_id" => "3",
+                        "couponrule_commodity_id" => "3",
+                        "is_coupon_expires" => "0"
+                    )
+                )
+            )
+        );
+        return $this->send($array, "获取优惠券成功", 1, 200, null, '获取优惠券成功');
     }
 
 }
