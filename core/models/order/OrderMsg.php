@@ -68,4 +68,37 @@ class OrderMsg extends Model
         }
     }
 
+    public static function cancelAssignWorker($order)
+    {
+        try {
+            if ($order->orderExtWorker->worker_id > 0) {
+                $worker_msg = "亲爱的阿姨，" . date('y年m月d日H点i分', $order->order_booked_begin_time) . "的订单已被取消，请重新安排您的工作时间，如有疑问请联系e家洁客服：4006767636";
+                Yii::$app->sms->send($order->orderExtWorker->order_worker_phone, $worker_msg);
+            }
+        } catch (Exception $e) {
+
+        }
+    }
+
+    public static function updateAddress($order,$from_address,$to_address)
+    {
+        if ($order->orderExtWorker->worker_id > 0) {
+            $worker_msg = "地点更改：亲爱的阿姨，" . date('y年m月d日H点i分', $order->order_booked_begin_time) . "的订单地点{$from_address}改为{$to_address}，请及时查看，如有疑问请联系e家洁客服：4006767636";
+            Yii::$app->sms->send($order->orderExtWorker->order_worker_phone, $worker_msg);
+        }
+    }
+
+    public static function updateBookedTime($order,$from_time,$to_time)
+    {
+
+        try {
+            if ($order->orderExtWorker->worker_id > 0) {
+                $worker_msg = "时间更改：亲爱的阿姨，" . date('y年m月d日H点i分', $order->$from_time) . "订单时间改为" . date('y年m月d日H点i分', $order->$to_time) . "，请及时查看，如有疑问请联系e家洁客服：4006767636";
+                Yii::$app->sms->send($order->orderExtWorker->order_worker_phone, $worker_msg);
+            }
+        } catch (Exception $e) {
+
+        }
+    }
+
 }

@@ -1113,6 +1113,7 @@ class Order extends OrderModel
             return false;
         }
         $order->setAttributes(['admin_id' => $admin_id]);
+        $from_time = $order->order_booked_begin_time;
         if (!empty($worker_id) && $order->orderExtWorker->worker_id == $worker_id) { //如果修改阿姨没有变修改预约时间
             $order->setAttributes([
                 'order_booked_begin_time' => $begin_time,
@@ -1145,7 +1146,12 @@ class Order extends OrderModel
                 $order->addError('order_booked_begin_time', "该时间段暂时没有可用阿姨！");
                 return false;
             }
-            return OrderStatus::_updateToWaitAssign($order, ['OrderExtWorker']);
+            if(OrderStatus::_updateToWaitAssign($order, ['OrderExtWorker'])){
+                $to_time = $order->order_booked_begin_time;
+                OrderMsg::updateBookedTime($order,$from_time,$to_time);
+                return true;
+            }
+            return false;
         }
     }
 
@@ -1190,6 +1196,7 @@ class Order extends OrderModel
         ]);
         if(OrderStatus::_updateToWaitManualAssign($order, ['OrderExtWorker'])) {
             OrderWorkerRelation::workerCancel($order_id, $worker_id, $admin_id, $memo);
+            OrderMsg::cancelAssignWorker($order); //发送短信
             return ['status'=>true];
         }
         return ['status'=>false,'error_code'=>'542302','msg'=>$order->errors];
@@ -1262,7 +1269,7 @@ class Order extends OrderModel
             $order->addError('order_address', '修改地址信息失败！');
             return $order;
         }
-
+        $from_address = $order->order_address;
         $order->setAttributes([
             'address_id' => $address_id,
             'order_address' => (empty($address->operation_province_name) ? '' : $address->operation_province_name . ',')
@@ -1272,7 +1279,13 @@ class Order extends OrderModel
             'order_lat' => $address->customer_address_latitude,
             'order_lng' => $address->customer_address_longitude
         ]);
-        $order->doSave();
+
+        if($order->doSave()){
+            $to_address = $order->order_address;
+            OrderMsg::updateAddress($order,$from_address,$to_address);
+            return true;
+        }
+
 
         return $order;
     }
