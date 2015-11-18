@@ -635,9 +635,9 @@ class OrderController extends BaseAuthController
     public function actionSaveAddress($address_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $province_id = Yii::$app->request->post('province_id');
-        $city_id = Yii::$app->request->post('city_id');
-        $county_id = Yii::$app->request->post('county_id');
+        $province_id = intval(Yii::$app->request->post('province_id'));
+        $city_id = intval(Yii::$app->request->post('city_id'));
+        $county_id = intval(Yii::$app->request->post('county_id'));
         $province_name = Yii::$app->request->post('province_name');
         $city_name = Yii::$app->request->post('city_name');
         $county_name = Yii::$app->request->post('county_name');
@@ -645,6 +645,9 @@ class OrderController extends BaseAuthController
         $nickname = Yii::$app->request->post('nickname');
         $phone = Yii::$app->request->post('phone');
         $customer_id = Yii::$app->request->post('customer_id');
+        if(!$province_id||!$city_id||!$county_id||!$detail){
+            return ['code' => 500, 'error' => '地址信息填写不完整,请检查'];
+        }
         if(!empty($province_name) && !empty($city_name) && !empty($county_name) && !empty($detail)) {
             if ($address_id > 0) {
                 //修改

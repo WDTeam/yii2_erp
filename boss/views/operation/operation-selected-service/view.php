@@ -32,6 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'selected_service_area_standard', 'value' => ($model->selected_service_area_standard == 1) ? '面积小于100平米' : '面积小于100平米'],
             'created_at:datetime',
             'updated_at:datetime',
+            [
+                'attribute'=>'selected_service_photo',
+                'format' => ['image',['width'=>'50','height'=>'50',]],
+                'value' => $model->selected_service_photo
+            ],
         ],
         'deleteOptions'=>[
             'url'=>['delete', 'id' => $model->id],

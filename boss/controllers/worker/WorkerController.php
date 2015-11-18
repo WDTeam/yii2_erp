@@ -247,10 +247,8 @@ class WorkerController extends BaseAuthController
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone']);
         //添加阿姨
         }else{
-            //$workerModel = Worker::findAll(['isdel'=>0]);
             $workerModel = new Worker();
             $workerModel->load(Yii::$app->request->post());
-            $workerModel->isdel = 0;
             return \yii\bootstrap\ActiveForm::validate($workerModel,['worker_phone','worker_idcard']);
         }
     }
@@ -359,31 +357,6 @@ class WorkerController extends BaseAuthController
     }
 
 
-
-
-    /**
-     * 通过搜索关键字获取门店信息
-     * 联想搜索通过ajax返回
-     * @param q string 关键字
-     * @return result array 门店信息
-     */
-    public function actionShowShop($city_id=null,$q = null)
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $out = ['results' => ['id' => '', 'text' => '']];
-        $condition = '1=1';
-        if($city_id){
-            $condition .= ' and city_id='.$city_id;
-        }
-        if($q){
-            $condition .=" and name like'%$q%'";
-        }
-
-        $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
-        $out['results'] = array_values($shopResult);
-        //$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
-        return $out;
-    }
 
     public function actionShowDistrict($city_id=null,$name=null){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

@@ -148,8 +148,20 @@ $(document).on("click",".save_address_btn",function(){
         alert('请先选择客户再添加地址！');
         return false;
     }
+    if(province_id==false){
+        alert('请选择地区省份！');
+        return false;
+    }
+    if(city_id==false){
+        alert('请选择城市！');
+        return false;
+    }
+    if(county_id==false){
+        alert('请选择城市区域！');
+        return false;
+    }
     if(detail==""){
-        alert('地址信息不完整！');
+        alert('详细地址信息不完整！');
         return false;
     }
     $.ajax({
@@ -177,6 +189,9 @@ $(document).on("click",".save_address_btn",function(){
                     '</label>' +
                     '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
                 );
+            }else{
+               alert(msg.error);
+               return false;
             }
         }
     });
@@ -366,7 +381,8 @@ function getCustomerInfo(){
                             } else {
                                 address_list = address;
                                 for (var k in address) {
-                                    var v = address[k];
+                                    console.log(address);
+                                var v = address[k];
                                     $("#order-address_id").append(
                                         '<div class="radio" id="address_' + v.id + '"><label class="col-sm-7"><input type="radio" value="' + v.id + '" '
                                         + ' name="Order[address_id]"> '

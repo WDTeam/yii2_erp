@@ -30,28 +30,40 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
     		
     		'finance_refund_pay_flow_num',
-    		'finance_refund_money',
     		[
     		'format' => 'raw',
-    		'label' => '订单金额',
+    		'label' => '退款金额',
     		'value' => function ($dataProvider) {
-    	    $sum=($dataProvider->finance_refund_money)+($dataProvider->finance_refund_discount);
+    			$sum=($dataProvider->finance_refund_money)+($dataProvider->order_use_acc_balance)+($dataProvider->order_use_card_money)+($dataProvider->finance_refund_discount);
     			return $sum;
     		},
     		'width' => "80px",
     		],
-    		'finance_refund_discount',
+    		[
+    		'format' => 'raw',
+    		'label' => '订单金额',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->order_money;
+    		},
+    		'width' => "80px",
+    		],
+    		'finance_refund_discount',//优惠价order_use_coupon_money
+    		
     		[
     		'format' => 'raw',
     		'label' => '实收金额',
     		'value' => function ($dataProvider) {
-    			return $dataProvider->finance_refund_money;
+    			$sum=($dataProvider->finance_refund_money)+($dataProvider->order_use_acc_balance)+($dataProvider->order_use_card_money);
+    			return $sum;
     		},
     		'width' => "80px",
     		],
+    		
     		'order_use_acc_balance',
     		'order_use_card_money',
     		'order_use_promotion_money',
+    		
+    		
     		'finance_order_channel_title',
     		'finance_pay_channel_title',
     		[

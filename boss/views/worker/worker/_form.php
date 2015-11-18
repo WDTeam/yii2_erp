@@ -74,17 +74,17 @@ use core\models\worker\WorkerIdentityConfig;
                     'allowClear' => true,
                     'minimumInputLength' => 0,
                     'ajax' => [
-                        'url' => Url::to(['show-shop']),
+                        'url' => Url::to(['shop/shop/search-by-name']),
                         'dataType' => 'json',
                         'data' => new JsExpression('function(params) { return {
                             city_id:$("#worker-worker_work_city").val(),
-                            q:params.term,
+                            name:params.term,
                       };
                     }')
                     ],
                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                    'templateResult' => new JsExpression('function(city) { return city.text; }'),
-                    'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+                    'templateResult' => new JsExpression('function(city) { return city.name; }'),
+                    'templateSelection' => new JsExpression('function (city) { return city.name; }'),
                 ],
             ]); ?>
 

@@ -33,12 +33,13 @@ class OperationSelectedService extends \core\models\operation\OperationSelectedS
     {
         return [
             [['selected_service_scene', 'selected_service_area', 'selected_service_sub_area', 'selected_service_standard', 'selected_service_unit', 'selected_service_area_standard'], 'required'],
-            [['selected_service_goods_id', 'selected_service_area_standard', 'selected_service_unit', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
+            [['selected_service_goods_id', 'selected_service_area_standard', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
+            [['selected_service_unit'], 'integer', 'max' => 9999],
             [['selected_service_price'], 'number'],
             [['selected_service_scene', 'selected_service_area'], 'string', 'max' => 32],
             [['selected_service_sub_area'], 'string', 'max' => 64],
             [['selected_service_standard'], 'string', 'max' => 128],
-            ['selected_service_photo', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
+            ['selected_service_photo', 'image', 'extensions' => ['png', 'jpg', 'gif'], 'maxHeight' => 1024, 'maxWidth' => 1024, 'maxSize' => 1024*1024],
             ['selected_service_photo', 'required', 'on' => ['create']],
         ];
     }

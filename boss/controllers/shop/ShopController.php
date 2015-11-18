@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\base\Object;
 use core\models\shop\ShopCustomeRelation;
+use core\models\auth\AuthItem;
 
 /**
  * ShopController implements the CRUD actions for Shop model.
@@ -161,13 +162,19 @@ class ShopController extends BaseAuthController
     /**
      * 通过名称获取列表
      */
-    public function actionSearchByName($name='', $shop_manager_id=null)
+    public function actionSearchByName($name='', $shop_manager_id=null, $city_id=null)
     {
         $query = Shop::find()
         ->select(['id', 'name'])
         ->andFilterWhere(['like', 'name', $name]);
+        if(isset($city_id)){
+            $query->andFilterWhere(['=', 'city_id', $city_id]);
+        }
         if(isset($shop_manager_id)){
             $query->andFilterWhere(['=', 'shop_manager_id', $shop_manager_id]);
+        }
+        if(\Yii::$app->user->identity->isMiNiBoss()){
+            $query->andWhere(['in', 'id', \Yii::$app->user->identity->getShopIds()]);
         }
         $models = $query->limit(50)->all();
         echo Json::encode(['results'=>$models]);
