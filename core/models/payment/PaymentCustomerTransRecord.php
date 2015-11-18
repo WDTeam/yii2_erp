@@ -295,6 +295,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //优惠券
         $transRecord["payment_customer_trans_record_coupon_id"] = !empty($orderInfo['coupon_id']) ? $orderInfo['coupon_id'] : 0;    //优惠券ID
+        $transRecord["payment_customer_trans_record_coupon_code"] = !empty($orderInfo['order_use_coupon_code']) ? $orderInfo['order_use_coupon_code'] : '';//优惠券编码
         $transRecord["payment_customer_trans_record_coupon_money"] = $orderInfo['order_use_coupon_money'];    //优惠券金额
 
         //余额支付
