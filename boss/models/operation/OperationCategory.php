@@ -43,7 +43,8 @@ class OperationCategory extends \core\models\operation\OperationCategory
             [['operation_category_parent_id', 'sort', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
             [['operation_category_icon', 'operation_category_price_description'], 'string', 'max' => 128],
             [['operation_category_url'], 'string', 'max' => 258],
-            ['operation_category_icon', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
+            //图片类型:png/jpg/gif;最大高度:96px,最大宽度96px;图片最大大小:50KB;
+            ['operation_category_icon', 'image', 'extensions' => ['png', 'jpg', 'gif'], 'maxHeight' => 96, 'maxWidth' => 96, 'maxSize' => 1024*50],
             ['operation_category_icon', 'required', 'on' => ['create']],
         ];
     }
@@ -56,7 +57,7 @@ class OperationCategory extends \core\models\operation\OperationCategory
         return [
             'id' => Yii::t('app', '编号'),
             'operation_category_name' => Yii::t('app', '服务品类名称'),
-            'operation_category_icon' => Yii::t('app', '服务品类图片'),
+            'operation_category_icon' => Yii::t('app', '服务品类图片(宽高不得超过96x96)'),
             'operation_category_introduction' => Yii::t('app', '服务品类简介'),
             'operation_category_price_description' => Yii::t('app', '价格备注'),
             'operation_category_url' => Yii::t('app', '品类跳转地址'),
