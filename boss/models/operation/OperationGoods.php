@@ -67,13 +67,13 @@ class OperationGoods extends \core\models\operation\OperationGoods
     {
         return [
             'id' => Yii::t('app', '编号'),
-            'operation_goods_name' => Yii::t('app', '商品名称'),
+            'operation_goods_name' => Yii::t('app', '服务项目名称'),
 
             'operation_category_id' => Yii::t('app', '对应服务品类编号（所属分类编号冗余）'),
             'operation_category_ids' => Yii::t('app', '服务品类'),
             'operation_category_name' => Yii::t('app', '服务品类名称'),
-            'operation_goods_introduction' => Yii::t('app', '商品简介'),
-            'operation_goods_english_name' => Yii::t('app', '商品英文名称'),
+            'operation_goods_introduction' => Yii::t('app', '服务项目简介'),
+            'operation_goods_english_name' => Yii::t('app', '项目英文名称'),
             'operation_goods_start_time' => Yii::t('app', '开始服务时间'),
             'operation_goods_end_time' => Yii::t('app', '结束服务时间'),
             'operation_goods_service_time_slot' => Yii::t('app', '可服务时间段（序列化方式存储）'),
@@ -91,7 +91,7 @@ class OperationGoods extends \core\models\operation\OperationGoods
             'operation_goods_market_price' => Yii::t('app', '市场价格(元)'),
             'operation_tags' => Yii::t('app', '个性标签'),
 
-            'operation_goods_img' => Yii::t('app', '商品图片'),
+            'operation_goods_img' => Yii::t('app', '服务项目图片'),
             'operation_goods_app_ico' => Yii::t('app', 'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)'),
             'operation_goods_app_homepage_max_ico' => Yii::t('app', 'APP端首页大图'),
             'operation_goods_app_homepage_min_ico' => Yii::t('app', 'APP端首页小图'),
