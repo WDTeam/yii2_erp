@@ -730,7 +730,12 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     private static function getNowTimes(){
-         $now_time  = time();
+         /**
+          * 当前时间向后延长2小时,8点钟不能下8点的订单,需给阿姨留赶路的时间
+          * create by wzg
+          * date 2015-11-16
+          */
+         $now_time  = time()+7200;
          $day_time_units = self::getDayTimes();
          if($now_time<=strtotime(date('Y-m-d').'08:00')){
              return [];
