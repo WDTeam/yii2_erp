@@ -1564,7 +1564,13 @@ class Payment extends \dbbase\models\payment\Payment
             if( !empty($orderInfo['order_use_acc_balance']) && $orderInfo['order_use_acc_balance'] > 0 )
             {
                 //余额支付退款
-                $model->paymentTransRecord(['customer_id'=>$customer_id, 'order_id'=>$order_id,'payment_type'=>4]);
+                $status = $model->paymentTransRecord(['customer_id'=>$customer_id, 'order_id'=>$order_id,'payment_type'=>4]);
+                if($status)
+                {
+                    return ['status'=>1,'info'=>'已确认退记录完成','data'=>''];
+                }else{
+                    return ['status'=>0,'info'=>'数据异常状态','data'=>''];
+                }
             }
             elseif( !empty($orderInfo['card_id']) && !empty($orderInfo['order_use_card_money']) && $orderInfo['order_use_card_money'] > 0 )
             {
