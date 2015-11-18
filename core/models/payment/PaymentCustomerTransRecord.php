@@ -94,6 +94,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'card_id',
                 'order_use_card_money',
                 'coupon_id',
+                'order_coupon_code',
                 'order_use_coupon_money',
                 'order_use_promotion_money',
                 'order_pop_order_money'
@@ -159,7 +160,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
             $transRecord["payment_customer_trans_record_service_card_pay"] = $data['order_use_card_money'];     //服务卡支付
 
             $transRecord["payment_customer_trans_record_coupon_id"] = !empty($data['coupon_id']) ? $data['coupon_id'] : '';    //优惠券ID
-            $transRecord["payment_customer_trans_record_coupon_code"] = !empty($data['order_use_coupon_code']) ? $data['order_use_coupon_code'] : '';//优惠券编码
+            $transRecord["payment_customer_trans_record_coupon_code"] = !empty($data['order_coupon_code']) ? $data['order_coupon_code'] : '';//优惠券编码
             $transRecord["payment_customer_trans_record_coupon_money"] = $data['order_use_coupon_money'];    //优惠券金额
 
             $transRecord["payment_customer_trans_record_online_balance_pay"] = $data['order_use_acc_balance'];    //余额支付
@@ -295,7 +296,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
 
         //优惠券
         $transRecord["payment_customer_trans_record_coupon_id"] = !empty($orderInfo['coupon_id']) ? $orderInfo['coupon_id'] : 0;    //优惠券ID
-        $transRecord["payment_customer_trans_record_coupon_code"] = !empty($orderInfo['order_use_coupon_code']) ? $orderInfo['order_use_coupon_code'] : '';//优惠券编码
+        $transRecord["payment_customer_trans_record_coupon_code"] = !empty($orderInfo['order_coupon_code']) ? $orderInfo['order_coupon_code'] : '';//优惠券编码
         $transRecord["payment_customer_trans_record_coupon_money"] = $orderInfo['order_use_coupon_money'];    //优惠券金额
 
         //余额支付
