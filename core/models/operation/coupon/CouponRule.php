@@ -205,18 +205,18 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 			$coupon_code_save->order_code='0';
 			$coupon_code_save->updated_at=time();
 			$datasave=$coupon_code_save->save();
-			if(!$datasave){ 
+			/* if(!$datasave){ 
 			//记录日志	
 			$newcoupon=date('Y-m-d H:i:s',time()).'优惠券退款失败 原因记录有误';
 			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND);
 			}else{
 			$newcoupon=date('Y-m-d H:i:s',time()).'优惠券退款成功电话是'.$tel.'订单号是'.$order_code;
 			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND);
-			}
+			} */
 		}else{
 			//无此优惠券
-			$newcoupon=date('Y-m-d H:i:s',time()).'无此优惠券'.$tel.'订单号是'.$order_code;
-			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND);
+			/* $newcoupon=date('Y-m-d H:i:s',time()).'无此优惠券'.$tel.'订单号是'.$order_code;
+			file_put_contents('CouponUserinfotui_pay.txt',$newcoupon."\n",FILE_APPEND); */
 			return true;
 		}
 	}
