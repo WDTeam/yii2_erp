@@ -47,11 +47,13 @@ class OrderStatus extends Order
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         if (self::_statusChange($order, $status, $must_models, $transact)) {
-            //支付成功后如果需要系统派单则把订单放入订单池
-            if ($order->orderExtFlag->order_flag_sys_assign == 1) {
-                // 开始系统指派
-                if (self::_sysAssignStart($order->id)) {
-                    OrderPool::addOrder($order->id);
+            if (in_array($order->order_service_item_name, Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
+                //支付成功后如果需要系统派单则把订单放入订单池
+                if ($order->orderExtFlag->order_flag_sys_assign == 1) {
+                    // 开始系统指派
+                    if (self::_sysAssignStart($order->id)) {
+                        OrderPool::addOrder($order->id);
+                    }
                 }
             }
             return true;

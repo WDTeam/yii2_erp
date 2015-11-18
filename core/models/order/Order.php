@@ -228,9 +228,7 @@ class Order extends OrderModel
                     if ($paymentCustomerTransRecord) {
                         $order_model = OrderSearch::getOne($this->id);
                         $order_model->admin_id = $attributes['admin_id'];
-                        if (in_array($this->order_service_item_name, Yii::$app->params['order']['USE_ORDER_FLOW_SERVICE_ITEMS'])) {//TODO 判断是否使用订单流程
-                            OrderStatus::_payment($order_model, ['OrderExtPay']);
-                        }
+                        OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }else{
                         $this->addError('error_code','540115');
                     }
