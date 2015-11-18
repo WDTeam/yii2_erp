@@ -54,9 +54,9 @@ class Worker extends \core\models\worker\Worker
 
 
     /**
-     * 通过id 获取worker model
+     * 获取单个阿姨Model
      * @param integer $id
-     * @param integer $hasExt 是否关联阿姨附属表Model
+     * @param bool $hasExt 是否关联阿姨附属表Model
      * @return model
      * @throws NotFoundHttpException if not found
      */
@@ -70,17 +70,23 @@ class Worker extends \core\models\worker\Worker
         if ($model!== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('阿姨不存在哦~');
         }
     }
 
-
-    public static function findAllModel($filterCondition=[],$isAuth=false){
+    /**
+     * 获取多个阿姨Model
+     * @param array $filterCondition
+     * @param bool|false $isRule
+     * @return static[]
+     * @throws ErrorException
+     */
+    public static function findAllModel($filterCondition=[],$isRule=false){
         if(!is_array($filterCondition)){
             throw new ErrorException('请传递数组参数');
         }
         $defaultCondition['isdel'] = 0;
-        if($isAuth!==false && \Yii::$app->user->identity->isNotAdmin()){
+        if($isRule!==false && \Yii::$app->user->identity->isNotAdmin()){
             $shopIds=Yii::$app->user->identity->getShopIds();
             $defaultCondition['shop_id'] = $shopIds;
         }
@@ -89,12 +95,19 @@ class Worker extends \core\models\worker\Worker
         return $model;
     }
 
-    public static function findAllQuery($filterCondition=[],$isAuth=true){
+    /**
+     * 获取多个阿姨Query
+     * @param array $filterCondition
+     * @param bool|true $isRule //是否控制权限 true控制权限(只返回当前登陆家政公司的阿姨) or false不控制权限
+     * @return $this
+     * @throws ErrorException
+     */
+    public static function findAllQuery($filterCondition=[],$isRule=true){
         if(!is_array($filterCondition)){
             throw new ErrorException('请传递数组参数');
         }
         $defaultCondition['isdel'] = 0;
-        if($isAuth==true && \Yii::$app->user->identity->isNotAdmin()){
+        if($isRule==true && \Yii::$app->user->identity->isNotAdmin()){
             $shopIds=Yii::$app->user->identity->getShopIds();
             $defaultCondition['shop_id'] = $shopIds;
         }

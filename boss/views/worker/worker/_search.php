@@ -52,23 +52,23 @@ use kartik\widgets\Select2;
                 'allowClear' => true,
                 'minimumInputLength' => 0,
                 'ajax' => [
-                    'url' => \yii\helpers\Url::to(['show-shop']),
+                    'url' => \yii\helpers\Url::to(['shop/shop/search-by-name']),
                     'dataType' => 'json',
                     'data' => new JsExpression('function(params) { return {
                             city_id:$("#workersearch-worker_work_city").val(),
-                            q:params.term,
+                            name:params.term,
                       };
                     }')
                 ],
                 'initSelection'=> new JsExpression('function (element, callback) {
                         callback({
                             shop_id:"'.$model->shop_id.'",
-                            text:"'.$model->getShopName($model->shop_id).'"
+                            name:"'.$model->getShopName($model->shop_id).'"
                         });
                 }'),
                 'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                'templateResult' => new JsExpression('function(city) { return city.text; }'),
-                'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+                'templateResult' => new JsExpression('function(data) { return data.name; }'),
+                'templateSelection' => new JsExpression('function (data) { return data.name; }'),
             ],
             'pluginEvents'=> [
                 "change" => "function() { $('#select2-worker-shop_id-container>.select2-selection__clear').mousedown()}",
@@ -100,7 +100,6 @@ use kartik\widgets\Select2;
             ],
         ]); ?>
     </div>
-    <?php } ?>
     <div class='col-md-3'>
         <?php echo $form->field($model, 'worker_type')->widget(Select2::classname(), [
             'name' => 'worker_type',
@@ -112,6 +111,8 @@ use kartik\widgets\Select2;
             ],
         ]); ?>
     </div>
+    <?php } ?>
+
     <div class='col-md-2'>
         <?= $form->field($model, 'worker_name') ?>
     </div>
