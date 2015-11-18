@@ -34,6 +34,7 @@ class OperationShopDistrict extends \core\models\operation\OperationShopDistrict
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_city_name'], 'string', 'max' => 50],
             [['operation_shop_district_name'], 'required'],
+            [['operation_shop_district_name'], 'unique', 'message' => '该商圈名称已经存在'],
             [['operation_area_name', 'district_upload_url'], 'string'],
             ['operation_area_id', 'safe'],
         ];
