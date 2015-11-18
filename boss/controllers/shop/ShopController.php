@@ -176,7 +176,7 @@ class ShopController extends BaseAuthController
         if(\Yii::$app->user->identity->isMiNiBoss()){
             $query->andWhere(['in', 'id', \Yii::$app->user->identity->getShopIds()]);
         }
-        $models = $query->limit(50)->all();
+        $models = $query->all();
         echo Json::encode(['results'=>$models]);
     }
     /**
