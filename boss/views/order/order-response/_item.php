@@ -35,7 +35,7 @@ use dbbase\models\order\OrderStatusDict;
             	<td><?= date('Y-m-d H:i', $model->created_at) ?> 下单
             	</td>
             	<td>
-            		<p><a href="/order/order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
+            		<p><a href="/order/order/edit?id=<?= Html::encode($model->order_code) ?>">查看订单</a></p>
             		<!-- <p><a href="###">发送短信</a></p> -->
             		
             		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_CANCEL):?>
