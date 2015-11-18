@@ -102,7 +102,8 @@ use boss\models\order\Order;
                 'pluginOptions' => [
                     'width' => '65%',
                     'tags' => true,
-                    'maximumInputLength' => 10
+                    'maximumInputLength' => 10,
+                    'allowClear' => true
                 ],
             ])->label('商圈:', ['class' => 'm_ipone', 'style' => 'line-height:35px']); ?>
         </div>
