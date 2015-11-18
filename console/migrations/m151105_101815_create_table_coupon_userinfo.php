@@ -31,7 +31,7 @@ class m151105_101815_create_table_coupon_userinfo extends Migration
             'couponrule_type' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'实收金额优惠券类型1为全网优惠券2为类别优惠券3为商品优惠券\'',
             'couponrule_service_type_id' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'服务类别id\'',
             'couponrule_commodity_id' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'如果是商品优惠券id\'',
-            'couponrule_city_limit' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'城市限制0为不限1为单一城市限制\'',
+            'couponrule_city_limit' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'城市限制1为不限2为单一城市限制\'',
             'couponrule_city_id' => Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'关联城市\'',
             'couponrule_customer_type' => Schema::TYPE_STRING . '(40) DEFAULT 0 COMMENT \'适用客户类别逗号分割1为所有用户2为新用户3为老用户4会员5为非会员\'',
             'couponrule_use_end_days' => Schema::TYPE_INTEGER . '(2) DEFAULT 1 COMMENT \'领取后过期天数\'',
