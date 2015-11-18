@@ -46,7 +46,8 @@ class FinanceRefundadd extends FinanceRefund
      		$numb='06'.date('ymdhis',time()).rand(1111,999999);
 	     	$this->finance_refund_code=$numb;
 	     	$this->customer_id=$order->orderExtCustomer->customer_id;
-	     	$this->finance_refund_tel=$order->orderExtCustomer->order_customer_phone;
+	     	$this->finance_refund_tel=$order->orderExtCustomer->order_customer_phone;	
+	     	$this->order_money=$order->order_money; //支付金额
 	     	$this->finance_refund_money=$order->orderExtPay->order_pay_money; //支付金额
 	     	$this->order_use_acc_balance=$order->orderExtPay->order_use_acc_balance;//使用余额
 	     	$this->order_use_card_money=$order->orderExtPay->order_use_card_money;//使用服务卡金额

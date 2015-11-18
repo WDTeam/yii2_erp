@@ -51,7 +51,7 @@ class FinanceRefund extends \yii\db\ActiveRecord
     {
         return [
             [['finance_refund_stype', 'create_time'], 'required'],
-            [['finance_refund_money','order_use_acc_balance','order_use_card_money','order_use_promotion_money','finance_refund_discount'], 'number'],
+            [['finance_refund_money','order_use_acc_balance','order_money','order_use_card_money','order_use_promotion_money','finance_refund_discount'], 'number'],
             [['finance_refund_stype','finance_refund_check_id', 'finance_refund_pay_create_time', 'finance_pay_channel_id', 'finance_refund_pay_status', 'finance_order_channel_id', 'finance_refund_worker_id', 'isstatus', 'create_time','finance_refund_county_id','finance_refund_city_id','finance_refund_province_id','finance_refund_shop_id','is_del'], 'integer'],
             [['finance_refund_code'], 'string', 'max' => 64],
             [['finance_refund_tel', 'finance_refund_worker_tel'], 'string', 'max' => 20],
@@ -110,6 +110,7 @@ class FinanceRefund extends \yii\db\ActiveRecord
             'finance_refund_code' => Yii::t('core', '流水号'),
             'customer_id' => Yii::t('core', '用户ID'),
             'finance_refund_tel' => Yii::t('core', '用户电话'),
+            'order_money' => Yii::t('core', '订单金额'),
             'finance_refund_money' => Yii::t('core', '退款金额'),
             'order_use_acc_balance' => Yii::t('core', '使用余额'),
             'order_use_card_money' => Yii::t('core', '使用服务卡金额'),

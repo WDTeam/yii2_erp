@@ -191,15 +191,15 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
         $query = $query->select([
             'ocomplain.complaint_content',
             'ocomplain.complaint_time',
-        ])->from('{{%order}} as order ')
-            ->leftJoin('{{%order_complaint}} as ocomplain','order.id = ocomplain.order_id')
+        ])->from('{{%order_complaint}} as ocomplain')
+            ->leftJoin('{{%order}} as order','order.id = ocomplain.order_id')
             ->andFilterWhere([
                 'order_booked_worker_id' => $worker_id
             ])->offset($offset)->limit($per_page_num);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        return $dataProvider->query->all();
+        return   $dataProvider->query->all();
     }
 
     public function getOrder(){
