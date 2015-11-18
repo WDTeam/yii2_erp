@@ -1280,10 +1280,10 @@ class Order extends OrderModel
             'order_lng' => $address->customer_address_longitude
         ]);
 
-        if($order->doSave()){
+        if($order->doSave([])){
             $to_address = $order->order_address;
             OrderMsg::updateAddress($order,$from_address,$to_address);
-            return true;
+            return $order;
         }
 
 
