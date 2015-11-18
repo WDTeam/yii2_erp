@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		'format' => 'raw',
     		'label' => '退款金额',
     		'value' => function ($dataProvider) {
-    			$sum=($dataProvider->finance_refund_money)+($dataProvider->order_use_acc_balance)+($dataProvider->order_use_card_money)+($dataProvider->order_use_coupon_money);
+    			$sum=($dataProvider->finance_refund_money)+($dataProvider->order_use_acc_balance)+($dataProvider->order_use_card_money)+($dataProvider->finance_refund_discount);
     			return $sum;
     		},
     		'width' => "80px",
