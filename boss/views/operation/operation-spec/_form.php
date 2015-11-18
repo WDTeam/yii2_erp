@@ -14,14 +14,23 @@ use kartik\datecontrol\DateControl;
 
 <div class="operation-spec-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
+    <?php
+        $form = ActiveForm::begin([
+            'type'=>ActiveForm::TYPE_HORIZONTAL,
+            'enableAjaxValidation' => true,
+            'validationUrl'=>Yii::$app->urlManager->createUrl([
+                'operation/operation-spec/ajax-validate-spec-info',
+                'action' => $action,
+                'id' => $model->id
+            ])
+        ]); 
+    ?>
 
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title">基础信息</h3>
         </div>
         <div class="panel-body">
-        <!-- <?//= $form->field($model, 'operation_spec_name')->textInput(['maxlength' => true]) ?> -->
             <?php
             echo Form::widget([
                 'model' => $model,
@@ -35,22 +44,8 @@ use kartik\datecontrol\DateControl;
                     'operation_spec_values'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>"规格属性【每项数据之间用逗号';'做分割】...",'rows'=> 6]],
                     'operation_spec_strategy_unit'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'计量单位...','maxlength'=> 10]],
 
-        //            'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']],
-            //
-            //        'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 编辑时间...']],
-            //
-            //        'operation_spec_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 规格名称...', 'maxlength'=>60]],
-
                 ]
             ]); ?>
-        <!--    <div class = "bs-glyphicons">-->
-        <!--        <ul class = "bs-glyphicons-list">-->
-        <!--            <li id = "addSpecValue">-->
-        <!--                <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>-->
-        <!--                <span class="glyphicon-class">增加规格属性</span>-->
-        <!--            </li>-->
-        <!--        </ul>-->
-        <!--    </div>-->
 
         </div>
         <div class="panel-footer">

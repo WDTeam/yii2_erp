@@ -143,6 +143,30 @@ class OperationSpecController extends Controller
     }
 
     /**
+     * ajax验证规格名称是否重复
+     */
+    public function actionAjaxValidateSpecInfo()
+    {
+        $spec_id = Yii::$app->request->get('id');
+        $action = Yii::$app->request->get('action');
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        //修改规格
+        if ($action == 'update' && isset($spec_id) && $spec_id > 0) {
+            $specModel = OperationSpec::find()->where(['id' => $spec_id])->one();
+            $specModel->load(Yii::$app->request->post());
+            return \yii\bootstrap\ActiveForm::validate($specModel,['operation_spec_name']);
+
+        //添加规格
+        }else{
+            $specModel = new OperationSpec(['is_softdel' => 0]);
+            $specModel->load(Yii::$app->request->post());
+            return \yii\bootstrap\ActiveForm::validate($specModel,['operation_spec_name']);
+        }
+    }
+
+    /**
      * Finds the OperationSpec model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
