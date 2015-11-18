@@ -72,7 +72,6 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 
     public static function get_couponinfo($customer_tel,$couponrule_id,$couponrule_price,$pay_nub,$order_code){
     	
-    	
     	$coupon_code_arr = CouponUserinfo::find()
     	->where(['customer_tel'=>$customer_tel,'id'=>$couponrule_id,'coupon_userinfo_price'=>$couponrule_price,'is_used'=>0])
     	->asArray()
