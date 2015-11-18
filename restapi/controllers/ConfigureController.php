@@ -212,8 +212,9 @@ class ConfigureController extends \restapi\components\Controller
     {
         try {
             $param = Yii::$app->request->get();
+			
             //获取环境变量对应的URL
-            $current_env_url = Yii::$app->params['envUrl'];
+            $current_env_url = Yii::$app->params['envUrl'];			
 
             if (!isset($param['city_name']) || !$param['city_name']) {
                 return $this->send(null, 'city_name参数错误', 0, 200, null, alertMsgEnum::getUserInitFailed);
@@ -274,12 +275,12 @@ class ConfigureController extends \restapi\components\Controller
                 'comment_link' => [
                     'title' => '意见反馈',
                     'url' => $current_env_url . '/#/personalCenter/feedback',
-                    'img' => $current_env_url . '/statics/images/fankui.png',
+                    'img' => $current_env_url . '/app/images/feedback20151118.png',
                 ],
                 'phone_link' => [
                     'title' => '400-6767-636',
                     'url' => '',
-                    'img' => $current_env_url . '/statics/images/phone.png',
+                    'img' => $current_env_url . '/app/images/telphone20151118.png',
                 ],
             ];
             //获取首页轮播图
@@ -330,7 +331,7 @@ class ConfigureController extends \restapi\components\Controller
                 'server_list' => $serviceCategoryList,
                 'isBlock' => $isBlock,
                 'isEffect' => $isEffect,
-                "isUpdate" => "1", // 0 代表不升级 1 代表升级  2 强制升级
+                "isUpdate" => "0", // 0 代表不升级 1 代表升级  2 强制升级
                 "updateContent" => "",
                 "updateUrl" => "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
                 "isShowGiveStar" => "0",
