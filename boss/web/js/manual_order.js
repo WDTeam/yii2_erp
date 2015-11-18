@@ -157,6 +157,7 @@ $(document).on("click",'#worker_search_submit',function(){
             dataType:"json",
             success: function (data) {
                 if(data.code==200){
+                    $("#worker_list tbody").html("");
                     for(var k in data.data){
                         var v = data.data[k];
                         $("#worker_list tbody").prepend('<tr>'+
