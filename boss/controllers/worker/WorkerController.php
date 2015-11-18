@@ -668,9 +668,9 @@ class WorkerController extends BaseAuthController
             $filePath = $path.$filename;
             $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            //$this->updateWorkerData($sheetData);
             $this->insertWorkerData($sheetData);
         }
-
         \Yii::$app->getSession()->setFlash('default','上传成功');
         $this->redirect(['index']);
     }
@@ -695,6 +695,24 @@ class WorkerController extends BaseAuthController
 
         \Yii::$app->getSession()->setFlash('default','上传成功');
         $this->redirect(['index']);
+    }
+
+    public function updateWorkerData($workerInfo){
+        ini_set('memory_limit','512M');
+        $offlineCityList = OperationCity::find()->asArray()->where(['operation_city_is_online' => 2])->all();
+        $offlineCityList =  ArrayHelper::map($offlineCityList,'city_name','city_id');
+        foreach($workerInfo as $key=>$col){
+            if($key<2){
+                continue;
+            }
+            if(isset($offlineCityList[$col['F'].'市'])){
+                $result = Worker::find()->where(['isdel'=>0,'worker_work_city'=>0,'worker_name'=>$col['A'],'worker_phone'=>$col['C']])->asArray()->one();
+                if($result){
+                    echo "update `ejj_worker` set worker_work_city='".$offlineCityList[$col['F'].'市']."' where worker_phone='".$col['C']."' and worker_name='".$col['A']."';";
+                    echo '<br>';
+                }
+            }
+        }
     }
 
     public function insertWorkerVacationData($workerVacationInfo){
@@ -1193,6 +1211,5 @@ class WorkerController extends BaseAuthController
 //        var_dump($workerFreeArr);
 //        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
     }
-
 
 }
