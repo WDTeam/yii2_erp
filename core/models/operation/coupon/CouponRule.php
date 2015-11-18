@@ -245,7 +245,7 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
 		}
 		
 		$coupon = CouponUserinfo::find()
-		->select(['id','customer_tel', 'coupon_userinfo_name as coupon_name', 'couponrule_price as coupon_price'])
+		->select(['id','customer_tel', 'coupon_userinfo_code as coupon_name', 'couponrule_price as coupon_price'])
 		->where(['id'=>$id])
 		->asArray()
 		->one();
