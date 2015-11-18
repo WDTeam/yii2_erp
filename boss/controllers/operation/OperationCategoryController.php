@@ -5,9 +5,9 @@ namespace boss\controllers\operation;
 use boss\components\BaseAuthController;
 use boss\models\operation\OperationCategory;
 use boss\models\operation\OperationCategorySearch;
-
-use \core\models\operation\OperationShopDistrictGoods;
 use boss\models\operation\OperationGoods;
+
+use core\models\operation\OperationShopDistrictGoods;
 
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -135,6 +135,30 @@ class OperationCategoryController extends BaseAuthController
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * ajax验证品类是否重复
+     */
+    public function actionAjaxValidateCategoryInfo()
+    {
+        $category_id = Yii::$app->request->get('id');
+        $action = Yii::$app->request->get('action');
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        //修改品类
+        if ($action == 'update' && isset($category_id) && $category_id > 0) {
+            $categoryModel = OperationCategory::find()->where(['id' => $category_id])->one();
+            $categoryModel->load(Yii::$app->request->post());
+            return \yii\bootstrap\ActiveForm::validate($categoryModel,['operation_category_name']);
+
+        //添加品类
+        }else{
+            $categoryModel = new OperationCategory(['is_softdel' => 0]);
+            $categoryModel->load(Yii::$app->request->post());
+            return \yii\bootstrap\ActiveForm::validate($categoryModel,['operation_category_name']);
+        }
     }
 
     /**

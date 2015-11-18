@@ -154,7 +154,11 @@ class CouponRuleController extends Controller
     	//退款退优惠券18964831206
     	//$rty=\core\models\operation\coupon\CouponUserinfo::GetCustomerDueCouponList('13501268242','1');
       	//var_dump($rty);exit;
-    	
+    	//$coupon_code,$customer_tel,$couponrule_service_type_id,$couponrule_commodity_id,$city_id){
+    	//优惠码检测使用
+    	//$rty=\core\models\operation\coupon\CouponRule::get_is_coupon_status('lsq00003','18001305711',1,0,1);
+    	//var_dump($rty);exit;
+    	   
         $searchModel = new CouponRuleSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -271,7 +275,7 @@ class CouponRuleController extends Controller
 		    }
 		    
 		    
-		    
+		    $model->couponrule_Prefix=  $name;
 		    $model->couponrule_city_id=  $dateinfo['CouponRule']['city_id'];$model->couponrule_city_name=\core\models\operation\OperationArea::getAreaname($dateinfo['CouponRule']['city_id']);
 		    $model->couponrule_promote_type_name=$Couponrule[6][$dateinfo['CouponRule']['couponrule_promote_type']];
 		    $model->couponrule_customer_type=implode(',',$dateinfo['CouponRule']['couponrule_customer_type']);
