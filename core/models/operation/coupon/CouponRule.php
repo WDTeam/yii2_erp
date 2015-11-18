@@ -129,8 +129,6 @@ class CouponRule extends \dbbase\models\operation\coupon\CouponRule
     		return $array;
     	}
 
-    	
-    	return $array;
     	}else{
     	//优惠券数据不匹配
     	$array=[

@@ -28,7 +28,7 @@ use dosamigos\datetimepicker\DateTimePicker;
             'form' => $form,
             'columns' => 1,
             'attributes' => [
-                'operation_shop_district_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'商圈名称...', 'maxlength'=>60]],
+                'operation_shop_district_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'商圈名称...', 'maxlength'=>20]],
             ]
 
 

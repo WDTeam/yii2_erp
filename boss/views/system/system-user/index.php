@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('绑定门店',['bind-shop', 'id'=>$model->id]);
                     },
                     'bind_shop_manager'=>function($url, $model){
-                        return Html::a('绑定小家政',['bind-shop-manager', 'id'=>$model->id]);
+                        return Html::a('绑定家政公司',['bind-shop-manager', 'id'=>$model->id]);
                     },
                 ],
             ],

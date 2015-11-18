@@ -56,7 +56,7 @@ use yii\helpers\Url;
                 'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
                 
                 'shop_manager_id'=>[
-                    'label'=>'归属家政 *',
+                    'label'=>'归属家政公司 *',
                     'type'=> Form::INPUT_WIDGET, 
                     'widgetClass'=>Select2::classname(),
                     'options'=>[
