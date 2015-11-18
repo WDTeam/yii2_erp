@@ -1,10 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\widgets\ActiveForm;
 
+use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\date\DatePicker;
+
 use boss\models\operation\coupon\CouponRule as CouponRuleSearch;
 use boss\components\AreaCascade;
 
