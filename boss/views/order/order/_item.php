@@ -108,13 +108,13 @@ use boss\models\order\Order;
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
                     OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
                 ])):?>
-                    <p><a href="href="/order/order/assign-worker?id=<?= Html::encode($model->order_code) ?>" >指派阿姨</a></p>
+                    <p><a href="/order/order/assign-worker?id=<?= Html::encode($model->order_code) ?>" >指派阿姨</a></p>
                 <?php elseif(in_array($model->orderExtStatus->order_status_dict_id,[
                         OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
                         OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
                         OrderStatusDict::ORDER_WORKER_BIND_ORDER,
                     ])): ?>
-                    <p><a href="href="/order/order/assign-worker?id=<?= Html::encode($model->order_code) ?>" >改派阿姨</a></p>
+                    <p><a href="/order/order/assign-worker?id=<?= Html::encode($model->order_code) ?>" >改派阿姨</a></p>
                 <?php endif; ?>
             </td>
         </tr>
