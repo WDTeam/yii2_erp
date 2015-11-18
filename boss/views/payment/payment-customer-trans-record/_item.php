@@ -11,7 +11,7 @@ use boss\models\order\Order;
         line-height: 27px;
     }
     .table{
-        width:95%;
+        width:98%;
     }
     .list-view{
         padding:18px;
@@ -21,11 +21,13 @@ use boss\models\order\Order;
     }
     table tr.first td{
         line-height: 30px;
-        font-size: 15px;
+        font-size: 14px;
         color: #45464B;
+        font-family: 微软雅黑;
     }
     table tr td{
         font-size:13px;
+        font-family: 微软雅黑;
     }
     .last{
         float: right;
