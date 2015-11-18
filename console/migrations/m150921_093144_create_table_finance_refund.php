@@ -15,6 +15,7 @@ class m150921_093144_create_table_finance_refund extends Migration
   'finance_refund_code' => Schema::TYPE_STRING . '(64)  NOT NULL COMMENT \'流水号\'' ,
   'customer_id' => Schema::TYPE_STRING . '(10)  NOT NULL COMMENT \'客户id\'' ,
   'finance_refund_tel' => Schema::TYPE_STRING . '(20)  NOT NULL COMMENT \'客户电话\'' ,
+  'order_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'order订单金额\'' ,
   'finance_refund_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'退款金额\'' ,
   'order_use_acc_balance' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'使用余额\'' ,
   'order_use_card_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'使用服务卡金额\'' ,
