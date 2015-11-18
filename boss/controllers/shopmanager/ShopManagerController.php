@@ -196,7 +196,10 @@ class ShopManagerController extends BaseAuthController
         if(isset($city_id)){
             $query->andFilterWhere(['=', 'city_id', $city_id]);
         }
-         $models = $query->limit(50)->all();
+        if(\Yii::$app->user->identity->isMiNiBoss()){
+            $query->andFilterWhere(['in', 'id', \Yii::$app->user->identity->getShopManagerIds()]);
+        }
+        $models = $query->limit(50)->all();
         echo Json::encode(['results'=>$models]);
     }
     /**
