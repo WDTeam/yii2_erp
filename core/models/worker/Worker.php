@@ -1369,6 +1369,17 @@ class Worker extends \dbbase\models\worker\Worker
      */
     public static function getOnlineCityList(){
         $onlineCityList = OperationCity::getCityOnlineInfoList();
+        //如果家政公司登陆，只显示小家政公司门店所在的城市
+        if(\Yii::$app->user->identity->isNotAdmin()){
+            $shopIds=Yii::$app->user->identity->getShopIds();
+            $shopResult = Shop::find()->select('city_id')->where(['id'=>$shopIds])->asArray()->all();
+            $shopCityIds = ArrayHelper::getColumn($shopResult,'city_id');
+            foreach ($onlineCityList as $key=>$val) {
+                if(!in_array($val['city_id'],$shopCityIds)){
+                    unset($onlineCityList[$key]);
+                }
+            }
+        }
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
