@@ -12,11 +12,10 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Categories
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-create">
-<!--    <div class="page-header">
-        <h1><?php //= Html::encode($this->title) ?></h1>
-    </div>-->
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
+
+    <?= $this->render('_form', [
+        'model' => $model,
+        'action' => 'create'
+    ]) ?>
 
 </div>

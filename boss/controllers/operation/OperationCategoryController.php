@@ -143,11 +143,13 @@ class OperationCategoryController extends BaseAuthController
     public function actionAjaxValidateCategoryInfo()
     {
         $category_id = Yii::$app->request->get('id');
+        $action = Yii::$app->request->get('action');
+
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         //修改品类
-        if ($category_id) {
-            $categoryModel = OperationCategory::findModel($category_id);
+        if ($action == 'update' && isset($category_id) && $category_id > 0) {
+            $categoryModel = OperationCategory::find()->where(['id' => $category_id])->one();
             $categoryModel->load(Yii::$app->request->post());
             return \yii\bootstrap\ActiveForm::validate($categoryModel,['operation_category_name']);
 
