@@ -1151,6 +1151,44 @@ class Order extends OrderModel
         }
     }
 
+    public static function cancelAssign($order_id,$worker_id,$admin_id,$memo){
+        $order = OrderSearch::getOne($order_id);
+        $status = [
+            OrderStatusDict::ORDER_INIT, // = 1已创建
+            OrderStatusDict::ORDER_WAIT_ASSIGN, // = 2待指派
+            OrderStatusDict::ORDER_SYS_ASSIGN_START, // = 3智能指派开始
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE, // = 4智能指派完成
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE, // = 5未完成智能指派 待人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_START, // = 6开始人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE, // = 7完成人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE, // = 8未完成人工指派，如果客服和小家政都未完成人工指派则去响应，否则重回待指派状态。
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER, // = 9阿姨自助抢单
+        ];
+
+        //1:获取订单状态
+        if (!in_array($order->orderExtStatus->order_status_dict_id, $status)) {
+            $order->addError('order_status', '当前订单状态不可改派阿姨！');
+            return false;
+        }
+        $order->setAttributes(['admin_id' => $admin_id]);
+        $order->setAttributes([
+            'worker_id' => 0,
+            'worker_type_id' => 0,
+            'order_worker_phone' => '',
+            'order_worker_name' => '',
+            'order_worker_type_name' => '',
+            'shop_id' => 0,
+            'order_worker_shop_name' => '',
+            'order_worker_assign_time' => 0,
+            'order_worker_assign_type' => 0,
+        ]);
+        if(OrderStatus::_updateToWaitManualAssign($order, ['OrderExtWorker'])) {
+            OrderWorkerRelation::workerCancel($order_id, $worker_id, Yii::$app->user->id, $memo);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 更改地址信息
      * @param $order_code
