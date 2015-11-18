@@ -269,9 +269,13 @@ class OrderSearch extends Order
      */
     public static function getListByWorkerIds($worker_ids, $booked_begin_time)
     {
-        $day_begin = strtotime(date('Y:m:d 00:00:00', $booked_begin_time));
-        $day_end = strtotime(date('Y:m:d 23:59:59', $booked_begin_time));
-        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_ids])->andWhere(['between', 'order_booked_begin_time', $day_begin, $day_end])->all();
+        if(!empty($worker_ids)) {
+            $day_begin = strtotime(date('Y:m:d 00:00:00', $booked_begin_time));
+            $day_end = strtotime(date('Y:m:d 23:59:59', $booked_begin_time));
+            return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_ids])->andWhere(['between', 'order_booked_begin_time', $day_begin, $day_end])->all();
+        }else{
+            return [];
+        }
     }
 
     /**

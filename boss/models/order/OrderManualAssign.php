@@ -193,7 +193,7 @@ class OrderManualAssign extends OrderManualAssignModel
         }
         $worker_ids = [];
         $workers = [];
-        if (is_array($worker_list)) {
+        if (is_array($worker_list) && !empty($worker_list)) {
             foreach ($worker_list as $k => $v) {
                 if($shop_ids!=null && !in_array($v['shop_id'],$shop_ids)){
                    continue;

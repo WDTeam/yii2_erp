@@ -156,7 +156,11 @@ class OrderWorkerRelation extends OrderWorkerRelationModel
      */
     public static function getListByOrderIdAndWorkerIdsForManualAssign($order_id,array $worker_ids)
     {
-        return self::find()->where(['order_id'=>$order_id,'worker_id'=>$worker_ids,'order_worker_relation_status_id'=>[1,2,3]])->all();
+        if(!empty($order_id) && !empty($worker_ids)) {
+            return self::find()->where(['order_id' => $order_id, 'worker_id' => $worker_ids, 'order_worker_relation_status_id' => [1, 2, 3]])->all();
+        }else{
+            return [];
+        }
     }
 
     /**
