@@ -29,34 +29,46 @@ class WorkerForRedis extends Model
 
         //清除Redis旧的所有商圈关联关系
         self::deleteAllDistrict();
-
-        //重新添加阿姨信息到Redis中
-        $defaultCondition['isdel'] = 0;
-        $defaultCondition['worker_is_block'] = 0;
-        $defaultCondition['worker_is_vacation'] = 0;
-        $defaultCondition['worker_is_blacklist'] = 0;
-        $defaultCondition['worker_is_dimission'] = 0;
-        $defaultCondition['worker_auth_status'] = [4,6,8,10];//3基础培训通过,5试工通过,6已上岗的阿姨可以 可以接单
-        $workerResult = Worker::find()
-            ->select('{{%worker}}.id ,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type')
-            ->joinWith('workerDistrictsRelation') //关联worker workerDistrictRelation方法
-            ->joinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
-            ->where($defaultCondition)
-            ->asArray()
-            ->all();
-
-        foreach ((array)$workerResult as $val) {
-            //整理阿姨信息
-            $workerDataForRedis = self::handleWorkerInfo($val);
-            $workerInfo = json_encode($workerDataForRedis);
-            Yii::$app->redis->executeCommand('set', [self::WORKER_INFO.'_'.$val['id'],$workerInfo]);
-            //整理阿姨商圈关联信息
-            $district = $val['workerDistrictsRelation'];
-            $districtIds = ArrayHelper::getColumn($district,'operation_shop_district_id');//['1','2']
-            //添加新的阿姨关联商圈信息到Redis中
-            self::addDistrictWorkerRelation($val['id'],$districtIds);
+        $i=1;
+        $count = 0;
+        while(1){
+            $limit = 3000;
+            $start = ($i-1)*$limit;
+            //重新添加阿姨信息到Redis中
+            $defaultCondition['isdel'] = 0;
+            $defaultCondition['worker_is_block'] = 0;
+            $defaultCondition['worker_is_vacation'] = 0;
+            $defaultCondition['worker_is_blacklist'] = 0;
+            $defaultCondition['worker_is_dimission'] = 0;
+            $defaultCondition['worker_auth_status'] = [4,6,8,10];//3基础培训通过,5试工通过,6已上岗的阿姨可以 可以接单
+            $workerResult = Worker::find()
+                ->select('{{%worker}}.id ,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type')
+                ->joinWith('workerDistrictsRelation') //关联worker workerDistrictRelation方法
+                ->joinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
+                ->where($defaultCondition)
+                ->offset($start)
+                ->limit($limit)
+                ->asArray()
+                ->all();
+            $count += count($workerResult);
+            if(empty($workerResult)){
+                break;
+            }
+            foreach ((array)$workerResult as $val) {
+                //整理阿姨信息
+                $workerDataForRedis = self::handleWorkerInfo($val);
+                $workerInfo = json_encode($workerDataForRedis);
+                Yii::$app->redis->executeCommand('set', [self::WORKER_INFO.'_'.$val['id'],$workerInfo]);
+                //整理阿姨商圈关联信息
+                $district = $val['workerDistrictsRelation'];
+                $districtIds = ArrayHelper::getColumn($district,'operation_shop_district_id');//['1','2']
+                //添加新的阿姨关联商圈信息到Redis中
+                self::addDistrictWorkerRelation($val['id'],$districtIds);
+            }
+            echo "已处理完".$count."个阿姨".PHP_EOL;
+            sleep(1);
+            $i++;
         }
-
     }
 
 
