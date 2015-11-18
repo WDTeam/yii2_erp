@@ -99,6 +99,23 @@ use boss\models\order\Order;
                 <?php if ($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_CANCEL): ?>
                     <p><a href="javascript:void(0);" class="m_quxiao">取消订单</a></p>
                 <?php endif; ?>
+
+                <?php
+                if(in_array($model->orderExtStatus->order_status_dict_id,[
+                    OrderStatusDict::ORDER_WAIT_ASSIGN,
+                    OrderStatusDict::ORDER_SYS_ASSIGN_START,
+                    OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
+                    OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
+                    OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+                ])):?>
+                    <p><a href="href="/order/order/assign-worker?id=<?= Html::encode($model->order_code) ?>" >指派阿姨</a></p>
+                <?php elseif(in_array($model->orderExtStatus->order_status_dict_id,[
+                        OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+                        OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+                        OrderStatusDict::ORDER_WORKER_BIND_ORDER,
+                    ])): ?>
+                    <p><a href="href="/order/order/assign-worker?id=<?= Html::encode($model->order_code) ?>" >改派阿姨</a></p>
+                <?php endif; ?>
             </td>
         </tr>
     </table>

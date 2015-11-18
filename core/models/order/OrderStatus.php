@@ -9,7 +9,6 @@ namespace core\models\order;
 
 
 use Yii;
-use dbbase\models\order\OrderStatusHistory;
 
 class OrderStatus extends Order
 {

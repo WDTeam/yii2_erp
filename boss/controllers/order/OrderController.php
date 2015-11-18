@@ -559,7 +559,6 @@ class OrderController extends BaseAuthController
             OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
             OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
             OrderStatusDict::ORDER_WORKER_BIND_ORDER,
-            OrderStatusDict::ORDER_WORKER_BIND_ORDER,
         ])) {
             return $this->render('assign-worker', [
                 'model' => $model,
