@@ -1151,6 +1151,14 @@ class Order extends OrderModel
         }
     }
 
+    /**
+     * @param $order_id
+     * @param $worker_id
+     * @param $admin_id
+     * @param $memo
+     * @code 23
+     * @return array|bool
+     */
     public static function cancelAssign($order_id,$worker_id,$admin_id,$memo){
         $order = OrderSearch::getOne($order_id);
         $status = [
@@ -1168,7 +1176,7 @@ class Order extends OrderModel
         //1:获取订单状态
         if (!in_array($order->orderExtStatus->order_status_dict_id, $status)) {
             $order->addError('order_status', '当前订单状态不可改派阿姨！');
-            return false;
+            return ['status'=>false,'error_code'=>'542301','msg'=>$order->errors];
         }
         $order->setAttributes(['admin_id' => $admin_id]);
         $order->setAttributes([
@@ -1183,10 +1191,10 @@ class Order extends OrderModel
             'order_worker_assign_type' => 0,
         ]);
         if(OrderStatus::_updateToWaitManualAssign($order, ['OrderExtWorker'])) {
-            OrderWorkerRelation::workerCancel($order_id, $worker_id, Yii::$app->user->id, $memo);
-            return true;
+            OrderWorkerRelation::workerCancel($order_id, $worker_id, $admin_id, $memo);
+            return ['status'=>true];
         }
-        return false;
+        return ['status'=>false,'error_code'=>'542302','msg'=>$order->errors];
     }
 
     /**

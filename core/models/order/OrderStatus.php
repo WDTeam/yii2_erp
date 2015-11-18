@@ -64,12 +64,13 @@ class OrderStatus extends Order
      * @param $order
      * @param array $must_models
      * @param null $transact
+     * @return bool
      */
     protected static function _updateToWaitManualAssign(&$order, $must_models = [], $transact = null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         $order->order_flag_sys_assign = 0; //待指派只走人工指派
-        self::_statusChange($order, $status, $must_models, $transact);
+        return self::_statusChange($order, $status, $must_models, $transact);
     }
 
 

@@ -608,6 +608,7 @@ class OrderController extends BaseAuthController
      */
     public function actionWorkerCancel()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id = Yii::$app->request->post('order_id');
         $worker_id = Yii::$app->request->post('worker_id');
         $memo = Yii::$app->request->post('memo');

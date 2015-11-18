@@ -44,10 +44,12 @@ $(document).on("click",'#worker_cancel_memo_submit',function(){
             data: "order_id="+$("#order_id").val()+"&worker_id="+cancel_worker_id+"&memo="+encodeURIComponent(memo),
             dataType:"json",
             success: function (msg) {
-                if(msg){
-                    $("#worker_memo_"+refuse_worker_id).text('已取消指派：'+memo);
-                    $("#worker_status_"+refuse_worker_id).text('取消指派');
+                if(msg.status){
+                    $("#worker_memo_"+cancel_worker_id).text('已取消指派：'+memo);
+                    $("#worker_status_"+cancel_worker_id).text('取消指派');
                     $("#worker_cancel_modal .close").click();
+                }else{
+                    alert('取消指派失败,错误代码['+msg.error_code+']');
                 }
             }
         });

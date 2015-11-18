@@ -348,7 +348,7 @@ function showOrder(){
     $("#order_customer_memo").text('用户备注：'+order.ext_customer.order_customer_memo);
     $("#order_cs_memo").text('客服备注：'+order.order.order_cs_memo);
     if(order.order_is_parent == 1) {
-        $("#order_check_worker").text('是否可更换阿姨：' + (order.ext_flag.order_flag_check_booked_worker ? '是' : '否' ));
+        $("#order_check_worker").text('是否可更换阿姨：' + (order.ext_flag.order_flag_change_booked_worker ? '是' : '否' ));
     }
 }
 

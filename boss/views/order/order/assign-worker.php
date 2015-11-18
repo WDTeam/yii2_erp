@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h5 class="col-sm-12" id="order_customer_memo">客户备注：<?=$model['ext_customer']->order_customer_memo;?></h5>
                             <h5 class="col-sm-12" id="order_cs_memo">客服备注：<?=$model['order']->order_cs_memo;?></h5>
                             <?php if($model['order']->order_is_parent == 1):?>
-                            <h5 class="col-sm-12" id="order_check_worker">是否可更换阿姨：<?=$model['ext_flage']->order_flag_check_booked_worker?'是':'否';?></h5>
+                            <h5 class="col-sm-12" id="order_check_worker">是否可更换阿姨：<?=$model['ext_flag']->order_flag_change_booked_worker?'是':'否';?></h5>
                             <?php endif;?>
                         </td>
                     </tr>
@@ -78,8 +78,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td> - </td>
                                 <td> - </td>
                                 <td>已指派阿姨</td>
-                                <td id="worker_status_<?=$worker['id']?>">已指派</td>
-                                <td id="worker_memo_<?=$worker['id']?>"><a href="javascript:void(0);" class="worker_assign_cancel">取消指派</a></td>
+                                <td id="worker_status_<?=$model['order']->orderExtWorker->worker_id?>">已指派</td>
+                                <td id="worker_memo_<?=$model['order']->orderExtWorker->worker_id?>"><a href="javascript:void(0);" data-toggle="modal" data-target="#worker_cancel_modal" class="worker_assign_cancel">取消指派</a></td>
                             </tr>
                         <?php endif;?>
                         <?php foreach($model['booked_workers'] as $worker): ?>
@@ -149,11 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h4 class="modal-title" id="worker_refuse_modal_label">请填写取消指派原因</h4>
             </div>
             <div class="modal-body">
-                <div class="radio">
-                    <label>
                         <input type="text" class="form-control" id="worker_cancel_memo" placeholder="取消指派原因" />
-                    </label>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
