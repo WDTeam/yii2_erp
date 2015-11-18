@@ -1501,7 +1501,7 @@ class Payment extends \dbbase\models\payment\Payment
             return ['status'=>0,'info'=>'已经退款过','data'=>''];
         }
 
-        if( $orderInfo['order_pay_type'] == 2 && !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
+        if( $orderInfo['pay_channel_id'] == OperationPayChannel::PAY_CHANNEL_EJJ_CASH_PAY && !empty($orderInfo['order_pay_money']) && $orderInfo['order_pay_money'] > 0 )
         {
             $connection  = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
