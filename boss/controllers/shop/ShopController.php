@@ -174,7 +174,7 @@ class ShopController extends BaseAuthController
             $query->andFilterWhere(['=', 'shop_manager_id', $shop_manager_id]);
         }
         if(\Yii::$app->user->identity->isMiNiBoss()){
-            $query->andFilterWhere(['in', 'id', \Yii::$app->user->identity->getShopIds()]);
+            $query->andWhere(['in', 'id', \Yii::$app->user->identity->getShopIds()]);
         }
         $models = $query->limit(50)->all();
         echo Json::encode(['results'=>$models]);
