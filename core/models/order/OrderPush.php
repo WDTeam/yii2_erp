@@ -106,14 +106,13 @@ class OrderPush extends Order
         foreach ($workers as $v) {
             if (!in_array($v['id'], $wait_ivr_worker_list)) { //判断该阿姨有没有推送过该订单，防止重复推送。
                 //把该推送ivr的阿姨放入该订单的队列中
-//todo                Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id, json_encode(['id' => $v['id'], 'worker_phone' => $v['worker_phone']])]);
-//todo                Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL_RECORD . '_' . $order_id, $v['id']]);
+                Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id, json_encode(['id' => $v['id'], 'worker_phone' => $v['worker_phone']])]);
+                Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL_RECORD . '_' . $order_id, $v['id']]);
                 $ivr_flag = true;
             }
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
                 OrderPool::addOrderToWorkerPushList($order_id,$v['id']); //把订单添加到接单大厅
-//TODO                $result = Yii::$app->jpush->push(["worker_{$v['worker_phone']}"],"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。",json_encode(["order_code"=>$order->order_code,"order_id"=>$order->id,"pushType"=> 4,"msg"=>"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"]));
-                $result = true;
+                $result = Yii::$app->jpush->push(["worker_{$v['worker_phone']}"],"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。",json_encode(["order_code"=>$order->order_code,"order_id"=>$order->id,"pushType"=> 4,"msg"=>"阿姨，您有一个{$order->order_money}元的待抢订单，请及时确认接单。"]));
                 if ($result) {
                     OrderWorkerRelation::jpushPushSuccess($order_id, $v['id'], 1);
                     $jpush_flag = true;
