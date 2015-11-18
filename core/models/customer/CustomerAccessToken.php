@@ -32,7 +32,6 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
      * @return bool|string
      */
     public static function generateAccessToken($phone, $code='', $channal_id=0){
-
         $ios_check = self::generateAccessTokenForIOSChecker($phone,$channal_id);
         if($ios_check){
             return $ios_check;
@@ -86,7 +85,9 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
         }
     }
 
+
     public static function generateAccessTokenForIOSChecker($phone,$channal_id){
+
         $default_phone = '15010153444';
         if($phone == $default_phone){
             $customer = Customer::find()->where(['customer_phone'=>$default_phone])->one();
@@ -242,15 +243,21 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
      * @param $weixin_id
      * @return array
      */
-    public static function createWeixinCustomer($phone, $code, $weixin_id){
-        $access_token = self::generateAccessToken($phone, $code);
+    public static function createWeixinCustomer($phone, $code, $weixin_id, $channal_id=0){
+        $access_token = self::generateAccessToken($phone, $code, $channal_id);
         if(!$access_token){
             return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'生成access_token 失败'];
         }
         $customer = self::getCustomer($access_token);
-        if(!$customer){
-            return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'获取客户信息失败'];
-        }
+//        if(!$customer){
+//            die;
+//            $create_is_success = Customer::addCustomer($phone, $channal_id);
+//
+//            if(!$create_is_success){
+//                return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'创建微信客户失败'];
+//            }
+//            $customer = self::getCustomer($access_token);
+//        }
         $customer->customer_is_weixin = 1;
         $customer->weixin_id = $weixin_id;
         $customer->updated_at = time();

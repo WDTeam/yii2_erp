@@ -240,7 +240,7 @@ class OrderController extends BaseAuthController
     public function actionGetWaitManualAssignOrder()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
         if($is_mini_boss) {
             return OrderManualAssign::getMiniBossWaitAssignOrder(Yii::$app->user->id,Yii::$app->user->identity->shopDistrictIds);
         }else {
@@ -256,7 +256,7 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id = Yii::$app->request->get('order_id');
-        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
         if($is_mini_boss) {
             return OrderManualAssign::getMinibossCanAssignWorkerList($order_id,Yii::$app->user->identity->shopIds);
         }else{
@@ -275,7 +275,7 @@ class OrderController extends BaseAuthController
         $order_id = Yii::$app->request->get('order_id');
         $phone = Yii::$app->request->get('phone');
         $worker_name = Yii::$app->request->get('worker_name');
-        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
         if($is_mini_boss) {
             return OrderManualAssign::searchMiniBossAssignWorker($order_id,$worker_name,$phone,Yii::$app->user->identity->shopIds);
         }else{
@@ -301,7 +301,7 @@ class OrderController extends BaseAuthController
     {
         $searchParas = Yii::$app->request->getQueryParams();
         $searchModel = new OrderSearchIndex();
-        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
         if($is_mini_boss){
             $dataProvider = $searchModel->search($searchParas);
             return $this->render('index-mini-boss', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel, 'searchParas' => $searchParas,]);
@@ -333,7 +333,7 @@ class OrderController extends BaseAuthController
         if ($q != null) {
             $condition = ['like','name',$q];
         }
-        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
         if($is_mini_boss){
             $shopResult = Shop::find()
                 ->where($condition)
@@ -532,9 +532,13 @@ class OrderController extends BaseAuthController
     {
         $kpiModel = new OrderDispatcherKpi();
         $model = $kpiModel->queryHistoricalKpi(yii::$app->user->id,strtotime(date('y-m-d')));
-        $model->non_assign_order_count = OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
+        if(!$is_mini_boss) {
+            $model->non_assign_order_count = OrderManualAssign::getWaitAssignOrdersCount(Yii::$app->user->identity->shopDistrictIds);
+        }
         return $this->render('assign', [
-            'model' => $model
+            'model' => $model,
+            'is_mini_boss' => $is_mini_boss
         ]);
     }
 
@@ -558,7 +562,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id = Yii::$app->request->post('order_id');
         $worker_id = Yii::$app->request->post('worker_id');
-        $is_mini_boss = Yii::$app->user->identity->isNotAdmin();
+        $is_mini_boss = Yii::$app->user->identity->isMiNiBoss();
         return Order::manualAssignDone($order_id, $worker_id, Yii::$app->user->id, !$is_mini_boss);
     }
 

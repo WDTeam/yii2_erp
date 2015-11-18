@@ -1,13 +1,15 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\widgets\ActiveForm;
-use kartik\widgets\Select2;
+use yii\helpers\url;
 use yii\web\JsExpression;
+
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
+use kartik\widgets\ActiveForm;
+use kartik\widgets\Select2;
 
 /**
  * @var yii\web\View $this
@@ -19,7 +21,8 @@ use kartik\date\DatePicker;
 
 <div class="worker-search">
 
-    <?php $form = ActiveForm::begin([
+    <?php
+        $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
         //'id' => 'login-form-inline',
         'action' => ['index'],
@@ -69,7 +72,32 @@ use kartik\date\DatePicker;
             ],
             'pluginEvents'=> [
                 "change" => "function() { $('#select2-worker-shop_id-container>.select2-selection__clear').mousedown()}",
-            ]
+            ],
+
+        ]); ?>
+    </div>
+    <div class='col-md-3'>
+        <?php echo  $form->field($model, 'worker_district')->widget(Select2::classname(), [
+            'name' => 'worker_district',
+            'hideSearch' => false,
+            'data' => $model::getDistrictList(),
+            'options' => ['placeholder' => '选择阿姨商圈','multiple' => false],
+            'pluginOptions' => [
+                'tags' => false,
+                'allowClear' => true,
+                'maximumInputLength' => 10,
+                'ajax' => [
+                    'url' => Url::to(['show-district']),
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { return {
+                        city_id: $("#workersearch-worker_work_city").val(),
+                        name: params.term
+                    }; }')
+                ],
+                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(content) { return content.text; }'),
+                'templateSelection' => new JsExpression('function (content) { return content.text; }'),
+            ],
         ]); ?>
     </div>
     <?php } ?>

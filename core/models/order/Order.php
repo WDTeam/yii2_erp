@@ -513,8 +513,7 @@ class Order extends OrderModel
                 foreach ($orders as $order) {
                     $order->order_flag_lock = 0;
                     $order->admin_id = $admin_id;
-                    $order->order_flag_sys_assign = 0; //待指派只走人工指派
-                    $result = OrderStatus::_payment($order, ['OrderExtFlag'], $transact);
+                    $result = OrderStatus::_updateToWaitManualAssign($order, ['OrderExtFlag'], $transact);
                     if (!$result) {
                         $transact->rollBack();
                         return $result;
@@ -525,8 +524,7 @@ class Order extends OrderModel
             } else {
                 $order->order_flag_lock = 0;
                 $order->admin_id = $admin_id;
-                $order->order_flag_sys_assign = 0; //待指派只走人工指派
-                return OrderStatus::_payment($order, ['OrderExtFlag']);
+                return OrderStatus::_updateToWaitManualAssign($order, ['OrderExtFlag']);
             }
         }
     }

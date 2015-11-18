@@ -37,6 +37,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 {
+    const PAYMENT_TRANS_TECORD_PREFIX = 'PAYMENT_TRANS_RECORD_CUSTOMER_';
+
     /**
      * @inheritdoc
      */

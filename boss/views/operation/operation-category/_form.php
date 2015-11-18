@@ -17,7 +17,12 @@ use boss\models\operation\OperationCommon;
 
 <div class="operation-category-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin([
+        'type'=>ActiveForm::TYPE_HORIZONTAL,
+        'options' => ['enctype' => 'multipart/form-data'],
+        'enableAjaxValidation' => true,
+        'validationUrl'=>Yii::$app->urlManager->createUrl(['operation/operation-category/ajax-validate-category-info'])
+    ]); ?>
 
     <div class="panel panel-info">
         <div class="panel-heading">

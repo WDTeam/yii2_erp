@@ -878,16 +878,11 @@ class OrderSearch extends Order
         $data[3] = (int)(($fdl/$division)*100);
         //主动接单
         $sql = "SELECT COUNT(1) FROM {{%order_ext_worker}} AS a
-        LEFT JOIN {{%order_status_history}} AS b
-        ON a.`order_id`=b.`order_id`
-        AND b.order_status_dict_id=:ORDER_WORKER_BIND_ORDER
-        WHERE a.order_worker_assign_type=1
+        WHERE a.order_worker_assign_type in (3,4)
         AND a.worker_id={$worker_id}
-        AND b.order_status_dict_id=:ORDER_WORKER_BIND_ORDER
-        AND b.`created_at`>={$start_time}
-        AND b.`created_at`<{$end_time}";
+        AND a.`order_worker_assign_time`>={$start_time}
+        AND a.`order_worker_assign_time`<{$end_time}";
         $data[4] = (int)\Yii::$app->db->createCommand($sql)
-        ->bindValues(['ORDER_WORKER_BIND_ORDER'=>OrderStatusDict::ORDER_WORKER_BIND_ORDER])
         ->queryScalar();
         //完成工时
         $sql = "SELECT COUNT(1)

@@ -204,7 +204,7 @@ class AuthController extends \restapi\components\Controller
             return $this->send(null, "用户名,签名或渠道id错误", 0, 403, null, alertMsgEnum::loginFromPopFail);
         }
     }
-
+ 
     /**
      * @api {POST} /auth/worker-login [POST] /auth/worker-login（李勇100%)
      * @apiDescription 阿姨登录（李勇）
@@ -396,7 +396,7 @@ class AuthController extends \restapi\components\Controller
 
         #订单渠道名称
         if ($param['order_channel_name']) {
-            $channal_id = OperationOrderChannel::get_post_id($param['order_channel_name']);
+            $channal_id = OperationOrderChannel::get_post_id($param['order_channel_name']); 
             if (empty($channal_id)) {
                 return $this->send(null, "对不起！您传递的渠道名称没有对应项", 0, 403, null, alertMsgEnum::uesrWeiXinLoginNot);
             }
@@ -418,6 +418,6 @@ class AuthController extends \restapi\components\Controller
         }
     }
 
-}
+} 
 
 ?>
