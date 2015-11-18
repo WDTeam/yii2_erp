@@ -11,7 +11,7 @@ use boss\models\order\Order;
         line-height: 27px;
     }
     .table{
-        width:100%;
+        width:100%;  
     }
     .list-view{
         padding:18px;
