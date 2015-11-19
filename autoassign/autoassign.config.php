@@ -87,7 +87,7 @@ return [
     /*
      * 日志文件
      */
-    'LOG_FILE' => '/code/ejj-homeclean-boss/boss/runtime/logs/autoassign-server.log',
+    'LOG_FILE' => '/code/ejj-enterprise-boss/autoassign/autoassign-server.log',
 
     /*
      * 设置worker进程的最大任务数
@@ -107,6 +107,8 @@ return [
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
 
     // 配置 BOSS API 地址
-    'BOSS_API_URL' => 'http://dev.api.1jiajie.com/order/push/',
+    'BOSS_API_URL' => 'http://api.me/order/push/',
 
+    // 配置 BOSS CONFIG 地址
+    'BOSS_CONFIG_URL' => 'http://api.me/config/',
 ];

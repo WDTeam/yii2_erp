@@ -1,6 +1,6 @@
 [submodule "boss"]
 	path = boss
-	url = git@gitlab.1jiajie.com:root/ejj-homeclean-boss-ui.git
+	url = git@gitlab.1jiajie.com:homeclean/ejj-homeclean-boss-ui.git
 [submodule "restapi"]
 	path = restapi
-	url = git@gitlab.1jiajie.com:root/ejj-homeclean-restapi.git
+	url = git@gitlab.1jiajie.com:homeclean/ejj-homeclean-restapi.git

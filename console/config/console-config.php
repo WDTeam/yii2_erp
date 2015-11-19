@@ -3,7 +3,7 @@
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'gii'],
 
     'controllerNamespace' => 'console\controllers',
     'components' => [
@@ -24,6 +24,9 @@ return [
         'schemadump' => [
             'class' => 'jamband\schemadump\SchemaDumpController',
         ],
+    ],
+    'modules' => [
+        'gii' => 'yii\gii\Module',
     ],
     'params' => [],
 ];
